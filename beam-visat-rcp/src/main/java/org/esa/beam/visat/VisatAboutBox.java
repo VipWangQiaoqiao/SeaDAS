@@ -126,15 +126,20 @@ public class VisatAboutBox extends ModalDialog {
                                "<br><b>{3}</b>" +
                                "<br>" +
                                "<br>This software is based on the BEAM toolbox." +
-                               "<br>(c) Copyright 2002-2010 by Brockmann Consult and contributors." +
+                               "<br>(c) Copyright 2002-2012 by Brockmann Consult and contributors." +
                                "<br>Visit http://www.brockmann-consult.de/beam/" +
                                "<br>BEAM is developed under contract to ESA (ESRIN)." +
                                "<br>Visit http://envisat.esa.int/services/" +
                                "<br>" +
-                               "<br>BEAM is free software; you can redistribute it and/or modify it" +
-                               "<br>under the terms of the GNU General Public License as published by the" +
-                               "<br>Free Software Foundation. This program is distributed in the hope it will be" +
-                               "<br>useful, but WITHOUT ANY WARRANTY; without even the implied warranty" +
+                               "<br>The SeaDAS source code and documentation are in the public domain," +
+                               "<br>available without fee for educational, research, non-commercial and "+
+                               "<br>commercial purposes. "+
+                               "<br>"+
+                               "<br>Portions of the code derived from BEAM are also free software; "+
+                               "<br>you can redistribute it and/or modify it under the terms of the"+
+                               "br>GNU General Public License as published by the Free Software Foundation." +
+                               "<br>This program is distributed in the hope it will be useful," +
+                               "<br>but WITHOUT ANY WARRANTY; without even the implied warranty" +
                                "<br>of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." +
                                "<br>See the GNU General Public License for more details." +
                                "</html>";
