@@ -1491,8 +1491,8 @@
             <mnemonic>T</mnemonic>
             <accelerator>F1</accelerator>
             <separatorBefore>false</separatorBefore>
-            <shortDescr>VISAT help</shortDescr>
-            <description>Opens the VISAT help browser.</description>
+            <shortDescr>SeaDAS help</shortDescr>
+            <description>Opens the SeaDAS help browser.</description>
             <smallIcon>icons/Help16.png</smallIcon>
             <largeIcon>icons/Help22.png</largeIcon>
             <helpId>visat</helpId>
@@ -1502,24 +1502,24 @@
             <id>showHomePage</id>
             <parent>help</parent>
             <class>org.esa.beam.visat.actions.ShowHomePageAction</class>
-            <text>BEAM Home Page</text>
+            <text>SeaDAS Home Page</text>
             <mnemonic>B</mnemonic>
-            <shortDescr>Opens the BEAM home page.</shortDescr>
-            <description>Opens the BEAM home page with the default web browser.</description>
+            <shortDescr>Opens the SeaDAS home page.</shortDescr>
+            <description>Opens the SeaDAS home page with the default web browser.</description>
             <placeAfter>helpTopics</placeAfter>
         </action>
 
-        <action>
-            <id>showDataSources</id>
-            <parent>help</parent>
-            <class>org.esa.beam.visat.actions.ShowDataSourcesAction</class>
-            <text>Access to Data Products</text>
-            <mnemonic>D</mnemonic>
-            <shortDescr>Provides information how different data products are accessed.</shortDescr>
-            <description>Provides information how different data products are accessed.</description>
-            <helpId>showDataSources</helpId>
-            <placeAfter>showHomePage</placeAfter>
-        </action>
+        <!--<action>-->
+            <!--<id>showDataSources</id>-->
+            <!--<parent>help</parent>-->
+            <!--<class>org.esa.beam.visat.actions.ShowDataSourcesAction</class>-->
+            <!--<text>Access to Data Products</text>-->
+            <!--<mnemonic>D</mnemonic>-->
+            <!--<shortDescr>Provides information how different data products are accessed.</shortDescr>-->
+            <!--<description>Provides information how different data products are accessed.</description>-->
+            <!--<helpId>showDataSources</helpId>-->
+            <!--<placeAfter>showHomePage</placeAfter>-->
+        <!--</action>-->
 
         <action>
             <id>showUpdateDialog</id>
@@ -1540,11 +1540,11 @@
             <id>about</id>
             <parent>help</parent>
             <class>org.esa.beam.visat.actions.AboutAction</class>
-            <text>About VISAT</text>
+            <text>About SeaDAS</text>
             <mnemonic>A</mnemonic>
             <accelerator>ctrl alt A</accelerator>
-            <shortDescr>Displays information about VISAT.</shortDescr>
-            <description>Displays information about VISAT.</description>
+            <shortDescr>Displays information about SeaDAS.</shortDescr>
+            <description>Displays information about SeaDAS.</description>
             <smallIcon>icons/About16.gif</smallIcon>
             <largeIcon>icons/About24.gif</largeIcon>
             <helpId>about</helpId>
