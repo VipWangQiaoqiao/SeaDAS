@@ -137,7 +137,7 @@ public class VisatAboutBox extends ModalDialog {
                                "<br>"+
                                "<br>Portions of the code derived from BEAM are also free software; "+
                                "<br>you can redistribute it and/or modify it under the terms of the"+
-                               "br>GNU General Public License as published by the Free Software Foundation." +
+                               "<br>GNU General Public License as published by the Free Software Foundation." +
                                "<br>This program is distributed in the hope it will be useful," +
                                "<br>but WITHOUT ANY WARRANTY; without even the implied warranty" +
                                "<br>of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE." +
