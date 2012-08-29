@@ -1334,6 +1334,22 @@
         </action>
 
         <action>
+            <parent>view</parent>
+            <id>createLandWaterCoastMasks</id>
+            <class>org.esa.beam.watermask.ui.WaterMaskVPI</class>
+            <placeAfter>showGraticuleOverlay</placeAfter>
+            <text>Show Landmask/Coastline</text>
+            <toggle>false</toggle>
+            <separatorAfter>false</separatorAfter>
+            <mnemonic>W</mnemonic>
+            <shortDescr>Create Landmask/coastline</shortDescr>
+            <description>Create Landmask/coastline masks</description>
+            <context>image</context>
+            <smallIcon>icons/GraticuleOverlay16.gif</smallIcon>
+            <largeIcon>icons/GraticuleOverlay24.gif</largeIcon>
+            <!--<helpId>showGraticuleOverlay</helpId>-->
+        </action>
+        <action>
             <id>bandArithmetic</id>
             <parent>tools</parent>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
