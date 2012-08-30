@@ -22,9 +22,8 @@ import org.esa.beam.visat.VisatApp;
 import javax.media.jai.ImageLayout;
 import javax.media.jai.JAI;
 import javax.media.jai.operator.FormatDescriptor;
-import javax.swing.AbstractButton;
-import java.awt.Color;
-import java.awt.RenderingHints;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.RenderedImage;
@@ -56,23 +55,41 @@ import java.util.Map;
 public class WaterMaskVPI extends AbstractVisatPlugIn {
 
     public static final String COMMAND_ID = "createLandWaterCoastMasks";
+
     public static final String LAND_WATER_MASK_OP_ALIAS = "LandWaterMask";
     public static final String TARGET_TOOL_BAR_NAME = "layersToolBar";
-    public static final String WATER_FRACTION_BAND_NAME = "water_fraction";
-    public static final String BLURRED_WATER_FRACTION_NAME = "blurred_water_fraction";
+    public static final String WATER_FRACTION_BAND_NAME = "mask_data_water_fraction";
+    public static final String WATER_FRACTION_SMOOTHED_NAME = "mask_data_water_fraction_smoothed";
 
-    String landExpression = WATER_FRACTION_BAND_NAME + " < 15";
-    String coastlineExpression = BLURRED_WATER_FRACTION_NAME + " > 15 and " + BLURRED_WATER_FRACTION_NAME + " < 85";
-    String waterExpression = WATER_FRACTION_BAND_NAME + " > 85";
 
-    boolean showCoastline = true;
-    boolean showLandMask = false;
-    boolean showWaterMask = false;
+    private static final String LAND_MASK_NAME = "LandMask";
+    private static final String LAND_MASK_MATH = WATER_FRACTION_BAND_NAME + " == 0";
+    private static final String LAND_MASK_DESCRIPTION = "Land pixels";
+    private static final Color LAND_MASK_COLOR = new Color(100, 49, 12);
+    private static final double LAND_MASK_TRANSPARENCY = 0.0;
+    private static final boolean SHOW_LAND_MASK_ALL_BANDS = false;
+
+
+    private static final String COASTLINE_MASK_NAME = "CoastLine";
+    private static final String COASTLINE_MATH = WATER_FRACTION_SMOOTHED_NAME + " > 25 and " + WATER_FRACTION_SMOOTHED_NAME + " < 75";
+    private static final String COASTLINE_MASK_DESCRIPTION = "Coastline pixels";
+    private static final Color COASTLINE_MASK_COLOR = new Color(192, 192, 192);
+    private static final double COASTLINE_MASK_TRANSPARENCY = 0.0;
+    private static final boolean SHOW_COASTLINE_MASK_ALL_BANDS = true;
+
+
+    private static final String WATER_MASK_NAME = "WaterMask";
+    private static final String WATER_MASK_MATH = WATER_FRACTION_BAND_NAME + " > 0";
+    private static final String WATER_MASK_DESCRIPTION = "Water pixels";
+    private static final Color WATER_MASK_COLOR = new Color(0, 0, 255);
+    private static final double WATER_MASK_TRANSPARENCY = 0.5;
+    private static final boolean SHOW_WATER_MASK_ALL_BANDS = false;
+
 
     @Override
     public void start(final VisatApp visatApp) {
         final ExecCommand action = visatApp.getCommandManager().createExecCommand(COMMAND_ID,
-                                                                                  new ToolbarCommand(visatApp));
+                new ToolbarCommand(visatApp));
         action.setLargeIcon(UIUtils.loadImageIcon("/org/esa/beam/watermask/ui/icons/dock.gif"));
 
         final AbstractButton lwcButton = visatApp.createToolButton(COMMAND_ID);
@@ -88,41 +105,41 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
     }
 
     private void showLandWaterCoastMasks(final VisatApp visatApp) {
-        /*JDialog landWaterCoastDialog = new JDialog();
-        landWaterCoastDialog.setVisible(true);
-
-        JPanel lwcPanel = GridBagUtils.createPanel();
-        JPanel coastlinePanel = GridBagUtils.createPanel();
-        GridBagConstraints coastlineConstraints = new GridBagConstraints();
-        int rightInset = 10;
-
-        SpinnerModel transparencyModel = new SpinnerNumberModel(0.4, 0.0, 1.0, 0.1);
-        JSpinner transparencySpinner = new JSpinner(transparencyModel);
-
-        SpinnerModel samplingModel = new SpinnerNumberModel(1, 1, 10, 1);
-        JSpinner xSamplingSpinner = new JSpinner(samplingModel);
-        JSpinner ySamplingSpinner = new JSpinner(samplingModel);
-
-        Integer[] resolutions = {50, 150};
-        JComboBox resolutionComboBox = new JComboBox(resolutions);
-
-        GridBagUtils.addToPanel(coastlinePanel, new JCheckBox("Coastline"), coastlineConstraints, "anchor=WEST, gridx=0, gridy=0");
-        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Mask name: "), coastlineConstraints, "gridy=1, insets.right="+ rightInset);
-        GridBagUtils.addToPanel(coastlinePanel, new JTextField("Coastline"), coastlineConstraints, "gridx=1, insets.right=0");
-        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Line color: "), coastlineConstraints, "gridx=0, gridy=2, insets.right=" + rightInset);
-        GridBagUtils.addToPanel(coastlinePanel, new ColorExComboBox(), coastlineConstraints, "gridx=1, insets.right=0");
-        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Transparency: "), coastlineConstraints, "gridy=2, insets.right="+ rightInset);
-        GridBagUtils.addToPanel(coastlinePanel, transparencySpinner, coastlineConstraints, "gridx=1, insets.right=0");
-        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Resolution: "), coastlineConstraints, "gridy=3, insets.right="+ rightInset);
-        GridBagUtils.addToPanel(coastlinePanel, resolutionComboBox, coastlineConstraints, "gridx=1, insets.right=0");
-        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Supersampling factor x: "), coastlineConstraints, "gridy=4, insets.right="+ rightInset);
-        GridBagUtils.addToPanel(coastlinePanel, xSamplingSpinner, coastlineConstraints, "gridx=1, insets.right=0");
-        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Supersampling factor y: "), coastlineConstraints, "gridy=5, insets.right="+ rightInset);
-        GridBagUtils.addToPanel(coastlinePanel, ySamplingSpinner, coastlineConstraints, "gridx=1, insets.right=0");*/
+//        JDialog landWaterCoastDialog = new JDialog();
+//        landWaterCoastDialog.setVisible(true);
+//
+//        JPanel lwcPanel = GridBagUtils.createPanel();
+//        JPanel coastlinePanel = GridBagUtils.createPanel();
+//        GridBagConstraints coastlineConstraints = new GridBagConstraints();
+//        int rightInset = 10;
+//
+//        SpinnerModel transparencyModel = new SpinnerNumberModel(0.4, 0.0, 1.0, 0.1);
+//        JSpinner transparencySpinner = new JSpinner(transparencyModel);
+//
+//        SpinnerModel samplingModel = new SpinnerNumberModel(1, 1, 10, 1);
+//        JSpinner xSamplingSpinner = new JSpinner(samplingModel);
+//        JSpinner ySamplingSpinner = new JSpinner(samplingModel);
+//
+//        Integer[] resolutions = {50, 150};
+//        JComboBox resolutionComboBox = new JComboBox(resolutions);
+//
+//        GridBagUtils.addToPanel(coastlinePanel, new JCheckBox("Coastline"), coastlineConstraints, "anchor=WEST, gridx=0, gridy=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Mask name: "), coastlineConstraints, "gridy=1, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, new JTextField("Coastline"), coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Line color: "), coastlineConstraints, "gridx=0, gridy=2, insets.right=" + rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, new ColorExComboBox(), coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Transparency: "), coastlineConstraints, "gridy=2, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, transparencySpinner, coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Resolution: "), coastlineConstraints, "gridy=3, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, resolutionComboBox, coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Supersampling factor x: "), coastlineConstraints, "gridy=4, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, xSamplingSpinner, coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Supersampling factor y: "), coastlineConstraints, "gridy=5, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, ySamplingSpinner, coastlineConstraints, "gridx=1, insets.right=0");
 
 
         ProgressMonitorSwingWorker pmSwingWorker = new ProgressMonitorSwingWorker(visatApp.getMainFrame(),
-                                                                                  "Computing Masks") {
+                "Computing Masks") {
 
             @Override
             protected Void doInBackground(ProgressMonitor pm) throws Exception {
@@ -149,51 +166,66 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                     pm.worked(1);
                     waterFractionBand.setName(WATER_FRACTION_BAND_NAME);
                     product.addBand(waterFractionBand);
-                    product.addBand(coastBand);
+                    //todo BEAM folks left this as a placeholder
+//                    product.addBand(coastBand);
 
                     //todo replace with JAI operator "GeneralFilter" which uses a GeneralFilterFunction
                     final Kernel arithmeticMean3x3Kernel = new Kernel(3, 3, 1.0 / 9.0,
-                                                                      new double[]{
-                                                                              +1, +1, +1,
-                                                                              +1, +1, +1,
-                                                                              +1, +1, +1,
-                                                                      });
-                    final ConvolutionFilterBand filteredCoastlineBand = new ConvolutionFilterBand(BLURRED_WATER_FRACTION_NAME,
-                                                                                          waterFractionBand,
-                                                                                          arithmeticMean3x3Kernel);
+                            new double[]{
+                                    +1, +1, +1,
+                                    +1, +1, +1,
+                                    +1, +1, +1,
+                            });
+                    final ConvolutionFilterBand filteredCoastlineBand = new ConvolutionFilterBand(WATER_FRACTION_SMOOTHED_NAME,
+                            waterFractionBand,
+                            arithmeticMean3x3Kernel);
                     product.addBand(filteredCoastlineBand);
 
                     ProductNodeGroup<Mask> maskGroup = product.getMaskGroup();
-                    Mask landMask = Mask.BandMathsType.create("poormans_land", "Land pixels",
-                                                              product.getSceneRasterWidth(),
-                                                              product.getSceneRasterHeight(),
-                                                              landExpression, Color.GREEN.darker(), 0.4);
+
+
+                    Mask landMask = Mask.BandMathsType.create(LAND_MASK_NAME,
+                            LAND_MASK_DESCRIPTION,
+                            product.getSceneRasterWidth(),
+                            product.getSceneRasterHeight(),
+                            LAND_MASK_MATH,
+                            LAND_MASK_COLOR,
+                            LAND_MASK_TRANSPARENCY);
+//                    Color.GREEN.darker(),
+
                     maskGroup.add(landMask);
 
-                    Mask coastlineMask = Mask.BandMathsType.create("poormans_coastline", "Coastline pixels",
-                                                                   product.getSceneRasterWidth(),
-                                                                   product.getSceneRasterHeight(),
-                                                                   coastlineExpression,
-                                                                   Color.YELLOW, 0.2);
+
+                    Mask coastlineMask = Mask.BandMathsType.create(COASTLINE_MASK_NAME,
+                            COASTLINE_MASK_DESCRIPTION,
+                            product.getSceneRasterWidth(),
+                            product.getSceneRasterHeight(),
+                            COASTLINE_MATH,
+                            COASTLINE_MASK_COLOR,
+                            COASTLINE_MASK_TRANSPARENCY);
                     maskGroup.add(coastlineMask);
 
-                    Mask waterMask = Mask.BandMathsType.create("poormans_water", "Water pixels",
-                                                               product.getSceneRasterWidth(),
-                                                               product.getSceneRasterHeight(),
-                                                               waterExpression, Color.BLUE, 0.4);
+
+                    Mask waterMask = Mask.BandMathsType.create(WATER_MASK_NAME,
+                            WATER_MASK_DESCRIPTION,
+                            product.getSceneRasterWidth(),
+                            product.getSceneRasterHeight(),
+                            WATER_MASK_MATH,
+                            WATER_MASK_COLOR,
+                            WATER_MASK_TRANSPARENCY);
                     maskGroup.add(waterMask);
                     pm.worked(1);
 
                     String[] bandNames = product.getBandNames();
                     for (String bandName : bandNames) {
                         RasterDataNode raster = product.getRasterDataNode(bandName);
-                        if (showCoastline) {
+                        if (SHOW_COASTLINE_MASK_ALL_BANDS) {
                             raster.getOverlayMaskGroup().add(coastlineMask);
                         }
-                        if (showLandMask) {
+                        if (SHOW_LAND_MASK_ALL_BANDS) {
                             raster.getOverlayMaskGroup().add(landMask);
                         }
-                        if (showWaterMask) {
+                        if (SHOW_WATER_MASK_ALL_BANDS) {
                             raster.getOverlayMaskGroup().add(waterMask);
                         }
                     }
@@ -221,12 +253,13 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
     }
 
+
     private void reformatSourceImage(Band band, ImageLayout imageLayout) {
         RenderingHints renderingHints = new RenderingHints(JAI.KEY_IMAGE_LAYOUT, imageLayout);
         MultiLevelImage waterFractionSourceImage = band.getSourceImage();
         int waterFractionDataType = waterFractionSourceImage.getData().getDataBuffer().getDataType();
         RenderedImage newImage = FormatDescriptor.create(waterFractionSourceImage, waterFractionDataType,
-                                                         renderingHints);
+                renderingHints);
         band.setSourceImage(newImage);
     }
 
