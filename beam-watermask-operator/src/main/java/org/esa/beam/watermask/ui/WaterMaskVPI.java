@@ -12,6 +12,7 @@ import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNodeGroup;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.gpf.GPF;
+import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.command.CommandAdapter;
 import org.esa.beam.framework.ui.command.CommandEvent;
@@ -24,9 +25,10 @@ import javax.media.jai.JAI;
 import javax.media.jai.operator.FormatDescriptor;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.RenderedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,9 +106,162 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
         });
     }
 
+    class WaterMaskData {
+
+        private boolean testBoolean = true;
+
+        public WaterMaskData() {
+
+        }
+
+        public boolean isTestBoolean() {
+            return testBoolean;
+        }
+
+        public void setTestBoolean(boolean testBoolean) {
+            this.testBoolean = testBoolean;
+        }
+    }
+
+
+    public class WaterMaskSampleCheckbox {
+
+        private WaterMaskData waterMaskData;
+
+        private JLabel jLabel;
+        private JCheckBox jCheckBox = new JCheckBox();
+
+        public WaterMaskSampleCheckbox(WaterMaskData waterMaskData) {
+
+            this.waterMaskData = waterMaskData;
+
+            jLabel = new JLabel("test Checkbox");
+            jLabel.setToolTipText("test toolTip");
+            jCheckBox.setName("test Checkbox");
+            jCheckBox.setSelected(waterMaskData.isTestBoolean());
+
+            addControlListeners();
+        }
+
+        private void addControlListeners() {
+            jCheckBox.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    waterMaskData.setTestBoolean(jCheckBox.isSelected());
+                }
+            });
+        }
+
+
+        public JLabel getjLabel() {
+            return jLabel;
+        }
+
+        public JCheckBox getjCheckBox() {
+            return jCheckBox;
+        }
+    }
+
+
+    class WaterMaskDialog extends JDialog {
+
+        public WaterMaskData waterMaskData = null;
+
+
+        public WaterMaskDialog(WaterMaskData waterMaskData) {
+            this.waterMaskData = waterMaskData;
+
+            initUI();
+        }
+
+        public final void initUI() {
+
+            JPanel jPanel = GridBagUtils.createPanel();
+            GridBagConstraints coastlineConstraints = new GridBagConstraints();
+
+            final WaterMaskSampleCheckbox waterMaskSampleCheckbox = new WaterMaskSampleCheckbox(waterMaskData);
+
+
+            GridBagUtils.addToPanel(jPanel, waterMaskSampleCheckbox.getjCheckBox(), coastlineConstraints,
+                    "anchor=WEST, gridx=0, gridy=0");
+
+
+            JButton close = new JButton("Close");
+            close.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent event) {
+                    waterMaskData.setTestBoolean(waterMaskSampleCheckbox.getjCheckBox().isSelected());
+                    dispose();
+                }
+            });
+
+            close.setAlignmentX(0.5f);
+
+            GridBagUtils.addToPanel(jPanel, close, coastlineConstraints,
+                    "anchor=WEST, gridx=0, gridy=0");
+
+
+            add(jPanel);
+
+            setModalityType(ModalityType.APPLICATION_MODAL);
+
+            setTitle("About Notes");
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            setLocationRelativeTo(null);
+            setSize(300, 200);
+        }
+    }
+
+
     private void showLandWaterCoastMasks(final VisatApp visatApp) {
-//        JDialog landWaterCoastDialog = new JDialog();
+
+        WaterMaskData waterMaskData = new WaterMaskData();
+        waterMaskData.setTestBoolean(true);
+
+        System.out.println("bool=" + waterMaskData.isTestBoolean());
+        WaterMaskDialog waterMaskDialog = new WaterMaskDialog(waterMaskData);
+
+        System.out.println("bool=" + waterMaskData.isTestBoolean());
+
+
+//        //1. Create the frame.
+//        JFrame frame = new JFrame("FrameDemo");
+////
+//////2. Optional: What happens when the frame closes?
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+////
+//////3. Create components and put them in the frame.
+//////...create emptyLabel...
+////        JLabel jLabel = new JLabel("test");
+////        frame.getContentPane().add(jLabel, BorderLayout.CENTER);
+////
+//////4. Size the frame.
+//        frame.pack();
+////
+//////5. Show it.
+//        frame.setVisible(true);
+//
+//
+//        JOptionPane.showMessageDialog(frame,
+//                "Eggs are not supposed to be green.");
+
+
+//        JFrame frame = new JFrame();
+//
+//        JDialog landWaterCoastDialog = new JDialog(frame, "My Dialog", true);
+//
+//        //     landWaterCoastDialog.setLayout(new GridBagLayout());
 //        landWaterCoastDialog.setVisible(true);
+//        landWaterCoastDialog.add(new JLabel("test"));
+//        landWaterCoastDialog.pack();
+//
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//        frame.pack();
+//        frame.setVisible(true);
+
+
+        // BEAM COMMENTS
 //
 //        JPanel lwcPanel = GridBagUtils.createPanel();
 //        JPanel coastlinePanel = GridBagUtils.createPanel();
