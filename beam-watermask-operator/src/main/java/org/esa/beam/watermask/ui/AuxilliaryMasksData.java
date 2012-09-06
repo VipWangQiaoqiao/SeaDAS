@@ -1,6 +1,7 @@
 package org.esa.beam.watermask.ui;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,9 +13,13 @@ import java.awt.*;
 class AuxilliaryMasksData {
 
     private boolean createMasks = false;
+    private boolean deleteMasks = false;
 
     private int superSampling = 1;
-    private int resolution = 50;
+
+    private ArrayList<ResolutionInfo> resolutionInfos = new ArrayList<ResolutionInfo>();
+    private ResolutionInfo resolutionInfo;
+
 
     private double landMaskTransparency = 0.0;
     private double waterMaskTransparency = 0.5;
@@ -47,7 +52,12 @@ class AuxilliaryMasksData {
     private String waterMaskDescription = "Water pixels";
 
     public AuxilliaryMasksData() {
+        ResolutionInfo resolutionInfo =    new ResolutionInfo(ResolutionInfo.Unit.METER, 50);
+        this.setResolutionInfo(resolutionInfo);
 
+        getResolutionInfos().add(resolutionInfo);
+        getResolutionInfos().add(new ResolutionInfo(ResolutionInfo.Unit.METER, 150));
+        getResolutionInfos().add(new ResolutionInfo(ResolutionInfo.Unit.KILOMETER, 1));
     }
 
 
@@ -139,12 +149,12 @@ class AuxilliaryMasksData {
         this.superSampling = superSampling;
     }
 
-    public int getResolution() {
-        return resolution;
+    public ResolutionInfo getResolutionInfo() {
+        return resolutionInfo;
     }
 
-    public void setResolution(int resolution) {
-        this.resolution = resolution;
+    public void setResolutionInfo(ResolutionInfo resolution) {
+        this.resolutionInfo = resolution;
     }
 
     public String getWaterFractionBandName() {
@@ -233,6 +243,22 @@ class AuxilliaryMasksData {
 
     public void setWaterMaskDescription(String waterMaskDescription) {
         this.waterMaskDescription = waterMaskDescription;
+    }
+
+    public boolean isDeleteMasks() {
+        return deleteMasks;
+    }
+
+    public void setDeleteMasks(boolean deleteMasks) {
+        this.deleteMasks = deleteMasks;
+    }
+
+    public ArrayList<ResolutionInfo> getResolutionInfos() {
+        return resolutionInfos;
+    }
+
+    public void setResolutionInfos(ArrayList<ResolutionInfo> resolutionInfos) {
+        this.resolutionInfos = resolutionInfos;
     }
 }
 

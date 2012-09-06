@@ -1,7 +1,5 @@
 package org.esa.beam.watermask.ui;
 
-import org.esa.beam.framework.ui.GridBagUtils;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,6 +12,39 @@ import java.awt.event.ActionListener;
  * Time: 8:46 AM
  * To change this template use File | Settings | File Templates.
  */
+
+// BEAM COMMENTS
+//
+
+//        JPanel lwcPanel = GridBagUtils.createPanel();
+//        JPanel coastlinePanel = GridBagUtils.createPanel();
+//        GridBagConstraints coastlineConstraints = new GridBagConstraints();
+//        int rightInset = 10;
+//
+//        SpinnerModel transparencyModel = new SpinnerNumberModel(0.4, 0.0, 1.0, 0.1);
+//        JSpinner transparencySpinner = new JSpinner(transparencyModel);
+//
+//        SpinnerModel samplingModel = new SpinnerNumberModel(1, 1, 10, 1);
+//        JSpinner xSamplingSpinner = new JSpinner(samplingModel);
+//        JSpinner ySamplingSpinner = new JSpinner(samplingModel);
+//
+//        Integer[] resolutions = {50, 150};
+//        JComboBox resolutionComboBox = new JComboBox(resolutions);
+//
+//        GridBagUtils.addToPanel(coastlinePanel, new JCheckBox("Coastline"), coastlineConstraints, "anchor=WEST, gridx=0, gridy=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Mask name: "), coastlineConstraints, "gridy=1, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, new JTextField("Coastline"), coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Line color: "), coastlineConstraints, "gridx=0, gridy=2, insets.right=" + rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, new ColorExComboBox(), coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Transparency: "), coastlineConstraints, "gridy=2, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, transparencySpinner, coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Resolution: "), coastlineConstraints, "gridy=3, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, resolutionComboBox, coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Supersampling factor x: "), coastlineConstraints, "gridy=4, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, xSamplingSpinner, coastlineConstraints, "gridx=1, insets.right=0");
+//        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Supersampling factor y: "), coastlineConstraints, "gridy=5, insets.right="+ rightInset);
+//        GridBagUtils.addToPanel(coastlinePanel, ySamplingSpinner, coastlineConstraints, "gridx=1, insets.right=0");
+
 class AuxilliaryMasksDialog extends JDialog {
 
     public AuxilliaryMasksData auxilliaryMasksData = null;
@@ -30,26 +61,51 @@ class AuxilliaryMasksDialog extends JDialog {
     }
 
     public final void notificationUI() {
-        JButton jButton = new JButton("Okay");
-        jButton.setPreferredSize(jButton.getPreferredSize());
-        jButton.setMinimumSize(jButton.getPreferredSize());
-        jButton.setMaximumSize(jButton.getPreferredSize());
+        JButton createMasks = new JButton("Create New Masks");
+        createMasks.setPreferredSize(createMasks.getPreferredSize());
+        createMasks.setMinimumSize(createMasks.getPreferredSize());
+        createMasks.setMaximumSize(createMasks.getPreferredSize());
 
 
-        jButton.addActionListener(new ActionListener() {
+        createMasks.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                auxilliaryMasksData.setDeleteMasks(true);
+                dispose();
+            }
+        });
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setPreferredSize(cancelButton.getPreferredSize());
+        cancelButton.setMinimumSize(cancelButton.getPreferredSize());
+        cancelButton.setMaximumSize(cancelButton.getPreferredSize());
+
+        cancelButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
                 dispose();
             }
         });
 
+        JLabel filler = new JLabel("                            ");
+
+
+        JPanel buttonsJPanel = new JPanel(new GridBagLayout());
+        buttonsJPanel.add(cancelButton,
+                new ExGridBagConstraints(0, 0, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+        buttonsJPanel.add(filler,
+                new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+        buttonsJPanel.add(createMasks,
+                new ExGridBagConstraints(2, 0, 1, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+
+
         JLabel jLabel = new JLabel("Masks have already been created for this product");
 
         JPanel jPanel = new JPanel(new GridBagLayout());
         jPanel.add(jLabel,
-                new GridBagConstraintsCustom(0, 0, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE));
-        jPanel.add(jButton,
-                new GridBagConstraintsCustom(0, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 0, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE));
+        jPanel.add(buttonsJPanel,
+                new ExGridBagConstraints(0, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 
 
         add(jPanel);
@@ -72,8 +128,8 @@ class AuxilliaryMasksDialog extends JDialog {
 
     public final void auxilliaryMasksUI() {
 
-//        JPanel mainPanel = GridBagUtils.createPanel();
-//        GridBagConstraints constraints = new GridBagConstraints();
+
+        final int rightInset = 5;
 
         final CoastlineEnabledAllBandsCheckbox coastlineEnabledAllBandsCheckbox = new CoastlineEnabledAllBandsCheckbox(auxilliaryMasksData);
         final WaterEnabledAllBandsCheckbox waterEnabledAllBandsCheckbox = new WaterEnabledAllBandsCheckbox(auxilliaryMasksData);
@@ -88,17 +144,24 @@ class AuxilliaryMasksDialog extends JDialog {
         final WaterColorComboBox waterColorComboBox = new WaterColorComboBox(auxilliaryMasksData);
         final LandColorComboBox landColorComboBox = new LandColorComboBox(auxilliaryMasksData);
 
+        final ResolutionComboBox resolutionComboBox = new ResolutionComboBox(auxilliaryMasksData);
         final SuperSamplingSpinner superSamplingSpinner = new SuperSamplingSpinner(auxilliaryMasksData);
 
 
         JPanel resolutionSamplingPanel = new JPanel(new GridBagLayout());
         resolutionSamplingPanel.setBorder(BorderFactory.createTitledBorder(""));
 
+        resolutionSamplingPanel.add(resolutionComboBox.getjLabel(),
+                new ExGridBagConstraints(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
+
+        resolutionSamplingPanel.add(resolutionComboBox.getjComboBox(),
+                new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+
         resolutionSamplingPanel.add(superSamplingSpinner.getjLabel(),
-                new GridBagConstraintsCustom(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         resolutionSamplingPanel.add(superSamplingSpinner.getjSpinner(),
-                new GridBagConstraintsCustom(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
 
         JPanel coastlineJPanel = new JPanel(new GridBagLayout());
@@ -109,29 +172,30 @@ class AuxilliaryMasksDialog extends JDialog {
         coastlineNameTextfield.setEditable(false);
         coastlineNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
+
         coastlineJPanel.add(new JLabel("Mask Name"),
-                new GridBagConstraintsCustom(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         coastlineJPanel.add(coastlineNameTextfield,
-                new GridBagConstraintsCustom(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         coastlineJPanel.add(coastlineColorComboBox.getjLabel(),
-                new GridBagConstraintsCustom(0, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         coastlineJPanel.add(coastlineColorComboBox.getColorExComboBox(),
-                new GridBagConstraintsCustom(1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         coastlineJPanel.add(coastlineTransparencySpinner.getjLabel(),
-                new GridBagConstraintsCustom(0, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         coastlineJPanel.add(coastlineTransparencySpinner.getjSpinner(),
-                new GridBagConstraintsCustom(1, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         coastlineJPanel.add(coastlineEnabledAllBandsCheckbox.getjLabel(),
-                new GridBagConstraintsCustom(0, 3, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 3, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         coastlineJPanel.add(coastlineEnabledAllBandsCheckbox.getjCheckBox(),
-                new GridBagConstraintsCustom(1, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
 
         JPanel waterJPanel = new JPanel(new GridBagLayout());
@@ -142,30 +206,28 @@ class AuxilliaryMasksDialog extends JDialog {
         waterNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
         waterJPanel.add(new JLabel("Mask Name"),
-                new GridBagConstraintsCustom(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         waterJPanel.add(waterNameTextfield,
-                new GridBagConstraintsCustom(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         waterJPanel.add(waterColorComboBox.getjLabel(),
-                new GridBagConstraintsCustom(0, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         waterJPanel.add(waterColorComboBox.getColorExComboBox(),
-                new GridBagConstraintsCustom(1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         waterJPanel.add(waterTransparencySpinner.getjLabel(),
-                new GridBagConstraintsCustom(0, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         waterJPanel.add(waterTransparencySpinner.getjSpinner(),
-                new GridBagConstraintsCustom(1, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         waterJPanel.add(waterEnabledAllBandsCheckbox.getjLabel(),
-                new GridBagConstraintsCustom(0, 3, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 3, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         waterJPanel.add(waterEnabledAllBandsCheckbox.getjCheckBox(),
-                new GridBagConstraintsCustom(1, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
-
-
+                new ExGridBagConstraints(1, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
 
         JPanel landJPanel = new JPanel(new GridBagLayout());
@@ -176,91 +238,40 @@ class AuxilliaryMasksDialog extends JDialog {
         landNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
         landJPanel.add(new JLabel("Mask Name"),
-                new GridBagConstraintsCustom(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         landJPanel.add(landNameTextfield,
-                new GridBagConstraintsCustom(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         landJPanel.add(landColorComboBox.getjLabel(),
-                new GridBagConstraintsCustom(0, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         landJPanel.add(landColorComboBox.getColorExComboBox(),
-                new GridBagConstraintsCustom(1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         landJPanel.add(landTransparencySpinner.getjLabel(),
-                new GridBagConstraintsCustom(0, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 2, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         landJPanel.add(landTransparencySpinner.getjSpinner(),
-                new GridBagConstraintsCustom(1, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         landJPanel.add(landEnabledAllBandsCheckbox.getjLabel(),
-                new GridBagConstraintsCustom(0, 3, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 3, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
         landJPanel.add(landEnabledAllBandsCheckbox.getjCheckBox(),
-                new GridBagConstraintsCustom(1, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(1, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.add(resolutionSamplingPanel,
-                new GridBagConstraintsCustom(0, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
+                new ExGridBagConstraints(0, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
         mainPanel.add(coastlineJPanel,
-                new GridBagConstraintsCustom(0, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
+                new ExGridBagConstraints(0, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
         mainPanel.add(waterJPanel,
-                new GridBagConstraintsCustom(0, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
+                new ExGridBagConstraints(0, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
         mainPanel.add(landJPanel,
-                new GridBagConstraintsCustom(0, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
+                new ExGridBagConstraints(0, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
 
-
-//        GridBagUtils.addToPanel(mainPanel, coastlineTransparencySpinner.getjLabel(), constraints,
-//                "gridx=0, gridy=0, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, coastlineTransparencySpinner.getjSpinner(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, waterTransparencySpinner.getjLabel(), constraints,
-//                "gridx=0, gridy=1, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, waterTransparencySpinner.getjSpinner(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, landTransparencySpinner.getjLabel(), constraints,
-//                "gridx=0, gridy=2, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, landTransparencySpinner.getjSpinner(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, coastlineEnabledAllBandsCheckbox.getjLabel(), constraints,
-//                "gridx=0, gridy=3, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, coastlineEnabledAllBandsCheckbox.getjCheckBox(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, waterEnabledAllBandsCheckbox.getjLabel(), constraints,
-//                "gridx=0, gridy=4, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, waterEnabledAllBandsCheckbox.getjCheckBox(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, landEnabledAllBandsCheckbox.getjLabel(), constraints,
-//                "gridx=0, gridy=5, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, landEnabledAllBandsCheckbox.getjCheckBox(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, coastlineColorComboBox.getjLabel(), constraints,
-//                "gridx=0, gridy=6, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, coastlineColorComboBox.getColorExComboBox(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, waterColorComboBox.getjLabel(), constraints,
-//                "gridx=0, gridy=7, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, waterColorComboBox.getColorExComboBox(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, landColorComboBox.getjLabel(), constraints,
-//                "gridx=0, gridy=8, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, landColorComboBox.getColorExComboBox(), constraints,
-//                "gridx=1, anchor=WEST");
-//
-//        GridBagUtils.addToPanel(mainPanel, superSamplingSpinner.getjLabel(), constraints,
-//                "gridx=0, gridy=9, anchor=EAST");
-//        GridBagUtils.addToPanel(mainPanel, superSamplingSpinner.getjSpinner(), constraints,
-//                "gridx=1, anchor=WEST");
-//
 
         JButton createMasks = new JButton("Create Masks");
         createMasks.setPreferredSize(createMasks.getPreferredSize());
@@ -293,40 +304,18 @@ class AuxilliaryMasksDialog extends JDialog {
 
         JPanel buttonsJPanel = new JPanel(new GridBagLayout());
         buttonsJPanel.add(cancelButton,
-                new GridBagConstraintsCustom(0, 0, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
+                new ExGridBagConstraints(0, 0, 1, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
         buttonsJPanel.add(filler,
-                new GridBagConstraintsCustom(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+                new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
         buttonsJPanel.add(createMasks,
-                new GridBagConstraintsCustom(2, 0, 1, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
-
-
-//            JPanel buttonsJPanel = GridBagUtils.createPanel();
-//            GridBagConstraints buttonConstraints = new GridBagConstraints();
-//            GridBagUtils.addToPanel(buttonsJPanel, new JLabel(" "), buttonConstraints,
-//                    "gridx=0, gridy=0, anchor=EAST, weightx=1, fill="+GridBagConstraints.HORIZONTAL);
-//
-//            GridBagUtils.addToPanel(buttonsJPanel, createMasks, buttonConstraints,
-//                    "gridx=1, gridy=0, anchor=CENTER, weightx=0");
-//
-//            GridBagUtils.addToPanel(buttonsJPanel, cancelButton, buttonConstraints,
-//                    "gridx=2, gridy=0, anchor=EAST, weightx=0");
-//
+                new ExGridBagConstraints(2, 0, 1, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
 
 
         createMasks.setAlignmentX(0.5f);
 
-//            mainPanel.add(buttonsJPanel,
-//                    new GridBagConstraintsCustom(0, 9, 1, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
-//
-
-
-        //  buttonsJPanel.setPreferredSize(buttonsJPanel.getPreferredSize());
-
-//        GridBagUtils.addToPanel(mainPanel, buttonsJPanel, constraints,
-//                "gridx=0, gridy=10, weightx=1, anchor=WEST, fill=HORIZONTAL, gridwidth=2");
 
         mainPanel.add(buttonsJPanel,
-                new GridBagConstraintsCustom(0, 4, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, 5));
+                new ExGridBagConstraints(0, 4, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE, 5));
 
 
         add(mainPanel);
