@@ -71,6 +71,7 @@ public class WatermaskOp extends Operator {
                label = "Resolution", defaultValue = "50", valueSet = {"50", "150"})
     private int resolution;
 
+
     @Parameter(description = "Specifies the factor between the resolution of the source product and the watermask in " +
                              "x direction. A value of '1' means no subsampling at all.",
                label = "Subsampling factor x", defaultValue = "3", notNull = true)
@@ -81,6 +82,12 @@ public class WatermaskOp extends Operator {
                label = "Subsampling factor y", defaultValue = "3", notNull = true)
     private int subSamplingFactorY;
 
+
+    @Parameter(description = "Specifies the watermaskClassifier mode",
+            label = "Mode", defaultValue = "2", notNull = true)
+    private int mode;
+
+
     @TargetProduct
     private Product targetProduct;
     private WatermaskClassifier classifier;
@@ -90,8 +97,9 @@ public class WatermaskOp extends Operator {
         validateParameter();
         validateSourceProduct();
         initTargetProduct();
+
         try {
-            classifier = new WatermaskClassifier(resolution);
+            classifier = new WatermaskClassifier(resolution, mode);
         } catch (IOException e) {
             throw new OperatorException("Error creating class WatermaskClassifier.", e);
         }

@@ -79,22 +79,30 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
         final Product product = visatApp.getSelectedProduct();
         if (product != null) {
+            final ProductNodeGroup<Mask> maskGroup = product.getMaskGroup();
+            final ProductNodeGroup<Band> bandGroup = product.getBandGroup();
 
+            /*
+               A simple boolean switch to enable this to run with or without the intermediate user dialogs
+            */
+
+            // todo for Danny: turn this boolean on when it is ready
             boolean useDialogs = false;
 
-            final boolean[] masksCreated = {false};
-
             final AuxilliaryMasksData auxilliaryMasksData = new AuxilliaryMasksData();
-            auxilliaryMasksData.setCreateMasks(false);
-            auxilliaryMasksData.setDeleteMasks(false);
+
 
             if (!useDialogs) {
                 auxilliaryMasksData.setCreateMasks(true);
             }
 
-            final ProductNodeGroup<Mask> maskGroup = product.getMaskGroup();
-            final ProductNodeGroup<Band> bandGroup = product.getBandGroup();
 
+            /*
+                Determine whether these auxilliary masks and associated products have already be created.
+                This would be the case when run a second time on the same product.
+            */
+
+            final boolean[] masksCreated = {false};
 
             for (String name : maskGroup.getNodeNames()) {
                 if (name.equals(auxilliaryMasksData.getCoastlineMaskName()) ||
@@ -112,9 +120,14 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                 }
             }
 
+            /*
+                For the case where this is being run a second time, prompt the user to determine whether to delete
+                and re-create the products and masks.
+             */
 
             if (masksCreated[0]) {
                 if (useDialogs) {
+                    auxilliaryMasksData.setDeleteMasks(false);
                     AuxilliaryMasksDialog auxilliaryMasksDialog = new AuxilliaryMasksDialog(auxilliaryMasksData, masksCreated[0]);
                     auxilliaryMasksDialog.setVisible(true);
                 }
@@ -145,6 +158,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
             if (!masksCreated[0]) {
                 if (useDialogs) {
+                    auxilliaryMasksData.setCreateMasks(false);
                     AuxilliaryMasksDialog auxilliaryMasksDialog = new AuxilliaryMasksDialog(auxilliaryMasksData, masksCreated[0]);
                     auxilliaryMasksDialog.setVisible(true);
                 }
@@ -159,16 +173,20 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                             pm.beginTask("Creating land, water, coastline masks", 2);
 
                             try {
-//        Product landWaterProduct = GPF.createProduct("LandWaterMask", GPF.NO_PARAMS, product);
-
+                                //  Product landWaterProduct = GPF.createProduct("LandWaterMask", GPF.NO_PARAMS, product);
 
                                 Map<String, Object> parameters = new HashMap<String, Object>();
 
                                 parameters.put("subSamplingFactorX", new Integer(auxilliaryMasksData.getSuperSampling()));
                                 parameters.put("subSamplingFactorY", new Integer(auxilliaryMasksData.getSuperSampling()));
+//                                //todo this mode of 3 is just a test value
+                                parameters.put("mode", 2);
 
                                 ResolutionInfo resolutionInfo = auxilliaryMasksData.getResolutionInfo();
 
+                                /*
+                                    Create a new product, which will contain the land_water_fraction band
+                                 */
                                 if ((resolutionInfo.getResolution() == 50 ||
                                         resolutionInfo.getResolution() == 150) &&
                                         resolutionInfo.getUnit() == ResolutionInfo.Unit.METER) {
@@ -179,6 +197,8 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
 
                                 Product landWaterProduct = GPF.createProduct(LAND_WATER_MASK_OP_ALIAS, parameters, product);
+
+
                                 Band waterFractionBand = landWaterProduct.getBand("land_water_fraction");
                                 Band coastBand = landWaterProduct.getBand("coast");
 
@@ -192,6 +212,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
                                 pm.worked(1);
                                 waterFractionBand.setName(auxilliaryMasksData.getWaterFractionBandName());
+
                                 product.addBand(waterFractionBand);
 
                                 //todo BEAM folks left this as a placeholder
