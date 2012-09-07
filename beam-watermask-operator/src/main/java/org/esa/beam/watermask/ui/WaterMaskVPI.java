@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.RenderedImage;
 import java.util.HashMap;
 import java.util.Map;
+import org.esa.beam.watermask.operator.*;
 
 
 /**
@@ -179,8 +180,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
                                 parameters.put("subSamplingFactorX", new Integer(auxilliaryMasksData.getSuperSampling()));
                                 parameters.put("subSamplingFactorY", new Integer(auxilliaryMasksData.getSuperSampling()));
-//                                //todo this mode of 3 is just a test value
-                                parameters.put("mode", 2);
+                                parameters.put("mode", WatermaskClassifier.MODE_GC);
 
                                 ResolutionInfo resolutionInfo = auxilliaryMasksData.getResolutionInfo();
 
