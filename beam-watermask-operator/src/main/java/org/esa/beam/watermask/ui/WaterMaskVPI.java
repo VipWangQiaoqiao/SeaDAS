@@ -88,7 +88,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
             */
 
             // todo for Danny: turn this boolean on when it is ready
-            boolean useDialogs = false;
+            boolean useDialogs = true;
 
             final AuxilliaryMasksData auxilliaryMasksData = new AuxilliaryMasksData();
 
@@ -157,6 +157,8 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
             }
 
 
+
+
             if (!masksCreated[0]) {
                 if (useDialogs) {
                     auxilliaryMasksData.setCreateMasks(false);
@@ -180,19 +182,19 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
                                 parameters.put("subSamplingFactorX", new Integer(auxilliaryMasksData.getSuperSampling()));
                                 parameters.put("subSamplingFactorY", new Integer(auxilliaryMasksData.getSuperSampling()));
-                                parameters.put("mode", WatermaskClassifier.MODE_GC);
 
                                 ResolutionInfo resolutionInfo = auxilliaryMasksData.getResolutionInfo();
 
                                 /*
                                     Create a new product, which will contain the land_water_fraction band
                                  */
-                                if ((resolutionInfo.getResolution() == 50 ||
-                                        resolutionInfo.getResolution() == 150) &&
-                                        resolutionInfo.getUnit() == ResolutionInfo.Unit.METER) {
+                                if (resolutionInfo.getResolution() == 50 ||
+                                        resolutionInfo.getResolution() == 150) {
                                     parameters.put("resolution", new Integer(resolutionInfo.getResolution()));
+                                    parameters.put("mode", WatermaskClassifier.MODE_GC);
                                 } else {
-
+                                    parameters.put("resolution", new Integer(resolutionInfo.getResolution()));
+                                    parameters.put("mode", WatermaskClassifier.MODE_NEW);
                                 }
 
 

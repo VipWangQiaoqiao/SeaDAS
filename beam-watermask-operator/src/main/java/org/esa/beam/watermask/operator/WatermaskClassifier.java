@@ -44,8 +44,11 @@ public class WatermaskClassifier {
     public static final int LAND_VALUE = 0;
     public static final int RESOLUTION_50 = 50;
     public static final int RESOLUTION_150 = 150;
+    public static final int RESOLUTION_1000 = 1000;
     public static final int MODE_MODIS = 1;
     public static final int MODE_GC = MODE_MODIS << 1;
+    public static final int MODE_NEW = 3;
+
 
     static final int GC_TILE_WIDTH = 576;
     static final int GC_TILE_HEIGHT = 491;
@@ -81,17 +84,29 @@ public class WatermaskClassifier {
      * @throws java.io.IOException If some IO-error occurs creating the sources.
      */
     public WatermaskClassifier(int resolution, int mode) throws IOException {
-        if (resolution != RESOLUTION_50 && resolution != RESOLUTION_150) {
+        if (resolution != RESOLUTION_50 && resolution != RESOLUTION_150 && resolution != RESOLUTION_1000) {
             throw new IllegalArgumentException(
-                    MessageFormat.format("Resolution needs to be {0} or {1}.", RESOLUTION_50, RESOLUTION_150));
+                    MessageFormat.format("Resolution needs to be {0}, {1} or {2}.", RESOLUTION_50, RESOLUTION_150, RESOLUTION_1000));
+        }
+
+
+        if (mode == MODE_GC) {
+
+        } else if (mode == MODE_NEW) {
+
+        } else {
+
         }
 
         final File auxdataDir = installAuxdata();
+
         ImageDescriptor northDescriptor = getNorthDescriptor(mode, auxdataDir);
         ImageDescriptor southDescriptor = getSouthDescriptor(auxdataDir);
         centerImage = createCenterImage(resolution, auxdataDir);
         aboveSixtyNorthImage = createBorderImage(northDescriptor);
 //        belowSixtySouthImage = createBorderImage(southDescriptor);
+
+
     }
 
     public WatermaskClassifier(int resolution) throws IOException {
@@ -209,9 +224,9 @@ public class WatermaskClassifier {
 
         if (normLat < 150.0f && normLat > 30.0f) {
             return getSample(normLat, tempLon, 180.0, 360.0, 0.0, centerImage);
-        } else if(normLat <= 30.0f) {
+        } else if (normLat <= 30.0f) {
             return getSample(normLat, tempLon, 30.0, 360.0, 0.0, aboveSixtyNorthImage);
-        } else if(normLat >= 150.0f) {
+        } else if (normLat >= 150.0f) {
             return WATER_VALUE;
 //            return getSample(normLat, tempLon, 30.0, 360.0, 150.0, belowSixtySouthImage);
         }
@@ -225,7 +240,7 @@ public class WatermaskClassifier {
         final int x = (int) Math.round(lon / pixelSizeX);
         final int y = (int) (Math.round((lat - offset) / pixelSizeY));
         final Raster tile = image.getTile(image.XToTileX(x), image.YToTileY(y));
-        if(tile == null) {
+        if (tile == null) {
             return INVALID_VALUE;
         }
         return tile.getSample(x, y, 0);

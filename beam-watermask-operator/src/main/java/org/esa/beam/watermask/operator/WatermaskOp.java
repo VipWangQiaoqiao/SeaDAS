@@ -52,34 +52,34 @@ import java.text.MessageFormat;
  */
 @SuppressWarnings({"FieldCanBeLocal"})
 @OperatorMetadata(alias = "LandWaterMask",
-                  version = "1.0",
-                  internal = false,
-                  authors = "Thomas Storm",
-                  copyright = "(c) 2011 by Brockmann Consult",
-                  description = "Operator creating a target product with a single band containing a land/water-mask," +
-                                " which is based on SRTM-shapefiles (between 60° north and 60° south) and the " +
-                                "GlobCover world map (above 60° north) and therefore very accurate.")
+        version = "1.0",
+        internal = false,
+        authors = "Thomas Storm",
+        copyright = "(c) 2011 by Brockmann Consult",
+        description = "Operator creating a target product with a single band containing a land/water-mask," +
+                " which is based on SRTM-shapefiles (between 60° north and 60° south) and the " +
+                "GlobCover world map (above 60° north) and therefore very accurate.")
 public class WatermaskOp extends Operator {
 
     public static final String LAND_WATER_FRACTION_BAND_NAME = "land_water_fraction";
     public static final String COAST_BAND_NAME = "coast";
     @SourceProduct(alias = "source", description = "The Product the land/water-mask shall be computed for.",
-                   label = "Name")
+            label = "Name")
     private Product sourceProduct;
 
     @Parameter(description = "Specifies on which resolution the water mask shall be based.", unit = "m/pixel",
-               label = "Resolution", defaultValue = "50", valueSet = {"50", "150"})
+            label = "Resolution", defaultValue = "50", valueSet = {"50", "150", "1000"})
     private int resolution;
 
 
     @Parameter(description = "Specifies the factor between the resolution of the source product and the watermask in " +
-                             "x direction. A value of '1' means no subsampling at all.",
-               label = "Subsampling factor x", defaultValue = "3", notNull = true)
+            "x direction. A value of '1' means no subsampling at all.",
+            label = "Subsampling factor x", defaultValue = "3", notNull = true)
     private int subSamplingFactorX;
 
     @Parameter(description = "Specifies the factor between the resolution of the source product and the watermask in" +
-                             "y direction. A value of '1' means no subsampling at all.",
-               label = "Subsampling factor y", defaultValue = "3", notNull = true)
+            "y direction. A value of '1' means no subsampling at all.",
+            label = "Subsampling factor y", defaultValue = "3", notNull = true)
     private int subSamplingFactorY;
 
 
@@ -119,12 +119,12 @@ public class WatermaskOp extends Operator {
                     int dataValue = 0;
                     if (targetBandName.equals(LAND_WATER_FRACTION_BAND_NAME)) {
                         dataValue = classifier.getWaterMaskFraction(geoCoding, pixelPos,
-                                                                    subSamplingFactorX,
-                                                                    subSamplingFactorY);
+                                subSamplingFactorX,
+                                subSamplingFactorY);
                     } else if (targetBandName.equals(COAST_BAND_NAME)) {
                         final boolean coastline = isCoastline(geoCoding, pixelPos,
-                                                              subSamplingFactorX,
-                                                              subSamplingFactorY);
+                                subSamplingFactorX,
+                                subSamplingFactorY);
                         dataValue = coastline ? 1 : 0;
                     }
                     targetTile.setSample(x, y, dataValue);
@@ -136,7 +136,7 @@ public class WatermaskOp extends Operator {
         }
     }
 
-    private boolean isCoastline(GeoCoding geoCoding, PixelPos pixelPos,int superSamplingX,int superSamplingY) {
+    private boolean isCoastline(GeoCoding geoCoding, PixelPos pixelPos, int superSamplingX, int superSamplingY) {
         double xStep = 1.0 / superSamplingX;
         double yStep = 1.0 / superSamplingY;
         final GeoPos geoPos = new GeoPos();
@@ -154,10 +154,13 @@ public class WatermaskOp extends Operator {
     }
 
     private void validateParameter() {
-        if (resolution != WatermaskClassifier.RESOLUTION_50 && resolution != WatermaskClassifier.RESOLUTION_150) {
-            throw new OperatorException(String.format("Resolution needs to be either %d or %d.",
-                                                      WatermaskClassifier.RESOLUTION_50,
-                                                      WatermaskClassifier.RESOLUTION_150));
+        if (resolution != WatermaskClassifier.RESOLUTION_50 &&
+                resolution != WatermaskClassifier.RESOLUTION_150 &&
+                resolution != WatermaskClassifier.RESOLUTION_1000) {
+            throw new OperatorException(String.format("Resolution needs to be either %d, %d, or %d.",
+                    WatermaskClassifier.RESOLUTION_50,
+                    WatermaskClassifier.RESOLUTION_150,
+                    WatermaskClassifier.RESOLUTION_1000));
         }
         if (subSamplingFactorX < 1) {
             String message = MessageFormat.format(
@@ -173,13 +176,13 @@ public class WatermaskOp extends Operator {
         }
         if (!geoCoding.canGetGeoPos()) {
             throw new OperatorException("The geo-coding of the source product can not be used.\n" +
-                                        "It does not provide the geo-position for a pixel position.");
+                    "It does not provide the geo-position for a pixel position.");
         }
     }
 
     private void initTargetProduct() {
         targetProduct = new Product("LW-Mask", ProductData.TYPESTRING_UINT8, sourceProduct.getSceneRasterWidth(),
-                                    sourceProduct.getSceneRasterHeight());
+                sourceProduct.getSceneRasterHeight());
         final Band waterBand = targetProduct.addBand(LAND_WATER_FRACTION_BAND_NAME, ProductData.TYPE_FLOAT32);
         waterBand.setNoDataValue(WatermaskClassifier.INVALID_VALUE);
         waterBand.setNoDataValueUsed(true);

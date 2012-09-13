@@ -52,12 +52,16 @@ class AuxilliaryMasksData {
     private String waterMaskDescription = "Water pixels";
 
     public AuxilliaryMasksData() {
-        ResolutionInfo resolutionInfo =    new ResolutionInfo(ResolutionInfo.Unit.METER, 50);
-        this.setResolutionInfo(resolutionInfo);
 
-        getResolutionInfos().add(resolutionInfo);
-        getResolutionInfos().add(new ResolutionInfo(ResolutionInfo.Unit.METER, 150));
-        getResolutionInfos().add(new ResolutionInfo(ResolutionInfo.Unit.KILOMETER, 1));
+        getResolutionInfos().add(new ResolutionInfo(50));
+        getResolutionInfos().add(new ResolutionInfo(150));
+        getResolutionInfos().add(new ResolutionInfo(1000));
+        
+        for (ResolutionInfo resolutionInfo : resolutionInfos) {
+            if (resolutionInfo.getResolution() == 50) {
+                this.setResolutionInfo(resolutionInfo);
+            }
+        }
     }
 
 

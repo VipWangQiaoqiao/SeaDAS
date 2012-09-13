@@ -47,6 +47,10 @@ public class ResolutionInfo {
     private Unit unit;
     private String description;
 
+    ResolutionInfo(int resolution) {
+        this(Unit.METER, resolution);
+    }
+
     ResolutionInfo(Unit unit, int resolution) {
         this.setUnit(unit);
         this.setResolution(resolution);
