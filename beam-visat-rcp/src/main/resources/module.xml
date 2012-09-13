@@ -456,6 +456,21 @@
         </toolView>
 
         <toolView>
+             <id>org.esa.beam.visat.toolviews.placemark.text.TextManagerToolView</id>
+             <class>org.esa.beam.visat.toolviews.placemark.text.TextManagerToolView</class>
+             <title>Text Manager</title>
+             <mnemonic>a</mnemonic>
+             <accelerator>ctrl alt A</accelerator>
+             <description>Manage text annotations of a data product.</description>
+             <smallIcon>/org/esa/beam/resources/images/icons/TextManager16.gif</smallIcon>
+             <largeIcon>/org/esa/beam/resources/images/icons/TextManager24.gif</largeIcon>
+             <helpId>showTextManagerWnd</helpId>
+             <initState>HIDDEN</initState>
+             <initSide>SOUTH</initSide>
+             <initIndex>0</initIndex>
+         </toolView>
+
+        <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</class>
             <title>Pin Manager</title>
@@ -1568,10 +1583,28 @@
             <separatorBefore>true</separatorBefore>
         </action>
 
+
+        <action>
+            <id>showTextOverlay</id>
+            <class>org.esa.beam.visat.actions.ShowTextOverlayAction</class>
+            <placeAfter>showGraticuleOverlay</placeAfter>
+            <parent>view</parent>
+            <text>Show Text Overlay</text>
+            <toggle>true</toggle>
+            <separatorAfter>false</separatorAfter>
+            <shortDescr>Show Text overlay</shortDescr>
+            <description>Show Text overlay for the selected image</description>
+            <smallIcon>icons/TextOverlay16.gif</smallIcon>
+            <largeIcon>icons/TextOverlay24.gif</largeIcon>
+            <context>image</context>
+            <helpId>showTextOverlay</helpId>
+        </action>
+
+
         <action>
             <id>showPinOverlay</id>
             <class>org.esa.beam.visat.actions.ShowPinOverlayAction</class>
-            <placeAfter>showGraticuleOverlay</placeAfter>
+            <placeAfter>showTextOverlay</placeAfter>
             <parent>view</parent>
             <text>Show Pin Overlay</text>
             <toggle>true</toggle>
@@ -1583,6 +1616,7 @@
             <context>image</context>
             <helpId>showPinOverlay</helpId>
         </action>
+
 
         <action>
             <id>showGcpOverlay</id>
@@ -1672,11 +1706,25 @@
         </action>
 
         <action>
+            <id>textTool</id>
+            <class>org.esa.beam.visat.actions.PlacemarkToolAction</class>
+            <interactor>org.esa.beam.visat.toolviews.placemark.text.InsertTextInteractor</interactor>
+            <parent>tools</parent>
+            <placeAfter>pinTool</placeAfter>
+            <text>Text Tool</text>
+            <shortDescr>Text placing tool</shortDescr>
+            <description>Sets, edits or deletes annotation texts</description>
+            <largeIcon>icons/TextTool24.png</largeIcon>
+            <selected>true</selected>
+            <helpId>textTool</helpId>
+        </action>
+
+        <action>
             <id>gcpTool</id>
             <class>org.esa.beam.visat.actions.PlacemarkToolAction</class>
             <interactor>org.esa.beam.visat.toolviews.placemark.gcp.InsertGcpInteractor</interactor>
             <parent>tools</parent>
-            <placeAfter>pinTool</placeAfter>
+            <placeAfter>textTool</placeAfter>
             <placeBefore>drawLineTool</placeBefore>
             <text>GCP Tool</text>
             <shortDescr>GCP placing tool</shortDescr>
@@ -1692,7 +1740,7 @@
             <interactor>com.bc.ceres.swing.figure.interactions.InsertLineFigureInteractor</interactor>
             <interactorListener>org.esa.beam.visat.actions.InsertFigureInteractorInterceptor</interactorListener>
             <parent>tools</parent>
-            <placeAfter>pinTool</placeAfter>
+            <placeAfter>gcpTool</placeAfter>
             <text>Draw Line</text>
             <shortDescr>Line drawing tool</shortDescr>
             <largeIcon>icons/DrawLineTool24.gif</largeIcon>

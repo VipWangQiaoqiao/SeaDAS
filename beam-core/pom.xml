@@ -115,6 +115,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-referencing</artifactId>
+            <version>2.7.4</version>
+        </dependency>
     </dependencies>
 
 </project>
