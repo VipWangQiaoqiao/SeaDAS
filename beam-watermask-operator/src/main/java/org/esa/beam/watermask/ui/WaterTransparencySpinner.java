@@ -14,15 +14,15 @@ import java.text.DecimalFormat;
  */
 public class WaterTransparencySpinner {
 
-    private AuxilliaryMasksData auxilliaryMasksData;
+    private AuxiliaryMasksData auxiliaryMasksData;
 
     private JLabel jLabel;
     private JSpinner jSpinner = new JSpinner();
 
 
-    public WaterTransparencySpinner(AuxilliaryMasksData auxilliaryMasksData) {
+    public WaterTransparencySpinner(AuxiliaryMasksData auxiliaryMasksData) {
 
-        this.auxilliaryMasksData = auxilliaryMasksData;
+        this.auxiliaryMasksData = auxiliaryMasksData;
 
         jLabel = new JLabel("Transparency");
         jLabel.setToolTipText("Water mask transparency");
@@ -32,7 +32,7 @@ public class WaterTransparencySpinner {
         jSpinner.setPreferredSize(jSpinner.getPreferredSize());
         jSpinner.setSize(jSpinner.getPreferredSize());
 
-        jSpinner.setModel(new SpinnerNumberModel(auxilliaryMasksData.getWaterMaskTransparency(), 0.0, 1.0, 0.1));
+        jSpinner.setModel(new SpinnerNumberModel(auxiliaryMasksData.getWaterMaskTransparency(), 0.0, 1.0, 0.1));
 
         JSpinner.NumberEditor editor = (JSpinner.NumberEditor) jSpinner.getEditor();
         DecimalFormat format = editor.getFormat();
@@ -47,7 +47,7 @@ public class WaterTransparencySpinner {
 
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                auxilliaryMasksData.setWaterMaskTransparency((Double) jSpinner.getValue());
+                auxiliaryMasksData.setWaterMaskTransparency((Double) jSpinner.getValue());
             }
         });
     }

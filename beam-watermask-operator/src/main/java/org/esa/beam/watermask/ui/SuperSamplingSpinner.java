@@ -3,7 +3,6 @@ package org.esa.beam.watermask.ui;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.text.DecimalFormat;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,14 +13,14 @@ import java.text.DecimalFormat;
  */
 public class SuperSamplingSpinner {
 
-    private AuxilliaryMasksData auxilliaryMasksData;
+    private AuxiliaryMasksData auxiliaryMasksData;
 
     private JLabel jLabel;
     private JSpinner jSpinner = new JSpinner();
 
-    public SuperSamplingSpinner(AuxilliaryMasksData auxilliaryMasksData) {
+    public SuperSamplingSpinner(AuxiliaryMasksData auxiliaryMasksData) {
 
-        this.auxilliaryMasksData = auxilliaryMasksData;
+        this.auxiliaryMasksData = auxiliaryMasksData;
 
         jLabel = new JLabel("Super Sampling");
 
@@ -32,7 +31,7 @@ public class SuperSamplingSpinner {
         jSpinner.setPreferredSize(jSpinner.getPreferredSize());
         jSpinner.setSize(jSpinner.getPreferredSize());
 
-        jSpinner.setModel(new SpinnerNumberModel(auxilliaryMasksData.getSuperSampling(), 1, 20, 1));
+        jSpinner.setModel(new SpinnerNumberModel(auxiliaryMasksData.getSuperSampling(), 1, 20, 1));
 
 //        JSpinner.NumberEditor editor = (JSpinner.NumberEditor) jSpinner.getEditor();
 //        DecimalFormat format = editor.getFormat();
@@ -48,7 +47,7 @@ public class SuperSamplingSpinner {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 int value =Integer.parseInt(jSpinner.getValue().toString() );
-                auxilliaryMasksData.setSuperSampling(value);
+                auxiliaryMasksData.setSuperSampling(value);
             }
         });
     }

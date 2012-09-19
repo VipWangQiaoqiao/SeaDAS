@@ -13,19 +13,19 @@ import java.awt.event.ActionListener;
  * Time: 11:40 AM
  * To change this template use File | Settings | File Templates.
  */
-public class WaterColorComboBox {    private AuxilliaryMasksData auxilliaryMasksData;
+public class WaterColorComboBox {    private AuxiliaryMasksData auxiliaryMasksData;
 
     private JLabel jLabel;
     private ColorExComboBox colorExComboBox = new ColorExComboBox();
 
-    public WaterColorComboBox(AuxilliaryMasksData auxilliaryMasksData) {
+    public WaterColorComboBox(AuxiliaryMasksData auxiliaryMasksData) {
 
-        this.auxilliaryMasksData = auxilliaryMasksData;
+        this.auxiliaryMasksData = auxiliaryMasksData;
 
         jLabel = new JLabel("Color");
         jLabel.setToolTipText("Water mask color");
 
-        colorExComboBox.setSelectedColor(auxilliaryMasksData.getWaterMaskColor());
+        colorExComboBox.setSelectedColor(auxiliaryMasksData.getWaterMaskColor());
         colorExComboBox.setPreferredSize(colorExComboBox.getPreferredSize());
 
         addControlListeners();
@@ -37,7 +37,7 @@ public class WaterColorComboBox {    private AuxilliaryMasksData auxilliaryMasks
         colorExComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                auxilliaryMasksData.setWaterMaskColor(colorExComboBox.getSelectedColor());
+                auxiliaryMasksData.setWaterMaskColor(colorExComboBox.getSelectedColor());
             }
         });
     }

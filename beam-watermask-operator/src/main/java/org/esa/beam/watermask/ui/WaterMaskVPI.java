@@ -1,6 +1,5 @@
 package org.esa.beam.watermask.ui;
 
-import com.bc.ceres.core.*;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import com.jidesoft.action.CommandBar;
@@ -23,6 +22,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.RenderedImage;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.esa.beam.watermask.operator.*;
 
 
@@ -50,7 +50,9 @@ import org.esa.beam.watermask.operator.*;
  */
 public class WaterMaskVPI extends AbstractVisatPlugIn {
 
-    public static final String COMMAND_ID = "newCreateLandWaterCoastMasks";
+    public static final String COMMAND_ID = "Auxiliary Masks and Coastline";
+    public static final String TOOL_TIP = "Add coastline, water and land masks";
+    public static final String ICON = "/org/esa/beam/watermask/ui/icons/coastline2_24.png";
 
     public static final String LAND_WATER_MASK_OP_ALIAS = "LandWaterMask";
     public static final String TARGET_TOOL_BAR_NAME = "layersToolBar";
@@ -61,9 +63,10 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
         final ExecCommand action = visatApp.getCommandManager().createExecCommand(COMMAND_ID,
                 new ToolbarCommand(visatApp));
 
-        action.setLargeIcon(UIUtils.loadImageIcon("/org/esa/beam/watermask/ui/icons/coastline2_24.png"));
+        action.setLargeIcon(UIUtils.loadImageIcon(ICON));
 
         final AbstractButton lwcButton = visatApp.createToolButton(COMMAND_ID);
+        lwcButton.setToolTipText(TOOL_TIP);
 
         visatApp.getMainFrame().addWindowListener(new WindowAdapter() {
             @Override
@@ -90,11 +93,11 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
             // todo for Danny: turn this boolean on when it is ready
             boolean useDialogs = true;
 
-            final AuxilliaryMasksData auxilliaryMasksData = new AuxilliaryMasksData();
+            final AuxiliaryMasksData auxiliaryMasksData = new AuxiliaryMasksData();
 
 
             if (!useDialogs) {
-                auxilliaryMasksData.setCreateMasks(true);
+                auxiliaryMasksData.setCreateMasks(true);
             }
 
 
@@ -106,17 +109,17 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
             final boolean[] masksCreated = {false};
 
             for (String name : maskGroup.getNodeNames()) {
-                if (name.equals(auxilliaryMasksData.getCoastlineMaskName()) ||
-                        name.equals(auxilliaryMasksData.getLandMaskName()) ||
-                        name.equals(auxilliaryMasksData.getWaterMaskName())) {
+                if (name.equals(auxiliaryMasksData.getCoastlineMaskName()) ||
+                        name.equals(auxiliaryMasksData.getLandMaskName()) ||
+                        name.equals(auxiliaryMasksData.getWaterMaskName())) {
                     masksCreated[0] = true;
                 }
             }
 
 
             for (String name : bandGroup.getNodeNames()) {
-                if (name.equals(auxilliaryMasksData.getWaterFractionBandName()) ||
-                        name.equals(auxilliaryMasksData.getWaterFractionSmoothedName())) {
+                if (name.equals(auxiliaryMasksData.getWaterFractionBandName()) ||
+                        name.equals(auxiliaryMasksData.getWaterFractionSmoothedName())) {
                     masksCreated[0] = true;
                 }
             }
@@ -128,26 +131,26 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
             if (masksCreated[0]) {
                 if (useDialogs) {
-                    auxilliaryMasksData.setDeleteMasks(false);
-                    AuxilliaryMasksDialog auxilliaryMasksDialog = new AuxilliaryMasksDialog(auxilliaryMasksData, masksCreated[0]);
-                    auxilliaryMasksDialog.setVisible(true);
+                    auxiliaryMasksData.setDeleteMasks(false);
+                    AuxiliaryMasksDialog auxiliaryMasksDialog = new AuxiliaryMasksDialog(auxiliaryMasksData, masksCreated[0]);
+                    auxiliaryMasksDialog.setVisible(true);
                 }
 
-                if (auxilliaryMasksData.isDeleteMasks() || !useDialogs) {
+                if (auxiliaryMasksData.isDeleteMasks() || !useDialogs) {
                     masksCreated[0] = false;
 
 
                     for (String name : maskGroup.getNodeNames()) {
-                        if (name.equals(auxilliaryMasksData.getCoastlineMaskName()) ||
-                                name.equals(auxilliaryMasksData.getLandMaskName()) ||
-                                name.equals(auxilliaryMasksData.getWaterMaskName())) {
+                        if (name.equals(auxiliaryMasksData.getCoastlineMaskName()) ||
+                                name.equals(auxiliaryMasksData.getLandMaskName()) ||
+                                name.equals(auxiliaryMasksData.getWaterMaskName())) {
                             maskGroup.remove(maskGroup.get(name));
                         }
                     }
 
                     for (String name : bandGroup.getNodeNames()) {
-                        if (name.equals(auxilliaryMasksData.getWaterFractionBandName()) ||
-                                name.equals(auxilliaryMasksData.getWaterFractionSmoothedName())) {
+                        if (name.equals(auxiliaryMasksData.getWaterFractionBandName()) ||
+                                name.equals(auxiliaryMasksData.getWaterFractionSmoothedName())) {
                             bandGroup.remove(bandGroup.get(name));
                         }
                     }
@@ -157,16 +160,14 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
             }
 
 
-
-
             if (!masksCreated[0]) {
                 if (useDialogs) {
-                    auxilliaryMasksData.setCreateMasks(false);
-                    AuxilliaryMasksDialog auxilliaryMasksDialog = new AuxilliaryMasksDialog(auxilliaryMasksData, masksCreated[0]);
-                    auxilliaryMasksDialog.setVisible(true);
+                    auxiliaryMasksData.setCreateMasks(false);
+                    AuxiliaryMasksDialog auxiliaryMasksDialog = new AuxiliaryMasksDialog(auxiliaryMasksData, masksCreated[0]);
+                    auxiliaryMasksDialog.setVisible(true);
                 }
 
-                if (auxilliaryMasksData.isCreateMasks()) {
+                if (auxiliaryMasksData.isCreateMasks()) {
                     ProgressMonitorSwingWorker pmSwingWorker = new ProgressMonitorSwingWorker(visatApp.getMainFrame(),
                             "Computing Masks") {
 
@@ -180,10 +181,10 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
                                 Map<String, Object> parameters = new HashMap<String, Object>();
 
-                                parameters.put("subSamplingFactorX", new Integer(auxilliaryMasksData.getSuperSampling()));
-                                parameters.put("subSamplingFactorY", new Integer(auxilliaryMasksData.getSuperSampling()));
+                                parameters.put("subSamplingFactorX", new Integer(auxiliaryMasksData.getSuperSampling()));
+                                parameters.put("subSamplingFactorY", new Integer(auxiliaryMasksData.getSuperSampling()));
 
-                                ResolutionInfo resolutionInfo = auxilliaryMasksData.getResolutionInfo();
+                                ResolutionInfo resolutionInfo = auxiliaryMasksData.getResolutionInfo();
 
                                 /*
                                     Create a new product, which will contain the land_water_fraction band
@@ -213,7 +214,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                                 reformatSourceImage(coastBand, new ImageLayout(product.getBandAt(0).getSourceImage()));
 
                                 pm.worked(1);
-                                waterFractionBand.setName(auxilliaryMasksData.getWaterFractionBandName());
+                                waterFractionBand.setName(auxiliaryMasksData.getWaterFractionBandName());
 
                                 product.addBand(waterFractionBand);
 
@@ -231,7 +232,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                                         });
 
                                 final ConvolutionFilterBand filteredCoastlineBand = new ConvolutionFilterBand(
-                                        auxilliaryMasksData.getWaterFractionSmoothedName(),
+                                        auxiliaryMasksData.getWaterFractionSmoothedName(),
                                         waterFractionBand,
                                         arithmeticMean3x3Kernel);
 
@@ -239,35 +240,35 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
 
 
                                 Mask coastlineMask = Mask.BandMathsType.create(
-                                        auxilliaryMasksData.getCoastlineMaskName(),
-                                        auxilliaryMasksData.getCoastlineMaskDescription(),
+                                        auxiliaryMasksData.getCoastlineMaskName(),
+                                        auxiliaryMasksData.getCoastlineMaskDescription(),
                                         product.getSceneRasterWidth(),
                                         product.getSceneRasterHeight(),
-                                        auxilliaryMasksData.getCoastlineMath(),
-                                        auxilliaryMasksData.getCoastlineMaskColor(),
-                                        auxilliaryMasksData.getCoastlineMaskTransparency());
+                                        auxiliaryMasksData.getCoastlineMath(),
+                                        auxiliaryMasksData.getCoastlineMaskColor(),
+                                        auxiliaryMasksData.getCoastlineMaskTransparency());
                                 maskGroup.add(coastlineMask);
 
 
                                 Mask waterMask = Mask.BandMathsType.create(
-                                        auxilliaryMasksData.getWaterMaskName(),
-                                        auxilliaryMasksData.getWaterMaskDescription(),
+                                        auxiliaryMasksData.getWaterMaskName(),
+                                        auxiliaryMasksData.getWaterMaskDescription(),
                                         product.getSceneRasterWidth(),
                                         product.getSceneRasterHeight(),
-                                        auxilliaryMasksData.getWaterMaskMath(),
-                                        auxilliaryMasksData.getWaterMaskColor(),
-                                        auxilliaryMasksData.getWaterMaskTransparency());
+                                        auxiliaryMasksData.getWaterMaskMath(),
+                                        auxiliaryMasksData.getWaterMaskColor(),
+                                        auxiliaryMasksData.getWaterMaskTransparency());
                                 maskGroup.add(waterMask);
 
 
                                 Mask landMask = Mask.BandMathsType.create(
-                                        auxilliaryMasksData.getLandMaskName(),
-                                        auxilliaryMasksData.getLandMaskDescription(),
+                                        auxiliaryMasksData.getLandMaskName(),
+                                        auxiliaryMasksData.getLandMaskDescription(),
                                         product.getSceneRasterWidth(),
                                         product.getSceneRasterHeight(),
-                                        auxilliaryMasksData.getLandMaskMath(),
-                                        auxilliaryMasksData.getLandMaskColor(),
-                                        auxilliaryMasksData.getLandMaskTransparency());
+                                        auxiliaryMasksData.getLandMaskMath(),
+                                        auxiliaryMasksData.getLandMaskColor(),
+                                        auxiliaryMasksData.getLandMaskTransparency());
 
                                 maskGroup.add(landMask);
 
@@ -277,13 +278,13 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                                 String[] bandNames = product.getBandNames();
                                 for (String bandName : bandNames) {
                                     RasterDataNode raster = product.getRasterDataNode(bandName);
-                                    if (auxilliaryMasksData.isShowCoastlineMaskAllBands()) {
+                                    if (auxiliaryMasksData.isShowCoastlineMaskAllBands()) {
                                         raster.getOverlayMaskGroup().add(coastlineMask);
                                     }
-                                    if (auxilliaryMasksData.isShowLandMaskAllBands()) {
+                                    if (auxiliaryMasksData.isShowLandMaskAllBands()) {
                                         raster.getOverlayMaskGroup().add(landMask);
                                     }
-                                    if (auxilliaryMasksData.isShowWaterMaskAllBands()) {
+                                    if (auxiliaryMasksData.isShowWaterMaskAllBands()) {
                                         raster.getOverlayMaskGroup().add(waterMask);
                                     }
                                 }

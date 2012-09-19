@@ -27,19 +27,36 @@
     <categories>Application,Processor</categories>
 
     <extension point="beam-ui:actions">
-        <action>
-            <id>watermask</id>
-            <class>org.esa.beam.visat.actions.DefaultOperatorAction</class>
-            <operatorName>LandWaterMask</operatorName>
-            <dialogTitle>Accurate Land/Water-mask</dialogTitle>
-            <targetProductNameSuffix>_watermask</targetProductNameSuffix>
-            <text>Land/Water-mask...</text>
-            <shortDescr>Accurate Land/Water-mask based on shape files.</shortDescr>
-            <mnemonic/>
-            <parent>tool</parent>
-            <helpID>watermask</helpID>
-            <placeAfter/>
-        </action>
+        <!--<action>-->
+            <!--<id>watermask</id>-->
+            <!--<class>org.esa.beam.visat.actions.DefaultOperatorAction</class>-->
+            <!--<operatorName>LandWaterMask</operatorName>-->
+            <!--<dialogTitle>Accurate Land/Water-mask</dialogTitle>-->
+            <!--<targetProductNameSuffix>_watermask</targetProductNameSuffix>-->
+            <!--<text>Land/Water-mask...</text>-->
+            <!--<shortDescr>Accurate Land/Water-mask based on shape files.</shortDescr>-->
+            <!--<mnemonic/>-->
+            <!--<parent>tool</parent>-->
+            <!--<helpID>watermask</helpID>-->
+            <!--<placeAfter/>-->
+        <!--</action>-->
+
+        <!--<action>-->
+            <!--<parent>view</parent>-->
+            <!--<id>Auxiliary Masks</id>-->
+            <!--<class>org.esa.beam.watermask.ui.WaterMaskVPI</class>-->
+            <!--<placeAfter>showGraticuleOverlay</placeAfter>-->
+            <!--<text>Show Landmask/Coastline</text>-->
+            <!--<toggle>false</toggle>-->
+            <!--<separatorAfter>false</separatorAfter>-->
+            <!--<mnemonic>W</mnemonic>-->
+            <!--<shortDescr>Create Landmask/coastline</shortDescr>-->
+            <!--<description>Create Landmask/coastline masks</description>-->
+            <!--<context>image</context>-->
+            <!--<smallIcon>icons/GraticuleOverlay16.gif</smallIcon>-->
+            <!--<largeIcon>icons/GraticuleOverlay24.gif</largeIcon>-->
+            <!--&lt;!&ndash;<helpId>showGraticuleOverlay</helpId>&ndash;&gt;-->
+        <!--</action>-->
     </extension>
 
 </module>

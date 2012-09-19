@@ -1,5 +1,9 @@
 package org.esa.beam.watermask.ui;
 
+import org.esa.beam.framework.help.HelpSys;
+import org.esa.beam.framework.ui.UIUtils;
+import org.esa.beam.framework.ui.tool.ToolButtonFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -45,13 +49,17 @@ import java.awt.event.ActionListener;
 //        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Supersampling factor y: "), coastlineConstraints, "gridy=5, insets.right="+ rightInset);
 //        GridBagUtils.addToPanel(coastlinePanel, ySamplingSpinner, coastlineConstraints, "gridx=1, insets.right=0");
 
-class AuxilliaryMasksDialog extends JDialog {
+class AuxiliaryMasksDialog extends JDialog {
 
-    public AuxilliaryMasksData auxilliaryMasksData = null;
+    public AuxiliaryMasksData auxiliaryMasksData = null;
+    private JButton helpButton = null;
+    private String HELP_ID = "auxiliary_masks";
 
 
-    public AuxilliaryMasksDialog(AuxilliaryMasksData auxilliaryMasksData, boolean masksCreated) {
-        this.auxilliaryMasksData = auxilliaryMasksData;
+    public AuxiliaryMasksDialog(AuxiliaryMasksData auxiliaryMasksData, boolean masksCreated) {
+        this.auxiliaryMasksData = auxiliaryMasksData;
+
+        helpButton = (JButton) getHelpButton(HELP_ID);
 
         if (masksCreated) {
             notificationUI();
@@ -59,6 +67,30 @@ class AuxilliaryMasksDialog extends JDialog {
             auxilliaryMasksUI();
         }
     }
+
+
+    // HELP EXAMPLE
+
+//        final JPanel helpPanel = new JPanel(new GridBagLayout());
+//        helpPanel.add(getHelpButton("l2gen"), BorderLayout.EAST);
+//
+//        mainPanel.add(helpPanel,
+//                new GridBagConstraintsCustom(0, 2, 0, 0, GridBagConstraints.NORTH, GridBagConstraints.NONE, 0, 2));
+
+    protected AbstractButton getHelpButton(String helpId) {
+        if (helpId != null) {
+            final AbstractButton helpButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/Help24.gif"),
+                    false);
+            helpButton.setToolTipText("Help");
+            helpButton.setName("helpButton");
+            HelpSys.enableHelpOnButton(helpButton, helpId);
+            //  HelpSys.enableHelpKey(getParentDialogContentPane(), getHelpId());
+            return helpButton;
+        }
+
+        return null;
+    }
+
 
     public final void notificationUI() {
         JButton createMasks = new JButton("Create New Masks");
@@ -70,7 +102,7 @@ class AuxilliaryMasksDialog extends JDialog {
         createMasks.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
-                auxilliaryMasksData.setDeleteMasks(true);
+                auxiliaryMasksData.setDeleteMasks(true);
                 dispose();
             }
         });
@@ -97,6 +129,8 @@ class AuxilliaryMasksDialog extends JDialog {
                 new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
         buttonsJPanel.add(createMasks,
                 new ExGridBagConstraints(2, 0, 1, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
+        buttonsJPanel.add(helpButton,
+                new ExGridBagConstraints(3, 0, 1, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
 
 
         JLabel jLabel = new JLabel("Masks have already been created for this product");
@@ -131,21 +165,21 @@ class AuxilliaryMasksDialog extends JDialog {
 
         final int rightInset = 5;
 
-        final CoastlineEnabledAllBandsCheckbox coastlineEnabledAllBandsCheckbox = new CoastlineEnabledAllBandsCheckbox(auxilliaryMasksData);
-        final WaterEnabledAllBandsCheckbox waterEnabledAllBandsCheckbox = new WaterEnabledAllBandsCheckbox(auxilliaryMasksData);
-        final LandEnabledAllBandsCheckbox landEnabledAllBandsCheckbox = new LandEnabledAllBandsCheckbox(auxilliaryMasksData);
+        final CoastlineEnabledAllBandsCheckbox coastlineEnabledAllBandsCheckbox = new CoastlineEnabledAllBandsCheckbox(auxiliaryMasksData);
+        final WaterEnabledAllBandsCheckbox waterEnabledAllBandsCheckbox = new WaterEnabledAllBandsCheckbox(auxiliaryMasksData);
+        final LandEnabledAllBandsCheckbox landEnabledAllBandsCheckbox = new LandEnabledAllBandsCheckbox(auxiliaryMasksData);
 
-        final CoastlineTransparencySpinner coastlineTransparencySpinner = new CoastlineTransparencySpinner(auxilliaryMasksData);
-        final WaterTransparencySpinner waterTransparencySpinner = new WaterTransparencySpinner(auxilliaryMasksData);
-        final LandTransparencySpinner landTransparencySpinner = new LandTransparencySpinner(auxilliaryMasksData);
+        final CoastlineTransparencySpinner coastlineTransparencySpinner = new CoastlineTransparencySpinner(auxiliaryMasksData);
+        final WaterTransparencySpinner waterTransparencySpinner = new WaterTransparencySpinner(auxiliaryMasksData);
+        final LandTransparencySpinner landTransparencySpinner = new LandTransparencySpinner(auxiliaryMasksData);
 
 
-        final CoastlineColorComboBox coastlineColorComboBox = new CoastlineColorComboBox(auxilliaryMasksData);
-        final WaterColorComboBox waterColorComboBox = new WaterColorComboBox(auxilliaryMasksData);
-        final LandColorComboBox landColorComboBox = new LandColorComboBox(auxilliaryMasksData);
+        final CoastlineColorComboBox coastlineColorComboBox = new CoastlineColorComboBox(auxiliaryMasksData);
+        final WaterColorComboBox waterColorComboBox = new WaterColorComboBox(auxiliaryMasksData);
+        final LandColorComboBox landColorComboBox = new LandColorComboBox(auxiliaryMasksData);
 
-        final ResolutionComboBox resolutionComboBox = new ResolutionComboBox(auxilliaryMasksData);
-        final SuperSamplingSpinner superSamplingSpinner = new SuperSamplingSpinner(auxilliaryMasksData);
+        final ResolutionComboBox resolutionComboBox = new ResolutionComboBox(auxiliaryMasksData);
+        final SuperSamplingSpinner superSamplingSpinner = new SuperSamplingSpinner(auxiliaryMasksData);
 
 
         JPanel resolutionSamplingPanel = new JPanel(new GridBagLayout());
@@ -168,7 +202,7 @@ class AuxilliaryMasksDialog extends JDialog {
         coastlineJPanel.setBorder(BorderFactory.createTitledBorder(""));
 
 
-        JTextField coastlineNameTextfield = new JTextField(auxilliaryMasksData.getCoastlineMaskName());
+        JTextField coastlineNameTextfield = new JTextField(auxiliaryMasksData.getCoastlineMaskName());
         coastlineNameTextfield.setEditable(false);
         coastlineNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
@@ -201,7 +235,7 @@ class AuxilliaryMasksDialog extends JDialog {
         JPanel waterJPanel = new JPanel(new GridBagLayout());
         waterJPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-        JTextField waterNameTextfield = new JTextField(auxilliaryMasksData.getWaterMaskName());
+        JTextField waterNameTextfield = new JTextField(auxiliaryMasksData.getWaterMaskName());
         waterNameTextfield.setEditable(false);
         waterNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
@@ -233,7 +267,7 @@ class AuxilliaryMasksDialog extends JDialog {
         JPanel landJPanel = new JPanel(new GridBagLayout());
         landJPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-        JTextField landNameTextfield = new JTextField(auxilliaryMasksData.getLandMaskName());
+        JTextField landNameTextfield = new JTextField(auxiliaryMasksData.getLandMaskName());
         landNameTextfield.setEditable(false);
         landNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
@@ -282,7 +316,7 @@ class AuxilliaryMasksDialog extends JDialog {
         createMasks.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
-                auxilliaryMasksData.setCreateMasks(true);
+                auxiliaryMasksData.setCreateMasks(true);
                 dispose();
             }
         });
@@ -309,7 +343,8 @@ class AuxilliaryMasksDialog extends JDialog {
                 new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
         buttonsJPanel.add(createMasks,
                 new ExGridBagConstraints(2, 0, 1, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
-
+        buttonsJPanel.add(helpButton,
+                new ExGridBagConstraints(3, 0, 1, 0, GridBagConstraints.EAST, GridBagConstraints.NONE));
 
         createMasks.setAlignmentX(0.5f);
 

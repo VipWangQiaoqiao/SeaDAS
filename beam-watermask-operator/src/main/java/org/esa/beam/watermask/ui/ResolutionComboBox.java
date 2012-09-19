@@ -5,8 +5,6 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 /**
@@ -17,20 +15,20 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class ResolutionComboBox {
-    private AuxilliaryMasksData auxilliaryMasksData;
+    private AuxiliaryMasksData auxiliaryMasksData;
 
     private JLabel jLabel;
     private JComboBox jComboBox;
 
-    public ResolutionComboBox(AuxilliaryMasksData auxilliaryMasksData) {
+    public ResolutionComboBox(AuxiliaryMasksData auxiliaryMasksData) {
 
-        this.auxilliaryMasksData = auxilliaryMasksData;
+        this.auxiliaryMasksData = auxiliaryMasksData;
 
         ArrayList<ResolutionInfo> jComboBoxArrayList = new ArrayList<ResolutionInfo>();
         ArrayList<String> toolTipsArrayList = new ArrayList<String>();
 
 
-        for (ResolutionInfo resolutionInfo : auxilliaryMasksData.getResolutionInfos()) {
+        for (ResolutionInfo resolutionInfo : auxiliaryMasksData.getResolutionInfos()) {
             jComboBoxArrayList.add(resolutionInfo);
 
             if (resolutionInfo.getDescription() != null) {
@@ -44,7 +42,7 @@ public class ResolutionComboBox {
         jComboBoxArray = new ResolutionInfo[jComboBoxArrayList.size()];
 
         int i = 0;
-        for (ResolutionInfo resolutionInfo : auxilliaryMasksData.getResolutionInfos()) {
+        for (ResolutionInfo resolutionInfo : auxiliaryMasksData.getResolutionInfos()) {
             jComboBoxArray[i] = resolutionInfo;
             i++;
         }
@@ -67,7 +65,7 @@ public class ResolutionComboBox {
 
 
         for (ResolutionInfo resolutionInfo : jComboBoxArray) {
-            if (resolutionInfo == auxilliaryMasksData.getResolutionInfo()) {
+            if (resolutionInfo == auxiliaryMasksData.getResolutionInfo()) {
                 jComboBox.setSelectedItem(resolutionInfo);
             }
         }
@@ -83,7 +81,7 @@ public class ResolutionComboBox {
         jComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                auxilliaryMasksData.setResolutionInfo((ResolutionInfo) jComboBox.getSelectedItem());
+                auxiliaryMasksData.setResolutionInfo((ResolutionInfo) jComboBox.getSelectedItem());
             }
         });
 

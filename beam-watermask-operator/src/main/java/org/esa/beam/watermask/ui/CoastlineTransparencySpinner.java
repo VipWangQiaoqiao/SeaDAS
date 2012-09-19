@@ -14,14 +14,14 @@ import java.text.DecimalFormat;
  */
 public class CoastlineTransparencySpinner {
 
-    private AuxilliaryMasksData auxilliaryMasksData;
+    private AuxiliaryMasksData auxiliaryMasksData;
 
     private JLabel jLabel;
     private JSpinner jSpinner = new JSpinner();
 
-    public CoastlineTransparencySpinner(AuxilliaryMasksData auxilliaryMasksData) {
+    public CoastlineTransparencySpinner(AuxiliaryMasksData auxiliaryMasksData) {
 
-        this.auxilliaryMasksData = auxilliaryMasksData;
+        this.auxiliaryMasksData = auxiliaryMasksData;
 
         jLabel = new JLabel("Transparency");
         jLabel.setToolTipText("Coastline mask transparency");
@@ -31,7 +31,7 @@ public class CoastlineTransparencySpinner {
         jSpinner.setPreferredSize(jSpinner.getPreferredSize());
         jSpinner.setSize(jSpinner.getPreferredSize());
 
-        jSpinner.setModel(new SpinnerNumberModel(auxilliaryMasksData.getCoastlineMaskTransparency(), 0.0, 1.0, 0.1));
+        jSpinner.setModel(new SpinnerNumberModel(auxiliaryMasksData.getCoastlineMaskTransparency(), 0.0, 1.0, 0.1));
 
         JSpinner.NumberEditor editor = (JSpinner.NumberEditor) jSpinner.getEditor();
         DecimalFormat format = editor.getFormat();
@@ -46,7 +46,7 @@ public class CoastlineTransparencySpinner {
 
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                auxilliaryMasksData.setCoastlineMaskTransparency((Double) jSpinner.getValue());
+                auxiliaryMasksData.setCoastlineMaskTransparency((Double) jSpinner.getValue());
             }
         });
     }
