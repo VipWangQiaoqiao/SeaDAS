@@ -56,6 +56,7 @@ class LandMasksData {
         getResolutionInfos().add(new ResolutionInfo(50));
         getResolutionInfos().add(new ResolutionInfo(150));
         getResolutionInfos().add(new ResolutionInfo(1000));
+        getResolutionInfos().add(new ResolutionInfo(10000));
         
         for (ResolutionInfo resolutionInfo : resolutionInfos) {
             if (resolutionInfo.getResolution() == 50) {

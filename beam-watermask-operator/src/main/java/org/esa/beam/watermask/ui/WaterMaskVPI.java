@@ -195,7 +195,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                                     parameters.put("mode", WatermaskClassifier.MODE_GC);
                                 } else {
                                     parameters.put("resolution", new Integer(resolutionInfo.getResolution()));
-                                    parameters.put("mode", WatermaskClassifier.MODE_NEW);
+                                    parameters.put("mode", WatermaskClassifier.MODE_GSHHS);
                                 }
 
 

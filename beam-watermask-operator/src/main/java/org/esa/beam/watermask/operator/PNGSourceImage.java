@@ -45,13 +45,14 @@ import java.util.zip.ZipFile;
 public class PNGSourceImage extends SourcelessOpImage {
 
     private final ZipFile zipFile;
-
-    static PNGSourceImage create(Properties properties, File zipFile) throws IOException {
+    private int mode;
+    private int resolution;
+    static PNGSourceImage create(Properties properties, File zipFile, int mode, int resolution) throws IOException {
         final ImageHeader imageHeader = ImageHeader.load(properties, null);
-        return new PNGSourceImage(imageHeader, zipFile);
+        return new PNGSourceImage(imageHeader, zipFile,mode,resolution);
     }
 
-    private PNGSourceImage(ImageHeader imageHeader, File zipFile) throws IOException {
+    private PNGSourceImage(ImageHeader imageHeader, File zipFile, int mode, int resolution) throws IOException {
         super(imageHeader.getImageLayout(),
               null,
               ImageUtils.createSingleBandedSampleModel(DataBuffer.TYPE_BYTE,
@@ -62,6 +63,8 @@ public class PNGSourceImage extends SourcelessOpImage {
               imageHeader.getImageLayout().getWidth(null),
               imageHeader.getImageLayout().getHeight(null));
         this.zipFile = new ZipFile(zipFile);
+        this.mode = mode;
+        this.resolution = resolution;
         // this image uses its own tile cache in order not to disturb the GPF tile cache.
         setTileCache(JAI.createTileCache(50L * 1024 * 1024));
     }
@@ -88,12 +91,12 @@ public class PNGSourceImage extends SourcelessOpImage {
             inputStream = zipFile.getInputStream(zipEntry);
             BufferedImage image = ImageIO.read(inputStream);
             Raster imageData = image.getData();
-            for (int x = 0; x < imageData.getWidth(); x++) {
-                int xPos = tileXToX(tileX) + x;
-                for (int y = 0; y < imageData.getHeight(); y++) {
+            for (int y = 0; y < imageData.getHeight(); y++) {
+                int yPos = tileYToY(tileY) + y;
+                for (int x = 0; x < imageData.getWidth(); x++) {
                     byte sample = (byte) imageData.getSample(x, y, 0);
                     sample = (byte) Math.abs(sample - 1);
-                    int yPos = tileYToY(tileY) + y;
+                    int xPos = tileXToX(tileX) + x;
                     targetRaster.setSample(xPos, yPos, 0, sample);
                 }
             }
@@ -112,6 +115,11 @@ public class PNGSourceImage extends SourcelessOpImage {
     }
 
     private String getFileName(int tileX, int tileY) {
-        return String.format("%d-%d.png", tileX, tileY);
+        if (mode == WatermaskClassifier.MODE_GSHHS){
+            String res = String.valueOf(resolution/1000);
+            return String.format("gshhs_%s_%02d_%02d.png", res, tileY, tileX);
+        } else {
+            return String.format("%d_%d.png", tileX, tileY);
+        }
     }
 }

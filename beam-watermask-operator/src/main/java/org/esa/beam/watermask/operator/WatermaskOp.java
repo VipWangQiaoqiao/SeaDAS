@@ -68,7 +68,7 @@ public class WatermaskOp extends Operator {
     private Product sourceProduct;
 
     @Parameter(description = "Specifies on which resolution the water mask shall be based.", unit = "m/pixel",
-            label = "Resolution", defaultValue = "50", valueSet = {"50", "150", "1000"})
+            label = "Resolution", defaultValue = "50", valueSet = {"50", "150", "1000","10000"})
     private int resolution;
 
 
@@ -156,11 +156,13 @@ public class WatermaskOp extends Operator {
     private void validateParameter() {
         if (resolution != WatermaskClassifier.RESOLUTION_50 &&
                 resolution != WatermaskClassifier.RESOLUTION_150 &&
-                resolution != WatermaskClassifier.RESOLUTION_1000) {
-            throw new OperatorException(String.format("Resolution needs to be either %d, %d, or %d.",
+                resolution != WatermaskClassifier.RESOLUTION_1km &&
+                resolution != WatermaskClassifier.RESOLUTION_10km) {
+            throw new OperatorException(String.format("Resolution needs to be either %d, %d, %d or %d.",
                     WatermaskClassifier.RESOLUTION_50,
                     WatermaskClassifier.RESOLUTION_150,
-                    WatermaskClassifier.RESOLUTION_1000));
+                    WatermaskClassifier.RESOLUTION_1km,
+                    WatermaskClassifier.RESOLUTION_10km));
         }
         if (subSamplingFactorX < 1) {
             String message = MessageFormat.format(
