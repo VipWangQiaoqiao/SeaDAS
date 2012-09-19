@@ -12,7 +12,7 @@ import java.awt.event.ItemListener;
  * To change this template use File | Settings | File Templates.
  */
 public class WaterEnabledAllBandsCheckbox {
-    private AuxiliaryMasksData auxiliaryMasksData;
+    private LandMasksData landMasksData;
 
     private JLabel jLabel;
     private JCheckBox jCheckBox = new JCheckBox();
@@ -20,13 +20,13 @@ public class WaterEnabledAllBandsCheckbox {
     private static String DEFAULT_NAME = "Enabled in All Bands";
     private static String DEFAULT_TOOLTIPS = "Set Water Mask Enabled in All Bands";
 
-    public WaterEnabledAllBandsCheckbox(AuxiliaryMasksData auxiliaryMasksData) {
+    public WaterEnabledAllBandsCheckbox(LandMasksData landMasksData) {
 
-        this.auxiliaryMasksData = auxiliaryMasksData;
+        this.landMasksData = landMasksData;
 
         jLabel = new JLabel(DEFAULT_NAME);
         jLabel.setToolTipText(DEFAULT_TOOLTIPS);
-        jCheckBox.setSelected(auxiliaryMasksData.isShowWaterMaskAllBands());
+        jCheckBox.setSelected(landMasksData.isShowWaterMaskAllBands());
 
         addControlListeners();
     }
@@ -35,7 +35,7 @@ public class WaterEnabledAllBandsCheckbox {
         jCheckBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                auxiliaryMasksData.setShowWaterMaskAllBands(jCheckBox.isSelected());
+                landMasksData.setShowWaterMaskAllBands(jCheckBox.isSelected());
 
             }
         });

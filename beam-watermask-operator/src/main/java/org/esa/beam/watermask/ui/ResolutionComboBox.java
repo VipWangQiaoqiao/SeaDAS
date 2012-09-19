@@ -15,20 +15,20 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class ResolutionComboBox {
-    private AuxiliaryMasksData auxiliaryMasksData;
+    private LandMasksData landMasksData;
 
     private JLabel jLabel;
     private JComboBox jComboBox;
 
-    public ResolutionComboBox(AuxiliaryMasksData auxiliaryMasksData) {
+    public ResolutionComboBox(LandMasksData landMasksData) {
 
-        this.auxiliaryMasksData = auxiliaryMasksData;
+        this.landMasksData = landMasksData;
 
         ArrayList<ResolutionInfo> jComboBoxArrayList = new ArrayList<ResolutionInfo>();
         ArrayList<String> toolTipsArrayList = new ArrayList<String>();
 
 
-        for (ResolutionInfo resolutionInfo : auxiliaryMasksData.getResolutionInfos()) {
+        for (ResolutionInfo resolutionInfo : landMasksData.getResolutionInfos()) {
             jComboBoxArrayList.add(resolutionInfo);
 
             if (resolutionInfo.getDescription() != null) {
@@ -42,7 +42,7 @@ public class ResolutionComboBox {
         jComboBoxArray = new ResolutionInfo[jComboBoxArrayList.size()];
 
         int i = 0;
-        for (ResolutionInfo resolutionInfo : auxiliaryMasksData.getResolutionInfos()) {
+        for (ResolutionInfo resolutionInfo : landMasksData.getResolutionInfos()) {
             jComboBoxArray[i] = resolutionInfo;
             i++;
         }
@@ -65,7 +65,7 @@ public class ResolutionComboBox {
 
 
         for (ResolutionInfo resolutionInfo : jComboBoxArray) {
-            if (resolutionInfo == auxiliaryMasksData.getResolutionInfo()) {
+            if (resolutionInfo == landMasksData.getResolutionInfo()) {
                 jComboBox.setSelectedItem(resolutionInfo);
             }
         }
@@ -81,7 +81,7 @@ public class ResolutionComboBox {
         jComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                auxiliaryMasksData.setResolutionInfo((ResolutionInfo) jComboBox.getSelectedItem());
+                landMasksData.setResolutionInfo((ResolutionInfo) jComboBox.getSelectedItem());
             }
         });
 

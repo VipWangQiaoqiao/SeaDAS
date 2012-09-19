@@ -14,14 +14,14 @@ import java.text.DecimalFormat;
  */
 public class CoastlineTransparencySpinner {
 
-    private AuxiliaryMasksData auxiliaryMasksData;
+    private LandMasksData landMasksData;
 
     private JLabel jLabel;
     private JSpinner jSpinner = new JSpinner();
 
-    public CoastlineTransparencySpinner(AuxiliaryMasksData auxiliaryMasksData) {
+    public CoastlineTransparencySpinner(LandMasksData landMasksData) {
 
-        this.auxiliaryMasksData = auxiliaryMasksData;
+        this.landMasksData = landMasksData;
 
         jLabel = new JLabel("Transparency");
         jLabel.setToolTipText("Coastline mask transparency");
@@ -31,7 +31,7 @@ public class CoastlineTransparencySpinner {
         jSpinner.setPreferredSize(jSpinner.getPreferredSize());
         jSpinner.setSize(jSpinner.getPreferredSize());
 
-        jSpinner.setModel(new SpinnerNumberModel(auxiliaryMasksData.getCoastlineMaskTransparency(), 0.0, 1.0, 0.1));
+        jSpinner.setModel(new SpinnerNumberModel(landMasksData.getCoastlineMaskTransparency(), 0.0, 1.0, 0.1));
 
         JSpinner.NumberEditor editor = (JSpinner.NumberEditor) jSpinner.getEditor();
         DecimalFormat format = editor.getFormat();
@@ -46,7 +46,7 @@ public class CoastlineTransparencySpinner {
 
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                auxiliaryMasksData.setCoastlineMaskTransparency((Double) jSpinner.getValue());
+                landMasksData.setCoastlineMaskTransparency((Double) jSpinner.getValue());
             }
         });
     }

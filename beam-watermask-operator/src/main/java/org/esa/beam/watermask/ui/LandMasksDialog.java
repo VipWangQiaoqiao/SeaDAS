@@ -49,22 +49,22 @@ import java.awt.event.ActionListener;
 //        GridBagUtils.addToPanel(coastlinePanel, new JLabel("Supersampling factor y: "), coastlineConstraints, "gridy=5, insets.right="+ rightInset);
 //        GridBagUtils.addToPanel(coastlinePanel, ySamplingSpinner, coastlineConstraints, "gridx=1, insets.right=0");
 
-class AuxiliaryMasksDialog extends JDialog {
+class LandMasksDialog extends JDialog {
 
-    public AuxiliaryMasksData auxiliaryMasksData = null;
+    public LandMasksData landMasksData = null;
     private JButton helpButton = null;
-    private String HELP_ID = "auxiliary_masks";
+    private String HELP_ID = "land_masks";
 
 
-    public AuxiliaryMasksDialog(AuxiliaryMasksData auxiliaryMasksData, boolean masksCreated) {
-        this.auxiliaryMasksData = auxiliaryMasksData;
+    public LandMasksDialog(LandMasksData landMasksData, boolean masksCreated) {
+        this.landMasksData = landMasksData;
 
         helpButton = (JButton) getHelpButton(HELP_ID);
 
         if (masksCreated) {
-            notificationUI();
+            createNotificationUI();
         } else {
-            auxilliaryMasksUI();
+            createLandMasksUI();
         }
     }
 
@@ -92,7 +92,7 @@ class AuxiliaryMasksDialog extends JDialog {
     }
 
 
-    public final void notificationUI() {
+    public final void createNotificationUI() {
         JButton createMasks = new JButton("Create New Masks");
         createMasks.setPreferredSize(createMasks.getPreferredSize());
         createMasks.setMinimumSize(createMasks.getPreferredSize());
@@ -102,7 +102,7 @@ class AuxiliaryMasksDialog extends JDialog {
         createMasks.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
-                auxiliaryMasksData.setDeleteMasks(true);
+                landMasksData.setDeleteMasks(true);
                 dispose();
             }
         });
@@ -147,7 +147,7 @@ class AuxiliaryMasksDialog extends JDialog {
         setModalityType(ModalityType.APPLICATION_MODAL);
 
 
-        setTitle("Auxilliary Masks");
+        setTitle("Land Masks");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         pack();
@@ -160,26 +160,26 @@ class AuxiliaryMasksDialog extends JDialog {
 
     }
 
-    public final void auxilliaryMasksUI() {
+    public final void createLandMasksUI() {
 
 
         final int rightInset = 5;
 
-        final CoastlineEnabledAllBandsCheckbox coastlineEnabledAllBandsCheckbox = new CoastlineEnabledAllBandsCheckbox(auxiliaryMasksData);
-        final WaterEnabledAllBandsCheckbox waterEnabledAllBandsCheckbox = new WaterEnabledAllBandsCheckbox(auxiliaryMasksData);
-        final LandEnabledAllBandsCheckbox landEnabledAllBandsCheckbox = new LandEnabledAllBandsCheckbox(auxiliaryMasksData);
+        final CoastlineEnabledAllBandsCheckbox coastlineEnabledAllBandsCheckbox = new CoastlineEnabledAllBandsCheckbox(landMasksData);
+        final WaterEnabledAllBandsCheckbox waterEnabledAllBandsCheckbox = new WaterEnabledAllBandsCheckbox(landMasksData);
+        final LandEnabledAllBandsCheckbox landEnabledAllBandsCheckbox = new LandEnabledAllBandsCheckbox(landMasksData);
 
-        final CoastlineTransparencySpinner coastlineTransparencySpinner = new CoastlineTransparencySpinner(auxiliaryMasksData);
-        final WaterTransparencySpinner waterTransparencySpinner = new WaterTransparencySpinner(auxiliaryMasksData);
-        final LandTransparencySpinner landTransparencySpinner = new LandTransparencySpinner(auxiliaryMasksData);
+        final CoastlineTransparencySpinner coastlineTransparencySpinner = new CoastlineTransparencySpinner(landMasksData);
+        final WaterTransparencySpinner waterTransparencySpinner = new WaterTransparencySpinner(landMasksData);
+        final LandTransparencySpinner landTransparencySpinner = new LandTransparencySpinner(landMasksData);
 
 
-        final CoastlineColorComboBox coastlineColorComboBox = new CoastlineColorComboBox(auxiliaryMasksData);
-        final WaterColorComboBox waterColorComboBox = new WaterColorComboBox(auxiliaryMasksData);
-        final LandColorComboBox landColorComboBox = new LandColorComboBox(auxiliaryMasksData);
+        final CoastlineColorComboBox coastlineColorComboBox = new CoastlineColorComboBox(landMasksData);
+        final WaterColorComboBox waterColorComboBox = new WaterColorComboBox(landMasksData);
+        final LandColorComboBox landColorComboBox = new LandColorComboBox(landMasksData);
 
-        final ResolutionComboBox resolutionComboBox = new ResolutionComboBox(auxiliaryMasksData);
-        final SuperSamplingSpinner superSamplingSpinner = new SuperSamplingSpinner(auxiliaryMasksData);
+        final ResolutionComboBox resolutionComboBox = new ResolutionComboBox(landMasksData);
+        final SuperSamplingSpinner superSamplingSpinner = new SuperSamplingSpinner(landMasksData);
 
 
         JPanel resolutionSamplingPanel = new JPanel(new GridBagLayout());
@@ -202,7 +202,7 @@ class AuxiliaryMasksDialog extends JDialog {
         coastlineJPanel.setBorder(BorderFactory.createTitledBorder(""));
 
 
-        JTextField coastlineNameTextfield = new JTextField(auxiliaryMasksData.getCoastlineMaskName());
+        JTextField coastlineNameTextfield = new JTextField(landMasksData.getCoastlineMaskName());
         coastlineNameTextfield.setEditable(false);
         coastlineNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
@@ -235,7 +235,7 @@ class AuxiliaryMasksDialog extends JDialog {
         JPanel waterJPanel = new JPanel(new GridBagLayout());
         waterJPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-        JTextField waterNameTextfield = new JTextField(auxiliaryMasksData.getWaterMaskName());
+        JTextField waterNameTextfield = new JTextField(landMasksData.getWaterMaskName());
         waterNameTextfield.setEditable(false);
         waterNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
@@ -267,7 +267,7 @@ class AuxiliaryMasksDialog extends JDialog {
         JPanel landJPanel = new JPanel(new GridBagLayout());
         landJPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-        JTextField landNameTextfield = new JTextField(auxiliaryMasksData.getLandMaskName());
+        JTextField landNameTextfield = new JTextField(landMasksData.getLandMaskName());
         landNameTextfield.setEditable(false);
         landNameTextfield.setToolTipText("Name of the mask (this field is not editable)");
 
@@ -316,7 +316,7 @@ class AuxiliaryMasksDialog extends JDialog {
         createMasks.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent event) {
-                auxiliaryMasksData.setCreateMasks(true);
+                landMasksData.setCreateMasks(true);
                 dispose();
             }
         });

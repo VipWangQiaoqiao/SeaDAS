@@ -14,19 +14,19 @@ import java.awt.event.ActionListener;
  * To change this template use File | Settings | File Templates.
  */
 public class CoastlineColorComboBox {
-    private AuxiliaryMasksData auxiliaryMasksData;
+    private LandMasksData landMasksData;
 
     private JLabel jLabel;
     private ColorExComboBox colorExComboBox = new ColorExComboBox();
 
-    public CoastlineColorComboBox(AuxiliaryMasksData auxiliaryMasksData) {
+    public CoastlineColorComboBox(LandMasksData landMasksData) {
 
-        this.auxiliaryMasksData = auxiliaryMasksData;
+        this.landMasksData = landMasksData;
 
         jLabel = new JLabel("Color");
         jLabel.setToolTipText("Coastline mask color");
 
-        colorExComboBox.setSelectedColor(auxiliaryMasksData.getCoastlineMaskColor());
+        colorExComboBox.setSelectedColor(landMasksData.getCoastlineMaskColor());
         colorExComboBox.setPreferredSize(colorExComboBox.getPreferredSize());
 
         addControlListeners();
@@ -38,7 +38,7 @@ public class CoastlineColorComboBox {
         colorExComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                auxiliaryMasksData.setCoastlineMaskColor(colorExComboBox.getSelectedColor());
+                landMasksData.setCoastlineMaskColor(colorExComboBox.getSelectedColor());
             }
         });
     }

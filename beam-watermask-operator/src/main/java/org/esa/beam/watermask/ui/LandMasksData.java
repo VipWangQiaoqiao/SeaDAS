@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Time: 9:13 AM
  * To change this template use File | Settings | File Templates.
  */
-class AuxiliaryMasksData {
+class LandMasksData {
 
     private boolean createMasks = false;
     private boolean deleteMasks = false;
@@ -51,7 +51,7 @@ class AuxiliaryMasksData {
     private String waterMaskMath = getWaterFractionBandName() + " > 0";
     private String waterMaskDescription = "Water pixels";
 
-    public AuxiliaryMasksData() {
+    public LandMasksData() {
 
         getResolutionInfos().add(new ResolutionInfo(50));
         getResolutionInfos().add(new ResolutionInfo(150));

@@ -13,14 +13,14 @@ import javax.swing.event.ChangeListener;
  */
 public class SuperSamplingSpinner {
 
-    private AuxiliaryMasksData auxiliaryMasksData;
+    private LandMasksData landMasksData;
 
     private JLabel jLabel;
     private JSpinner jSpinner = new JSpinner();
 
-    public SuperSamplingSpinner(AuxiliaryMasksData auxiliaryMasksData) {
+    public SuperSamplingSpinner(LandMasksData landMasksData) {
 
-        this.auxiliaryMasksData = auxiliaryMasksData;
+        this.landMasksData = landMasksData;
 
         jLabel = new JLabel("Super Sampling");
 
@@ -31,7 +31,7 @@ public class SuperSamplingSpinner {
         jSpinner.setPreferredSize(jSpinner.getPreferredSize());
         jSpinner.setSize(jSpinner.getPreferredSize());
 
-        jSpinner.setModel(new SpinnerNumberModel(auxiliaryMasksData.getSuperSampling(), 1, 20, 1));
+        jSpinner.setModel(new SpinnerNumberModel(landMasksData.getSuperSampling(), 1, 20, 1));
 
 //        JSpinner.NumberEditor editor = (JSpinner.NumberEditor) jSpinner.getEditor();
 //        DecimalFormat format = editor.getFormat();
@@ -47,7 +47,7 @@ public class SuperSamplingSpinner {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 int value =Integer.parseInt(jSpinner.getValue().toString() );
-                auxiliaryMasksData.setSuperSampling(value);
+                landMasksData.setSuperSampling(value);
             }
         });
     }

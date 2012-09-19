@@ -12,7 +12,7 @@ import java.awt.event.ItemListener;
  * To change this template use File | Settings | File Templates.
  */
 public class LandEnabledAllBandsCheckbox {
-    private AuxiliaryMasksData auxiliaryMasksData;
+    private LandMasksData landMasksData;
 
     private JLabel jLabel;
     private JCheckBox jCheckBox = new JCheckBox();
@@ -20,13 +20,13 @@ public class LandEnabledAllBandsCheckbox {
     private static String DEFAULT_NAME = "Enabled in All Bands";
     private static String DEFAULT_TOOLTIPS = "Set Land Mask Enabled in All Bands";
 
-    public LandEnabledAllBandsCheckbox(AuxiliaryMasksData auxiliaryMasksData) {
+    public LandEnabledAllBandsCheckbox(LandMasksData landMasksData) {
 
-        this.auxiliaryMasksData = auxiliaryMasksData;
+        this.landMasksData = landMasksData;
 
         jLabel = new JLabel(DEFAULT_NAME);
         jLabel.setToolTipText(DEFAULT_TOOLTIPS);
-        jCheckBox.setSelected(auxiliaryMasksData.isShowLandMaskAllBands());
+        jCheckBox.setSelected(landMasksData.isShowLandMaskAllBands());
 
         addControlListeners();
     }
@@ -35,7 +35,7 @@ public class LandEnabledAllBandsCheckbox {
         jCheckBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                auxiliaryMasksData.setShowLandMaskAllBands(jCheckBox.isSelected());
+                landMasksData.setShowLandMaskAllBands(jCheckBox.isSelected());
 
             }
         });
