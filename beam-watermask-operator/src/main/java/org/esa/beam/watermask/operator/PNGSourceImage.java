@@ -45,14 +45,15 @@ import java.util.zip.ZipFile;
 public class PNGSourceImage extends SourcelessOpImage {
 
     private final ZipFile zipFile;
-    private int mode;
+    private WatermaskClassifier.Mode mode;
     private int resolution;
-    static PNGSourceImage create(Properties properties, File zipFile, int mode, int resolution) throws IOException {
+
+    static PNGSourceImage create(Properties properties, File zipFile, WatermaskClassifier.Mode mode, int resolution) throws IOException {
         final ImageHeader imageHeader = ImageHeader.load(properties, null);
         return new PNGSourceImage(imageHeader, zipFile,mode,resolution);
     }
 
-    private PNGSourceImage(ImageHeader imageHeader, File zipFile, int mode, int resolution) throws IOException {
+    private PNGSourceImage(ImageHeader imageHeader, File zipFile, WatermaskClassifier.Mode mode, int resolution) throws IOException {
         super(imageHeader.getImageLayout(),
               null,
               ImageUtils.createSingleBandedSampleModel(DataBuffer.TYPE_BYTE,
@@ -115,7 +116,7 @@ public class PNGSourceImage extends SourcelessOpImage {
     }
 
     private String getFileName(int tileX, int tileY) {
-        if (mode == WatermaskClassifier.MODE_GSHHS){
+        if (mode == WatermaskClassifier.Mode.GSHHS){
             String res = String.valueOf(resolution/1000);
             return String.format("gshhs_%s_%02d_%02d.png", res, tileY, tileX);
         } else {

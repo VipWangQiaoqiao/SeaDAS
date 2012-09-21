@@ -42,18 +42,47 @@ public class WatermaskClassifier {
     public static final int WATER_VALUE = 1;
     public static final int INVALID_VALUE = 127;
     public static final int LAND_VALUE = 0;
-    public static final int RESOLUTION_50 = 50;
-    public static final int RESOLUTION_150 = 150;
+    public static final int RESOLUTION_50m = 50;
+    public static final int RESOLUTION_150m = 150;
     public static final int RESOLUTION_1km = 1000;
     public static final int RESOLUTION_10km = 10000;
-    public static enum Mode {
-        MODE_MODIS,
-        MODE_GC,
-        MODE_GSHHS
+
+
+    public enum Mode {
+        MODIS("MODIS"),
+        SRTM_GC("SRTM & GC"),
+        GSHHS("GSHHS");
+
+        public String SRTM_GC_DESCRIPTION = "SRTM (Shuttle Radar Topography Mission) and GC(GlobCover World Map)";
+        public String GSHHS_DESCRIPTION = "GSHHS (Global Self-consistent, Hierarchical, High-resolution Shoreline Database)";
+        public String MODIS_DESCRIPTION = "";
+
+        private final String name;
+
+        private Mode(String name) {
+            this.name = name;
+        }
+
+
+        public String getDescription() {
+            switch (this) {
+                case MODIS: return  MODIS_DESCRIPTION;
+                case SRTM_GC: return SRTM_GC_DESCRIPTION;
+                case GSHHS: return GSHHS_DESCRIPTION;
+            }
+
+            return null;
+        }
+
+        public String toString() {
+            return name;
+        }
     }
-    public static final int MODE_MODIS = 1;
-    public static final int MODE_GC = MODE_MODIS << 1;
-    public static final int MODE_GSHHS = MODE_MODIS << 2;
+
+
+//    public static final int MODE_MODIS = 1;
+//    public static final int MODE_GC = MODE_MODIS << 1;
+//    public static final int MODE_GSHHS = MODE_MODIS << 2;
 
     static final int GC_TILE_WIDTH = 576;
     static final int GC_TILE_HEIGHT = 491;
@@ -75,11 +104,16 @@ public class WatermaskClassifier {
     static final int MODIS_TILE_WIDTH = 640;
     static final int MODIS_TILE_HEIGHT = 540;
 
+//    private SRTMOpImage centerImage;
+//    private final PNGSourceImage gshhsImage;
+//    private final PNGSourceImage aboveSixtyNorthImage;
+//    private final PNGSourceImage belowSixtySouthImage;
+
     private SRTMOpImage centerImage;
-    private final PNGSourceImage gshhsImage;
-    private final PNGSourceImage aboveSixtyNorthImage;
-    private final PNGSourceImage belowSixtySouthImage;
-    private int mode;
+    private PNGSourceImage gshhsImage;
+    private PNGSourceImage aboveSixtyNorthImage;
+    private PNGSourceImage belowSixtySouthImage;
+    private Mode mode;
     private int resolution;
 
     /**
@@ -92,48 +126,71 @@ public class WatermaskClassifier {
      * for the given geo-position is returned.
      * If the fill algorithm is not performed a value indicating invalid is returned.
      *
-     * @param resolution The resolution specifying on source data is to be queried. Needs to be
-     *                   <code>RESOLUTION_50</code> or <code>RESOLUTION_150</code>.
+     * @param resolution The resolution specifying the source data which is to be queried. The units are in meters.
+     *                   Needs to be <code>RESOLUTION_50m</code>, <code>RESOLUTION_150m</code>,
+     *                   <code>RESOLUTION_1km</code> or <code>RESOLUTION_10km</code>
      * @param mode       The mode the classifier shall run in. Must be one of <code>MODE_MODIS</code>,
-     *                   <code>MODE_GC</code> or <code>MODE_GSHHS</code>.
-     *
-     *                   If <code>MODE_MODIS</code> is chosen, the watermask is based on MODIS above 60° north,
+     *                   <code>Mode.SRTM_GC</code> or <code>Mode.GSHHS</code>.
+     *                   <p/>
+     *                   If <code>Mode.MODIS</code> is chosen, the watermask is based on MODIS above 60° north,
      *                   on SRTM-shapefiles between 60° north and 60° south, and on MODIS below 60°
      *                   south.
-     *
-     *                   If <code>MODE_GC</code> is chosen, the watermask is based on GlobCover above 60° north,
+     *                   <p/>
+     *                   If <code>Mode.SRTM_GC</code> is chosen, the watermask is based on GlobCover above 60° north,
      *                   on SRTM-shapefiles between 60° north and 60° south, and on MODIS below 60° south.
-     *
-     *                   If <code>MODE_GSHHS</code> is chosen, the watermask is based on the Global Self-consistent,
+     *                   <p/>
+     *                   If <code>Mode.GSHHS</code> is chosen, the watermask is based on the Global Self-consistent,
      *                   Hierarchical, High-resolution Shoreline Database
-     *
      * @throws java.io.IOException If some IO-error occurs creating the sources.
      */
-    public WatermaskClassifier(int resolution, int mode) throws IOException {
-        if (resolution != RESOLUTION_50 && resolution != RESOLUTION_150 && resolution != RESOLUTION_1km && resolution != RESOLUTION_10km) {
+    public WatermaskClassifier(int resolution, Mode mode) throws IOException {
+        if (resolution != RESOLUTION_50m && resolution != RESOLUTION_150m && resolution != RESOLUTION_1km && resolution != RESOLUTION_10km) {
             throw new IllegalArgumentException(
-                    MessageFormat.format("Resolution needs to be {0}, {1}, {2} or {3}.", RESOLUTION_50, RESOLUTION_150, RESOLUTION_1km,RESOLUTION_10km));
+                    MessageFormat.format("Resolution needs to be {0}, {1}, {2} or {3}.", RESOLUTION_50m, RESOLUTION_150m, RESOLUTION_1km, RESOLUTION_10km));
         }
+
+        if (mode != Mode.SRTM_GC && mode != Mode.GSHHS && mode != Mode.MODIS) {
+            throw new IllegalArgumentException(
+                    MessageFormat.format("Mode needs to be {0}, {1} or {2}.", Mode.SRTM_GC, Mode.GSHHS, Mode.MODIS));
+        }
+
         this.mode = mode;
         this.resolution = resolution;
 
         final File auxdataDir = installAuxdata();
-        ImageDescriptor gshhsDescriptor = getNorthDescriptor(auxdataDir);
-        ImageDescriptor northDescriptor = getNorthDescriptor(auxdataDir);
-        ImageDescriptor southDescriptor = getSouthDescriptor(auxdataDir);
-        gshhsImage = createImage(gshhsDescriptor);
-        centerImage = null;
-        if (resolution == RESOLUTION_50 || resolution == RESOLUTION_150){
+
+//        ImageDescriptor gshhsDescriptor = getNorthDescriptor(auxdataDir);
+//        ImageDescriptor northDescriptor = getNorthDescriptor(auxdataDir);
+//        ImageDescriptor southDescriptor = getSouthDescriptor(auxdataDir);
+//        gshhsImage = createImage(gshhsDescriptor);
+//
+//        centerImage = null;
+//        if (mode == Mode.SRTM_GC) {
+//            centerImage = createSrtmImage(auxdataDir);
+//        }
+//        aboveSixtyNorthImage = createImage(northDescriptor);
+//        belowSixtySouthImage = createImage(southDescriptor);
+
+
+        if (mode == Mode.GSHHS) {
+            ImageDescriptor gshhsDescriptor = getNorthDescriptor(auxdataDir);
+            gshhsImage = createImage(gshhsDescriptor);
+        } else if (mode == Mode.SRTM_GC) {
             centerImage = createSrtmImage(auxdataDir);
+
+            ImageDescriptor northDescriptor = getNorthDescriptor(auxdataDir);
+            aboveSixtyNorthImage = createImage(northDescriptor);
+
+            ImageDescriptor southDescriptor = getSouthDescriptor(auxdataDir);
+            belowSixtySouthImage = createImage(southDescriptor);
         }
-        aboveSixtyNorthImage = createImage(northDescriptor);
-        belowSixtySouthImage = createImage(southDescriptor);
+
 
     }
 
-    public WatermaskClassifier(int resolution) throws IOException {
-        this(resolution, MODE_GSHHS);
-    }
+//    public WatermaskClassifier(int resolution) throws IOException {
+//        this(resolution, MODE_GSHHS);
+//    }
 
     private ImageDescriptor getSouthDescriptor(File auxdataDir) {
         return new ImageDescriptorBuilder()
@@ -149,7 +206,7 @@ public class WatermaskClassifier {
     private ImageDescriptor getNorthDescriptor(File auxdataDir) {
         ImageDescriptor northDescriptor;
         switch (mode) {
-            case MODE_MODIS:
+            case MODIS:
                 northDescriptor = new ImageDescriptorBuilder()
                         .width(MODIS_IMAGE_WIDTH)
                         .height(MODIS_IMAGE_HEIGHT)
@@ -159,7 +216,7 @@ public class WatermaskClassifier {
                         .zipFileName("MODIS_north_water_mask.zip")
                         .build();
                 break;
-            case MODE_GC:
+            case SRTM_GC:
                 northDescriptor = new ImageDescriptorBuilder()
                         .width(GC_IMAGE_WIDTH)
                         .height(GC_IMAGE_HEIGHT)
@@ -168,9 +225,10 @@ public class WatermaskClassifier {
                         .auxdataDir(auxdataDir)
                         .zipFileName("GC_water_mask.zip")
                         .build();
-            case MODE_GSHHS:
+                break;
+            case GSHHS:
                 String zipname = String.format("GSHHS_water_mask_%skm.zip", String.valueOf(resolution / 1000));
-                if (resolution == 1000){
+                if (resolution == 1000) {
                     northDescriptor = new ImageDescriptorBuilder()
                             .width(GSHHS_1_IMAGE_WIDTH)
                             .height(GSHHS_1_IMAGE_HEIGHT)
@@ -181,17 +239,17 @@ public class WatermaskClassifier {
                             .build();
                 } else {
                     northDescriptor = new ImageDescriptorBuilder()
-                        .width(GSHHS_10_IMAGE_WIDTH)
-                        .height(GSHHS_10_IMAGE_HEIGHT)
-                        .tileWidth(GSHHS_10_TILE_WIDTH)
-                        .tileHeight(GSHHS_10_TILE_HEIGHT)
-                        .auxdataDir(auxdataDir)
-                        .zipFileName(zipname)
-                        .build();
+                            .width(GSHHS_10_IMAGE_WIDTH)
+                            .height(GSHHS_10_IMAGE_HEIGHT)
+                            .tileWidth(GSHHS_10_TILE_WIDTH)
+                            .tileHeight(GSHHS_10_TILE_HEIGHT)
+                            .auxdataDir(auxdataDir)
+                            .zipFileName(zipname)
+                            .build();
                 }
                 break;
             default:
-                String msg = String.format("Unknown mode '%d'. Known modes are {%d, %d, %d}", mode, MODE_MODIS, MODE_GC, MODE_GSHHS);
+                String msg = String.format("Unknown mode '%d'. Known modes are {%d, %d, %d}", mode, Mode.MODIS, Mode.SRTM_GC, Mode.GSHHS);
                 throw new IllegalArgumentException(msg);
         }
         return northDescriptor;
@@ -230,7 +288,7 @@ public class WatermaskClassifier {
         final File auxdataDir = descriptor.getAuxdataDir();
         final String zipFileName = descriptor.getZipFileName();
         File zipFile = new File(auxdataDir, zipFileName);
-        return PNGSourceImage.create(properties, zipFile,mode,resolution);
+        return PNGSourceImage.create(properties, zipFile, mode, resolution);
     }
 
     private File installAuxdata() throws IOException {
@@ -264,17 +322,17 @@ public class WatermaskClassifier {
         if (tempLon < 0.0 || tempLon > 360.0 || normLat < 0.0 || normLat > 180.0) {
             return INVALID_VALUE;
         }
-        if (mode == MODE_GSHHS) {
+        if (mode == Mode.GSHHS) {
             return getSample(normLat, tempLon, 180.0, 360.0, 0.0, gshhsImage);
-        }  else {
+        } else {
             if (normLat < 150.0f && normLat > 30.0f) {
                 return getSample(normLat, tempLon, 180.0, 360.0, 0.0, centerImage);
-            } else if(normLat <= 30.0f) {
+            } else if (normLat <= 30.0f) {
                 return getSample(normLat, tempLon, 30.0, 360.0, 0.0, aboveSixtyNorthImage);
-            } else if(normLat >= 150.0f) {
+            } else if (normLat >= 150.0f) {
 //                return WATER_VALUE;
                 return getSample(normLat, tempLon, 30.0, 360.0, 0.0, belowSixtySouthImage);
-        }
+            }
         }
         throw new IllegalStateException("Cannot come here");
     }
@@ -285,7 +343,7 @@ public class WatermaskClassifier {
         final int x = (int) Math.round(lon / pixelSizeX);
         final int y = (int) (Math.round((lat - offset) / pixelSizeY));
         final Raster tile = image.getTile(image.XToTileX(x), image.YToTileY(y));
-        if(tile == null) {
+        if (tile == null) {
             return INVALID_VALUE;
         }
         return tile.getSample(x, y, 0);

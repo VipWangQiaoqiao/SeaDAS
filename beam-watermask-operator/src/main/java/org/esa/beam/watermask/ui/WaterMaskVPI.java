@@ -50,7 +50,7 @@ import org.esa.beam.watermask.operator.*;
  */
 public class WaterMaskVPI extends AbstractVisatPlugIn {
 
-    public static final String COMMAND_ID = "Land Masks and Coastline";
+    public static final String COMMAND_ID = "Coastline and Land Masks";
     public static final String TOOL_TIP = "Add coastline, water and land masks";
     public static final String ICON = "/org/esa/beam/watermask/ui/icons/coastline2_24.png";
 
@@ -134,6 +134,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                     landMasksData.setDeleteMasks(false);
                     LandMasksDialog landMasksDialog = new LandMasksDialog(landMasksData, masksCreated[0]);
                     landMasksDialog.setVisible(true);
+
                 }
 
                 if (landMasksData.isDeleteMasks() || !useDialogs) {
@@ -179,24 +180,18 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                             try {
                                 //  Product landWaterProduct = GPF.createProduct("LandWaterMask", GPF.NO_PARAMS, product);
 
+                                ResolutionInfo resolutionInfo = landMasksData.getResolutionInfo();
+
                                 Map<String, Object> parameters = new HashMap<String, Object>();
 
                                 parameters.put("subSamplingFactorX", new Integer(landMasksData.getSuperSampling()));
                                 parameters.put("subSamplingFactorY", new Integer(landMasksData.getSuperSampling()));
-
-                                ResolutionInfo resolutionInfo = landMasksData.getResolutionInfo();
-
+                                parameters.put("resolution", resolutionInfo.getResolution(ResolutionInfo.Unit.METER));
+                                parameters.put("mode", resolutionInfo.getMode().toString());
+                                parameters.put("resolutionInfo", resolutionInfo);
                                 /*
                                     Create a new product, which will contain the land_water_fraction band
                                  */
-                                if (resolutionInfo.getResolution() == 50 ||
-                                        resolutionInfo.getResolution() == 150) {
-                                    parameters.put("resolution", new Integer(resolutionInfo.getResolution()));
-                                    parameters.put("mode", WatermaskClassifier.MODE_GC);
-                                } else {
-                                    parameters.put("resolution", new Integer(resolutionInfo.getResolution()));
-                                    parameters.put("mode", WatermaskClassifier.MODE_GSHHS);
-                                }
 
 
                                 Product landWaterProduct = GPF.createProduct(LAND_WATER_MASK_OP_ALIAS, parameters, product);

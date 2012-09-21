@@ -68,7 +68,7 @@ public class WatermaskOp extends Operator {
     private Product sourceProduct;
 
     @Parameter(description = "Specifies on which resolution the water mask shall be based.", unit = "m/pixel",
-            label = "Resolution", defaultValue = "50", valueSet = {"50", "150", "1000","10000"})
+            label = "Resolution", defaultValue = "1000", valueSet = {"50", "150", "1000", "10000"})
     private int resolution;
 
 
@@ -83,9 +83,18 @@ public class WatermaskOp extends Operator {
     private int subSamplingFactorY;
 
 
+//    @Parameter(description = "Specifies the watermaskClassifier mode",
+//            label = "Mode", defaultValue = "2", notNull = true)
+//    private int mode;
+
     @Parameter(description = "Specifies the watermaskClassifier mode",
-            label = "Mode", defaultValue = "2", notNull = true)
-    private int mode;
+            label = "Mode", defaultValue = "GSHHS", notNull = true)
+    private WatermaskClassifier.Mode mode;
+
+
+//    @Parameter(description = "Specifies the resolutionInfo which contains resolution, mode",
+//            label = "Resolution Info", defaultValue = "1 km GSHHS", notNull = true)
+//    private ResolutionInfo resolutionInfo;
 
 
     @TargetProduct
@@ -154,13 +163,13 @@ public class WatermaskOp extends Operator {
     }
 
     private void validateParameter() {
-        if (resolution != WatermaskClassifier.RESOLUTION_50 &&
-                resolution != WatermaskClassifier.RESOLUTION_150 &&
+        if (resolution != WatermaskClassifier.RESOLUTION_50m &&
+                resolution != WatermaskClassifier.RESOLUTION_150m &&
                 resolution != WatermaskClassifier.RESOLUTION_1km &&
                 resolution != WatermaskClassifier.RESOLUTION_10km) {
             throw new OperatorException(String.format("Resolution needs to be either %d, %d, %d or %d.",
-                    WatermaskClassifier.RESOLUTION_50,
-                    WatermaskClassifier.RESOLUTION_150,
+                    WatermaskClassifier.RESOLUTION_50m,
+                    WatermaskClassifier.RESOLUTION_150m,
                     WatermaskClassifier.RESOLUTION_1km,
                     WatermaskClassifier.RESOLUTION_10km));
         }

@@ -1,5 +1,7 @@
 package org.esa.beam.watermask.ui;
 
+import org.esa.beam.watermask.operator.WatermaskClassifier;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
@@ -19,6 +21,7 @@ public class ResolutionComboBox {
 
     private JLabel jLabel;
     private JComboBox jComboBox;
+    private int selectedIndex;
 
     public ResolutionComboBox(LandMasksData landMasksData) {
 
@@ -26,7 +29,7 @@ public class ResolutionComboBox {
 
         ArrayList<ResolutionInfo> jComboBoxArrayList = new ArrayList<ResolutionInfo>();
         ArrayList<String> toolTipsArrayList = new ArrayList<String>();
-
+        ArrayList<Boolean> enabledArrayList = new ArrayList<Boolean>();
 
         for (ResolutionInfo resolutionInfo : landMasksData.getResolutionInfos()) {
             jComboBoxArrayList.add(resolutionInfo);
@@ -36,6 +39,8 @@ public class ResolutionComboBox {
             } else {
                 toolTipsArrayList.add(null);
             }
+
+            enabledArrayList.add(new Boolean(resolutionInfo.isEnabled()));
         }
 
         final ResolutionInfo[] jComboBoxArray;
@@ -55,11 +60,21 @@ public class ResolutionComboBox {
             j++;
         }
 
+        final Boolean[] enabledArray = new Boolean[jComboBoxArrayList.size()];
+
+        int k = 0;
+        for (Boolean enabled : enabledArrayList) {
+            enabledArray[k] = enabled;
+            k++;
+        }
+
 
         jComboBox = new JComboBox(jComboBoxArray);
 
         final MyComboBoxRenderer myComboBoxRenderer = new MyComboBoxRenderer();
-        myComboBoxRenderer.setTooltips(toolTipsArray);
+        myComboBoxRenderer.setTooltipList(toolTipsArray);
+        myComboBoxRenderer.setEnabledList(enabledArray);
+
         jComboBox.setRenderer(myComboBoxRenderer);
         jComboBox.setEditable(false);
 
@@ -69,6 +84,8 @@ public class ResolutionComboBox {
                 jComboBox.setSelectedItem(resolutionInfo);
             }
         }
+
+        selectedIndex = jComboBox.getSelectedIndex();
 
 
         jLabel = new JLabel("Resolution");
@@ -81,7 +98,13 @@ public class ResolutionComboBox {
         jComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                landMasksData.setResolutionInfo((ResolutionInfo) jComboBox.getSelectedItem());
+                ResolutionInfo resolutionInfo = (ResolutionInfo) jComboBox.getSelectedItem();
+                if (resolutionInfo.isEnabled()) {
+                    landMasksData.setResolutionInfo(resolutionInfo);
+                    selectedIndex = jComboBox.getSelectedIndex();
+                } else {
+                    jComboBox.setSelectedIndex(selectedIndex);
+                }
             }
         });
 
@@ -99,33 +122,80 @@ public class ResolutionComboBox {
     class MyComboBoxRenderer extends BasicComboBoxRenderer {
 
         private String[] tooltips;
+        private Boolean[] enabledList;
 
-        public void MyComboBoxRenderer(String[] tooltips) {
-            this.tooltips = tooltips;
-        }
+
+//        public void MyComboBoxRenderer(String[] tooltips) {
+//            this.tooltips = tooltips;
+//        }
 
 
         public Component getListCellRendererComponent(JList list, Object value,
                                                       int index, boolean isSelected, boolean cellHasFocus) {
+
+
             if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
 
                 if (-1 < index && index < tooltips.length) {
                     list.setToolTipText(tooltips[index]);
                 }
-            } else {
-                setBackground(Color.white);
-                setForeground(Color.black);
+
+                if (-1 < index && index < enabledList.length) {
+                    if (enabledList[index] == true) {
+//                        list.setSelectionBackground(Color.white);
+//                        list.setSelectionForeground(Color.black);
+//                        setBackground(Color.white);
+//                        setForeground(Color.black);
+//                        setEnabled(true);
+//                        setFocusable(true);
+//
+                    } else {
+//                        list.setSelectionBackground(Color.white);
+//                        list.setSelectionForeground(Color.gray);
+//                        setBackground(Color.white);
+//                        setForeground(Color.gray);
+//                        setEnabled(false);
+//                        setFocusable(false);
+                    }
+                }
+
+
             }
+
+            if (-1 < index && index < enabledList.length) {
+                if (enabledList[index] == true) {
+                    list.setSelectionBackground(Color.white);
+                    list.setSelectionForeground(Color.black);
+                    setBackground(Color.white);
+                    setForeground(Color.black);
+                    setEnabled(true);
+                    setFocusable(true);
+                } else {
+                    list.setSelectionBackground(Color.white);
+                    list.setSelectionForeground(Color.gray);
+                    setBackground(Color.white);
+                    setForeground(Color.gray);
+                    setEnabled(false);
+                    setFocusable(false);
+                }
+
+            }
+
+//
+//            list.setSelectionBackground(Color.white);
+//            list.setSelectionForeground(Color.black);
 
             setFont(list.getFont());
             setText((value == null) ? "" : value.toString());
             return this;
         }
 
-        public void setTooltips(String[] tooltips) {
-            this.tooltips = tooltips;
+        public void setTooltipList(String[] tooltipList) {
+            this.tooltips = tooltipList;
+        }
+
+        public void setEnabledList(Boolean[] enabledList) {
+            this.enabledList = enabledList;
         }
     }
 

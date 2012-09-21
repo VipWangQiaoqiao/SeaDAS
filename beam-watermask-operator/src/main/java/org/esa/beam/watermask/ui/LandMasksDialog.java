@@ -358,7 +358,7 @@ class LandMasksDialog extends JDialog {
         setModalityType(ModalityType.APPLICATION_MODAL);
 
 
-        setTitle("Auxilliary Masks");
+        setTitle("Coastline and Land Masks");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         pack();

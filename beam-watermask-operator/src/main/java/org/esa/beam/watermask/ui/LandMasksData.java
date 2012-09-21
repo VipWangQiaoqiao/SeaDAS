@@ -1,5 +1,7 @@
 package org.esa.beam.watermask.ui;
 
+import org.esa.beam.watermask.operator.WatermaskClassifier;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -16,9 +18,6 @@ class LandMasksData {
     private boolean deleteMasks = false;
 
     private int superSampling = 1;
-
-    private ArrayList<ResolutionInfo> resolutionInfos = new ArrayList<ResolutionInfo>();
-    private ResolutionInfo resolutionInfo;
 
 
     private double landMaskTransparency = 0.0;
@@ -51,18 +50,39 @@ class LandMasksData {
     private String waterMaskMath = getWaterFractionBandName() + " > 0";
     private String waterMaskDescription = "Water pixels";
 
-    public LandMasksData() {
 
-        getResolutionInfos().add(new ResolutionInfo(50));
-        getResolutionInfos().add(new ResolutionInfo(150));
-        getResolutionInfos().add(new ResolutionInfo(1000));
-        getResolutionInfos().add(new ResolutionInfo(10000));
-        
-        for (ResolutionInfo resolutionInfo : resolutionInfos) {
-            if (resolutionInfo.getResolution() == 50) {
-                this.setResolutionInfo(resolutionInfo);
-            }
-        }
+    private ArrayList<ResolutionInfo> resolutionInfos = new ArrayList<ResolutionInfo>();
+    private ResolutionInfo resolutionInfo;
+
+    public LandMasksData() {
+        ResolutionInfo resolutionInfo;
+
+        resolutionInfo = new ResolutionInfo(50, ResolutionInfo.Unit.METER, WatermaskClassifier.Mode.SRTM_GC);
+        resolutionInfo.setEnabled(true);
+        getResolutionInfos().add(resolutionInfo);
+
+        resolutionInfo = new ResolutionInfo(150, ResolutionInfo.Unit.METER, WatermaskClassifier.Mode.SRTM_GC);
+        resolutionInfo.setEnabled(true);
+        getResolutionInfos().add(resolutionInfo);
+
+        resolutionInfo = new ResolutionInfo(250, ResolutionInfo.Unit.METER, WatermaskClassifier.Mode.GSHHS);
+        resolutionInfo.setEnabled(false);
+        getResolutionInfos().add(resolutionInfo);
+
+        resolutionInfo = new ResolutionInfo(500, ResolutionInfo.Unit.METER, WatermaskClassifier.Mode.GSHHS);
+        resolutionInfo.setEnabled(false);
+        getResolutionInfos().add(resolutionInfo);
+
+        resolutionInfo = new ResolutionInfo(1, ResolutionInfo.Unit.KILOMETER, WatermaskClassifier.Mode.GSHHS);
+        resolutionInfo.setEnabled(true);
+        getResolutionInfos().add(resolutionInfo);
+        // set the default
+        this.resolutionInfo = resolutionInfo;
+
+        resolutionInfo = new ResolutionInfo(10, ResolutionInfo.Unit.KILOMETER, WatermaskClassifier.Mode.GSHHS);
+        resolutionInfo.setEnabled(true);
+        getResolutionInfos().add(resolutionInfo);
+
     }
 
 
