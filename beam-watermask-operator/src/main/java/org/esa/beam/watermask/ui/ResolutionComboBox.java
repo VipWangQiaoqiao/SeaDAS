@@ -136,6 +136,7 @@ public class ResolutionComboBox {
 
             if (isSelected) {
 
+
                 if (-1 < index && index < tooltips.length) {
                     list.setToolTipText(tooltips[index]);
                 }
@@ -144,8 +145,8 @@ public class ResolutionComboBox {
                     if (enabledList[index] == true) {
 //                        list.setSelectionBackground(Color.white);
 //                        list.setSelectionForeground(Color.black);
-//                        setBackground(Color.white);
-//                        setForeground(Color.black);
+                        setBackground(Color.blue);
+                        setForeground(Color.white);
 //                        setEnabled(true);
 //                        setFocusable(true);
 //
@@ -160,27 +161,28 @@ public class ResolutionComboBox {
                 }
 
 
-            }
+            } else {
 
-            if (-1 < index && index < enabledList.length) {
-                if (enabledList[index] == true) {
-                    list.setSelectionBackground(Color.white);
-                    list.setSelectionForeground(Color.black);
-                    setBackground(Color.white);
-                    setForeground(Color.black);
-                    setEnabled(true);
-                    setFocusable(true);
-                } else {
-                    list.setSelectionBackground(Color.white);
-                    list.setSelectionForeground(Color.gray);
-                    setBackground(Color.white);
-                    setForeground(Color.gray);
-                    setEnabled(false);
-                    setFocusable(false);
+                if (-1 < index && index < enabledList.length) {
+                    if (enabledList[index] == true) {
+//                    list.setSelectionBackground(Color.white);
+//                    list.setSelectionForeground(Color.black);
+                        setBackground(Color.white);
+                        setForeground(Color.black);
+//                        setEnabled(true);
+//                        setFocusable(true);
+                    } else {
+//                    list.setSelectionBackground(Color.white);
+//                    list.setSelectionForeground(Color.gray);
+                        setBackground(Color.white);
+                        setForeground(Color.gray);
+//                        setEnabled(false);
+//                        setFocusable(false);
+                    }
+
                 }
 
             }
-
 //
 //            list.setSelectionBackground(Color.white);
 //            list.setSelectionForeground(Color.black);

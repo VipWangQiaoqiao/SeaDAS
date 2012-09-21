@@ -50,7 +50,7 @@ public class WatermaskClassifier {
 
     public enum Mode {
         MODIS("MODIS"),
-        SRTM_GC("SRTM & GC"),
+        SRTM_GC("SRTM_GC"),
         GSHHS("GSHHS");
 
         public String SRTM_GC_DESCRIPTION = "SRTM (Shuttle Radar Topography Mission) and GC(GlobCover World Map)";

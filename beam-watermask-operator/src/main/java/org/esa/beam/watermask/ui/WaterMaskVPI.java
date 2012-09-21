@@ -188,7 +188,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                                 parameters.put("subSamplingFactorY", new Integer(landMasksData.getSuperSampling()));
                                 parameters.put("resolution", resolutionInfo.getResolution(ResolutionInfo.Unit.METER));
                                 parameters.put("mode", resolutionInfo.getMode().toString());
-                                parameters.put("resolutionInfo", resolutionInfo);
+   //                             parameters.put("resolutionInfo", resolutionInfo);
                                 /*
                                     Create a new product, which will contain the land_water_fraction band
                                  */
