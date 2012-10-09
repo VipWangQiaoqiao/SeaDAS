@@ -27,6 +27,8 @@ import org.esa.beam.framework.ui.ColorComboBoxAdapter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -41,8 +43,14 @@ class MoreOptionsForm {
     private ColorManipulationForm parentForm;
     private boolean hasHistogramMatching;
 
+
+    private JCheckBox discreteColorsCheckBox;
+    private ColorManipulationChildForm childForm;
+
+
     MoreOptionsForm(ColorManipulationForm parentForm, boolean hasHistogramMatching) {
         this.parentForm = parentForm;
+        childForm = EmptyImageInfoForm.INSTANCE;
         PropertyContainer propertyContainer = new PropertyContainer();
         propertyContainer.addProperty(Property.create(NO_DATA_COLOR_PROPERTY, ImageInfo.NO_COLOR));
 
@@ -94,6 +102,24 @@ class MoreOptionsForm {
             addRow(histogramMatchingLabel, histogramMatchingBox);
             bindingContext.addPropertyChangeListener(HISTOGRAM_MATCHING_PROPERTY, pcl);
         }
+
+
+        discreteColorsCheckBox = new JCheckBox("Discrete colors");
+        discreteColorsCheckBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                setDiscreteColorsMode(discreteColorsCheckBox);
+            }
+        });
+
+        addRow(discreteColorsCheckBox);
+    }
+
+    private void setDiscreteColorsMode(JCheckBox discreteColorsCheckBox) {
+        parentForm.getImageInfo().getColorPaletteDef().setDiscrete(discreteColorsCheckBox.isSelected());
+        if (childForm instanceof  Continuous1BandGraphicalForm) {
+           ( (Continuous1BandGraphicalForm)childForm).getImageInfoEditor().getModel().fireStateChanged();
+        }
+        parentForm.setApplyEnabled(true);
     }
 
     private ImageInfo getImageInfo() {
@@ -129,6 +155,7 @@ class MoreOptionsForm {
         if (hasHistogramMatching) {
             setHistogramMatching(getImageInfo().getHistogramMatching());
         }
+        updateDiscreteColorCheckBox();
     }
 
     public void updateModel() {
@@ -137,6 +164,15 @@ class MoreOptionsForm {
             getImageInfo().setHistogramMatching(getHistogramMatching());
         }
         getParentForm().setApplyEnabled(true);
+        updateDiscreteColorCheckBox();
+    }
+
+    private void updateDiscreteColorCheckBox() {
+        ImageInfo imageInfo = parentForm.getImageInfo();
+        if (imageInfo != null) {
+            discreteColorsCheckBox.setSelected(imageInfo.getColorPaletteDef().isDiscrete());
+        }
+
     }
 
     public JPanel getContentPanel() {
