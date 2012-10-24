@@ -22,7 +22,7 @@ public class SuperSamplingSpinner {
 
         this.landMasksData = landMasksData;
 
-        jLabel = new JLabel("Super Sampling");
+        jLabel = new JLabel("Super Sampling Factor");
 
         jLabel.setToolTipText("Super Sampling");
 

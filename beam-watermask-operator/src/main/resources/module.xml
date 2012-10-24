@@ -59,4 +59,10 @@
         <!--</action>-->
     </extension>
 
+    <extension point="beam-ui:helpSets">
+        <helpSet>
+            <parent>seadas-help</parent>
+            <path>doc/help/coastlineLandMasks.hs</path>
+        </helpSet>
+    </extension>
 </module>

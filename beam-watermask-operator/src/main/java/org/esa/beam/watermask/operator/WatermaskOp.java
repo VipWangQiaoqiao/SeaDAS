@@ -71,6 +71,11 @@ public class WatermaskOp extends Operator {
             label = "Resolution", defaultValue = "1000", valueSet = {"50", "150", "1000", "10000"})
     private int resolution;
 
+    @Parameter(description = "Water mask filename",
+            label = "Filename", defaultValue = "50m.zip",
+            valueSet = {"50m.zip", "150m.zip", "GSHHS_water_mask_250m.zip", "GSHHS_water_mask_250m.zip", "GSHHS_water_mask_1km.zip", "GSHHS_water_mask_10km.zip"})
+    private String filename;
+
 
     @Parameter(description = "Specifies the factor between the resolution of the source product and the watermask in " +
             "x direction. A value of '1' means no subsampling at all.",
@@ -94,7 +99,7 @@ public class WatermaskOp extends Operator {
 
 //    @Parameter(description = "Specifies the resolutionInfo which contains resolution, mode",
 //            label = "Resolution Info", defaultValue = "1 km GSHHS", notNull = true)
-//    private ResolutionInfo resolutionInfo;
+//    private SourceFileInfo resolutionInfo;
 
 
     @TargetProduct
@@ -108,7 +113,7 @@ public class WatermaskOp extends Operator {
         initTargetProduct();
 
         try {
-            classifier = new WatermaskClassifier(resolution, mode);
+            classifier = new WatermaskClassifier(resolution, mode, filename);
         } catch (IOException e) {
             throw new OperatorException("Error creating class WatermaskClassifier.", e);
         }

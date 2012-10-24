@@ -1,7 +1,5 @@
 package org.esa.beam.watermask.ui;
 
-import org.esa.beam.watermask.operator.WatermaskClassifier;
-
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
@@ -27,28 +25,28 @@ public class ResolutionComboBox {
 
         this.landMasksData = landMasksData;
 
-        ArrayList<ResolutionInfo> jComboBoxArrayList = new ArrayList<ResolutionInfo>();
+        ArrayList<SourceFileInfo> jComboBoxArrayList = new ArrayList<SourceFileInfo>();
         ArrayList<String> toolTipsArrayList = new ArrayList<String>();
         ArrayList<Boolean> enabledArrayList = new ArrayList<Boolean>();
 
-        for (ResolutionInfo resolutionInfo : landMasksData.getResolutionInfos()) {
-            jComboBoxArrayList.add(resolutionInfo);
+        for (SourceFileInfo sourceFileInfo : landMasksData.getSourceFileInfos()) {
+            jComboBoxArrayList.add(sourceFileInfo);
 
-            if (resolutionInfo.getDescription() != null) {
-                toolTipsArrayList.add(resolutionInfo.getDescription());
+            if (sourceFileInfo.getDescription() != null) {
+                toolTipsArrayList.add(sourceFileInfo.getDescription());
             } else {
                 toolTipsArrayList.add(null);
             }
 
-            enabledArrayList.add(new Boolean(resolutionInfo.isEnabled()));
+            enabledArrayList.add(new Boolean(sourceFileInfo.isEnabled()));
         }
 
-        final ResolutionInfo[] jComboBoxArray;
-        jComboBoxArray = new ResolutionInfo[jComboBoxArrayList.size()];
+        final SourceFileInfo[] jComboBoxArray;
+        jComboBoxArray = new SourceFileInfo[jComboBoxArrayList.size()];
 
         int i = 0;
-        for (ResolutionInfo resolutionInfo : landMasksData.getResolutionInfos()) {
-            jComboBoxArray[i] = resolutionInfo;
+        for (SourceFileInfo sourceFileInfo : landMasksData.getSourceFileInfos()) {
+            jComboBoxArray[i] = sourceFileInfo;
             i++;
         }
 
@@ -79,17 +77,17 @@ public class ResolutionComboBox {
         jComboBox.setEditable(false);
 
 
-        for (ResolutionInfo resolutionInfo : jComboBoxArray) {
-            if (resolutionInfo == landMasksData.getResolutionInfo()) {
-                jComboBox.setSelectedItem(resolutionInfo);
+        for (SourceFileInfo sourceFileInfo : jComboBoxArray) {
+            if (sourceFileInfo == landMasksData.getSourceFileInfo()) {
+                jComboBox.setSelectedItem(sourceFileInfo);
             }
         }
 
         selectedIndex = jComboBox.getSelectedIndex();
 
 
-        jLabel = new JLabel("Resolution");
-        jLabel.setToolTipText("Resolution");
+        jLabel = new JLabel("Coastline Source Dataset");
+        jLabel.setToolTipText("Determines which shoreline source dataset to use when generating the masks");
 
         addControlListeners();
     }
@@ -98,9 +96,9 @@ public class ResolutionComboBox {
         jComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ResolutionInfo resolutionInfo = (ResolutionInfo) jComboBox.getSelectedItem();
-                if (resolutionInfo.isEnabled()) {
-                    landMasksData.setResolutionInfo(resolutionInfo);
+                SourceFileInfo sourceFileInfo = (SourceFileInfo) jComboBox.getSelectedItem();
+                if (sourceFileInfo.isEnabled()) {
+                    landMasksData.setSourceFileInfo(sourceFileInfo);
                     selectedIndex = jComboBox.getSelectedIndex();
                 } else {
                     jComboBox.setSelectedIndex(selectedIndex);

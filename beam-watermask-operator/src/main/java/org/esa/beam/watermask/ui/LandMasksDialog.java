@@ -53,7 +53,7 @@ class LandMasksDialog extends JDialog {
 
     public LandMasksData landMasksData = null;
     private JButton helpButton = null;
-    private String HELP_ID = "land_masks";
+    private String HELP_ID = "coastlineLandMasks";
 
 
     public LandMasksDialog(LandMasksData landMasksData, boolean masksCreated) {
@@ -301,9 +301,9 @@ class LandMasksDialog extends JDialog {
                 new ExGridBagConstraints(0, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
         mainPanel.add(coastlineJPanel,
                 new ExGridBagConstraints(0, 1, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
-        mainPanel.add(waterJPanel,
-                new ExGridBagConstraints(0, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
         mainPanel.add(landJPanel,
+                new ExGridBagConstraints(0, 2, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
+        mainPanel.add(waterJPanel,
                 new ExGridBagConstraints(0, 3, 0, 0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, 3));
 
 

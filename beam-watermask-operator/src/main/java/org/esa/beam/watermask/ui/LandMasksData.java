@@ -51,37 +51,50 @@ class LandMasksData {
     private String waterMaskDescription = "Water pixels";
 
 
-    private ArrayList<ResolutionInfo> resolutionInfos = new ArrayList<ResolutionInfo>();
-    private ResolutionInfo resolutionInfo;
+    private ArrayList<SourceFileInfo> sourceFileInfos = new ArrayList<SourceFileInfo>();
+    private SourceFileInfo sourceFileInfo;
 
     public LandMasksData() {
-        ResolutionInfo resolutionInfo;
 
-        resolutionInfo = new ResolutionInfo(50, ResolutionInfo.Unit.METER, WatermaskClassifier.Mode.SRTM_GC);
-        resolutionInfo.setEnabled(true);
-        getResolutionInfos().add(resolutionInfo);
+        SourceFileInfo sourceFileInfo;
 
-        resolutionInfo = new ResolutionInfo(150, ResolutionInfo.Unit.METER, WatermaskClassifier.Mode.SRTM_GC);
-        resolutionInfo.setEnabled(true);
-        getResolutionInfos().add(resolutionInfo);
+        sourceFileInfo = new SourceFileInfo(WatermaskClassifier.RESOLUTION_50m,
+                SourceFileInfo.Unit.METER,
+                WatermaskClassifier.Mode.SRTM_GC,
+                WatermaskClassifier.FILENAME_SRTM_GC_50m);
+        getSourceFileInfos().add(sourceFileInfo);
 
-        resolutionInfo = new ResolutionInfo(250, ResolutionInfo.Unit.METER, WatermaskClassifier.Mode.GSHHS);
-        resolutionInfo.setEnabled(false);
-        getResolutionInfos().add(resolutionInfo);
+        sourceFileInfo = new SourceFileInfo(WatermaskClassifier.RESOLUTION_150m,
+                SourceFileInfo.Unit.METER,
+                WatermaskClassifier.Mode.SRTM_GC,
+                WatermaskClassifier.FILENAME_SRTM_GC_150m);
+        getSourceFileInfos().add(sourceFileInfo);
 
-        resolutionInfo = new ResolutionInfo(500, ResolutionInfo.Unit.METER, WatermaskClassifier.Mode.GSHHS);
-        resolutionInfo.setEnabled(false);
-        getResolutionInfos().add(resolutionInfo);
+        sourceFileInfo = new SourceFileInfo(WatermaskClassifier.RESOLUTION_250m,
+                SourceFileInfo.Unit.METER,
+                WatermaskClassifier.Mode.GSHHS,
+                WatermaskClassifier.FILENAME_GSHHS_250m);
+        getSourceFileInfos().add(sourceFileInfo);
 
-        resolutionInfo = new ResolutionInfo(1, ResolutionInfo.Unit.KILOMETER, WatermaskClassifier.Mode.GSHHS);
-        resolutionInfo.setEnabled(true);
-        getResolutionInfos().add(resolutionInfo);
+        sourceFileInfo = new SourceFileInfo(WatermaskClassifier.RESOLUTION_500m,
+                SourceFileInfo.Unit.METER,
+                WatermaskClassifier.Mode.GSHHS,
+                WatermaskClassifier.FILENAME_GSHHS_500m);
+        getSourceFileInfos().add(sourceFileInfo);
+
+        sourceFileInfo = new SourceFileInfo(WatermaskClassifier.RESOLUTION_1km,
+                SourceFileInfo.Unit.METER,
+                WatermaskClassifier.Mode.GSHHS,
+                WatermaskClassifier.FILENAME_GSHHS_1km);
+        getSourceFileInfos().add(sourceFileInfo);
         // set the default
-        this.resolutionInfo = resolutionInfo;
+        this.sourceFileInfo = sourceFileInfo;
 
-        resolutionInfo = new ResolutionInfo(10, ResolutionInfo.Unit.KILOMETER, WatermaskClassifier.Mode.GSHHS);
-        resolutionInfo.setEnabled(true);
-        getResolutionInfos().add(resolutionInfo);
+        sourceFileInfo = new SourceFileInfo(WatermaskClassifier.RESOLUTION_10km,
+                SourceFileInfo.Unit.METER,
+                WatermaskClassifier.Mode.GSHHS,
+                WatermaskClassifier.FILENAME_GSHHS_10km);
+        getSourceFileInfos().add(sourceFileInfo);
 
     }
 
@@ -174,12 +187,12 @@ class LandMasksData {
         this.superSampling = superSampling;
     }
 
-    public ResolutionInfo getResolutionInfo() {
-        return resolutionInfo;
+    public SourceFileInfo getSourceFileInfo() {
+        return sourceFileInfo;
     }
 
-    public void setResolutionInfo(ResolutionInfo resolution) {
-        this.resolutionInfo = resolution;
+    public void setSourceFileInfo(SourceFileInfo resolution) {
+        this.sourceFileInfo = resolution;
     }
 
     public String getWaterFractionBandName() {
@@ -278,12 +291,12 @@ class LandMasksData {
         this.deleteMasks = deleteMasks;
     }
 
-    public ArrayList<ResolutionInfo> getResolutionInfos() {
-        return resolutionInfos;
+    public ArrayList<SourceFileInfo> getSourceFileInfos() {
+        return sourceFileInfos;
     }
 
-    public void setResolutionInfos(ArrayList<ResolutionInfo> resolutionInfos) {
-        this.resolutionInfos = resolutionInfos;
+    public void setSourceFileInfos(ArrayList<SourceFileInfo> sourceFileInfos) {
+        this.sourceFileInfos = sourceFileInfos;
     }
 }
 

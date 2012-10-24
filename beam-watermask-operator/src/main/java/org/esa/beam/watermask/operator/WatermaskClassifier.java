@@ -42,10 +42,20 @@ public class WatermaskClassifier {
     public static final int WATER_VALUE = 1;
     public static final int INVALID_VALUE = 127;
     public static final int LAND_VALUE = 0;
+
     public static final int RESOLUTION_50m = 50;
     public static final int RESOLUTION_150m = 150;
+    public static final int RESOLUTION_250m = 250;
+    public static final int RESOLUTION_500m = 500;
     public static final int RESOLUTION_1km = 1000;
     public static final int RESOLUTION_10km = 10000;
+
+    public static final String FILENAME_SRTM_GC_50m = "50m.zip";
+    public static final String FILENAME_SRTM_GC_150m = "150m.zip";
+    public static final String FILENAME_GSHHS_250m = "GSHHS_water_mask_250m.zip";
+    public static final String FILENAME_GSHHS_500m = "GSHHS_water_mask_500m.zip";
+    public static final String FILENAME_GSHHS_1km = "GSHHS_water_mask_1km.zip";
+    public static final String FILENAME_GSHHS_10km = "GSHHS_water_mask_10km.zip";
 
 
     public enum Mode {
@@ -66,9 +76,12 @@ public class WatermaskClassifier {
 
         public String getDescription() {
             switch (this) {
-                case MODIS: return  MODIS_DESCRIPTION;
-                case SRTM_GC: return SRTM_GC_DESCRIPTION;
-                case GSHHS: return GSHHS_DESCRIPTION;
+                case MODIS:
+                    return MODIS_DESCRIPTION;
+                case SRTM_GC:
+                    return SRTM_GC_DESCRIPTION;
+                case GSHHS:
+                    return GSHHS_DESCRIPTION;
             }
 
             return null;
@@ -115,6 +128,7 @@ public class WatermaskClassifier {
     private PNGSourceImage belowSixtySouthImage;
     private Mode mode;
     private int resolution;
+    private String filename;
 
     /**
      * Creates a new classifier instance on the given resolution.
@@ -143,7 +157,7 @@ public class WatermaskClassifier {
      *                   Hierarchical, High-resolution Shoreline Database
      * @throws java.io.IOException If some IO-error occurs creating the sources.
      */
-    public WatermaskClassifier(int resolution, Mode mode) throws IOException {
+    public WatermaskClassifier(int resolution, Mode mode, String filename) throws IOException {
         if (resolution != RESOLUTION_50m && resolution != RESOLUTION_150m && resolution != RESOLUTION_1km && resolution != RESOLUTION_10km) {
             throw new IllegalArgumentException(
                     MessageFormat.format("Resolution needs to be {0}, {1}, {2} or {3}.", RESOLUTION_50m, RESOLUTION_150m, RESOLUTION_1km, RESOLUTION_10km));
@@ -156,8 +170,9 @@ public class WatermaskClassifier {
 
         this.mode = mode;
         this.resolution = resolution;
+        this.filename = filename;
 
-        final File auxdataDir = installAuxdata();
+        final File auxdataDir = installAuxdata(filename);
 
 //        ImageDescriptor gshhsDescriptor = getNorthDescriptor(auxdataDir);
 //        ImageDescriptor northDescriptor = getNorthDescriptor(auxdataDir);
@@ -227,7 +242,8 @@ public class WatermaskClassifier {
                         .build();
                 break;
             case GSHHS:
-                String zipname = String.format("GSHHS_water_mask_%skm.zip", String.valueOf(resolution / 1000));
+                //  String zipname = String.format("GSHHS_water_mask_%skm.zip", String.valueOf(resolution / 1000));
+                String zipname = filename;
                 if (resolution == 1000) {
                     northDescriptor = new ImageDescriptorBuilder()
                             .width(GSHHS_1_IMAGE_WIDTH)
@@ -268,7 +284,8 @@ public class WatermaskClassifier {
         final URL imageProperties = getClass().getResource("image.properties");
         properties.load(imageProperties.openStream());
 
-        File zipFile = new File(auxdataDir, resolution + "m.zip");
+        //   File zipFile = new File(auxdataDir, resolution + "m.zip");
+        File zipFile = new File(auxdataDir, filename);
         return SRTMOpImage.create(properties, zipFile);
     }
 
@@ -291,16 +308,24 @@ public class WatermaskClassifier {
         return PNGSourceImage.create(properties, zipFile, mode, resolution);
     }
 
-    private File installAuxdata() throws IOException {
-        String auxdataSrcPath = "auxdata/images";
-        final String relativeDestPath = ".beam/" + "beam-watermask-operator" + "/" + auxdataSrcPath;
-        File auxdataTargetDir = new File(SystemUtils.getUserHomeDir(), relativeDestPath);
-        URL sourceUrl = ResourceInstaller.getSourceUrl(this.getClass());
+    public static File installAuxdata(String filename) {
+        String auxdataTargetPath = "auxdata";
+        File tmpTargetDir = new File(SystemUtils.getApplicationDataDir(), "beam-watermask-operator");
+        File auxdataTargetDir = new File(tmpTargetDir, auxdataTargetPath);
+        File targetFile = new File(auxdataTargetDir, filename);
 
-        ResourceInstaller resourceInstaller = new ResourceInstaller(sourceUrl, auxdataSrcPath, auxdataTargetDir);
-        resourceInstaller.install(".*", ProgressMonitor.NULL);
-
-        return auxdataTargetDir;
+        if (!targetFile.canRead()) {
+            String auxdataSourcePath = "org/esa/beam/watermask/operator/auxdata/";
+            URL sourceUrl = ResourceInstaller.getSourceUrl(WatermaskClassifier.class);
+            final URL codeSourceUrl = WatermaskClassifier.class.getProtectionDomain().getCodeSource().getLocation();
+            ResourceInstaller resourceInstaller = new ResourceInstaller(sourceUrl, auxdataSourcePath, auxdataTargetDir);
+            try {
+                resourceInstaller.install(filename, ProgressMonitor.NULL);
+            } catch (Exception e) {
+                System.out.printf("resource not copied - %s", e.getMessage());
+            }
+        }
+        return targetFile;
     }
 
     /**

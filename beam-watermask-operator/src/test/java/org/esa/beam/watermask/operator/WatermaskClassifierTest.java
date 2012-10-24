@@ -35,9 +35,9 @@ public class WatermaskClassifierTest {
 
     @Before
     public void setUp() throws Exception {
-        gcClassifier = new WatermaskClassifier(WatermaskClassifier.RESOLUTION_50m, WatermaskClassifier.Mode.SRTM_GC);
-        modisClassifier = new WatermaskClassifier(WatermaskClassifier.RESOLUTION_50m, WatermaskClassifier.Mode.MODIS);
-        fillClassifier = new WatermaskClassifier(WatermaskClassifier.RESOLUTION_50m, WatermaskClassifier.Mode.GSHHS);
+        gcClassifier = new WatermaskClassifier(WatermaskClassifier.RESOLUTION_50m, WatermaskClassifier.Mode.SRTM_GC, "50m.zip");
+        modisClassifier = new WatermaskClassifier(WatermaskClassifier.RESOLUTION_50m, WatermaskClassifier.Mode.MODIS, "50m.zip");
+        fillClassifier = new WatermaskClassifier(WatermaskClassifier.RESOLUTION_50m, WatermaskClassifier.Mode.GSHHS, "50m.zip");
     }
 
     @Test

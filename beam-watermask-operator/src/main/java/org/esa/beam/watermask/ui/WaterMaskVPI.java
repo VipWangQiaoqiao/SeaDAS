@@ -23,8 +23,6 @@ import java.awt.image.RenderedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.esa.beam.watermask.operator.*;
-
 
 /**
  * This VISAT PlugIn registers an action which calls the "LandWaterMask" Operator and based on its generated "water_fraction"
@@ -50,9 +48,9 @@ import org.esa.beam.watermask.operator.*;
  */
 public class WaterMaskVPI extends AbstractVisatPlugIn {
 
-    public static final String COMMAND_ID = "Coastline and Land Masks";
-    public static final String TOOL_TIP = "Add coastline, water and land masks";
-    public static final String ICON = "/org/esa/beam/watermask/ui/icons/coastline2_24.png";
+    public static final String COMMAND_ID = "Coastline, Land and Water Masks";
+    public static final String TOOL_TIP = "Shortcut for adding coastline, land and water masks";
+    public static final String ICON = "/org/esa/beam/watermask/ui/icons/coastline_24.png";
 
     public static final String LAND_WATER_MASK_OP_ALIAS = "LandWaterMask";
     public static final String TARGET_TOOL_BAR_NAME = "layersToolBar";
@@ -180,15 +178,16 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                             try {
                                 //  Product landWaterProduct = GPF.createProduct("LandWaterMask", GPF.NO_PARAMS, product);
 
-                                ResolutionInfo resolutionInfo = landMasksData.getResolutionInfo();
+                                SourceFileInfo sourceFileInfo = landMasksData.getSourceFileInfo();
 
                                 Map<String, Object> parameters = new HashMap<String, Object>();
 
                                 parameters.put("subSamplingFactorX", new Integer(landMasksData.getSuperSampling()));
                                 parameters.put("subSamplingFactorY", new Integer(landMasksData.getSuperSampling()));
-                                parameters.put("resolution", resolutionInfo.getResolution(ResolutionInfo.Unit.METER));
-                                parameters.put("mode", resolutionInfo.getMode().toString());
-   //                             parameters.put("resolutionInfo", resolutionInfo);
+                                parameters.put("resolution", sourceFileInfo.getResolution(SourceFileInfo.Unit.METER));
+                                parameters.put("mode", sourceFileInfo.getMode().toString());
+                                parameters.put("filename", sourceFileInfo.getFile().getName());
+   //                             parameters.put("sourceFileInfo", sourceFileInfo);
                                 /*
                                     Create a new product, which will contain the land_water_fraction band
                                  */
