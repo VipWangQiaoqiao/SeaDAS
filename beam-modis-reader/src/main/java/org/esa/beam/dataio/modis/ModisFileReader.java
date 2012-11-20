@@ -302,8 +302,17 @@ class ModisFileReader {
                 // set cyclic behaviour
                 lonGrid.setDiscontinuity(TiePointGrid.DISCONT_AT_180);
 
+                int scanlineHeight = 10;
+                switch (Math.round(lonGrid.getSubSamplingY())) {
+                    case 2:
+                        scanlineHeight = 20;
+                        break;
+                    case 4:
+                        scanlineHeight = 40;
+                        break;
+                }
                 // and create geo coding
-                GeoCoding coding = new ModisTiePointGeoCoding(latGrid, lonGrid);
+                GeoCoding coding = new ModisTiePointGeoCoding(latGrid, lonGrid, scanlineHeight);
                 product.setGeoCoding(coding);
             }
         }

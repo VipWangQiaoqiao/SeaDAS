@@ -16,14 +16,6 @@ public class ModisTiePointGeoCodingTest extends TestCase {
         assertTrue(ModisTiePointGeoCoding.mustRecalculateTiePointGrids(subsetDef));
     }
 
-    public void testIfModisProductIsHighResolutionProduct() {
-        assertTrue(ModisTiePointGeoCoding.isHighResolution(120, 60));
-        assertTrue(ModisTiePointGeoCoding.isHighResolution(3072, 1536));
-
-        assertFalse(ModisTiePointGeoCoding.isHighResolution(120, 24));
-        assertFalse(ModisTiePointGeoCoding.isHighResolution(2072, 208));
-    }
-
     public void testCalculateStartLine() {
         assertEquals(100, ModisTiePointGeoCoding.calculateStartLine(20, new Rectangle(0, 106, 10, 10)));
         assertEquals(1210, ModisTiePointGeoCoding.calculateStartLine(10, new Rectangle(0, 1217, 10, 10)));
