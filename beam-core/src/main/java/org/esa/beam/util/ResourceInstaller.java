@@ -96,6 +96,7 @@ public class ResourceInstaller {
                     }
                 } finally {
                     if (is != null) {
+
                         try {
                             is.close();
                         } catch (IOException ignored) {
