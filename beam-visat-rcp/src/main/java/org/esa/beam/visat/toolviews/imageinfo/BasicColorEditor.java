@@ -127,7 +127,7 @@ class BasicColorEditor extends JPanel {
                 cpdFileName = currentColorBar.getDescription();
                 File cpdFile = colorChooser.getColorPaletteDir();
                 parentForm.loadColorPaletteFile(new File(cpdFile, cpdFileName));
-                fileDefaultCheckBox.doClick();
+                //fileDefaultCheckBox.doClick();
                 parentForm.setApplyEnabled(true);
             }
         });
@@ -174,7 +174,7 @@ class BasicColorEditor extends JPanel {
         minMaxPanel.add(minPanel);
         minMaxPanel.add(maxPanel);
 
-        fileDefaultCheckBox = new JCheckBox("File Default");
+        fileDefaultCheckBox = new JCheckBox("CPD Default");
         fileDefaultCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

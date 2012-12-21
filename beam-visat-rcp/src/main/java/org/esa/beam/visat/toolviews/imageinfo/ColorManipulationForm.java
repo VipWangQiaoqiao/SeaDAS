@@ -414,12 +414,12 @@ class ColorManipulationForm {
 
     protected void setMinValueFile(double minValueFile) {
         this.minValueFile = minValueFile;
-        setCurrentMinValue(minValueFile );
+        //setCurrentMinValue(minValueFile );
     }
 
     protected void setMaxValueFile(double maxValueFile) {
         this.maxValueFile = maxValueFile;
-        setCurrentMaxValue(maxValueFile );
+        //setCurrentMaxValue(maxValueFile );
     }
 
     protected void setCurrentMinValue(double  currentMinValue) {

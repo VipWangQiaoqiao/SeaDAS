@@ -108,7 +108,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         logDisplayButton.setSelected(newModel.getImageInfo().isLogScaled());
 
-        basicColorEditor.resetMinMax();
+        //basicColorEditor.resetMinMax();
 
         parentForm.revalidateToolViewPaneControl();
     }
