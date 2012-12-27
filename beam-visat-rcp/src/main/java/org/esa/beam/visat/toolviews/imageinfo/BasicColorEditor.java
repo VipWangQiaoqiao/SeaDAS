@@ -120,27 +120,17 @@ class BasicColorEditor extends JPanel {
 
         //colorChooser = new ColorPaletteChooser(new File("/Users/aabduraz/.beam/beam-ui/auxdata/color-palettes"));
         colorChooser = new ColorPaletteChooser(parentForm.getIODir(), defaultColorPaletteDef);
-        colorChooser.addMouseListener(new MouseAdapter() {
+
+        colorChooser.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
+            public void actionPerformed(ActionEvent actionEvent) {
                 ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
                 cpdFileName = currentColorBar.getDescription();
                 File cpdFile = colorChooser.getColorPaletteDir();
                 parentForm.loadColorPaletteFile(new File(cpdFile, cpdFileName));
                 parentForm.setApplyEnabled(true);
-
             }
         });
-//        colorChooser.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent actionEvent) {
-//                ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
-//                cpdFileName = currentColorBar.getDescription();
-//                File cpdFile = colorChooser.getColorPaletteDir();
-//                parentForm.loadColorPaletteFile(new File(cpdFile, cpdFileName));
-//                parentForm.setApplyEnabled(true);
-//            }
-//        });
 
         colorChooser.addPropertyChangeListener("color_bar_changed", new PropertyChangeListener() {
             @Override
