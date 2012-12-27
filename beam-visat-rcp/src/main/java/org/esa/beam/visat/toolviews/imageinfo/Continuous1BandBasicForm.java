@@ -97,7 +97,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     @Override
     public void updateFormModel(ProductSceneView productSceneView) {
 
-
+        //final ImageInfoEditorModel oldModel = imageInfoEditor.getModel();
         final ImageInfoEditorModel newModel = new ImageInfoEditorModel1B(parentForm.getImageInfo());
         newModel.addChangeListener(applyEnablerCL);
         imageInfoEditor.setModel(newModel);
@@ -105,10 +105,19 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         final RasterDataNode raster = productSceneView.getRaster();
         setLogarithmicDisplay(raster, newModel.getImageInfo().isLogScaled());
 
+//        if (oldModel != null) {
+//            newModel.setHistogramViewGain(oldModel.getHistogramViewGain());
+//            newModel.setMinHistogramViewSample(oldModel.getMinHistogramViewSample());
+//            newModel.setMaxHistogramViewSample(oldModel.getMaxHistogramViewSample());
+//        }
+//        if (newModel.getSliderSample(0) < newModel.getMinHistogramViewSample() ||
+//            newModel.getSliderSample(newModel.getSliderCount() - 1) > newModel.getMaxHistogramViewSample()) {
+//            imageInfoEditor.computeZoomInToSliderLimits();
+//        }
 
         logDisplayButton.setSelected(newModel.getImageInfo().isLogScaled());
 
-        //basicColorEditor.resetMinMax();
+        basicColorEditor.resetMinMax();
 
         parentForm.revalidateToolViewPaneControl();
     }

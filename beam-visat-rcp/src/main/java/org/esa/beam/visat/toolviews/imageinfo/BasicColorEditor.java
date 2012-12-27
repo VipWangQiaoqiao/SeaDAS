@@ -24,16 +24,15 @@ import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.binding.BindingContext;
 import org.esa.beam.framework.datamodel.ColorPaletteDef;
 import org.esa.beam.framework.ui.ImageInfoEditor;
+import org.esa.beam.framework.ui.ImageInfoEditorModel;
 import org.esa.beam.util.math.MathUtils;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -85,6 +84,7 @@ class BasicColorEditor extends JPanel {
         valFormat.setMaximumFractionDigits(4);
         this.imageInfoEditor = imageInfoEditor;
         applyEnablerCL = parentForm.createApplyEnablerChangeListener();
+        //addPropertyChangeListener("model", new ModelChangeHandler());
     }
 
     public boolean getShowExtraInfo() {
@@ -120,17 +120,27 @@ class BasicColorEditor extends JPanel {
 
         //colorChooser = new ColorPaletteChooser(new File("/Users/aabduraz/.beam/beam-ui/auxdata/color-palettes"));
         colorChooser = new ColorPaletteChooser(parentForm.getIODir(), defaultColorPaletteDef);
-        colorChooser.addActionListener(new ActionListener() {
+        colorChooser.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+            public void mouseClicked(MouseEvent mouseEvent) {
                 ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
                 cpdFileName = currentColorBar.getDescription();
                 File cpdFile = colorChooser.getColorPaletteDir();
                 parentForm.loadColorPaletteFile(new File(cpdFile, cpdFileName));
-                //fileDefaultCheckBox.doClick();
                 parentForm.setApplyEnabled(true);
+
             }
         });
+//        colorChooser.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent actionEvent) {
+//                ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
+//                cpdFileName = currentColorBar.getDescription();
+//                File cpdFile = colorChooser.getColorPaletteDir();
+//                parentForm.loadColorPaletteFile(new File(cpdFile, cpdFileName));
+//                parentForm.setApplyEnabled(true);
+//            }
+//        });
 
         colorChooser.addPropertyChangeListener("color_bar_changed", new PropertyChangeListener() {
             @Override
@@ -144,6 +154,8 @@ class BasicColorEditor extends JPanel {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
                 //To change body of implemented methods use File | Settings | File Templates.
+                colorChooser.resetToDefaultColorPalette(parentForm.getImageInfo().getColorPaletteDef());
+                //parentForm.getImageInfo().getColorPaletteDef();
             }
         });
         final JPanel minPanel = new JPanel();
@@ -410,5 +422,31 @@ class BasicColorEditor extends JPanel {
         return field;
     }
 
+    private class ModelChangeHandler implements PropertyChangeListener, ChangeListener {
+
+
+         @Override
+         public void stateChanged(ChangeEvent e) {
+             updateStxOverlayComponent();
+         }
+
+         @Override
+         public void propertyChange(PropertyChangeEvent evt) {
+             if (!"model".equals(evt.getPropertyName())) {
+                 return;
+             }
+
+             final ImageInfoEditorModel oldModel = (ImageInfoEditorModel) evt.getOldValue();
+             final ImageInfoEditorModel newModel = (ImageInfoEditorModel) evt.getNewValue();
+             if (oldModel != null) {
+                 oldModel.removeChangeListener(this);
+             }
+             if (newModel != null) {
+                 newModel.addChangeListener(this);
+             }
+
+             updateStxOverlayComponent();
+         }
+     }
 
 }
