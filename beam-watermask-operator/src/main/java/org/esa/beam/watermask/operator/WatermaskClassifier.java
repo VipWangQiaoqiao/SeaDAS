@@ -172,7 +172,7 @@ public class WatermaskClassifier {
         this.resolution = resolution;
         this.filename = filename;
 
-        final File auxdataDir = installAuxdata(filename);
+        final File auxdataDir = installAuxdata(filename).getParentFile();
 
 //        ImageDescriptor gshhsDescriptor = getNorthDescriptor(auxdataDir);
 //        ImageDescriptor northDescriptor = getNorthDescriptor(auxdataDir);
@@ -189,15 +189,15 @@ public class WatermaskClassifier {
 
         if (mode == Mode.GSHHS) {
             ImageDescriptor gshhsDescriptor = getNorthDescriptor(auxdataDir);
-            gshhsImage = createImage(gshhsDescriptor);
+            gshhsImage = createImage(auxdataDir, gshhsDescriptor);
         } else if (mode == Mode.SRTM_GC) {
             centerImage = createSrtmImage(auxdataDir);
 
             ImageDescriptor northDescriptor = getNorthDescriptor(auxdataDir);
-            aboveSixtyNorthImage = createImage(northDescriptor);
+            aboveSixtyNorthImage = createImage(auxdataDir, northDescriptor);
 
             ImageDescriptor southDescriptor = getSouthDescriptor(auxdataDir);
-            belowSixtySouthImage = createImage(southDescriptor);
+            belowSixtySouthImage = createImage(auxdataDir, southDescriptor);
         }
 
 
@@ -289,7 +289,7 @@ public class WatermaskClassifier {
         return SRTMOpImage.create(properties, zipFile);
     }
 
-    private PNGSourceImage createImage(ImageDescriptor descriptor) throws IOException {
+    private PNGSourceImage createImage(File auxdataDir2,  ImageDescriptor descriptor) throws IOException {
         int width = descriptor.getImageWidth();
         int tileWidth = descriptor.getTileWidth();
         int height = descriptor.getImageHeight();
