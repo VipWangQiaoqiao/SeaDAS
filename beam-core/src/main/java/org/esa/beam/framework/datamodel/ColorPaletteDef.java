@@ -53,6 +53,7 @@ public class ColorPaletteDef implements Cloneable {
 
     private boolean logDisplay;
 
+
     public ColorPaletteDef(double minSample, double maxSample) {
         this(minSample, 0.5 * (maxSample + minSample), maxSample);
     }
@@ -77,10 +78,6 @@ public class ColorPaletteDef implements Cloneable {
         this.points = new Vector<Point>(points.length);
         this.points.addAll(Arrays.asList(points));
         this.discrete = false;
-//        this.logDisplay = false;
-//        this.currentMinSample =  points[0].getSample();
-//        this.currentMaxSample = points[points.length - 1].getSample();
-//        currentSamplePoints = points;
     }
 
     public boolean isDiscrete() {
@@ -289,6 +286,40 @@ public class ColorPaletteDef implements Cloneable {
         return paletteDef;
     }
 
+
+    /**
+     * Loads a color palette definition from the given file
+     *
+     * @param file the file
+     * @return the color palette definition, never null
+     * @throws java.io.IOException if an I/O error occurs
+     */
+    public static ColorPaletteDef loadColorPaletteDefForColorBar(File file) throws IOException {
+        final PropertyMap propertyMap = new PropertyMap();
+        propertyMap.load(file); // Overwrite existing values
+        final int numPoints = propertyMap.getPropertyInt(_PROPERTY_KEY_NUM_POINTS);
+        if (numPoints < 2) {
+            throw new IOException("The selected file contains less than\n" +
+                    "two colour points.");
+        }
+        final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints];
+        double lastSample = 0;
+        for (int i = 0; i < points.length; i++) {
+            final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
+            final Color color = propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR + i);
+            double sample = propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + i);
+            if (i > 0 && sample < lastSample) {
+                sample = lastSample + 1.0;
+            }
+            point.setColor(color);
+            point.setSample(sample);
+            points[i] = point;
+            lastSample = sample;
+        }
+        ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
+        paletteDef.setAutoDistribute(true);
+        return paletteDef;
+    }
 
     /**
      * Stores this color palette definition in the given file

@@ -51,6 +51,7 @@ class Continuous1BandSwitcherForm implements ColorManipulationChildForm {
         editorGroup.add(graphicalButton);
         editorGroup.add(tabularButton);
         basicButton.setSelected(true);
+        //graphicalButton.setSelected(true);
         final SwitcherActionListener switcherActionListener = new SwitcherActionListener();
         graphicalButton.addActionListener(switcherActionListener);
         tabularButton.addActionListener(switcherActionListener);

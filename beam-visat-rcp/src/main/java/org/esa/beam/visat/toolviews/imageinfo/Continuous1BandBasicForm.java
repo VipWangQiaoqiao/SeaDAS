@@ -25,6 +25,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * This class is added to implement Basic Color Manipulation. Its design pattern is similar to Continuous1BandGraphicalForm, which implements the Sliders.
@@ -48,7 +50,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         contentPanel = new JPanel(new BorderLayout(2, 2));
         contentPanel.add(basicColorEditor, BorderLayout.CENTER);
         moreOptionsForm = new MoreOptionsForm(parentForm, true);
-
+        moreOptionsForm.addDiscretePropertyChangeListener("isDiscrete", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+                basicColorEditor.updateColorBar(parentForm.getImageInfo().getColorPaletteDef());
+            }
+        });
         logDisplayButton = ImageInfoEditorSupport.createToggleButton("icons/LogDisplay24.png");
         logDisplayButton.setName("logDisplayButton");
         logDisplayButton.setToolTipText("Switch to logarithmic display"); /*I18N*/
@@ -118,6 +125,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         logDisplayButton.setSelected(newModel.getImageInfo().isLogScaled());
 
         basicColorEditor.resetMinMax();
+        basicColorEditor.resetDefaultColorFile();
 
         parentForm.revalidateToolViewPaneControl();
     }
@@ -132,7 +140,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
     @Override
     public void resetFormModel(ProductSceneView productSceneView) {
-        basicColorEditor.resetToDataDefault();
         updateFormModel(productSceneView);
         imageInfoEditor.computeZoomOutToFullHistogramm();
         parentForm.revalidateToolViewPaneControl();

@@ -26,6 +26,7 @@ import org.esa.beam.framework.datamodel.ImageInfo;
 import org.esa.beam.framework.ui.ColorComboBoxAdapter;
 
 import javax.swing.*;
+import javax.swing.event.SwingPropertyChangeSupport;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,6 +48,7 @@ class MoreOptionsForm {
     private JCheckBox discreteColorsCheckBox;
     private ColorManipulationChildForm childForm;
 
+    private SwingPropertyChangeSupport propertyChangeSupport;
 
     MoreOptionsForm(ColorManipulationForm parentForm, boolean hasHistogramMatching) {
         this.parentForm = parentForm;
@@ -112,14 +114,25 @@ class MoreOptionsForm {
         });
 
         addRow(discreteColorsCheckBox);
+
+        propertyChangeSupport = new SwingPropertyChangeSupport(this);
     }
 
     private void setDiscreteColorsMode(JCheckBox discreteColorsCheckBox) {
+        boolean oldValue = parentForm.getImageInfo().getColorPaletteDef().isDiscrete();
+        boolean newValue = discreteColorsCheckBox.isSelected();
         parentForm.getImageInfo().getColorPaletteDef().setDiscrete(discreteColorsCheckBox.isSelected());
         if (childForm instanceof  Continuous1BandGraphicalForm) {
            ( (Continuous1BandGraphicalForm)childForm).getImageInfoEditor().getModel().fireStateChanged();
         }
+        parentForm.getProductSceneView().setImageInfo(parentForm.getImageInfo());
+        propertyChangeSupport.firePropertyChange("isDiscrete", oldValue, newValue);
         parentForm.setApplyEnabled(true);
+    }
+
+
+    public void addDiscretePropertyChangeListener(String name, PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(name, listener);
     }
 
     private ImageInfo getImageInfo() {

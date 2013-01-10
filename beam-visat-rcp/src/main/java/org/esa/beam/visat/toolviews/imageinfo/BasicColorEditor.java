@@ -32,10 +32,12 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -58,7 +60,7 @@ class BasicColorEditor extends JPanel {
     private double minValData, maxValData;
     private JFormattedTextField maxValField;
     private JFormattedTextField minValField;
-    private JCheckBox fileDefaultCheckBox;
+    private JButton fileDefaultButton;
     private JButton dataDefaultButton;
     private NumberFormat valFormat;
     private ImageInfoEditor imageInfoEditor;
@@ -68,7 +70,7 @@ class BasicColorEditor extends JPanel {
 
     private ChangeListener applyEnablerCL;
 
-    private ColorPaletteDef defaultColorPaletteDef;
+    private ColorPaletteDef currentColorPaletteDef;
     private String cpdFileName;
 
     BasicColorEditor(final ColorManipulationForm parentForm, ImageInfoEditor imageInfoEditor) {
@@ -77,7 +79,7 @@ class BasicColorEditor extends JPanel {
         minVal = parentForm.getMinValueData();
         minValData = minVal;
         maxValData = maxVal;
-        defaultColorPaletteDef = parentForm.getImageInfo().getColorPaletteDef();
+        currentColorPaletteDef = parentForm.getImageInfo().getColorPaletteDef();
         setLayout(new BorderLayout());
         setShowExtraInfo(true);
         valFormat = NumberFormat.getNumberInstance();
@@ -118,16 +120,16 @@ class BasicColorEditor extends JPanel {
         JPanel simpleColorEditorPanel = new JPanel();
         simpleColorEditorPanel.setLayout(new GridLayout(0, 1));
 
-        //colorChooser = new ColorPaletteChooser(new File("/Users/aabduraz/.beam/beam-ui/auxdata/color-palettes"));
-        colorChooser = new ColorPaletteChooser(parentForm.getIODir(), defaultColorPaletteDef);
+        //colorChooser = new ColorPaletteChooser(new File("/Users/aabduraz/.seadas/beam-ui/auxdata/color-palettes"));
+        currentColorPaletteDef = parentForm.getImageInfo().getColorPaletteDef();
+        colorChooser = new ColorPaletteChooser(parentForm.getIODir(), currentColorPaletteDef);
 
         colorChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
                 cpdFileName = currentColorBar.getDescription();
-                File cpdFile = colorChooser.getColorPaletteDir();
-                parentForm.loadColorPaletteFile(new File(cpdFile, cpdFileName));
+                imageInfoEditor.getModel().getImageInfo().setColorPaletteDef(colorChooser.getSelectedColorPaletteDef(), minVal, maxVal, true);
                 parentForm.setApplyEnabled(true);
             }
         });
@@ -144,7 +146,7 @@ class BasicColorEditor extends JPanel {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
                 //To change body of implemented methods use File | Settings | File Templates.
-                colorChooser.resetToDefaultColorPalette(parentForm.getImageInfo().getColorPaletteDef());
+                colorChooser.updateColorPalette(parentForm.getImageInfo().getColorPaletteDef());
                 //parentForm.getImageInfo().getColorPaletteDef();
             }
         });
@@ -176,50 +178,21 @@ class BasicColorEditor extends JPanel {
         minMaxPanel.add(minPanel);
         minMaxPanel.add(maxPanel);
 
-        fileDefaultCheckBox = new JCheckBox("CPD Default");
-        fileDefaultCheckBox.addActionListener(new ActionListener() {
+        fileDefaultButton = new JButton("CPD Min/Max");
+        fileDefaultButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (!parentForm.isColorPaletteFileLoaded()) {
-                    JOptionPane.showMessageDialog(minMaxPanel, "Color Palette File has not been loaded.");
-                    fileDefaultCheckBox.setSelected(false);
-                    return;
-                }
-
-                AbstractButton abstractButton = (AbstractButton) actionEvent
-                        .getSource();
-                boolean selected = abstractButton.getModel().isSelected();
-
-                if (selected) {
-                    maxVal = parentForm.getMaxValueFile();
-                    minVal = parentForm.getMinValueFile();
-                    validateMinMax(minVal, maxVal);
-                    maxValField.setValue(maxVal);
-                    minValField.setValue(minVal);
-
-
-                    minValField.setEditable(false);
-                    maxValField.setEditable(false);
-                    minValField.setEnabled(false);
-                    maxValField.setEnabled(false);
-                    minValField.setDisabledTextColor(Color.GRAY);
-                    maxValField.setDisabledTextColor(Color.GRAY);
-                } else {
-
-                    minValField.setEnabled(true);
-                    maxValField.setEnabled(true);
-                    minValField.setEditable(true);
-                    maxValField.setEditable(true);
-                }
-
+                maxVal = colorChooser.getColorBarMax();
+                minVal = colorChooser.getColorBarMin();
+                validateMinMax(minVal, maxVal);
+                maxValField.setValue(maxVal);
+                minValField.setValue(minVal);
             }
         });
-
-        dataDefaultButton = new JButton("Data Default");
+        dataDefaultButton = new JButton("Data Min/Max");
         dataDefaultButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                fileDefaultCheckBox.setSelected(false);
                 minVal = parentForm.getMinValueData();
                 maxVal = parentForm.getMaxValueData();
 
@@ -229,15 +202,10 @@ class BasicColorEditor extends JPanel {
                 }
                 minValField.setValue(minVal);
                 maxValField.setValue(maxVal);
-                minValField.setEnabled(true);
-                maxValField.setEnabled(true);
-                minValField.setEditable(true);
-                maxValField.setEditable(true);
-
             }
         });
 
-        minMaxPanel.add(fileDefaultCheckBox);
+        minMaxPanel.add(fileDefaultButton);
         minMaxPanel.add(dataDefaultButton);
         JPanel simpleColorManipulationPanel = new JPanel();
         simpleColorManipulationPanel.setLayout(new BoxLayout(simpleColorManipulationPanel, BoxLayout.Y_AXIS));
@@ -254,12 +222,6 @@ class BasicColorEditor extends JPanel {
         return minSample;
     }
 
-    private void activateApply() {
-        parentForm.setCurrentMaxValue(maxVal);
-        parentForm.setCurrentMinValue(minVal);
-        parentForm.setApplyEnabled(true);
-    }
-
     private void deactivateApply() {
         parentForm.setApplyEnabled(false);
     }
@@ -269,16 +231,15 @@ class BasicColorEditor extends JPanel {
     }
 
     protected void resetToFileDefault() {
-        fileDefaultCheckBox.doClick();
+        fileDefaultButton.doClick();
     }
 
     protected void resetMinMax() {
-        minVal = parentForm.getCurrentMinValue();
-        maxVal = parentForm.getCurrentMaxValue();
+        minVal = parentForm.getImageInfo().getColorPaletteDef().getPointAt(0).getSample();
+        maxVal = parentForm.getImageInfo().getColorPaletteDef().getPointAt(getSliderCount() - 1).getSample();
         minValField.setValue(MathUtils.round((new Double(minVal)).doubleValue(), 100000000));
         maxValField.setValue(MathUtils.round((new Double(maxVal)).doubleValue(), 100000000));
         if (minValData != parentForm.getMinValueData() || maxValData != parentForm.getMaxValueData()) {
-            resetDefaultColorFile(parentForm.getImageInfo().getColorPaletteDef());
             minValData = parentForm.getMinValueData();
             maxValData = parentForm.getMaxValueData();
         }
@@ -290,9 +251,22 @@ class BasicColorEditor extends JPanel {
 
     }
 
-    protected void resetDefaultColorFile(ColorPaletteDef colorPaletteDef) {
-        defaultColorPaletteDef = colorPaletteDef;
-        colorChooser.resetToDefaultColorPalette(defaultColorPaletteDef);
+    protected void resetDefaultColorFile() {
+        updateColorRamp(parentForm.getImageInfo().getColorPaletteDef());
+    }
+
+    protected void updateColorRamp(ColorPaletteDef colorPaletteDef) {
+        currentColorPaletteDef = colorPaletteDef;
+        colorChooser.updateColorPalette(currentColorPaletteDef);
+        revalidate();
+        repaint();
+    }
+
+    protected void updateColorBar(ColorPaletteDef colorPaletteDef) {
+        currentColorPaletteDef = colorPaletteDef;
+        //colorChooser.updateColorBar(currentColorPaletteDef);
+        revalidate();
+        repaint();
     }
 
     private boolean validateMinMax(double min, double max) {
@@ -405,7 +379,7 @@ class BasicColorEditor extends JPanel {
                 }
 
                 imageInfoEditor.updateMinMax(minVal, maxVal);
-                activateApply();
+                parentForm.setApplyEnabled(true);
             }
         });
 
@@ -415,28 +389,28 @@ class BasicColorEditor extends JPanel {
     private class ModelChangeHandler implements PropertyChangeListener, ChangeListener {
 
 
-         @Override
-         public void stateChanged(ChangeEvent e) {
-             updateStxOverlayComponent();
-         }
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            updateStxOverlayComponent();
+        }
 
-         @Override
-         public void propertyChange(PropertyChangeEvent evt) {
-             if (!"model".equals(evt.getPropertyName())) {
-                 return;
-             }
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            if (!"model".equals(evt.getPropertyName())) {
+                return;
+            }
 
-             final ImageInfoEditorModel oldModel = (ImageInfoEditorModel) evt.getOldValue();
-             final ImageInfoEditorModel newModel = (ImageInfoEditorModel) evt.getNewValue();
-             if (oldModel != null) {
-                 oldModel.removeChangeListener(this);
-             }
-             if (newModel != null) {
-                 newModel.addChangeListener(this);
-             }
+            final ImageInfoEditorModel oldModel = (ImageInfoEditorModel) evt.getOldValue();
+            final ImageInfoEditorModel newModel = (ImageInfoEditorModel) evt.getNewValue();
+            if (oldModel != null) {
+                oldModel.removeChangeListener(this);
+            }
+            if (newModel != null) {
+                newModel.addChangeListener(this);
+            }
 
-             updateStxOverlayComponent();
-         }
-     }
+            updateStxOverlayComponent();
+        }
+    }
 
 }
