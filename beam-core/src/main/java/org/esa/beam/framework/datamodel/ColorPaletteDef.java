@@ -53,6 +53,7 @@ public class ColorPaletteDef implements Cloneable {
 
     private boolean logDisplay;
 
+    private String cpdFileName;
 
     public ColorPaletteDef(double minSample, double maxSample) {
         this(minSample, 0.5 * (maxSample + minSample), maxSample);
@@ -283,6 +284,7 @@ public class ColorPaletteDef implements Cloneable {
         }
         ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
         paletteDef.setAutoDistribute(propertyMap.getPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, false));
+        paletteDef.setCpdFileName(file.getName());
         return paletteDef;
     }
 
@@ -318,6 +320,7 @@ public class ColorPaletteDef implements Cloneable {
         }
         ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
         paletteDef.setAutoDistribute(true);
+        paletteDef.setCpdFileName(file.getName());
         return paletteDef;
     }
 
@@ -339,6 +342,7 @@ public class ColorPaletteDef implements Cloneable {
             propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + i, points[i].getSample());
         }
         propertyMap.store(file, "BEAM Colour Palette Definition File"); /*I18N*/
+        colorPaletteDef.setCpdFileName(file.getName());
     }
 
     private void check2PointsMinimum() {
@@ -492,6 +496,14 @@ public class ColorPaletteDef implements Cloneable {
             }
         }
         return Color.BLACK;
+    }
+
+    public String getCpdFileName() {
+        return cpdFileName;
+    }
+
+    public void setCpdFileName(String cpdFileName) {
+        this.cpdFileName = cpdFileName;
     }
 
 

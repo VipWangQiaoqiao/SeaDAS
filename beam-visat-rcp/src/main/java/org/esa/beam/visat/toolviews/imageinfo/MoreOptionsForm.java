@@ -122,6 +122,7 @@ class MoreOptionsForm {
         boolean oldValue = parentForm.getImageInfo().getColorPaletteDef().isDiscrete();
         boolean newValue = discreteColorsCheckBox.isSelected();
         parentForm.getImageInfo().getColorPaletteDef().setDiscrete(discreteColorsCheckBox.isSelected());
+        //propertyChangeSupport.firePropertyChange("isDiscrete", oldValue, newValue);
         if (childForm instanceof  Continuous1BandGraphicalForm) {
            ( (Continuous1BandGraphicalForm)childForm).getImageInfoEditor().getModel().fireStateChanged();
         }

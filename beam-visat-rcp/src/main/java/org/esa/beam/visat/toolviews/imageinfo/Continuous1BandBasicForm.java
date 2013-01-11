@@ -53,7 +53,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         moreOptionsForm.addDiscretePropertyChangeListener("isDiscrete", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                basicColorEditor.updateColorBar(parentForm.getImageInfo().getColorPaletteDef());
+                basicColorEditor.updateColorRamp(parentForm.getImageInfo().getColorPaletteDef());
             }
         });
         logDisplayButton = ImageInfoEditorSupport.createToggleButton("icons/LogDisplay24.png");
@@ -124,9 +124,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         logDisplayButton.setSelected(newModel.getImageInfo().isLogScaled());
 
-        basicColorEditor.resetMinMax();
-        basicColorEditor.resetDefaultColorFile();
-
+        basicColorEditor.updateBasicEditor();
         parentForm.revalidateToolViewPaneControl();
     }
 

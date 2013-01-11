@@ -146,10 +146,11 @@ class BasicColorEditor extends JPanel {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
                 //To change body of implemented methods use File | Settings | File Templates.
-                colorChooser.updateColorPalette(parentForm.getImageInfo().getColorPaletteDef());
+                colorChooser.updateColorPalette(imageInfoEditor.getModel().getImageInfo().getColorPaletteDef());
                 //parentForm.getImageInfo().getColorPaletteDef();
             }
         });
+
         final JPanel minPanel = new JPanel();
         minPanel.setLayout(new BoxLayout(minPanel, BoxLayout.Y_AXIS));
         minPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -234,7 +235,7 @@ class BasicColorEditor extends JPanel {
         fileDefaultButton.doClick();
     }
 
-    protected void resetMinMax() {
+    protected void updateBasicEditor() {
         minVal = parentForm.getImageInfo().getColorPaletteDef().getPointAt(0).getSample();
         maxVal = parentForm.getImageInfo().getColorPaletteDef().getPointAt(getSliderCount() - 1).getSample();
         minValField.setValue(MathUtils.round((new Double(minVal)).doubleValue(), 100000000));
@@ -243,8 +244,12 @@ class BasicColorEditor extends JPanel {
             minValData = parentForm.getMinValueData();
             maxValData = parentForm.getMaxValueData();
         }
+        //colorChooser.updateColorPalette(parentForm.getImageInfo().getColorPaletteDef());
     }
 
+    private ColorPaletteDef getCurrentColorPaletteDef() {
+        return imageInfoEditor.getModel().getImageInfo().getColorPaletteDef();
+    }
 
     private void showErrorMessage(String errorMessage) {
         JOptionPane.showMessageDialog(this, errorMessage);
@@ -264,7 +269,7 @@ class BasicColorEditor extends JPanel {
 
     protected void updateColorBar(ColorPaletteDef colorPaletteDef) {
         currentColorPaletteDef = colorPaletteDef;
-        //colorChooser.updateColorBar(currentColorPaletteDef);
+        colorChooser.updateColorBar(currentColorPaletteDef);
         revalidate();
         repaint();
     }
