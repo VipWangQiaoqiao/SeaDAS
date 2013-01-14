@@ -50,7 +50,7 @@ class MoreOptionsForm {
 
     private SwingPropertyChangeSupport propertyChangeSupport;
 
-    MoreOptionsForm(ColorManipulationForm parentForm, boolean hasHistogramMatching) {
+    MoreOptionsForm(final ColorManipulationForm parentForm, boolean hasHistogramMatching) {
         this.parentForm = parentForm;
         childForm = EmptyImageInfoForm.INSTANCE;
         PropertyContainer propertyContainer = new PropertyContainer();
@@ -113,6 +113,13 @@ class MoreOptionsForm {
             }
         });
 
+        parentForm.getProductSceneView().addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+                discreteColorsCheckBox.setSelected(parentForm.getImageInfo().getColorPaletteDef().isDiscrete());
+            }
+        });
         addRow(discreteColorsCheckBox);
 
         propertyChangeSupport = new SwingPropertyChangeSupport(this);
