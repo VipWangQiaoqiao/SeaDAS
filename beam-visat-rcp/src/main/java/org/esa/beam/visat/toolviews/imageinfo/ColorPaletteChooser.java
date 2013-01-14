@@ -266,13 +266,24 @@ public class ColorPaletteChooser extends JComboBox {
         if (cpdFileName == null) {
             cpdFileName = DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME;
         }
-       return colorBarMap.get(cpdFileName);
-
+        ColorRamp cr =  colorBarMap.get(cpdFileName);
+       return cr;
     }
 
     public ColorPaletteDef getSelectedColorPaletteDef() {
 
         return getCurrentColorRamp().getColorPaletteDef();
+    }
+
+    protected File getSelectedColorPaletteDefCPDFile(){
+        String cpdFileName = ((ImageIcon) colorModel.getSelectedItem()).getDescription();
+
+        if (cpdFileName == null) {
+            cpdFileName = DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME;
+        }
+
+        return new File(colorPaletteDir, cpdFileName);
+        //return null;
     }
 
     public double getColorBarMin() {

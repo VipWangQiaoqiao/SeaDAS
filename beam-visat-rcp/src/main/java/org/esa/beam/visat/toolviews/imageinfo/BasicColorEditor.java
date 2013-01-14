@@ -129,7 +129,11 @@ class BasicColorEditor extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
                 cpdFileName = currentColorBar.getDescription();
+                //parentForm.loadColorPaletteFileForColorChooser(colorChooser.getSelectedColorPaletteDefCPDFile());
+                currentColorPaletteDef = colorChooser.getSelectedColorPaletteDef();
+                imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().setCpdFileName(currentColorPaletteDef.getCpdFileName());
                 imageInfoEditor.getModel().getImageInfo().setColorPaletteDef(colorChooser.getSelectedColorPaletteDef(), minVal, maxVal, true);
+                //parentForm.getImageInfo().setColorPaletteDef(colorChooser.getSelectedColorPaletteDef(), minVal, maxVal, true);
                 parentForm.setApplyEnabled(true);
             }
         });
@@ -142,14 +146,14 @@ class BasicColorEditor extends JPanel {
         });
 
 
-        parentForm.getProductSceneView().addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
-                colorChooser.updateColorPalette(imageInfoEditor.getModel().getImageInfo().getColorPaletteDef());
-                //parentForm.getImageInfo().getColorPaletteDef();
-            }
-        });
+//        parentForm.getProductSceneView().addPropertyChangeListener(new PropertyChangeListener() {
+//            @Override
+//            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//                colorChooser.updateColorPalette(imageInfoEditor.getModel().getImageInfo().getColorPaletteDef());
+//                //parentForm.getImageInfo().getColorPaletteDef();
+//            }
+//        });
 
         final JPanel minPanel = new JPanel();
         minPanel.setLayout(new BoxLayout(minPanel, BoxLayout.Y_AXIS));
@@ -244,7 +248,7 @@ class BasicColorEditor extends JPanel {
             minValData = parentForm.getMinValueData();
             maxValData = parentForm.getMaxValueData();
         }
-        //colorChooser.updateColorPalette(parentForm.getImageInfo().getColorPaletteDef());
+        colorChooser.updateColorPalette(getCurrentColorPaletteDef());
     }
 
     private ColorPaletteDef getCurrentColorPaletteDef() {
