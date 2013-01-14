@@ -680,26 +680,6 @@ class ColorManipulationForm {
 
     }
 
-    protected void loadColorPaletteFileForColorChooser(File file) {
-        final ImageInfo targetImageInfo = getImageInfo();
-        try {
-            final ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDefForColorBar(file);
-            setMinValueFile(colorPaletteDef.getMinDisplaySample());
-            setMaxValueFile(colorPaletteDef.getMaxDisplaySample());
-            applyColorPaletteDef(colorPaletteDef, getProductSceneView().getRaster(), targetImageInfo);
-            setImageInfoCopy(targetImageInfo);
-            if (!colorPaletteFileLoaded) {
-                colorPaletteFileLoaded = true;
-            }
-
-            childForm.updateFormModel(getProductSceneView());
-            setApplyEnabled(true);
-        } catch (IOException e) {
-            showErrorDialog("Failed to import colour palette:\n" + e.getMessage());
-        }
-
-    }
-
     protected void applyColorPaletteDef(ColorPaletteDef colorPaletteDef,
                                         RasterDataNode targetRaster,
                                         ImageInfo targetImageInfo) {

@@ -60,7 +60,7 @@ class BasicColorEditor extends JPanel {
     private double minValData, maxValData;
     private JFormattedTextField maxValField;
     private JFormattedTextField minValField;
-    private JButton fileDefaultButton;
+    private JButton cpdFileDefaultButton;
     private JButton dataDefaultButton;
     private NumberFormat valFormat;
     private ImageInfoEditor imageInfoEditor;
@@ -129,31 +129,12 @@ class BasicColorEditor extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
                 cpdFileName = currentColorBar.getDescription();
-                //parentForm.loadColorPaletteFileForColorChooser(colorChooser.getSelectedColorPaletteDefCPDFile());
                 currentColorPaletteDef = colorChooser.getSelectedColorPaletteDef();
                 imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().setCpdFileName(currentColorPaletteDef.getCpdFileName());
                 imageInfoEditor.getModel().getImageInfo().setColorPaletteDef(colorChooser.getSelectedColorPaletteDef(), minVal, maxVal, true);
-                //parentForm.getImageInfo().setColorPaletteDef(colorChooser.getSelectedColorPaletteDef(), minVal, maxVal, true);
                 parentForm.setApplyEnabled(true);
             }
         });
-
-        colorChooser.addPropertyChangeListener("color_bar_changed", new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
-
-
-//        parentForm.getProductSceneView().addPropertyChangeListener(new PropertyChangeListener() {
-//            @Override
-//            public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//                colorChooser.updateColorPalette(imageInfoEditor.getModel().getImageInfo().getColorPaletteDef());
-//                //parentForm.getImageInfo().getColorPaletteDef();
-//            }
-//        });
 
         final JPanel minPanel = new JPanel();
         minPanel.setLayout(new BoxLayout(minPanel, BoxLayout.Y_AXIS));
@@ -183,8 +164,8 @@ class BasicColorEditor extends JPanel {
         minMaxPanel.add(minPanel);
         minMaxPanel.add(maxPanel);
 
-        fileDefaultButton = new JButton("CPD Min/Max");
-        fileDefaultButton.addActionListener(new ActionListener() {
+        cpdFileDefaultButton = new JButton("CPD Min/Max");
+        cpdFileDefaultButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 maxVal = colorChooser.getColorBarMax();
@@ -198,9 +179,11 @@ class BasicColorEditor extends JPanel {
         dataDefaultButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                minVal = parentForm.getMinValueData();
-                maxVal = parentForm.getMaxValueData();
+                //minVal = parentForm.getMinValueData();
+                //maxVal = parentForm.getMaxValueData();
 
+                minVal = parentForm.getProductSceneView().getRaster().getStx().getMinimum();
+                maxVal = parentForm.getProductSceneView().getRaster().getStx().getMaximum();
                 if (minVal > ((Number) maxValField.getValue()).doubleValue()) {
                     maxValField.setValue(maxVal);
                     minValField.setValue(minVal);
@@ -210,7 +193,7 @@ class BasicColorEditor extends JPanel {
             }
         });
 
-        minMaxPanel.add(fileDefaultButton);
+        minMaxPanel.add(cpdFileDefaultButton);
         minMaxPanel.add(dataDefaultButton);
         JPanel simpleColorManipulationPanel = new JPanel();
         simpleColorManipulationPanel.setLayout(new BoxLayout(simpleColorManipulationPanel, BoxLayout.Y_AXIS));
@@ -236,7 +219,7 @@ class BasicColorEditor extends JPanel {
     }
 
     protected void resetToFileDefault() {
-        fileDefaultButton.doClick();
+        cpdFileDefaultButton.doClick();
     }
 
     protected void updateBasicEditor() {

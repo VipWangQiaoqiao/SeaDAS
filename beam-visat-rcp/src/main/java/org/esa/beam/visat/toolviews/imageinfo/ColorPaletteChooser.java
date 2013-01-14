@@ -21,7 +21,7 @@ import java.util.*;
 public class ColorPaletteChooser extends JComboBox {
     private final int COLORBAR_HEIGHT = 15;
     private final int COLORBAR_WIDTH = 204;
-    private final String DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME = "defaultGrayColor.cpd";
+    public final String DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME = "defaultGrayColor.cpd";
 
     private File colorPaletteDir;
     private Dimension colorBarDimension;
@@ -192,9 +192,10 @@ public class ColorPaletteChooser extends JComboBox {
 
         ImageIcon currentColorBarIcon, newIcon = null;
 
-        if (colorPaletteDef.getNumColors() == 3) {
+        if (colorPaletteDef.getNumPoints() == 3) {
             createDefaultGrayColorPaletteFile(colorPaletteDef);
             currentColorBarIcon = createGrayColorBarIcon(colorPaletteDef, colorBarDimension);
+            colorPaletteDef.setCpdFileName(DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME);
             icons.add(currentColorBarIcon);
             colorModel.setSelectedItem(currentColorBarIcon);
             setModel(colorModel);
