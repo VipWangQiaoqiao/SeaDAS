@@ -122,7 +122,7 @@ public class ColorPaletteChooser extends JComboBox {
     private void drawPalette(Graphics2D g2, File paletteFile, Rectangle paletteRect) throws IOException {
         ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDefForColorBar(paletteFile);
         updateColorBarMinMax(colorPaletteDef);
-        distributeSlidersEvenly(colorPaletteDef);
+        //distributeSlidersEvenly(colorPaletteDef);
         drawPalette(g2, colorPaletteDef, paletteRect);
     }
 
@@ -130,7 +130,7 @@ public class ColorPaletteChooser extends JComboBox {
         BufferedImage bufferedImage = new BufferedImage(dimension.width, dimension.height,
                 BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = bufferedImage.createGraphics();
-        distributeSlidersEvenly(colorPaletteDef);
+        //distributeSlidersEvenly(colorPaletteDef);
         drawPalette(g2, colorPaletteDef, new Rectangle(dimension));
         return new ImageIcon(bufferedImage);
     }
@@ -219,6 +219,8 @@ public class ColorPaletteChooser extends JComboBox {
                 setModel(colorModel);
             }
         }
+        validate();
+        repaint();
     }
 
     protected void updateColorBar(ColorPaletteDef colorPaletteDef) {
@@ -369,7 +371,7 @@ public class ColorPaletteChooser extends JComboBox {
         public ColorRamp(String cpdFileName, ColorPaletteDef colorPaletteDef, double cpdFileMin, double cpdFileMax) {
             this.cpdFileName = cpdFileName;
             this.colorPaletteDef = colorPaletteDef;
-            this.cpdFileMin = colorBarMin;
+            this.cpdFileMin = cpdFileMin;
             this.cpdFileMax = cpdFileMax;
         }
 
