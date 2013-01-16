@@ -93,10 +93,6 @@ public class WatermaskClassifier {
     }
 
 
-//    public static final int MODE_MODIS = 1;
-//    public static final int MODE_GC = MODE_MODIS << 1;
-//    public static final int MODE_GSHHS = MODE_MODIS << 2;
-
     static final int GC_TILE_WIDTH = 576;
     static final int GC_TILE_HEIGHT = 491;
     static final int GC_IMAGE_WIDTH = 129600;
@@ -203,9 +199,6 @@ public class WatermaskClassifier {
 
     }
 
-//    public WatermaskClassifier(int resolution) throws IOException {
-//        this(resolution, MODE_GSHHS);
-//    }
 
     private ImageDescriptor getSouthDescriptor(File auxdataDir) {
         return new ImageDescriptorBuilder()

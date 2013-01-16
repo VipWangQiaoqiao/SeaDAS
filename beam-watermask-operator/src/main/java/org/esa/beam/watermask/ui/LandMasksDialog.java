@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Created with IntelliJ IDEA.
@@ -188,7 +190,16 @@ class LandMasksDialog extends JDialog {
         resolutionSamplingPanel.add(resolutionComboBox.getjLabel(),
                 new ExGridBagConstraints(0, 0, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE, new Insets(0, 0, 0, rightInset)));
 
-        resolutionSamplingPanel.add(resolutionComboBox.getjComboBox(),
+        JComboBox jComboBox = resolutionComboBox.getjComboBox();
+
+        landMasksData.addPropertyChangeListener(LandMasksData.FILE_INSTALLED_EVENT, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                resolutionComboBox.updateJComboBox();
+            }
+        });
+
+        resolutionSamplingPanel.add(jComboBox,
                 new ExGridBagConstraints(1, 0, 0, 0, GridBagConstraints.WEST, GridBagConstraints.NONE));
 
         resolutionSamplingPanel.add(superSamplingSpinner.getjLabel(),
