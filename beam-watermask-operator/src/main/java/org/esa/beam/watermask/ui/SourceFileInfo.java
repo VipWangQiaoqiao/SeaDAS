@@ -1,15 +1,9 @@
 package org.esa.beam.watermask.ui;
 
-import com.bc.ceres.core.ProgressMonitor;
-import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
-import org.esa.beam.util.ResourceInstaller;
-import org.esa.beam.util.SystemUtils;
-import org.esa.beam.visat.VisatApp;
 import org.esa.beam.watermask.operator.WatermaskClassifier;
+import org.esa.beam.watermask.util.ResourceInstallationUtils;
 
 import java.io.File;
-import java.net.URL;
-import java.util.logging.Level;
 
 /**
  * Created with IntelliJ IDEA.
@@ -115,7 +109,7 @@ public class SourceFileInfo {
     }
 
     private void setFile(String filename) {
-        file = WatermaskClassifier.installAuxdata(filename);
+        file = ResourceInstallationUtils.installAuxdata(WatermaskClassifier.class, filename);
     }
 
 
@@ -123,56 +117,6 @@ public class SourceFileInfo {
 
         return file.exists();
     }
-
-
-//    public static File installAuxFile(String fileName) {
-//
-//
-//
-//        final String tinyFileName = fileName;
-//        final File dataDir = new File(SystemUtils.getApplicationDataDir(), "l2gen");
-//        File theFile = new File(dataDir, fileName);
-//        if (theFile.canRead()) {
-//            return theFile;
-//        }
-//
-//        URL sourceUrl = ResourceInstaller.getSourceUrl(this.getClass());
-//        final ResourceInstaller resourceInstaller = new ResourceInstaller(sourceUrl, "gov/nasa/gsfc/seadas/processing/l2gen/userInterface/",
-//                dataDir);
-//
-//        ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(VisatApp.getApp().getApplicationWindow(),
-//                "Installing Auxdata...") {
-//            @Override
-//            protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
-//                resourceInstaller.install(tinyFileName, progressMonitor);
-//                return Boolean.TRUE;
-//            }
-//
-//            /**
-//             * Executed on the <i>Event Dispatch Thread</i> after the {@code doInBackground}
-//             * method is finished. The default
-//             * implementation does nothing. Subclasses may override this method to
-//             * perform completion actions on the <i>Event Dispatch Thread</i>. Note
-//             * that you can query status inside the implementation of this method to
-//             * determine the result of this task or whether this task has been cancelled.
-//             *
-//             * @see #doInBackground
-//             * @see #isCancelled()
-//             * @see #get
-//             */
-//            @Override
-//            protected void done() {
-//                try {
-//                    get();
-//                } catch (Exception e) {
-//                    VisatApp.getApp().getLogger().log(Level.SEVERE, "Could not install tiny iFile", e);
-//                }
-//            }
-//        };
-//
-//        swingWorker.executeWithBlocking();
-//        return theFile;
-//    }
 
 
     public String toString() {
@@ -188,13 +132,16 @@ public class SourceFileInfo {
 
         if (resolution >= 1000) {
             stringBuilder.append(String.valueOf(resolution / 1000));
+            stringBuilder.append(" ");
+            stringBuilder.append(Unit.KILOMETER.toString());
         } else {
             stringBuilder.append(Integer.toString(getResolution()));
+            stringBuilder.append(" ");
+            stringBuilder.append(getUnit().toString());
         }
 
 
-        stringBuilder.append(" ");
-        stringBuilder.append(getUnit().toString());
+
         stringBuilder.append(" (");
         stringBuilder.append(getMode().toString());
         stringBuilder.append(")");

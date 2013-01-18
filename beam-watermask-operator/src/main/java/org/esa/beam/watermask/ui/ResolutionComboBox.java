@@ -19,9 +19,10 @@ public class ResolutionComboBox {
 
     private JLabel jLabel;
     private JComboBox jComboBox;
-    private int selectedIndex;
+    private int validSelectedIndex;
 
-    public ResolutionComboBox(LandMasksData landMasksData) {
+
+    public ResolutionComboBox(final LandMasksData landMasksData) {
 
         this.landMasksData = landMasksData;
 
@@ -41,8 +42,8 @@ public class ResolutionComboBox {
             enabledArrayList.add(new Boolean(sourceFileInfo.isEnabled()));
         }
 
-        final SourceFileInfo[] jComboBoxArray;
-        jComboBoxArray = new SourceFileInfo[jComboBoxArrayList.size()];
+
+        final SourceFileInfo[] jComboBoxArray = new SourceFileInfo[jComboBoxArrayList.size()];
 
         int i = 0;
         for (SourceFileInfo sourceFileInfo : landMasksData.getSourceFileInfos()) {
@@ -83,25 +84,35 @@ public class ResolutionComboBox {
             }
         }
 
-        selectedIndex = jComboBox.getSelectedIndex();
+        validSelectedIndex = jComboBox.getSelectedIndex();
 
 
         jLabel = new JLabel("Coastline Source Dataset");
         jLabel.setToolTipText("Determines which shoreline source dataset to use when generating the masks");
 
         addControlListeners();
+
     }
+
 
     private void addControlListeners() {
         jComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SourceFileInfo sourceFileInfo = (SourceFileInfo) jComboBox.getSelectedItem();
+
                 if (sourceFileInfo.isEnabled()) {
                     landMasksData.setSourceFileInfo(sourceFileInfo);
-                    selectedIndex = jComboBox.getSelectedIndex();
+                    validSelectedIndex = jComboBox.getSelectedIndex();
                 } else {
-                    jComboBox.setSelectedIndex(selectedIndex);
+                    // restore to prior selection
+//                    jComboBox.setSelectedIndex(selectedIndex);
+
+                    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            landMasksData.fireEvent(LandMasksData.PROMPT_REQUEST_TO_INSTALL_FILE_EVENT);
+                        }
+                    });
                 }
             }
         });
@@ -116,6 +127,96 @@ public class ResolutionComboBox {
         return jComboBox;
     }
 
+
+    public void updateJComboBox() {
+
+        ArrayList<SourceFileInfo> jComboBoxArrayList = new ArrayList<SourceFileInfo>();
+        ArrayList<String> toolTipsArrayList = new ArrayList<String>();
+        ArrayList<Boolean> enabledArrayList = new ArrayList<Boolean>();
+
+        for (SourceFileInfo sourceFileInfo : landMasksData.getSourceFileInfos()) {
+            jComboBoxArrayList.add(sourceFileInfo);
+
+            if (sourceFileInfo.getDescription() != null) {
+                toolTipsArrayList.add(sourceFileInfo.getDescription());
+            } else {
+                toolTipsArrayList.add(null);
+            }
+
+            enabledArrayList.add(new Boolean(sourceFileInfo.isEnabled()));
+        }
+
+
+        final SourceFileInfo[] jComboBoxArray = new SourceFileInfo[jComboBoxArrayList.size()];
+
+        int i = 0;
+        for (SourceFileInfo sourceFileInfo : landMasksData.getSourceFileInfos()) {
+            jComboBoxArray[i] = sourceFileInfo;
+            i++;
+        }
+
+        final String[] toolTipsArray = new String[jComboBoxArrayList.size()];
+
+        int j = 0;
+        for (String validValuesToolTip : toolTipsArrayList) {
+            toolTipsArray[j] = validValuesToolTip;
+            j++;
+        }
+
+        final Boolean[] enabledArray = new Boolean[jComboBoxArrayList.size()];
+
+        int k = 0;
+        for (Boolean enabled : enabledArrayList) {
+            enabledArray[k] = enabled;
+            k++;
+        }
+
+
+        final MyComboBoxRenderer myComboBoxRenderer = new MyComboBoxRenderer();
+        myComboBoxRenderer.setTooltipList(toolTipsArray);
+        myComboBoxRenderer.setEnabledList(enabledArray);
+
+        jComboBox.setRenderer(myComboBoxRenderer);
+        jComboBox.setEditable(false);
+
+
+        for (SourceFileInfo sourceFileInfo : jComboBoxArray) {
+            if (sourceFileInfo == landMasksData.getSourceFileInfo()) {
+                jComboBox.setSelectedItem(sourceFileInfo);
+            }
+        }
+
+        validSelectedIndex = jComboBox.getSelectedIndex();
+
+
+//        int i = 0;
+//        for (SourceFileInfo sourceFileInfo : jComboBoxArray) {
+//            enabledArray[i] = sourceFileInfo.isEnabled();
+//            i++;
+//        }
+//
+//
+//        final MyComboBoxRenderer myComboBoxRenderer = new MyComboBoxRenderer();
+//        myComboBoxRenderer.setTooltipList(toolTipsArray);
+//        myComboBoxRenderer.setEnabledList(enabledArray);
+//
+//        jComboBox.setRenderer(myComboBoxRenderer);
+//
+//
+//        for (SourceFileInfo sourceFileInfo : jComboBoxArray) {
+//            if (sourceFileInfo == landMasksData.getSourceFileInfo()) {
+//                jComboBox.setSelectedItem(sourceFileInfo);
+//            }
+//        }
+//
+//        selectedIndex = jComboBox.getSelectedIndex();
+//
+
+    }
+
+    public int getValidSelectedIndex() {
+        return validSelectedIndex;
+    }
 
     class MyComboBoxRenderer extends BasicComboBoxRenderer {
 
@@ -153,6 +254,8 @@ public class ResolutionComboBox {
 //                        list.setSelectionForeground(Color.gray);
 //                        setBackground(Color.white);
 //                        setForeground(Color.gray);
+                        setBackground(Color.blue);
+                        setForeground(Color.gray);
 //                        setEnabled(false);
 //                        setFocusable(false);
                     }

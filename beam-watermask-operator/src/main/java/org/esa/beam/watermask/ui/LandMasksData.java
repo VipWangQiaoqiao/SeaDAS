@@ -2,7 +2,10 @@ package org.esa.beam.watermask.ui;
 
 import org.esa.beam.watermask.operator.WatermaskClassifier;
 
+import javax.swing.event.SwingPropertyChangeSupport;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 /**
@@ -13,6 +16,12 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 class LandMasksData {
+
+    public static String FILE_INSTALLED_EVENT = "FILE_INSTALLED_EVENT";
+    public static String PROMPT_REQUEST_TO_INSTALL_FILE_EVENT = "REQUEST_TO_INSTALL_FILE_EVENT";
+    public static String CONFIRMED_REQUEST_TO_INSTALL_FILE_EVENT = "CONFIRMED_REQUEST_TO_INSTALL_FILE_EVENT";
+
+    public static String LANDMASK_URL =  "http://oceandata.sci.gsfc.nasa.gov/SeaDAS/installer/landmask";
 
     private boolean createMasks = false;
     private boolean deleteMasks = false;
@@ -53,6 +62,8 @@ class LandMasksData {
 
     private ArrayList<SourceFileInfo> sourceFileInfos = new ArrayList<SourceFileInfo>();
     private SourceFileInfo sourceFileInfo;
+
+    private final SwingPropertyChangeSupport propertyChangeSupport = new SwingPropertyChangeSupport(this);
 
     public LandMasksData() {
 
@@ -297,6 +308,14 @@ class LandMasksData {
 
     public void setSourceFileInfos(ArrayList<SourceFileInfo> sourceFileInfos) {
         this.sourceFileInfos = sourceFileInfos;
+    }
+
+    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
+    }
+
+    public void fireEvent(String propertyName) {
+        propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, propertyName, null, null));
     }
 }
 

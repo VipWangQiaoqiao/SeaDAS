@@ -16,12 +16,10 @@
 
 package org.esa.beam.watermask.operator;
 
-import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.framework.datamodel.GeoCoding;
 import org.esa.beam.framework.datamodel.GeoPos;
 import org.esa.beam.framework.datamodel.PixelPos;
-import org.esa.beam.util.ResourceInstaller;
-import org.esa.beam.util.SystemUtils;
+import org.esa.beam.watermask.util.ResourceInstallationUtils;
 import org.esa.beam.watermask.util.ImageDescriptor;
 import org.esa.beam.watermask.util.ImageDescriptorBuilder;
 
@@ -92,10 +90,6 @@ public class WatermaskClassifier {
         }
     }
 
-
-//    public static final int MODE_MODIS = 1;
-//    public static final int MODE_GC = MODE_MODIS << 1;
-//    public static final int MODE_GSHHS = MODE_MODIS << 2;
 
     static final int GC_TILE_WIDTH = 576;
     static final int GC_TILE_HEIGHT = 491;
@@ -172,7 +166,7 @@ public class WatermaskClassifier {
         this.resolution = resolution;
         this.filename = filename;
 
-        final File auxdataDir = installAuxdata(filename).getParentFile();
+        final File auxdataDir = ResourceInstallationUtils.installAuxdata(WatermaskClassifier.class, filename).getParentFile();
 
 //        ImageDescriptor gshhsDescriptor = getNorthDescriptor(auxdataDir);
 //        ImageDescriptor northDescriptor = getNorthDescriptor(auxdataDir);
@@ -203,9 +197,6 @@ public class WatermaskClassifier {
 
     }
 
-//    public WatermaskClassifier(int resolution) throws IOException {
-//        this(resolution, MODE_GSHHS);
-//    }
 
     private ImageDescriptor getSouthDescriptor(File auxdataDir) {
         return new ImageDescriptorBuilder()
@@ -308,25 +299,6 @@ public class WatermaskClassifier {
         return PNGSourceImage.create(properties, zipFile, mode, resolution);
     }
 
-    public static File installAuxdata(String filename) {
-        String auxdataTargetPath = "auxdata";
-        File tmpTargetDir = new File(SystemUtils.getApplicationDataDir(), "beam-watermask-operator");
-        File auxdataTargetDir = new File(tmpTargetDir, auxdataTargetPath);
-        File targetFile = new File(auxdataTargetDir, filename);
-
-        if (!targetFile.canRead()) {
-            String auxdataSourcePath = "org/esa/beam/watermask/operator/auxdata/";
-            URL sourceUrl = ResourceInstaller.getSourceUrl(WatermaskClassifier.class);
-            final URL codeSourceUrl = WatermaskClassifier.class.getProtectionDomain().getCodeSource().getLocation();
-            ResourceInstaller resourceInstaller = new ResourceInstaller(sourceUrl, auxdataSourcePath, auxdataTargetDir);
-            try {
-                resourceInstaller.install(filename, ProgressMonitor.NULL);
-            } catch (Exception e) {
-                System.out.printf("resource not copied - %s", e.getMessage());
-            }
-        }
-        return targetFile;
-    }
 
     /**
      * Returns the sample value at the given geo-position, regardless of the source resolution.

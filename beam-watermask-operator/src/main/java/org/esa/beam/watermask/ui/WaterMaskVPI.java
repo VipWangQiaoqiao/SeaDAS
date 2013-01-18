@@ -20,6 +20,8 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.RenderedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -187,7 +189,7 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                                 parameters.put("resolution", sourceFileInfo.getResolution(SourceFileInfo.Unit.METER));
                                 parameters.put("mode", sourceFileInfo.getMode().toString());
                                 parameters.put("filename", sourceFileInfo.getFile().getName());
-   //                             parameters.put("sourceFileInfo", sourceFileInfo);
+                                //                             parameters.put("sourceFileInfo", sourceFileInfo);
                                 /*
                                     Create a new product, which will contain the land_water_fraction band
                                  */
@@ -308,6 +310,9 @@ public class WaterMaskVPI extends AbstractVisatPlugIn {
                     pmSwingWorker.executeWithBlocking();
                 }
             }
+
+
+
         }
 
     }

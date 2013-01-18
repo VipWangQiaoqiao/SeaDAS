@@ -261,9 +261,11 @@ public class ModisPixelGeoCoding extends AbstractBowtieGeoCoding {
         final String lonBandName = _lonBand.getName();
         final int srcStripeOffsetY = srcGeocoding.getScanlineOffsetY();
         int destStripeOffsetY = srcStripeOffsetY;
-        Rectangle region = subsetDef.getRegion();
-        if(region != null) {
-            destStripeOffsetY = (srcStripeOffsetY+region.y) % getScanlineHeight();
+        if(subsetDef != null) {
+            Rectangle region = subsetDef.getRegion();
+            if(region != null) {
+                destStripeOffsetY = (srcStripeOffsetY+region.y) % getScanlineHeight();
+            }
         }
         final Band latBand = destScene.getProduct().getBand(latBandName);
         final Band lonBand = destScene.getProduct().getBand(lonBandName);
