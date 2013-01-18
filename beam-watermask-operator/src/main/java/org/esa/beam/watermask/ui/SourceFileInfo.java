@@ -1,15 +1,9 @@
 package org.esa.beam.watermask.ui;
 
-import com.bc.ceres.core.ProgressMonitor;
-import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
-import org.esa.beam.util.ResourceInstaller;
-import org.esa.beam.util.SystemUtils;
-import org.esa.beam.visat.VisatApp;
 import org.esa.beam.watermask.operator.WatermaskClassifier;
+import org.esa.beam.watermask.util.ResourceInstallationUtils;
 
 import java.io.File;
-import java.net.URL;
-import java.util.logging.Level;
 
 /**
  * Created with IntelliJ IDEA.
@@ -115,7 +109,7 @@ public class SourceFileInfo {
     }
 
     private void setFile(String filename) {
-        file = WatermaskClassifier.installAuxdata(filename);
+        file = ResourceInstallationUtils.installAuxdata(WatermaskClassifier.class, filename);
     }
 
 
@@ -138,13 +132,16 @@ public class SourceFileInfo {
 
         if (resolution >= 1000) {
             stringBuilder.append(String.valueOf(resolution / 1000));
+            stringBuilder.append(" ");
+            stringBuilder.append(Unit.KILOMETER.toString());
         } else {
             stringBuilder.append(Integer.toString(getResolution()));
+            stringBuilder.append(" ");
+            stringBuilder.append(getUnit().toString());
         }
 
 
-        stringBuilder.append(" ");
-        stringBuilder.append(getUnit().toString());
+
         stringBuilder.append(" (");
         stringBuilder.append(getMode().toString());
         stringBuilder.append(")");

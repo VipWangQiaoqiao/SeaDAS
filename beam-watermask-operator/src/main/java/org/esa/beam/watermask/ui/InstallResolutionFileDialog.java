@@ -1,10 +1,12 @@
 package org.esa.beam.watermask.ui;
 
+import org.esa.beam.watermask.util.ResourceInstallationUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
+import java.net.URL;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,7 +56,17 @@ class InstallResolutionFileDialog extends JDialog {
 
                 dispose();
 
-                // todo install file
+                //  acquire in example: "http://oceandata.sci.gsfc.nasa.gov/SeaDAS/installer/landmask/50m.zip"
+                try {
+                    landMasksData.fireEvent(LandMasksData.CONFIRMED_REQUEST_TO_INSTALL_FILE_EVENT);
+
+                    String filename = sourceFileInfo.getFile().getName().toString();
+                    URL sourceUrl = new URL(LandMasksData.LANDMASK_URL + "/" + filename);
+                    ResourceInstallationUtils.installAuxdata(sourceUrl, filename);
+                    landMasksData.fireEvent(LandMasksData.FILE_INSTALLED_EVENT);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 InstallResolutionFileDialog dialog = new InstallResolutionFileDialog(landMasksData, sourceFileInfo, Step.CONFIRMATION);
                 dialog.setVisible(true);
@@ -136,19 +148,12 @@ class InstallResolutionFileDialog extends JDialog {
                 dispose();
 
 
-
-
             }
         });
 
 
         if (sourceFileInfo.isEnabled()) {
             jLabel = new JLabel("File " + sourceFileInfo.getFile().getName().toString() + " has been installed");
-            javax.swing.SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    landMasksData.fireEvent(LandMasksData.FILE_INSTALLED_EVENT);
-                }
-            });
         } else {
             jLabel = new JLabel("File " + sourceFileInfo.getFile().getName().toString() + " installation failure");
         }

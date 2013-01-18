@@ -1,14 +1,10 @@
 package org.esa.beam.watermask.ui;
 
 import javax.swing.*;
-import javax.swing.event.SwingPropertyChangeSupport;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -23,13 +19,7 @@ public class ResolutionComboBox {
 
     private JLabel jLabel;
     private JComboBox jComboBox;
-    private int selectedIndex;
-
-    private String INSTALL_FILE_EVENT = "INSTALL_FILE_EVENT";
-
-    private final SwingPropertyChangeSupport propertyChangeSupport = new SwingPropertyChangeSupport(this);
-
-
+    private int validSelectedIndex;
 
 
     public ResolutionComboBox(final LandMasksData landMasksData) {
@@ -53,7 +43,7 @@ public class ResolutionComboBox {
         }
 
 
-        final SourceFileInfo[]  jComboBoxArray = new SourceFileInfo[jComboBoxArrayList.size()];
+        final SourceFileInfo[] jComboBoxArray = new SourceFileInfo[jComboBoxArrayList.size()];
 
         int i = 0;
         for (SourceFileInfo sourceFileInfo : landMasksData.getSourceFileInfos()) {
@@ -61,7 +51,7 @@ public class ResolutionComboBox {
             i++;
         }
 
-        final String[]  toolTipsArray = new String[jComboBoxArrayList.size()];
+        final String[] toolTipsArray = new String[jComboBoxArrayList.size()];
 
         int j = 0;
         for (String validValuesToolTip : toolTipsArrayList) {
@@ -94,7 +84,7 @@ public class ResolutionComboBox {
             }
         }
 
-        selectedIndex = jComboBox.getSelectedIndex();
+        validSelectedIndex = jComboBox.getSelectedIndex();
 
 
         jLabel = new JLabel("Coastline Source Dataset");
@@ -102,21 +92,6 @@ public class ResolutionComboBox {
 
         addControlListeners();
 
-        this.addPropertyChangeListener(INSTALL_FILE_EVENT, new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                SourceFileInfo sourceFileInfo = (SourceFileInfo) jComboBox.getSelectedItem();
-
-                InstallResolutionFileDialog dialog = new InstallResolutionFileDialog(landMasksData, sourceFileInfo, InstallResolutionFileDialog.Step.INSTALLATION);
-                dialog.setVisible(true);
-                dialog.setEnabled(true);
-            }
-        });
-    }
-
-
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
     }
 
 
@@ -125,24 +100,20 @@ public class ResolutionComboBox {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SourceFileInfo sourceFileInfo = (SourceFileInfo) jComboBox.getSelectedItem();
-                landMasksData.setSourceFileInfo(sourceFileInfo);
-                selectedIndex = jComboBox.getSelectedIndex();
 
+                if (sourceFileInfo.isEnabled()) {
+                    landMasksData.setSourceFileInfo(sourceFileInfo);
+                    validSelectedIndex = jComboBox.getSelectedIndex();
+                } else {
+                    // restore to prior selection
+//                    jComboBox.setSelectedIndex(selectedIndex);
 
-                if (!sourceFileInfo.isEnabled()) {
                     javax.swing.SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-                            propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, INSTALL_FILE_EVENT, null, null));
+                            landMasksData.fireEvent(LandMasksData.PROMPT_REQUEST_TO_INSTALL_FILE_EVENT);
                         }
                     });
                 }
-
-//                if (fileAvailable) {
-//                landMasksData.setSourceFileInfo(sourceFileInfo);
-//                selectedIndex = jComboBox.getSelectedIndex();
-//                } else {
-//                    jComboBox.setSelectedIndex(selectedIndex);
-//                }
             }
         });
 
@@ -176,7 +147,7 @@ public class ResolutionComboBox {
         }
 
 
-        final SourceFileInfo[]  jComboBoxArray = new SourceFileInfo[jComboBoxArrayList.size()];
+        final SourceFileInfo[] jComboBoxArray = new SourceFileInfo[jComboBoxArrayList.size()];
 
         int i = 0;
         for (SourceFileInfo sourceFileInfo : landMasksData.getSourceFileInfos()) {
@@ -184,7 +155,7 @@ public class ResolutionComboBox {
             i++;
         }
 
-        final String[]  toolTipsArray = new String[jComboBoxArrayList.size()];
+        final String[] toolTipsArray = new String[jComboBoxArrayList.size()];
 
         int j = 0;
         for (String validValuesToolTip : toolTipsArrayList) {
@@ -215,12 +186,7 @@ public class ResolutionComboBox {
             }
         }
 
-        selectedIndex = jComboBox.getSelectedIndex();
-
-
-
-
-
+        validSelectedIndex = jComboBox.getSelectedIndex();
 
 
 //        int i = 0;
@@ -246,6 +212,10 @@ public class ResolutionComboBox {
 //        selectedIndex = jComboBox.getSelectedIndex();
 //
 
+    }
+
+    public int getValidSelectedIndex() {
+        return validSelectedIndex;
     }
 
     class MyComboBoxRenderer extends BasicComboBoxRenderer {

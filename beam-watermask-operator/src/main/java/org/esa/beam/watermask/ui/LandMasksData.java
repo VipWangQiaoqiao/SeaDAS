@@ -18,6 +18,10 @@ import java.util.ArrayList;
 class LandMasksData {
 
     public static String FILE_INSTALLED_EVENT = "FILE_INSTALLED_EVENT";
+    public static String PROMPT_REQUEST_TO_INSTALL_FILE_EVENT = "REQUEST_TO_INSTALL_FILE_EVENT";
+    public static String CONFIRMED_REQUEST_TO_INSTALL_FILE_EVENT = "CONFIRMED_REQUEST_TO_INSTALL_FILE_EVENT";
+
+    public static String LANDMASK_URL =  "http://oceandata.sci.gsfc.nasa.gov/SeaDAS/installer/landmask";
 
     private boolean createMasks = false;
     private boolean deleteMasks = false;
@@ -311,7 +315,7 @@ class LandMasksData {
     }
 
     public void fireEvent(String propertyName) {
-        propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, LandMasksData.FILE_INSTALLED_EVENT, null, null));
+        propertyChangeSupport.firePropertyChange(new PropertyChangeEvent(this, propertyName, null, null));
     }
 }
 
