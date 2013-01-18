@@ -643,6 +643,8 @@ class ColorManipulationForm {
             if (file != null && file.canRead()) {
                 try {
                     final ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(file);
+                    colorPaletteDef.setCpdFileName(file.getName());
+                    System.out.println("current color palette name in cmf : " + colorPaletteDef.getCpdFileName());
                     setMinValueFile(colorPaletteDef.getMinDisplaySample());
                     setMaxValueFile(colorPaletteDef.getMaxDisplaySample());
                     applyColorPaletteDef(colorPaletteDef, getProductSceneView().getRaster(), targetImageInfo);
@@ -691,6 +693,7 @@ class ColorManipulationForm {
             if (autoDistribute == null) {
                 return;
             }
+            getImageInfo().getColorPaletteDef().setCpdFileName(colorPaletteDef.getCpdFileName());
             targetImageInfo.setColorPaletteDef(colorPaletteDef,
                     stx.getMinimum(),
                     stx.getMaximum(),

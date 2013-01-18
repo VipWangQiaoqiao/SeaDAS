@@ -62,6 +62,14 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         logDisplayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (logDisplayButton.isSelected()) {
+                    logDisplayButton.setToolTipText("Switch to linear display");
+                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
+                } else {
+                    logDisplayButton.setToolTipText("Switch to logarithmic display");
+                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
+                }
+
                 setLogarithmicDisplay(parentForm.getProductSceneView().getRaster(), logDisplayButton.isSelected());
             }
         });
@@ -112,7 +120,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         setLogarithmicDisplay(raster, newModel.getImageInfo().isLogScaled());
 
         logDisplayButton.setSelected(newModel.getImageInfo().isLogScaled());
-
+        System.out.println("current color palette name in form: " + imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().getCpdFileName());
+        System.out.println("current color palette name in form: " + parentForm.getImageInfo().getColorPaletteDef().getCpdFileName());
         basicColorEditor.updateBasicEditor();
         parentForm.revalidateToolViewPaneControl();
     }
@@ -127,8 +136,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
     @Override
     public void resetFormModel(ProductSceneView productSceneView) {
-        imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().setCpdFileName("defaultGrayColor.cpd");
-        parentForm.getImageInfo().getColorPaletteDef().setCpdFileName("defaultGrayColor.cpd");
+        if (imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().getCpdFileName() == null) {
+            imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().setCpdFileName("defaultGrayColor.cpd");
+        }
+        //parentForm.getImageInfo().getColorPaletteDef().setCpdFileName("defaultGrayColor.cpd");
         updateFormModel(productSceneView);
         imageInfoEditor.computeZoomOutToFullHistogramm();
         parentForm.revalidateToolViewPaneControl();

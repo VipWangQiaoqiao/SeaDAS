@@ -26,8 +26,7 @@ import org.esa.beam.framework.ui.ImageInfoEditor;
 import org.esa.beam.framework.ui.ImageInfoEditorModel;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 
-import javax.swing.AbstractButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -62,6 +61,13 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
         logDisplayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (logDisplayButton.isSelected()) {
+                    logDisplayButton.setToolTipText("Switch to linear display");
+                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
+                } else {
+                    logDisplayButton.setToolTipText("Switch to logarithmic display");
+                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
+                }
                 setLogarithmicDisplay(parentForm.getProductSceneView().getRaster(), logDisplayButton.isSelected());
             }
         });
@@ -117,7 +123,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
             newModel.setMaxHistogramViewSample(oldModel.getMaxHistogramViewSample());
         }
         if (newModel.getSliderSample(0) < newModel.getMinHistogramViewSample() ||
-            newModel.getSliderSample(newModel.getSliderCount() - 1) > newModel.getMaxHistogramViewSample()) {
+                newModel.getSliderSample(newModel.getSliderCount() - 1) > newModel.getMaxHistogramViewSample()) {
             imageInfoEditor.computeZoomInToSliderLimits();
         }
 
@@ -191,7 +197,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
 
     static void setDisplayProperties(ImageInfoEditorModel model, RasterDataNode raster) {
         model.setDisplayProperties(raster.getName(), raster.getUnit(), raster.getStx(),
-                                   raster.isLog10Scaled() ? POW10_SCALING : Scaling.IDENTITY);
+                raster.isLog10Scaled() ? POW10_SCALING : Scaling.IDENTITY);
     }
 
 
