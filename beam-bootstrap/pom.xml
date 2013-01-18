@@ -202,5 +202,16 @@
             </dependencies>
 
         </profile>
+        <profile>
+            <id>osx_profile</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <toolsjar>${java.home}/../Classes/classes.jar</toolsjar>
+            </properties>
+        </profile>
     </profiles>
 </project>
