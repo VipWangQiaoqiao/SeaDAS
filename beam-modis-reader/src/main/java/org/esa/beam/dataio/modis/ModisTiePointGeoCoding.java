@@ -250,9 +250,6 @@ public class ModisTiePointGeoCoding extends AbstractBowtieGeoCoding {
     }
 
     static boolean mustRecalculateTiePointGrids(ProductSubsetDef subsetDef) {
-        if(subsetDef == null) {
-            return false;
-        }
         return subsetDef.getRegion() != null;
     }
 
