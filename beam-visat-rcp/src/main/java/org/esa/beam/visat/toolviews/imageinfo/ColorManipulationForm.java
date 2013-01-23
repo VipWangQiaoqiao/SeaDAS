@@ -693,7 +693,7 @@ class ColorManipulationForm {
             if (autoDistribute == null) {
                 return;
             }
-            getImageInfo().getColorPaletteDef().setCpdFileName(colorPaletteDef.getCpdFileName());
+            targetImageInfo.setCpdFileName(colorPaletteDef.getCpdFileName());
             targetImageInfo.setColorPaletteDef(colorPaletteDef,
                     stx.getMinimum(),
                     stx.getMaximum(),

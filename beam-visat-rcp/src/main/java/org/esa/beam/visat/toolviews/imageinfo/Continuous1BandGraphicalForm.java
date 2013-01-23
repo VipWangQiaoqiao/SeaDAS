@@ -61,13 +61,13 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
         logDisplayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (logDisplayButton.isSelected()) {
-                    logDisplayButton.setToolTipText("Switch to linear display");
-                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
-                } else {
-                    logDisplayButton.setToolTipText("Switch to logarithmic display");
-                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
-                }
+//                if (logDisplayButton.isSelected()) {
+//                    logDisplayButton.setToolTipText("Switch to linear display");
+//                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
+//                } else {
+//                    logDisplayButton.setToolTipText("Switch to logarithmic display");
+//                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
+//                }
                 setLogarithmicDisplay(parentForm.getProductSceneView().getRaster(), logDisplayButton.isSelected());
             }
         });

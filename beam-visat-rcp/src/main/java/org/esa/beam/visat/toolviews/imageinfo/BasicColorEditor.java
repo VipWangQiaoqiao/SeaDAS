@@ -124,18 +124,22 @@ class BasicColorEditor extends JPanel {
         currentColorPaletteDef = parentForm.getImageInfo().getColorPaletteDef();
         colorChooser = new ColorPaletteChooser(parentForm.getIODir(), currentColorPaletteDef);
 
+//        if (imageInfoEditor.getModel().getImageInfo().getCpdFileName() == null ) {
+//            imageInfoEditor.getModel().getImageInfo().setCpdFileName("defaultGrayColor.cpd");
+//        }
+
         colorChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
                 cpdFileName = currentColorBar.getDescription();
                 currentColorPaletteDef = colorChooser.getSelectedColorPaletteDef();
-                System.out.println("current color bar color palette name in basic : " + currentColorPaletteDef.getCpdFileName());
-                System.out.println("current image info color palette name in basic : " + imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().getCpdFileName());
-                imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().setCpdFileName(currentColorPaletteDef.getCpdFileName());
+                //System.out.println("current color bar color palette name in basic : " + currentColorPaletteDef.getCpdFileName());
+                System.out.println("current image info color palette name in basic : " + imageInfoEditor.getModel().getImageInfo().getCpdFileName());
+                imageInfoEditor.getModel().getImageInfo().setCpdFileName(colorChooser.getSelectedColorPaletteDefFileName());
                 imageInfoEditor.getModel().getImageInfo().setColorPaletteDef(colorChooser.getSelectedColorPaletteDef(), minVal, maxVal, true);
+                System.out.println("current image info color palette name in basic : " + imageInfoEditor.getModel().getImageInfo().getCpdFileName());
                 parentForm.setApplyEnabled(true);
-                System.out.println("current color palette name in basic : " + currentColorPaletteDef.getCpdFileName());
             }
         });
 
@@ -234,9 +238,17 @@ class BasicColorEditor extends JPanel {
             minValData = parentForm.getMinValueData();
             maxValData = parentForm.getMaxValueData();
         }
-        System.out.println("current color palette name in basic : " + currentColorPaletteDef.getCpdFileName());
-        colorChooser.updateColorPalette(getCurrentColorPaletteDef());
+//        if (imageInfoEditor.getModel().getImageInfo().getCpdFileName() == null ) {
+//            imageInfoEditor.getModel().getImageInfo().setCpdFileName("");
+//        }
+        colorChooser.updateColorPalette(imageInfoEditor.getModel().getImageInfo().getCpdFileName(), imageInfoEditor.getModel().getImageInfo().getColorPaletteDef());
     }
+
+    //TODO
+    /**
+     * circular events happening here!!! fix it
+     * @return
+     */
 
     private ColorPaletteDef getCurrentColorPaletteDef() {
         return imageInfoEditor.getModel().getImageInfo().getColorPaletteDef();
@@ -247,13 +259,12 @@ class BasicColorEditor extends JPanel {
 
     }
 
-    protected void resetDefaultColorFile() {
-        updateColorRamp(parentForm.getImageInfo().getColorPaletteDef());
-    }
-
-    protected void updateColorRamp(ColorPaletteDef colorPaletteDef) {
-        currentColorPaletteDef = colorPaletteDef;
-        colorChooser.updateColorPalette(currentColorPaletteDef);
+//    protected void resetDefaultColorFile() {
+//        updateColorRamp(parentForm.getImageInfo().getColorPaletteDef());
+//    }
+//
+    protected void updateColorRamp(String cpdFileName, ColorPaletteDef colorPaletteDef) {
+        colorChooser.updateColorPalette(cpdFileName, colorPaletteDef);
         revalidate();
         repaint();
     }

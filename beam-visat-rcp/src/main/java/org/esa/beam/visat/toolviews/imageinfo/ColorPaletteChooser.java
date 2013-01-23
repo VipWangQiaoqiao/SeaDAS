@@ -100,7 +100,7 @@ public class ColorPaletteChooser extends JComboBox {
         ImageIcon icon = new ImageIcon(bufferedImage);
         colorPaletteDef.setCpdFileName(DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME);
         icon.setDescription(DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME);
-        colorBarMap.put(DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME, new ColorRamp(colorPaletteDef.getCpdFileName(), colorPaletteDef, colorPaletteDef.getMinDisplaySample(), colorPaletteDef.getMaxDisplaySample()));
+        colorBarMap.put(DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME, new ColorRamp(DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME, colorPaletteDef, colorPaletteDef.getMinDisplaySample(), colorPaletteDef.getMaxDisplaySample()));
         return icon;
     }
 
@@ -143,7 +143,7 @@ public class ColorPaletteChooser extends JComboBox {
         ImageIcon icon = new ImageIcon(bufferedImage);
         icon.setDescription(cpdFile.getName());
         ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDefForColorBar(cpdFile);
-        colorBarMap.put(cpdFile.getName(), new ColorRamp(colorPaletteDef.getCpdFileName(), colorPaletteDef, colorPaletteDef.getMinDisplaySample(), colorPaletteDef.getMaxDisplaySample()));
+        colorBarMap.put(cpdFile.getName(), new ColorRamp(cpdFile.getName(), colorPaletteDef, colorPaletteDef.getMinDisplaySample(), colorPaletteDef.getMaxDisplaySample()));
         updateColorBarMinMax(colorPaletteDef);
         return icon;
     }
@@ -187,9 +187,9 @@ public class ColorPaletteChooser extends JComboBox {
         setModel(colorModel);
     }
 
-    public void updateColorPalette(ColorPaletteDef colorPaletteDef) {
+    public void updateColorPalette(String cpdFileName, ColorPaletteDef colorPaletteDef) {
         currentCPD = colorPaletteDef;
-        System.out.println("current color palette name in color chooser: " + colorPaletteDef.getCpdFileName());
+        System.out.println("current color palette name in color chooser: " + cpdFileName);
         ImageIcon currentColorBarIcon, newIcon = null;
 
         if (colorPaletteDef.getNumPoints() == 3) {
@@ -204,13 +204,14 @@ public class ColorPaletteChooser extends JComboBox {
 
             try {
                 newIcon = createColorBarIcon(colorPaletteDef, colorBarDimension);
-                newIcon.setDescription(colorPaletteDef.getCpdFileName());
+                newIcon.setDescription(cpdFileName);
             } catch (IOException ioe) {
 
             }
-            ColorRamp cr = colorBarMap.get(colorPaletteDef.getCpdFileName());
+            ColorRamp cr = colorBarMap.get(cpdFileName);
             cr.setColorPaletteDef(colorPaletteDef);
-            colorBarMap.put(colorPaletteDef.getCpdFileName(), cr);
+            cr.setCpdFileName(cpdFileName);
+            colorBarMap.put(cpdFileName, cr);
             icons.remove(currentColorBarIcon);
             icons.add(newIcon);
 
@@ -219,7 +220,7 @@ public class ColorPaletteChooser extends JComboBox {
                 setModel(colorModel);
             }
         }
-        System.out.println("current color palette name in color chooser: " + colorPaletteDef.getCpdFileName());
+        System.out.println("current color palette name in color chooser: " + cpdFileName);
         validate();
         repaint();
     }
@@ -277,6 +278,11 @@ public class ColorPaletteChooser extends JComboBox {
     public ColorPaletteDef getSelectedColorPaletteDef() {
 
         return getCurrentColorRamp().getColorPaletteDef();
+    }
+
+    public String getSelectedColorPaletteDefFileName() {
+                                                            return getCurrentColorRamp().getCpdFileName();
+        //return ((ImageIcon) colorModel.getSelectedItem()).getDescription();
     }
 
     protected File getSelectedColorPaletteDefCPDFile(){
