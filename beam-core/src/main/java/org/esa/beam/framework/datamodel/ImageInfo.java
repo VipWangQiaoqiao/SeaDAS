@@ -59,6 +59,8 @@ public class ImageInfo implements Cloneable {
     private HistogramMatching histogramMatching;
     // todo - save in DIMAP   (nf - 13.03.2012)
     private boolean logScaled;
+    
+    private String cpdFileName;
 
     /**
      * Constructs a new image information instance.
@@ -94,6 +96,14 @@ public class ImageInfo implements Cloneable {
      */
     public ColorPaletteDef getColorPaletteDef() {
         return colorPaletteDef;
+    } 
+
+    public String getCpdFileName(){
+       return cpdFileName;
+    }
+     
+    public void setCpdFileName(String cpdFileName) {
+       this.cpdFileName = cpdFileName;
     }
 
     /**
