@@ -120,8 +120,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         setLogarithmicDisplay(raster, newModel.getImageInfo().isLogScaled());
 
         logDisplayButton.setSelected(newModel.getImageInfo().isLogScaled());
-        System.out.println("current color palette name in form: " + imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().getCpdFileName());
-        System.out.println("current color palette name in form: " + parentForm.getImageInfo().getColorPaletteDef().getCpdFileName());
+        System.out.println("current color palette name in form: " + imageInfoEditor.getModel().getImageInfo().getCpdFileName());
+        System.out.println("current color palette name in form: " + parentForm.getImageInfo().getCpdFileName());
         basicColorEditor.updateBasicEditor();
         parentForm.revalidateToolViewPaneControl();
     }

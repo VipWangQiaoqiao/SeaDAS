@@ -124,21 +124,15 @@ class BasicColorEditor extends JPanel {
         currentColorPaletteDef = parentForm.getImageInfo().getColorPaletteDef();
         colorChooser = new ColorPaletteChooser(parentForm.getIODir(), currentColorPaletteDef);
 
-//        if (imageInfoEditor.getModel().getImageInfo().getCpdFileName() == null ) {
-//            imageInfoEditor.getModel().getImageInfo().setCpdFileName("defaultGrayColor.cpd");
-//        }
-
         colorChooser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 ImageIcon currentColorBar = (ImageIcon) colorChooser.getSelectedItem();
                 cpdFileName = currentColorBar.getDescription();
                 currentColorPaletteDef = colorChooser.getSelectedColorPaletteDef();
-                //System.out.println("current color bar color palette name in basic : " + currentColorPaletteDef.getCpdFileName());
-                System.out.println("current image info color palette name in basic : " + imageInfoEditor.getModel().getImageInfo().getCpdFileName());
                 imageInfoEditor.getModel().getImageInfo().setCpdFileName(colorChooser.getSelectedColorPaletteDefFileName());
                 imageInfoEditor.getModel().getImageInfo().setColorPaletteDef(colorChooser.getSelectedColorPaletteDef(), minVal, maxVal, true);
-                System.out.println("current image info color palette name in basic : " + imageInfoEditor.getModel().getImageInfo().getCpdFileName());
+                parentForm.getProductSceneView().setImageInfo(imageInfoEditor.getModel().getImageInfo());
                 parentForm.setApplyEnabled(true);
             }
         });
@@ -238,10 +232,8 @@ class BasicColorEditor extends JPanel {
             minValData = parentForm.getMinValueData();
             maxValData = parentForm.getMaxValueData();
         }
-//        if (imageInfoEditor.getModel().getImageInfo().getCpdFileName() == null ) {
-//            imageInfoEditor.getModel().getImageInfo().setCpdFileName("");
-//        }
-        colorChooser.updateColorPalette(imageInfoEditor.getModel().getImageInfo().getCpdFileName(), imageInfoEditor.getModel().getImageInfo().getColorPaletteDef());
+        ColorPaletteDef cpd = (ColorPaletteDef)imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().clone();
+        colorChooser.updateColorPalette(imageInfoEditor.getModel().getImageInfo().getCpdFileName(), cpd);
     }
 
     //TODO
@@ -269,12 +261,6 @@ class BasicColorEditor extends JPanel {
         repaint();
     }
 
-    protected void updateColorBar(ColorPaletteDef colorPaletteDef) {
-        currentColorPaletteDef = colorPaletteDef;
-        colorChooser.updateColorBar(currentColorPaletteDef);
-        revalidate();
-        repaint();
-    }
 
     private boolean validateMinMax(double min, double max) {
 

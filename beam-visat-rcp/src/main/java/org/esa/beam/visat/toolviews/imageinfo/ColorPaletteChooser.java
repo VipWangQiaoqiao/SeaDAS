@@ -34,7 +34,6 @@ public class ColorPaletteChooser extends JComboBox {
     private double colorBarMax;
     private boolean isDiscrete;
     private int currentColorBarIndex;
-    private ColorPaletteDef currentCPD;
 
     public ColorPaletteChooser(File colorPaletteDir) {
         super();
@@ -188,7 +187,7 @@ public class ColorPaletteChooser extends JComboBox {
     }
 
     public void updateColorPalette(String cpdFileName, ColorPaletteDef colorPaletteDef) {
-        currentCPD = colorPaletteDef;
+
         System.out.println("current color palette name in color chooser: " + cpdFileName);
         ImageIcon currentColorBarIcon, newIcon = null;
 
@@ -201,7 +200,6 @@ public class ColorPaletteChooser extends JComboBox {
             setModel(colorModel);
         } else {
             currentColorBarIcon = (ImageIcon) colorModel.getSelectedItem();
-
             try {
                 newIcon = createColorBarIcon(colorPaletteDef, colorBarDimension);
                 newIcon.setDescription(cpdFileName);
@@ -225,25 +223,7 @@ public class ColorPaletteChooser extends JComboBox {
         repaint();
     }
 
-    protected void updateColorBar(ColorPaletteDef colorPaletteDef) {
 
-        currentCPD = colorPaletteDef;
-
-        System.out.println("isDiscrete Changed!");
-
-        ImageIcon newIcon = new ImageIcon();
-        try {
-
-            newIcon = createColorBarIcon(colorPaletteDef, colorBarDimension);
-        } catch (IOException ioe) {
-
-        }
-
-
-        validate();
-        repaint();
-
-    }
 
     public File getColorPaletteDir() {
         return colorPaletteDir;
@@ -261,10 +241,6 @@ public class ColorPaletteChooser extends JComboBox {
         this.colorBarDimension = colorBarDimension;
     }
 
-    protected void setColorPaletteDef(ColorPaletteDef colorPaletteDef) {
-        currentCPD = colorPaletteDef;
-    }
-
     private ColorRamp getCurrentColorRamp(){
         String cpdFileName = ((ImageIcon) colorModel.getSelectedItem()).getDescription();
 
@@ -277,7 +253,7 @@ public class ColorPaletteChooser extends JComboBox {
 
     public ColorPaletteDef getSelectedColorPaletteDef() {
 
-        return getCurrentColorRamp().getColorPaletteDef();
+        return (ColorPaletteDef)getCurrentColorRamp().getColorPaletteDef().clone();
     }
 
     public String getSelectedColorPaletteDefFileName() {
