@@ -62,13 +62,13 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         logDisplayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                if (logDisplayButton.isSelected()) {
-//                    logDisplayButton.setToolTipText("Switch to linear display");
-//                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
-//                } else {
-//                    logDisplayButton.setToolTipText("Switch to logarithmic display");
-//                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
-//                }
+                if (logDisplayButton.isSelected()) {
+                    logDisplayButton.setToolTipText("Switch to linear display");
+                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
+                } else {
+                    logDisplayButton.setToolTipText("Switch to logarithmic display");
+                    //logDisplayButton.setIcon(new ImageIcon("icons/LogDisplay24.png"));
+                }
 
                 setLogarithmicDisplay(parentForm.getProductSceneView().getRaster(), logDisplayButton.isSelected());
             }
@@ -120,8 +120,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         setLogarithmicDisplay(raster, newModel.getImageInfo().isLogScaled());
 
         logDisplayButton.setSelected(newModel.getImageInfo().isLogScaled());
-        System.out.println("current color palette name in form: " + imageInfoEditor.getModel().getImageInfo().getCpdFileName());
-        System.out.println("current color palette name in form: " + parentForm.getImageInfo().getCpdFileName());
+        if (logDisplayButton.isSelected()) {
+            logDisplayButton.setToolTipText("Switch to linear display");
+        } else {
+            logDisplayButton.setToolTipText("Switch to logarithmic display");
+        }
         basicColorEditor.updateBasicEditor();
         parentForm.revalidateToolViewPaneControl();
     }
@@ -139,7 +142,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         if (imageInfoEditor.getModel().getImageInfo().getCpdFileName() == null) {
             imageInfoEditor.getModel().getImageInfo().setCpdFileName("defaultGrayColor.cpd");
         }
-        //parentForm.getImageInfo().getColorPaletteDef().setCpdFileName("defaultGrayColor.cpd");
         updateFormModel(productSceneView);
         imageInfoEditor.computeZoomOutToFullHistogramm();
         parentForm.revalidateToolViewPaneControl();

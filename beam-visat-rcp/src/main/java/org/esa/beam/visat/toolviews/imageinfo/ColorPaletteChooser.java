@@ -188,7 +188,6 @@ public class ColorPaletteChooser extends JComboBox {
 
     public void updateColorPalette(String cpdFileName, ColorPaletteDef colorPaletteDef) {
 
-        System.out.println("current color palette name in color chooser: " + cpdFileName);
         ImageIcon currentColorBarIcon, newIcon = null;
 
         if (colorPaletteDef.getNumPoints() == 3) {
@@ -218,7 +217,6 @@ public class ColorPaletteChooser extends JComboBox {
                 setModel(colorModel);
             }
         }
-        System.out.println("current color palette name in color chooser: " + cpdFileName);
         validate();
         repaint();
     }
@@ -333,7 +331,6 @@ public class ColorPaletteChooser extends JComboBox {
                 if (Arrays.equals(colors, currentColors)) {
                     return get(colors);
                 }
-
             }
             return null;
         }
