@@ -51,7 +51,7 @@
         <module>../beam-unmix</module>
         <module>../blue-marble-worldmap</module>
         <module>../globcover-worldmap</module>
-        <module>../beam-watermask-operator</module>
+        <!--<module>../beam-watermask-operator</module>-->
         <module>../lib-hdf</module>
     </modules>
 
