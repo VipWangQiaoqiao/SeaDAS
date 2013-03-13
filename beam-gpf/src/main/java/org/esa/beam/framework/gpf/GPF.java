@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static org.esa.beam.util.SystemUtils.getApplicationContextId;
 /**
  * <p>The facade for the Graph Processing Framework.</p>
  * <p>The Graph Processing Framework makes extensive use of Java Advanced Imaging (JAI).
@@ -45,9 +46,9 @@ import java.util.TreeMap;
  */
 public class GPF {
 
-    public static final String DISABLE_TILE_CACHE_PROPERTY = "beam.gpf.disableTileCache";
-    public static final String USE_FILE_TILE_CACHE_PROPERTY = "beam.gpf.useFileTileCache";
-    public static final String TILE_COMPUTATION_OBSERVER_PROPERTY = "beam.gpf.tileComputationObserver";
+    public static final String DISABLE_TILE_CACHE_PROPERTY = getApplicationContextId()+".gpf.disableTileCache";
+    public static final String USE_FILE_TILE_CACHE_PROPERTY = getApplicationContextId()+".gpf.useFileTileCache";
+    public static final String TILE_COMPUTATION_OBSERVER_PROPERTY = getApplicationContextId()+".gpf.tileComputationObserver";
 
     public static final String SOURCE_PRODUCT_FIELD_NAME = "sourceProduct";
     public static final String TARGET_PRODUCT_FIELD_NAME = "targetProduct";

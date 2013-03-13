@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static org.esa.beam.util.SystemUtils.getApplicationContextId;
 
 /**
  * This class provides most of the new imaging features introduced in BEAM 4.5.
@@ -67,7 +68,7 @@ public class ImageManager {
             DefaultCartesianCS.DISPLAY);
 
     private static final boolean CACHE_INTERMEDIATE_TILES = Boolean.getBoolean(
-            "beam.imageManager.enableIntermediateTileCaching");
+            getApplicationContextId()+"imageManager.enableIntermediateTileCaching");
 
     private final Map<MaskKey, MultiLevelImage> maskImageMap = new HashMap<MaskKey, MultiLevelImage>(101);
     private final ProductNodeListener rasterDataChangeListener;

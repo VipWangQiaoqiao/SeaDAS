@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.logging.Logger;
 
+import static org.esa.beam.util.SystemUtils.getApplicationContextId;
+
 /**
  * The <code>AbstractProductReader</code>  class can be used as a base class for new product reader implementations. The
  * only two methods which clients must implement are <code>readProductNodes()</code> and <code>readBandData</code>
@@ -46,11 +48,11 @@ public abstract class AbstractProductReader implements ProductReader {
     /**
      * @since BEAM 4.9
      */
-    private static final String SYSPROP_READER_TILE_WIDTH = "beam.reader.tileWidth";
+    private static final String SYSPROP_READER_TILE_WIDTH = getApplicationContextId()+".reader.tileWidth";
     /**
      * @since BEAM 4.9
      */
-    private static final String SYSPROP_READER_TILE_HEIGHT = "beam.reader.tileHeight";
+    private static final String SYSPROP_READER_TILE_HEIGHT = getApplicationContextId()+".reader.tileHeight";
 
     /**
      * The reader plug-in responsible for creating this reader.

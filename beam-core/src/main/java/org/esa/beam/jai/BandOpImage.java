@@ -24,6 +24,7 @@ import org.esa.beam.framework.datamodel.ProductData;
 import java.awt.Rectangle;
 import java.io.IOException;
 
+import static org.esa.beam.util.SystemUtils.getApplicationContextId;
 
 /**
  * An {@code OpImage} which retrieves its data from the product reader associated with the
@@ -37,7 +38,7 @@ public class BandOpImage extends RasterDataNodeOpImage {
 
     public BandOpImage(Band band, ResolutionLevel level) {
         super(band, level);
-        if (Boolean.getBoolean("beam.imageManager.disableSourceTileCaching")) {
+        if (Boolean.getBoolean(getApplicationContextId()+".imageManager.disableSourceTileCaching")) {
             setTileCache(null);
         }
     }

@@ -47,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import static org.esa.beam.util.SystemUtils.getApplicationContextId;
+
 /**
  * The <code>EnvisatProductReader</code> class is an implementation of the <code>ProductReader</code> interface
  * exclusively for data products having the standard ESA/ENVISAT raw format.
@@ -61,7 +63,7 @@ public class EnvisatProductReader extends AbstractProductReader {
     /**
      * @since BEAM 4.9
      */
-    private static final String SYSPROP_ENVISAT_USE_PIXEL_GEO_CODING = "beam.envisat.usePixelGeoCoding";
+    private static final String SYSPROP_ENVISAT_USE_PIXEL_GEO_CODING = getApplicationContextId()+".envisat.usePixelGeoCoding";
 
     /**
      * Represents the product's file.
