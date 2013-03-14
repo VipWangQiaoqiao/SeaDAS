@@ -1,4 +1,4 @@
-#SeaDAS Color Palette Definition File
+#SeaDAS Standard SST Color Palette Definition File
 #Mon May 30 15:53:54 EDT 2011
 color0=99,9,139
 color1=73,7,239
@@ -53,4 +53,4 @@ sample22=22.0000
 sample23=23.0000
 sample24=24.0000
 sample25=25.0000
-autoDistribute=true
+autoDistribute=false
