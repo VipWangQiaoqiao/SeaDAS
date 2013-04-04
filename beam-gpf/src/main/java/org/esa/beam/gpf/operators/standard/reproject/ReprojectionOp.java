@@ -19,8 +19,24 @@ import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelModel;
 import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
-import org.esa.beam.framework.datamodel.*;
-import org.esa.beam.framework.dataop.dem.*;
+import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.datamodel.ColorPaletteDef;
+import org.esa.beam.framework.datamodel.CrsGeoCoding;
+import org.esa.beam.framework.datamodel.FlagCoding;
+import org.esa.beam.framework.datamodel.GeoCoding;
+import org.esa.beam.framework.datamodel.GeoPos;
+import org.esa.beam.framework.datamodel.ImageGeometry;
+import org.esa.beam.framework.datamodel.ImageInfo;
+import org.esa.beam.framework.datamodel.IndexCoding;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.framework.datamodel.ProductNodeGroup;
+import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.dataop.dem.ElevationModel;
+import org.esa.beam.framework.dataop.dem.ElevationModelDescriptor;
+import org.esa.beam.framework.dataop.dem.ElevationModelRegistry;
+import org.esa.beam.framework.dataop.dem.Orthorectifier;
+import org.esa.beam.framework.dataop.dem.Orthorectifier2;
 import org.esa.beam.framework.dataop.resamp.Resampling;
 import org.esa.beam.framework.gpf.Operator;
 import org.esa.beam.framework.gpf.OperatorException;
@@ -31,7 +47,6 @@ import org.esa.beam.framework.gpf.annotations.SourceProduct;
 import org.esa.beam.framework.gpf.annotations.TargetProduct;
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.jai.ResolutionLevel;
-import org.esa.beam.jai.VirtualBandOpImage;
 import org.esa.beam.util.Debug;
 import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.io.FileUtils;
@@ -45,7 +60,9 @@ import org.opengis.referencing.operation.TransformException;
 import javax.media.jai.ImageLayout;
 import javax.media.jai.Interpolation;
 import javax.media.jai.JAI;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -133,9 +150,9 @@ public class ReprojectionOp extends Operator {
     private File wktFile;
 
     @Parameter(description = "A text specifying the target Coordinate Reference System, either in WKT or as an " +
-            "authority code. For appropriate EPSG authority codes see (www.epsg-registry.org). " +
-            "AUTO authority can be used with code 42001 (UTM), and 42002 (Transverse Mercator) " +
-            "where the scene center is used as reference. Examples: EPSG:4326, AUTO:42001")
+                             "authority code. For appropriate EPSG authority codes see (www.epsg-registry.org). " +
+                             "AUTO authority can be used with code 42001 (UTM), and 42002 (Transverse Mercator) " +
+                             "where the scene center is used as reference. Examples: EPSG:4326, AUTO:42001")
     private String crs;
 
     @Parameter(alias = "resampling",
@@ -174,7 +191,7 @@ public class ReprojectionOp extends Operator {
     private boolean orthorectify;
 
     @Parameter(description = "The name of the elevation model for the orthorectification. " +
-            "If not given tie-point data is used.")
+                             "If not given tie-point data is used.")
     private String elevationModelName;
 
     @Parameter(description = "The value used to indicate no-data.")
@@ -227,7 +244,8 @@ public class ReprojectionOp extends Operator {
             if (sourceProductPreferredTileSize != null) {
                 if (sourceProductPreferredTileSize.width == sourceProduct.getSceneRasterWidth()) {
                     tileSize.width = targetProduct.getSceneRasterWidth();
-                    tileSize.height = Math.min(sourceProductPreferredTileSize.height, targetProduct.getSceneRasterHeight());
+                    tileSize.height = Math.min(sourceProductPreferredTileSize.height,
+                                               targetProduct.getSceneRasterHeight());
                 }
             }
         }
@@ -277,7 +295,7 @@ public class ReprojectionOp extends Operator {
     private ElevationModel createElevationModel() throws OperatorException {
         if (elevationModelName != null) {
             final ElevationModelDescriptor demDescriptor = ElevationModelRegistry.getInstance().getDescriptor(
-                    elevationModelName);
+                        elevationModelName);
             if (!demDescriptor.isDemInstalled()) {
                 throw new OperatorException("DEM not installed: " + elevationModelName);
             }
@@ -329,10 +347,6 @@ public class ReprojectionOp extends Operator {
         final GeoCoding sourceGeoCoding = getSourceGeoCoding(sourceRaster);
         final String exp = sourceRaster.getValidMaskExpression();
         if (exp != null) {
-            // TODO decide between VirtualBand and a special implementation (mz, 2009.11.11)
-//            final String externalName = BandArithmetic.createExternalName(sourceRaster.getName());
-//            exp = String.format("(%s) ? %s : %s", exp, externalName, Double.toString(targetNoDataValue));
-//            sourceImage = createVirtualSourceImage(exp, geoDataType, targetNoDataValue);
             sourceImage = createNoDataReplacedImage(sourceImage, sourceRaster.getValidMaskImage(), targetNoDataValue);
         }
 
@@ -392,14 +406,13 @@ public class ReprojectionOp extends Operator {
         return targetNoDataValue;
     }
 
-    private MultiLevelImage createNaNReplacedImage(final MultiLevelImage srcImage, final double value) {
+    private MultiLevelImage createNaNReplacedImage(final MultiLevelImage projectedImage, final double value) {
 
-        return new DefaultMultiLevelImage(new AbstractMultiLevelSource(srcModel) {
+        return new DefaultMultiLevelImage(new AbstractMultiLevelSource(targetModel) {
 
             @Override
-            public RenderedImage createImage(int level) {
-                final int sourceLevel = getSourceLevel(srcModel, level);
-                return new ReplaceNaNOpImage(srcImage.getImage(sourceLevel), value);
+            public RenderedImage createImage(int targetLevel) {
+                return new ReplaceNaNOpImage(projectedImage.getImage(targetLevel), value);
             }
         });
     }
@@ -410,22 +423,8 @@ public class ReprojectionOp extends Operator {
         return new DefaultMultiLevelImage(new AbstractMultiLevelSource(srcModel) {
 
             @Override
-            public RenderedImage createImage(int level) {
-                return new InsertNoDataValueOpImage(srcImage.getImage(level), maskImage.getImage(level), noData);
-            }
-        });
-    }
-
-    private MultiLevelImage createVirtualSourceImage(final String expression, final int geoDataType,
-                                                     final Number noDataValue) {
-
-        return new DefaultMultiLevelImage(new AbstractMultiLevelSource(srcModel) {
-
-            @Override
-            public RenderedImage createImage(int level) {
-                return VirtualBandOpImage.create(expression, geoDataType,
-                                                 noDataValue, sourceProduct,
-                                                 ResolutionLevel.create(getModel(), level));
+            public RenderedImage createImage(int sourceLevel) {
+                return new InsertNoDataValueOpImage(srcImage.getImage(sourceLevel), maskImage.getImage(sourceLevel), noData);
             }
         });
     }
@@ -433,12 +432,10 @@ public class ReprojectionOp extends Operator {
     private MultiLevelImage createProjectedImage(final GeoCoding sourceGeoCoding, final MultiLevelImage sourceImage,
                                                  final Band targetBand, final Interpolation resampling) {
 
-
         final CoordinateReferenceSystem sourceModelCrs = ImageManager.getModelCrs(sourceGeoCoding);
         final CoordinateReferenceSystem targetModelCrs = ImageManager.getModelCrs(targetProduct.getGeoCoding());
         final AffineTransform i2mSourceProduct = ImageManager.getImageToModelTransform(sourceGeoCoding);
         final AffineTransform i2mTargetProduct = ImageManager.getImageToModelTransform(targetProduct.getGeoCoding());
-
 
         return new DefaultMultiLevelImage(new AbstractMultiLevelSource(targetModel) {
 
@@ -461,11 +458,11 @@ public class ReprojectionOp extends Operator {
                                                                  i2mSource);
 
                 ImageLayout imageLayout = ImageManager.createSingleBandedImageLayout(
-                        ImageManager.getDataBufferType(targetBand.getDataType()),
-                        targetProduct.getSceneRasterWidth(),
-                        targetProduct.getSceneRasterHeight(),
-                        targetProduct.getPreferredTileSize(),
-                        ResolutionLevel.create(getModel(), targetLevel));
+                            ImageManager.getDataBufferType(targetBand.getDataType()),
+                            targetProduct.getSceneRasterWidth(),
+                            targetProduct.getSceneRasterHeight(),
+                            targetProduct.getPreferredTileSize(),
+                            ResolutionLevel.create(getModel(), targetLevel));
                 Rectangle targetBounds = new Rectangle(imageLayout.getWidth(null), imageLayout.getHeight(null));
 
                 // the following transformation maps the target level image to level zero and then to the model,
@@ -497,12 +494,8 @@ public class ReprojectionOp extends Operator {
     }
 
     private int getSourceLevel(MultiLevelModel srcModel, int targetLevel) {
-        int sourceLevel = targetLevel;
-        int sourceLevelCount = srcModel.getLevelCount();
-        if (sourceLevelCount - 1 < targetLevel) {
-            sourceLevel = sourceLevelCount - 1;
-        }
-        return sourceLevel;
+        int maxSourceLevel = srcModel.getLevelCount() - 1;
+        return maxSourceLevel < targetLevel ? maxSourceLevel : targetLevel;
     }
 
     private void copyIndexCoding() {
@@ -556,7 +549,7 @@ public class ReprojectionOp extends Operator {
 
     protected void validateCrsParameters() {
         final String msgPattern = "Invalid target CRS specification.\nSpecify {0} one of the " +
-                "''wktFile'', ''crs'' or ''collocationProduct'' parameters.";
+                                  "''wktFile'', ''crs'' or ''collocationProduct'' parameters.";
 
         if (wktFile == null && crs == null && collocationProduct == null) {
             throw new OperatorException(MessageFormat.format(msgPattern, "at least"));
@@ -610,15 +603,15 @@ public class ReprojectionOp extends Operator {
 
     void validateReferencingParameters() {
         if (!((referencePixelX == null && referencePixelY == null && easting == null && northing == null)
-                || (referencePixelX != null && referencePixelY != null && easting != null && northing != null))) {
+              || (referencePixelX != null && referencePixelY != null && easting != null && northing != null))) {
             throw new OperatorException("Invalid referencing parameters: \n" +
-                                                "'referencePixelX', 'referencePixelY', 'easting' and 'northing' have to be specified either all or not at all.");
+                                        "'referencePixelX', 'referencePixelY', 'easting' and 'northing' have to be specified either all or not at all.");
         }
     }
 
     void validateTargetGridParameters() {
         if ((pixelSizeX != null && pixelSizeY == null) ||
-                (pixelSizeX == null && pixelSizeY != null)) {
+            (pixelSizeX == null && pixelSizeY != null)) {
             throw new OperatorException("'pixelSizeX' and 'pixelSizeY' must be specified both or not at all.");
         }
     }
@@ -648,14 +641,14 @@ public class ReprojectionOp extends Operator {
         deltaLonBand.setUnit("deg");
         deltaLonBand.setDescription("Delta between old longitude and new longitude in degree");
         deltaLonBand.setNoDataValueUsed(true);
-        deltaLonBand.setNoDataValue(noDataValue);
+        deltaLonBand.setNoDataValue(noDataValue == null ? Double.NaN : noDataValue);
         deltaLonBand.setImageInfo(createDeltaBandImageInfo(-0.015, +0.015));
 
         final Band deltaLatBand = targetProduct.addBand("delta_lat_angular", "latitude - LAT");
         deltaLatBand.setUnit("deg");
         deltaLatBand.setDescription("Delta between old latitude and new latitude in degree");
         deltaLatBand.setNoDataValueUsed(true);
-        deltaLatBand.setNoDataValue(noDataValue);
+        deltaLatBand.setNoDataValue(noDataValue == null ? Double.NaN : noDataValue);
         deltaLatBand.setImageInfo(createDeltaBandImageInfo(-0.01, +0.01));
 
         final Band deltaLonMetBand = targetProduct.addBand("delta_lon_metric",
@@ -663,22 +656,22 @@ public class ReprojectionOp extends Operator {
         deltaLonMetBand.setUnit("m");
         deltaLonMetBand.setDescription("Delta between old longitude and new longitude in meters");
         deltaLonMetBand.setNoDataValueUsed(true);
-        deltaLonMetBand.setNoDataValue(noDataValue);
+        deltaLonMetBand.setNoDataValue(noDataValue == null ? Double.NaN : noDataValue);
         deltaLonMetBand.setImageInfo(createDeltaBandImageInfo(-1500.0, +1500.0));
 
         final Band deltaLatMetBand = targetProduct.addBand("delta_lat_metric", "6378137 * rad(latitude - LAT)");
         deltaLatMetBand.setUnit("m");
         deltaLatMetBand.setDescription("Delta between old latitude and new latitude in meters");
         deltaLatMetBand.setNoDataValueUsed(true);
-        deltaLatMetBand.setNoDataValue(noDataValue);
+        deltaLatMetBand.setNoDataValue(noDataValue == null ? Double.NaN : noDataValue);
         deltaLatMetBand.setImageInfo(createDeltaBandImageInfo(-1000.0, +1000.0));
     }
 
     private ImageInfo createDeltaBandImageInfo(double p1, double p2) {
         return new ImageInfo(new ColorPaletteDef(new ColorPaletteDef.Point[]{
-                new ColorPaletteDef.Point(p1, new Color(255, 0, 0)),
-                new ColorPaletteDef.Point((p1 + p2) / 2, new Color(255, 255, 255)),
-                new ColorPaletteDef.Point(p2, new Color(0, 0, 127)),
+                    new ColorPaletteDef.Point(p1, new Color(255, 0, 0)),
+                    new ColorPaletteDef.Point((p1 + p2) / 2, new Color(255, 255, 255)),
+                    new ColorPaletteDef.Point(p2, new Color(0, 0, 127)),
         }));
     }
 }

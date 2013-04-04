@@ -246,6 +246,16 @@ public class CommandLineToolMultiSourceGraphTest {
         }
 
         @Override
+        public String[] list(String path) throws IOException {
+            return new String[0];
+        }
+
+        @Override
+        public boolean isFile(String path) {
+            return true;
+        }
+
+        @Override
         public boolean fileExists(String fileName) {
             return false;
         }

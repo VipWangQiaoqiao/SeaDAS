@@ -18,7 +18,17 @@ package org.esa.beam.visat.toolviews.imageinfo;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.BeamUiActivator;
-import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.datamodel.ColorPaletteDef;
+import org.esa.beam.framework.datamodel.ImageInfo;
+import org.esa.beam.framework.datamodel.Product;
+import org.esa.beam.framework.datamodel.ProductManager;
+import org.esa.beam.framework.datamodel.ProductNode;
+import org.esa.beam.framework.datamodel.ProductNodeEvent;
+import org.esa.beam.framework.datamodel.ProductNodeListener;
+import org.esa.beam.framework.datamodel.ProductNodeListenerAdapter;
+import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.datamodel.Stx;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.SuppressibleOptionPane;
@@ -36,9 +46,25 @@ import org.esa.beam.util.io.BeamFileFilter;
 import org.esa.beam.util.io.FileUtils;
 import org.esa.beam.visat.VisatApp;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -270,12 +296,12 @@ class ColorManipulationForm {
 
     private boolean isContinuous1BandImage() {
         return (productSceneView.getRaster() instanceof Band)
-                && ((Band) productSceneView.getRaster()).getIndexCoding() == null;
+               && ((Band) productSceneView.getRaster()).getIndexCoding() == null;
     }
 
     private boolean isDiscrete1BandImage() {
         return (productSceneView.getRaster() instanceof Band)
-                && ((Band) productSceneView.getRaster()).getIndexCoding() != null;
+               && ((Band) productSceneView.getRaster()).getIndexCoding() != null;
     }
 
     private PageComponentDescriptor getToolViewDescriptor() {
@@ -355,6 +381,7 @@ class ColorManipulationForm {
 
         installHelp();
         suppressibleOptionPane = visatApp.getSuppressibleOptionPane();
+
         setProductSceneView(visatApp.getSelectedProductSceneView());
 
         // Add an internal frame listsner to VISAT so that we can update our
@@ -497,10 +524,10 @@ class ColorManipulationForm {
 
     public void showMessageDialog(String propertyName, String message, String title) {
         suppressibleOptionPane.showMessageDialog(propertyName,
-                getToolViewPaneControl(),
-                message,
-                getToolViewDescriptor().getTitle() + title,
-                JOptionPane.INFORMATION_MESSAGE);
+                                                 getToolViewPaneControl(),
+                                                 message,
+                                                 getToolViewDescriptor().getTitle() + title,
+                                                 JOptionPane.INFORMATION_MESSAGE);
     }
 
 
@@ -569,17 +596,17 @@ class ColorManipulationForm {
 
         if (availableBands.length == 0) {
             JOptionPane.showMessageDialog(getToolViewPaneControl(),
-                    "No other bands available.", /*I18N*/
-                    getToolViewDescriptor().getTitle(),
-                    JOptionPane.WARNING_MESSAGE);
+                                          "No other bands available.", /*I18N*/
+                                          getToolViewDescriptor().getTitle(),
+                                          JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         final BandChooser bandChooser = new BandChooser(toolView.getPaneWindow(),
-                "Apply to other bands", /*I18N*/
-                getToolViewDescriptor().getHelpId(),
-                availableBands,
-                bandsToBeModified);
+                                                        "Apply to other bands", /*I18N*/
+                                                        getToolViewDescriptor().getHelpId(),
+                                                        availableBands,
+                                                        bandsToBeModified);
         final List<Band> modifiedRasterList = new ArrayList<Band>(availableBands.length);
         if (bandChooser.show() == BandChooser.ID_OK) {
             bandsToBeModified = bandChooser.getSelectedBands();
@@ -636,7 +663,7 @@ class ColorManipulationForm {
         fileChooser.setCurrentDirectory(getIODir());
         final int result = fileChooser.showOpenDialog(getToolViewPaneControl());
         final File file = fileChooser.getSelectedFile();
-        if (file != null) {
+        if (file != null && file.getParentFile() != null) {
             setIODir(file.getParentFile());
         }
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -683,8 +710,8 @@ class ColorManipulationForm {
     }
 
     protected void applyColorPaletteDef(ColorPaletteDef colorPaletteDef,
-                                        RasterDataNode targetRaster,
-                                        ImageInfo targetImageInfo) {
+                                      RasterDataNode targetRaster,
+                                      ImageInfo targetImageInfo) {
         if (isIndexCoded(targetRaster)) {
             targetImageInfo.setColors(colorPaletteDef.getColors());
         } else {
@@ -695,9 +722,9 @@ class ColorManipulationForm {
             }
             targetImageInfo.setCpdFileName(colorPaletteDef.getCpdFileName());
             targetImageInfo.setColorPaletteDef(colorPaletteDef,
-                    stx.getMinimum(),
-                    stx.getMaximum(),
-                    autoDistribute);
+                                               stx.getMinimum(),
+                                               stx.getMaximum(),
+                                               autoDistribute);
         }
     }
 
@@ -706,10 +733,10 @@ class ColorManipulationForm {
             return Boolean.TRUE;
         }
         int answer = JOptionPane.showConfirmDialog(getToolViewPaneControl(),
-                "Automatically distribute points of\n" +
-                        "colour palette between min/max?",
-                "Import Colour Palette",
-                JOptionPane.YES_NO_CANCEL_OPTION);
+                                                   "Automatically distribute points of\n" +
+                                                   "colour palette between min/max?",
+                                                   "Import Colour Palette",
+                                                   JOptionPane.YES_NO_CANCEL_OPTION);
         if (answer == JOptionPane.YES_OPTION) {
             return Boolean.TRUE;
         } else if (answer == JOptionPane.NO_OPTION) {
@@ -736,7 +763,7 @@ class ColorManipulationForm {
         fileChooser.setCurrentDirectory(getIODir());
         final int result = fileChooser.showSaveDialog(getToolViewPaneControl());
         File file = fileChooser.getSelectedFile();
-        if (file != null) {
+        if (file != null && file.getParentFile() != null) {
             setIODir(file.getParentFile());
         }
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -760,27 +787,15 @@ class ColorManipulationForm {
         return productSceneView != null && isContinuous3BandImage();
     }
 
-    private boolean canComputeExactHistogram() {
-        boolean canComputeExact = false;
-        if (productSceneView != null) {
-            final RasterDataNode[] rasters = productSceneView.getRasters();
-            for (RasterDataNode raster : rasters) {
-                final int resolutionLevel = raster.getStx().getResolutionLevel();
-                canComputeExact = resolutionLevel > 0;
-            }
-        }
-        return canComputeExact;
-    }
-
     private void showErrorDialog(final String message) {
         if (message != null && message.trim().length() > 0) {
             if (visatApp != null) {
                 visatApp.showErrorDialog(message);
             } else {
                 JOptionPane.showMessageDialog(getToolViewPaneControl(),
-                        message,
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                                              message,
+                                              "Error",
+                                              JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -789,9 +804,9 @@ class ColorManipulationForm {
         final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
         final File auxdataDir = getSystemAuxdataDir();
         final ResourceInstaller resourceInstaller = new ResourceInstaller(codeSourceUrl, "auxdata/color_palettes/",
-                auxdataDir);
+                                                                          auxdataDir);
         ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(toolView.getPaneControl(),
-                "Installing Auxdata...") {
+                                                                                "Installing Auxdata...") {
             @Override
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
                 resourceInstaller.install(".*.cpd", progressMonitor);
@@ -832,9 +847,9 @@ class ColorManipulationForm {
             return ProductUtils.createImageInfo(productSceneView.getRasters(), false, ProgressMonitor.NULL);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(getContentPanel(),
-                    "Failed to create default image settings:\n" + e.getMessage(),
-                    "I/O Error",
-                    JOptionPane.ERROR_MESSAGE);
+                                          "Failed to create default image settings:\n" + e.getMessage(),
+                                          "I/O Error",
+                                          JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }

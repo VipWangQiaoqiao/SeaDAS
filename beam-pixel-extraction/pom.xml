@@ -29,7 +29,7 @@
 
     <groupId>org.esa.beam</groupId>
     <artifactId>beam-pixel-extraction</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
     <name>BEAM Pixel Extraction Tool</name>
 
     <description>
@@ -45,6 +45,10 @@
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-gpf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.esa.beam</groupId>
+            <artifactId>beam-csv-dataio</artifactId>
         </dependency>
     </dependencies>
 

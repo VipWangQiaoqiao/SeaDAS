@@ -32,18 +32,19 @@
     <groupId>org.esa.beam</groupId>
     <artifactId>beam-system</artifactId>
     <description>This POM serves as aggregator for all BEAM system level modules.</description>
-    <version>4.10.3</version>
+    <version>4.11</version>
 
     <properties>
         <!-- In version 3.0 of Maven the sourceEncoding property will be embedded in the build tag.
         For now the convention is to that it as property.
         TODO: Move the sourceEncoding property to the build tag if version 3.0 is released -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <beam.version>4.10.3</beam.version>
-        <ceres.version>0.13.1</ceres.version>
+        <beam.version>4.11</beam.version>
+        <ceres.version>0.13.2</ceres.version>
         <geotools.version>2.7.4</geotools.version>
         <jide.version>3.3.7</jide.version>
-        <hdf.version>2.7</hdf.version>
+        <!-- This property is set in beam-parent; reason? see there!-->
+        <!--<hdf.version>2.7</hdf.version>-->
         <netcdf.version>4.2.20</netcdf.version>
     </properties>
     <modules>
@@ -94,6 +95,12 @@
             <dependency>
                 <groupId>com.bc.ceres</groupId>
                 <artifactId>ceres-binio</artifactId>
+                <version>${ceres.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.bc.ceres</groupId>
+                <artifactId>ceres-metadata</artifactId>
                 <version>${ceres.version}</version>
             </dependency>
 
@@ -162,7 +169,7 @@
             <dependency>
                 <groupId>edu.ucar</groupId>
                 <artifactId>nujan</artifactId>
-                <version>1.4.1</version>
+                <version>1.4.1.1</version>
             </dependency>
 
             <!-- GeoTools Libraries ############################################# -->
@@ -410,7 +417,7 @@
             <dependency>
                 <groupId>Jama</groupId>
                 <artifactId>Jama</artifactId>
-                <version>1.0.2</version>
+                <version>1.0.3</version>
             </dependency>
 
             <!-- Test Libraries ############################################# -->
@@ -419,13 +426,15 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.8.2</version>
+                <!-- junit is also used in production code e.g. GlobalTestConfig, therefore we
+                can't declare the test scope -->
                 <!--<scope>test</scope>-->
             </dependency>
 
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
-                <version>1.8.5</version>
+                <version>1.9.0</version>
                 <scope>test</scope>
             </dependency>
 
@@ -498,20 +507,18 @@
                 <version>1.0.4</version>
             </dependency>
 
-            <!-- APACHE velocity support ########################################  -->
-            <dependency>
-                <groupId>velocity</groupId>
-                <artifactId>velocity</artifactId>
-                <version>1.5</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>jdom</groupId>
-                        <artifactId>jdom</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
+
+    <!-- Dependency on SLF4J binding to Java logging. -->
+    <!-- Its only purpose is to prevent SLF4 from outputting annoying 'missing binding' messages to System.err -->
+    <!-- So, since it is not used in any module, it's included on the highest level. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+    </dependencies>
 
 </project>

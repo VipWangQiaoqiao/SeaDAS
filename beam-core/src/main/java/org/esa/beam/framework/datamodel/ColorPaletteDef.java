@@ -107,7 +107,6 @@ public class ColorPaletteDef implements Cloneable {
         return points.size();
     }
 
-
     public void setNumPoints(int numPoints) {
         while (getNumPoints() < numPoints) {
             addPoint(new Point(getMaxDisplaySample() + 1.0, Color.BLACK));
@@ -154,6 +153,7 @@ public class ColorPaletteDef implements Cloneable {
      *
      * @param index   the index
      * @param scaling the scaling
+     *
      * @return true, if a point has been inserted
      */
     public boolean createPointAfter(int index, Scaling scaling) {
@@ -176,30 +176,18 @@ public class ColorPaletteDef implements Cloneable {
     }
 
     /**
-     * Creates the center color between the colors of the given two points.
-     *
-     * @param p1 1st point
-     * @param p2 2nd point
-     * @return the center color
-     * @deprecated since BEAM 4.2, use {@link #getCenterColor(java.awt.Color, java.awt.Color)}
-     */
-    @Deprecated
-    public static Color createCenterColor(Point p1, Point p2) {
-        return getCenterColor(p1.getColor(), p2.getColor());
-    }
-
-    /**
      * Creates the center color between the given two colors.
      *
      * @param c1 1st color
      * @param c2 2nd color
+     *
      * @return the center color
      */
     public static Color getCenterColor(Color c1, Color c2) {
         return new Color(0.5F * (c1.getRed() + c2.getRed()) / 255.0F,
-                0.5F * (c1.getGreen() + c2.getGreen()) / 255.0F,
-                0.5F * (c1.getBlue() + c2.getBlue()) / 255.0F,
-                0.5F * (c1.getAlpha() + c2.getAlpha()) / 255.0F);
+                         0.5F * (c1.getGreen() + c2.getGreen()) / 255.0F,
+                         0.5F * (c1.getBlue() + c2.getBlue()) / 255.0F,
+                         0.5F * (c1.getAlpha() + c2.getAlpha()) / 255.0F);
     }
 
 
@@ -257,8 +245,10 @@ public class ColorPaletteDef implements Cloneable {
      * Loads a color palette definition from the given file
      *
      * @param file the file
+     *
      * @return the color palette definition, never null
-     * @throws java.io.IOException if an I/O error occurs
+     *
+     * @throws IOException if an I/O error occurs
      */
     public static ColorPaletteDef loadColorPaletteDef(File file) throws IOException {
         final PropertyMap propertyMap = new PropertyMap();
@@ -266,7 +256,7 @@ public class ColorPaletteDef implements Cloneable {
         final int numPoints = propertyMap.getPropertyInt(_PROPERTY_KEY_NUM_POINTS);
         if (numPoints < 2) {
             throw new IOException("The selected file contains less than\n" +
-                    "two colour points.");
+                                  "two colour points.");
         }
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints];
         double lastSample = 0;
@@ -287,7 +277,6 @@ public class ColorPaletteDef implements Cloneable {
         paletteDef.setCpdFileName(file.getName());
         return paletteDef;
     }
-
 
     /**
      * Loads a color palette definition from the given file
@@ -329,6 +318,7 @@ public class ColorPaletteDef implements Cloneable {
      *
      * @param colorPaletteDef the color palette definition
      * @param file            the file
+     *
      * @throws IOException if an I/O error occurs
      */
     public static void storeColorPaletteDef(ColorPaletteDef colorPaletteDef, File file) throws IOException {
@@ -375,7 +365,6 @@ public class ColorPaletteDef implements Cloneable {
         return colors;
     }
 
-
     public Color[] createColorPalette(Scaling scaling) {
 
         if (logDisplay) {
@@ -413,10 +402,6 @@ public class ColorPaletteDef implements Cloneable {
     private Color computeColorRaw(Scaling scaling, double sample, double minDisplay, double maxDisplay) {
         final Color c;
         if (sample <= minDisplay) {
-//            if (sample < 0) {
-//                //if sample is equal to the nodata value, then the no_color value should be returned. This is a shortcut for the time being.
-//                return new Color(51, 51, 51); //ImageInfo.NO_COLOR; ImageInfo.NO_COLOR is pure black, so used the background color.
-//            }
             c = getFirstPoint().getColor();
         } else if (sample >= maxDisplay) {
             c = getLastPoint().getColor();
@@ -425,8 +410,8 @@ public class ColorPaletteDef implements Cloneable {
             if (logDisplay) {
                 c = computeColorRawForLogDisplay(scaling, sample);
             } else {
-                c = computeColorRaw(scaling, sample);
-            }
+            c = computeColorRaw(scaling, sample);
+        }
 
         }
         return c;
@@ -442,7 +427,6 @@ public class ColorPaletteDef implements Cloneable {
             final Point p2 = getPointAt(i + 1);
             final double sample1 = scaling.scaleInverse(p1.getSample());
             final double sample2 = scaling.scaleInverse(p2.getSample());
-
             if (rawSample >= sample1 && rawSample <= sample2) {
                 if (discrete) {
                     return p1.getColor();

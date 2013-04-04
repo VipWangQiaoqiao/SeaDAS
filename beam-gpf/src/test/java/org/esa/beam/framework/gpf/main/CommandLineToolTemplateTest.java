@@ -15,9 +15,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * @author Norman Fomferra
@@ -69,8 +67,8 @@ public class CommandLineToolTemplateTest {
                  "-v", templateDir.getPath(),
                  sourceFile.getPath());
 
-        assertNotNull(context.writers.get("./20120607-CHL-1D-op-metadata.xml"));
-        assertNotNull(context.writers.get("./20120607-CHL-1D-op-metadata.html"));
+        assertNotNull(context.writers.get("20120607-CHL-1D-op-metadata.xml"));
+        assertNotNull(context.writers.get("20120607-CHL-1D-op-metadata.html"));
 
 
         assertEquals("<metadata>\n" +
@@ -107,8 +105,7 @@ public class CommandLineToolTemplateTest {
                              "    <pixelSizeX>0.04</pixelSizeX>\n" +
                              "    <pixelSizeY>0.02</pixelSizeY>\n" +
                              "    <crs>EPSG:4326</crs>\n" +
-                             "</parameters>\n" +
-                             "]]></parameterXml>\n" +
+                             "</parameters>]]></parameterXml>\n" +
                              "    </parameterMetadata>\n" +
                              "\n" +
                              "    <operatorMetadata>\n" +
@@ -122,7 +119,7 @@ public class CommandLineToolTemplateTest {
                              "        <softwareName>BEAM</softwareName>\n" +
                              "    </extraMetadata>\n" +
                              "</metadata>",
-                     context.writers.get("./20120607-CHL-1D-op-metadata.xml").toString());
+                     context.writers.get("20120607-CHL-1D-op-metadata.xml").toString());
 
 
         assertEquals("<html>\n" +
@@ -134,7 +131,7 @@ public class CommandLineToolTemplateTest {
                              "softwareName = BEAM<br/>\n" +
                              "</body>\n" +
                              "</html>",
-                     context.writers.get("./20120607-CHL-1D-op-metadata.html").toString());
+                     context.writers.get("20120607-CHL-1D-op-metadata.html").toString());
     }
 
     @Test
@@ -163,6 +160,13 @@ public class CommandLineToolTemplateTest {
                 "</graph>\n";
         context.textFiles.put("graph.xml", graphXml);
 
+        context.textFiles.put("test-metadata.xml",
+                "<metadata>\n" +
+                "    <product>\n" +
+                "        <name>test-product</name>\n" +
+                "    </product>\n" +
+                "</metadata>");
+
         context.textFiles.put(metadataPath, "" +
                 "processingCenter = BC\n" +
                 "softwareName = BEAM\n");
@@ -181,70 +185,77 @@ public class CommandLineToolTemplateTest {
         assertTrue(targetProducts.containsKey(targetFile));
 
 
-        assertNotNull(context.writers.get("./20120607-CHL-1D-graph-metadata.xml"));
-        assertNotNull(context.writers.get("./20120607-CHL-1D-graph-metadata.html"));
+        assertNotNull(context.writers.get("20120607-CHL-1D-graph-metadata.xml"));
+        assertNotNull(context.writers.get("20120607-CHL-1D-graph-metadata.html"));
 
         assertEquals("<metadata>\n" +
-                             "\n" +
-                             "    <source>\n" +
-                             "        <name>MERIS</name>\n" +
-                             "        <width>10</width>\n" +
-                             "        <height>10</height>\n" +
-                             "    </source>\n" +
-                             "\n" +
-                             "    <sources>\n" +
-                             "        <src>MERIS</src>\n" +
-                             "    </sources>\n" +
-                             "\n" +
-                             "    <target>\n" +
-                             "        <name>projected_MERIS</name>\n" +
-                             "        <width>226</width>\n" +
-                             "        <height>451</height>\n" +
-                             "    </target>\n" +
-                             "\n" +
-                             "    <parameterMetadata>\n" +
-                             "        <parameters>\n" +
-                             "            <pixelSizeX>0.04</pixelSizeX>\n" +
-                             "            <pixelSizeY>0.02</pixelSizeY>\n" +
-                             "            <sourceProducts></sourceProducts>\n" +
-                             "            <src>ReadOp@src</src>\n" +
-                             "        </parameters>\n" +
-                             "        <parameterFile>params.txt</parameterFile>\n" +
-                             "        <parameterFileContent><![CDATA[pixelSizeX = 0.04\n" +
-                             "pixelSizeY = 0.02\n" +
-                             "]]></parameterFileContent>\n" +
-                             "    </parameterMetadata>\n" +
-                             "\n" +
-                             "    <graphMetadata>\n" +
-                             "        <graphFile>graph.xml</graphFile>\n" +
-                             "        <graphXml><![CDATA[<graph id=\"testGraph\">\n" +
-                             "    <version>1.0</version>\n" +
-                             "    <node id=\"testNode\">\n" +
-                             "        <operator>Reproject</operator>\n" +
-                             "        <sources>\n" +
-                             "            <source>${src}</source>\n" +
-                             "        </sources>\n" +
-                             "        <parameters>\n" +
-                             "            <pixelSizeX>${pixelSizeX}</pixelSizeX>\n" +
-                             "            <pixelSizeY>${pixelSizeY}</pixelSizeY>\n" +
-                             "            <crs>EPSG:4326</crs>\n" +
-                             "        </parameters>\n" +
-                             "    </node>\n" +
-                             "</graph>\n" +
-                             "]]></graphXml>\n" +
-                             "        <graphNodeIds>\n" +
-                             "            <node>testNode</node>\n" +
-                             "            <node>ReadOp@src</node>\n" +
-                             "            <node>WriteOp@testNode</node>\n" +
-                             "        </graphNodeIds>\n" +
-                             "    </graphMetadata>\n" +
-                             "\n" +
-                             "    <extraMetadata>\n" +
-                             "        <processingCenter>BC</processingCenter>\n" +
-                             "        <softwareName>BEAM</softwareName>\n" +
-                             "    </extraMetadata>\n" +
-                             "</metadata>",
-                     context.writers.get("./20120607-CHL-1D-graph-metadata.xml").toString());
+                "\n" +
+                "    <source>\n" +
+                "        <name>MERIS</name>\n" +
+                "        <width>10</width>\n" +
+                "        <height>10</height>\n" +
+                "    </source>\n" +
+                "\n" +
+                "    <sources>\n" +
+                "        <product>\n" +
+                "        <src>MERIS</src>\n" +
+                "        </product>\n" +
+                "        <metadata>\n" +
+                "          <metadata>\n" +
+                "    <product>\n" +
+                "        <name>test-product</name>\n" +
+                "    </product>\n" +
+                "</metadata>\n" +
+                "           </metadata>\n" +
+                "    </sources>\n" +
+                "\n" +
+                "    <target>\n" +
+                "        <name>projected_MERIS</name>\n" +
+                "        <width>226</width>\n" +
+                "        <height>451</height>\n" +
+                "    </target>\n" +
+                "\n" +
+                "    <parameterMetadata>\n" +
+                "        <parameters>\n" +
+                "            <pixelSizeX>0.04</pixelSizeX>\n" +
+                "            <pixelSizeY>0.02</pixelSizeY>\n" +
+                "            <sourceProducts></sourceProducts>\n" +
+                "            <src>ReadOp@src</src>\n" +
+                "        </parameters>\n" +
+                "        <parameterFile>params.txt</parameterFile>\n" +
+                "        <parameterFileContent><![CDATA[pixelSizeX = 0.04\n" +
+                "pixelSizeY = 0.02]]></parameterFileContent>\n" +
+                "    </parameterMetadata>\n" +
+                "\n" +
+                "    <graphMetadata>\n" +
+                "        <graphFile>graph.xml</graphFile>\n" +
+                "        <graphXml><![CDATA[<graph id=\"testGraph\">\n" +
+                "    <version>1.0</version>\n" +
+                "    <node id=\"testNode\">\n" +
+                "        <operator>Reproject</operator>\n" +
+                "        <sources>\n" +
+                "            <source>${src}</source>\n" +
+                "        </sources>\n" +
+                "        <parameters>\n" +
+                "            <pixelSizeX>${pixelSizeX}</pixelSizeX>\n" +
+                "            <pixelSizeY>${pixelSizeY}</pixelSizeY>\n" +
+                "            <crs>EPSG:4326</crs>\n" +
+                "        </parameters>\n" +
+                "    </node>\n" +
+                "</graph>]]></graphXml>\n" +
+                "        <graphNodeIds>\n" +
+                "            <node>testNode</node>\n" +
+                "            <node>ReadOp@src</node>\n" +
+                "            <node>WriteOp@testNode</node>\n" +
+                "        </graphNodeIds>\n" +
+                "    </graphMetadata>\n" +
+                "\n" +
+                "    <extraMetadata>\n" +
+                "        <processingCenter>BC</processingCenter>\n" +
+                "        <softwareName>BEAM</softwareName>\n" +
+                "    </extraMetadata>\n" +
+                "</metadata>",
+                     context.writers.get("20120607-CHL-1D-graph-metadata.xml").toString());
 
         assertEquals("<html>\n" +
                              "<body>\n" +
@@ -255,7 +266,7 @@ public class CommandLineToolTemplateTest {
                              "softwareName = BEAM<br/>\n" +
                              "</body>\n" +
                              "</html>",
-                     context.writers.get("./20120607-CHL-1D-graph-metadata.html").toString());
+                     context.writers.get("20120607-CHL-1D-graph-metadata.html").toString());
     }
 
     private File getTemplateDir() throws URISyntaxException {

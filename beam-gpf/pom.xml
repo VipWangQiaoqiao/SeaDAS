@@ -24,7 +24,7 @@
     <parent>
         <artifactId>beam-system</artifactId>
         <groupId>org.esa.beam</groupId>
-        <version>4.10.3</version>
+        <version>4.11</version>
         <relativePath>../beam-system/pom.xml</relativePath>
     </parent>
 
@@ -54,8 +54,8 @@
             <artifactId>ceres-binding</artifactId>
         </dependency>
         <dependency>
-            <groupId>velocity</groupId>
-            <artifactId>velocity</artifactId>
+            <groupId>com.bc.ceres</groupId>
+            <artifactId>ceres-metadata</artifactId>
         </dependency>
     </dependencies>
 

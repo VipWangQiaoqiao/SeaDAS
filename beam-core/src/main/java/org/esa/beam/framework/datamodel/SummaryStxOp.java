@@ -16,11 +16,12 @@
 
 package org.esa.beam.framework.datamodel;
 
-import org.esa.beam.util.math.DoubleList;
+import static java.lang.Double.NEGATIVE_INFINITY;
+import static java.lang.Double.NaN;
+import static java.lang.Double.POSITIVE_INFINITY;
 
 import javax.media.jai.UnpackedImageData;
-
-import static java.lang.Double.*;
+import org.esa.beam.util.math.DoubleList;
 
 /**
  * Utility class for calculating minimum, maximum, mean and standard deviation. Uses
@@ -31,7 +32,7 @@ import static java.lang.Double.*;
  * @author Ralf Quast
  * @since BEAM 4.5.1, full revision in 4.10
  */
-final class SummaryStxOp extends StxOp {
+final public class SummaryStxOp extends StxOp {
 
     private double minimum;
     private double maximum;
@@ -39,31 +40,31 @@ final class SummaryStxOp extends StxOp {
     private double meanSqr;
     private long sampleCount;
 
-    SummaryStxOp() {
+    public SummaryStxOp() {
         super("Summary");
         this.minimum = POSITIVE_INFINITY;
         this.maximum = NEGATIVE_INFINITY;
     }
 
-    double getMinimum() {
+    public double getMinimum() {
         // Check case in which we have never seen any data tile
         return minimum == POSITIVE_INFINITY ? NaN : minimum;
     }
 
-    double getMaximum() {
+    public double getMaximum() {
         // Check case in which we have never seen any data tile
         return maximum == NEGATIVE_INFINITY ? NaN : maximum;
     }
 
-    double getMean() {
+    public double getMean() {
         return sampleCount > 0 ? mean : NaN;
     }
 
-    double getStandardDeviation() {
+    public double getStandardDeviation() {
         return sampleCount > 0 ? Math.sqrt(getVariance()) : NaN;
     }
 
-    double getVariance() {
+    public double getVariance() {
         return sampleCount > 1 ? meanSqr / (sampleCount - 1) : sampleCount == 1 ? 0.0 : NaN;
     }
 

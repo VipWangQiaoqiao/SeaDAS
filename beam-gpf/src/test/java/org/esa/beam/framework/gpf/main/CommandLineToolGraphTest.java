@@ -349,6 +349,11 @@ public class CommandLineToolGraphTest extends TestCase {
         }
 
         @Override
+        public String[] list(String path) throws IOException {
+            return new String[0];
+        }
+
+        @Override
         public void print(String m) {
             this.m += m;
         }
@@ -361,6 +366,11 @@ public class CommandLineToolGraphTest extends TestCase {
         @Override
         public boolean fileExists(String fileName) {
             return false;
+        }
+
+        @Override
+        public boolean isFile(String path) {
+            return true;
         }
     }
 }

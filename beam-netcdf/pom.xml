@@ -29,7 +29,7 @@
     <groupId>org.esa.beam</groupId>
     <artifactId>beam-netcdf</artifactId>
     <name>BEAM NetCDF Product Reader and Writer</name>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <url>http://envisat.esa.int/beam/</url>
 
     <dependencies>
@@ -48,8 +48,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.8.5</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
