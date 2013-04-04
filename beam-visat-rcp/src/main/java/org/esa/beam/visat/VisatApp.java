@@ -1933,7 +1933,6 @@ public class VisatApp extends BasicApp implements AppContext {
                 "rangeFinder",
                 "zoomTool",
                 "pannerTool",
-                "textTool",
                 "pinTool",
                 "gcpTool",
                 "drawLineTool",

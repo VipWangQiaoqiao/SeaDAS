@@ -56,8 +56,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * <code>Product</code> instances are an in-memory representation of a remote sensing data product. The product is more
@@ -85,7 +83,6 @@ public class Product extends ProductNode {
 
     private static final String PIN_GROUP_NAME = "pins";
     private static final String GCP_GROUP_NAME = "ground_control_points";
-    private static final String TEXT_GROUP_NAME = "text_annotations";
 
     public static final String PROPERTY_NAME_GEOCODING = "geoCoding";
     public static final String PROPERTY_NAME_PRODUCT_TYPE = "productType";

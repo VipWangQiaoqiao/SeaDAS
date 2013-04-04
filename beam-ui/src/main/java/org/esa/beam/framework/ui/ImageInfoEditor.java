@@ -135,7 +135,7 @@ public class ImageInfoEditor extends JPanel {
                 oldModel.removeChangeListener(modelCL);
             }
             if (this.model != null) {
-                roundFactor = MathUtils.computeRoundFactor(this.model.getMinSample(), this.model.getMaxSample(), 8);
+                roundFactor = MathUtils.computeRoundFactor(this.model.getMinSample(), this.model.getMaxSample(), 2);
                 installMouseListener();
                 model.addChangeListener(modelCL);
             }
