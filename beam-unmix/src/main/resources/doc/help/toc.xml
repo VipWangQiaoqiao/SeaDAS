@@ -3,8 +3,9 @@
         "http://java.sun.com/products/javahelp/toc_2_0.dtd">
 
 <toc version="2.0" categoryclosedimage="folder" categoryopenimage="folder" topicimage="doc">
-
-    <tocitem text="Data Processors">
-        <tocitem text="Spectral Unmixing Tool" target="spectralUnmixing"/>
+    <tocitem text="SeaDAS">
+        <tocitem text="Data Processors">
+            <tocitem text="Spectral Unmixing Tool" target="spectralUnmixing"/>
+        </tocitem>
     </tocitem>
 </toc>

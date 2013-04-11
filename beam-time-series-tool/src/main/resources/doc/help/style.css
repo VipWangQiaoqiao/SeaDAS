@@ -167,12 +167,13 @@ table.header {
 }
 
 .header {
-    font-size: 24pt;
-    height: 25px;
-    color: #000000;
-    vertical-align: bottom;
+    font-size: 17;
+    height: 29;
+    color: #ffffff;
+    background-color: #FFD257;
+    vertical-align: middle;
     border-width: 0;
-    padding: 3px;
+    padding: 0;
     white-space: nowrap;
 }
 
