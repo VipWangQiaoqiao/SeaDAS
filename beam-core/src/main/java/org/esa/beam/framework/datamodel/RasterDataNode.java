@@ -1892,7 +1892,7 @@ public abstract class RasterDataNode extends DataNode implements Scaling {
     @Override
     public final double scale(double v) {
         v = v * scalingFactor + scalingOffset;
-        if (log10Scaled ) {
+        if (log10Scaled) {
             v = Math.pow(10.0, v);
         }
         return v;
@@ -1909,7 +1909,7 @@ public abstract class RasterDataNode extends DataNode implements Scaling {
      */
     @Override
     public final double scaleInverse(double v) {
-        if (log10Scaled ) {
+        if (log10Scaled) {
             v = Math.log10(v);
         }
         return (v - scalingOffset) / scalingFactor;
@@ -1994,7 +1994,7 @@ public abstract class RasterDataNode extends DataNode implements Scaling {
     }
 
     private void setGeophysicalNoDataValue() {
-        geophysicalNoDataValue = scale(getNoDataValue()) ;
+        geophysicalNoDataValue = scale(getNoDataValue());
     }
 
     /**

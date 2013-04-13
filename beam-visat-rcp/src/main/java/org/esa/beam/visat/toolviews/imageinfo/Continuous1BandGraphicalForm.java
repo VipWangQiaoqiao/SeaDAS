@@ -122,7 +122,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
             newModel.setMaxHistogramViewSample(oldModel.getMaxHistogramViewSample());
         }
         if (newModel.getSliderSample(0) < newModel.getMinHistogramViewSample() ||
-                newModel.getSliderSample(newModel.getSliderCount() - 1) > newModel.getMaxHistogramViewSample()) {
+            newModel.getSliderSample(newModel.getSliderCount() - 1) > newModel.getMaxHistogramViewSample()) {
             imageInfoEditor.computeZoomInToSliderLimits();
         }
 
@@ -201,7 +201,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
 
     static void setDisplayProperties(ImageInfoEditorModel model, RasterDataNode raster) {
         model.setDisplayProperties(raster.getName(), raster.getUnit(), raster.getStx(),
-                raster.isLog10Scaled() ? POW10_SCALING : Scaling.IDENTITY);
+                                   raster.isLog10Scaled() ? POW10_SCALING : Scaling.IDENTITY);
     }
 
 
