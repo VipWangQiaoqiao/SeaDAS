@@ -117,7 +117,9 @@ class MoreOptionsForm {
             @Override
             public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
                 //To change body of implemented methods use File | Settings | File Templates.
-                discreteColorsCheckBox.setSelected(parentForm.getImageInfo().getColorPaletteDef().isDiscrete());
+                if (parentForm.getImageInfo().getColorPaletteDef() != null) {
+                    discreteColorsCheckBox.setSelected(parentForm.getImageInfo().getColorPaletteDef().isDiscrete());
+                }
             }
         });
         addRow(discreteColorsCheckBox);
@@ -130,8 +132,8 @@ class MoreOptionsForm {
         boolean newValue = discreteColorsCheckBox.isSelected();
         parentForm.getImageInfo().getColorPaletteDef().setDiscrete(discreteColorsCheckBox.isSelected());
         //propertyChangeSupport.firePropertyChange("isDiscrete", oldValue, newValue);
-        if (childForm instanceof  Continuous1BandGraphicalForm) {
-           ( (Continuous1BandGraphicalForm)childForm).getImageInfoEditor().getModel().fireStateChanged();
+        if (childForm instanceof Continuous1BandGraphicalForm) {
+            ((Continuous1BandGraphicalForm) childForm).getImageInfoEditor().getModel().fireStateChanged();
         }
         parentForm.getProductSceneView().setImageInfo(parentForm.getImageInfo());
         propertyChangeSupport.firePropertyChange("isDiscrete", oldValue, newValue);
@@ -190,7 +192,7 @@ class MoreOptionsForm {
 
     private void updateDiscreteColorCheckBox() {
         ImageInfo imageInfo = parentForm.getImageInfo();
-        if (imageInfo != null) {
+        if (imageInfo != null && imageInfo.getColorPaletteDef() != null ) {
             discreteColorsCheckBox.setSelected(imageInfo.getColorPaletteDef().isDiscrete());
         }
 

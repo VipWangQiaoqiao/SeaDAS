@@ -296,12 +296,12 @@ class ColorManipulationForm {
 
     private boolean isContinuous1BandImage() {
         return (productSceneView.getRaster() instanceof Band)
-               && ((Band) productSceneView.getRaster()).getIndexCoding() == null;
+                && ((Band) productSceneView.getRaster()).getIndexCoding() == null;
     }
 
     private boolean isDiscrete1BandImage() {
         return (productSceneView.getRaster() instanceof Band)
-               && ((Band) productSceneView.getRaster()).getIndexCoding() != null;
+                && ((Band) productSceneView.getRaster()).getIndexCoding() != null;
     }
 
     private PageComponentDescriptor getToolViewDescriptor() {
@@ -524,10 +524,10 @@ class ColorManipulationForm {
 
     public void showMessageDialog(String propertyName, String message, String title) {
         suppressibleOptionPane.showMessageDialog(propertyName,
-                                                 getToolViewPaneControl(),
-                                                 message,
-                                                 getToolViewDescriptor().getTitle() + title,
-                                                 JOptionPane.INFORMATION_MESSAGE);
+                getToolViewPaneControl(),
+                message,
+                getToolViewDescriptor().getTitle() + title,
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 
@@ -551,8 +551,10 @@ class ColorManipulationForm {
 
     private void setImageInfoCopy(ImageInfo imageInfo) {
         this.imageInfo = imageInfo.createDeepCopy();
-        currentMaxValue = imageInfo.getColorPaletteDef().getMaxDisplaySample();
-        currentMinValue = imageInfo.getColorPaletteDef().getMinDisplaySample();
+        if (imageInfo.getColorPaletteDef() != null) {
+            currentMaxValue = imageInfo.getColorPaletteDef().getMaxDisplaySample();
+            currentMinValue = imageInfo.getColorPaletteDef().getMinDisplaySample();
+        }
     }
 
     private void resetToDefaults() {
@@ -596,17 +598,17 @@ class ColorManipulationForm {
 
         if (availableBands.length == 0) {
             JOptionPane.showMessageDialog(getToolViewPaneControl(),
-                                          "No other bands available.", /*I18N*/
-                                          getToolViewDescriptor().getTitle(),
-                                          JOptionPane.WARNING_MESSAGE);
+                    "No other bands available.", /*I18N*/
+                    getToolViewDescriptor().getTitle(),
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         final BandChooser bandChooser = new BandChooser(toolView.getPaneWindow(),
-                                                        "Apply to other bands", /*I18N*/
-                                                        getToolViewDescriptor().getHelpId(),
-                                                        availableBands,
-                                                        bandsToBeModified);
+                "Apply to other bands", /*I18N*/
+                getToolViewDescriptor().getHelpId(),
+                availableBands,
+                bandsToBeModified);
         final List<Band> modifiedRasterList = new ArrayList<Band>(availableBands.length);
         if (bandChooser.show() == BandChooser.ID_OK) {
             bandsToBeModified = bandChooser.getSelectedBands();
@@ -710,8 +712,8 @@ class ColorManipulationForm {
     }
 
     protected void applyColorPaletteDef(ColorPaletteDef colorPaletteDef,
-                                      RasterDataNode targetRaster,
-                                      ImageInfo targetImageInfo) {
+                                        RasterDataNode targetRaster,
+                                        ImageInfo targetImageInfo) {
         if (isIndexCoded(targetRaster)) {
             targetImageInfo.setColors(colorPaletteDef.getColors());
         } else {
@@ -722,9 +724,9 @@ class ColorManipulationForm {
             }
             targetImageInfo.setCpdFileName(colorPaletteDef.getCpdFileName());
             targetImageInfo.setColorPaletteDef(colorPaletteDef,
-                                               stx.getMinimum(),
-                                               stx.getMaximum(),
-                                               autoDistribute);
+                    stx.getMinimum(),
+                    stx.getMaximum(),
+                    autoDistribute);
         }
     }
 
@@ -733,10 +735,10 @@ class ColorManipulationForm {
             return Boolean.TRUE;
         }
         int answer = JOptionPane.showConfirmDialog(getToolViewPaneControl(),
-                                                   "Automatically distribute points of\n" +
-                                                   "colour palette between min/max?",
-                                                   "Import Colour Palette",
-                                                   JOptionPane.YES_NO_CANCEL_OPTION);
+                "Automatically distribute points of\n" +
+                        "colour palette between min/max?",
+                "Import Colour Palette",
+                JOptionPane.YES_NO_CANCEL_OPTION);
         if (answer == JOptionPane.YES_OPTION) {
             return Boolean.TRUE;
         } else if (answer == JOptionPane.NO_OPTION) {
@@ -793,9 +795,9 @@ class ColorManipulationForm {
                 visatApp.showErrorDialog(message);
             } else {
                 JOptionPane.showMessageDialog(getToolViewPaneControl(),
-                                              message,
-                                              "Error",
-                                              JOptionPane.ERROR_MESSAGE);
+                        message,
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -804,9 +806,9 @@ class ColorManipulationForm {
         final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
         final File auxdataDir = getSystemAuxdataDir();
         final ResourceInstaller resourceInstaller = new ResourceInstaller(codeSourceUrl, "auxdata/color_palettes/",
-                                                                          auxdataDir);
+                auxdataDir);
         ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(toolView.getPaneControl(),
-                                                                                "Installing Auxdata...") {
+                "Installing Auxdata...") {
             @Override
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
                 resourceInstaller.install(".*.cpd", progressMonitor);
@@ -847,9 +849,9 @@ class ColorManipulationForm {
             return ProductUtils.createImageInfo(productSceneView.getRasters(), false, ProgressMonitor.NULL);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(getContentPanel(),
-                                          "Failed to create default image settings:\n" + e.getMessage(),
-                                          "I/O Error",
-                                          JOptionPane.ERROR_MESSAGE);
+                    "Failed to create default image settings:\n" + e.getMessage(),
+                    "I/O Error",
+                    JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
