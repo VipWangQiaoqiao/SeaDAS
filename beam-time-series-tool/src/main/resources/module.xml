@@ -145,7 +145,7 @@
 
     <extension point="beam-ui:helpSets">
         <helpSet>
-            <parent>beam-help</parent>
+            <parent>seadas-help</parent>
             <path>doc/help/time-series-tool.hs</path>
         </helpSet>
     </extension>
