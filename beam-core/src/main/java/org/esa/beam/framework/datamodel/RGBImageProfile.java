@@ -33,7 +33,7 @@ import java.util.Properties;
 
 /**
  * A profile used for the creation of RGB images. The profile comprises the band arithmetic expressions
- * for the computation of red, gree, blue and alpha (optional) channels of the resulting image.
+ * for the computation of red, green, blue and alpha (optional) channels of the resulting image.
  */
 public class RGBImageProfile implements ConfigurableExtension {
 
