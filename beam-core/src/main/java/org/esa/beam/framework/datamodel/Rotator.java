@@ -18,20 +18,18 @@ package org.esa.beam.framework.datamodel;
 
 import java.awt.geom.Point2D;
 
-import static java.lang.Math.asin;
-import static java.lang.Math.atan2;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.toDegrees;
-import static java.lang.Math.toRadians;
+import static java.lang.Math.*;
 
 /**
  * Class for rotating geographical positions.
+ * The rotator makes the given coordinate the origin <code>(0.0, 0.0)</code> of the coordinate system.
+ * If the coordinate which shall become the north pole of the new coordinate system is known the latitude value given into the
+ * constructor must be changed. Instead of providing directly the latitude value, it must be <code>90 - latitude</code>.
  *
  * @author Ralf Quast
  * @version $Revision$ $Date$
  */
-class Rotator {
+public class Rotator {
 
     private final double a11;
     private final double a12;
@@ -45,7 +43,7 @@ class Rotator {
 
     /**
      * Constructs a new rotation. In the rotated system, the point defined
-     * by the (lat, lon) parameters is located at the origin, i.e. has the
+     * by the (lon, lat) parameters is located at the origin, i.e. has the
      * geographical coordinates (0, 0).
      * <p/>
      * The new rotation is composed of a clockwise rotation about the z-axis
@@ -63,7 +61,7 @@ class Rotator {
 
     /**
      * Constructs a new rotation. In the rotated system, the point defined
-     * by the (lat, lon) parameters is located at the origin, i.e. has the
+     * by the (lon, lat) parameters is located at the origin, i.e. has the
      * geographical coordinates (0, 0).
      * <p/>
      * The new rotation is composed of a clockwise rotation about the z-axis
@@ -104,7 +102,7 @@ class Rotator {
 
     /**
      * Constructs a new rotation. In the rotated system, the point defined
-     * by the (lat, lon) parameters is located at the origin, i.e. has the
+     * by the (lon, lat) parameters is located at the origin, i.e. has the
      * geographical coordinates (0, 0).
      * <p/>
      * The new rotation is composed of a clockwise rotation about the z-axis
@@ -121,7 +119,7 @@ class Rotator {
 
     /**
      * Constructs a new rotation. In the rotated system, the point defined
-     * by the (lat, lon) parameters is located at the origin, i.e. has the
+     * by the (lon, lat) parameters is located at the origin, i.e. has the
      * geographical coordinates (0, 0).
      * <p/>
      * The new rotation is composed of a clockwise rotation about the z-axis

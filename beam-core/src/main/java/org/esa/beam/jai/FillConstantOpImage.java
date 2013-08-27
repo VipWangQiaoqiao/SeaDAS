@@ -13,10 +13,12 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, see http://www.gnu.org/licenses/
  */
-package org.esa.beam.statistics.percentile.interpolated;
+package org.esa.beam.jai;
 
-import org.esa.beam.framework.gpf.internal.OperatorContext;
 
+import org.esa.beam.util.jai.SingleBandedSampleModel;
+
+import javax.media.jai.ImageLayout;
 import javax.media.jai.PointOpImage;
 import javax.media.jai.RasterAccessor;
 import javax.media.jai.RasterFormatTag;
@@ -25,16 +27,35 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 
-final class InsertNoDataValueOpImage extends PointOpImage {
-    private final double noDataValue;
+/**
+ * An image to replace values in the source image controlled by a mask.
+ */
+public final class FillConstantOpImage extends PointOpImage {
+
+    private final Number fillValue;
     private final RasterFormatTag maskRasterFormatTag;
 
-    InsertNoDataValueOpImage(RenderedImage sourceImage, RenderedImage maskImage, double noDataValue) {
-        super(sourceImage, maskImage, null, null, true);
-        this.noDataValue = noDataValue;
+    /**
+     * Where the mask image is set the original values in the source image are preserved.
+     * Otherwise the values are replaced by the no-data value.
+     *
+     * @param sourceImage The source image.
+     * @param maskImage   The mask image. This mask prevents pixel values from being overwritten by fill value (where mask != 0).
+     * @param fillValue   The value to replace the original ones.
+     */
+    public FillConstantOpImage(RenderedImage sourceImage, RenderedImage maskImage, Number fillValue) {
+        super(sourceImage, maskImage, createImageLayout(sourceImage, fillValue), null, true);
+        this.fillValue = fillValue;
         int compatibleTagId = RasterAccessor.findCompatibleTag(null, maskImage.getSampleModel());
         maskRasterFormatTag = new RasterFormatTag(maskImage.getSampleModel(), compatibleTagId);
-        OperatorContext.setTileCache(this);
+    }
+
+    private static ImageLayout createImageLayout(RenderedImage sourceImage, Number fillValue) {
+        int targetDataType = Math.max(sourceImage.getSampleModel().getDataType(), DataBufferUtils.getDataBufferType(fillValue));
+        SingleBandedSampleModel sampleModel = new SingleBandedSampleModel(targetDataType,
+                                                                          sourceImage.getTileWidth(),
+                                                                          sourceImage.getTileHeight());
+        return new ImageLayout(sourceImage).setSampleModel(sampleModel);
     }
 
     @Override
@@ -45,23 +66,23 @@ final class InsertNoDataValueOpImage extends PointOpImage {
         RasterAccessor d = new RasterAccessor(dest, destRect, formatTags[2], getColorModel());
         switch (d.getDataType()) {
             case 0: // '\0'
-                computeRectByte(s, m, d, (byte) noDataValue);
+                computeRectByte(s, m, d, fillValue.byteValue());
                 break;
 
             case 1: // '\001'
             case 2: // '\002'
-                computeRectShort(s, m, d, (short) noDataValue);
+                computeRectShort(s, m, d, fillValue.shortValue());
                 break;
 
             case 3: // '\003'
-                computeRectInt(s, m, d, (int) noDataValue);
+                computeRectInt(s, m, d, fillValue.intValue());
                 break;
             case 4: // '\004'
-                computeRectFloat(s, m, d, (float) noDataValue);
+                computeRectFloat(s, m, d, fillValue.floatValue());
                 break;
 
             case 5: // '\005'
-                computeRectDouble(s, m, d, noDataValue);
+                computeRectDouble(s, m, d, fillValue.doubleValue());
                 break;
         }
         d.copyDataToRaster();

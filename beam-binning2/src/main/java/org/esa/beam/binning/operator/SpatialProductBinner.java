@@ -33,16 +33,18 @@ import org.esa.beam.framework.datamodel.VirtualBand;
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.util.StopWatch;
 import org.esa.beam.util.StringUtils;
+import org.esa.beam.util.logging.BeamLogManager;
 import org.esa.beam.util.math.MathUtils;
 
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.image.Raster;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class which performs a spatial binning of single input products.
@@ -51,6 +53,8 @@ import java.util.Map;
  * @author Marco Zühlke
  */
 public class SpatialProductBinner {
+
+    private static final String PROPERTY_KEY_SLICE_HEIGHT = "beam.binning.sliceHeight";
 
     /**
      * Processes a source product and generated spatial bins.
@@ -104,12 +108,15 @@ public class SpatialProductBinner {
         final float[] superSamplingSteps = getSuperSamplingSteps(superSampling);
         long numObsTotal = 0;
         progressMonitor.beginTask("Spatially binning of " + product.getName(), sliceRectangles.length);
+        final Logger logger = BeamLogManager.getSystemLogger();
         for (int idx = 0; idx < sliceRectangles.length; idx++) {
             StopWatch stopWatch = new StopWatch();
             stopWatch.start();
             numObsTotal += processSlice(spatialBinner, progressMonitor, superSamplingSteps, maskImage, varImages,
                                         product, sliceRectangles[idx]);
-            stopWatch.stopAndTrace(String.format("Processed slice %d of %d", idx, sliceRectangles.length));
+            final String label = String.format("Processed slice %d of %d : ", idx + 1, sliceRectangles.length);
+            stopWatch.stop();
+            logger.info(label + stopWatch.getTimeDiffString());
         }
         spatialBinner.complete();
         return numObsTotal;
@@ -120,11 +127,11 @@ public class SpatialProductBinner {
         for (int i = 0; i < variableContext.getVariableCount(); i++) {
             final String nodeName = variableContext.getVariableName(i);
             final RasterDataNode node = getRasterDataNode(product, nodeName);
-            final MultiLevelImage varImage = node.getGeophysicalImage();
-            varImages[i] = varImage;
+            varImages[i] = ImageManager.createMaskedGeophysicalImage(node, Float.NaN);
         }
         return varImages;
     }
+
 
     private static MultiLevelImage getMaskImage(Product product, String maskExpr) {
         MultiLevelImage maskImage = null;
@@ -185,14 +192,7 @@ public class SpatialProductBinner {
     private static long processSlice(SpatialBinner spatialBinner, ProgressMonitor progressMonitor,
                                      float[] superSamplingSteps, MultiLevelImage maskImage, MultiLevelImage[] varImages,
                                      Product product, Rectangle sliceRect) {
-        final Raster maskTile = maskImage != null ? maskImage.getData(sliceRect) : null;
-        final Raster[] varTiles = new Raster[varImages.length];
-        for (int i = 0; i < varImages.length; i++) {
-            varTiles[i] = varImages[i].getData(sliceRect);
-        }
-
-        final ObservationSlice observationSlice = new ObservationSlice(varTiles, maskTile, product,
-                                                                       superSamplingSteps);
+        final ObservationSlice observationSlice = new ObservationSlice(varImages, maskImage, product, superSamplingSteps, sliceRect);
         long numObservations = spatialBinner.processObservationSlice(observationSlice);
         progressMonitor.worked(1);
         return numObservations;
@@ -208,7 +208,11 @@ public class SpatialProductBinner {
         } else {
             sliceHeight = ImageManager.getPreferredTileSize(product).height;
         }
-        return new Dimension(sliceWidth, sliceHeight);
+        String sliceHeightString = System.getProperty(PROPERTY_KEY_SLICE_HEIGHT, String.valueOf(sliceHeight));
+        Dimension dimension = new Dimension(sliceWidth, Integer.parseInt(sliceHeightString));
+        String logMsg = String.format("Using slice dimension [width=%d, height=%d] in binning", dimension.width, dimension.height);
+        BeamLogManager.getSystemLogger().log(Level.INFO, logMsg);
+        return dimension;
     }
 
     private static void addVariablesToProduct(VariableContext variableContext, Product product,

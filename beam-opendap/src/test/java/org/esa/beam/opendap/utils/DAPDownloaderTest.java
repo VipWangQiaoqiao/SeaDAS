@@ -1,6 +1,6 @@
 package org.esa.beam.opendap.utils;
 
-import org.esa.beam.opendap.ui.OpendapAccessPanel;
+import org.esa.beam.opendap.ui.DownloadProgressBarPM;
 import org.esa.beam.util.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -44,7 +44,7 @@ public class DAPDownloaderTest {
     @Test
     public void testDownloadFile() throws Exception {
         final Set<File> downloadedFiles = new HashSet<File>();
-        NullFileCountProvider fileCountProvider = new NullFileCountProvider() {
+        NullDownloadContext fileCountProvider = new NullDownloadContext() {
             @Override
             public void notifyFileDownloaded(File downloadedFile) {
                 downloadedFiles.add(downloadedFile);
@@ -95,7 +95,7 @@ public class DAPDownloaderTest {
         final List<Variable> variables = netcdfFile.getVariables();
         final List<String> variableNames = new ArrayList<String>();
         for (Variable variable : variables) {
-            variableNames.add(variable.getName());
+            variableNames.add(variable.getFullName());
         }
         String constraintExpression = null;
         List<String> filteredVariables = DAPDownloader.filterVariables(variableNames, constraintExpression);
@@ -139,25 +139,25 @@ public class DAPDownloaderTest {
         List<Dimension> dimensions = DAPDownloader.filterDimensions(variableNames, netcdfFile);
         Collections.sort(dimensions);
         assertEquals(3, dimensions.size());
-        assertEquals("COADSX", dimensions.get(0).getName());
-        assertEquals("COADSY", dimensions.get(1).getName());
-        assertEquals("TIME", dimensions.get(2).getName());
+        assertEquals("COADSX", dimensions.get(0).getShortName());
+        assertEquals("COADSY", dimensions.get(1).getShortName());
+        assertEquals("TIME", dimensions.get(2).getShortName());
 
         variableNames.clear();
         variableNames.add("wind");
         dimensions = DAPDownloader.filterDimensions(variableNames, netcdfFile);
         Collections.sort(dimensions);
         assertEquals(2, dimensions.size());
-        assertEquals("COADSX", dimensions.get(0).getName());
-        assertEquals("COADSY", dimensions.get(1).getName());
+        assertEquals("COADSX", dimensions.get(0).getShortName());
+        assertEquals("COADSY", dimensions.get(1).getShortName());
 
         variableNames.clear();
         variableNames.add("sst");
         dimensions = DAPDownloader.filterDimensions(variableNames, netcdfFile);
         Collections.sort(dimensions);
-        assertEquals("COADSX", dimensions.get(0).getName());
-        assertEquals("COADSY", dimensions.get(1).getName());
-        assertEquals("TIME", dimensions.get(2).getName());
+        assertEquals("COADSX", dimensions.get(0).getShortName());
+        assertEquals("COADSY", dimensions.get(1).getShortName());
+        assertEquals("TIME", dimensions.get(2).getShortName());
     }
 
     @Test
@@ -196,13 +196,13 @@ public class DAPDownloaderTest {
 
     @Test
     public void testGetDownloadSpeed() {
-        assertEquals(1024.0/60.0, DAPDownloader.getDownloadSpeed(60 * 1000, 1024), 1E-4);
+        assertEquals(1024.0 / 60.0, DAPDownloader.getDownloadSpeed(60 * 1000, 1024), 1E-4);
     }
 
     @Ignore
     @Test
     public void testActualWriting() throws Exception {
-        final DAPDownloader dapDownloader = new DAPDownloader(null, null, new NullFileCountProvider(), new NullLabelledProgressBarPM());
+        final DAPDownloader dapDownloader = new DAPDownloader(null, null, new NullDownloadContext(), new NullLabelledProgressBarPM());
         final DODSNetcdfFile sourceNetcdfFile = new DODSNetcdfFile(
                 "http://test.opendap.org:80/opendap/data/nc/coads_climatology.nc");
         dapDownloader.writeNetcdfFile(TESTDATA_DIR, "deleteme.nc", "", sourceNetcdfFile, false);
@@ -217,7 +217,7 @@ public class DAPDownloaderTest {
     @Ignore
     @Test
     public void testActualWriting_WithConstraint() throws Exception {
-        final DAPDownloader dapDownloader = new DAPDownloader(null, null, new NullFileCountProvider(), new NullLabelledProgressBarPM());
+        final DAPDownloader dapDownloader = new DAPDownloader(null, null, new NullDownloadContext(), new NullLabelledProgressBarPM());
         final DODSNetcdfFile sourceNetcdfFile = new DODSNetcdfFile(
                 "http://test.opendap.org:80/opendap/data/nc/coads_climatology.nc");
         dapDownloader.writeNetcdfFile(TESTDATA_DIR, "deleteme.nc", "COADSX[0:1:4]", sourceNetcdfFile, false);
@@ -234,7 +234,7 @@ public class DAPDownloaderTest {
         return new File(TESTDATA_DIR, fileName);
     }
 
-    private static class NullLabelledProgressBarPM extends OpendapAccessPanel.DownloadProgressBarProgressMonitor {
+    private static class NullLabelledProgressBarPM extends DownloadProgressBarPM {
 
         public NullLabelledProgressBarPM() {
             super(null, null, null, null);
@@ -296,7 +296,7 @@ public class DAPDownloaderTest {
         }
     }
 
-    private static class NullFileCountProvider implements DAPDownloader.FileCountProvider {
+    private static class NullDownloadContext implements DAPDownloader.DownloadContext {
 
         @Override
         public int getAllFilesCount() {
@@ -310,6 +310,11 @@ public class DAPDownloaderTest {
 
         @Override
         public void notifyFileDownloaded(File downloadedFile) {
+        }
+
+        @Override
+        public boolean mayOverwrite(String filename) {
+            return true;
         }
     }
 }

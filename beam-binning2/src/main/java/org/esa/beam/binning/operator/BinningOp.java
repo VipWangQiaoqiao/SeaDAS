@@ -28,6 +28,7 @@ import org.esa.beam.binning.SpatialBinner;
 import org.esa.beam.binning.TemporalBin;
 import org.esa.beam.binning.TemporalBinSource;
 import org.esa.beam.binning.TemporalBinner;
+import org.esa.beam.binning.cellprocessor.CellProcessorChain;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.MetadataAttribute;
@@ -51,7 +52,6 @@ import org.esa.beam.util.converters.JtsGeometryConverter;
 import org.esa.beam.util.io.FileUtils;
 import org.esa.beam.util.io.WildcardMatcher;
 import org.geotools.geometry.jts.JTS;
-import ucar.ma2.InvalidRangeException;
 
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
@@ -111,7 +111,7 @@ todo - address the following BinningOp requirements (nf, 2012-03-09)
  */
 @SuppressWarnings("UnusedDeclaration")
 @OperatorMetadata(alias = "Binning",
-                  version = "0.8.1",
+                  version = "0.8.2",
                   authors = "Norman Fomferra, Marco Zühlke, Thomas Storm",
                   copyright = "(c) 2012 by Brockmann Consult GmbH",
                   description = "Performs spatial and temporal aggregation of pixel values into 'bin' cells")
@@ -168,9 +168,8 @@ public class BinningOp extends Operator implements Output {
             defaultValue = "./metadata.properties")
     File metadataPropertiesFile;
 
-    @Parameter(
-            description = "The name of the directory containing metadata templates (google \"Apache Velocity VTL format\").",
-            defaultValue = ".")
+    @Parameter(description = "The name of the directory containing metadata templates (google \"Apache Velocity VTL format\").",
+               defaultValue = ".")
     File metadataTemplateDir;
 
     private transient BinningContext binningContext;
@@ -178,11 +177,14 @@ public class BinningOp extends Operator implements Output {
     private transient ProductData.UTC minDateUtc;
     private transient ProductData.UTC maxDateUtc;
     private transient SortedMap<String, String> metadataProperties;
+    private transient boolean outputTargetProduct;
+    private transient BinWriter binWriter;
 
     private final Map<Product, List<Band>> addedBands;
 
     public BinningOp() throws OperatorException {
         addedBands = new HashMap<Product, List<Band>>();
+        outputTargetProduct = true;
     }
 
     public Geometry getRegion() {
@@ -229,6 +231,14 @@ public class BinningOp extends Operator implements Output {
         return metadataProperties;
     }
 
+    public void setBinWriter(BinWriter binWriter) {
+        this.binWriter = binWriter;
+    }
+
+    public void setOutputTargetProduct(boolean outputTargetProduct) {
+        this.outputTargetProduct = outputTargetProduct;
+    }
+
     /**
      * Processes all source products and writes the output file.
      * The target product represents the written output file
@@ -273,16 +283,6 @@ public class BinningOp extends Operator implements Output {
                     temporalBins.close();
 
                 }
-                // TODO - Check efficiency of interface 'org.esa.beam.framework.gpf.experimental.Output'  (nf, 2012-03-02)
-                // actually, the following line of code would be sufficient, but then, the
-                // 'Output' interface implemented by this operator has no effect, because it already has a
-                // 'ProductReader' instance set. The overall concept of 'Output' is not fully thought-out!
-                //
-                // this.targetProduct = readOutput();
-                //
-                // This is why I have to do the following
-                Product writtenProduct = readOutput();
-                this.targetProduct = copyProduct(writtenProduct);
             } else {
                 getLogger().warning("No bins have been generated, no output has been written");
             }
@@ -508,7 +508,7 @@ public class BinningOp extends Operator implements Output {
     }
 
     private SpatialBinCollection doSpatialBinning() throws IOException {
-        SpatialBinCollector spatialBinCollector =  new GeneralSpatialBinCollector(binningContext.getPlanetaryGrid().getNumBins());
+        SpatialBinCollector spatialBinCollector = new FileBackedSpatialBinCollector(binningContext.getPlanetaryGrid().getNumBins());
         final SpatialBinner spatialBinner = new SpatialBinner(binningContext, spatialBinCollector);
         if (sourceProducts != null) {
             for (Product sourceProduct : sourceProducts) {
@@ -562,13 +562,24 @@ public class BinningOp extends Operator implements Output {
 
         long numberOfBins = spatialBinMap.size();
         final TemporalBinner temporalBinner = new TemporalBinner(binningContext);
-        final TemporalBinList temporalBins = new TemporalBinList((int) spatialBinMap.size());
+        final CellProcessorChain cellChain = new CellProcessorChain(binningContext);
+        final TemporalBinList temporalBins = new TemporalBinList((int) numberOfBins);
         Iterable<List<SpatialBin>> spatialBinListCollection = spatialBinMap.getBinCollection();
+        double binCounter = 0;
+        long hundredthOfNumBins = numberOfBins / 100;
         for (List<SpatialBin> spatialBinList : spatialBinListCollection) {
+            binCounter++;
             SpatialBin spatialBin = spatialBinList.get(0);
             long spatialBinIndex = spatialBin.getIndex();
-            final TemporalBin temporalBin = temporalBinner.processSpatialBins(spatialBinIndex, spatialBinList);
+            TemporalBin temporalBin = temporalBinner.processSpatialBins(spatialBinIndex, spatialBinList);
+
+            temporalBin = temporalBinner.computeOutput(spatialBinIndex, temporalBin);
+            temporalBin = cellChain.process(temporalBin);
+
             temporalBins.add(temporalBin);
+            if (binCounter % hundredthOfNumBins == 0) {
+                getLogger().info(String.format("Finished %d%% temporal bins", (int) (binCounter * 100 / numberOfBins)));
+            }
         }
         stopWatch.stop();
         getLogger().info(String.format("Temporal binning of %d bins done, took %s", numberOfBins, stopWatch));
@@ -584,30 +595,41 @@ public class BinningOp extends Operator implements Output {
         initMetadataProperties();
 
         if (outputBinnedData) {
-            File binnedDataFile = FileUtils.exchangeExtension(new File(formatterConfig.getOutputFile()), "-bins.nc");
             try {
-                getLogger().info(String.format("Writing binned data to '%s'...", binnedDataFile));
-                writeNetCDFBinFile(binnedDataFile, temporalBins, startTime, stopTime);
-                getLogger().info(String.format("Writing binned data to '%s' done.", binnedDataFile));
+                writeNetCDFBinFile(temporalBins, startTime, stopTime);
             } catch (Exception e) {
-                getLogger().log(Level.SEVERE, String.format("Failed to write binned data to '%s': %s", binnedDataFile,
-                                                            e.getMessage()), e);
+                getLogger().log(Level.SEVERE, String.format("Failed to write binned data: %s", e.getMessage()), e);
             }
         }
 
-        getLogger().info(String.format("Writing mapped product '%s'...", formatterConfig.getOutputFile()));
-        final MetadataElement globalAttributes = createGlobalAttributesElement();
-        Formatter.format(binningContext,
-                         getTemporalBinSource(temporalBins),
-                         formatterConfig,
-                         region,
-                         startTime,
-                         stopTime,
-                         globalAttributes);
-        stopWatch.stop();
+        if (outputTargetProduct) {
+            getLogger().info(String.format("Writing mapped product '%s'...", formatterConfig.getOutputFile()));
+            final MetadataElement globalAttributes = createGlobalAttributesElement();
+            Formatter.format(binningContext,
+                             getTemporalBinSource(temporalBins),
+                             formatterConfig,
+                             region,
+                             startTime,
+                             stopTime,
+                             globalAttributes);
+            stopWatch.stop();
 
-        String msgPattern = "Writing mapped product '%s' done, took %s";
-        getLogger().info(String.format(msgPattern, formatterConfig.getOutputFile(), stopWatch));
+            String msgPattern = "Writing mapped product '%s' done, took %s";
+            getLogger().info(String.format(msgPattern, formatterConfig.getOutputFile(), stopWatch));
+
+            // TODO - Check efficiency of interface 'org.esa.beam.framework.gpf.experimental.Output'  (nf, 2012-03-02)
+            // actually, the following line of code would be sufficient, but then, the
+            // 'Output' interface implemented by this operator has no effect, because it already has a
+            // 'ProductReader' instance set. The overall concept of 'Output' is not fully thought-out!
+            //
+            // this.targetProduct = readOutput();
+            //
+            // This is why I have to do the following
+            Product writtenProduct = readOutput();
+            this.targetProduct = copyProduct(writtenProduct);
+        } else {
+            this.targetProduct = new Product("Dummy", "t", 10, 10);
+        }
     }
 
     private MetadataElement createGlobalAttributesElement() {
@@ -623,16 +645,26 @@ public class BinningOp extends Operator implements Output {
         return new SimpleTemporalBinSource(temporalBins);
     }
 
-    private void writeNetCDFBinFile(File file, List<TemporalBin> temporalBins, ProductData.UTC startTime,
+    private void writeNetCDFBinFile(List<TemporalBin> temporalBins, ProductData.UTC startTime,
                                     ProductData.UTC stopTime) throws IOException {
-        final BinWriter writer = new BinWriter(binningContext, getLogger(), region,
-                                               startTime != null ? startTime : minDateUtc,
-                                               stopTime != null ? stopTime : maxDateUtc);
-        try {
-            writer.write(file, metadataProperties, temporalBins);
-        } catch (InvalidRangeException e) {
-            throw new IllegalArgumentException(e);
+        initBinWriter(startTime, stopTime);
+        getLogger().info(String.format("Writing binned data to '%s'...", binWriter.getTargetFilePath()));
+        binWriter.write(metadataProperties, temporalBins);
+        getLogger().info(String.format("Writing binned data to '%s' done.", binWriter.getTargetFilePath()));
+
+    }
+
+    private void initBinWriter(ProductData.UTC startTime, ProductData.UTC stopTime) {
+        if (binWriter == null) {
+            binWriter = new SeaDASLevel3BinWriter(region,
+                                                  startTime != null ? startTime : minDateUtc,
+                                                  stopTime != null ? stopTime : maxDateUtc);
         }
+
+        binWriter.setBinningContext(binningContext);
+        binWriter.setTargetFileTemplatePath(formatterConfig.getOutputFile());
+        binWriter.setLogger(getLogger());
+
     }
 
     private ProductData.UTC getStartDateUtc(String parameterName) throws OperatorException {
@@ -664,7 +696,8 @@ public class BinningOp extends Operator implements Output {
         }
     }
 
-    private ProductData.UTC parseDateUtc(String name, String date) {
+    // package access for tessting only tb 2013-05-07
+    static ProductData.UTC parseDateUtc(String name, String date) {
         try {
             return ProductData.UTC.parse(date, DATE_PATTERN);
         } catch (ParseException e) {

@@ -18,7 +18,7 @@ package org.esa.beam.binning.operator.ui;
 
 import com.bc.ceres.binding.ValidationException;
 import org.esa.beam.binning.AggregatorDescriptor;
-import org.esa.beam.binning.AggregatorDescriptorRegistry;
+import org.esa.beam.binning.TypedDescriptorsRegistry;
 import org.esa.beam.binning.aggregators.AggregatorAverage;
 import org.esa.beam.binning.aggregators.AggregatorOnMaxSet;
 import org.esa.beam.framework.datamodel.Product;
@@ -91,22 +91,13 @@ class VariableConfigTable {
             aggregatorNames[i] = aggregatorDescriptors.get(i).getName();
         }
 
-        tableModel = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                final Object bandName = tableModel.getValueAt(row, 0);
-                return column != 1 ||
-                       table.getSelectedRow() == row && bandName != null &&
-                       bandName.toString().matches("<expression_?\\d*>");
-            }
-        };
+        tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{
                 "Band",
                 "Expression",
                 "Aggregation",
                 "Weight",
-                "Percentile",
-                "Fill value"
+                "Percentile"
         });
 
         tableModel.addTableModelListener(new VariableConfigTableListener(this));
@@ -114,7 +105,7 @@ class VariableConfigTable {
         table = new JTable(tableModel) {
             @Override
             public Class getColumnClass(int column) {
-                if (column == 3 || column == 5) {
+                if (column == 3) {
                     return Double.class;
                 } else if (column == 4) {
                     return Integer.class;
@@ -131,20 +122,19 @@ class VariableConfigTable {
         table.getColumnModel().getColumn(2).setWidth(80);
         table.getColumnModel().getColumn(3).setWidth(60);
         table.getColumnModel().getColumn(4).setWidth(60);
-        table.getColumnModel().getColumn(5).setWidth(60);
 
         table.getColumnModel().getColumn(2).setMaxWidth(80);
         table.getColumnModel().getColumn(3).setMaxWidth(60);
         table.getColumnModel().getColumn(4).setMaxWidth(60);
-        table.getColumnModel().getColumn(5).setMaxWidth(60);
 
-        table.getColumnModel().getColumn(1).setResizable(false);
+        table.getColumnModel().getColumn(0).setResizable(false);
+        table.getColumnModel().getColumn(1).setResizable(true);
         table.getColumnModel().getColumn(2).setResizable(false);
         table.getColumnModel().getColumn(3).setResizable(false);
         table.getColumnModel().getColumn(4).setResizable(false);
-        table.getColumnModel().getColumn(5).setResizable(false);
 
         bandNamesComboBox = new JComboBox(bandNames.toArray());
+        bandNamesComboBox.setEditable(true);
 
         table.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(bandNamesComboBox));
         table.getColumnModel().getColumn(1).setCellEditor(new CellExpressionEditor());
@@ -157,13 +147,13 @@ class VariableConfigTable {
         };
         table.getColumnModel().getColumn(3).setCellRenderer(cellRenderer);
         table.getColumnModel().getColumn(4).setCellRenderer(cellRenderer);
-        table.getColumnModel().getColumn(5).setCellRenderer(cellRenderer);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
         scrollPane = new JScrollPane(table);
     }
 
     private List<AggregatorDescriptor> getAggregatorDescriptors(String... filterNames) {
-        final AggregatorDescriptor[] allDescriptors = AggregatorDescriptorRegistry.getInstance().getAggregatorDescriptors();
+        TypedDescriptorsRegistry registry = TypedDescriptorsRegistry.getInstance();
+        List<AggregatorDescriptor> allDescriptors = registry.getDescriptors(AggregatorDescriptor.class);
         final List<AggregatorDescriptor> filteredDescriptors = new ArrayList<AggregatorDescriptor>();
         for (final AggregatorDescriptor descriptor : allDescriptors) {
             for (String name : filterNames) {
@@ -179,13 +169,13 @@ class VariableConfigTable {
         return scrollPane;
     }
 
-    void addRow(final String name, String expression, String algorithmName, double weightCoefficient, float fillValue, int percentile) {
+    void addRow(final String name, String expression, String algorithmName, double weightCoefficient, int percentile) {
         if (algorithmName == null || !StringUtils.contains(aggregatorNames, algorithmName)) {
             algorithmName = AggregatorAverage.Descriptor.NAME;
         }
         bandNames.add("<expression_" + getExpressionCount() + ">");
         updateBandNameCombobox();
-        tableModel.addRow(new Object[]{name, expression, algorithmName, weightCoefficient, percentile, fillValue});
+        tableModel.addRow(new Object[]{name, expression, algorithmName, weightCoefficient, percentile});
     }
 
     void removeSelectedRows() {
@@ -204,8 +194,7 @@ class VariableConfigTable {
                               (String) dataListRow.get(1),
                               (String) dataListRow.get(2),
                               (Double) dataListRow.get(3),
-                              (Integer) dataListRow.get(4),
-                              (Float) dataListRow.get(5));
+                              (Integer) dataListRow.get(4));
         }
         return rows;
     }
@@ -327,9 +316,10 @@ class VariableConfigTable {
         public void tableChanged(TableModelEvent event) {
             TableRow[] tableRows = new TableRow[bandsTable.getRows().length];
             Row[] rows = bandsTable.getRows();
+            TypedDescriptorsRegistry registry = TypedDescriptorsRegistry.getInstance();
             for (int i = 0; i < rows.length; i++) {
                 Row row = rows[i];
-                AggregatorDescriptor aggregatorDescriptor = AggregatorDescriptorRegistry.getInstance().getAggregatorDescriptor(row.algorithmName);
+                AggregatorDescriptor aggregatorDescriptor = registry.getDescriptor(AggregatorDescriptor.class, row.algorithmName);
                 int percentile = 0;
                 if (hasAggregatorChanged(event) || aggregatorDescriptor.getName().equals("PERCENTILE")) {
                     percentile = 90;
@@ -341,8 +331,7 @@ class VariableConfigTable {
                                             row.expression,
                                             aggregatorDescriptor,
                                             row.weightCoefficient,
-                                            percentile,
-                                            row.fillValue);
+                                            percentile);
                 bandsTable.setPercentile(i, percentile);
             }
             try {
@@ -375,16 +364,14 @@ class VariableConfigTable {
         private final String expression;
         private final String algorithmName;
         private final double weightCoefficient;
-        private final float fillValue;
         private final Integer percentile;
 
-        Row(String bandName, String expression, String algorithmName, double weightCoefficient, Integer percentile, float fillValue) {
+        Row(String bandName, String expression, String algorithmName, double weightCoefficient, Integer percentile) {
             this.bandName = bandName;
             this.expression = expression;
             this.algorithmName = algorithmName;
             this.weightCoefficient = weightCoefficient;
             this.percentile = percentile;
-            this.fillValue = fillValue;
         }
     }
 }

@@ -34,15 +34,7 @@ package org.esa.beam.binning.operator;
 
 
 import com.bc.ceres.binding.BindingException;
-import org.esa.beam.binning.Aggregator;
-import org.esa.beam.binning.AggregatorConfig;
-import org.esa.beam.binning.AggregatorDescriptor;
-import org.esa.beam.binning.AggregatorDescriptorRegistry;
-import org.esa.beam.binning.BinManager;
-import org.esa.beam.binning.BinningContext;
-import org.esa.beam.binning.CompositingType;
-import org.esa.beam.binning.PlanetaryGrid;
-import org.esa.beam.binning.VariableContext;
+import org.esa.beam.binning.*;
 import org.esa.beam.binning.support.BinningContextImpl;
 import org.esa.beam.binning.support.SEAGrid;
 import org.esa.beam.binning.support.VariableContextImpl;
@@ -111,6 +103,9 @@ public class BinningConfig {
     @Parameter(alias = "aggregators", domConverter = AggregatorConfigDomConverter.class)
     private AggregatorConfig[] aggregatorConfigs;
 
+    @Parameter(alias = "postProcessor", domConverter = CellProcessorConfigDomConverter.class)
+    private CellProcessorConfig postProcessorConfig;
+
     public String getPlanetaryGrid() {
         return planetaryGrid;
     }
@@ -165,6 +160,14 @@ public class BinningConfig {
 
     public void setAggregatorConfigs(AggregatorConfig... aggregatorConfigs) {
         this.aggregatorConfigs = aggregatorConfigs;
+    }
+
+    public CellProcessorConfig getPostProcessorConfig() {
+        return postProcessorConfig;
+    }
+
+    public void setPostProcessorConfig(CellProcessorConfig cellProcessorConfig) {
+        this.postProcessorConfig = cellProcessorConfig;
     }
 
     public static BinningConfig fromXml(String xml) throws BindingException {
@@ -222,21 +225,21 @@ public class BinningConfig {
 
     public Aggregator[] createAggregators(VariableContext variableContext) {
         Aggregator[] aggregators = new Aggregator[aggregatorConfigs.length];
+        TypedDescriptorsRegistry registry = TypedDescriptorsRegistry.getInstance();
         for (int i = 0; i < aggregators.length; i++) {
             AggregatorConfig aggregatorConfig = aggregatorConfigs[i];
-            AggregatorDescriptor descriptor = AggregatorDescriptorRegistry.getInstance().getAggregatorDescriptor(
-                    aggregatorConfig.getAggregatorName());
+            AggregatorDescriptor descriptor = registry.getDescriptor(AggregatorDescriptor.class, aggregatorConfig.getName());
             if (descriptor != null) {
                 aggregators[i] = descriptor.createAggregator(variableContext, aggregatorConfig);
             } else {
-                throw new IllegalArgumentException("Unknown aggregator type: " + aggregatorConfig.getAggregatorName());
+                throw new IllegalArgumentException("Unknown aggregator type: " + aggregatorConfig.getName());
             }
         }
         return aggregators;
     }
 
     protected BinManager createBinManager(VariableContext variableContext, Aggregator[] aggregators) {
-        return new BinManager(variableContext, aggregators);
+        return new BinManager(variableContext, postProcessorConfig, aggregators);
     }
 
     public VariableContext createVariableContext() {

@@ -183,7 +183,7 @@ public class ReprojectionOp extends Operator {
     private Integer height;
     @Parameter(description = "The tile size in X direction.")
     private Integer tileSizeX;
-    @Parameter(description = "The pixel size in Y direction.")
+    @Parameter(description = "The tile size in Y direction.")
     private Integer tileSizeY;
 
     @Parameter(description = "Whether the source product should be orthorectified. (Not applicable to all products)",
@@ -267,6 +267,10 @@ public class ReprojectionOp extends Operator {
             throw new OperatorException(e);
         }
 
+        ProductData.UTC meanTime = getSourceMeanTime();
+        targetProduct.setStartTime(meanTime);
+        targetProduct.setEndTime(meanTime);
+
         srcModel = ImageManager.getMultiLevelModel(sourceProduct.getBandAt(0));
         targetModel = ImageManager.createMultiLevelModel(targetProduct);
         reprojection = new Reproject(targetModel.getLevelCount());
@@ -347,7 +351,7 @@ public class ReprojectionOp extends Operator {
         final GeoCoding sourceGeoCoding = getSourceGeoCoding(sourceRaster);
         final String exp = sourceRaster.getValidMaskExpression();
         if (exp != null) {
-            sourceImage = createNoDataReplacedImage(sourceImage, sourceRaster.getValidMaskImage(), targetNoDataValue);
+            sourceImage = createNoDataReplacedImage(sourceRaster, targetNoDataValue);
         }
 
         final Interpolation resampling = getResampling(targetBand);
@@ -417,16 +421,8 @@ public class ReprojectionOp extends Operator {
         });
     }
 
-    private MultiLevelImage createNoDataReplacedImage(final MultiLevelImage srcImage, final MultiLevelImage maskImage,
-                                                      final double noData) {
-
-        return new DefaultMultiLevelImage(new AbstractMultiLevelSource(srcModel) {
-
-            @Override
-            public RenderedImage createImage(int sourceLevel) {
-                return new InsertNoDataValueOpImage(srcImage.getImage(sourceLevel), maskImage.getImage(sourceLevel), noData);
-            }
-        });
+    private MultiLevelImage createNoDataReplacedImage(final RasterDataNode rasterDataNode, final double noData) {
+        return ImageManager.createMaskedGeophysicalImage(rasterDataNode, noData);
     }
 
     private MultiLevelImage createProjectedImage(final GeoCoding sourceGeoCoding, final MultiLevelImage sourceImage,
@@ -496,6 +492,22 @@ public class ReprojectionOp extends Operator {
     private int getSourceLevel(MultiLevelModel srcModel, int targetLevel) {
         int maxSourceLevel = srcModel.getLevelCount() - 1;
         return maxSourceLevel < targetLevel ? maxSourceLevel : targetLevel;
+    }
+
+    private ProductData.UTC getSourceMeanTime() {
+        ProductData.UTC startTime = sourceProduct.getStartTime();
+        ProductData.UTC endTime = sourceProduct.getEndTime();
+        ProductData.UTC meanTime;
+        if (startTime != null && endTime != null) {
+            meanTime = new ProductData.UTC(0.5 * (startTime.getMJD() + endTime.getMJD()));
+        } else if (startTime != null) {
+            meanTime = startTime;
+        } else if (endTime != null) {
+            meanTime = endTime;
+        } else {
+            meanTime = null;
+        }
+        return meanTime;
     }
 
     private void copyIndexCoding() {

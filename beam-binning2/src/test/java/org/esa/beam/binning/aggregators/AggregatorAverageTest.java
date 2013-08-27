@@ -23,13 +23,10 @@ import org.esa.beam.binning.support.VectorImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import static java.lang.Float.NaN;
-import static java.lang.Math.sqrt;
-import static org.esa.beam.binning.aggregators.AggregatorTestUtils.createCtx;
-import static org.esa.beam.binning.aggregators.AggregatorTestUtils.obsNT;
-import static org.esa.beam.binning.aggregators.AggregatorTestUtils.vec;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static java.lang.Float.*;
+import static java.lang.Math.*;
+import static org.esa.beam.binning.aggregators.AggregatorTestUtils.*;
+import static org.junit.Assert.*;
 
 public class AggregatorAverageTest {
 
@@ -42,10 +39,9 @@ public class AggregatorAverageTest {
 
     @Test
     public void testMetadata() {
-        AggregatorAverage agg = new AggregatorAverage(new MyVariableContext("c"), "c", 0.0, null);
+        AggregatorAverage agg = new AggregatorAverage(new MyVariableContext("c"), "c", 0.0);
 
         assertEquals("AVG", agg.getName());
-        assertTrue(Float.isNaN(agg.getOutputFillValue()));
 
         String[] spatialFeatureNames = agg.getSpatialFeatureNames();
         assertEquals(2, spatialFeatureNames.length);
@@ -66,15 +62,14 @@ public class AggregatorAverageTest {
 
     @Test
     public void testMetadata_ForDedicatedFillValue() {
-        AggregatorAverage agg = new AggregatorAverage(new MyVariableContext("c"), "c", 0.0, 43.21f);
+        AggregatorAverage agg = new AggregatorAverage(new MyVariableContext("c"), "c", 0.0);
 
         assertEquals("AVG", agg.getName());
-        assertEquals(43.21f, agg.getOutputFillValue(), 1e-5f);
     }
 
     @Test
     public void testAggregatorAverageNoWeight() {
-        AggregatorAverage agg = new AggregatorAverage(new MyVariableContext("c"), "c", 0.0, null);
+        AggregatorAverage agg = new AggregatorAverage(new MyVariableContext("c"), "c", 0.0);
 
         VectorImpl svec = vec(NaN, NaN);
         VectorImpl tvec = vec(NaN, NaN, NaN);
@@ -118,8 +113,111 @@ public class AggregatorAverageTest {
     }
 
     @Test
+    public void testAggregatorAverageNoWeightWithNaN() {
+        AggregatorAverage agg = new AggregatorAverage(new MyVariableContext("c"), "c", 0.0);
+
+        VectorImpl svec = vec(NaN, NaN);
+        VectorImpl tvec = vec(NaN, NaN, NaN);
+        VectorImpl out = vec(NaN, NaN);
+
+        agg.initSpatial(ctx, svec);
+        assertEquals(0.0f, svec.get(0), 0.0f);
+        assertEquals(0.0f, svec.get(1), 0.0f);
+
+        agg.aggregateSpatial(ctx, obsNT(1.5f), svec);
+        agg.aggregateSpatial(ctx, obsNT(2.5f), svec);
+        agg.aggregateSpatial(ctx, obsNT(NaN), svec);
+        float sumX = 1.5f + 2.5f;
+        float sumXX = 1.5f * 1.5f + 2.5f * 2.5f;
+        assertEquals(sumX, svec.get(0), 1e-5f);
+        assertEquals(sumXX, svec.get(1), 1e-5f);
+
+        int numObs = 3;
+        agg.completeSpatial(ctx, numObs, svec);
+        assertEquals(sumX / 2, svec.get(0), 1e-5f);
+        assertEquals(sumXX / 2, svec.get(1), 1e-5f);
+
+        agg.initTemporal(ctx, tvec);
+        assertEquals(0.0f, tvec.get(0), 0.0f);
+        assertEquals(0.0f, tvec.get(1), 0.0f);
+        assertEquals(0.0f, tvec.get(2), 0.0f);
+
+        agg.aggregateTemporal(ctx, vec(0.3f, 0.09f), 3, tvec);
+        agg.aggregateTemporal(ctx, vec(0.1f, 0.01f), 2, tvec);
+        agg.aggregateTemporal(ctx, vec(NaN, NaN), 1, tvec);
+        agg.aggregateTemporal(ctx, vec(0.1f, 0.01f), 7, tvec);
+        float sum = 0.3f + 0.1f + 0.1f;
+        float sumSqr = 0.09f + 0.01f + 0.01f;
+        float weightSum = 3f;
+        assertEquals(sum, tvec.get(0), 1e-5f);
+        assertEquals(sumSqr, tvec.get(1), 1e-5f);
+        assertEquals(weightSum, tvec.get(2), 1e-5f);
+
+        float mean = sum / weightSum;
+        float sigma = (float) sqrt(sumSqr / weightSum - mean * mean);
+        agg.computeOutput(tvec, out);
+        assertEquals(mean, out.get(0), 1e-5f);
+        assertEquals(sigma, out.get(1), 1e-5f);
+    }
+
+    @Test
+    public void testAggregatorAverageWithWeightWithNaNWithOutputCounts() {
+        AggregatorAverage agg = new AggregatorAverage(new MyVariableContext("c"), "c", 1.0, true);
+
+        VectorImpl svec = vec(NaN, NaN, NaN);
+        VectorImpl tvec = vec(NaN, NaN, NaN, NaN);
+        VectorImpl out = vec(NaN, NaN, NaN);
+
+        agg.initSpatial(ctx, svec);
+        assertEquals(0.0f, svec.get(0), 0.0f);
+        assertEquals(0.0f, svec.get(1), 0.0f);
+        assertEquals(0.0f, svec.get(2), 0.0f);
+
+        agg.aggregateSpatial(ctx, obsNT(1.5f), svec);
+        agg.aggregateSpatial(ctx, obsNT(2.5f), svec);
+        agg.aggregateSpatial(ctx, obsNT(NaN), svec);
+        float sumX = 1.5f + 2.5f;
+        float sumXX = 1.5f * 1.5f + 2.5f * 2.5f;
+        float counts = 2;
+        assertEquals(sumX, svec.get(0), 1e-5f);
+        assertEquals(sumXX, svec.get(1), 1e-5f);
+        assertEquals(counts, svec.get(2), 1e-5f);
+
+        int numObs = 3;
+        agg.completeSpatial(ctx, numObs, svec);
+        assertEquals(sumX / counts, svec.get(0), 1e-5f);
+        assertEquals(sumXX / counts, svec.get(1), 1e-5f);
+
+        agg.initTemporal(ctx, tvec);
+        assertEquals(0.0f, tvec.get(0), 0.0f);
+        assertEquals(0.0f, tvec.get(1), 0.0f);
+        assertEquals(0.0f, tvec.get(2), 0.0f);
+        assertEquals(0.0f, tvec.get(3), 0.0f);
+
+        agg.aggregateTemporal(ctx, vec(0.3f, 0.09f, 3), 3, tvec);
+        agg.aggregateTemporal(ctx, vec(0.1f, 0.01f, 2), 2, tvec);
+        agg.aggregateTemporal(ctx, vec(NaN, NaN, 0), 5, tvec);
+        agg.aggregateTemporal(ctx, vec(0.1f, 0.01f, 7), 7, tvec);
+        float sum = 0.3f * 3 + 0.1f * 2 + 0.1f * 7;
+        float sumSqr = 0.09f * 3 + 0.01f * 2 + 0.01f * 7;
+        float weightSum = 3 + 2 + 7;
+        counts = 3 + 2 + 7;
+        assertEquals(sum, tvec.get(0), 1e-5f);
+        assertEquals(sumSqr, tvec.get(1), 1e-5f);
+        assertEquals(weightSum, tvec.get(2), 1e-5f);
+        assertEquals(counts, tvec.get(2), 1e-5f);
+
+        float mean = sum / weightSum;
+        float sigma = (float) sqrt(sumSqr / weightSum - mean * mean);
+        agg.computeOutput(tvec, out);
+        assertEquals(mean, out.get(0), 1e-5f);
+        assertEquals(sigma, out.get(1), 1e-5f);
+        assertEquals(counts, out.get(2), 1e-5f);
+    }
+
+    @Test
     public void testAggregatorAverageWeighted() {
-        Aggregator agg = new AggregatorAverage(new MyVariableContext("c"), "c", 1.0, null);
+        Aggregator agg = new AggregatorAverage(new MyVariableContext("c"), "c", 1.0);
 
         VectorImpl svec = vec(NaN, NaN);
         VectorImpl tvec = vec(NaN, NaN, NaN);
@@ -164,7 +262,7 @@ public class AggregatorAverageTest {
 
     @Test
     public void testSuperSampling() {
-        Aggregator agg = new AggregatorAverage(new MyVariableContext("c"), "c", null, null);
+        Aggregator agg = new AggregatorAverage(new MyVariableContext("c"), "c", null);
         VectorImpl svec = vec(NaN, NaN);
         VectorImpl tvec = vec(NaN, NaN, NaN);
         VectorImpl out = vec(NaN, NaN);

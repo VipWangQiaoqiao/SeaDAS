@@ -23,11 +23,10 @@
     <parent>
         <groupId>org.esa.beam</groupId>
         <artifactId>beam-plugin-parent</artifactId>
-        <version>1.0</version>
+        <version>1.0.1</version>
         <relativePath>../beam-plugin-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>org.esa.beam</groupId>
     <artifactId>beam-meris-radiometry</artifactId>
     <name>BEAM MERIS Radiometry Processor</name>
     <version>1.1.2</version>

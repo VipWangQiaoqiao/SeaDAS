@@ -30,21 +30,27 @@ import java.util.Map;
 public class BinManager {
 
     private final VariableContext variableContext;
+    private final CellProcessor cellProcessor;
     private final Aggregator[] aggregators;
     private final int spatialFeatureCount;
     private final int temporalFeatureCount;
     private final int outputFeatureCount;
+    private final int postFeatureCount;
     private final int[] spatialFeatureOffsets;
     private final int[] temporalFeatureOffsets;
     private final int[] outputFeatureOffsets;
     private final String[] outputFeatureNames;
-    private final double[] outputFeatureFillValues;
+    private final String[] postFeatureNames;
 
     public BinManager() {
         this(new VariableContextImpl());
     }
 
     public BinManager(VariableContext variableContext, Aggregator... aggregators) {
+        this(variableContext, null, aggregators);
+    }
+
+    public BinManager(VariableContext variableContext, CellProcessorConfig cellProcessorConfig, Aggregator... aggregators) {
         this.variableContext = variableContext;
         this.aggregators = aggregators;
         this.spatialFeatureOffsets = new int[aggregators.length];
@@ -66,15 +72,36 @@ public class BinManager {
         this.temporalFeatureCount = temporalFeatureCount;
         this.outputFeatureCount = outputFeatureCount;
         this.outputFeatureNames = new String[outputFeatureCount];
-        this.outputFeatureFillValues = new double[outputFeatureCount];
         final NameUnifier nameUnifier = new NameUnifier();
         int k = 0;
         for (Aggregator aggregator : aggregators) {
             for (int i = 0; i < aggregator.getOutputFeatureNames().length; i++) {
                 outputFeatureNames[k] = nameUnifier.unifyName(aggregator.getOutputFeatureNames()[i]);
-                outputFeatureFillValues[k] = aggregator.getOutputFillValue();
                 k++;
             }
+        }
+        if (cellProcessorConfig != null) {
+            this.cellProcessor = createPostProcessor(cellProcessorConfig, outputFeatureNames);
+            this.postFeatureNames = cellProcessor.getOutputFeatureNames();
+            this.postFeatureCount = this.postFeatureNames.length;
+        } else {
+            this.cellProcessor = null;
+            this.postFeatureCount = 0;
+            this.postFeatureNames = new String[0];
+        }
+    }
+
+    private static CellProcessor createPostProcessor(CellProcessorConfig config, String[] outputFeatureNames) {
+        VariableContextImpl variableContextAgg = new VariableContextImpl();
+        for (String outputFeatureName : outputFeatureNames) {
+            variableContextAgg.defineVariable(outputFeatureName);
+        }
+        TypedDescriptorsRegistry registry = TypedDescriptorsRegistry.getInstance();
+        CellProcessorDescriptor descriptor = registry.getDescriptor(CellProcessorDescriptor.class, config.getName());
+        if (descriptor != null) {
+            return descriptor.createCellProcessor(variableContextAgg, config);
+        } else {
+            throw new IllegalArgumentException("Unknown cell processor type: " + config.getName());
         }
     }
 
@@ -90,12 +117,36 @@ public class BinManager {
         return temporalFeatureCount;
     }
 
+    public final int getOutputFeatureCount() {
+        return outputFeatureCount;
+    }
+
+    public int getPostProcessFeatureCount() {
+        return postFeatureCount;
+    }
+
     public final String[] getOutputFeatureNames() {
         return outputFeatureNames;
     }
 
-    public final double getOutputFeatureFillValue(int i) {
-        return outputFeatureFillValues[i];
+    final String[] getPostProcessFeatureNames() {
+        return postFeatureNames;
+    }
+
+    public int getResultFeatureCount() {
+        if (hasPostProcessor()) {
+            return postFeatureCount;
+        } else {
+            return outputFeatureCount;
+        }
+    }
+
+    public final String[] getResultFeatureNames() {
+        if (hasPostProcessor()) {
+            return getPostProcessFeatureNames();
+        } else {
+            return getOutputFeatureNames();
+        }
     }
 
     public final int getAggregatorCount() {
@@ -120,6 +171,7 @@ public class BinManager {
         return vector;
     }
 
+    // method is used in Calvalus - undocumented API :-) don't remove
     public WritableVector createOutputVector() {
         return new VectorImpl(new float[outputFeatureCount]);
     }
@@ -169,6 +221,7 @@ public class BinManager {
         outputBin.numPasses++;
     }
 
+    // method is used in Calvalus - undocumented API :-) don't remove
     public void aggregateTemporalBin(TemporalBin inputBin, TemporalBin outputBin) {
         aggregateBin(inputBin, outputBin);
         outputBin.numPasses += inputBin.numPasses;
@@ -193,6 +246,10 @@ public class BinManager {
             temporalVector.setOffsetAndSize(temporalFeatureOffsets[i], aggregator.getTemporalFeatureNames().length);
             aggregator.completeTemporal(temporalBin, temporalBin.numObs, temporalVector);
         }
+    }
+
+    public TemporalBin createOutputBin(long binIndex) {
+        return new TemporalBin(binIndex, outputFeatureCount);
     }
 
     public void computeOutput(TemporalBin temporalBin, WritableVector outputVector) {
@@ -225,12 +282,24 @@ public class BinManager {
         }
     }
 
+    public boolean hasPostProcessor() {
+        return cellProcessor != null;
+    }
+
+    public TemporalBin createProcessBin(long binIndex) {
+        return new TemporalBin(binIndex, postFeatureCount);
+    }
+
+    public void postProcess(Vector outputVector, WritableVector postVector) {
+        cellProcessor.compute(outputVector, postVector);
+    }
+
     static class NameUnifier {
 
         private final Map<String, Integer> addedNames = new HashMap<String, Integer>();
 
         String unifyName(String name) {
-            if(!addedNames.containsKey(name)) {
+            if (!addedNames.containsKey(name)) {
                 addedNames.put(name, 0);
                 return name;
             } else {

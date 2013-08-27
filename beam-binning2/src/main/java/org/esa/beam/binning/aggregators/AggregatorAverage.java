@@ -17,7 +17,16 @@
 package org.esa.beam.binning.aggregators;
 
 import com.bc.ceres.binding.PropertySet;
-import org.esa.beam.binning.*;
+import org.esa.beam.binning.AbstractAggregator;
+import org.esa.beam.binning.Aggregator;
+import org.esa.beam.binning.AggregatorConfig;
+import org.esa.beam.binning.AggregatorDescriptor;
+import org.esa.beam.binning.BinContext;
+import org.esa.beam.binning.Observation;
+import org.esa.beam.binning.VariableContext;
+import org.esa.beam.binning.Vector;
+import org.esa.beam.binning.WeightFn;
+import org.esa.beam.binning.WritableVector;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 
 import java.util.Arrays;
@@ -26,32 +35,45 @@ import java.util.Arrays;
  * An aggregator that computes an average.
  */
 public final class AggregatorAverage extends AbstractAggregator {
+
     private final int varIndex;
     private final WeightFn weightFn;
+    private final boolean outputCounts;
+    private final String icName;
 
-    public AggregatorAverage(VariableContext varCtx, String varName, Double weightCoeff, Number fillValue) {
+    public AggregatorAverage(VariableContext varCtx, String varName, Double weightCoeff) {
+        this(varCtx, varName, weightCoeff != null ? weightCoeff : 0.0, false);
+    }
+
+    public AggregatorAverage(VariableContext varCtx, String varName, double weightCoeff, boolean outputCounts) {
         super(Descriptor.NAME,
-              createFeatureNames(varName, "sum", "sum_sq"),
-              createFeatureNames(varName, "sum", "sum_sq", "weights"),
-              createFeatureNames(varName, "mean", "sigma"),
-              fillValue);
+              createFeatureNames(varName, "sum", "sum_sq", outputCounts ? "counts" : null),
+              createFeatureNames(varName, "sum", "sum_sq", "weights", outputCounts ? "counts" : null),
+              createFeatureNames(varName, "mean", "sigma", outputCounts ? "counts" : null));
         if (varCtx == null) {
             throw new NullPointerException("varCtx");
         }
         if (varName == null) {
             throw new NullPointerException("varName");
         }
-        if (weightCoeff != null && weightCoeff < 0.0) {
+        if (weightCoeff < 0.0) {
             throw new IllegalArgumentException("weightCoeff < 0.0");
         }
         this.varIndex = varCtx.getVariableIndex(varName);
-        this.weightFn = WeightFn.createPow(weightCoeff != null ? weightCoeff : 0.0);
+        this.weightFn = WeightFn.createPow(weightCoeff);
+        this.outputCounts = outputCounts;
+        this.icName = "ic." + varName;
     }
 
     @Override
     public void initSpatial(BinContext ctx, WritableVector vector) {
         vector.set(0, 0.0f);
         vector.set(1, 0.0f);
+        if (outputCounts) {
+            vector.set(2, 0.0f);
+        } else {
+            initNumInvalids(ctx);
+        }
     }
 
     @Override
@@ -59,27 +81,61 @@ public final class AggregatorAverage extends AbstractAggregator {
         vector.set(0, 0.0f);
         vector.set(1, 0.0f);
         vector.set(2, 0.0f);
+        if (outputCounts) {
+            vector.set(3, 0.0f);
+        } else {
+            initNumInvalids(ctx);
+        }
     }
 
     @Override
     public void aggregateSpatial(BinContext ctx, Observation observationVector, WritableVector spatialVector) {
         final float value = observationVector.get(varIndex);
-        spatialVector.set(0, spatialVector.get(0) + value);
-        spatialVector.set(1, spatialVector.get(1) + value * value);
+        if (!Float.isNaN(value)) {
+            spatialVector.set(0, spatialVector.get(0) + value);
+            spatialVector.set(1, spatialVector.get(1) + value * value);
+            if (outputCounts) {
+                spatialVector.set(2, spatialVector.get(2) + 1f);
+            }
+        } else {
+            if (!outputCounts) {
+                incrementNumInvalids(ctx);
+            }
+        }
     }
 
     @Override
     public void completeSpatial(BinContext ctx, int numSpatialObs, WritableVector spatialVector) {
-        spatialVector.set(0, spatialVector.get(0) / numSpatialObs);
-        spatialVector.set(1, spatialVector.get(1) / numSpatialObs);
+        int counts;
+        if (outputCounts) {
+            counts = (int) spatialVector.get(2);
+        } else {
+            counts = numSpatialObs - getNumInvalids(ctx);
+        }
+        if (counts > 0) {
+            spatialVector.set(0, spatialVector.get(0) / counts);
+            spatialVector.set(1, spatialVector.get(1) / counts);
+        } else {
+            spatialVector.set(0, Float.NaN);
+            spatialVector.set(1, Float.NaN);
+        }
     }
 
     @Override
-    public void aggregateTemporal(BinContext ctx, Vector spatialVector, int numSpatialObs, WritableVector temporalVector) {
-        final float w = weightFn.eval(numSpatialObs);
-        temporalVector.set(0, temporalVector.get(0) + spatialVector.get(0) * w);
-        temporalVector.set(1, temporalVector.get(1) + spatialVector.get(1) * w);
-        temporalVector.set(2, temporalVector.get(2) + w);
+    public void aggregateTemporal(BinContext ctx, Vector spatialVector, int numSpatialObs,
+                                  WritableVector temporalVector) {
+        float w = weightFn.eval(numSpatialObs);
+        float sum = spatialVector.get(0);
+        float sumSqr = spatialVector.get(1);
+        if (!Float.isNaN(sum)) {
+            temporalVector.set(0, temporalVector.get(0) + sum * w);
+            temporalVector.set(1, temporalVector.get(1) + sumSqr * w);
+            temporalVector.set(2, temporalVector.get(2) + w);
+            if (outputCounts) {
+                float counts = spatialVector.get(2);
+                temporalVector.set(3, temporalVector.get(3) + counts);
+            }
+        }
     }
 
     @Override
@@ -91,11 +147,39 @@ public final class AggregatorAverage extends AbstractAggregator {
         final double sumX = temporalVector.get(0);
         final double sumXX = temporalVector.get(1);
         final double sumW = temporalVector.get(2);
-        final double mean = sumX / sumW;
-        final double sigmaSqr = sumXX / sumW - mean * mean;
-        final double sigma = sigmaSqr > 0.0 ? Math.sqrt(sigmaSqr) : 0.0 * sigmaSqr; // multiplication to pass through NaN
-        outputVector.set(0, (float) mean);
-        outputVector.set(1, (float) sigma);
+        if (sumW > 0.0) {
+            // Note: sigmaSqr may be negative but not NaN.
+            // If it is negative, sigma is actually a complex number of which
+            // we take the real part, which is zero.  (nf)
+            final double mean = sumX / sumW;
+            final double sigmaSqr = sumXX / sumW - mean * mean;
+            final double sigma = sigmaSqr > 0.0 ? Math.sqrt(sigmaSqr) : 0.0;
+            outputVector.set(0, (float) mean);
+            outputVector.set(1, (float) sigma);
+            if (outputCounts) {
+                float counts = temporalVector.get(3);
+                outputVector.set(2, counts);
+            }
+        } else {
+            // todo - use fillValue here (nf)
+            outputVector.set(0, Float.NaN);
+            outputVector.set(1, Float.NaN);
+            if (outputCounts) {
+                outputVector.set(2, 0.0f);
+            }
+        }
+    }
+
+    private void initNumInvalids(BinContext ctx) {
+        ctx.put(icName, new int[1]);
+    }
+
+    private void incrementNumInvalids(BinContext ctx) {
+        ((int[]) ctx.get(icName))[0]++;
+    }
+
+    private int getNumInvalids(BinContext ctx) {
+        return ((int[]) ctx.get(icName))[0];
     }
 
     @Override
@@ -110,23 +194,27 @@ public final class AggregatorAverage extends AbstractAggregator {
     }
 
     public static class Config extends AggregatorConfig {
+
         @Parameter(notEmpty = true, notNull = true)
         String varName;
         @Parameter
         Double weightCoeff;
         @Parameter
         Float fillValue;
+        @Parameter
+        Boolean outputCounts;
 
 
         public Config() {
-            this(null, null, null);
+            this(null, null, null, null);
         }
 
-        public Config(String varName, Double weightCoeff, Float fillValue) {
+        public Config(String varName, Double weightCoeff, Float fillValue, Boolean outputCounts) {
             super(Descriptor.NAME);
             this.varName = varName;
             this.weightCoeff = weightCoeff;
             this.fillValue = fillValue;
+            this.outputCounts = outputCounts;
         }
 
         public void setVarName(String varName) {
@@ -151,14 +239,16 @@ public final class AggregatorAverage extends AbstractAggregator {
         @Override
         public Aggregator createAggregator(VariableContext varCtx, AggregatorConfig aggregatorConfig) {
             PropertySet propertySet = aggregatorConfig.asPropertySet();
+            Double weightCoeff = propertySet.getValue("weightCoeff");
+            Boolean outputCounts = propertySet.getValue("outputCounts");
             return new AggregatorAverage(varCtx,
                                          (String) propertySet.getValue("varName"),
-                                         (Double) propertySet.getValue("weightCoeff"),
-                                         (Float) propertySet.getValue("fillValue"));
+                                         weightCoeff != null ? weightCoeff : 0.0,
+                                         outputCounts != null ? outputCounts : false);
         }
 
         @Override
-        public AggregatorConfig createAggregatorConfig() {
+        public AggregatorConfig createConfig() {
             return new Config();
         }
     }
