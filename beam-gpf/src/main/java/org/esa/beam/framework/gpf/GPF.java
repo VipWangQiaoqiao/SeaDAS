@@ -236,14 +236,11 @@ public class GPF {
                     for (int i = 0; i < sourceProducts.length; i++) {
                         Product sourceProduct = sourceProducts[i];
                         sourceProductMap.put(SOURCE_PRODUCT_FIELD_NAME + "." + (i + 1), sourceProduct);
-                        // kept for backward compatibility
-                        // since BEAM 4.9 the pattern above is preferred
                         sourceProductMap.put(SOURCE_PRODUCT_FIELD_NAME + (i + 1), sourceProduct);
                     }
                 }
             }
         }
-
         return defaultInstance.createProductNS(operatorName, parameters, sourceProductMap, renderingHints);
     }
 
