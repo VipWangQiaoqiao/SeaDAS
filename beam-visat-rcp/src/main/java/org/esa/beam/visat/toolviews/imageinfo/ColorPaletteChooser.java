@@ -35,6 +35,8 @@ public class ColorPaletteChooser extends JComboBox {
     private boolean isDiscrete;
     private int currentColorBarIndex;
 
+    private double minDefaultValue, maxDefaultValue;
+
     public ColorPaletteChooser(File colorPaletteDir) {
         super();
         colorBarDimension = new Dimension(COLORBAR_WIDTH, COLORBAR_HEIGHT);
@@ -48,6 +50,8 @@ public class ColorPaletteChooser extends JComboBox {
 
     public ColorPaletteChooser(File colorPaletteDir, ColorPaletteDef defaultColorPaletteDef) {
         super();
+        minDefaultValue = defaultColorPaletteDef.getMinDisplaySample();
+        maxDefaultValue = defaultColorPaletteDef.getMaxDisplaySample();
         colorBarDimension = new Dimension(COLORBAR_WIDTH, COLORBAR_HEIGHT);
         this.colorPaletteDir = colorPaletteDir;
         colorBarMap = new HashMap();
@@ -119,7 +123,7 @@ public class ColorPaletteChooser extends JComboBox {
     }
 
     private void drawPalette(Graphics2D g2, File paletteFile, Rectangle paletteRect) throws IOException {
-        ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDefForColorBar(paletteFile);
+        ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDefForColorBar(paletteFile, minDefaultValue, maxDefaultValue);
         updateColorBarMinMax(colorPaletteDef);
         //distributeSlidersEvenly(colorPaletteDef);
         drawPalette(g2, colorPaletteDef, paletteRect);
@@ -141,7 +145,7 @@ public class ColorPaletteChooser extends JComboBox {
         drawPalette(g2, cpdFile, new Rectangle(dimension));
         ImageIcon icon = new ImageIcon(bufferedImage);
         icon.setDescription(cpdFile.getName());
-        ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDefForColorBar(cpdFile);
+        ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDefForColorBar(cpdFile, minDefaultValue, maxDefaultValue);
         colorBarMap.put(cpdFile.getName(), new ColorRamp(cpdFile.getName(), colorPaletteDef, colorPaletteDef.getMinDisplaySample(), colorPaletteDef.getMaxDisplaySample()));
         updateColorBarMinMax(colorPaletteDef);
         return icon;
@@ -165,6 +169,7 @@ public class ColorPaletteChooser extends JComboBox {
                     defaultIcon = icon;
                 }
             } catch (IOException e) {
+                System.out.println("File " + file.getName() + " is not accepted as a valid cpd file!");
             }
         }
         Collections.sort(icons, new Comparator<ImageIcon>() {
