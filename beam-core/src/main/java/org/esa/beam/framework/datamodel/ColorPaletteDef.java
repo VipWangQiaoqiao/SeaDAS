@@ -21,9 +21,11 @@ import org.esa.beam.util.Guardian;
 import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.math.MathUtils;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Vector;
@@ -87,7 +89,7 @@ public class ColorPaletteDef implements Cloneable {
 
     public void setLogDisplay(boolean logDislay) {
 
-           this.logDisplay = logDislay;
+        this.logDisplay = logDislay;
 
     }
 
@@ -153,7 +155,6 @@ public class ColorPaletteDef implements Cloneable {
      *
      * @param index   the index
      * @param scaling the scaling
-     *
      * @return true, if a point has been inserted
      */
     public boolean createPointAfter(int index, Scaling scaling) {
@@ -180,14 +181,13 @@ public class ColorPaletteDef implements Cloneable {
      *
      * @param c1 1st color
      * @param c2 2nd color
-     *
      * @return the center color
      */
     public static Color getCenterColor(Color c1, Color c2) {
         return new Color(0.5F * (c1.getRed() + c2.getRed()) / 255.0F,
-                         0.5F * (c1.getGreen() + c2.getGreen()) / 255.0F,
-                         0.5F * (c1.getBlue() + c2.getBlue()) / 255.0F,
-                         0.5F * (c1.getAlpha() + c2.getAlpha()) / 255.0F);
+                0.5F * (c1.getGreen() + c2.getGreen()) / 255.0F,
+                0.5F * (c1.getBlue() + c2.getBlue()) / 255.0F,
+                0.5F * (c1.getAlpha() + c2.getAlpha()) / 255.0F);
     }
 
 
@@ -245,9 +245,7 @@ public class ColorPaletteDef implements Cloneable {
      * Loads a color palette definition from the given file
      *
      * @param file the file
-     *
      * @return the color palette definition, never null
-     *
      * @throws IOException if an I/O error occurs
      */
     public static ColorPaletteDef loadColorPaletteDef(File file) throws IOException {
@@ -256,7 +254,7 @@ public class ColorPaletteDef implements Cloneable {
         final int numPoints = propertyMap.getPropertyInt(_PROPERTY_KEY_NUM_POINTS);
         if (numPoints < 2) {
             throw new IOException("The selected file contains less than\n" +
-                                  "two colour points.");
+                    "two colour points.");
         }
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints];
         double lastSample = 0;
@@ -285,13 +283,14 @@ public class ColorPaletteDef implements Cloneable {
      * @return the color palette definition, never null
      * @throws java.io.IOException if an I/O error occurs
      */
-    public static ColorPaletteDef loadColorPaletteDefForColorBar(File file) throws IOException {
+    public static ColorPaletteDef loadColorPaletteDefForColorBar(File file, double minDefaultValue, double maxDefaultValue) throws IOException {
         final PropertyMap propertyMap = new PropertyMap();
         propertyMap.load(file); // Overwrite existing values
         final int numPoints = propertyMap.getPropertyInt(_PROPERTY_KEY_NUM_POINTS);
         if (numPoints < 2) {
-            throw new IOException("The selected file contains less than\n" +
-                    "two colour points.");
+            //throw new IOException("The selected file contains less than\n" +
+                    //"two colour points.");
+            return loadColorOnlyCPDForColorBar(file, minDefaultValue, maxDefaultValue);
         }
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints];
         double lastSample = 0;
@@ -308,17 +307,75 @@ public class ColorPaletteDef implements Cloneable {
             lastSample = sample;
         }
         ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
+        //ColorPaletteDef paletteDef = new ColorPaletteDef(points, numPoints);
         paletteDef.setAutoDistribute(true);
         paletteDef.setCpdFileName(file.getName());
         return paletteDef;
     }
 
     /**
+     * Loads a color palette definition from the given file
+     *
+     * @param file the file
+     * @return the color palette definition, never null
+     * @throws java.io.IOException if an I/O error occurs
+     */
+    public static ColorPaletteDef loadColorOnlyCPDForColorBar(File file, double minDefaultValue, double maxDefaultValue) throws IOException {
+
+        LineNumberReader reader = null;
+        int numPoints = 0;
+        Color[] colors = new Color[256];
+        try {
+            reader = new LineNumberReader(new FileReader(file));
+
+            String line;
+            line = reader.readLine();
+            String[] option;
+            int r, g, b;
+
+            while (line != null) {
+                line = line.trim();
+                option = line.split("\\s+");
+                r = new Integer(option[0]).intValue();
+                g = new Integer(option[1]).intValue();
+                b = new Integer(option[2]).intValue();
+                colors[numPoints] = new Color(r, g, b);
+                numPoints++;
+                line = reader.readLine();
+            }
+        } catch (IOException e1) {
+            System.err.println(e1.getMessage());
+            e1.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+
+        final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints/10];
+        double increment = (maxDefaultValue - minDefaultValue )/numPoints;
+        for (int i = 0; i < points.length; i = i+10) {
+            final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
+            point.setColor(colors[i]);
+            point.setSample(minDefaultValue + increment * i);
+            points[i] = point;
+        }
+        //ColorPaletteDef paletteDef = new ColorPaletteDef(points, numPoints);
+        ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
+        paletteDef.setAutoDistribute(true);
+        paletteDef.setCpdFileName(file.getName());
+        return paletteDef;
+    }
+
+
+    /**
      * Stores this color palette definition in the given file
      *
      * @param colorPaletteDef the color palette definition
      * @param file            the file
-     *
      * @throws IOException if an I/O error occurs
      */
     public static void storeColorPaletteDef(ColorPaletteDef colorPaletteDef, File file) throws IOException {
@@ -368,7 +425,7 @@ public class ColorPaletteDef implements Cloneable {
     public Color[] createColorPalette(Scaling scaling) {
 
         if (logDisplay) {
-           return createColorPaletteForLogScaledDisplay();
+            return createColorPaletteForLogScaledDisplay();
         }
         Debug.assertTrue(getNumPoints() >= 2);
         final int numColors = getNumColors();
@@ -410,8 +467,8 @@ public class ColorPaletteDef implements Cloneable {
             if (logDisplay) {
                 c = computeColorRawForLogDisplay(scaling, sample);
             } else {
-            c = computeColorRaw(scaling, sample);
-        }
+                c = computeColorRaw(scaling, sample);
+            }
 
         }
         return c;
