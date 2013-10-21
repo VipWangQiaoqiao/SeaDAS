@@ -355,9 +355,64 @@ public class ColorPaletteDef implements Cloneable {
             }
         }
 
-        final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints/10];
-        double increment = (maxDefaultValue - minDefaultValue )/numPoints;
-        for (int i = 0; i < points.length; i = i+10) {
+        int samplePoints = (int)Math.round(numPoints/10.0);
+        final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[samplePoints];
+        double increment = (maxDefaultValue - minDefaultValue )/(samplePoints);
+        for (int i = 0; i < samplePoints; i++) {
+            final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
+            point.setColor(colors[i*10 + 1]);
+            point.setSample(i);
+            points[i] = point;
+
+            System.out.println(point.getSample() + "   "   + point.getColor().toString());
+        }
+        //ColorPaletteDef paletteDef = new ColorPaletteDef(points, numPoints);
+        ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
+        paletteDef.setAutoDistribute(true);
+        paletteDef.setCpdFileName(file.getName());
+        return paletteDef;
+    }
+
+
+    public static ColorPaletteDef loadColorOnlyLUTForColorBar(File file, double minDefaultValue, double maxDefaultValue) throws IOException {
+
+        LineNumberReader reader = null;
+        int numPoints = 0;
+        Color[] colors = new Color[256];
+        try {
+            reader = new LineNumberReader(new FileReader(file));
+
+            String line;
+            line = reader.readLine();
+            String[] option;
+            int r, g, b;
+
+            while (line != null) {
+                line = line.trim();
+                option = line.split("\\s+");
+                r = new Integer(option[0]).intValue();
+                g = new Integer(option[1]).intValue();
+                b = new Integer(option[2]).intValue();
+                colors[numPoints] = new Color(r, g, b);
+                numPoints++;
+                line = reader.readLine();
+            }
+        } catch (IOException e1) {
+            System.err.println(e1.getMessage());
+            e1.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+
+        //int samplePoints = numPoints/10;
+        final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints];
+        double increment = (maxDefaultValue - minDefaultValue )/(numPoints);
+        for (int i = 0; i < numPoints; i++) {
             final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
             point.setColor(colors[i]);
             point.setSample(minDefaultValue + increment * i);
@@ -605,5 +660,5 @@ public class ColorPaletteDef implements Cloneable {
             return (Point) clone();
         }
 
-    }
+     }
 }
