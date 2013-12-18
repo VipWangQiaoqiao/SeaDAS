@@ -289,7 +289,7 @@ public class ColorPaletteDef implements Cloneable {
         final int numPoints = propertyMap.getPropertyInt(_PROPERTY_KEY_NUM_POINTS);
         if (numPoints < 2) {
             //throw new IOException("The selected file contains less than\n" +
-                    //"two colour points.");
+            //"two colour points.");
             return loadColorOnlyCPDForColorBar(file, minDefaultValue, maxDefaultValue);
         }
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints];
@@ -355,16 +355,16 @@ public class ColorPaletteDef implements Cloneable {
             }
         }
 
-        int samplePoints = (int)Math.round(numPoints/10.0);
+        int samplePoints = (int) Math.round(numPoints / 10.0);
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[samplePoints];
-        double increment = (maxDefaultValue - minDefaultValue )/(samplePoints);
+        double increment = (maxDefaultValue - minDefaultValue) / (samplePoints);
         for (int i = 0; i < samplePoints; i++) {
             final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
-            point.setColor(colors[i*10 + 1]);
+            point.setColor(colors[i * 10 + 1]);
             point.setSample(i);
             points[i] = point;
 
-            System.out.println(point.getSample() + "   "   + point.getColor().toString());
+            //System.out.println(point.getSample() + "   " + point.getColor().toString());
         }
         //ColorPaletteDef paletteDef = new ColorPaletteDef(points, numPoints);
         ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
@@ -411,7 +411,7 @@ public class ColorPaletteDef implements Cloneable {
 
         //int samplePoints = numPoints/10;
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints];
-        double increment = (maxDefaultValue - minDefaultValue )/(numPoints);
+        double increment = (maxDefaultValue - minDefaultValue) / (numPoints);
         for (int i = 0; i < numPoints; i++) {
             final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
             point.setColor(colors[i]);
@@ -602,6 +602,26 @@ public class ColorPaletteDef implements Cloneable {
         this.cpdFileName = cpdFileName;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (other == this) return true;
+        if (!(other instanceof ColorPaletteDef)) return false;
+        ColorPaletteDef otherMyClass = (ColorPaletteDef) other;
+        Point[] points = this.getPoints();
+        Point[]  otherPoints = otherMyClass.getPoints();
+
+        if (points.length != otherPoints.length) {
+            return false;
+        }
+
+        for ( int i = 0; i<points.length; i++) {
+            if (points[i].color != otherPoints[i].color)
+                return false;
+        }
+
+        return true;
+    }
 
     public static class Point implements Cloneable {
 
@@ -660,5 +680,13 @@ public class ColorPaletteDef implements Cloneable {
             return (Point) clone();
         }
 
-     }
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) return false;
+            if (other == this) return true;
+            if (!(other instanceof Point)) return false;
+            Point otherMyClass = (Point) other;
+            return this.color.equals(otherMyClass.color);
+        }
+    }
 }
