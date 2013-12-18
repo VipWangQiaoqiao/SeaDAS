@@ -233,7 +233,11 @@ class BasicColorEditor extends JPanel {
             maxValData = parentForm.getMaxValueData();
         }
         ColorPaletteDef cpd = (ColorPaletteDef)imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().clone();
-        colorChooser.updateColorPalette(imageInfoEditor.getModel().getImageInfo().getCpdFileName(), cpd);
+        String cpdFileName =  imageInfoEditor.getModel().getImageInfo().getCpdFileName();
+        if (cpdFileName == null ) {
+            cpdFileName = imageInfoEditor.getModel().getImageInfo().getColorPaletteDef().getCpdFileName();
+        }
+        colorChooser.updateColorPalette(cpdFileName, cpd);
     }
 
     //TODO
