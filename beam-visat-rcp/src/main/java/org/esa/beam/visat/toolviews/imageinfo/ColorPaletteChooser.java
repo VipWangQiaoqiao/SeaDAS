@@ -22,6 +22,7 @@ public class ColorPaletteChooser extends JComboBox {
     private final int COLORBAR_HEIGHT = 15;
     private final int COLORBAR_WIDTH = 204;
     public final String DEFAULT_GRAY_COLOR_PALETTE_FILE_NAME = "defaultGrayColor.cpd";
+    public final String DEFAULT_COLOR_PALETTE_FILE_NAME = "defaultColor.cpd";
 
     private File colorPaletteDir;
     private Dimension colorBarDimension;
@@ -178,6 +179,7 @@ public class ColorPaletteChooser extends JComboBox {
                 return o1.getDescription().compareTo(o2.getDescription());
             }
         });
+
         this.icons = icons;
         this.icons.remove(defaultIcon);
         this.icons.add(0, defaultIcon);
@@ -202,7 +204,16 @@ public class ColorPaletteChooser extends JComboBox {
             icons.add(currentColorBarIcon);
             colorModel.setSelectedItem(currentColorBarIcon);
             setModel(colorModel);
-        } else {
+        }
+        else if (cpdFileName == null) {
+            createDefaultGrayColorPaletteFile(colorPaletteDef);
+                        currentColorBarIcon = createGrayColorBarIcon(colorPaletteDef, colorBarDimension);
+                        colorPaletteDef.setCpdFileName(DEFAULT_COLOR_PALETTE_FILE_NAME);
+                        icons.add(currentColorBarIcon);
+                        colorModel.setSelectedItem(currentColorBarIcon);
+                        setModel(colorModel);
+        }
+        else {
             currentColorBarIcon = (ImageIcon) colorModel.getSelectedItem();
             try {
                 newIcon = createColorBarIcon(colorPaletteDef, colorBarDimension);
@@ -226,7 +237,12 @@ public class ColorPaletteChooser extends JComboBox {
         repaint();
     }
 
+    private boolean foundImageIcon(ImageIcon newIcon) {
+        boolean found = false;
+        Collection<ColorRamp> icons = colorBarMap.values();
 
+        return found;
+    }
 
     public File getColorPaletteDir() {
         return colorPaletteDir;
@@ -392,26 +408,4 @@ public class ColorPaletteChooser extends JComboBox {
             this.cpdFileMin = cpdFileMin;
         }
     }
-//    private class ColorHashMap extends HashMap<String, ImageIcon> {
-//        ColorHashMap() {
-//            super();
-//        }
-//
-//        protected ImageIcon getImageIcon(String cpdFileName) {
-//            Set<String> keys = keySet();
-//            Iterator itr = keys.iterator();
-//            String fileName;
-//            while (itr.hasNext()) {
-//                fileName = (String) itr.next();
-//                if (fileName.equals(cpdFileName)) {
-//                    return get(fileName);
-//                }
-//            }
-//            return null;
-//        }
-//
-//
-//    }
-
-
 }
