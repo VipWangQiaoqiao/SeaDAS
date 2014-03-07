@@ -396,6 +396,7 @@
             <id>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</id>
             <class>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</class>
             <title>Colour Manipulation</title>
+            <tabTitle>Color Manipulation</tabTitle>
             <mnemonic>C</mnemonic>
             <accelerator>ctrl alt C</accelerator>
             <description>Image colour manipulation and enhancements.</description>
@@ -411,6 +412,7 @@
             <id>org.esa.beam.visat.toolviews.layermanager.LayerManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.layermanager.LayerManagerToolView</class>
             <title>Layer Manager</title>
+            <tabTitle>Layer Manager</tabTitle>
             <mnemonic>L</mnemonic>
             <accelerator>ctrl alt L</accelerator>
             <description>Manage view layer visibility and transparency.</description>
@@ -418,8 +420,8 @@
             <largeIcon>/org/esa/beam/resources/images/icons/LayerManager24.png</largeIcon>
             <helpId>showLayerManagerWnd</helpId>
             <!-- todo provide help -->
-            <initState>HIDDEN</initState>
-            <initSide>SOUTH</initSide>
+            <initState>DOCKED</initState>
+            <initSide>WEST</initSide>
             <initIndex>0</initIndex>
         </toolView>
 
@@ -433,9 +435,9 @@
             <smallIcon>/org/esa/beam/resources/images/icons/LayerEditor16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/LayerEditor24.png</largeIcon>
             <helpId>showLayerEditorWnd</helpId>
-            <!-- todo provide help -->
+            <placeAfter>MaskManagerToolView</placeAfter>
             <initState>HIDDEN</initState>
-            <initSide>SOUTH</initSide>
+            <initSide>WEST</initSide>
             <initIndex>0</initIndex>
         </toolView>
         <!--
@@ -458,14 +460,15 @@
             <id>org.esa.beam.visat.toolviews.mask.MaskManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.mask.MaskManagerToolView</class>
             <title>Mask Manager</title>
+            <tabTitle>Mask Manager</tabTitle>
             <mnemonic>M</mnemonic>
             <accelerator>ctrl alt M</accelerator>
             <description>Manage binary data masks and ROIs.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/MaskManager16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/MaskManager24.png</largeIcon>
             <helpId>showMaskROIManagerWnd</helpId>
-            <initState>HIDDEN</initState>
-            <initSide>SOUTH</initSide>
+            <initState>DOCKED</initState>
+            <initSide>WEST</initSide>
             <initIndex>0</initIndex>
         </toolView>
 
@@ -1453,6 +1456,8 @@
             <parent>tools</parent>
             <placeAfter>detachPixelGeoCoding</placeAfter>
             <placeBefore>flipping</placeBefore>
+            <smallIcon>icons/Subset16.png</smallIcon>
+            <largeIcon>icons/Subset22.png</largeIcon>
         </action>
 
         <action>

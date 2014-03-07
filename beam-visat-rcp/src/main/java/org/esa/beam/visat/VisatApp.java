@@ -1894,7 +1894,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return toolBar;
     }
 
-    private CommandBar createLayersToolBar() {
+    protected CommandBar createLayersToolBar() {
         final CommandBar toolBar = createToolBar(LAYERS_TOOL_BAR_ID, "Layers");
         ArrayList<String> commandIdList = new ArrayList<String>(Arrays.asList(
                 "showNoDataOverlay",
@@ -1911,7 +1911,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return toolBar;
     }
 
-    private CommandBar createAnalysisToolBar() {
+    protected CommandBar createAnalysisToolBar() {
         final CommandBar toolBar = createToolBar(ANALYSIS_TOOL_BAR_ID, "Analysis");
         addCommandsToToolBar(toolBar, new String[]{
                 InformationToolView.ID + SHOW_TOOLVIEW_CMD_POSTFIX,
@@ -1925,7 +1925,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return toolBar;
     }
 
-    private CommandBar createInteractionsToolBar() {
+    protected CommandBar createInteractionsToolBar() {
         final CommandBar toolBar = createToolBar(INTERACTIONS_TOOL_BAR_ID, "Interactions");
         addCommandsToToolBar(toolBar, new String[]{
                 // These IDs are defined in the module.xml
@@ -1949,7 +1949,7 @@ public class VisatApp extends BasicApp implements AppContext {
     }
 
 
-    private CommandBar[] createViewsToolBars() {
+    protected CommandBar[] createViewsToolBars() {
 
         final HashSet<String> excludedIds = new HashSet<String>(8);
         // todo - remove bad forward dependencies to tool views (nf - 30.10.2008)
@@ -2011,7 +2011,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return viewToolBars.toArray(new CommandBar[viewToolBars.size()]);
     }
 
-    private void addCommandsToToolBar(CommandBar toolBar, String[] commandIDs) {
+    protected void addCommandsToToolBar(CommandBar toolBar, String[] commandIDs) {
         for (final String commandID : commandIDs) {
             if (commandID == null) {
                 toolBar.add(ToolButtonFactory.createToolBarSeparator());
