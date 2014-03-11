@@ -1357,8 +1357,10 @@
             <text>Create Band by Band Maths...</text>
             <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
             <context>image,band,tiePointGrid</context>
-            <smallIcon>icons/BAritmethic16.gif</smallIcon>
-            <largeIcon>icons/BAritmethic24.gif</largeIcon>
+            <!--<smallIcon>icons/BAritmethic16.gif</smallIcon>-->
+            <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
+            <smallIcon>icons/dannys_band_maths16.png</smallIcon>
+            <largeIcon>icons/dannys_band_maths24.png</largeIcon>
             <placeBefore>createDemRelatedBands</placeBefore>
             <helpId>bandArithmetic</helpId>
         </action>
@@ -1456,8 +1458,10 @@
             <parent>tools</parent>
             <placeAfter>detachPixelGeoCoding</placeAfter>
             <placeBefore>flipping</placeBefore>
-            <smallIcon>icons/Subset16.png</smallIcon>
-            <largeIcon>icons/Subset22.png</largeIcon>
+            <!--<smallIcon>icons/Subset16.png</smallIcon>-->
+            <!--<largeIcon>icons/Subset24.png</largeIcon>-->
+            <smallIcon>icons/dannys_spatial_subset16.png</smallIcon>
+            <largeIcon>icons/dannys_spatial_subset24.png</largeIcon>
         </action>
 
         <action>
