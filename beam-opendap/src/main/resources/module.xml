@@ -39,15 +39,14 @@
     <extension point="beam-ui:actions">
         <action>
             <id>showOpendapClientAction</id>
-            <parent>file</parent>
+            <parent>openSubMenu</parent>
             <class>org.esa.beam.opendap.ShowOpendapClientAction</class>
             <text>OPeNDAP Access</text>
             <smallIcon>icons/RsProduct16.gif</smallIcon>
             <largeIcon>icons/RsProduct24.gif</largeIcon>
             <shortDescr>Download products from OPeNDAP servers</shortDescr>
             <helpId>opendap-client</helpId>
-            <placeAfter>reopen</placeAfter>
-            <placeBefore>productGrabber</placeBefore>
+            <placeAfter>productGrabber</placeAfter>
         </action>
     </extension>
 

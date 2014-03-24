@@ -33,15 +33,24 @@
         <action>
             <parent>processing.geomOperations</parent>
             <id>collocation</id>
-            <class>org.esa.beam.collocation.visat.CollocationAction</class>
-            <text>Collocation...</text>
             <helpId>collocation</helpId>
+            <class>org.esa.beam.collocation.visat.CollocationAction</class>
+            <parent>tools</parent>
+            <text>Product: Collocation...</text>
+            <placeAfter>createSubsetFromView</placeAfter>
+            <placeBefore>mosaicAction</placeBefore>
+            <shortDescr>Collocate two products into a single product (useful for parameter comparisons, etc.)</shortDescr>
+            <description>Collocate two products into a single product (useful for parameter comparisons, etc.)</description>
+            <!--<smallIcon>icons/Collocation16.gif</smallIcon>-->
+            <!--<largeIcon>icons/Collocation24.gif</largeIcon>-->
+            <smallIcon>icons/dannys_collocation16.png</smallIcon>
+            <largeIcon>icons/dannys_collocation24.png</largeIcon>
         </action>
     </extension>
 
     <extension point="beam-ui:helpSets">
         <helpSet>
-            <parent>beam-help</parent>
+            <parent>seadas-help</parent>
             <path>doc/help/collocation.hs</path>
         </helpSet>
     </extension>
