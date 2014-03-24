@@ -54,13 +54,7 @@ import org.opengis.referencing.crs.ImageCRS;
 import org.opengis.referencing.datum.PixelInCell;
 import org.opengis.referencing.operation.MathTransform;
 
-import javax.media.jai.Histogram;
-import javax.media.jai.ImageLayout;
-import javax.media.jai.JAI;
-import javax.media.jai.LookupTableJAI;
-import javax.media.jai.PlanarImage;
-import javax.media.jai.RenderedOp;
-import javax.media.jai.TiledImage;
+import javax.media.jai.*;
 
 import javax.media.jai.operator.BandMergeDescriptor;
 import javax.media.jai.operator.ClampDescriptor;
@@ -435,6 +429,8 @@ public class ImageManager {
      */
     //new method added by seadas team
     private static TiledImage transformPixels(RenderedImage sourceImage, double r_offset, double r_factor) {
+        //ParameterBlockJAI pbj = new ParameterBlockJAI("Contour");
+        //System.out.println("it passed here.");
         int width = sourceImage.getWidth();
         int height = sourceImage.getHeight();
         SampleModel sm = sourceImage.getSampleModel();
@@ -545,6 +541,7 @@ public class ImageManager {
 
         if (histogramMatching == ImageInfo.HistogramMatching.None) {
             ParameterBlock pb = new ParameterBlock();
+            ParameterBlockJAI pbj = new ParameterBlockJAI("Contour");
             pb.addSource(sourceImages[0]);
             pb.addSource(sourceImages[1]);
             pb.addSource(sourceImages[2]);
