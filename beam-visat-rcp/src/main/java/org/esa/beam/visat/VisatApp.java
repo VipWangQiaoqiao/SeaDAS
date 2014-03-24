@@ -326,7 +326,7 @@ public class VisatApp extends BasicApp implements AppContext {
     private File sessionFile;
 
     private Interactor activeInteractor = NullInteractor.INSTANCE;
-    private Interactor selectionInteractor;
+    protected Interactor selectionInteractor;
 
     /**
      * Constructs the VISAT application instance. The constructor does not start the application nor does it perform any GUI
@@ -394,7 +394,7 @@ public class VisatApp extends BasicApp implements AppContext {
         }
     }
 
-    private void loadCommands() {
+    protected void loadCommands() {
         Command[] commands = VisatActivator.getInstance().getCommands();
         for (Command command : commands) {
             addCommand(command, getCommandManager());
@@ -517,7 +517,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return null;
     }
 
-    private static void addCommand(Command command, CommandManager commandManager) {
+    protected static void addCommand(Command command, CommandManager commandManager) {
         String parentId = command.getParent();
         if (parentId != null && commandManager.getCommandGroup(parentId) == null) {
             Command com = getCommand(VisatActivator.getInstance().getCommands(), parentId);
