@@ -1098,7 +1098,7 @@
             <parent>showOverlaysMenu</parent>
             <id>showNoDataOverlay</id>
             <class>org.esa.beam.visat.actions.ShowNoDataOverlayAction</class>
-            <text>Show No-Data Overlay</text>
+            <text>No-Data Overlay</text>
             <toggle>true</toggle>
             <shortDescr>Show no-data overlay</shortDescr>
             <description>Show no-data overlay for the selected image</description>
@@ -1112,7 +1112,7 @@
             <parent>showOverlaysMenu</parent>
             <id>showShapeOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGeometryOverlayAction</class>
-            <text>Show Geometry Overlay</text>
+            <text>Geometry Overlay</text>
             <toggle>true</toggle>
             <mnemonic>O</mnemonic>
             <shortDescr>Show/hide geometry overlay</shortDescr>
@@ -1127,7 +1127,7 @@
             <parent>showOverlaysMenu</parent>
             <id>showGraticuleOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGraticuleOverlayAction</class>
-            <text>Show Graticule Overlay</text>
+            <text>Graticule Overlay</text>
             <toggle>true</toggle>
             <mnemonic>G</mnemonic>
             <shortDescr>Show/hide graticule overlay</shortDescr>
@@ -1142,7 +1142,7 @@
             <id>showPinOverlay</id>
             <class>org.esa.beam.visat.actions.ShowPinOverlayAction</class>
             <parent>showOverlaysMenu</parent>
-            <text>Show Pin Overlay</text>
+            <text>Pin Overlay</text>
             <toggle>true</toggle>
             <shortDescr>Show pin overlay</shortDescr>
             <description>Show pin overlay for the selected image</description>
@@ -1156,7 +1156,7 @@
             <id>showGcpOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGcpOverlayAction</class>
             <parent>showOverlaysMenu</parent>
-            <text>Show GCP Overlay</text>
+            <text>GCP Overlay</text>
             <toggle>true</toggle>
             <shortDescr>Show GCP overlay</shortDescr>
             <description>Show GCP overlay for the selected image</description>
@@ -1170,7 +1170,7 @@
             <id>showWorldMapOverlay</id>
             <class>org.esa.beam.visat.actions.ShowWorldMapOverlayAction</class>
             <parent>showOverlaysMenu</parent>
-            <text>Show World Map Overlay</text>
+            <text>World Map Overlay</text>
             <toggle>true</toggle>
             <shortDescr>Show World Map overlay</shortDescr>
             <description>Show World Map overlay for the selected image</description>
@@ -1281,7 +1281,7 @@
             <parent>openViewsMenu</parent>
             <id>showImageView</id>
             <class>org.esa.beam.visat.actions.ShowImageViewAction</class>
-            <text>Open Image View</text>
+            <text>Image View</text>
             <mnemonic>I</mnemonic>
             <accellerator>control alt I</accellerator>
             <shortDescr>Open image view.</shortDescr>
@@ -1296,7 +1296,7 @@
             <parent>openViewsMenu</parent>
             <id>showImageViewRGB</id>
             <class>org.esa.beam.visat.actions.ShowImageViewRGBAction</class>
-            <text>Open RGB Image View...</text>
+            <text>RGB Image View...</text>
             <mnemonic>R</mnemonic>
             <accellerator>control alt G</accellerator>
             <shortDescr>Open RGB image view.</shortDescr>
@@ -1311,7 +1311,7 @@
             <parent>openViewsMenu</parent>
             <id>showMetadataView</id>
             <class>org.esa.beam.visat.actions.ShowMetadataViewAction</class>
-            <text>Open Metadata View</text>
+            <text>Metadata View</text>
             <mnemonic>M</mnemonic>
             <accellerator>control alt M</accellerator>
             <shortDescr>Open metadata view.</shortDescr>
@@ -1325,7 +1325,7 @@
             <parent>openViewsMenu</parent>
             <id>showPlacemarkView</id>
             <class>org.esa.beam.visat.actions.ShowPlacemarkViewAction</class>
-            <text>Open Placemark View</text>
+            <text>Placemark View</text>
             <mnemonic>P</mnemonic>
             <accellerator>control alt P</accellerator>
             <shortDescr>Open placemark view.</shortDescr>
