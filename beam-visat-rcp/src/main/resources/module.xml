@@ -330,7 +330,7 @@
         <toolView>
             <id>org.esa.beam.visat.ProductsToolView</id>
             <class>org.esa.beam.visat.ProductsToolView</class>
-            <title>Products View</title>
+            <title>Products</title>
             <tabTitle>Products</tabTitle>
             <mnemonic>P</mnemonic>
             <accelerator>ctrl alt P</accelerator>
@@ -346,7 +346,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.pixelinfo.PixelInfoToolView</id>
             <class>org.esa.beam.visat.toolviews.pixelinfo.PixelInfoToolView</class>
-            <title>Pixel Info View</title>
+            <title>Pixel Info</title>
             <tabTitle>Pixel Info</tabTitle>
             <mnemonic>i</mnemonic>
             <accelerator>ctrl alt I</accelerator>
@@ -393,10 +393,26 @@
         </toolView>
 
         <toolView>
+            <id>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</id>
+            <class>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</class>
+            <title>World Map</title>
+            <tabTitle>World Map</tabTitle>
+            <mnemonic>W</mnemonic>
+            <accelerator>ctrl alt W</accelerator>
+            <description>Display product boundaries in a world map.</description>
+            <smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.gif</smallIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.gif</largeIcon>
+            <helpId>showWorldMapWnd</helpId>
+            <initState>DOCKED</initState>
+            <initSide>WEST</initSide>
+            <initIndex>1</initIndex>
+        </toolView>
+
+        <toolView>
             <id>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</id>
             <class>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</class>
-            <title>Color Scheme Manager</title>
-            <tabTitle>Color</tabTitle>
+            <title>Color Palette Manager</title>
+            <tabTitle>Color Palettes</tabTitle>
             <mnemonic>C</mnemonic>
             <accelerator>ctrl alt C</accelerator>
             <description>Image color manipulation and enhancements.</description>
@@ -612,21 +628,7 @@
             <initIndex>0</initIndex>
         </toolView>
 
-        <toolView>
-            <id>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</id>
-            <class>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</class>
-            <title>World Map</title>
-            <tabTitle>World Map</tabTitle>
-            <mnemonic>W</mnemonic>
-            <accelerator>ctrl alt W</accelerator>
-            <description>Display product boundaries in a world map.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.gif</largeIcon>
-            <helpId>showWorldMapWnd</helpId>
-            <initState>DOCKED</initState>
-            <initSide>WEST</initSide>
-            <initIndex>1</initIndex>
-        </toolView>
+
 
         <toolView>
             <id>org.esa.beam.visat.toolviews.diag.TileCacheDiagnosisToolView</id>
@@ -650,21 +652,6 @@
 
         <!-- start of -->
         <!-- File menu -->
-
-        <action>
-            <id>new</id>
-            <parent>file</parent>
-            <class>org.esa.beam.visat.actions.NewAction</class>
-            <text>New</text>
-            <mnemonic>N</mnemonic>
-            <accelerator>control N</accelerator>
-            <shortDescr>Create a new data product.</shortDescr>
-            <description>Create a new data product.</description>
-            <smallIcon>icons/New16.gif</smallIcon>
-            <largeIcon>icons/New24.gif</largeIcon>
-            <helpId>new</helpId>
-            <context>product</context>
-        </action>
 
         <action>
             <id>open</id>
@@ -1587,8 +1574,26 @@
             <text>Product: Mosaic...</text>
             <shortDescr>Create a mosaic of multiple products.</shortDescr>
             <helpId>mosaicAction</helpId>
-            <separatorAfter>true</separatorAfter>
+
             <placeAfter>createSubsetFromView</placeAfter>
+        </action>
+
+
+        <action>
+            <id>new</id>
+            <parent>tools</parent>
+            <class>org.esa.beam.visat.actions.NewAction</class>
+            <text>Product: New (Derived)...</text>
+            <mnemonic>N</mnemonic>
+            <accelerator>control N</accelerator>
+            <shortDescr>Create a new data product derived from the selected product</shortDescr>
+            <description>Create a new data product derived from the selected product</description>
+            <smallIcon>icons/New16.gif</smallIcon>
+            <largeIcon>icons/New24.gif</largeIcon>
+            <placeAfter>mosaicAction</placeAfter>
+            <helpId>new</helpId>
+            <separatorAfter>true</separatorAfter>
+            <context>product</context>
         </action>
 
 
@@ -1596,7 +1601,7 @@
             <id>reprojectionAction</id>
             <class>org.esa.beam.gpf.operators.reproject.ReprojectionAction</class>
             <parent>tools</parent>
-            <placeAfter>mosaicAction</placeAfter>
+            <placeAfter>new</placeAfter>
             <text>Reprojection...</text>
             <shortDescr>Apply a reprojection.</shortDescr>
             <helpId>reprojectionAction</helpId>
