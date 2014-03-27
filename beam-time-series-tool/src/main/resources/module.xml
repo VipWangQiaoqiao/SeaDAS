@@ -59,7 +59,7 @@
             <initState>HIDDEN</initState>
             <initSide>EAST</initSide>
             <initIndex>3</initIndex>
-            <toolBarId>Time Series Tool Bar</toolBarId>
+            <toolBarId>Time Series</toolBarId>
             <helpId>timeSeriesPlayer</helpId>
         </toolView>
 
@@ -76,7 +76,7 @@
             <initState>HIDDEN</initState>
             <initSide>EAST</initSide>
             <initIndex>0</initIndex>
-            <toolBarId>Time Series Tool Bar</toolBarId>
+            <toolBarId>Time Series</toolBarId>
             <helpId>timeSeriesManager</helpId>
         </toolView>
 
@@ -93,7 +93,7 @@
             <initState>HIDDEN</initState>
             <initSide>EAST</initSide>
             <initIndex>1</initIndex>
-            <toolBarId>Time Series Tool Bar</toolBarId>
+            <toolBarId>Time Series</toolBarId>
             <helpId>timeSeriesGraph</helpId>
         </toolView>
 
@@ -110,7 +110,7 @@
             <initState>HIDDEN</initState>
             <initSide>EAST</initSide>
             <initIndex>2</initIndex>
-            <toolBarId>Time Series Tool Bar</toolBarId>
+            <toolBarId>Time Series</toolBarId>
             <helpId>timeSeriesMatrix</helpId>
         </toolView>
 
