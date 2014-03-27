@@ -36,9 +36,9 @@
             <helpId>collocation</helpId>
             <class>org.esa.beam.collocation.visat.CollocationAction</class>
             <parent>tools</parent>
-            <text>Product: Collocation...</text>
-            <placeAfter>createSubsetFromView</placeAfter>
-            <placeBefore>mosaicAction</placeBefore>
+            <text>Collocation...</text>
+            <placeAfter>mosaicAction</placeAfter>
+            <placeBefore>createSubsetFromView</placeBefore>
             <shortDescr>Collocate two products into a single product (useful for parameter comparisons, etc.)</shortDescr>
             <description>Collocate two products into a single product (useful for parameter comparisons, etc.)</description>
             <!--<smallIcon>icons/Collocation16.gif</smallIcon>-->

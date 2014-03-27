@@ -61,11 +61,11 @@ class CollocationForm extends JPanel {
     public CollocationForm(PropertySet propertySet, TargetProductSelector targetProductSelector, AppContext appContext) {
         this.targetProductSelector = targetProductSelector;
         masterProductSelector = new SourceProductSelector(appContext,
-                                                          "Master (pixel values are conserved):");
+                                                          "Reference (pixel values are conserved):");
         slaveProductSelector = new SourceProductSelector(appContext,
-                                                         "Slave (pixel values are resampled onto the master grid):");
-        renameMasterComponentsCheckBox = new JCheckBox("Rename master components:");
-        renameSlaveComponentsCheckBox = new JCheckBox("Rename slave components:");
+                                                         "Dependent (pixel values are resampled onto the reference grid):");
+        renameMasterComponentsCheckBox = new JCheckBox("Rename reference components:");
+        renameSlaveComponentsCheckBox = new JCheckBox("Rename dependent components:");
         masterComponentPatternField = new JTextField();
         slaveComponentPatternField = new JTextField();
         resamplingComboBoxModel = new DefaultComboBoxModel<>(ResamplingType.values());
