@@ -42,15 +42,17 @@
             <parent>tools</parent>
             <text>Image Analysis</text>
             <mnemonic>A</mnemonic>
-            <shortDescr>Image analysis tools.</shortDescr>
-            <placeAfter>Binning</placeAfter>
+            <!--<shortDescr>Image analysis tools.</shortDescr>-->
+            <placeAfter>attachPixelGeoCoding</placeAfter>
+            <placeBefore>createVectorDataNode</placeBefore>
+            <!--<separatorBefore>true</separatorBefore>-->
         </action>
         <action>
             <id>emClusterAnalysis</id>
             <helpId>clusterAnalysisEM</helpId>
             <class>org.esa.beam.visat.actions.DefaultOperatorAction</class>
             <parent>imageAnalysis</parent>
-            <text>EM Cluster Analysis...</text>
+            <text>EM Cluster...</text>
             <mnemonic>C</mnemonic>
             <operatorName>EMClusterAnalysis</operatorName>
             <dialogTitle>EM Cluster Analysis</dialogTitle>
@@ -61,7 +63,7 @@
             <helpId>clusterAnalysisKMeans</helpId>
             <class>org.esa.beam.visat.actions.DefaultOperatorAction</class>
             <parent>imageAnalysis</parent>
-            <text>K-Means Cluster Analysis...</text>
+            <text>K-Means Cluster...</text>
             <mnemonic>C</mnemonic>
             <operatorName>KMeansClusterAnalysis</operatorName>
             <dialogTitle>K-Means Cluster Analysis</dialogTitle>
