@@ -43,7 +43,7 @@
             <description>Collocate two products into a single product (useful for parameter comparisons, etc.)</description>
             <!--<smallIcon>icons/Collocation16.gif</smallIcon>-->
             <!--<largeIcon>icons/Collocation24.gif</largeIcon>-->
-            <smallIcon>icons/dannys_collocation16.png</smallIcon>
+            <!--<smallIcon>icons/dannys_collocation16.png</smallIcon>-->
             <largeIcon>icons/dannys_collocation24.png</largeIcon>
         </action>
     </extension>

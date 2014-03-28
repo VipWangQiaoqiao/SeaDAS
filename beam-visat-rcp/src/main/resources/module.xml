@@ -495,7 +495,7 @@
             <accelerator>control N</accelerator>
             <shortDescr>Create a new data product derived from the selected product</shortDescr>
             <description>Create a new data product derived from the selected product</description>
-            <smallIcon>icons/New16.gif</smallIcon>
+            <!--<smallIcon>icons/New16.gif</smallIcon>-->
             <largeIcon>icons/New24.gif</largeIcon>
             <helpId>new</helpId>
             <context>product</context>
@@ -511,7 +511,7 @@
             <accelerator>control O</accelerator>
             <shortDescr>Open a data product.</shortDescr>
             <description>Open a data product.</description>
-            <smallIcon>icons/Open16.gif</smallIcon>
+            <!--<smallIcon>icons/Open16.gif</smallIcon>-->
             <largeIcon>icons/Open24.gif</largeIcon>
             <helpId>open</helpId>
             <placeAfter>new</placeAfter>
@@ -523,9 +523,9 @@
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <text>Open Recent</text>
             <mnemonic>R</mnemonic>
-            <shortDescr>Re-open a data product.</shortDescr>
+            <!--<shortDescr>Re-open a data product.</shortDescr>-->
             <longDescr>Re-open a data product.</longDescr>
-            <smallIcon>icons/History16.gif</smallIcon>
+            <!--<smallIcon>icons/History16.gif</smallIcon>-->
             <largeIcon>icons/History24.gif</largeIcon>
             <helpId>reopen</helpId>
             <placeAfter>open</placeAfter>
@@ -549,7 +549,7 @@
             <shortDescr>Save a BEAM-DIMAP data product.</shortDescr>
             <description>Save a BEAM-DIMAP data product.</description>
             <accelerator>control S</accelerator>
-            <smallIcon>icons/Save16.gif</smallIcon>
+            <!--<smallIcon>icons/Save16.gif</smallIcon>-->
             <largeIcon>icons/Save24.gif</largeIcon>
             <helpId>save</helpId>
             <placeAfter>openSubMenu</placeAfter>
@@ -563,7 +563,7 @@
             <mnemonic>A</mnemonic>
             <shortDescr>Save a BEAM-DIMAP data product with a different name.</shortDescr>
             <description>Save a BEAM-DIMAP data product with a different name.</description>
-            <smallIcon>icons/SaveAs16.gif</smallIcon>
+            <!--<smallIcon>icons/SaveAs16.gif</smallIcon>-->
             <largeIcon>icons/SaveAs24.gif</largeIcon>
             <helpId>saveAs</helpId>
             <context>product</context>
@@ -587,26 +587,39 @@
         </action>
 
         <action>
-            <id>openSession</id>
+            <id>sessionTop</id>
             <parent>file</parent>
             <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
-            <text>Session: Open...</text>
-            <accelerator>shift control O</accelerator>
-            <shortDescr>Open a BEAM session.</shortDescr>
-            <longDescr>Open a BEAM session.</longDescr>
+            <text>Session</text>
+            <!--<accelerator>shift control O</accelerator>-->
+            <!--<shortDescr>Open a BEAM session.</shortDescr>-->
+            <!--<longDescr>Open a BEAM session.</longDescr>-->
             <placeAfter>close</placeAfter>
             <helpId>openSession</helpId>
         </action>
+
+        <action>
+        <id>openSession</id>
+        <parent>file</parent>
+        <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
+        <text>        - Open...</text>
+        <accelerator>shift control O</accelerator>
+        <shortDescr>Open a SeaDAS session.</shortDescr>
+        <longDescr>Open a SeaDAS session.</longDescr>
+        <placeAfter>sessionTop</placeAfter>
+        <helpId>openSession</helpId>
+        </action>
+
 
         <action>
             <id>saveSession</id>
             <parent>file</parent>
             <placeAfter>openSession</placeAfter>
             <class>org.esa.beam.visat.actions.session.SaveSessionAction</class>
-            <text>Session: Save</text>
+            <text>        - Save</text>
             <accelerator>shift control S</accelerator>
-            <shortDescr>Save the current BEAM session.</shortDescr>
-            <longDescr>Save the current BEAM session.</longDescr>
+            <shortDescr>Save the current SeaDAS session.</shortDescr>
+            <longDescr>Save the current SeaDAS session.</longDescr>
             <placeAfter>close</placeAfter>
             <helpId>saveSession</helpId>
         </action>
@@ -616,9 +629,9 @@
             <parent>file</parent>
             <placeAfter>saveSession</placeAfter>
             <class>org.esa.beam.visat.actions.session.SaveSessionAsAction</class>
-            <text>Session: Save As...</text>
-            <shortDescr>Save the current BEAM session using a different name.</shortDescr>
-            <longDescr>Save the current BEAM session using a different name.</longDescr>
+            <text>        - Save As...</text>
+            <shortDescr>Save the current SeaDAS session using a different name.</shortDescr>
+            <longDescr>Save the current SeaDAS session using a different name.</longDescr>
             <helpId>saveSessionAs</helpId>
         </action>
 
@@ -627,10 +640,10 @@
             <parent>file</parent>
             <placeAfter>saveSessionAs</placeAfter>
             <class>org.esa.beam.visat.actions.session.CloseSessionAction</class>
-            <text>Session: Close</text>
+            <text>        - Close</text>
             <accelerator>shift control W</accelerator>
-            <shortDescr>Close the current BEAM session.</shortDescr>
-            <longDescr>Close the current BEAM session.</longDescr>
+            <shortDescr>Close the current SeaDAS session.</shortDescr>
+            <longDescr>Close the current SeaDAS session.</longDescr>
             <separatorAfter>true</separatorAfter>
             <helpId>closeSession</helpId>
         </action>
@@ -641,7 +654,7 @@
             <parent>file</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <text>Export Utilities</text>
-            <shortDescr>Export</shortDescr>
+            <!--<shortDescr>Export</shortDescr>-->
             <description>Export</description>
             <helpId>exportOther</helpId>
             <sortChildren>true</sortChildren>
@@ -654,7 +667,7 @@
             <text>Vector Import</text>
             <parent>file</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <shortDescr>Import vector data</shortDescr>
+            <!--<shortDescr>Import vector data</shortDescr>-->
             <description>Import vector data</description>
             <helpId>importVectorData</helpId>
             <sortChildren>true</sortChildren>
@@ -666,7 +679,7 @@
             <text>Vector Export</text>
             <parent>file</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <shortDescr>Export vector data</shortDescr>
+            <!--<shortDescr>Export vector data</shortDescr>-->
             <description>Export vector data</description>
             <separatorAfter>true</separatorAfter>
             <sortChildren>true</sortChildren>
@@ -678,7 +691,7 @@
             <text>Raster Import</text>
             <parent>file</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <shortDescr>Import raster data</shortDescr>
+            <!--<shortDescr>Import raster data</shortDescr>-->
             <description>Import raster data</description>
             <helpId>importRasterData</helpId>
             <sortChildren>true</sortChildren>
@@ -691,7 +704,7 @@
             <parent>file</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <mnemonic>I</mnemonic>
-            <shortDescr>Export Raster Data</shortDescr>
+            <!--<shortDescr>Export Raster Data</shortDescr>-->
             <description>Export Raster Data</description>
             <helpId>exportRasterData</helpId>
             <sortChildren>true</sortChildren>
@@ -1020,7 +1033,7 @@
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <text>Tool Bars</text>
             <mnemonic>T</mnemonic>
-            <shortDescr>Toggle Tool Bars visibility</shortDescr>
+            <!--<shortDescr>Toggle Tool Bars visibility</shortDescr>-->
             <description>Toggle Tool Bars visibility</description>
             <sortChildren>true</sortChildren>
             <helpId>toolBars</helpId>
@@ -1106,7 +1119,7 @@
             <shortDescr>Show no-data overlay</shortDescr>
             <description>Show no-data overlay for the selected image</description>
             <context>image</context>
-            <smallIcon>icons/NoDataOverlay16.gif</smallIcon>
+            <!--<smallIcon>icons/NoDataOverlay16.gif</smallIcon>-->
             <largeIcon>icons/NoDataOverlay24.gif</largeIcon>
             <helpId>noDataOverlay</helpId>
         </action>
@@ -1121,7 +1134,7 @@
             <shortDescr>Show/hide geometry overlay</shortDescr>
             <description>Show/hide geometry overlay for the selected image</description>
             <context>image</context>
-            <smallIcon>icons/ShapeOverlay16.gif</smallIcon>
+            <!--<smallIcon>icons/ShapeOverlay16.gif</smallIcon>-->
             <largeIcon>icons/ShapeOverlay24.gif</largeIcon>
             <helpId>showShapeOverlay</helpId>
         </action>
@@ -1136,7 +1149,7 @@
             <shortDescr>Show/hide graticule overlay</shortDescr>
             <description>Show/hide graticule overlay for the selected image</description>
             <context>image</context>
-            <smallIcon>icons/GraticuleOverlay16.gif</smallIcon>
+            <!--<smallIcon>icons/GraticuleOverlay16.gif</smallIcon>-->
             <largeIcon>icons/GraticuleOverlay24.gif</largeIcon>
             <helpId>showGraticuleOverlay</helpId>
         </action>
@@ -1149,7 +1162,7 @@
             <toggle>true</toggle>
             <shortDescr>Show pin overlay</shortDescr>
             <description>Show pin overlay for the selected image</description>
-            <smallIcon>icons/PinOverlay16.gif</smallIcon>
+            <!--<smallIcon>icons/PinOverlay16.gif</smallIcon>-->
             <largeIcon>icons/PinOverlay24.gif</largeIcon>
             <context>image</context>
             <helpId>showPinOverlay</helpId>
@@ -1163,7 +1176,7 @@
             <toggle>true</toggle>
             <shortDescr>Show GCP overlay</shortDescr>
             <description>Show GCP overlay for the selected image</description>
-            <smallIcon>icons/GcpOverlay16.gif</smallIcon>
+            <!--<smallIcon>icons/GcpOverlay16.gif</smallIcon>-->
             <largeIcon>icons/GcpOverlay24.gif</largeIcon>
             <context>image</context>
             <helpId>showGcpOverlay</helpId>
@@ -1177,7 +1190,7 @@
             <toggle>true</toggle>
             <shortDescr>Show World Map overlay</shortDescr>
             <description>Show World Map overlay for the selected image</description>
-            <smallIcon>icons/WorldMapOverlay16.png</smallIcon>
+            <!--<smallIcon>icons/WorldMapOverlay16.png</smallIcon>-->
             <largeIcon>icons/WorldMapOverlay24.png</largeIcon>
             <context>image</context>
             <helpId>showWorldMapOverlay</helpId>
@@ -1334,7 +1347,7 @@
             <shortDescr>Open placemark view.</shortDescr>
             <description>Open a placemark view for the selected metadata node.</description>
             <context>vectorDataNode</context>
-            <smallIcon>icons/RsVectorData16.gif</smallIcon>
+            <!--<smallIcon>icons/RsVectorData16.gif</smallIcon>-->
             <!--<largeIcon>icons/ImageView24.gif</largeIcon>-->
         </action>
 
@@ -1375,7 +1388,7 @@
             <parent>tools</parent>
             <!--<smallIcon>icons/Subset16.png</smallIcon>-->
             <!--<largeIcon>icons/Subset24.png</largeIcon>-->
-            <smallIcon>icons/dannys_spatial_subset16.png</smallIcon>
+            <!--<smallIcon>icons/dannys_spatial_subset16.png</smallIcon>-->
             <largeIcon>icons/dannys_spatial_subset24.png</largeIcon>
             <placeAfter>mosaicAction</placeAfter>
             <separatorAfter>true</separatorAfter>
@@ -1388,12 +1401,12 @@
             <id>bandArithmetic</id>
             <parent>tools</parent>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
-            <text>Band: Math...</text>
+            <text>Band Math...</text>
             <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
             <context>image,band,tiePointGrid</context>
             <!--<smallIcon>icons/BAritmethic16.gif</smallIcon>-->
             <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
-            <smallIcon>icons/dannys_band_maths16.png</smallIcon>
+            <!--<smallIcon>icons/dannys_band_maths16.png</smallIcon>-->
             <largeIcon>icons/dannys_band_maths24.png</largeIcon>
             <placeAfter>createSubsetFromView</placeAfter>
             <helpId>mosaicAction</helpId>
@@ -1402,7 +1415,7 @@
         <action>
             <id>createFilteredBand</id>
             <class>org.esa.beam.visat.actions.CreateFilteredBandAction</class>
-            <text>Band: Filter...</text>
+            <text>Band Filter...</text>
             <shortDescr>Creates an filtered band</shortDescr>
             <description>Creates an filtered band from the currently selected band</description>
             <context>band</context>
@@ -1415,7 +1428,7 @@
         <action>
             <id>createDemRelatedBands</id>
             <class>org.esa.beam.visat.actions.CreateDemRelatedBandsAction</class>
-            <text>Band: DEM...</text>
+            <text>Band DEM...</text>
             <description>Creates DEM elevation and optionally DEM-corrected lat/lon bands from a selected DEM
             </description>
             <context>product</context>
@@ -1426,7 +1439,7 @@
         <action>
             <id>createAsarNrcsBands</id>
             <class>org.esa.beam.visat.actions.CreateAsarNrcsBandsAction</class>
-            <text>Band: NRCS (ASAR)...</text>
+            <text>Band NRCS (ASAR)...</text>
             <!--<mnemonic>N</mnemonic>-->
             <shortDescr>Create ASAR Normalised Radar Cross Section Bands</shortDescr>
             <helpId>createAsarNrcsBands</helpId>
@@ -1492,7 +1505,7 @@
             <text>New Vector Container...</text>
             <shortDescr>Create a new vector data container</shortDescr>
             <description>Create a new vector data container for drawing lines and polygons.</description>
-            <smallIcon>icons/NewVectorDataNode16.gif</smallIcon>
+            <!--<smallIcon>icons/NewVectorDataNode16.gif</smallIcon>-->
             <largeIcon>icons/NewVectorDataNode24.gif</largeIcon>
             <helpId>createVectorDataNode</helpId>
             <context>product</context>
@@ -1519,7 +1532,7 @@
         <action>
             <id>attachPixelGeoCoding</id>
             <class>org.esa.beam.visat.actions.AttachPixelGeoCodingAction</class>
-            <text>Attach Pixel Geo-Coding...</text>
+            <text>Attach...</text>
             <shortDescr>Attaches a pixel based geo-coding</shortDescr>
             <description>Attaches a pixel based geo-coding to the selected product</description>
             <context>attachPixelGeoCoding</context>
@@ -1531,14 +1544,13 @@
         <action>
             <id>detachPixelGeoCoding</id>
             <class>org.esa.beam.visat.actions.DetachPixelGeoCodingAction</class>
-            <text>Detach Pixel Geo-Coding...</text>
+            <text>Detach...</text>
             <shortDescr>Detaches a pixel based geo-coding</shortDescr>
             <description>Detaches a pixel based geo-coding from the selected product</description>
             <context>detachPixelGeoCoding</context>
             <helpId>detachPixelGeoCoding</helpId>
             <parent>pixelGeoCodingSubMenu</parent>
             <placeAfter>attachPixelGeoCoding</placeAfter>
-            <separatorAfter>true</separatorAfter>
         </action>
 
         <!-- end of -->
@@ -1593,7 +1605,7 @@
             <helpId>moduleManager</helpId>
             <placeAfter>showDataSources</placeAfter>
             <separatorBefore>true</separatorBefore>
-            <smallIcon>icons/ModuleManager16.png</smallIcon>
+            <!--<smallIcon>icons/ModuleManager16.png</smallIcon>-->
             <largeIcon>icons/ModuleManager22.png</largeIcon>
         </action>
 
