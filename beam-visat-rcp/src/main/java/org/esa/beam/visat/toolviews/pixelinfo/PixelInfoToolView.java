@@ -146,9 +146,9 @@ public class PixelInfoToolView extends AbstractToolView {
         AbstractButton coordToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.GEOLOCATION,
                                                               true);
         AbstractButton timeToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.SCANLINE,
-                                                             true);
+                                                             false);
         AbstractButton tpgsToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.TIEPOINTS,
-                                                             true);
+                                                             false);
         AbstractButton bandsToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.BANDS, true);
         AbstractButton flagsToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.FLAGS,
                                                               false);
