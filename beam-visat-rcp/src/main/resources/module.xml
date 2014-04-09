@@ -217,7 +217,8 @@
             <mnemonic>N</mnemonic>
             <accelerator>ctrl alt N</accelerator>
             <description>Zoom and pan a selected image view.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/Navigation16.gif</smallIcon>
+            <smallIcon>/org/esa/beam/resources/images/icons/Navigation16.png</smallIcon>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/Navigation16.gif</smallIcon>-->
             <largeIcon>/org/esa/beam/resources/images/icons/Navigation24.gif</largeIcon>
             <helpId>showNavigationWnd</helpId>
             <initState>DOCKED</initState>
@@ -233,8 +234,10 @@
             <mnemonic>W</mnemonic>
             <accelerator>ctrl alt W</accelerator>
             <description>Display product boundaries in a world map.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.gif</largeIcon>
+            <smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.png</smallIcon>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.gif</smallIcon>-->
+            <largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.gif</largeIcon>-->
             <helpId>showWorldMapWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
@@ -249,8 +252,9 @@
             <mnemonic>C</mnemonic>
             <accelerator>ctrl alt C</accelerator>
             <description>Image color manipulation and enhancements.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>
+            <smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.png</smallIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>-->
             <helpId>showColorManipulationWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
@@ -330,7 +334,8 @@
             <accelerator>ctrl alt A</accelerator>
             <description>Manage pins of a data product.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/PinManager16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/PinManager24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>-->
             <helpId>showPinManagerWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
@@ -345,7 +350,8 @@
             <accelerator>ctrl alt G</accelerator>
             <description>Manage ground control points of a data product.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/GcpManager16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/GcpManager24.gif</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/GcpTool24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/GcpManager24.gif</largeIcon>-->
             <helpId>showGcpManagerWnd</helpId>/
             <initState>HIDDEN</initState>
             <initSide>SOUTH</initSide>
@@ -513,7 +519,8 @@
             <shortDescr>Open a data product.</shortDescr>
             <description>Open a data product.</description>
             <!--<smallIcon>icons/Open16.gif</smallIcon>-->
-            <largeIcon>icons/Open24.gif</largeIcon>
+            <largeIcon>icons/Open24.png</largeIcon>
+            <!--<largeIcon>icons/Open24.gif</largeIcon>-->
             <helpId>open</helpId>
             <placeAfter>new</placeAfter>
         </action>
@@ -587,27 +594,27 @@
             <placeAfter>saveAs</placeAfter>
         </action>
 
-        <action>
-            <id>sessionTop</id>
-            <parent>file</parent>
-            <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
-            <text>Session</text>
-            <!--<accelerator>shift control O</accelerator>-->
-            <!--<shortDescr>Open a BEAM session.</shortDescr>-->
-            <!--<longDescr>Open a BEAM session.</longDescr>-->
-            <placeAfter>close</placeAfter>
-            <helpId>openSession</helpId>
-        </action>
+        <!--<action>-->
+            <!--<id>sessionTop</id>-->
+            <!--<parent>file</parent>-->
+            <!--<class>org.esa.beam.visat.actions.session.OpenSessionAction</class>-->
+            <!--<text>Session</text>-->
+            <!--&lt;!&ndash;<accelerator>shift control O</accelerator>&ndash;&gt;-->
+            <!--&lt;!&ndash;<shortDescr>Open a BEAM session.</shortDescr>&ndash;&gt;-->
+            <!--&lt;!&ndash;<longDescr>Open a BEAM session.</longDescr>&ndash;&gt;-->
+            <!--<placeAfter>close</placeAfter>-->
+            <!--<helpId>openSession</helpId>-->
+        <!--</action>-->
 
         <action>
         <id>openSession</id>
         <parent>file</parent>
         <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
-        <text>        - Open...</text>
+        <text>Session Open...</text>
         <accelerator>shift control O</accelerator>
         <shortDescr>Open a SeaDAS session.</shortDescr>
         <longDescr>Open a SeaDAS session.</longDescr>
-        <placeAfter>sessionTop</placeAfter>
+        <placeAfter>close</placeAfter>
         <helpId>openSession</helpId>
         </action>
 
@@ -617,7 +624,7 @@
             <parent>file</parent>
             <placeAfter>openSession</placeAfter>
             <class>org.esa.beam.visat.actions.session.SaveSessionAction</class>
-            <text>        - Save</text>
+            <text>Session Save</text>
             <accelerator>shift control S</accelerator>
             <shortDescr>Save the current SeaDAS session.</shortDescr>
             <longDescr>Save the current SeaDAS session.</longDescr>
@@ -630,7 +637,7 @@
             <parent>file</parent>
             <placeAfter>saveSession</placeAfter>
             <class>org.esa.beam.visat.actions.session.SaveSessionAsAction</class>
-            <text>        - Save As...</text>
+            <text>Session Save As...</text>
             <shortDescr>Save the current SeaDAS session using a different name.</shortDescr>
             <longDescr>Save the current SeaDAS session using a different name.</longDescr>
             <helpId>saveSessionAs</helpId>
@@ -641,7 +648,7 @@
             <parent>file</parent>
             <placeAfter>saveSessionAs</placeAfter>
             <class>org.esa.beam.visat.actions.session.CloseSessionAction</class>
-            <text>        - Close</text>
+            <text>Session Close</text>
             <accelerator>shift control W</accelerator>
             <shortDescr>Close the current SeaDAS session.</shortDescr>
             <longDescr>Close the current SeaDAS session.</longDescr>
@@ -1168,7 +1175,8 @@
             <description>Show pin overlay for the selected image</description>
             <!--<smallIcon>icons/PinOverlay16.gif</smallIcon>-->
             <!--<largeIcon>icons/PinOverlay24.gif</largeIcon>-->
-            <largeIcon>icons/PinManager24.gif</largeIcon>
+            <largeIcon>icons/PinManager24.png</largeIcon>
+            <!--<largeIcon>icons/PinManager24.gif</largeIcon>-->
             <context>image</context>
             <helpId>showPinOverlay</helpId>
         </action>
@@ -1196,7 +1204,7 @@
             <shortDescr>Show World Map overlay</shortDescr>
             <description>Show World Map overlay for the selected image</description>
             <!--<smallIcon>icons/WorldMapOverlay16.png</smallIcon>-->
-            <largeIcon>icons/WorldMap24.gif</largeIcon>
+            <largeIcon>icons/WorldMap24.png</largeIcon>
             <!--<largeIcon>icons/WorldMapOverlay24.png</largeIcon>-->
             <context>image</context>
             <helpId>showWorldMapOverlay</helpId>
@@ -1265,19 +1273,19 @@
             <helpId>showToolsToolBar</helpId>
         </action>
 
-        <!--<action>-->
-            <!--<id>showViewsToolBar</id>-->
-            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
-            <!--<context>viewsToolBar</context>-->
-            <!--<parent>toolBars</parent>-->
-            <!--<text>Views</text>-->
-            <!--<mnemonic>V</mnemonic>-->
-            <!--<selected>false</selected>-->
-            <!--<toggle>true</toggle>-->
-            <!--<shortDescr>Toggle visibility of the views tool bar.</shortDescr>-->
-            <!--<description>Toggle visibility of the views tool bar.</description>-->
-            <!--<helpId>showViewsToolBar</helpId>-->
-        <!--</action>-->
+        <action>
+            <id>showViewsToolBar</id>
+            <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
+            <context>viewsToolBar</context>
+            <parent>toolBars</parent>
+            <text>Views</text>
+            <mnemonic>V</mnemonic>
+            <selected>false</selected>
+            <toggle>true</toggle>
+            <shortDescr>Toggle visibility of the views tool bar.</shortDescr>
+            <description>Toggle visibility of the views tool bar.</description>
+            <helpId>showViewsToolBar</helpId>
+        </action>
 
         <action>
             <id>showStatusBar</id>
@@ -1375,6 +1383,7 @@
             <class>org.esa.beam.gpf.operators.mosaic.MosaicAction</class>
             <parent>tools</parent>
             <text>Mosaic...</text>
+            <largeIcon>icons/dannys_mosaic.png</largeIcon>
             <shortDescr>Create a mosaic of multiple products.</shortDescr>
             <helpId>mosaicAction</helpId>
 
