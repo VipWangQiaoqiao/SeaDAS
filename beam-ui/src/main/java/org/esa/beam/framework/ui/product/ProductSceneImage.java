@@ -237,7 +237,7 @@ public class ProductSceneImage implements ProductLayerContext {
         return getRaster().getOverlayMaskGroup().getNodeCount() > 0;
     }
 
-    private AffineTransform getImageToModelTransform() {
+    public AffineTransform getImageToModelTransform() {
         return bandImageMultiLevelSource.getModel().getImageToModelTransform(0);
     }
 
