@@ -384,7 +384,8 @@
             <mnemonic>N</mnemonic>
             <accelerator>ctrl alt N</accelerator>
             <description>Zoom and pan a selected image view.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/Navigation16.gif</smallIcon>
+            <smallIcon>/org/esa/beam/resources/images/icons/Navigation16.png</smallIcon>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/Navigation16.gif</smallIcon>-->
             <largeIcon>/org/esa/beam/resources/images/icons/Navigation24.gif</largeIcon>
             <helpId>showNavigationWnd</helpId>
             <initState>DOCKED</initState>
@@ -396,12 +397,14 @@
             <id>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</id>
             <class>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</class>
             <title>World Map</title>
-            <tabTitle>World Map</tabTitle>
+            <tabTitle>World</tabTitle>
             <mnemonic>W</mnemonic>
             <accelerator>ctrl alt W</accelerator>
             <description>Display product boundaries in a world map.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.gif</largeIcon>
+            <smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.png</smallIcon>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.gif</smallIcon>-->
+            <largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.gif</largeIcon>-->
             <helpId>showWorldMapWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
@@ -412,12 +415,13 @@
             <id>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</id>
             <class>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</class>
             <title>Color Palette Manager</title>
-            <tabTitle>Color Palettes</tabTitle>
+            <tabTitle>Colors</tabTitle>
             <mnemonic>C</mnemonic>
             <accelerator>ctrl alt C</accelerator>
             <description>Image color manipulation and enhancements.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>
+            <smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.png</smallIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>-->
             <helpId>showColorManipulationWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
@@ -492,15 +496,17 @@
             <id>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</class>
             <title>Pin Manager</title>
+            <tabTitle>Pins</tabTitle>
             <mnemonic>a</mnemonic>
             <accelerator>ctrl alt A</accelerator>
             <description>Manage pins of a data product.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/PinManager16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/PinManager24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>-->
             <helpId>showPinManagerWnd</helpId>
-            <initState>HIDDEN</initState>
-            <initSide>SOUTH</initSide>
-            <initIndex>0</initIndex>
+            <initState>DOCKED</initState>
+            <initSide>WEST</initSide>
+            <initIndex>1</initIndex>
         </toolView>
 
         <toolView>
@@ -511,7 +517,8 @@
             <accelerator>ctrl alt G</accelerator>
             <description>Manage ground control points of a data product.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/GcpManager16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/GcpManager24.gif</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/GcpTool24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/GcpManager24.gif</largeIcon>-->
             <helpId>showGcpManagerWnd</helpId>/
             <initState>HIDDEN</initState>
             <initSide>SOUTH</initSide>
@@ -527,7 +534,7 @@
             <accelerator>ctrl alt S</accelerator>
             <description>Display spectrum at the current pixel position.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/Spectrum16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/Spectrum24.gif</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/Spectrum24.png</largeIcon>
             <helpId>showSpectrumWnd</helpId>
             <initState>HIDDEN</initState>
             <initSide>SOUTH</initSide>
@@ -537,8 +544,8 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.stat.InformationToolView</id>
             <class>org.esa.beam.visat.toolviews.stat.InformationToolView</class>
-            <title>Information View</title>
-            <tabTitle>Information</tabTitle>
+            <title>Band Info View</title>
+            <tabTitle>Band Info</tabTitle>
             <description>Display information for a selected band.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/NodeInfo16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/NodeInfo24.png</largeIcon>
@@ -580,7 +587,7 @@
             <tabTitle>Histogram</tabTitle>
             <description>Display Histogram for a selected band.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/Histogram16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/Histogram24.gif</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/Histogram24.png</largeIcon>
             <helpId>histogramDialog</helpId>
             <initState>HIDDEN</initState>
             <initSide>SOUTH</initSide>
@@ -593,7 +600,7 @@
             <tabTitle>Scatter Plot</tabTitle>
             <description>Display Scatter Plot for two selected bands.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/DensityPlot16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/DensityPlot24.gif</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/ScatterPlot24.png</largeIcon>
             <helpId>densityPlotDialog</helpId>
             <initState>HIDDEN</initState>
             <initSide>SOUTH</initSide>
@@ -607,7 +614,7 @@
             <tabTitle>Correlative Plot</tabTitle>
             <description>Display Correlative Plot for a selected band.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/ScatterPlot16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/ScatterPlot24.gif</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/CorrelativePlot24.png</largeIcon>
             <helpId>correlativePlotDialog</helpId>
             <initState>HIDDEN</initState>
             <initSide>SOUTH</initSide>
@@ -679,7 +686,8 @@
             <shortDescr>Open a data product.</shortDescr>
             <description>Open a data product.</description>
             <!--<smallIcon>icons/Open16.gif</smallIcon>-->
-            <largeIcon>icons/Open24.gif</largeIcon>
+            <largeIcon>icons/Open24.png</largeIcon>
+            <!--<largeIcon>icons/Open24.gif</largeIcon>-->
             <helpId>open</helpId>
             <placeAfter>new</placeAfter>
         </action>
@@ -753,27 +761,27 @@
             <placeAfter>saveAs</placeAfter>
         </action>
 
-        <action>
-            <id>sessionTop</id>
-            <parent>file</parent>
-            <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
-            <text>Session</text>
-            <!--<accelerator>shift control O</accelerator>-->
-            <!--<shortDescr>Open a BEAM session.</shortDescr>-->
-            <!--<longDescr>Open a BEAM session.</longDescr>-->
-            <placeAfter>close</placeAfter>
-            <helpId>openSession</helpId>
-        </action>
+        <!--<action>-->
+            <!--<id>sessionTop</id>-->
+            <!--<parent>file</parent>-->
+            <!--<class>org.esa.beam.visat.actions.session.OpenSessionAction</class>-->
+            <!--<text>Session</text>-->
+            <!--&lt;!&ndash;<accelerator>shift control O</accelerator>&ndash;&gt;-->
+            <!--&lt;!&ndash;<shortDescr>Open a BEAM session.</shortDescr>&ndash;&gt;-->
+            <!--&lt;!&ndash;<longDescr>Open a BEAM session.</longDescr>&ndash;&gt;-->
+            <!--<placeAfter>close</placeAfter>-->
+            <!--<helpId>openSession</helpId>-->
+        <!--</action>-->
 
         <action>
         <id>openSession</id>
         <parent>file</parent>
         <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
-        <text>        - Open...</text>
+        <text>Session Open...</text>
         <accelerator>shift control O</accelerator>
         <shortDescr>Open a SeaDAS session.</shortDescr>
         <longDescr>Open a SeaDAS session.</longDescr>
-        <placeAfter>sessionTop</placeAfter>
+        <placeAfter>close</placeAfter>
         <helpId>openSession</helpId>
         </action>
 
@@ -783,7 +791,7 @@
             <parent>file</parent>
             <placeAfter>openSession</placeAfter>
             <class>org.esa.beam.visat.actions.session.SaveSessionAction</class>
-            <text>        - Save</text>
+            <text>Session Save</text>
             <accelerator>shift control S</accelerator>
             <shortDescr>Save the current SeaDAS session.</shortDescr>
             <longDescr>Save the current SeaDAS session.</longDescr>
@@ -796,7 +804,7 @@
             <parent>file</parent>
             <placeAfter>saveSession</placeAfter>
             <class>org.esa.beam.visat.actions.session.SaveSessionAsAction</class>
-            <text>        - Save As...</text>
+            <text>Session Save As...</text>
             <shortDescr>Save the current SeaDAS session using a different name.</shortDescr>
             <longDescr>Save the current SeaDAS session using a different name.</longDescr>
             <helpId>saveSessionAs</helpId>
@@ -807,7 +815,7 @@
             <parent>file</parent>
             <placeAfter>saveSessionAs</placeAfter>
             <class>org.esa.beam.visat.actions.session.CloseSessionAction</class>
-            <text>        - Close</text>
+            <text>Session Close</text>
             <accelerator>shift control W</accelerator>
             <shortDescr>Close the current SeaDAS session.</shortDescr>
             <longDescr>Close the current SeaDAS session.</longDescr>
@@ -1224,7 +1232,7 @@
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <text>Overlays</text>
             <sortChildren>true</sortChildren>
-            <placeAfter>layout</placeAfter>
+            <placeAfter>toolBars</placeAfter>
         </action>
 
         <action>
@@ -1287,7 +1295,8 @@
             <description>Show no-data overlay for the selected image</description>
             <context>image</context>
             <!--<smallIcon>icons/NoDataOverlay16.gif</smallIcon>-->
-            <largeIcon>icons/NoDataOverlay24.gif</largeIcon>
+            <largeIcon>icons/NoDataOverlay24.png</largeIcon>
+            <!--<largeIcon>icons/NoDataOverlay24.gif</largeIcon>-->
             <helpId>noDataOverlay</helpId>
         </action>
 
@@ -1302,7 +1311,8 @@
             <description>Show/hide geometry overlay for the selected image</description>
             <context>image</context>
             <!--<smallIcon>icons/ShapeOverlay16.gif</smallIcon>-->
-            <largeIcon>icons/ShapeOverlay24.gif</largeIcon>
+            <largeIcon>icons/ShapeOverlay24.png</largeIcon>
+            <!--<largeIcon>icons/ShapeOverlay24.gif</largeIcon>-->
             <helpId>showShapeOverlay</helpId>
         </action>
 
@@ -1317,7 +1327,8 @@
             <description>Show/hide graticule overlay for the selected image</description>
             <context>image</context>
             <!--<smallIcon>icons/GraticuleOverlay16.gif</smallIcon>-->
-            <largeIcon>icons/GraticuleOverlay24.gif</largeIcon>
+            <largeIcon>icons/GraticuleOverlay24.png</largeIcon>
+            <!--<largeIcon>icons/GraticuleOverlay24.gif</largeIcon>-->
             <helpId>showGraticuleOverlay</helpId>
         </action>
 
@@ -1330,7 +1341,9 @@
             <shortDescr>Show pin overlay</shortDescr>
             <description>Show pin overlay for the selected image</description>
             <!--<smallIcon>icons/PinOverlay16.gif</smallIcon>-->
-            <largeIcon>icons/PinOverlay24.gif</largeIcon>
+            <!--<largeIcon>icons/PinOverlay24.gif</largeIcon>-->
+            <largeIcon>icons/PinManager24.png</largeIcon>
+            <!--<largeIcon>icons/PinManager24.gif</largeIcon>-->
             <context>image</context>
             <helpId>showPinOverlay</helpId>
         </action>
@@ -1358,7 +1371,8 @@
             <shortDescr>Show World Map overlay</shortDescr>
             <description>Show World Map overlay for the selected image</description>
             <!--<smallIcon>icons/WorldMapOverlay16.png</smallIcon>-->
-            <largeIcon>icons/WorldMapOverlay24.png</largeIcon>
+            <largeIcon>icons/WorldMap24.png</largeIcon>
+            <!--<largeIcon>icons/WorldMapOverlay24.png</largeIcon>-->
             <context>image</context>
             <helpId>showWorldMapOverlay</helpId>
         </action>
@@ -1433,7 +1447,7 @@
             <parent>toolBars</parent>
             <text>Views</text>
             <mnemonic>V</mnemonic>
-            <selected>true</selected>
+            <selected>false</selected>
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the views tool bar.</shortDescr>
             <description>Toggle visibility of the views tool bar.</description>
@@ -1536,6 +1550,7 @@
             <class>org.esa.beam.gpf.operators.mosaic.MosaicAction</class>
             <parent>tools</parent>
             <text>Mosaic...</text>
+            <largeIcon>icons/dannys_mosaic.png</largeIcon>
             <shortDescr>Create a mosaic of multiple products.</shortDescr>
             <helpId>mosaicAction</helpId>
 
@@ -1663,7 +1678,8 @@
             <shortDescr>Create a new vector data container</shortDescr>
             <description>Create a new vector data container for drawing lines and polygons.</description>
             <!--<smallIcon>icons/NewVectorDataNode16.gif</smallIcon>-->
-            <largeIcon>icons/NewVectorDataNode24.gif</largeIcon>
+            <!--<largeIcon>icons/NewVectorDataNode24.gif</largeIcon>-->
+            <largeIcon>icons/NewVectorContainer.png</largeIcon>
             <helpId>createVectorDataNode</helpId>
             <context>product</context>
             <parent>tools</parent>
@@ -1835,7 +1851,8 @@
             <text>Pin Tool</text>
             <shortDescr>Pin placing tool</shortDescr>
             <description>Sets, edits or deletes pins</description>
-            <largeIcon>icons/PinTool24.gif</largeIcon>
+            <largeIcon>icons/PinTool24.png</largeIcon>
+            <!--<largeIcon>icons/PinTool24.gif</largeIcon>-->
             <selected>false</selected>
             <helpId>pinTool</helpId>
         </action>
@@ -1850,7 +1867,8 @@
             <text>GCP Tool</text>
             <shortDescr>GCP placing tool</shortDescr>
             <description>Sets, edits or deletes ground control points</description>
-            <largeIcon>icons/GcpTool24.gif</largeIcon>
+            <largeIcon>icons/GcpTool24.png</largeIcon>
+            <!--<largeIcon>icons/GcpTool24.gif</largeIcon>-->
             <selected>false</selected>
             <helpId>gcpTool</helpId>
         </action>
@@ -1864,7 +1882,8 @@
             <placeAfter>pinTool</placeAfter>
             <text>Draw Line</text>
             <shortDescr>Line drawing tool</shortDescr>
-            <largeIcon>icons/DrawLineTool24.gif</largeIcon>
+            <largeIcon>icons/DrawLineTool24.png</largeIcon>
+            <!--<largeIcon>icons/DrawLineTool24.gif</largeIcon>-->
             <selected>false</selected>
             <context>image</context>
             <helpId>drawLineTool</helpId>
@@ -1879,7 +1898,8 @@
             <placeAfter>drawLineTool</placeAfter>
             <text>Draw Rectangle</text>
             <shortDescr>Rectangle drawing tool</shortDescr>
-            <largeIcon>icons/DrawRectangleTool24.gif</largeIcon>
+            <!--<largeIcon>icons/DrawRectangleTool24.gif</largeIcon>-->
+            <largeIcon>icons/DrawRectangleTool24.png</largeIcon>
             <context>image</context>
             <selected>false</selected>
             <helpId>drawRectangleTool</helpId>
@@ -1894,7 +1914,8 @@
             <placeAfter>drawRectangleTool</placeAfter>
             <text>Draw Ellipse</text>
             <shortDescr>Ellipse drawing tool</shortDescr>
-            <largeIcon>icons/DrawEllipseTool24.gif</largeIcon>
+            <!--<largeIcon>icons/DrawEllipseTool24.gif</largeIcon>-->
+            <largeIcon>icons/DrawEllipseTool24.png</largeIcon>
             <selected>false</selected>
             <context>image</context>
             <helpId>drawEllipseTool</helpId>
@@ -1909,7 +1930,8 @@
             <placeAfter>drawEllipseTool</placeAfter>
             <text>Draw Polyline</text>
             <shortDescr>Polyline drawing tool</shortDescr>
-            <largeIcon>icons/DrawPolylineTool24.gif</largeIcon>
+            <!--<largeIcon>icons/DrawPolylineTool24.gif</largeIcon>-->
+            <largeIcon>icons/DrawPolylineTool24.png</largeIcon>
             <selected>false</selected>
             <context>image</context>
             <helpId>drawPolylineTool</helpId>
@@ -1924,7 +1946,8 @@
             <placeAfter>drawPolylineTool</placeAfter>
             <text>Draw Polygon</text>
             <shortDescr>Polygon drawing tool</shortDescr>
-            <largeIcon>icons/DrawPolygonTool24.gif</largeIcon>
+            <largeIcon>icons/DrawPolygonTool24.png</largeIcon>
+            <!--<largeIcon>icons/DrawPolygonTool24.gif</largeIcon>-->
             <selected>false</selected>
             <context>image</context>
             <helpId>drawPolygonTool</helpId>

@@ -278,12 +278,14 @@ public class PixelInfoView extends JPanel {
                                                        tiePointModel);
         flagPixelInfoPane = createDockablePane("Flags", 4, UIUtils.loadImageIcon("icons/RsBandFlags16.gif"), flagModel);
 
-        geolocInfoPane.setPreferredSize(new Dimension(128, 128));
+        geolocInfoPane.setPreferredSize(new Dimension(128, 512));
         scanLineInfoPane.setPreferredSize(new Dimension(128, 128));
         bandPixelInfoPane.setPreferredSize(new Dimension(128, 512));
         tiePointGridPixelInfoPane.setPreferredSize(new Dimension(128, 128));
         flagPixelInfoPane.setPreferredSize(new Dimension(128, 128));
         flagPixelInfoPane.setVisible(false);
+        tiePointGridPixelInfoPane.setVisible(false);
+        scanLineInfoPane.setVisible(false);
 
         dockablePaneMap.put(DockablePaneKey.GEOLOCATION, geolocInfoPane);
         dockablePaneMap.put(DockablePaneKey.SCANLINE, scanLineInfoPane);

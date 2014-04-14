@@ -52,9 +52,9 @@ class Continuous1BandTabularForm implements ColorManipulationChildForm {
         table.setDefaultEditor(Color.class, new ColorCellEditor());
         table.getTableHeader().setReorderingAllowed(false);
         table.getColumnModel().getColumn(0).setPreferredWidth(140);
-        table.getColumnModel().getColumn(1).setPreferredWidth(140);
+//        table.getColumnModel().getColumn(1).setPreferredWidth(80);
 
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         final JScrollPane tableScrollPane = new JScrollPane(table);
         tableScrollPane.getViewport().setPreferredSize(table.getPreferredSize());
         contentPanel = tableScrollPane;
