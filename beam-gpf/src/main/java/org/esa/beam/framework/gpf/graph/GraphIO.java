@@ -126,7 +126,7 @@ public class GraphIO {
         xStream.registerConverter(new HeaderParameter.Converter());
 
         xStream.alias("node", Node.class);
-        xStream.aliasField("operator", Node.class, "operatorName");
+        xStream.aliasField("action", Node.class, "operatorName");
         xStream.useAttributeFor(Node.class, "id");
 
         xStream.alias("sources", SourceList.class);

@@ -735,7 +735,7 @@ public class JAIUtils {
         if (sourcePIm2.getColorModel() instanceof IndexColorModel) {
             // For the first overlay, create a index color model image because:
             // 1. the base image (without any bitmask overlays) has an index color model
-            // 2. the JAI composite operator requires the source images to have the same
+            // 2. the JAI composite action requires the source images to have the same
             //    color models
             IndexColorModel cm = new IndexColorModel(8, 1, new byte[]{r}, new byte[]{g}, new byte[]{b});
             byte[] data = new byte[w * h]; // Zero filled --> zero index points to r,g,b

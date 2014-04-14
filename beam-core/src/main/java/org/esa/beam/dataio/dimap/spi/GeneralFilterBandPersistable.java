@@ -55,8 +55,8 @@ class GeneralFilterBandPersistable implements DimapPersistable {
 
         if(operator == null || operator instanceof GeneralFilterBand.StandardDeviation || operator instanceof GeneralFilterBand.RootMeanSquare) {
             // TODO - (mp, se: 10.10.2008):
-            // Currently the operator GeneralFilterBand.STDDEV or GeneralFilterBand.RMS are not supported.            
-            // They have to be implemented as JAI operator
+            // Currently the action GeneralFilterBand.STDDEV or GeneralFilterBand.RMS are not supported.
+            // They have to be implemented as JAI action
             return null;
         }
         final String sourceName = filterBandInfo.getChildTextTrim(DimapProductConstants.TAG_FILTER_SOURCE);

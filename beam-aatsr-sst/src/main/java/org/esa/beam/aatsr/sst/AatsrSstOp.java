@@ -47,7 +47,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * An operator for computing sea surface temperature from (A)ATSR products.
+ * An action for computing sea surface temperature from (A)ATSR products.
  *
  * @author Tom Block
  * @author Ralf Quast

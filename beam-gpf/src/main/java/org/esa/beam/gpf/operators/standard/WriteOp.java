@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This standard operator is used to store a data product to a specified file location.
+ * This standard action is used to store a data product to a specified file location.
  * <p/>
  * It is used by the framework, e.g. the {@code gpt} command line tool, to write target products.
  * <p/>
@@ -62,7 +62,7 @@ import java.util.Map;
  * <p/>
  * <pre>
  * &lt;node id="anyNodeId"&gt;
- *     &lt;operator&gt;Write&lt;/operator&gt;
+ *     &lt;action&gt;Write&lt;/action&gt;
  *     &lt;sources&gt;
  *         &lt;source&gt;${anySourceNodeId}&lt;/source&gt;
  *     &lt;/sources&gt;
@@ -76,7 +76,7 @@ import java.util.Map;
  * &lt;/node&gt;
  * </pre>
  * <p/>
- * Clients may also use this operator in a programmatic way:
+ * Clients may also use this action in a programmatic way:
  * <pre>
  *   WriteOp writeOp = new WriteOp(sourceProduct, file, formatName);
  *   writeOp.setDeleteOutputOnFailure(true);

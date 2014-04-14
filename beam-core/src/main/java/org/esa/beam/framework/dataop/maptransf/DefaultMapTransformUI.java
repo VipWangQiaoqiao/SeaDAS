@@ -25,7 +25,7 @@ import org.esa.beam.util.Debug;
 import org.esa.beam.util.Guardian;
 
 /**
- * @deprecated since BEAM 4.7, replaced by GPF operator 'Reproject'
+ * @deprecated since BEAM 4.7, replaced by GPF action 'Reproject'
  */
 @Deprecated
 public class DefaultMapTransformUI implements MapTransformUI {

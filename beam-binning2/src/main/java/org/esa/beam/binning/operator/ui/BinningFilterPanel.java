@@ -48,7 +48,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 /**
- * The panel in the binning operator UI which allows for setting the regional and temporal filters.
+ * The panel in the binning action UI which allows for setting the regional and temporal filters.
  *
  * @author Olaf Danne
  * @author Thomas Storm

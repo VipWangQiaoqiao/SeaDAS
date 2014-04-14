@@ -95,12 +95,12 @@ todo - address the following BinningOp requirements (nf, 2012-03-09)
 */
 
 /**
- * An operator that is used to perform spatial and temporal aggregations into "bin" cells for any number of source
+ * An action that is used to perform spatial and temporal aggregations into "bin" cells for any number of source
  * product. The output is either a file comprising the resulting bins or a reprojected "map" of the bin cells
  * represented by a usual data product.
  * <p/>
  * Unlike most other operators, that can compute single {@link org.esa.beam.framework.gpf.Tile tiles},
- * the binning operator processes all
+ * the binning action processes all
  * of its source products in its {@link #initialize()} method.
  *
  * @author Norman Fomferra
@@ -347,7 +347,7 @@ public class BinningOp extends Operator implements Output {
             throw new OperatorException(msg);
         }
         if (binningConfig == null) {
-            throw new OperatorException("Missing operator parameter 'binningConfig'");
+            throw new OperatorException("Missing action parameter 'binningConfig'");
         }
         if (binningConfig.getNumRows() <= 2) {
             throw new OperatorException("Operator parameter 'binningConfig.numRows' must be greater than 2");
@@ -356,10 +356,10 @@ public class BinningOp extends Operator implements Output {
             throw new OperatorException("Operator config does not define any output variable");
         }
         if (formatterConfig == null) {
-            throw new OperatorException("Missing operator parameter 'formatterConfig'");
+            throw new OperatorException("Missing action parameter 'formatterConfig'");
         }
         if (formatterConfig.getOutputFile() == null) {
-            throw new OperatorException("Missing operator parameter 'formatterConfig.outputFile'");
+            throw new OperatorException("Missing action parameter 'formatterConfig.outputFile'");
         }
         if (metadataTemplateDir == null || "".equals(metadataTemplateDir.getPath())) {
             metadataTemplateDir = new File(".");
@@ -435,7 +435,7 @@ public class BinningOp extends Operator implements Output {
 
         VelocityContext vc = new VelocityContext(metadataProperties);
 
-        vc.put("operator", this);
+        vc.put("action", this);
         vc.put("targetProduct", targetProduct);
         vc.put("metadataProperties", metadataProperties);
 
@@ -662,7 +662,7 @@ public class BinningOp extends Operator implements Output {
 
             // TODO - Check efficiency of interface 'org.esa.beam.framework.gpf.experimental.Output'  (nf, 2012-03-02)
             // actually, the following line of code would be sufficient, but then, the
-            // 'Output' interface implemented by this operator has no effect, because it already has a
+            // 'Output' interface implemented by this action has no effect, because it already has a
             // 'ProductReader' instance set. The overall concept of 'Output' is not fully thought-out!
             //
             // this.targetProduct = readOutput();

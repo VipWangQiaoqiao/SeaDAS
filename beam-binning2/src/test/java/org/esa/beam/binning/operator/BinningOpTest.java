@@ -47,7 +47,7 @@ import static org.junit.Assert.*;
 
 /**
  * Test that creates a local and a global L3 product from 5 source files.
- * The {@link BinningOp} is tested directly using an operator instance,
+ * The {@link BinningOp} is tested directly using an action instance,
  * and indirectly using the GPF facade and the GPT command-line tool.
  *
  * @author Norman Fomferra

@@ -64,7 +64,7 @@ public class GeneralFilterBand extends FilterBand {
      * @param name          the name of the band.
      * @param source        the source which shall be filtered.
      * @param subWindowSize the window size (width/height) used by the filter
-     * @param operator      the operator which performs the filter operation
+     * @param operator      the action which performs the filter operation
      */
     public GeneralFilterBand(String name, RasterDataNode source, int subWindowSize, Operator operator) {
         super(name,
@@ -110,7 +110,7 @@ public class GeneralFilterBand extends FilterBand {
     }
 
     /**
-     * An operator which performs an operation on an array of pixel values extracted from a raster sub-window.
+     * An action which performs an operation on an array of pixel values extracted from a raster sub-window.
      */
     public static interface Operator {
 
@@ -261,10 +261,10 @@ public class GeneralFilterBand extends FilterBand {
                 return ConvolveDescriptor.create(geophysicalImage, kernel, rh);
             }
             if (getOperator() == STDDEV) {
-                // TODO - implement a JAI operator
+                // TODO - implement a JAI action
             }
             if (getOperator() == RMS) {
-                // TODO - implement a JAI operator
+                // TODO - implement a JAI action
             }
             throw new IllegalStateException(
                     String.format("Operator class %s not supported.", getOperator().getClass()));

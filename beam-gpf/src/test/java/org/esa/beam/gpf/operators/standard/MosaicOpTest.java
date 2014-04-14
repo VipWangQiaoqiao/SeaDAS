@@ -256,7 +256,7 @@ public class MosaicOpTest {
 
     private MetadataElement getSourcesElement(MosaicOp mosaicUpdateOp, MetadataElement mosaicMetadata) {
         for (MetadataElement element : mosaicMetadata.getElements()) {
-            if (mosaicUpdateOp.getSpi().getOperatorAlias().equals(element.getAttributeString("operator"))) {
+            if (mosaicUpdateOp.getSpi().getOperatorAlias().equals(element.getAttributeString("action"))) {
                 return element.getElement("sources");
             }
         }

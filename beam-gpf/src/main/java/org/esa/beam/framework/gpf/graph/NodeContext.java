@@ -114,15 +114,15 @@ public class NodeContext {
         final OperatorSpiRegistry spiRegistry = GPF.getDefaultInstance().getOperatorSpiRegistry();
         OperatorSpi operatorSpi = spiRegistry.getOperatorSpi(node.getOperatorName());
         if (operatorSpi == null) {
-            throw new GraphException("SPI not found for operator '" + node.getOperatorName() + "'");
+            throw new GraphException("SPI not found for action '" + node.getOperatorName() + "'");
         }
 
         try {
             this.operator = operatorSpi.createOperator();
             this.operator.setLogger(graphContext.getLogger());
-            // this.operator.setConfiguration(node.getConfiguration());
+            // this.action.setConfiguration(node.getConfiguration());
         } catch (OperatorException e) {
-            throw new GraphException("Failed to create instance of operator '" + node.getOperatorName() + "'");
+            throw new GraphException("Failed to create instance of action '" + node.getOperatorName() + "'");
         }
     }
 
@@ -142,7 +142,7 @@ public class NodeContext {
 
     public synchronized void dispose() {
         if (operatorContext != null && !operatorContext.isDisposed()) {
-            operatorContext.dispose(); // disposes operator as well
+            operatorContext.dispose(); // disposes action as well
             operatorContext = null;
             operator = null;
         }

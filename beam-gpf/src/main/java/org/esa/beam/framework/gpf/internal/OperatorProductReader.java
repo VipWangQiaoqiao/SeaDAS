@@ -50,7 +50,7 @@ public class OperatorProductReader implements ProductReader {
     /**
      * Creates a <code>OperatorProductReader</code> instance.
      *
-     * @param operatorContext the operator context
+     * @param operatorContext the action context
      */
     public OperatorProductReader(OperatorContext operatorContext) {
         this.operatorContext = operatorContext;
@@ -102,7 +102,7 @@ public class OperatorProductReader implements ProductReader {
 
     public synchronized void close() throws IOException {
         if (operatorContext != null && !operatorContext.isDisposed()) {
-            operatorContext.dispose(); // disposes operator as well
+            operatorContext.dispose(); // disposes action as well
             operatorContext = null;
         }
     }

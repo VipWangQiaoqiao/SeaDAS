@@ -47,7 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This operator is used to spatially collocate two data products. It requires two source products,
+ * This action is used to spatially collocate two data products. It requires two source products,
  * a <code>master</code> product which provides the Coordinate reference system and grid into which
  * the raster data sets of the <code>slave</code> product are resampled to.
  *
@@ -540,7 +540,7 @@ public class CollocateOp extends Operator {
     }
 
     /**
-     * Collocation operator SPI.
+     * Collocation action SPI.
      */
     public static class Spi extends OperatorSpi {
 

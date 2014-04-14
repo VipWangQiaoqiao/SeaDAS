@@ -1899,6 +1899,7 @@ public class VisatApp extends BasicApp implements AppContext {
         ArrayList<String> commandIdList = new ArrayList<String>(Arrays.asList(
                 "showNoDataOverlay",
                 "showShapeOverlay",
+                "showContourOverlay",
                 "showGraticuleOverlay",
                 "showWorldMapOverlay"));
         Set<PlacemarkDescriptor> placemarkDescriptors = PlacemarkDescriptorRegistry.getInstance().getPlacemarkDescriptors();

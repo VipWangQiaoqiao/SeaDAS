@@ -202,7 +202,7 @@ public class CommandLineToolMultiSourceGraphTest {
                     "<graph id=\"chain1\">" +
                             "<version>1.0</version>\n" +
                             "<node id=\"node1\">" +
-                            "  <operator>org.esa.beam.framework.gpf.TestOps$Op5$Spi</operator>\n" +
+                            "  <action>org.esa.beam.framework.gpf.TestOps$Op5$Spi</action>\n" +
                             "  <sources>\n" +
                             "    <sourceProducts>${sourceProducts}</sourceProducts>\n" +
                             "  </sources>\n" +

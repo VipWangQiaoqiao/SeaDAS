@@ -85,7 +85,7 @@ public class OperatorParameterSupportTest {
     @OperatorMetadata(alias = "Tester",
                       authors = "Nobody",
                       version = "42",
-                      description = "This is very stupid operator.")
+                      description = "This is very stupid action.")
     public class TestOp extends Operator {
 
         @Parameter

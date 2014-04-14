@@ -290,7 +290,7 @@ public class CommandLineToolGraphTest extends TestCase {
                         "<parameter name=\"expression\" type=\"String\"/>\n" +
                         "</header>\n" +
                         "<node id=\"node1\">" +
-                        "  <operator>org.esa.beam.framework.gpf.TestOps$Op2$Spi</operator>\n" +
+                        "  <action>org.esa.beam.framework.gpf.TestOps$Op2$Spi</action>\n" +
                         "  <sources>\n" +
                         "    <input>${sourceProduct}</input>\n" +
                         "  </sources>\n" +
@@ -299,7 +299,7 @@ public class CommandLineToolGraphTest extends TestCase {
                         "  </parameters>\n" +
                         "</node>" +
                         "<node id=\"node2\">" +
-                        "  <operator>org.esa.beam.framework.gpf.TestOps$Op3$Spi</operator>\n" +
+                        "  <action>org.esa.beam.framework.gpf.TestOps$Op3$Spi</action>\n" +
                         "  <sources>\n" +
                         "    <input1 refid=\"node1\"/>\n" +
                         "    <input2>${sourceProduct2}</input2>\n" +
@@ -313,7 +313,7 @@ public class CommandLineToolGraphTest extends TestCase {
                 xml = "<graph id=\"chain1\">" +
                         "<version>1.0</version>\n" +
                         "<node id=\"node1\">" +
-                        "  <operator>org.esa.beam.framework.gpf.TestOps$OpImplementingOutput$Spi</operator>\n" +
+                        "  <action>org.esa.beam.framework.gpf.TestOps$OpImplementingOutput$Spi</action>\n" +
                         "</node>" +
                         "</graph>";
             } else {

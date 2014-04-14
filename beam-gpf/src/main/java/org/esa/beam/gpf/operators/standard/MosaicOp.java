@@ -160,7 +160,7 @@ public class MosaicOp extends Operator {
     private void updateMetadata(Product product) {
         final MetadataElement graphElement = product.getMetadataRoot().getElement("Processing_Graph");
         for (MetadataElement nodeElement : graphElement.getElements()) {
-            if (getSpi().getOperatorAlias().equals(nodeElement.getAttributeString("operator"))) {
+            if (getSpi().getOperatorAlias().equals(nodeElement.getAttributeString("action"))) {
                 final MetadataElement sourcesElement = nodeElement.getElement("sources");
                 for (int i = 0; i < sourceProducts.length; i++) {
                     final String oldIndex = String.valueOf(i + 1);
@@ -506,13 +506,13 @@ public class MosaicOp extends Operator {
         final Map<String, Object> parameters = new HashMap<String, Object>();
         boolean operatorFound = false;
         for (MetadataElement nodeElement : graphElement.getElements()) {
-            if (operatorAlias.equals(nodeElement.getAttributeString("operator"))) {
+            if (operatorAlias.equals(nodeElement.getAttributeString("action"))) {
                 operatorFound = true;
                 collectParameters(MosaicOp.class, nodeElement.getElement("parameters"), parameters);
             }
         }
         if (!operatorFound) {
-            throw new OperatorException("No metadata found for operator '" + operatorAlias + "'");
+            throw new OperatorException("No metadata found for action '" + operatorAlias + "'");
         }
         return parameters;
     }
@@ -557,7 +557,7 @@ public class MosaicOp extends Operator {
                 }
             }
         } catch (Exception e) {
-            throw new OperatorException(String.format("Cannot initialise operator parameter '%s'", name), e);
+            throw new OperatorException(String.format("Cannot initialise action parameter '%s'", name), e);
         }
     }
 
@@ -584,7 +584,7 @@ public class MosaicOp extends Operator {
                 parameters.put(name, array);
             }
         } catch (Exception e) {
-            throw new OperatorException(String.format("Cannot initialise operator parameter '%s'", name), e);
+            throw new OperatorException(String.format("Cannot initialise action parameter '%s'", name), e);
         }
     }
 
@@ -599,7 +599,7 @@ public class MosaicOp extends Operator {
                 try {
                     field.set(object, params.get(name));
                 } catch (Exception e) {
-                    final String msg = String.format("Cannot initialise operator parameter '%s'", name);
+                    final String msg = String.format("Cannot initialise action parameter '%s'", name);
                     throw new OperatorException(msg, e);
                 }
             }

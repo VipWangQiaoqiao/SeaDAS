@@ -60,7 +60,7 @@ import java.util.logging.Level;
 import static java.lang.Math.*;
 
 /**
- * This operator is used to create either spatial and/or spectral subsets of a data product.
+ * This action is used to create either spatial and/or spectral subsets of a data product.
  * Spatial subset may be given by pixel positions (parameter <code>region</code>)
  * or a geographical polygon (parameter <code>geoRegion</code>). Subsets of band and tie-point grid
  * are given by name lists (parameters <code>bandNames</code> and  <code>tiePointGridNames</code>).
@@ -98,7 +98,7 @@ public class SubsetOp extends Operator {
                description = "The pixel sub-sampling step in Y (vertical image direction)")
     private int subSamplingY;
     @Parameter(defaultValue = "false",
-               description = "Forces the operator to extend the subset region to the full swath.")
+               description = "Forces the action to extend the subset region to the full swath.")
     private boolean fullSwath;
 
     @Parameter(description = "The comma-separated list of names of tie-point grids to be copied. \n" +

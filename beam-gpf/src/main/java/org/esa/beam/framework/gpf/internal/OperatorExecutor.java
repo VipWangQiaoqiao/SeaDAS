@@ -39,7 +39,7 @@ import java.util.concurrent.Semaphore;
 
 /**
  * This executor triggers the computation of all tiles that the bands of the
- * target product of the given operator have. The computation of these tiles is
+ * target product of the given action have. The computation of these tiles is
  * parallelized to use all available CPUs (cores) using the JAI
  * {@link TileScheduler}.
  *
@@ -109,7 +109,7 @@ public class OperatorExecutor {
 
         ImagingListener imagingListener = JAI.getDefaultInstance().getImagingListener();
         JAI.getDefaultInstance().setImagingListener(new GPFImagingListener());
-        pm.beginTask("Executing operator...", tileCountX * tileCountY * images.length);
+        pm.beginTask("Executing action...", tileCountX * tileCountY * images.length);
 
         ExecutionOrder effectiveExecutionOrder = getEffectiveExecutionOrder(executionOrder);
 

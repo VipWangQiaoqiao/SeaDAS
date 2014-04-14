@@ -35,13 +35,13 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Reads the specified file as product. This operator may serve as a source node in processing graphs,
+ * Reads the specified file as product. This action may serve as a source node in processing graphs,
  * especially if multiple data products need to be read in.
  * <p/>
- * Here is a sample of how the <code>Read</code> operator can be integrated as a node within a processing graph:
+ * Here is a sample of how the <code>Read</code> action can be integrated as a node within a processing graph:
  * <pre>
  *    &lt;node id="readNode"&gt;
- *        &lt;operator&gt;Read&lt;/operator&gt;
+ *        &lt;action&gt;Read&lt;/action&gt;
  *        &lt;parameters&gt;
  *            &lt;file&gt;/eodata/SST.nc&lt;/file&gt;
  *        &lt;/parameters&gt;

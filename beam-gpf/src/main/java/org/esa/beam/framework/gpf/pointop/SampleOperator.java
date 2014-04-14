@@ -8,7 +8,7 @@ import org.esa.beam.framework.gpf.Tile;
 import java.awt.Point;
 
 /**
- * A {@code SampleOperator} may serve as a handy base class for an operator that computes a single target sample from
+ * A {@code SampleOperator} may serve as a handy base class for an action that computes a single target sample from
  * any number of source samples.
  *
  * @author Norman Fomferra

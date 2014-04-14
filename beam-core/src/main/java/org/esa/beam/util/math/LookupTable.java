@@ -393,7 +393,7 @@ public:
 	AerLookupTable(const Axis* axes[], size_t numAxes, const Wp values[]);
 	~AerLookupTable();
 
-	Wp operator()(const Wp coordinates[]) const;
+	Wp action()(const Wp coordinates[]) const;
 
 	Wp maxCoordinate(size_t axisIndex) const;
 	Wp minCoordinate(size_t axisIndex) const;
@@ -479,7 +479,7 @@ AerLookupTable<Wp>::~AerLookupTable()
 
 template<class Wp>
 Wp
-AerLookupTable<Wp>::operator()(const Wp coordinates[]) const
+AerLookupTable<Wp>::action()(const Wp coordinates[]) const
 {
 	using std::valarray;
 

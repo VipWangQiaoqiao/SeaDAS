@@ -22,7 +22,7 @@ import org.esa.beam.framework.ui.command.CommandEvent;
 import org.esa.beam.visat.actions.AbstractVisatAction;
 
 /**
- * Action for starting the GPF binning operator user interface.
+ * Action for starting the GPF binning action user interface.
  *
  * @author Tonio Fincke
  * @author Thomas Storm

@@ -217,7 +217,7 @@ class CommandLineUsage {
     public static String getUsageTextForOperator(String operatorName) {
         final OperatorSpi operatorSpi = GPF.getDefaultInstance().getOperatorSpiRegistry().getOperatorSpi(operatorName);
         if (operatorSpi == null) {
-            return MessageFormat.format("Unknown operator ''{0}''.", operatorName);
+            return MessageFormat.format("Unknown action ''{0}''.", operatorName);
         }
         final OperatorClassDescriptor operatorClassDescriptor = new OperatorClassDescriptor(operatorSpi.getOperatorClass());
         StringBuilder usageText = new StringBuilder(1024);
@@ -434,7 +434,7 @@ class CommandLineUsage {
         versionElem.setValue("1.0");
         final DomElement nodeElem = graphElem.createChild("node");
         nodeElem.setAttribute("id", "someNodeId");
-        final DomElement operatorElem = nodeElem.createChild("operator");
+        final DomElement operatorElem = nodeElem.createChild("action");
         operatorElem.setValue(OperatorSpi.getOperatorAlias(operatorClassDescriptor.getOperatorClass()));
         DomElement sourcesElem = nodeElem.createChild("sources");
         for (Field sourceField : operatorClassDescriptor.getSourceProductMap().keySet()) {

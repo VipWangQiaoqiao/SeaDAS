@@ -44,7 +44,7 @@ import java.io.*;
 /**
  * WARNING: This class belongs to a preliminary API and may change in future releases.
  * <p/>
- * Provides an operator menu with action for loading, saving and displaying the parameters of an operator
+ * Provides an action menu with action for loading, saving and displaying the parameters of an action
  * in the file menu section and actions for help and about in the help menu section.
  *
  * @author Norman Fomferra
@@ -317,7 +317,7 @@ public class OperatorMenu {
             sb.append("</html>");
             return makeHtmlConform(sb.toString());
         }
-        return "No operator metadata available.";
+        return "No action metadata available.";
     }
 
     private static String makeHtmlConform(String text) {

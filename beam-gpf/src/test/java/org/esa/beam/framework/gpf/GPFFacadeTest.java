@@ -169,7 +169,7 @@ public class GPFFacadeTest {
         MetadataElement metadataElement = p2.getMetadataRoot().getElement("Processing_Graph");
         MetadataElement sourceElement = null;
         for (MetadataElement element : metadataElement.getElements()) {
-            if (element.getAttribute("operator").getData().getElemString().equals("Foo")) {
+            if (element.getAttribute("action").getData().getElemString().equals("Foo")) {
                 sourceElement = element.getElement("sources");
                 break;
             }
@@ -194,7 +194,7 @@ public class GPFFacadeTest {
         MetadataElement metadataElement = p3.getMetadataRoot().getElement("Processing_Graph");
         MetadataElement sourceElement = null;
         for (MetadataElement element : metadataElement.getElements()) {
-            if (element.getAttribute("operator").getData().getElemString().equals("Foos")) {
+            if (element.getAttribute("action").getData().getElemString().equals("Foos")) {
                 sourceElement = element.getElement("sources");
                 break;
             }

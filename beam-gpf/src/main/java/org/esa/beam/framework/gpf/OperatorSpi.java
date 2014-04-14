@@ -30,8 +30,8 @@ import java.util.logging.Logger;
 /**
  * <p>The <code>OperatorSpi</code> class is the service provider interface (SPI) for {@link Operator}s.
  * Therefore this abstract class is intended to be derived by clients.</p>
- * <p>The SPI is both a descriptor for the operator type and a factory for new {@link Operator} instances.
- * <p>An SPI is required for your operator if you want to make it accessible via an alias name in
+ * <p>The SPI is both a descriptor for the action type and a factory for new {@link Operator} instances.
+ * <p>An SPI is required for your action if you want to make it accessible via an alias name in
  * the various {@link GPF}{@code .create} methods or within GPF Graph XML code.</p>
  * <p>SPI are registered either programmatically using the
  * {@link org.esa.beam.framework.gpf.GPF#getOperatorSpiRegistry() OperatorSpiRegistry} or
@@ -52,23 +52,23 @@ public abstract class OperatorSpi {
     private Module module;
 
     /**
-     * Constructs an operator SPI for the given operator class. The alias name
-     * and other metadata will be taken from the operator annotation
+     * Constructs an action SPI for the given action class. The alias name
+     * and other metadata will be taken from the action annotation
      * {@link OperatorMetadata}. If no such exists,
-     * the alias name will be the operator's class name without the package path.
+     * the alias name will be the action's class name without the package path.
      * All other metadata will be set to the empty string.
      *
-     * @param operatorClass The operator class.
+     * @param operatorClass The action class.
      */
     protected OperatorSpi(Class<? extends Operator> operatorClass) {
         this(operatorClass, getOperatorAlias(operatorClass));
     }
 
     /**
-     * Constructs an operator SPI for the given class name and alias name.
+     * Constructs an action SPI for the given class name and alias name.
      *
-     * @param operatorClass The operator class.
-     * @param operatorAlias The alias name for the operator.
+     * @param operatorClass The action class.
+     * @param operatorAlias The alias name for the action.
      */
     protected OperatorSpi(Class<? extends Operator> operatorClass, String operatorAlias) {
         this.operatorClass = operatorClass;
@@ -76,13 +76,13 @@ public abstract class OperatorSpi {
     }
 
     /**
-     * <p>Creates an operator instance with no arguments. The default implemrentation calls
-     * the default constructor. If no such is defined in the operator, an exception is thrown.</p>
-     * <p>This method may be overridden by clients in order to provide a no-argument instance of their operator.
-     * Implementors should call {@link Operator#setSpi(OperatorSpi) operator.setSpi(this)}
-     * in order to set the operator's SPI.</p>
+     * <p>Creates an action instance with no arguments. The default implemrentation calls
+     * the default constructor. If no such is defined in the action, an exception is thrown.</p>
+     * <p>This method may be overridden by clients in order to provide a no-argument instance of their action.
+     * Implementors should call {@link Operator#setSpi(OperatorSpi) action.setSpi(this)}
+     * in order to set the action's SPI.</p>
      *
-     * @return the operator instance
+     * @return the action instance
      *
      * @throws OperatorException if the instance could not be created
      */
@@ -99,18 +99,18 @@ public abstract class OperatorSpi {
     }
 
     /**
-     * <p>Creates an operator instance for the given source products and processing parameters.</p>
+     * <p>Creates an action instance for the given source products and processing parameters.</p>
      * <p>This method may be overridden by clients in order to process the passed parameters and
-     * source products and optionally construct the operator in a specific way.
-     * Implementors should call {@link Operator#setSpi(OperatorSpi) operator.setSpi(this)}
-     * in order to set the operator's SPI.</p>
+     * source products and optionally construct the action in a specific way.
+     * Implementors should call {@link Operator#setSpi(OperatorSpi) action.setSpi(this)}
+     * in order to set the action's SPI.</p>
      *
      * @param parameters     the processing parameters.
      * @param sourceProducts the source products.
      *
-     * @return the operator instance.
+     * @return the action instance.
      *
-     * @throws OperatorException if the operator could not be created.
+     * @throws OperatorException if the action could not be created.
      */
     public Operator createOperator(Map<String, Object> parameters,
                                    Map<String, Product> sourceProducts) throws OperatorException {
@@ -118,19 +118,19 @@ public abstract class OperatorSpi {
     }
 
     /**
-     * <p>Creates an operator instance for the given source products and processing parameters.</p>
+     * <p>Creates an action instance for the given source products and processing parameters.</p>
      * <p>This method may be overridden by clients in order to process the passed parameters and
-     * source products and optionally construct the operator in a specific way.
-     * Implementors should call {@link Operator#setSpi(OperatorSpi) operator.setSpi(this)}
-     * in order to set the operator's SPI.</p>
+     * source products and optionally construct the action in a specific way.
+     * Implementors should call {@link Operator#setSpi(OperatorSpi) action.setSpi(this)}
+     * in order to set the action's SPI.</p>
      *
      * @param parameters     the processing parameters.
      * @param sourceProducts the source products.
      * @param renderingHints the rendering hints, may be {@code null}.
      *
-     * @return the operator instance.
+     * @return the action instance.
      *
-     * @throws OperatorException if the operator could not be created.
+     * @throws OperatorException if the action could not be created.
      */
     public Operator createOperator(Map<String, Object> parameters,
                                    Map<String, Product> sourceProducts,
@@ -145,17 +145,17 @@ public abstract class OperatorSpi {
     }
 
     /**
-     * Gets the operator class.
-     * The operator class must be public and provide a public zero-argument constructor.
+     * Gets the action class.
+     * The action class must be public and provide a public zero-argument constructor.
      *
-     * @return the operator class
+     * @return the action class
      */
     public final Class<? extends Operator> getOperatorClass() {
         return operatorClass;
     }
 
     /**
-     * The alias name under which the operator can be accessed.
+     * The alias name under which the action can be accessed.
      *
      * @return The alias name of the (@link Operator).
      */
@@ -164,9 +164,9 @@ public abstract class OperatorSpi {
     }
 
     /**
-     * The module containing the operator.
+     * The module containing the action.
      *
-     * @return The {@link Module module} containing the operator or {@code null} if no module is defined.
+     * @return The {@link Module module} containing the action or {@code null} if no module is defined.
      */
     public Module getModule() {
         if(module == null) {

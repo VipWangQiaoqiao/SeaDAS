@@ -19,7 +19,7 @@ package org.esa.beam.framework.gpf;
 import com.bc.ceres.core.ServiceRegistry;
 
 /**
- * A registry for operator SPI instances.
+ * A registry for action SPI instances.
  *
  * @author Norman Fomferra
  * @author Marco Zühlke
@@ -40,13 +40,13 @@ public interface OperatorSpiRegistry {
     ServiceRegistry<OperatorSpi> getServiceRegistry();
 
     /**
-     * Gets a registrered operator SPI. The given <code>operatorName</code> can be
+     * Gets a registrered action SPI. The given <code>operatorName</code> can be
      * either the fully qualified class name of the {@link OperatorSpi}
      * or an alias name.
      *
-     * @param operatorName a name identifying the operator SPI.
+     * @param operatorName a name identifying the action SPI.
      *
-     * @return the operator SPI, or <code>null</code>
+     * @return the action SPI, or <code>null</code>
      */
     OperatorSpi getOperatorSpi(String operatorName);
 

@@ -211,9 +211,9 @@ public class Parameter {
     /**
      * Tests if this parameter's value type is a, is derived from or implements the given value type.
      * <p/>
-     * The method should be used instead of the <code>instanceof</code> operator in order to determine whether this
+     * The method should be used instead of the <code>instanceof</code> action in order to determine whether this
      * parameter's value is compatible with a given class (or interface). That is, if the parameter's value is
-     * <code>null</code>, the <code>instanceof</code> operator would simply return <code>false</code>.
+     * <code>null</code>, the <code>instanceof</code> action would simply return <code>false</code>.
      *
      * @param valueType the value type
      *

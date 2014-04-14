@@ -53,7 +53,7 @@ public class TargetProductAnnotationValidationTest extends TestCase {
         GraphContext graphContext = new GraphContext(graph);
         NodeContext nodeContext = graphContext.getNodeContext(node);
         NotInitOutputOperator notInitOutputOperator = (NotInitOutputOperator) nodeContext.getOperator();
-        assertNotNull("Output of operator is null", notInitOutputOperator.output);
+        assertNotNull("Output of action is null", notInitOutputOperator.output);
         assertSame(nodeContext.getTargetProduct(), notInitOutputOperator.output);
     }
 

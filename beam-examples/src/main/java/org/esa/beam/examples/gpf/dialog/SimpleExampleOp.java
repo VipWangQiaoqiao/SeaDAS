@@ -16,7 +16,7 @@ import org.esa.beam.framework.gpf.pointop.WritableSample;
 
 @OperatorMetadata(alias = "Simple",
                   version = "1.0",
-                  description = "An simple operator which does nothing meaningful. " +
+                  description = "An simple action which does nothing meaningful. " +
                           "It is just a coding example.")
 public class SimpleExampleOp extends SampleOperator {
     private static final String OUTPUT_BAND_NAME = "output";

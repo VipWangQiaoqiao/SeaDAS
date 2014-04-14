@@ -352,7 +352,7 @@ public class MagicWandModel implements Cloneable {
         } else if (operator == Operator.INTEGRAL) {
             functionName = "distance_integ";
         } else {
-            throw new IllegalStateException("unhandled operator " + operator);
+            throw new IllegalStateException("unhandled action " + operator);
         }
         if (bands.length == 1) {
             return String.format("%s(%s) < %s", functionName, arguments, tolerance);
@@ -377,7 +377,7 @@ public class MagicWandModel implements Cloneable {
         } else if (operator == Operator.INTEGRAL) {
             functionName = "inrange_integ";
         } else {
-            throw new IllegalStateException("unhandled operator " + operator);
+            throw new IllegalStateException("unhandled action " + operator);
         }
         return String.format("%s(%s)", functionName, arguments);
     }

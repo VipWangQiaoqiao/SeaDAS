@@ -26,7 +26,7 @@ import java.util.Iterator;
 /**
  * A tile represents a rectangular region of sample data within the scene rectangle of a data product.
  * Tiles are used to enable the sample data transfer from and to the source and target bands of data
- * products used within operator graphs.
+ * products used within action graphs.
  * <p>Target tiles to be computed are passed into an {@link Operator}'s
  * {@link Operator#computeTile(org.esa.beam.framework.datamodel.Band, Tile, com.bc.ceres.core.ProgressMonitor) computeTile}
  * and {@link Operator#computeTileStack(java.util.Map, java.awt.Rectangle, com.bc.ceres.core.ProgressMonitor) computeTileStack}  computeTileStack} methods.

@@ -1569,7 +1569,7 @@ public class DimapProductHelpers {
                 final DimapPersistable persistable = DimapPersistence.getPersistable(element);
                 if (persistable != null) {
                     band = (Band) persistable.createObjectFromXml(element, product);
-                    // currently it can be null if the operator of filtered band is of type
+                    // currently it can be null if the action of filtered band is of type
                     // GeneralFilterBand.STDDEV or GeneralFilterBand.RMS
                     if (band != null) {
                         product.addBand(band);

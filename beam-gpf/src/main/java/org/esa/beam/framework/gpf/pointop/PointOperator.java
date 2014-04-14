@@ -77,7 +77,7 @@ public abstract class PointOperator extends Operator {
     }
 
     /**
-     * Prepares the inputs for this operator. Called by {@link #initialize()}.
+     * Prepares the inputs for this action. Called by {@link #initialize()}.
      * <p/>
      * Clients may override to perform some extra validation of
      * parameters and source products and/or to load external, auxiliary resources. External resources that may be opened
@@ -87,7 +87,7 @@ public abstract class PointOperator extends Operator {
      * Failures of input preparation shall be indicated by throwing an {@link OperatorException}.
      * <p/>
      * The default implementation checks whether all source products have the same raster size.
-     * Clients that require a similar behaviour in their operator shall first call the {@code super} method
+     * Clients that require a similar behaviour in their action shall first call the {@code super} method
      * in their implementation.
      *
      * @throws OperatorException If the validation of input fails.
@@ -116,7 +116,7 @@ public abstract class PointOperator extends Operator {
      * Configures the target product via the given {@link ProductConfigurer}. Called by {@link #initialize()}.
      * <p/>
      * Client implementations of this method usually add product components to the given target product, such as
-     * {@link Band bands} to be computed by this operator,
+     * {@link Band bands} to be computed by this action,
      * {@link org.esa.beam.framework.datamodel.VirtualBand virtual bands},
      * {@link org.esa.beam.framework.datamodel.Mask masks}
      * or {@link org.esa.beam.framework.datamodel.SampleCoding sample codings}.
@@ -128,7 +128,7 @@ public abstract class PointOperator extends Operator {
      * <li>the geo-coding by calling {@link ProductConfigurer#copyGeoCoding()}.</li>
      * </ul>
      * <p/>
-     * Clients that require a similar behaviour in their operator shall first call the {@code super} method
+     * Clients that require a similar behaviour in their action shall first call the {@code super} method
      * in their implementation.
      *
      * @param productConfigurer The target product configurer.
@@ -145,7 +145,7 @@ public abstract class PointOperator extends Operator {
     }
 
     /**
-     * Configures all source samples that this operator requires for the computation of target samples.
+     * Configures all source samples that this action requires for the computation of target samples.
      * Source sample are defined by using the provided {@link SampleConfigurer}.
      * <p/>
      * <p/> The method is called by {@link #initialize()}.
@@ -156,7 +156,7 @@ public abstract class PointOperator extends Operator {
     protected abstract void configureSourceSamples(SampleConfigurer sampleConfigurer) throws OperatorException;
 
     /**
-     * Configures all target samples computed by this operator.
+     * Configures all target samples computed by this action.
      * Target samples are defined by using the provided {@link SampleConfigurer}.
      * <p/>
      * <p/> The method is called by {@link #initialize()}.

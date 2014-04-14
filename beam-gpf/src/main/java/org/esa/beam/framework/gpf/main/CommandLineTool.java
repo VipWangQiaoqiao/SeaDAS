@@ -265,7 +265,7 @@ class CommandLineTool implements GraphProcessingObserver {
         VelocityContext velocityContext = metadataResourceEngine.getVelocityContext();
         if (operator != null) {
             OperatorSpi spi = operator.getSpi();
-            velocityContext.put("operator", operator);
+            velocityContext.put("action", operator);
             velocityContext.put("operatorSpi", spi);
             velocityContext.put("operatorMetadata", spi.getOperatorClass().getAnnotation(OperatorMetadata.class));
         }
@@ -310,7 +310,7 @@ class CommandLineTool implements GraphProcessingObserver {
         final String operatorName = lastNode.getOperatorName();
         final OperatorSpi lastOpSpi = operatorSpiRegistry.getOperatorSpi(operatorName);
         if (lastOpSpi == null) {
-            throw new GraphException(String.format("Unknown operator name '%s'. No SPI found.", operatorName));
+            throw new GraphException(String.format("Unknown action name '%s'. No SPI found.", operatorName));
         }
 
         if (!Output.class.isAssignableFrom(lastOpSpi.getOperatorClass())) {
@@ -362,7 +362,7 @@ class CommandLineTool implements GraphProcessingObserver {
                 try {
                     domConverter.convertDomToValue(parametersElement, container);
                 } catch (ConversionException e) {
-                    String msgPattern = "Can not convert XML parameters for operator '%s'";
+                    String msgPattern = "Can not convert XML parameters for action '%s'";
                     throw new RuntimeException(String.format(msgPattern, operatorName));
                 }
             }
@@ -376,7 +376,7 @@ class CommandLineTool implements GraphProcessingObserver {
                 property.setValueFromText(paramValue);
             } else {
                 throw new RuntimeException(String.format(
-                        "Parameter '%s' is not known by operator '%s'", paramName, operatorName));
+                        "Parameter '%s' is not known by action '%s'", paramName, operatorName));
             }
         }
         return parameters;
@@ -519,7 +519,7 @@ class CommandLineTool implements GraphProcessingObserver {
         }
 
 
-        // It can happen that we have no target file when the operator implements the Output interface
+        // It can happen that we have no target file when the action implements the Output interface
         if (!commandLineContext.isFile(commandLineArgs.getTargetFilePath())) {
             String msgPattern = "Target file '%s' does not exist, but is required to process velocity templates";
             logger.warning(String.format(msgPattern, commandLineArgs.getTargetFilePath()));

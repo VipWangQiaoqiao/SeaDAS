@@ -66,7 +66,7 @@ public class PixExOpTest {
                 "<graph id=\"someGraphId\">\n" +
                         "    <version>1.0</version>\n" +
                         "    <node id=\"someNodeId\">\n" +
-                        "      <operator>PixEx</operator>\n" +
+                        "      <action>PixEx</action>\n" +
                         "      <parameters>\n" +
                         "        <sourceProductPaths>\n" +
                         "           " + parentDir + File.separator + "*.dim" +

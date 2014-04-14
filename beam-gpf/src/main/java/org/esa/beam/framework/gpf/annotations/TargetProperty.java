@@ -20,7 +20,7 @@ import java.lang.annotation.*;
 
 /**
  * Marks a target property field of an {@link org.esa.beam.framework.gpf.Operator Operator}.
- * The field must be computed during initialization of the operator.
+ * The field must be computed during initialization of the action.
  */
 @Documented
 @Inherited

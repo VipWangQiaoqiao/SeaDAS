@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * WARNING: This class belongs to a preliminary API and may change in future releases.
  *
- * Support for operator parameters input/output.
+ * Support for action parameters input/output.
  *
  * @author Norman Fomferra
  * @author Marco Zühlke
@@ -57,22 +57,22 @@ public class OperatorParameterSupport {
     private final ParameterUpdater parameterUpdater;
 
     /**
-     * Creates a parameter support for the given operator type.
+     * Creates a parameter support for the given action type.
      *
-     * @param opType The operator type.
+     * @param opType The action type.
      */
     public OperatorParameterSupport(Class<? extends Operator> opType) {
         this(opType, null, null, null);
     }
 
     /**
-     * Creates a parameter support, for the given operator type.
+     * Creates a parameter support, for the given action type.
      * <p/>
      * If a property set and a parameter map are given the client as to keep them in sync.
      * The {@code parameterUpdater} will be called before each save  and after each load request to
      * enable custom updating.
      *
-     * @param opType  The operator type (mandatory).
+     * @param opType  The action type (mandatory).
      * @param propertySet The property set (can be null). If supplied a parameter map is required as well.
      * @param parameterMap the parameter map (can be null)
      * @param parameterUpdater The parameter updater (can be null)

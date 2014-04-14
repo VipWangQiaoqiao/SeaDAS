@@ -477,8 +477,8 @@ public class SpectralUnmixingOp extends Operator {
     }
 
     /**
-     * The Service Provider Interface (SPI) for the operator.
-     * It provides operator meta-data and is a factory for new operator instances.
+     * The Service Provider Interface (SPI) for the action.
+     * It provides action meta-data and is a factory for new action instances.
      */
     public static class Spi extends OperatorSpi {
         public Spi() {

@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A registry for operator SPI instances.
+ * A registry for action SPI instances.
  *
  * @author Norman Fomferra
  * @author Marco Zühlke
@@ -78,12 +78,12 @@ public class OperatorSpiRegistryImpl implements OperatorSpiRegistry {
     }
 
     /**
-     * Gets a registrered operator SPI. The given <code>operatorName</code> can be
+     * Gets a registrered action SPI. The given <code>operatorName</code> can be
      * either the fully qualified class name of the {@link OperatorSpi}
      * or an alias name.
      *
-     * @param operatorName A name identifying the operator SPI.
-     * @return the operator SPI, or <code>null</code>
+     * @param operatorName A name identifying the action SPI.
+     * @return the action SPI, or <code>null</code>
      */
     public OperatorSpi getOperatorSpi(String operatorName) {
         OperatorSpi service = serviceRegistry.getService(operatorName);

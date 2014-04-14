@@ -47,7 +47,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * UI for binning operator.
+ * UI for binning action.
  *
  * @author Olaf Danne
  * @author Thomas Storm

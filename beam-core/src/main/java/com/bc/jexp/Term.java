@@ -24,7 +24,7 @@ import java.util.List;
  * element within an arbitrary expression tree. The class defines a number of
  * concrete <code>Term</code> implementations each representing either an
  * an atomic leave (number constant, symbol reference) or a node
- * (e.g. binary operator, function call) within an expression tree.
+ * (e.g. binary action, function call) within an expression tree.
  * <p/>
  * <p> Instances of this class are normally created using an expression parser
  * which implements the <code>{@link com.bc.jexp.Parser}</code> interface.

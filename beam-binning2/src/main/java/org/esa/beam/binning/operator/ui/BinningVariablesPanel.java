@@ -47,7 +47,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
 /**
- * The panel in the binning operator UI which allows for specifying the configuration of binning variables.
+ * The panel in the binning action UI which allows for specifying the configuration of binning variables.
  *
  * @author Olaf Danne
  * @author Thomas Storm

@@ -29,7 +29,7 @@ import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 
 /**
  * A doclet which scans the classpath for GPF operators and creates
- * associated documentation derived from an operator's annotations
+ * associated documentation derived from an action's annotations
  * <ol>
  * <li>{@link org.esa.beam.framework.gpf.annotations.OperatorMetadata OperatorMetadata}</li>
  * <li>{@link org.esa.beam.framework.gpf.annotations.SourceProduct SourceProduct}</li>
@@ -105,7 +105,7 @@ public class OperatorDoclet extends Doclet {
                 "org.esa.beam.gpf.operators.standard.reproject",
                 "org.esa.beam.gpf.operators.meris",
                 "org.esa.beam.aatsr.sst",
-                "org.esa.beam.binning.operator",
+                "org.esa.beam.binning.action",
                 "org.esa.beam.cluster",
                 "org.esa.beam.collocation",
                 "org.esa.beam.meris.radiometry",

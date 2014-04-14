@@ -41,7 +41,7 @@ import javax.media.jai.OpImage;
 import java.awt.image.Raster;
 
 /**
- * An operator for computing fluorescence line height (FLH) or maximum chlorophyll index (MCI).
+ * An action for computing fluorescence line height (FLH) or maximum chlorophyll index (MCI).
  *
  * @author Tom Block
  * @author Ralf Quast

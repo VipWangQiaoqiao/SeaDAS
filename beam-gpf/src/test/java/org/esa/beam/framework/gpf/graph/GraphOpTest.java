@@ -57,7 +57,7 @@ public class GraphOpTest {
                         "  </header>\n" +
 
                         "  <node id=\"node2\">\n" +
-                        "    <operator>Op2</operator>\n" +
+                        "    <action>Op2</action>\n" +
                         "    <sources>\n" +
                         "      <input refid=\"toa\"/>\n" +
                         "    </sources>\n" +
@@ -83,11 +83,11 @@ public class GraphOpTest {
                         "  </header>\n" +
 
                         "  <node id=\"node1\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "  </node>\n" +
 
                         "  <node id=\"node2\">\n" +
-                        "    <operator>Op2</operator>\n" +
+                        "    <action>Op2</action>\n" +
                         "    <sources>\n" +
                         "      <input refid=\"node1\"/>\n" +
                         "    </sources>\n" +
@@ -108,7 +108,7 @@ public class GraphOpTest {
                         "  <version>1.0</version>\n" +
 
                         "  <node id=\"node1\">\n" +
-                        "    <operator>SourcelessOp1Op2Graph</operator>\n" +
+                        "    <action>SourcelessOp1Op2Graph</action>\n" +
                         "    <parameters>\n" +
                         "       <THR>33</THR>\n" +
                         "    </parameters>\n" +

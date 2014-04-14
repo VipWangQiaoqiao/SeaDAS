@@ -34,13 +34,13 @@ import java.util.logging.Logger;
  * The abstract base class for all operators intended to be extended by clients.
  * <p>The following methods are intended to be implemented or overridden:
  * <ld>
- * <li>{@link #initialize()}: must be implemented in order to initialise the operator and create the target
+ * <li>{@link #initialize()}: must be implemented in order to initialise the action and create the target
  * product.</li>
  * <li>{@link #computeTile(org.esa.beam.framework.datamodel.Band, Tile, com.bc.ceres.core.ProgressMonitor) computeTile()}: implemented to compute the tile
  * for a single band.</li>
  * <li>{@link #computeTileStack(java.util.Map, java.awt.Rectangle, com.bc.ceres.core.ProgressMonitor)}: implemented to compute the tiles
  * for multiple bands.</li>
- * <li>{@link #dispose()}: can be overridden in order to free all resources previously allocated by the operator.</li>
+ * <li>{@link #dispose()}: can be overridden in order to free all resources previously allocated by the action.</li>
  * </ld>
  * </p>
  * <p>Generally, only one {@code computeTile} method needs to be implemented. It depends on the type of algorithm which
@@ -59,9 +59,9 @@ import java.util.logging.Logger;
  * If tiles for single bands are requested, e.g. for image display, it will always prefer an implementation of
  * the {@code computeTile()} method and call it.
  * If all tiles are requested at once, e.g. writing a product to disk, it will attempt to use the {@code computeTileStack()}
- * method. If the framework cannot use its preferred operation, it will use the one implemented by the operator.</p>
+ * method. If the framework cannot use its preferred operation, it will use the one implemented by the action.</p>
  * <p/>
- * <p>todo - Explain the role of operator annotations (nf - 15.10.2007)</p>
+ * <p>todo - Explain the role of action annotations (nf - 15.10.2007)</p>
  * <p>todo - Explain the role of the SPI (nf - 15.10.2007)</p>
  *
  * @author Norman Fomferra
@@ -81,7 +81,7 @@ public abstract class Operator {
     final OperatorContext context;
 
     /**
-     * Constructs a new operator.
+     * Constructs a new action.
      */
     protected Operator() {
         context = new OperatorContext(this);
@@ -100,7 +100,7 @@ public abstract class Operator {
     }
 
     /**
-     * Initializes this operator and sets the one and only target product.
+     * Initializes this action and sets the one and only target product.
      * <p>The target product can be either defined by a field of type {@link Product} annotated with the
      * {@link org.esa.beam.framework.gpf.annotations.TargetProduct TargetProduct} annotation or
      * by calling {@link #setTargetProduct} method.
@@ -114,13 +114,13 @@ public abstract class Operator {
      * Any client code that must be performed before computation of tile data
      * should be placed here.
      *
-     * @throws OperatorException If an error occurs during operator initialisation.
+     * @throws OperatorException If an error occurs during action initialisation.
      * @see #getTargetProduct()
      */
     public abstract void initialize() throws OperatorException;
 
     /**
-     * Updates this operator forcing it to recreate the target product.
+     * Updates this action forcing it to recreate the target product.
      * <i>Warning: Experimental API added by nf (25.02.2010)</i><br/>
      *
      * @since BEAM 4.8
@@ -169,7 +169,7 @@ public abstract class Operator {
     }
 
     /**
-     * Releases the resources the operator has acquired during its lifetime.
+     * Releases the resources the action has acquired during its lifetime.
      * The default implementation does nothing.
      * <p/>
      * Overrides should make sure to call {@code super.dispose()} as well.
@@ -181,7 +181,7 @@ public abstract class Operator {
 
     /**
      * Deactivates the {@link #computeTile(org.esa.beam.framework.datamodel.Band, Tile, com.bc.ceres.core.ProgressMonitor) computeTile}
-     * method. This method can be called from within the {@link #initialize()} method if the current operator configuration prevents
+     * method. This method can be called from within the {@link #initialize()} method if the current action configuration prevents
      * the computation of tiles of individual, independent bands.
      *
      * @throws IllegalStateException if the {@link #computeTileStack(java.util.Map, java.awt.Rectangle, com.bc.ceres.core.ProgressMonitor) computeTileStack} method is not implemented
@@ -199,7 +199,7 @@ public abstract class Operator {
     }
 
     /**
-     * @return The operator's runtime identifier assigned by the framework.
+     * @return The action's runtime identifier assigned by the framework.
      */
     public final String getId() {
         return context.getId();
@@ -303,14 +303,14 @@ public abstract class Operator {
     }
 
     /**
-     * Gets the target product for the operator.
+     * Gets the target product for the action.
      * <p/>
      * <p>If the target product is not set, calling this method results in a
      * call to {@link #initialize()}.</p>
      *
      * @return The target product.
      *
-     * @throws OperatorException May be caused by {@link #initialize()}, if the operator is not initialised,
+     * @throws OperatorException May be caused by {@link #initialize()}, if the action is not initialised,
      *                           or if the target product is not set.
      */
     public final Product getTargetProduct() throws OperatorException {
@@ -318,7 +318,7 @@ public abstract class Operator {
     }
 
     /**
-     * Sets the target product for the operator.
+     * Sets the target product for the action.
      * <p/>
      * <p>Must be called from within the {@link #initialize()} method.</p>
      *
@@ -329,7 +329,7 @@ public abstract class Operator {
     }
 
     /**
-     * Gets a target property of the operator.
+     * Gets a target property of the action.
      * <p/>
      * <p>If the requested target property is not set, calling this method results in a
      * call to {@link #initialize()}.</p>
@@ -338,7 +338,7 @@ public abstract class Operator {
      *
      * @return the target property requested.
      *
-     * @throws OperatorException May be caused by {@link #initialize()}, if the operator is not initialised,
+     * @throws OperatorException May be caused by {@link #initialize()}, if the action is not initialised,
      *                           or if the target product is not been set.
      */
     public final Object getTargetProperty(String name) throws OperatorException {
@@ -446,20 +446,20 @@ public abstract class Operator {
     }
 
     /**
-     * Gets the SPI which was used to create this operator.
-     * If no operator has been explicitly set, the method will return an anonymous
+     * Gets the SPI which was used to create this action.
+     * If no action has been explicitly set, the method will return an anonymous
      * SPI.
      *
-     * @return The operator SPI.
+     * @return The action SPI.
      */
     public final OperatorSpi getSpi() {
         return context.getOperatorSpi();
     }
 
     /**
-     * Sets the SPI which was used to create this operator.
+     * Sets the SPI which was used to create this action.
      *
-     * @param operatorSpi The operator SPI.
+     * @param operatorSpi The action SPI.
      */
     public final void setSpi(OperatorSpi operatorSpi) {
         Assert.notNull(operatorSpi, "operatorSpi");

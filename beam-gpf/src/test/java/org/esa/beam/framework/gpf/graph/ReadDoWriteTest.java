@@ -78,19 +78,19 @@ public class ReadDoWriteTest {
         String graphOpXml = "<graph id=\"myOneNodeGraph\">\n"
                 + "  <version>1.0</version>\n"
                 + "  <node id=\"node0\">\n"
-                + "    <operator>Read</operator>\n"
+                + "    <action>Read</action>\n"
                 + "    <parameters>\n"
                 + "       <file>" + inputFile.getAbsolutePath() + "</file>\n"
                 + "    </parameters>\n"                
                 + "  </node>\n"
                 + "  <node id=\"node1\">\n"
-                + "    <operator>Do</operator>\n"
+                + "    <action>Do</action>\n"
                 + "    <sources>\n"
                 + "      <source refid=\"node0\"/>\n"
                 + "    </sources>\n"
                 + "  </node>\n"
                 + "  <node id=\"node2\">\n"
-                + "    <operator>Write</operator>\n"
+                + "    <action>Write</action>\n"
                 + "    <sources>\n"
                 + "      <source refid=\"node1\"/>\n"
                 + "    </sources>\n"
@@ -163,7 +163,7 @@ public class ReadDoWriteTest {
         @Override
         public void computeTile(Band band, Tile targetTile, ProgressMonitor pm) {
             if (!band.getName().equals("OperatorBand")) {
-                throw new OperatorException("operator called for wrong band: "+ band.getName());
+                throw new OperatorException("action called for wrong band: "+ band.getName());
             }
             // Fill the tile with the constant sample value 42
             //

@@ -30,7 +30,7 @@ import java.awt.image.Raster;
 /**
  * <p>
  * This executor triggers the computation of all tiles that the bands of the
- * target product of the given operator have. The computation of these tiles is
+ * target product of the given action have. The computation of these tiles is
  * may be parallelized to use all available CPUs (cores) using the JAI
  * {@link javax.media.jai.TileScheduler}.
  * </p>
@@ -67,7 +67,7 @@ public class OperatorExecutor2 {
 
 
     /**
-     * Calls the given handler for all frames of the product the operator executor product.
+     * Calls the given handler for all frames of the product the action executor product.
      *
      * @param handler
      * @return

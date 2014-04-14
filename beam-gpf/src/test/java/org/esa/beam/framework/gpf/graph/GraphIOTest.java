@@ -90,7 +90,7 @@ public class GraphIOTest extends TestCase {
                 "<graph id=\"myOneNodeGraph\">\n" +
                         "  <version>1.0</version>\n" +
                         "  <node id=\"node1\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "    <sources/>\n" +
                         "  </node>\n" +
                         "</graph>";
@@ -121,7 +121,7 @@ public class GraphIOTest extends TestCase {
                 "<graph id=\"myOneNodeGraph\">\n" +
                         "  <version>1.0</version>\n" +
                         "  <node id=\"node1\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "    <sources/>\n" +
                         "  </node>\n" +
                         "  <applicationData id=\"foo\">\n" +
@@ -139,7 +139,7 @@ public class GraphIOTest extends TestCase {
         String expectedXML =
                 "<graph id=\"myOneNodeGraph\">\n" +
                         "  <node id=\"node1\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "    <sources/>\n" +
                         "  </node>\n" +
                         "</graph>";
@@ -160,7 +160,7 @@ public class GraphIOTest extends TestCase {
                 "<graph id=\"myOneNodeGraph\">\n" +
                         "  <version>1.0</version>\n" +
                         "  <node id=\"node1\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "    <sources/>\n" +
                         "  </node>\n" +
                         "</graph>";
@@ -183,7 +183,7 @@ public class GraphIOTest extends TestCase {
                 "<graph id=\"myOneNodeGraph\">\n" +
                         "  <version>1.0</version>\n" +
                         "  <node id=\"node1\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "    <sources/>\n" +
                         "  </node>\n" +
 
@@ -231,7 +231,7 @@ public class GraphIOTest extends TestCase {
                         "  </header>\n" +
 
                         "  <node id=\"node1\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "    <sources>\n" +
                         "      <toa refid=\"input1\"/>\n" +
                         "      <chris refid=\"input2\"/>\n" +
@@ -335,10 +335,10 @@ public class GraphIOTest extends TestCase {
                 "<graph id=\"foo\">\n" +
                         "<version>1.0</version>\n" +
                         "  <node id=\"grunt\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "  </node>\n" +
                         "  <node id=\"baz\">\n" +
-                        "    <operator>Op2</operator>\n" +
+                        "    <action>Op2</action>\n" +
                         "    <sources>\n" +
                         "      <input refid=\"grunt\"/>\n" +
                         "    </sources>\n" +
@@ -347,7 +347,7 @@ public class GraphIOTest extends TestCase {
                         "    </parameters>\n" +
                         "  </node>\n" +
                         "  <node id=\"bar\">\n" +
-                        "    <operator>Op3</operator>\n" +
+                        "    <action>Op3</action>\n" +
                         "    <sources>\n" +
                         "      <input1 refid=\"grunt\"/>\n" +
                         "      <input2 refid=\"baz\"/>\n" +
@@ -426,10 +426,10 @@ public class GraphIOTest extends TestCase {
                 "<graph id=\"foo\">\n" +
                         "<version>1.0</version>\n" +
                         "  <node id=\"bert\">\n" +
-                        "    <operator>Op4</operator>\n" +
+                        "    <action>Op4</action>\n" +
                         "  </node>\n" +
                         "  <node id=\"baz\">\n" +
-                        "    <operator>Op2</operator>\n" +
+                        "    <action>Op2</action>\n" +
                         "    <sources>\n" +
                         "      <input refid=\"bert\"/>\n" +
                         "    </sources>\n" +
@@ -470,13 +470,13 @@ public class GraphIOTest extends TestCase {
                 "<graph id=\"foo\">\n" +
                         "<version>1.0</version>\n" +
                         "  <node id=\"grunt\">\n" +
-                        "    <operator>Op1</operator>\n" +
+                        "    <action>Op1</action>\n" +
                         "  </node>\n" +
                         "  <node id=\"bert\">\n" +
-                        "    <operator>Op4</operator>\n" +
+                        "    <action>Op4</action>\n" +
                         "  </node>\n" +
                         "  <node id=\"baz\">\n" +
-                        "    <operator>Op2</operator>\n" +
+                        "    <action>Op2</action>\n" +
                         "    <sources>\n" +
                         "      <input refid=\"grunt\"/>\n" +
                         "    </sources>\n" +

@@ -38,7 +38,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * The panel in the binning operator UI which allows for setting input products and the path of the output product.
+ * The panel in the binning action UI which allows for setting input products and the path of the output product.
  *
  * @author Olaf Danne
  * @author Thomas Storm

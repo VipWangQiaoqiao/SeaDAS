@@ -2403,7 +2403,7 @@ public abstract class RasterDataNode extends DataNode implements Scaling {
 
 
     /**
-     * @deprecated since BEAM 4.5. No direct replacement, implement a GPF operator or a {@link org.esa.beam.jai.SingleBandedOpImage} instead.
+     * @deprecated since BEAM 4.5. No direct replacement, implement a GPF action or a {@link org.esa.beam.jai.SingleBandedOpImage} instead.
      */
     @Deprecated
     protected void processRasterData(String message, RasterDataProcessor processor, ProgressMonitor pm) throws
@@ -2439,7 +2439,7 @@ public abstract class RasterDataNode extends DataNode implements Scaling {
     }
 
     /**
-     * @deprecated since BEAM 4.5. No direct replacement, implement a GPF operator or a {@link org.esa.beam.jai.SingleBandedOpImage} instead.
+     * @deprecated since BEAM 4.5. No direct replacement, implement a GPF action or a {@link org.esa.beam.jai.SingleBandedOpImage} instead.
      */
     @Deprecated
     public static interface RasterDataProcessor {

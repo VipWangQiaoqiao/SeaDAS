@@ -147,7 +147,7 @@ public class CommandLineToolTemplateTest {
                 "<graph id=\"testGraph\">\n" +
                 "    <version>1.0</version>\n" +
                 "    <node id=\"testNode\">\n" +
-                "        <operator>Reproject</operator>\n" +
+                "        <action>Reproject</action>\n" +
                 "        <sources>\n" +
                 "            <source>${src}</source>\n" +
                 "        </sources>\n" +
@@ -232,7 +232,7 @@ public class CommandLineToolTemplateTest {
                 "        <graphXml><![CDATA[<graph id=\"testGraph\">\n" +
                 "    <version>1.0</version>\n" +
                 "    <node id=\"testNode\">\n" +
-                "        <operator>Reproject</operator>\n" +
+                "        <action>Reproject</action>\n" +
                 "        <sources>\n" +
                 "            <source>${src}</source>\n" +
                 "        </sources>\n" +

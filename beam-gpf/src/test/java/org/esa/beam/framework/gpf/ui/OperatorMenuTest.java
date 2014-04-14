@@ -50,6 +50,6 @@ public class OperatorMenuTest {
         assertTrue(operatorDescription.contains("<tr><td><b>Full name:</b></td><td><code>org.esa.beam.framework.gpf.ui.OperatorParameterSupportTest$TestOp</code></td></tr>"));
         assertTrue(operatorDescription.contains("<tr><td><b>Authors:</b></td><td>Nobody</td></tr>"));
         assertTrue(operatorDescription.contains("<tr><td><b>Version:</b></td><td>42</td></tr>"));
-        assertTrue(operatorDescription.contains("<tr><td><b>Purpose:</b></td><td>This is very stupid operator.</td></tr>"));
+        assertTrue(operatorDescription.contains("<tr><td><b>Purpose:</b></td><td>This is very stupid action.</td></tr>"));
     }
 }

@@ -160,7 +160,7 @@ public final class ParserImpl implements Parser {
     /**
      * Parses a complete expression jex.term. Simply a wrapper for
      * a <code>parseAssign</code> method in order to signal that the assignment
-     * operator '=' has the highest operator precedence.
+     * action '=' has the highest action precedence.
      *
      * @param required true, if the expression is required.
      *
@@ -945,27 +945,27 @@ public final class ParserImpl implements Parser {
     }
 
     private void reportTypeErrorB1(final String operator) throws ParseException {
-        reportError("Boolean operand expected for unary " + operator + " operator.");
+        reportError("Boolean operand expected for unary " + operator + " action.");
     }
 
     private void reportTypeErrorI1(final String operator) throws ParseException {
-        reportError("Integer operand expected for unary " + operator + " operator.");
+        reportError("Integer operand expected for unary " + operator + " action.");
     }
 
     private void reportTypeErrorN1(final String operator) throws ParseException {
-        reportError("Numeric operand expected for unary " + operator + " operator.");
+        reportError("Numeric operand expected for unary " + operator + " action.");
     }
 
     private void reportTypeErrorB2(final String operator) throws ParseException {
-        reportError("Boolean operands expected for binary " + operator + " operator.");
+        reportError("Boolean operands expected for binary " + operator + " action.");
     }
 
     private void reportTypeErrorI2(final String operator) throws ParseException {
-        reportError("Integer operands expected for binary " + operator + " operator.");
+        reportError("Integer operands expected for binary " + operator + " action.");
     }
 
     private void reportTypeErrorN2(final String operator) throws ParseException {
-        reportError("Numeric operands expected for binary " + operator + " operator.");
+        reportError("Numeric operands expected for binary " + operator + " action.");
     }
 
     private static String getFunctionCallString(final String name, final Term[] args) {

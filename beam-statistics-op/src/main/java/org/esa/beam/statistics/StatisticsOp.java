@@ -61,7 +61,7 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 
 /**
- * An operator that is used to compute statistics for any number of source products, restricted to regions given by an
+ * An action that is used to compute statistics for any number of source products, restricted to regions given by an
  * ESRI shapefile.
  * <p/>
  * It writes two different sorts of output:<br/>
@@ -71,7 +71,7 @@ import java.util.logging.Level;
  * </ul>
  * <p/>
  * Unlike most other operators, that can compute single {@link org.esa.beam.framework.gpf.Tile tiles},
- * the statistics operator processes all of its source products in its {@link #initialize()} method.
+ * the statistics action processes all of its source products in its {@link #initialize()} method.
  *
  * @author Sabine Embacher
  * @author Tonio Fincke
@@ -124,7 +124,7 @@ public class StatisticsOp extends Operator implements Output {
                format = DATETIME_PATTERN, converter = UtcConverter.class)
     ProductData.UTC endDate;
 
-    @Parameter(description = "The band configurations. These configurations determine the input of the operator.",
+    @Parameter(description = "The band configurations. These configurations determine the input of the action.",
                alias = "bandConfigurations", itemAlias = "bandConfiguration", notNull = true)
     BandConfiguration[] bandConfigurations;
 

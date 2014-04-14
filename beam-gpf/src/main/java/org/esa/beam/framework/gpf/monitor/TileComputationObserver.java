@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  *     <li>{@link #start()} is called only once before any other method is called.</li>
  *     <li>{@link #tileComputed(TileComputationEvent)} is called for each tile computed by any GPF {@link org.esa.beam.framework.gpf.Operator Operator}.</li>
  *     <li>{@link #stop()} is called after a {@link org.esa.beam.framework.datamodel.Product Product} has been
- *     fully written using the {@link org.esa.beam.gpf.operators.standard.WriteOp WriteOp} operator.</li>
+ *     fully written using the {@link org.esa.beam.gpf.operators.standard.WriteOp WriteOp} action.</li>
  * </ol>
  * @author Norman Fomferra
  * @since BEAM 4.9

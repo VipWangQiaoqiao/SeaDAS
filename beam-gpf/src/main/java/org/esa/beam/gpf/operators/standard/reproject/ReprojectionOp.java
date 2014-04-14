@@ -71,15 +71,15 @@ import java.text.MessageFormat;
 
 /**
  * <p/>
- * The reprojection operator is used to geo-reference data products.
+ * The reprojection action is used to geo-reference data products.
  * Beside plain reprojection it is able to use a Digital Elevation Model (DEM) to orthorectify a data product and
  * to collocate one product with another.
  * <p/>
- * The following XML sample shows how to integrate the <code>Reproject</code> operator in a processing graph (an
+ * The following XML sample shows how to integrate the <code>Reproject</code> action in a processing graph (an
  * Lambert_Azimuthal_Equal_Area projection using the WGS-84 datum):
  * <pre>
  *    &lt;node id="reprojectNode"&gt;
- *        &lt;operator&gt;Reproject&lt;/operator&gt;
+ *        &lt;action&gt;Reproject&lt;/action&gt;
  *        &lt;sources&gt;
  *            &lt;sourceProducts&gt;readNode&lt;/sourceProducts&gt;
  *        &lt;/sources&gt;

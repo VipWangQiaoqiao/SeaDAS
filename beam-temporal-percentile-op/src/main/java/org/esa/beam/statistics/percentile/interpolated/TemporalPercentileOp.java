@@ -74,7 +74,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 
 /**
- * An operator that is used to compute percentiles over a given time period. Products with different observation times
+ * An action that is used to compute percentiles over a given time period. Products with different observation times
  * serve as computation base. All the input products are sorted chronologically and grouped per day. For each day
  * inside the given time period, a collocated mean band from the grouped products is computed. By this means, a intermediate
  * time series product is created successively.
@@ -778,7 +778,7 @@ public class TemporalPercentileOp extends Operator {
 
     private void validateInput() {
         if (sourceProducts != null && sourceProducts.length > 0) {
-            throw new OperatorException("Use this operator only with source product paths defined in the graph.xml file.");
+            throw new OperatorException("Use this action only with source product paths defined in the graph.xml file.");
         }
         if (startDate != null && endDate != null && endDate.getAsDate().before(startDate.getAsDate())) {
             throw new OperatorException("End date '" + this.endDate + "' before start date '" + this.startDate + "'");

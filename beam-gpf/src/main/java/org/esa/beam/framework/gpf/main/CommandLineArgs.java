@@ -157,7 +157,7 @@ public class CommandLineArgs {
         }
 
         if (operatorName == null && graphFilePath == null && !helpRequested) {
-            throw error("Either operator name or graph XML file must be given");
+            throw error("Either action name or graph XML file must be given");
         }
         if (graphFilePath == null && !targetFilePathMap.isEmpty()) {
             throw error("Defined target products only valid for graph XML");

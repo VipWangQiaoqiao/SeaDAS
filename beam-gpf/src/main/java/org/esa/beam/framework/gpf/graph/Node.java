@@ -48,7 +48,7 @@ public class Node {
      * Constructs a new <code>Node</code> instance.
      *
      * @param id           a unique identifier for the node
-     * @param operatorName the name of the operator
+     * @param operatorName the name of the action
      */
     public Node(String id, String operatorName) {
         this.id = id;
@@ -66,10 +66,10 @@ public class Node {
     }
 
     /**
-     * Gets the name of the operator. This can be either the fully qualified class name of the {@link OperatorSpi}
+     * Gets the name of the action. This can be either the fully qualified class name of the {@link OperatorSpi}
      * or an alias name.
      *
-     * @return the name of the operator.
+     * @return the name of the action.
      */
     public String getOperatorName() {
         return operatorName;

@@ -48,7 +48,7 @@ import static org.esa.beam.dataio.envisat.EnvisatConstants.*;
 
 
 /**
- * This operator is used to perform radiometric corrections on MERIS L1b data products.
+ * This action is used to perform radiometric corrections on MERIS L1b data products.
  * The corrections include the following optional steps:
  * <ul>
  * <li><b>Radiometric re-calibration</b><br/>

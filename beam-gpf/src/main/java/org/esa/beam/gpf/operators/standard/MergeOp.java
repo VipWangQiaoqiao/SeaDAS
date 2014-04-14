@@ -38,7 +38,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The merge operator allows copying raster data from other products to a specified product. The first product provided
+ * The merge action allows copying raster data from other products to a specified product. The first product provided
  * is considered the 'master product', into which the raster data coming from the other products is copied. Existing
  * nodes are kept.
  * <p/>
@@ -180,7 +180,7 @@ public class MergeOp extends Operator {
 
     @Override
     public void computeTile(Band band, Tile targetTile, ProgressMonitor pm) throws OperatorException {
-        getLogger().warning("Wrongly configured operator. Tiles should not be requested.");
+        getLogger().warning("Wrongly configured action. Tiles should not be requested.");
     }
 
     public static class NodeDescriptor {

@@ -18,7 +18,7 @@ package org.esa.beam.framework.dataop.maptransf;
 import java.awt.Component;
 
 /**
- * @deprecated since BEAM 4.7, replaced by GPF operator 'Reproject'
+ * @deprecated since BEAM 4.7, replaced by GPF action 'Reproject'
  */
 @Deprecated
 public interface MapTransformUI {

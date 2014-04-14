@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @OperatorMetadata(alias = "Graph",
-                  description = "Encapsulates a graph into an operator.",
+                  description = "Encapsulates a graph into an action.",
                   internal = true)
 public class GraphOp extends Operator {
 

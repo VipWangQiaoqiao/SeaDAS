@@ -115,7 +115,7 @@ public class OperatorContext {
 
     public OperatorContext(Operator operator) {
         if (operator == null) {
-            throw new NullPointerException("operator");
+            throw new NullPointerException("action");
         }
 
         this.operator = operator;
@@ -441,7 +441,7 @@ public class OperatorContext {
 
     private void initializeOperator() throws OperatorException {
         Assert.state(targetProduct == null, "targetProduct == null");
-        Assert.state(operator != null, "operator != null");
+        Assert.state(operator != null, "action != null");
         Assert.state(!initialising, "!initialising, attempt to call getTargetProduct() from within initialise()?");
 
         try {
@@ -464,7 +464,7 @@ public class OperatorContext {
     }
 
     /**
-     * Updates this operator forcing it to recreate the target product.
+     * Updates this action forcing it to recreate the target product.
      * <i>Warning: Experimental API added by nf (25.02.2010)</i><br/>
      *
      * @throws org.esa.beam.framework.gpf.OperatorException
@@ -516,7 +516,7 @@ public class OperatorContext {
         MetadataElement targetNodeME = new MetadataElement(String.format("node.%d", nodeElementCount));
         targetGraphME.addElement(targetNodeME);
         targetNodeME.addAttribute(new MetadataAttribute("id", ProductData.createInstance(opId), false));
-        targetNodeME.addAttribute(new MetadataAttribute("operator", ProductData.createInstance(opName), false));
+        targetNodeME.addAttribute(new MetadataAttribute("action", ProductData.createInstance(opName), false));
 
         Module module = operatorSpi.getModule();
         if (module == null) {
@@ -654,11 +654,11 @@ public class OperatorContext {
                     }
                     targetImageMap.put(targetBand, image);
 
-                    // Note: It is legal not to set the newly created operator image
+                    // Note: It is legal not to set the newly created action image
                     // in the target band, if it already has a source image set.
                     // This case occurs for "pass-through" operators.
                     // Pull processing in GPF is primarily triggered by fetching tiles
-                    // of the target images of this operator context, not directly
+                    // of the target images of this action context, not directly
                     // by using the band's source images. Otherwise the WriteOp.computeTile()
                     // method would never be called.
                     //

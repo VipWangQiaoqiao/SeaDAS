@@ -24,7 +24,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Provides metadata for an operator. This annotation is valid for
+ * Provides metadata for an action. This annotation is valid for
  * extensions of the {@link org.esa.beam.framework.gpf.Operator Operator} class.
  */
 @Documented
@@ -33,37 +33,37 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface OperatorMetadata {
     /**
-     * @return An alias name for the operator.
+     * @return An alias name for the action.
      */
     String alias();
 
     /**
-     * @return The version of the operator.
+     * @return The version of the action.
      *         Defaults to the empty string (= not set).
      */
     String version() default "";
 
     /**
-     * @return The author(s) of the operator.
+     * @return The author(s) of the action.
      *         Defaults to the empty string (= not set).
      */
     String authors() default "";
 
     /**
-     * @return The copyright notice for the operator code.
+     * @return The copyright notice for the action code.
      *         Defaults to the empty string (= not set).
      */
     String copyright() default "";
 
     /**
-     * @return A brief description of the operator's purpose.
+     * @return A brief description of the action's purpose.
      *         Defaults to the empty string (= not set).
      */
     String description() default "";
 
 
     /**
-     * @return If {@code true}, this operator is considered for internal use only and thus
+     * @return If {@code true}, this action is considered for internal use only and thus
      *         may not be exposed in user interfaces.
      */
     boolean internal() default false;

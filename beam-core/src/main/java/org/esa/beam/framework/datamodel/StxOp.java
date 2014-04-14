@@ -22,7 +22,7 @@ import javax.media.jai.UnpackedImageData;
 import java.awt.image.DataBuffer;
 
 /**
- * A statistics operator.
+ * A statistics action.
  *
  * @author Norman Fomferra
  * @since BEAM 4.5.1, full revision in 4.10

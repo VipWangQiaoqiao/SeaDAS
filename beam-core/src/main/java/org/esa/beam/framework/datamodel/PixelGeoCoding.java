@@ -641,7 +641,7 @@ public class PixelGeoCoding extends AbstractGeoCoding {
      * Returns the latitude and longitude value for a given pixel co-ordinate.
      *
      * @param pixelPos the pixel's co-ordinates given as x,y
-     * @param geoPos   an instance of <code>GeoPos</code> to be used as retun value. If this parameter is
+     * @param geoPos   an instance of <code>GeoPos</code> to be used as return value. If this parameter is
      *                 <code>null</code>, the method creates a new instance which it then returns.
      *
      * @return the geographical position as lat/lon.

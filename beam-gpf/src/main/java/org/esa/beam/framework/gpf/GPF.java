@@ -74,7 +74,7 @@ public class GPF {
      * An unmodifiable empty {@link Map Map}.
      * <p/>
      * Can be used for convenience as a parameter for {@code createProduct()} if no
-     * parameters are needed for the operator.
+     * parameters are needed for the action.
      *
      * @see #createProduct(String, Map)
      * @see #createProduct(String, Map, Product ...)
@@ -86,7 +86,7 @@ public class GPF {
      * An unmodifiable empty {@link Map Map}.
      * <p/>
      * Can be used for convenience as a parameter for {@code createProduct(String, Map, Map)} if no
-     * source products are needed for the operator.
+     * source products are needed for the action.
      *
      * @see #createProduct(String, Map, Map)
      */
@@ -104,14 +104,14 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      *
-     * @param operatorName the name of the operator to use.
-     * @param parameters   the named parameters needed by the operator.
+     * @param operatorName the name of the action to use.
+     * @param parameters   the named parameters needed by the action.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -121,15 +121,15 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      *
-     * @param operatorName   the name of the operator to use.
-     * @param parameters     the named parameters needed by the operator.
+     * @param operatorName   the name of the action to use.
+     * @param parameters     the named parameters needed by the action.
      * @param renderingHints the rendering hints may be {@code null}.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -140,15 +140,15 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      *
-     * @param operatorName  the name of the operator to use.
-     * @param parameters    the named parameters needed by the operator.
+     * @param operatorName  the name of the action to use.
+     * @param parameters    the named parameters needed by the action.
      * @param sourceProduct a source product.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -159,16 +159,16 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      *
-     * @param operatorName   the name of the operator to use.
-     * @param parameters     the named parameters needed by the operator.
+     * @param operatorName   the name of the action to use.
+     * @param parameters     the named parameters needed by the action.
      * @param sourceProduct  the source product.
      * @param renderingHints the rendering hints may be {@code null}.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -180,15 +180,15 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      *
-     * @param operatorName   the name of the operator to use.
-     * @param parameters     the named parameters needed by the operator.
+     * @param operatorName   the name of the action to use.
+     * @param parameters     the named parameters needed by the action.
      * @param sourceProducts the source products.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -199,16 +199,16 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      *
-     * @param operatorName   the name of the operator to use.
-     * @param parameters     the named parameters needed by the operator.
+     * @param operatorName   the name of the action to use.
+     * @param parameters     the named parameters needed by the action.
      * @param sourceProducts the source products.
      * @param renderingHints the rendering hints may be {@code null}.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -222,7 +222,7 @@ public class GPF {
             OperatorSpi operatorSpi = GPF.getDefaultInstance().spiRegistry.getOperatorSpi(operatorName);
             if (operatorSpi == null) {
                 throw new OperatorException(
-                        String.format("Unknown operator '%s'. Note that operator aliases are case sensitive.",
+                        String.format("Unknown action '%s'. Note that action aliases are case sensitive.",
                                       operatorName));
             }
             Field[] declaredFields = operatorSpi.getOperatorClass().getDeclaredFields();
@@ -245,15 +245,15 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      *
-     * @param operatorName   the name of the operator to use.
-     * @param parameters     the named parameters needed by the operator.
+     * @param operatorName   the name of the action to use.
+     * @param parameters     the named parameters needed by the action.
      * @param sourceProducts the map of named source products.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -264,16 +264,16 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      *
-     * @param operatorName   the name of the operator to use.
-     * @param parameters     the named parameters needed by the operator.
+     * @param operatorName   the name of the action to use.
+     * @param parameters     the named parameters needed by the action.
      * @param sourceProducts the map of named source products.
      * @param renderingHints the rendering hints, may be {@code null}.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -285,19 +285,19 @@ public class GPF {
     }
 
     /**
-     * Creates a product by using the operator specified by the given name.
+     * Creates a product by using the action specified by the given name.
      * The resulting product can be used as input product for a further call to {@code createProduct()}.
      * By concatenating multiple calls it is possible to set up a processing graph.
      * <p>All static {@code createProduct} methods delegate to this non-static (= NS) version.
      * It can be overriden by clients in order to alter product creation behaviour of the static
      * {@code createProduct} methods of the current GPF instance.</p>
      *
-     * @param operatorName   the name of the operator to use.
-     * @param parameters     the named parameters needed by the operator.
+     * @param operatorName   the name of the action to use.
+     * @param parameters     the named parameters needed by the action.
      * @param sourceProducts the map of named source products.
      * @param renderingHints the rendering hints, may be {@code null}.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      */
@@ -310,14 +310,14 @@ public class GPF {
     }
 
     /**
-     * Creates an operator instance by using the given operator (alias) name.
+     * Creates an action instance by using the given action (alias) name.
      *
-     * @param operatorName   the name of the operator to use.
-     * @param parameters     the named parameters needed by the operator.
+     * @param operatorName   the name of the action to use.
+     * @param parameters     the named parameters needed by the action.
      * @param sourceProducts the map of named source products.
      * @param renderingHints the rendering hints, may be {@code null}.
      *
-     * @return the product created by the operator.
+     * @return the product created by the action.
      *
      * @throws OperatorException if the product could not be created.
      * @since BEAM 4.9
@@ -326,24 +326,24 @@ public class GPF {
                                    RenderingHints renderingHints) {
         OperatorSpi operatorSpi = spiRegistry.getOperatorSpi(operatorName);
         if (operatorSpi == null) {
-            throw new OperatorException("No SPI found for operator '" + operatorName + "'");
+            throw new OperatorException("No SPI found for action '" + operatorName + "'");
         }
         return operatorSpi.createOperator(parameters, sourceProducts, renderingHints);
     }
 
     /**
-     * Gets the registry for operator SPIs.
+     * Gets the registry for action SPIs.
      *
-     * @return the registry for operator SPIs.
+     * @return the registry for action SPIs.
      */
     public OperatorSpiRegistry getOperatorSpiRegistry() {
         return spiRegistry;
     }
 
     /**
-     * Sets the registry for operator SPIs.
+     * Sets the registry for action SPIs.
      *
-     * @param spiRegistry the registry for operator SPIs.
+     * @param spiRegistry the registry for action SPIs.
      */
     public void setOperatorSpiRegistry(OperatorSpiRegistry spiRegistry) {
         Guardian.assertNotNull("spiRegistry", spiRegistry);

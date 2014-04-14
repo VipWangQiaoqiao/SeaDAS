@@ -188,12 +188,12 @@ class MagicWandForm {
         operatorGroup.add(operatorButton1);
         operatorGroup.add(operatorButton2);
         operatorGroup.add(operatorButton3);
-        bindingContext.bind("operator", operatorGroup);
+        bindingContext.bind("action", operatorGroup);
         JPanel operatorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
         operatorPanel.add(operatorButton1);
         operatorPanel.add(operatorButton2);
         operatorPanel.add(operatorButton3);
-        bindingContext.addPropertyChangeListener("operator", new PropertyChangeListener() {
+        bindingContext.addPropertyChangeListener("action", new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 interactor.updateMask();

@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 import java.util.Map;
 
 /**
- * A {@code PixelOperator} may serve as a handy base class for an operator that computes any number of target samples
+ * A {@code PixelOperator} may serve as a handy base class for an action that computes any number of target samples
  * from any number of source samples.
  *
  * @author Norman Fomferra

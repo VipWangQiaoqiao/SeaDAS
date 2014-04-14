@@ -429,8 +429,6 @@ public class ImageManager {
      */
     //new method added by seadas team
     private static TiledImage transformPixels(RenderedImage sourceImage, double r_offset, double r_factor) {
-        //ParameterBlockJAI pbj = new ParameterBlockJAI("Contour");
-        //System.out.println("it passed here.");
         int width = sourceImage.getWidth();
         int height = sourceImage.getHeight();
         SampleModel sm = sourceImage.getSampleModel();
