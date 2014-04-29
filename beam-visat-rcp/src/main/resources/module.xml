@@ -1056,10 +1056,10 @@
             <class>org.esa.beam.visat.actions.ExportLegendImageAction</class>
             <text>Color Bar</text>
             <mnemonic>C</mnemonic>
-            <shortDescr>Export the color legend as an image.</shortDescr>
-            <description>Export the color legend of the current view as an image.</description>
+            <shortDescr>Export the colorbar</shortDescr>
+            <description>Export the colorbar</description>
             <context>image</context>
-            <popuptext>Export Color Legend as Image...</popuptext>
+            <popuptext>Export Colorbar...</popuptext>
             <helpId>exportLegendImageFile</helpId>
         </action>
 
