@@ -18,6 +18,7 @@ package org.esa.beam.framework.gpf.internal;
 
 import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.gpf.Operator;
 import org.esa.beam.framework.gpf.Tile;
 import org.esa.beam.jai.ImageManager;
 
@@ -72,6 +73,10 @@ public class OperatorImage extends SourcelessOpImage {
         }
         // computeTile() may have been deactivated
         if (targetTile != null && getOperatorContext().isComputeTileMethodUsable()) {
+//          OperatorContext operatorContext1 =  getOperatorContext();
+//          Operator operator = operatorContext1.getOperator();
+//         Band targetBand =  getTargetBand();
+//            operator.computeTile(targetBand, targetTile, ProgressMonitor.NULL);
             getOperatorContext().getOperator().computeTile(getTargetBand(), targetTile, ProgressMonitor.NULL);
         }
 
