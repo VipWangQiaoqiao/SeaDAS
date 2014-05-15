@@ -329,7 +329,7 @@ public class VisatApp extends BasicApp implements AppContext {
     private File sessionFile;
 
     private Interactor activeInteractor = NullInteractor.INSTANCE;
-    private Interactor selectionInteractor;
+    protected Interactor selectionInteractor;
 
     /**
      * Constructs the VISAT application instance. The constructor does not start the application nor does it perform any GUI
@@ -397,7 +397,7 @@ public class VisatApp extends BasicApp implements AppContext {
         }
     }
 
-    private void loadCommands() {
+    protected void loadCommands() {
         CommandManager commandManager = getCommandManager();
         List<Command> commands = VisatActivator.getInstance().getCommands();
         Map<String, Command> commandMap = new HashMap<>(commands.size() * 2 + 1);
@@ -410,7 +410,7 @@ public class VisatApp extends BasicApp implements AppContext {
         setSelectToolSelectState(commandManager);
     }
 
-    private void setSelectToolSelectState(CommandManager commandManager) {
+    protected void setSelectToolSelectState(CommandManager commandManager) {
         Command selectTool = commandManager.getCommand("selectTool");
         if (selectTool instanceof ToolCommand) {
             ToolCommand toolCommand = (ToolCommand) selectTool;
@@ -529,7 +529,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return null;
     }
 
-    private static void addCommand(CommandManager commandManager, Command command, Map<String, Command> commandMap) {
+    protected static void addCommand(CommandManager commandManager, Command command, Map<String, Command> commandMap) {
         String parentId = command.getParent();
         if (parentId != null && commandManager.getCommandGroup(parentId) == null) {
             Command parentCommand = commandMap.get(parentId);
@@ -1955,7 +1955,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return toolBar;
     }
 
-    private CommandBar createLayersToolBar() {
+    protected CommandBar createLayersToolBar() {
         final CommandBar toolBar = createToolBar(LAYERS_TOOL_BAR_ID, "Layers");
         ArrayList<String> commandIdList = new ArrayList<>(Arrays.asList(
                 "showNoDataOverlay",
@@ -1972,7 +1972,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return toolBar;
     }
 
-    private CommandBar createAnalysisToolBar() {
+    protected CommandBar createAnalysisToolBar() {
         final CommandBar toolBar = createToolBar(ANALYSIS_TOOL_BAR_ID, "Analysis");
         addCommandsToToolBar(toolBar, new String[]{
                 InformationToolView.ID + SHOW_TOOLVIEW_CMD_POSTFIX,
@@ -1986,7 +1986,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return toolBar;
     }
 
-    private CommandBar createInteractionsToolBar() {
+    protected CommandBar createInteractionsToolBar() {
         final CommandBar toolBar = createToolBar(INTERACTIONS_TOOL_BAR_ID, "Interactions");
         addCommandsToToolBar(toolBar, new String[]{
                 // These IDs are defined in the module.xml
@@ -2008,7 +2008,7 @@ public class VisatApp extends BasicApp implements AppContext {
     }
 
 
-    private CommandBar[] createViewsToolBars() {
+    protected CommandBar[] createViewsToolBars() {
 
         final HashSet<String> excludedIds = new HashSet<>(8);
         // todo - remove bad forward dependencies to tool views (nf - 30.10.2008)
@@ -2072,7 +2072,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return viewToolBars.toArray(new CommandBar[viewToolBars.size()]);
     }
 
-    private void addCommandsToToolBar(final CommandBar toolBar, final String[] commandIDs) {
+    protected void addCommandsToToolBar(final CommandBar toolBar, final String[] commandIDs) {
         for (final String commandID : commandIDs) {
             if (commandID == null) {
                 toolBar.add(ToolButtonFactory.createToolBarSeparator());
