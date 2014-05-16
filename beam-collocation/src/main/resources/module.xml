@@ -31,7 +31,7 @@
 
     <extension point="beam-ui:actions">
         <action>
-            <parent>processing.geomOperations</parent>
+            <parent>tools</parent>
             <id>collocation</id>
             <helpId>collocation</helpId>
             <class>org.esa.beam.collocation.visat.CollocationAction</class>

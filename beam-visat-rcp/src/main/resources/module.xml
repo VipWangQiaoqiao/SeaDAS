@@ -241,7 +241,7 @@
             <helpId>showWorldMapWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <initIndex>1</initIndex>
+            <initIndex>0</initIndex>
         </toolView>
 
         <toolView>
@@ -275,7 +275,7 @@
             <!-- todo provide help -->
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <initIndex>0</initIndex>
+            <initIndex>1</initIndex>
         </toolView>
 
         <toolView>
@@ -322,7 +322,7 @@
             <helpId>showMaskROIManagerWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <initIndex>0</initIndex>
+            <initIndex>1</initIndex>
         </toolView>
 
         <toolView>
@@ -339,7 +339,7 @@
             <helpId>showPinManagerWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <initIndex>1</initIndex>
+            <initIndex>0</initIndex>
         </toolView>
 
         <toolView>
@@ -495,7 +495,7 @@
 
         <action>
             <id>new</id>
-            <parent>file</parent>
+            <parent>tools</parent>
             <class>org.esa.beam.visat.actions.NewAction</class>
             <text>New...</text>
             <mnemonic>N</mnemonic>
@@ -889,10 +889,10 @@
             <class>org.esa.beam.visat.actions.ExportLegendImageAction</class>
             <text>Color Bar</text>
             <mnemonic>C</mnemonic>
-            <shortDescr>Export the color legend as an image.</shortDescr>
-            <description>Export the color legend of the current view as an image.</description>
+            <shortDescr>Export the colorbar.</shortDescr>
+            <description>Export the colorbar.</description>
             <context>image</context>
-            <popuptext>Export Color Legend as Image...</popuptext>
+            <popuptext>Export Colorbar...</popuptext>
             <helpId>exportLegendImageFile</helpId>
         </action>
 
@@ -1372,12 +1372,6 @@
         <!-- start of -->
         <!-- Tools menu -->
 
-
-
-
-
-
-
         <action>
             <id>mosaicAction</id>
             <class>org.esa.beam.gpf.operators.mosaic.MosaicAction</class>
@@ -1386,8 +1380,6 @@
             <largeIcon>icons/dannys_mosaic.png</largeIcon>
             <shortDescr>Create a mosaic of multiple products.</shortDescr>
             <helpId>mosaicAction</helpId>
-
-
         </action>
 
 
@@ -1408,8 +1400,6 @@
             <placeAfter>mosaicAction</placeAfter>
             <separatorAfter>true</separatorAfter>
         </action>
-
-
 
 
         <action>
@@ -1451,31 +1441,19 @@
             <parent>tools</parent>
             <placeAfter>createFilteredBand</placeAfter>
         </action>
-        <action>
-            <id>createAsarNrcsBands</id>
-            <class>org.esa.beam.visat.actions.CreateAsarNrcsBandsAction</class>
-            <text>Band NRCS (ASAR)...</text>
-            <!--<mnemonic>N</mnemonic>-->
-            <shortDescr>Create ASAR Normalised Radar Cross Section Bands</shortDescr>
-            <helpId>createAsarNrcsBands</helpId>
-            <parent>tools</parent>
-            <separatorAfter>true</separatorAfter>
-            <placeAfter>createDemRelatedBands</placeAfter>
-        </action>
-
 
         <action>
             <id>reprojectionAction</id>
             <class>org.esa.beam.gpf.operators.reproject.ReprojectionAction</class>
             <parent>tools</parent>
-            <placeAfter>createAsarNrcsBands</placeAfter>
+            <placeAfter>createDemRelatedBands</placeAfter>
             <text>Reprojection...</text>
             <shortDescr>Apply a reprojection.</shortDescr>
             <helpId>reprojectionAction</helpId>
         </action>
 
         <action>
-            <parent>processing.geomOperations</parent>
+            <parent>tools</parent>
             <id>orthorectificationAction</id>
             <placeAfter>reprojectionAction</placeAfter>
             <text>Orthorectification...</text>
@@ -1493,17 +1471,6 @@
             <helpId>flipDialog</helpId>
             <separatorAfter>true</separatorAfter>
             <placeAfter>orthorectificationAction</placeAfter>
-        </action>
-
-        <action>
-            <parent>processing.geomOperations</parent>
-            <id>createSubsetFromView</id>
-            <placeAfter>mosaicAction</placeAfter>
-            <text>Spatial Subset from View...</text>
-            <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
-            <shortDescr>Creates a product subset from the selected view.</shortDescr>
-            <context>image</context>
-            <helpId>subsetFromView</helpId>
         </action>
 
         <action>
@@ -1571,6 +1538,21 @@
 
         <!-- end of -->
         <!-- Tools : Pixel Geo-Coding sub-menu -->
+ <!-- Processing ########################################################################################## -->
+
+
+        <action>
+            <parent>tools</parent>
+            <id>processing.imageAnalysis</id>
+            <placeAfter>processing.thematicLand</placeAfter>
+            <text>Image Analysis</text>
+            <shortDescr>Group of Image Analysis Processing Steps</shortDescr>
+            <class>org.esa.beam.visat.actions.ActionGroup</class>
+            <mnemonic>A</mnemonic>
+        </action>
+
+
+        <!-- Processing / Geometric Operations  ======================================================= -->
 
         <action>
             <id>helpTopics</id>
