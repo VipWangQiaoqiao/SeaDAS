@@ -779,8 +779,29 @@
 
         <!-- end of -->
         <!-- File : Export Vector Data sub-menu -->
+        <action>
+            <parent>tools</parent>
+            <id>showGeometryAsWkt</id>
+            <placeAfter>createVectorDataNode</placeAfter>
+            <text>WKT from Geometry...</text>
+            <class>org.esa.beam.visat.actions.ShowGeometryWktAction</class>
+            <popuptext>WKT from Geometry...</popuptext>
+            <shortDescr>Get the well-known-text (WKT) representation of a selected geomety</shortDescr>
+            <context>image</context>
+            <helpId>showGeometryAsWkt</helpId>
+        </action>
 
-
+        <action>
+            <parent>tools</parent>
+            <id>insertWktAsGeometry</id>
+            <placeAfter>showGeometryAsWkt</placeAfter>
+            <text>Geometry from WKT...</text>
+            <class>org.esa.beam.visat.actions.InsertWktGeometryAction</class>
+            <popuptext>Geometry from WKT...</popuptext>
+            <shortDescr>Creates a geomtry from well-known-text (WKT) representation.</shortDescr>
+            <context>image</context>
+            <helpId>insertWktAsGeometry</helpId>
+        </action>
         <!-- start of -->
         <!-- File : Import Vector Data sub-menu -->
 
@@ -1419,7 +1440,7 @@
 
         <action>
             <id>createFilteredBand</id>
-            <class>org.esa.beam.visat.actions.CreateFilteredBandAction</class>
+            <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
             <text>Band Filter...</text>
             <shortDescr>Creates an filtered band</shortDescr>
             <description>Creates an filtered band from the currently selected band</description>
@@ -1429,6 +1450,30 @@
             <placeAfter>bandArithmetic</placeAfter>
         </action>
 
+        <action>
+            <parent>tools</parent>
+            <id>convertComputedBand2Band</id>
+            <placeAfter>createFilteredBand</placeAfter>
+            <text>Convert Computed Band</text>
+            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
+            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
+            <context>virtualBand</context>
+            <helpId>convertComputedBand2Band</helpId>
+        </action>
+
+        <action>
+            <parent>tools</parent>
+            <id>createXYDisplacementBandsAction</id>
+            <placeAfter>createDemRelatedBands</placeAfter>
+            <text>Create Geo-Coding Displacement Bands...</text>
+            <class>org.esa.beam.visat.actions.CreateGeoCodingDisplacementBandsAction</class>
+            <shortDescr>&lt;html&gt;Computes actual pixel position minus pixel position c
+                geo-coding&lt;br/&gt;
+                and adds displacements as new bands (test for geo-coding accuracy).
+            </shortDescr>
+            <context>createXYDisplacementBandsAction</context>
+            <helpId>createXYDisplacementBandsAction</helpId>
+        </action>
 
         <action>
             <id>createDemRelatedBands</id>
