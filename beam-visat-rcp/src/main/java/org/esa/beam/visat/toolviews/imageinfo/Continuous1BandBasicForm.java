@@ -25,16 +25,9 @@ import org.esa.beam.framework.datamodel.Stx;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.util.math.Range;
 
-import javax.swing.AbstractButton;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.text.NumberFormatter;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -63,41 +56,92 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         final TableLayout layout = new TableLayout();
         layout.setTableWeightX(1.0);
         layout.setTableWeightY(1.0);
-        layout.setTablePadding(2, 2);
+        layout.setTablePadding(2, 1);
         layout.setTableFill(TableLayout.Fill.HORIZONTAL);
         layout.setTableAnchor(TableLayout.Anchor.NORTH);
-        layout.setCellPadding(0, 0, new Insets(8, 2, 2, 2));
-        layout.setCellPadding(2, 0, new Insets(13, 2, 5, 2));
+        layout.setCellPadding(0, 0, new Insets(8, 2, 8, 2));
+//        layout.setCellPadding(1, 0, new Insets(8, 2, 2, 2));
+//        layout.setCellPadding(1, 0, new Insets(13, 2, 5, 2));
 
         final JPanel editorPanel = new JPanel(layout);
-        editorPanel.add(new JLabel("Colour ramp:"));
+//        editorPanel.add(new JLabel("Colour ramp:"));
         colorPaletteChooser = new ColorPaletteChooser();
-        editorPanel.add(colorPaletteChooser);
-        editorPanel.add(new JLabel("Display range"));
 
-        minField = getNumberTextField(0.00001);
+      //  editorPanel.add(colorPaletteChooser);
+//        editorPanel.add(new JLabel("Display range"));
+
+        colorPaletteChooser.setPreferredSize(new Dimension(220,40));
+        colorPaletteChooser.setMaximumSize(new Dimension(220,40));
+        colorPaletteChooser.setMinimumSize(new Dimension(220,40));
+        final JPanel colorChoosePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+
+        colorChoosePanel.add(colorPaletteChooser);
+        colorChoosePanel.add(new JLabel(""));
+        editorPanel.add(colorChoosePanel);
+
+
+//        minField = getNumberTextField(0.00001);
+//        maxField = getNumberTextField(1);
+        minField = getNumberTextField(0);
         maxField = getNumberTextField(1);
 
-        final JPanel minPanel = new JPanel(new BorderLayout(5, 2));
-        minPanel.add(new JLabel("Min:"), BorderLayout.WEST);
-        minPanel.add(minField, BorderLayout.SOUTH);
-        final JPanel maxPanel = new JPanel(new BorderLayout(5, 2));
-        maxPanel.add(new JLabel("Max:"), BorderLayout.EAST);
-        maxPanel.add(maxField, BorderLayout.SOUTH);
+        JTextField tmpSizeTextField = new JTextField(("123456789012345678"));
+        minField.setMinimumSize(tmpSizeTextField.getPreferredSize());
+        minField.setMaximumSize(tmpSizeTextField.getPreferredSize());
+        minField.setPreferredSize(tmpSizeTextField.getPreferredSize());
+        maxField.setMinimumSize(tmpSizeTextField.getPreferredSize());
+        maxField.setMaximumSize(tmpSizeTextField.getPreferredSize());
+        maxField.setPreferredSize(tmpSizeTextField.getPreferredSize());
 
-        final JPanel minMaxPanel = new JPanel(new BorderLayout(5, 5));
-        minMaxPanel.add(minPanel, BorderLayout.WEST);
-        minMaxPanel.add(maxPanel, BorderLayout.EAST);
-        editorPanel.add(minMaxPanel);
 
-        final JButton fromFile = new JButton("Range from File");
-        final JButton fromData = new JButton("Range from Data");
 
-        final JPanel buttonPanel = new JPanel(new BorderLayout(5, 10));
-        buttonPanel.add(fromFile, BorderLayout.WEST);
-        buttonPanel.add(fromData, BorderLayout.EAST);
-        editorPanel.add(new JLabel(" "));
-        editorPanel.add(buttonPanel);
+
+
+        final JPanel minPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+        minPanel.add(new JLabel("Min:"));
+        minPanel.add(minField);
+
+        final JPanel maxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+        maxPanel.add(new JLabel("Max:"));
+        maxPanel.add(maxField);
+
+//        final JPanel minMaxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
+        editorPanel.add(minPanel);
+        editorPanel.add(maxPanel);
+//        minMaxPanel.add(minPanel);
+//        minMaxPanel.add(maxPanel);
+//        editorPanel.add(minMaxPanel);
+
+        final JButton fromFile = new JButton("CPD Range");
+        final JPanel fromFileRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+        fromFile.setMaximumSize(fromFile.getMinimumSize());
+        fromFile.setPreferredSize(fromFile.getMinimumSize());
+        fromFile.setMinimumSize(fromFile.getMinimumSize());
+
+
+        final JButton fromData = new JButton("Band Range");
+        final JPanel fromDataRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+        fromData.setMaximumSize(fromData.getMinimumSize());
+        fromData.setPreferredSize(fromData.getMinimumSize());
+        fromData.setMinimumSize(fromData.getMinimumSize());
+
+        fromFileRow.add(fromFile);
+        fromFileRow.add(new JLabel(""));
+        fromFileRow.add(fromData);
+
+
+//        fromDataRow.add(fromData);
+//        fromDataRow.add(new JLabel(""));
+
+        editorPanel.add(fromFileRow);
+//        editorPanel.add(fromDataRow);
+
+//        final JPanel buttonPanel = new JPanel(new BorderLayout(5, 5));
+//        buttonPanel.add(fromFile, BorderLayout.WEST);
+//        buttonPanel.add(fromData, BorderLayout.EAST);
+//        editorPanel.add(new JLabel(" "));
+//        editorPanel.add(buttonPanel);
+
 
         shouldFireChooserEvent = true;
 

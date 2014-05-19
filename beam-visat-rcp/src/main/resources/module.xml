@@ -377,8 +377,8 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.stat.InformationToolView</id>
             <class>org.esa.beam.visat.toolviews.stat.InformationToolView</class>
-            <title>Information View</title>
-            <tabTitle>Information</tabTitle>
+            <title>Band Info</title>
+            <tabTitle>Band Info</tabTitle>
             <description>Display information for a selected band.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/NodeInfo16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/NodeInfo24.png</largeIcon>
