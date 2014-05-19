@@ -299,8 +299,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 cpd = currentCPD;
                 break;
             case FromMinMaxFields:
-                min = (double) minField.getValue();
-                max = (double) maxField.getValue();
+                min = new Double(minField.getValue().toString());//(double) minField.getValue();
+                max = new Double(maxField.getValue().toString());//(double) maxField.getValue();
                 cpd = currentCPD;
                 break;
             default:
