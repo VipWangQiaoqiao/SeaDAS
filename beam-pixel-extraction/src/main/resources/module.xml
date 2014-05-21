@@ -58,7 +58,7 @@
         <action>
             <parent>tools</parent>
             <id>pixelExtraction</id>
-            <placeLast>true</placeLast>
+            <placeAfter>pixelGeoCodingSubMenu</placeAfter>
             <text>Extract Pixel Values...</text>
             <class>org.esa.beam.pixex.visat.PixelExtractionAction</class>
             <helpId>pixelExtraction</helpId>

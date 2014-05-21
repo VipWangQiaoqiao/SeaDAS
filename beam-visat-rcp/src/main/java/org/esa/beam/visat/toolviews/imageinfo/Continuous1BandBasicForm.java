@@ -113,6 +113,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //        editorPanel.add(minMaxPanel);
 
         final JButton fromFile = new JButton("CPD Range");
+        fromFile.setToolTipText("Set min and max value to be value in cpd file");
         final JPanel fromFileRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
         fromFile.setMaximumSize(fromFile.getMinimumSize());
         fromFile.setPreferredSize(fromFile.getMinimumSize());
@@ -120,6 +121,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
         final JButton fromData = new JButton("Band Range");
+        fromData.setToolTipText("Set min and max value to corresponding data value in the band statistics");
         final JPanel fromDataRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
         fromData.setMaximumSize(fromData.getMinimumSize());
         fromData.setPreferredSize(fromData.getMinimumSize());

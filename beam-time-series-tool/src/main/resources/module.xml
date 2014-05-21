@@ -114,11 +114,13 @@
             <id>newTimeSeriesAssistantAction</id>
             <parent>tools</parent>
             <class>org.esa.beam.timeseries.ui.assistant.TimeSeriesAssistantAction</class>
-            <text>New Time Series...</text>
+            <text>Time Series...</text>
             <!--<smallIcon>icons/New16.gif</smallIcon>-->
             <largeIcon>icons/New24.gif</largeIcon>
             <shortDescr>Create a new time series</shortDescr>
             <helpId>newTimeSeriesAssistantAction</helpId>
+            <placeAfter>new</placeAfter>
+            <placeBefore>bandArithmetic</placeBefore>
             <!--<placeBefore>exit</placeBefore>-->
         </action>
 

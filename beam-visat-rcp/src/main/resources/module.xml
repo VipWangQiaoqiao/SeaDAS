@@ -493,20 +493,6 @@
         <!-- start of -->
         <!-- File menu -->
 
-        <action>
-            <id>new</id>
-            <parent>tools</parent>
-            <class>org.esa.beam.visat.actions.NewAction</class>
-            <text>New...</text>
-            <mnemonic>N</mnemonic>
-            <accelerator>control N</accelerator>
-            <shortDescr>Create a new data product derived from the selected product</shortDescr>
-            <description>Create a new data product derived from the selected product</description>
-            <!--<smallIcon>icons/New16.gif</smallIcon>-->
-            <largeIcon>icons/New24.gif</largeIcon>
-            <helpId>new</helpId>
-            <context>product</context>
-        </action>
 
 
         <action>
@@ -781,9 +767,26 @@
         <!-- File : Export Vector Data sub-menu -->
         <action>
             <parent>tools</parent>
+            <id>insertWktAsGeometry</id>
+            <placeAfter>computeMaskArea</placeAfter>
+            <!--<text>Geometry from WKT...</text>-->
+            <text>Geometry by Coordinates...</text>
+            <class>org.esa.beam.visat.actions.InsertWktGeometryAction</class>
+            <popuptext>Geometry from WKT...</popuptext>
+            <!--<shortDescr>Creates a geometry from well-known-text (WKT) representation.</shortDescr>-->
+            <shortDescr>Enter coordinates to create a geometry (well-known-text format)</shortDescr>
+            <context>image</context>
+            <helpId>insertWktAsGeometry</helpId>
+            <largeIcon>icons/InsertWKTTool24.png</largeIcon>
+            <!--<separatorAfter>true</separatorAfter>-->
+        </action>
+
+        <action>
+            <parent>tools</parent>
             <id>showGeometryAsWkt</id>
-            <placeAfter>createVectorDataNode</placeAfter>
-            <text>WKT from Geometry...</text>
+            <placeAfter>insertWktAsGeometry</placeAfter>
+            <!--<text>WKT from Geometry...</text>-->
+            <text>Geometry Info...</text>
             <class>org.esa.beam.visat.actions.ShowGeometryWktAction</class>
             <popuptext>WKT from Geometry...</popuptext>
             <shortDescr>Get the well-known-text (WKT) representation of a selected geomety</shortDescr>
@@ -791,17 +794,7 @@
             <helpId>showGeometryAsWkt</helpId>
         </action>
 
-        <action>
-            <parent>tools</parent>
-            <id>insertWktAsGeometry</id>
-            <placeAfter>showGeometryAsWkt</placeAfter>
-            <text>Geometry from WKT...</text>
-            <class>org.esa.beam.visat.actions.InsertWktGeometryAction</class>
-            <popuptext>Geometry from WKT...</popuptext>
-            <shortDescr>Creates a geomtry from well-known-text (WKT) representation.</shortDescr>
-            <context>image</context>
-            <helpId>insertWktAsGeometry</helpId>
-        </action>
+
         <!-- start of -->
         <!-- File : Import Vector Data sub-menu -->
 
@@ -1401,6 +1394,7 @@
             <largeIcon>icons/dannys_mosaic.png</largeIcon>
             <shortDescr>Create a mosaic of multiple products.</shortDescr>
             <helpId>mosaicAction</helpId>
+            <separatorBefore>true</separatorBefore>
         </action>
 
 
@@ -1419,7 +1413,22 @@
             <!--<smallIcon>icons/dannys_spatial_subset16.png</smallIcon>-->
             <largeIcon>icons/dannys_spatial_subset24.png</largeIcon>
             <placeAfter>mosaicAction</placeAfter>
-            <separatorAfter>true</separatorAfter>
+        </action>
+
+        <action>
+            <id>new</id>
+            <parent>tools</parent>
+            <class>org.esa.beam.visat.actions.NewAction</class>
+            <text>Bandless Clone...</text>
+            <mnemonic>N</mnemonic>
+            <!--<accelerator>control N</accelerator>-->
+            <shortDescr>Create a new data product derived from the selected product</shortDescr>
+            <description>Create a new data product derived from the selected product</description>
+            <!--<smallIcon>icons/New16.gif</smallIcon>-->
+            <largeIcon>icons/New24.gif</largeIcon>
+            <helpId>new</helpId>
+            <context>product</context>
+            <placeAfter>createSubsetFromView</placeAfter>
         </action>
 
 
@@ -1434,14 +1443,15 @@
             <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
             <!--<smallIcon>icons/dannys_band_maths16.png</smallIcon>-->
             <largeIcon>icons/dannys_band_maths24.png</largeIcon>
-            <placeAfter>createSubsetFromView</placeAfter>
+            <placeAfter>new</placeAfter>
             <helpId>mosaicAction</helpId>
+            <separatorBefore>true</separatorBefore>
         </action>
 
         <action>
             <id>createFilteredBand</id>
             <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
-            <text>Band Filter...</text>
+            <text>Filter Band...</text>
             <shortDescr>Creates an filtered band</shortDescr>
             <description>Creates an filtered band from the currently selected band</description>
             <context>band</context>
@@ -1454,7 +1464,7 @@
             <parent>tools</parent>
             <id>convertComputedBand2Band</id>
             <placeAfter>createFilteredBand</placeAfter>
-            <text>Convert Computed Band</text>
+            <text>Virtual Band Conversion</text>
             <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
             <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
             <context>virtualBand</context>
@@ -1465,7 +1475,7 @@
             <parent>tools</parent>
             <id>createXYDisplacementBandsAction</id>
             <placeAfter>createDemRelatedBands</placeAfter>
-            <text>Create Geo-Coding Displacement Bands...</text>
+            <text>Geo-Coding Displacement Bands...</text>
             <class>org.esa.beam.visat.actions.CreateGeoCodingDisplacementBandsAction</class>
             <shortDescr>&lt;html&gt;Computes actual pixel position minus pixel position c
                 geo-coding&lt;br/&gt;
@@ -1478,7 +1488,7 @@
         <action>
             <id>createDemRelatedBands</id>
             <class>org.esa.beam.visat.actions.CreateDemRelatedBandsAction</class>
-            <text>Band DEM...</text>
+            <text>DEM Band ...</text>
             <description>Creates DEM elevation and optionally DEM-corrected lat/lon bands from a selected DEM
             </description>
             <context>product</context>
@@ -1495,6 +1505,7 @@
             <text>Reprojection...</text>
             <shortDescr>Apply a reprojection.</shortDescr>
             <helpId>reprojectionAction</helpId>
+            <separatorBefore>true</separatorBefore>
         </action>
 
         <action>
@@ -1529,7 +1540,8 @@
         <action>
             <id>createVectorDataNode</id>
             <class>org.esa.beam.visat.actions.CreateVectorDataNodeAction</class>
-            <text>New Vector Container...</text>
+            <text>Geometry Container...</text>
+            <!--<text>New Vector Container...</text>-->
             <shortDescr>Create a new vector data container</shortDescr>
             <description>Create a new vector data container for drawing lines and polygons.</description>
             <!--<smallIcon>icons/NewVectorDataNode16.gif</smallIcon>-->
@@ -1549,6 +1561,7 @@
             <mnemonic>A</mnemonic>
             <helpId>computeMaskArea</helpId>
             <placeAfter>pixelGeoCodingSubMenu</placeAfter>
+            <separatorAfter>true</separatorAfter>
         </action>
 
         <!-- end of -->
@@ -1589,7 +1602,7 @@
         <action>
             <parent>tools</parent>
             <id>processing.imageAnalysis</id>
-            <placeAfter>processing.thematicLand</placeAfter>
+            <placeAfter>pixelGeoCodingSubMenu</placeAfter>
             <text>Image Analysis</text>
             <shortDescr>Group of Image Analysis Processing Steps</shortDescr>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
