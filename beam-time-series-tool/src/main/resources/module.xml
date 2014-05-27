@@ -119,7 +119,7 @@
             <largeIcon>icons/New24.gif</largeIcon>
             <shortDescr>Create a new time series</shortDescr>
             <helpId>newTimeSeriesAssistantAction</helpId>
-            <placeAfter>new</placeAfter>
+            <placeAfter>createSubsetFromView</placeAfter>
             <placeBefore>bandArithmetic</placeBefore>
             <!--<placeBefore>exit</placeBefore>-->
         </action>

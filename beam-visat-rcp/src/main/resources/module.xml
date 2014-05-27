@@ -1401,7 +1401,7 @@
         <action>
             <id>createSubsetFromView</id>
             <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
-            <text>Spatial Subset...</text>
+            <text>Crop (Spatial Subset)...</text>
             <shortDescr>Creates a product subset from the selected view</shortDescr>
             <description>Creates a product subset from the selected view by preselecting the subset area from view
             </description>
@@ -1415,43 +1415,46 @@
             <placeAfter>mosaicAction</placeAfter>
         </action>
 
-        <action>
-            <id>new</id>
-            <parent>tools</parent>
-            <class>org.esa.beam.visat.actions.NewAction</class>
-            <text>Bandless Clone...</text>
-            <mnemonic>N</mnemonic>
-            <!--<accelerator>control N</accelerator>-->
-            <shortDescr>Create a new data product derived from the selected product</shortDescr>
-            <description>Create a new data product derived from the selected product</description>
-            <!--<smallIcon>icons/New16.gif</smallIcon>-->
-            <largeIcon>icons/New24.gif</largeIcon>
-            <helpId>new</helpId>
-            <context>product</context>
-            <placeAfter>createSubsetFromView</placeAfter>
-        </action>
+        <!--<action>-->
+            <!--<id>new</id>-->
+            <!--<parent>tools</parent>-->
+            <!--<class>org.esa.beam.visat.actions.NewAction</class>-->
+            <!--<text>Bandless Clone...</text>-->
+            <!--<mnemonic>N</mnemonic>-->
+            <!--&lt;!&ndash;<accelerator>control N</accelerator>&ndash;&gt;-->
+            <!--<shortDescr>Create a new data product derived from the selected product</shortDescr>-->
+            <!--<description>Create a new data product derived from the selected product</description>-->
+            <!--&lt;!&ndash;<smallIcon>icons/New16.gif</smallIcon>&ndash;&gt;-->
+            <!--<largeIcon>icons/New24.gif</largeIcon>-->
+            <!--<helpId>new</helpId>-->
+            <!--<context>product</context>-->
+            <!--<placeAfter>createSubsetFromView</placeAfter>-->
+        <!--</action>-->
 
 
         <action>
             <id>bandArithmetic</id>
             <parent>tools</parent>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
-            <text>Band Math...</text>
+            <text>Logical Expression Band...</text>
             <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
             <context>image,band,tiePointGrid</context>
             <!--<smallIcon>icons/BAritmethic16.gif</smallIcon>-->
             <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
             <!--<smallIcon>icons/dannys_band_maths16.png</smallIcon>-->
             <largeIcon>icons/dannys_band_maths24.png</largeIcon>
-            <placeAfter>new</placeAfter>
+            <placeAfter>createSubsetFromView</placeAfter>
             <helpId>mosaicAction</helpId>
             <separatorBefore>true</separatorBefore>
         </action>
 
+
+
+
         <action>
             <id>createFilteredBand</id>
             <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
-            <text>Filter Band...</text>
+            <text>Filtered Band...</text>
             <shortDescr>Creates an filtered band</shortDescr>
             <description>Creates an filtered band from the currently selected band</description>
             <context>band</context>
@@ -1464,7 +1467,7 @@
             <parent>tools</parent>
             <id>convertComputedBand2Band</id>
             <placeAfter>createFilteredBand</placeAfter>
-            <text>Virtual Band Conversion</text>
+            <text>Real Band</text>
             <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
             <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
             <context>virtualBand</context>
