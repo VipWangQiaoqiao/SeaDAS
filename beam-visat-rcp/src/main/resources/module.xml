@@ -163,8 +163,8 @@
         <toolView>
             <id>org.esa.beam.visat.ProductsToolView</id>
             <class>org.esa.beam.visat.ProductsToolView</class>
-            <title>Products View</title>
-            <tabTitle>Products</tabTitle>
+            <title>File Products</title>
+            <tabTitle>File Products</tabTitle>
             <mnemonic>P</mnemonic>
             <accelerator>ctrl alt P</accelerator>
             <smallIcon>/org/esa/beam/resources/images/icons/RsProduct16.gif</smallIcon>
@@ -179,8 +179,8 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.pixelinfo.PixelInfoToolView</id>
             <class>org.esa.beam.visat.toolviews.pixelinfo.PixelInfoToolView</class>
-            <title>Pixel Info View</title>
-            <tabTitle>Pixel Info</tabTitle>
+            <title>Pixel Info</title>
+            <tabTitle>Pixels</tabTitle>
             <mnemonic>i</mnemonic>
             <accelerator>ctrl alt I</accelerator>
             <description>Display detailed pixel information in a table view.</description>
@@ -770,7 +770,7 @@
             <id>insertWktAsGeometry</id>
             <placeAfter>computeMaskArea</placeAfter>
             <!--<text>Geometry from WKT...</text>-->
-            <text>Geometry by Coordinates...</text>
+            <text>Geometry...</text>
             <class>org.esa.beam.visat.actions.InsertWktGeometryAction</class>
             <popuptext>Geometry from WKT...</popuptext>
             <!--<shortDescr>Creates a geometry from well-known-text (WKT) representation.</shortDescr>-->
@@ -782,16 +782,18 @@
         </action>
 
         <action>
-            <parent>tools</parent>
+            <parent>showToolViews</parent>
             <id>showGeometryAsWkt</id>
-            <placeAfter>insertWktAsGeometry</placeAfter>
+            <!--<placeAfter>insertWktAsGeometry</placeAfter>-->
             <!--<text>WKT from Geometry...</text>-->
             <text>Geometry Info...</text>
             <class>org.esa.beam.visat.actions.ShowGeometryWktAction</class>
-            <popuptext>WKT from Geometry...</popuptext>
+            <popuptext>Geometry Info...</popuptext>
+            <!--<popuptext>WKT from Geometry...</popuptext>-->
             <shortDescr>Get the well-known-text (WKT) representation of a selected geomety</shortDescr>
             <context>image</context>
             <helpId>showGeometryAsWkt</helpId>
+            <smallIcon>icons/InsertWKTTool16.png</smallIcon>
         </action>
 
 
@@ -1390,7 +1392,7 @@
             <id>mosaicAction</id>
             <class>org.esa.beam.gpf.operators.mosaic.MosaicAction</class>
             <parent>tools</parent>
-            <text>Mosaic...</text>
+            <text>Mosaic File...</text>
             <largeIcon>icons/dannys_mosaic.png</largeIcon>
             <shortDescr>Create a mosaic of multiple products.</shortDescr>
             <helpId>mosaicAction</helpId>
@@ -1401,7 +1403,7 @@
         <action>
             <id>createSubsetFromView</id>
             <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
-            <text>Crop (Spatial Subset)...</text>
+            <text>Cropped File...</text>
             <shortDescr>Creates a product subset from the selected view</shortDescr>
             <description>Creates a product subset from the selected view by preselecting the subset area from view
             </description>
@@ -1443,7 +1445,7 @@
             <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
             <!--<smallIcon>icons/dannys_band_maths16.png</smallIcon>-->
             <largeIcon>icons/dannys_band_maths24.png</largeIcon>
-            <placeAfter>createSubsetFromView</placeAfter>
+            <placeAfter>flipping</placeAfter>
             <helpId>mosaicAction</helpId>
             <separatorBefore>true</separatorBefore>
         </action>
@@ -1504,8 +1506,8 @@
             <id>reprojectionAction</id>
             <class>org.esa.beam.gpf.operators.reproject.ReprojectionAction</class>
             <parent>tools</parent>
-            <placeAfter>createDemRelatedBands</placeAfter>
-            <text>Reprojection...</text>
+            <placeAfter>createSubsetFromView</placeAfter>
+            <text>Reprojected File...</text>
             <shortDescr>Apply a reprojection.</shortDescr>
             <helpId>reprojectionAction</helpId>
             <separatorBefore>true</separatorBefore>
@@ -1515,7 +1517,7 @@
             <parent>tools</parent>
             <id>orthorectificationAction</id>
             <placeAfter>reprojectionAction</placeAfter>
-            <text>Orthorectification...</text>
+            <text>Orthorectification File...</text>
             <class>org.esa.beam.gpf.operators.reproject.OrthorectificationAction</class>
             <shortDescr>Apply an orthorectification.</shortDescr>
             <helpId>orthorectificationAction</helpId>
@@ -1525,7 +1527,7 @@
             <id>flipping</id>
             <class>org.esa.beam.visat.actions.FlippingAction</class>
             <parent>tools</parent>
-            <text>Data Flip...</text>
+            <text>Data Flipped File...</text>
             <shortDescr>Apply Data Flip</shortDescr>
             <helpId>flipDialog</helpId>
             <separatorAfter>true</separatorAfter>
