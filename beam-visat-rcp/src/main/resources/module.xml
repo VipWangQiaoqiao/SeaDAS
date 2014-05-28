@@ -163,8 +163,8 @@
         <toolView>
             <id>org.esa.beam.visat.ProductsToolView</id>
             <class>org.esa.beam.visat.ProductsToolView</class>
-            <title>File Products</title>
-            <tabTitle>File Products</tabTitle>
+            <title>Files</title>
+            <tabTitle>Files</tabTitle>
             <mnemonic>P</mnemonic>
             <accelerator>ctrl alt P</accelerator>
             <smallIcon>/org/esa/beam/resources/images/icons/RsProduct16.gif</smallIcon>
@@ -765,36 +765,6 @@
 
         <!-- end of -->
         <!-- File : Export Vector Data sub-menu -->
-        <action>
-            <parent>tools</parent>
-            <id>insertWktAsGeometry</id>
-            <placeAfter>computeMaskArea</placeAfter>
-            <!--<text>Geometry from WKT...</text>-->
-            <text>Geometry...</text>
-            <class>org.esa.beam.visat.actions.InsertWktGeometryAction</class>
-            <popuptext>Geometry from WKT...</popuptext>
-            <!--<shortDescr>Creates a geometry from well-known-text (WKT) representation.</shortDescr>-->
-            <shortDescr>Enter coordinates to create a geometry (well-known-text format)</shortDescr>
-            <context>image</context>
-            <helpId>insertWktAsGeometry</helpId>
-            <largeIcon>icons/InsertWKTTool24.png</largeIcon>
-            <!--<separatorAfter>true</separatorAfter>-->
-        </action>
-
-        <action>
-            <parent>showToolViews</parent>
-            <id>showGeometryAsWkt</id>
-            <!--<placeAfter>insertWktAsGeometry</placeAfter>-->
-            <!--<text>WKT from Geometry...</text>-->
-            <text>Geometry Info...</text>
-            <class>org.esa.beam.visat.actions.ShowGeometryWktAction</class>
-            <popuptext>Geometry Info...</popuptext>
-            <!--<popuptext>WKT from Geometry...</popuptext>-->
-            <shortDescr>Get the well-known-text (WKT) representation of a selected geomety</shortDescr>
-            <context>image</context>
-            <helpId>showGeometryAsWkt</helpId>
-            <smallIcon>icons/InsertWKTTool16.png</smallIcon>
-        </action>
 
 
         <!-- start of -->
@@ -1042,14 +1012,6 @@
         <!-- start of -->
         <!-- View menu -->
 
-        <action>
-            <id>showToolViews</id>
-            <parent>view</parent>
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Tool Windows</text>
-            <sortChildren>true</sortChildren>
-            <placeBefore>toolBars</placeBefore>
-        </action>
 
         <action>
             <id>toolBars</id>
@@ -1389,97 +1351,89 @@
         <!-- Tools menu -->
 
         <action>
-            <id>mosaicAction</id>
-            <class>org.esa.beam.gpf.operators.mosaic.MosaicAction</class>
+            <id>showToolViews</id>
             <parent>tools</parent>
-            <text>Mosaic File...</text>
-            <largeIcon>icons/dannys_mosaic.png</largeIcon>
-            <shortDescr>Create a mosaic of multiple products.</shortDescr>
-            <helpId>mosaicAction</helpId>
+            <!--<placeBefore>createDemRelatedBands</placeBefore>-->
+            <placeAfter>confusion</placeAfter>
+            <!--<placeAtContextTop>top</placeAtContextTop>-->
             <separatorBefore>true</separatorBefore>
+
+            <class>org.esa.beam.visat.actions.ActionGroup</class>
+            <text>Dockable Windows</text>
+            <sortChildren>true</sortChildren>
         </action>
 
 
         <action>
-            <id>createSubsetFromView</id>
-            <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
-            <text>Cropped File...</text>
-            <shortDescr>Creates a product subset from the selected view</shortDescr>
-            <description>Creates a product subset from the selected view by preselecting the subset area from view
+            <id>geometryFolder</id>
+            <parent>tools</parent>
+            <placeAfter>showToolViews</placeAfter>
+            <sortChildren>true</sortChildren>
+
+            <text>Geometry</text>
+            <class>org.esa.beam.visat.actions.ActionGroup</class>
+        </action>
+
+
+        <action>
+            <id>maskFolder</id>
+            <parent>tools</parent>
+            <placeAfter>geometryFolder</placeAfter>
+            <sortChildren>true</sortChildren>
+
+            <text>Mask</text>
+            <class>org.esa.beam.visat.actions.ActionGroup</class>
+        </action>
+
+
+        <action>
+            <id>pixelFolder</id>
+            <parent>tools</parent>
+            <placeAfter>maskFolder</placeAfter>
+            <separatorAfter>true</separatorAfter>
+            <sortChildren>true</sortChildren>
+
+            <text>Pixel</text>
+            <class>org.esa.beam.visat.actions.ActionGroup</class>
+        </action>
+
+
+
+        <action>
+            <id>createDemRelatedBands</id>
+            <parent>tools</parent>
+            <placeAfter>pixelFolder</placeAfter>
+            <separatorBefore>true</separatorBefore>
+
+
+            <text>Elevation (DEM) Band ...</text>
+            <class>org.esa.beam.visat.actions.CreateDemRelatedBandsAction</class>
+            <description>Creates DEM elevation and optionally DEM-corrected lat/lon bands from a selected DEM
             </description>
-            <context>image</context>
-            <helpId>subsetFromView</helpId>
-            <parent>tools</parent>
-            <!--<smallIcon>icons/Subset16.png</smallIcon>-->
-            <!--<largeIcon>icons/Subset24.png</largeIcon>-->
-            <!--<smallIcon>icons/dannys_spatial_subset16.png</smallIcon>-->
-            <largeIcon>icons/dannys_spatial_subset24.png</largeIcon>
-            <placeAfter>mosaicAction</placeAfter>
+            <context>product</context>
+            <helpId>createDemRelatedBands</helpId>
         </action>
-
-        <!--<action>-->
-            <!--<id>new</id>-->
-            <!--<parent>tools</parent>-->
-            <!--<class>org.esa.beam.visat.actions.NewAction</class>-->
-            <!--<text>Bandless Clone...</text>-->
-            <!--<mnemonic>N</mnemonic>-->
-            <!--&lt;!&ndash;<accelerator>control N</accelerator>&ndash;&gt;-->
-            <!--<shortDescr>Create a new data product derived from the selected product</shortDescr>-->
-            <!--<description>Create a new data product derived from the selected product</description>-->
-            <!--&lt;!&ndash;<smallIcon>icons/New16.gif</smallIcon>&ndash;&gt;-->
-            <!--<largeIcon>icons/New24.gif</largeIcon>-->
-            <!--<helpId>new</helpId>-->
-            <!--<context>product</context>-->
-            <!--<placeAfter>createSubsetFromView</placeAfter>-->
-        <!--</action>-->
-
-
-        <action>
-            <id>bandArithmetic</id>
-            <parent>tools</parent>
-            <class>org.esa.beam.visat.actions.BandMathsAction</class>
-            <text>Logical Expression Band...</text>
-            <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
-            <context>image,band,tiePointGrid</context>
-            <!--<smallIcon>icons/BAritmethic16.gif</smallIcon>-->
-            <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
-            <!--<smallIcon>icons/dannys_band_maths16.png</smallIcon>-->
-            <largeIcon>icons/dannys_band_maths24.png</largeIcon>
-            <placeAfter>flipping</placeAfter>
-            <helpId>mosaicAction</helpId>
-            <separatorBefore>true</separatorBefore>
-        </action>
-
-
 
 
         <action>
             <id>createFilteredBand</id>
-            <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
+            <parent>tools</parent>
+            <placeAfter>createDemRelatedBands</placeAfter>
+
             <text>Filtered Band...</text>
+            <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
             <shortDescr>Creates an filtered band</shortDescr>
             <description>Creates an filtered band from the currently selected band</description>
             <context>band</context>
             <helpId>createFilteredBand</helpId>
-            <parent>tools</parent>
-            <placeAfter>bandArithmetic</placeAfter>
         </action>
 
-        <action>
-            <parent>tools</parent>
-            <id>convertComputedBand2Band</id>
-            <placeAfter>createFilteredBand</placeAfter>
-            <text>Real Band</text>
-            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
-            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
-            <context>virtualBand</context>
-            <helpId>convertComputedBand2Band</helpId>
-        </action>
 
         <action>
-            <parent>tools</parent>
             <id>createXYDisplacementBandsAction</id>
-            <placeAfter>createDemRelatedBands</placeAfter>
+            <parent>tools</parent>
+            <placeAfter>createFilteredBand</placeAfter>
+
             <text>Geo-Coding Displacement Bands...</text>
             <class>org.esa.beam.visat.actions.CreateGeoCodingDisplacementBandsAction</class>
             <shortDescr>&lt;html&gt;Computes actual pixel position minus pixel position c
@@ -1490,62 +1444,62 @@
             <helpId>createXYDisplacementBandsAction</helpId>
         </action>
 
-        <action>
-            <id>createDemRelatedBands</id>
-            <class>org.esa.beam.visat.actions.CreateDemRelatedBandsAction</class>
-            <text>DEM Band ...</text>
-            <description>Creates DEM elevation and optionally DEM-corrected lat/lon bands from a selected DEM
-            </description>
-            <context>product</context>
-            <helpId>createDemRelatedBands</helpId>
-            <parent>tools</parent>
-            <placeAfter>createFilteredBand</placeAfter>
-        </action>
+
+
 
         <action>
-            <id>reprojectionAction</id>
-            <class>org.esa.beam.gpf.operators.reproject.ReprojectionAction</class>
+            <id>convertComputedBand2Band</id>
             <parent>tools</parent>
-            <placeAfter>createSubsetFromView</placeAfter>
-            <text>Reprojected File...</text>
-            <shortDescr>Apply a reprojection.</shortDescr>
-            <helpId>reprojectionAction</helpId>
-            <separatorBefore>true</separatorBefore>
+            <placeAfter>createXYDisplacementBandsAction</placeAfter>
+
+            <text>Real Band</text>
+            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
+            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
+            <context>virtualBand</context>
+            <helpId>convertComputedBand2Band</helpId>
         </action>
 
-        <action>
-            <parent>tools</parent>
-            <id>orthorectificationAction</id>
-            <placeAfter>reprojectionAction</placeAfter>
-            <text>Orthorectification File...</text>
-            <class>org.esa.beam.gpf.operators.reproject.OrthorectificationAction</class>
-            <shortDescr>Apply an orthorectification.</shortDescr>
-            <helpId>orthorectificationAction</helpId>
-        </action>
 
         <action>
-            <id>flipping</id>
-            <class>org.esa.beam.visat.actions.FlippingAction</class>
+            <id>bandArithmetic</id>
             <parent>tools</parent>
-            <text>Data Flipped File...</text>
-            <shortDescr>Apply Data Flip</shortDescr>
-            <helpId>flipDialog</helpId>
+            <placeAfter>convertComputedBand2Band</placeAfter>
             <separatorAfter>true</separatorAfter>
-            <placeAfter>orthorectificationAction</placeAfter>
+
+            <text>Virtual Band...</text>
+            <class>org.esa.beam.visat.actions.BandMathsAction</class>
+            <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
+            <context>image,band,tiePointGrid</context>
+            <!--<smallIcon>icons/BAritmethic16.gif</smallIcon>-->
+            <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
+            <!--<smallIcon>icons/dannys_band_maths16.png</smallIcon>-->
+            <largeIcon>icons/dannys_band_maths24.png</largeIcon>
+            <helpId>mosaicAction</helpId>
         </action>
 
+
+
+        <!-- end of -->
+        <!-- Tools menu -->
+
+
         <action>
-            <id>pixelGeoCodingSubMenu</id>
-            <parent>tools</parent>
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Pixel Geo-Coding</text>
-            <placeAfter>flipping</placeAfter>
+            <id>computeMaskArea</id>
+            <parent>maskFolder</parent>
+            <placeAfter>geometryFolder</placeAfter>
+
+            <text>Compute Area...</text>
+            <mnemonic>A</mnemonic>
+            <class>org.esa.beam.visat.actions.ComputeMaskAreaAction</class>
+            <helpId>computeMaskArea</helpId>
         </action>
+
+
 
         <action>
             <id>createVectorDataNode</id>
             <class>org.esa.beam.visat.actions.CreateVectorDataNodeAction</class>
-            <text>Geometry Container...</text>
+            <text>Container...</text>
             <!--<text>New Vector Container...</text>-->
             <shortDescr>Create a new vector data container</shortDescr>
             <description>Create a new vector data container for drawing lines and polygons.</description>
@@ -1554,23 +1508,44 @@
             <largeIcon>icons/NewVectorContainer.png</largeIcon>
             <helpId>createVectorDataNode</helpId>
             <context>product</context>
-            <parent>tools</parent>
+            <parent>geometryFolder</parent>
             <placeAfter>pixelGeoCodingSubMenu</placeAfter>
+        </action>
+
+
+        <action>
+            <parent>geometryFolder</parent>
+            <id>insertWktAsGeometry</id>
+            <placeAfter>computeMaskArea</placeAfter>
+            <!--<text>Geometry from WKT...</text>-->
+            <text>New (Coordinates)...</text>
+            <class>org.esa.beam.visat.actions.InsertWktGeometryAction</class>
+            <popuptext>Geometry from WKT...</popuptext>
+            <!--<shortDescr>Creates a geometry from well-known-text (WKT) representation.</shortDescr>-->
+            <shortDescr>Enter coordinates to create a geometry (well-known-text format)</shortDescr>
+            <context>image</context>
+            <helpId>insertWktAsGeometry</helpId>
+            <largeIcon>icons/InsertWKTTool24.png</largeIcon>
+            <!--<separatorAfter>true</separatorAfter>-->
         </action>
 
         <action>
-            <parent>tools</parent>
-            <id>computeMaskArea</id>
-            <class>org.esa.beam.visat.actions.ComputeMaskAreaAction</class>
-            <text>Mask Area...</text>
-            <mnemonic>A</mnemonic>
-            <helpId>computeMaskArea</helpId>
-            <placeAfter>pixelGeoCodingSubMenu</placeAfter>
-            <separatorAfter>true</separatorAfter>
+            <parent>geometryFolder</parent>
+            <id>showGeometryAsWkt</id>
+            <!--<placeAfter>insertWktAsGeometry</placeAfter>-->
+            <!--<text>WKT from Geometry...</text>-->
+            <text>Info...</text>
+            <class>org.esa.beam.visat.actions.ShowGeometryWktAction</class>
+            <popuptext>Geometry Info...</popuptext>
+            <!--<popuptext>WKT from Geometry...</popuptext>-->
+            <shortDescr>Get the well-known-text (WKT) representation of a selected geomety</shortDescr>
+            <context>image</context>
+            <helpId>showGeometryAsWkt</helpId>
         </action>
 
-        <!-- end of -->
-        <!-- Tools menu -->
+
+
+
 
         <!-- start of -->
         <!-- Tools : Pixel Geo-Coding sub-menu -->
@@ -1578,24 +1553,24 @@
         <action>
             <id>attachPixelGeoCoding</id>
             <class>org.esa.beam.visat.actions.AttachPixelGeoCodingAction</class>
-            <text>Attach...</text>
+            <text>Attach Geo-Coding...</text>
             <shortDescr>Attaches a pixel based geo-coding</shortDescr>
             <description>Attaches a pixel based geo-coding to the selected product</description>
             <context>attachPixelGeoCoding</context>
             <helpId>attachPixelGeoCoding</helpId>
-            <parent>pixelGeoCodingSubMenu</parent>
+            <parent>pixelFolder</parent>
             <separatorBefore>true</separatorBefore>
         </action>
 
         <action>
             <id>detachPixelGeoCoding</id>
             <class>org.esa.beam.visat.actions.DetachPixelGeoCodingAction</class>
-            <text>Detach...</text>
+            <text>Detach Geo-Coding...</text>
             <shortDescr>Detaches a pixel based geo-coding</shortDescr>
             <description>Detaches a pixel based geo-coding from the selected product</description>
             <context>detachPixelGeoCoding</context>
             <helpId>detachPixelGeoCoding</helpId>
-            <parent>pixelGeoCodingSubMenu</parent>
+            <parent>pixelFolder</parent>
             <placeAfter>attachPixelGeoCoding</placeAfter>
         </action>
 
@@ -1603,11 +1578,96 @@
         <!-- Tools : Pixel Geo-Coding sub-menu -->
  <!-- Processing ########################################################################################## -->
 
+        <action>
+            <id>createSubsetFromView</id>
+            <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
+            <text>Cropped File...</text>
+            <shortDescr>Creates a product subset from the selected view</shortDescr>
+            <description>Creates a product subset from the selected view by preselecting the subset area from view
+            </description>
+            <context>image</context>
+            <helpId>subsetFromView</helpId>
+            <parent>processing</parent>
+            <largeIcon>icons/dannys_spatial_subset24.png</largeIcon>
+            <separatorAfter>true</separatorAfter>
+
+        </action>
 
         <action>
-            <parent>tools</parent>
+            <id>mosaicAction</id>
+            <class>org.esa.beam.gpf.operators.mosaic.MosaicAction</class>
+            <parent>processing</parent>
+            <text>Mosaic File...</text>
+            <largeIcon>icons/dannys_mosaic.png</largeIcon>
+            <shortDescr>Create a mosaic of multiple products.</shortDescr>
+            <helpId>mosaicAction</helpId>
+            <placeAfter>createSubsetFromView</placeAfter>
+        </action>
+
+
+
+
+        <!--<action>-->
+        <!--<id>new</id>-->
+        <!--<parent>tools</parent>-->
+        <!--<class>org.esa.beam.visat.actions.NewAction</class>-->
+        <!--<text>Bandless Clone...</text>-->
+        <!--<mnemonic>N</mnemonic>-->
+        <!--&lt;!&ndash;<accelerator>control N</accelerator>&ndash;&gt;-->
+        <!--<shortDescr>Create a new data product derived from the selected product</shortDescr>-->
+        <!--<description>Create a new data product derived from the selected product</description>-->
+        <!--&lt;!&ndash;<smallIcon>icons/New16.gif</smallIcon>&ndash;&gt;-->
+        <!--<largeIcon>icons/New24.gif</largeIcon>-->
+        <!--<helpId>new</helpId>-->
+        <!--<context>product</context>-->
+        <!--<placeAfter>createSubsetFromView</placeAfter>-->
+        <!--</action>-->
+
+
+        <action>
+            <id>flipping</id>
+            <text>Data Flipped File...</text>
+            <parent>processing</parent>
+            <placeAfter>mosaicAction</placeAfter>
+            <separatorBefore>true</separatorBefore>
+            <class>org.esa.beam.visat.actions.FlippingAction</class>
+            <shortDescr>Apply Data Flip</shortDescr>
+            <helpId>flipDialog</helpId>
+        </action>
+
+
+        <action>
+            <id>orthorectificationAction</id>
+            <text>Orthorectified File...</text>
+            <parent>processing</parent>
+            <placeAfter>flipping</placeAfter>
+            <shortDescr>Apply an orthorectification.</shortDescr>
+            <class>org.esa.beam.gpf.operators.reproject.OrthorectificationAction</class>
+            <helpId>orthorectificationAction</helpId>
+        </action>
+
+
+        <action>
+            <id>reprojectionAction</id>
+            <text>Reprojected File...</text>
+            <parent>processing</parent>
+            <placeAfter>orthorectificationAction</placeAfter>
+            <separatorAfter>true</separatorAfter>
+            <class>org.esa.beam.gpf.operators.reproject.ReprojectionAction</class>
+            <shortDescr>Apply a reprojection.</shortDescr>
+            <helpId>reprojectionAction</helpId>
+        </action>
+
+
+
+
+
+
+
+        <action>
+            <parent>processing</parent>
             <id>processing.imageAnalysis</id>
-            <placeAfter>pixelGeoCodingSubMenu</placeAfter>
+            <placeAfter>reprojectionAction</placeAfter>
             <text>Image Analysis</text>
             <shortDescr>Group of Image Analysis Processing Steps</shortDescr>
             <class>org.esa.beam.visat.actions.ActionGroup</class>

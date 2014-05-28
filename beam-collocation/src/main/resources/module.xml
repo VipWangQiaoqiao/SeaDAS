@@ -31,14 +31,14 @@
 
     <extension point="beam-ui:actions">
         <action>
-            <parent>tools</parent>
+            <parent>processing</parent>
             <id>collocation</id>
             <helpId>collocation</helpId>
             <class>org.esa.beam.collocation.visat.CollocationAction</class>
             <parent>tools</parent>
             <text>Collocated File...</text>
-            <placeAfter>mosaicAction</placeAfter>
-            <placeBefore>createSubsetFromView</placeBefore>
+            <placeAfter>createSubsetFromView</placeAfter>
+            <placeBefore>mosaicAction</placeBefore>
             <shortDescr>Collocate two products into a single product (useful for parameter comparisons, etc.)</shortDescr>
             <description>Collocate two products into a single product (useful for parameter comparisons, etc.)</description>
             <!--<smallIcon>icons/Collocation16.gif</smallIcon>-->

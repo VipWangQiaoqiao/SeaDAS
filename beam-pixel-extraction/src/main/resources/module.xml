@@ -56,7 +56,7 @@
 
     <extension point="beam-ui:actions">
         <action>
-            <parent>tools</parent>
+            <parent>pixelFolder</parent>
             <id>pixelExtraction</id>
             <placeAfter>pixelGeoCodingSubMenu</placeAfter>
             <text>Extract Pixel Values...</text>

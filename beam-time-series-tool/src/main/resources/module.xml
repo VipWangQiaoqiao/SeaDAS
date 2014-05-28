@@ -112,15 +112,15 @@
 
         <action>
             <id>newTimeSeriesAssistantAction</id>
-            <parent>tools</parent>
+            <parent>processing</parent>
             <class>org.esa.beam.timeseries.ui.assistant.TimeSeriesAssistantAction</class>
             <text>Time Series File...</text>
             <!--<smallIcon>icons/New16.gif</smallIcon>-->
             <largeIcon>icons/New24.gif</largeIcon>
             <shortDescr>Create a new time series</shortDescr>
             <helpId>newTimeSeriesAssistantAction</helpId>
-            <placeAfter>createSubsetFromView</placeAfter>
-            <placeBefore>reprojectionAction</placeBefore>
+            <placeAfter>mosaicAction</placeAfter>
+            <placeBefore>flipping</placeBefore>
             <!--<placeBefore>exit</placeBefore>-->
         </action>
 
