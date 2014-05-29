@@ -45,7 +45,7 @@ import java.awt.image.SampleModel;
  *
  * @author Ralf Quast
  */
-class PixelGeoCoding2 extends AbstractGeoCoding implements BasicPixelGeoCoding {
+public class PixelGeoCoding2 extends AbstractGeoCoding implements BasicPixelGeoCoding {
 
     private static final String SYSPROP_PIXEL_GEO_CODING_FRACTION_ACCURACY = "beam.pixelGeoCoding.fractionAccuracy";
     private static final String SYSPROP_PIXEL_GEO_CODING_USE_TILING = "beam.pixelGeoCoding.useTiling";
