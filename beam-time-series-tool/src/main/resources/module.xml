@@ -114,7 +114,7 @@
             <id>newTimeSeriesAssistantAction</id>
             <parent>processing</parent>
             <class>org.esa.beam.timeseries.ui.assistant.TimeSeriesAssistantAction</class>
-            <text>Time Series File...</text>
+            <text>Time Series...</text>
             <!--<smallIcon>icons/New16.gif</smallIcon>-->
             <largeIcon>icons/New24.gif</largeIcon>
             <shortDescr>Create a new time series</shortDescr>

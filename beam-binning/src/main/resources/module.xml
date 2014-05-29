@@ -50,11 +50,11 @@
 
     <extension point="beam-ui:actions">
         <action>
-            <parent>ocprocessing</parent>
+            <parent>processing</parent>
             <id>Binning</id>
             <!--<placeLast>true</placeLast>-->
-            <placeAfter>l3bindump</placeAfter>
-            <placeBefore>multilevel_processor.py</placeBefore>
+            <placeAfter>processing.imageAnalysis</placeAfter>
+            <placeBefore>mosaicAction</placeBefore>
             <text>Level-3 Binning</text>
             <class>org.esa.beam.binning.operator.ui.BinningOperatorAction</class>
             <operatorName>Binning</operatorName>

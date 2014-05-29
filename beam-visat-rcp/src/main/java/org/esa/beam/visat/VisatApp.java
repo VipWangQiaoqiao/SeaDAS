@@ -504,7 +504,7 @@ public class VisatApp extends BasicApp implements AppContext {
     // Checks the platform, then attempts to register with the Apple EAWT
     // See OSXAdapter.java to see how this is done without directly referencing any Apple APIs
 
-    private void registerForMacOSXEvents() {
+    protected void registerForMacOSXEvents() {
         if (SystemUtils.isRunningOnMacOS()) {
             try {
                 // Generate and register the OSXAdapter, passing it a hash of all the methods we wish to

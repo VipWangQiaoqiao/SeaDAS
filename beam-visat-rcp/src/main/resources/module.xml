@@ -173,7 +173,7 @@
             <description>Display all opened data products in a tree view.</description>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <initIndex>0</initIndex>
+            <!--<initIndex>0</initIndex>-->
         </toolView>
 
         <toolView>
@@ -188,8 +188,8 @@
             <largeIcon>/org/esa/beam/resources/images/icons/PixelInfo24.png</largeIcon>
             <helpId>pixelInfoView</helpId>
             <initState>DOCKED</initState>
-            <initSide>WEST</initSide>
-            <initIndex>0</initIndex>
+            <initSide>EAST</initSide>
+            <initIndex>1</initIndex>
         </toolView>
 
         <toolView>
@@ -222,8 +222,8 @@
             <largeIcon>/org/esa/beam/resources/images/icons/Navigation24.gif</largeIcon>
             <helpId>showNavigationWnd</helpId>
             <initState>DOCKED</initState>
-            <initSide>WEST</initSide>
-            <initIndex>1</initIndex>
+            <initSide>EAST</initSide>
+            <initIndex>0</initIndex>
         </toolView>
 
         <toolView>
@@ -240,8 +240,8 @@
             <!--<largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.gif</largeIcon>-->
             <helpId>showWorldMapWnd</helpId>
             <initState>DOCKED</initState>
-            <initSide>WEST</initSide>
-            <initIndex>0</initIndex>
+            <initSide>EAST</initSide>
+            <initIndex>1</initIndex>
         </toolView>
 
         <toolView>
@@ -257,26 +257,11 @@
             <!--<largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>-->
             <helpId>showColorManipulationWnd</helpId>
             <initState>DOCKED</initState>
-            <initSide>WEST</initSide>
+            <initSide>EAST</initSide>
             <initIndex>1</initIndex>
         </toolView>
 
-        <toolView>
-            <id>org.esa.beam.visat.toolviews.layermanager.LayerManagerToolView</id>
-            <class>org.esa.beam.visat.toolviews.layermanager.LayerManagerToolView</class>
-            <title>Layer Manager</title>
-            <tabTitle>Layers</tabTitle>
-            <mnemonic>L</mnemonic>
-            <accelerator>ctrl alt L</accelerator>
-            <description>Manage view layer visibility and transparency.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/LayerManager16.png</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/LayerManager24.png</largeIcon>
-            <helpId>showLayerManagerWnd</helpId>
-            <!-- todo provide help -->
-            <initState>DOCKED</initState>
-            <initSide>WEST</initSide>
-            <initIndex>1</initIndex>
-        </toolView>
+
 
         <toolView>
             <id>org.esa.beam.visat.toolviews.layermanager.LayerEditorToolView</id>
@@ -322,8 +307,26 @@
             <helpId>showMaskROIManagerWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <initIndex>1</initIndex>
+            <!--<initIndex>0</initIndex>-->
         </toolView>
+
+        <toolView>
+            <id>org.esa.beam.visat.toolviews.layermanager.LayerManagerToolView</id>
+            <class>org.esa.beam.visat.toolviews.layermanager.LayerManagerToolView</class>
+            <title>Layer Manager</title>
+            <tabTitle>Layers</tabTitle>
+            <mnemonic>L</mnemonic>
+            <accelerator>ctrl alt L</accelerator>
+            <description>Manage view layer visibility and transparency.</description>
+            <smallIcon>/org/esa/beam/resources/images/icons/LayerManager16.png</smallIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/LayerManager24.png</largeIcon>
+            <helpId>showLayerManagerWnd</helpId>
+            <!-- todo provide help -->
+            <initState>DOCKED</initState>
+            <initSide>WEST</initSide>
+            <!--<initIndex>0</initIndex>-->
+        </toolView>
+
 
         <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</id>
@@ -338,8 +341,8 @@
             <!--<largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>-->
             <helpId>showPinManagerWnd</helpId>
             <initState>DOCKED</initState>
-            <initSide>WEST</initSide>
-            <initIndex>0</initIndex>
+            <initSide>EAST</initSide>
+            <initIndex>1</initIndex>
         </toolView>
 
         <toolView>
@@ -478,8 +481,8 @@
             <mnemonic>D</mnemonic>
             <accelerator>ctrl alt D</accelerator>
             <initState>HIDDEN</initState>
-            <!--<initSide>WEST</initSide>-->
-            <!--<initIndex>0</initIndex>-->
+            <initSide>SOUTH</initSide>
+            <initIndex>0</initIndex>
             <smallIcon>/org/esa/beam/resources/images/icons/TileCacheDiagnosis16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/TileCacheDiagnosis24.png</largeIcon>
         </toolView>
@@ -1028,8 +1031,19 @@
             <text>User Layout</text>
             <placeAfter>resetLayout</placeAfter>
             <shortDescr>User Layout</shortDescr>
+        </action>
+
+        <action>
+            <id>saveAsUserLayout</id>
+            <class>org.esa.beam.visat.actions.layout.SaveAsUserLayoutAction</class>
+            <parent>view</parent>
+            <placeAfter>loadUserLayout</placeAfter>
+            <text>Save User Layout</text>
+            <shortDescr>Save as user layout.</shortDescr>
+            <longDescr>Save the current layout as user layout.</longDescr>
             <separatorAfter>true</separatorAfter>
         </action>
+
 
         <action>
             <id>toolBars</id>
@@ -1041,7 +1055,7 @@
             <description>Toggle Tool Bars visibility</description>
             <sortChildren>true</sortChildren>
             <helpId>toolBars</helpId>
-            <placeAfter>loadUserLayout</placeAfter>
+            <placeAfter>saveAsUserLayout</placeAfter>
         </action>
 
 
@@ -1182,15 +1196,6 @@
 
 
 
-        <action>
-            <id>saveAsUserLayout</id>
-            <class>org.esa.beam.visat.actions.layout.SaveAsUserLayoutAction</class>
-            <parent>edit</parent>
-            <placeAfter>loadUserLayout</placeAfter>
-            <text>Save User Layout</text>
-            <shortDescr>Save as user layout.</shortDescr>
-            <longDescr>Save the current layout as user layout.</longDescr>
-        </action>
 
 
 
@@ -1363,13 +1368,11 @@
         <action>
             <id>showToolViews</id>
             <parent>tools</parent>
-            <!--<placeBefore>createDemRelatedBands</placeBefore>-->
-            <placeAfter>confusion</placeAfter>
-            <!--<placeAtContextTop>top</placeAtContextTop>-->
+            <placeAtContextTop>top</placeAtContextTop>
             <separatorBefore>true</separatorBefore>
 
             <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Dockable Windows</text>
+            <text>Tool Windows</text>
             <sortChildren>true</sortChildren>
         </action>
 
@@ -1385,26 +1388,26 @@
         </action>
 
 
+
         <action>
-            <id>maskFolder</id>
+            <id>geocodingFolder</id>
             <parent>tools</parent>
             <placeAfter>geometryFolder</placeAfter>
             <sortChildren>true</sortChildren>
 
-            <text>Mask</text>
+            <text>Geo-Coding</text>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
         </action>
 
-
         <action>
-            <id>pixelFolder</id>
+            <id>computeMaskArea</id>
             <parent>tools</parent>
-            <placeAfter>maskFolder</placeAfter>
-            <separatorAfter>true</separatorAfter>
-            <sortChildren>true</sortChildren>
+            <placeAfter>geocodingFolder</placeAfter>
 
-            <text>Pixel</text>
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
+            <text>Mask Area...</text>
+            <mnemonic>A</mnemonic>
+            <class>org.esa.beam.visat.actions.ComputeMaskAreaAction</class>
+            <helpId>computeMaskArea</helpId>
         </action>
 
 
@@ -1412,7 +1415,7 @@
         <action>
             <id>createDemRelatedBands</id>
             <parent>tools</parent>
-            <placeAfter>pixelFolder</placeAfter>
+            <placeAfter>computeMaskArea</placeAfter>
             <separatorBefore>true</separatorBefore>
 
 
@@ -1432,35 +1435,36 @@
 
             <text>Filtered Band...</text>
             <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
-            <shortDescr>Creates an filtered band</shortDescr>
-            <description>Creates an filtered band from the currently selected band</description>
+            <shortDescr>Creates a filtered band</shortDescr>
+            <description>Creates a filtered band from the currently selected band</description>
             <context>band</context>
             <helpId>createFilteredBand</helpId>
         </action>
 
 
+
+
+
         <action>
-            <id>createXYDisplacementBandsAction</id>
+            <id>convertComputedBand2Band</id>
             <parent>tools</parent>
             <placeAfter>createFilteredBand</placeAfter>
 
-            <text>Geo-Coding Displacement Bands...</text>
-            <class>org.esa.beam.visat.actions.CreateGeoCodingDisplacementBandsAction</class>
-            <shortDescr>&lt;html&gt;Computes actual pixel position minus pixel position c
-                geo-coding&lt;br/&gt;
-                and adds displacements as new bands (test for geo-coding accuracy).
-            </shortDescr>
-            <context>createXYDisplacementBandsAction</context>
-            <helpId>createXYDisplacementBandsAction</helpId>
+            <text>Real Band</text>
+            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
+            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
+            <context>virtualBand</context>
+            <helpId>convertComputedBand2Band</helpId>
         </action>
 
 
         <action>
             <id>bandArithmetic</id>
             <parent>tools</parent>
-            <placeAfter>createXYDisplacementBandsAction</placeAfter>
+            <placeAfter>convertComputedBand2Band</placeAfter>
+            <separatorAfter>true</separatorAfter>
 
-            <text>Logical Expression Band...</text>
+            <text>Virtual Band...</text>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
             <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
             <context>image,band,tiePointGrid</context>
@@ -1473,37 +1477,11 @@
 
 
 
-        <action>
-            <id>convertComputedBand2Band</id>
-            <parent>tools</parent>
-            <placeAfter>bandArithmetic</placeAfter>
-            <separatorAfter>true</separatorAfter>
-
-            <text>Real Band</text>
-            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
-            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
-            <context>virtualBand</context>
-            <helpId>convertComputedBand2Band</helpId>
-        </action>
-
-
-
-
 
         <!-- end of -->
         <!-- Tools menu -->
 
 
-        <action>
-            <id>computeMaskArea</id>
-            <parent>maskFolder</parent>
-            <placeAfter>geometryFolder</placeAfter>
-
-            <text>Compute Area...</text>
-            <mnemonic>A</mnemonic>
-            <class>org.esa.beam.visat.actions.ComputeMaskAreaAction</class>
-            <helpId>computeMaskArea</helpId>
-        </action>
 
 
 
@@ -1569,7 +1547,7 @@
             <description>Attaches a pixel based geo-coding to the selected product</description>
             <context>attachPixelGeoCoding</context>
             <helpId>attachPixelGeoCoding</helpId>
-            <parent>pixelFolder</parent>
+            <parent>geocodingFolder</parent>
             <separatorBefore>true</separatorBefore>
         </action>
 
@@ -1581,9 +1559,26 @@
             <description>Detaches a pixel based geo-coding from the selected product</description>
             <context>detachPixelGeoCoding</context>
             <helpId>detachPixelGeoCoding</helpId>
-            <parent>pixelFolder</parent>
+            <parent>geocodingFolder</parent>
             <placeAfter>attachPixelGeoCoding</placeAfter>
         </action>
+
+
+        <action>
+            <id>createXYDisplacementBandsAction</id>
+            <parent>geocodingFolder</parent>
+
+            <text>Geo-Coding Displacement Bands...</text>
+            <class>org.esa.beam.visat.actions.CreateGeoCodingDisplacementBandsAction</class>
+            <shortDescr>&lt;html&gt;Computes actual pixel position minus pixel position c
+                geo-coding&lt;br/&gt;
+                and adds displacements as new bands (test for geo-coding accuracy).
+            </shortDescr>
+            <context>createXYDisplacementBandsAction</context>
+            <helpId>createXYDisplacementBandsAction</helpId>
+            <placeAfter>detachPixelGeoCoding</placeAfter>
+        </action>
+
 
         <!-- end of -->
         <!-- Tools : Pixel Geo-Coding sub-menu -->
@@ -1592,7 +1587,7 @@
         <action>
             <id>createSubsetFromView</id>
             <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
-            <text>Cropped File...</text>
+            <text>Crop...</text>
             <shortDescr>Creates a product subset from the selected view</shortDescr>
             <description>Creates a product subset from the selected view by preselecting the subset area from view
             </description>
@@ -1607,7 +1602,7 @@
             <id>mosaicAction</id>
             <class>org.esa.beam.gpf.operators.mosaic.MosaicAction</class>
             <parent>processing</parent>
-            <text>Mosaic File...</text>
+            <text>Mosaic...</text>
             <largeIcon>icons/dannys_mosaic.png</largeIcon>
             <shortDescr>Create a mosaic of multiple products.</shortDescr>
             <helpId>mosaicAction</helpId>
@@ -1636,7 +1631,7 @@
 
         <action>
             <id>flipping</id>
-            <text>Data Flipped File...</text>
+            <text>Flip Data...</text>
             <parent>processing</parent>
             <!--<placeAfter>mosaicAction</placeAfter>-->
             <class>org.esa.beam.visat.actions.FlippingAction</class>
@@ -1647,7 +1642,7 @@
 
         <action>
             <id>orthorectificationAction</id>
-            <text>Orthorectified File...</text>
+            <text>Orthorectify...</text>
             <parent>processing</parent>
             <!--<placeAfter>flipping</placeAfter>-->
             <shortDescr>Apply an orthorectification.</shortDescr>
@@ -1658,7 +1653,7 @@
 
         <action>
             <id>reprojectionAction</id>
-            <text>Reprojected File...</text>
+            <text>Reproject...</text>
             <parent>processing</parent>
             <!--<placeAfter>orthorectificationAction</placeAfter>-->
             <class>org.esa.beam.gpf.operators.reproject.ReprojectionAction</class>
@@ -1676,7 +1671,7 @@
             <parent>processing</parent>
             <id>processing.imageAnalysis</id>
             <!--<placeAfter>reprojectionAction</placeAfter>-->
-            <text>Image Analysis Files</text>
+            <text>Image Analysis</text>
             <shortDescr>Group of Image Analysis Processing Steps</shortDescr>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <mnemonic>A</mnemonic>

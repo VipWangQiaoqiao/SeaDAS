@@ -56,9 +56,10 @@
 
     <extension point="beam-ui:actions">
         <action>
-            <parent>pixelFolder</parent>
+            <parent>tools</parent>
             <id>pixelExtraction</id>
-            <placeAfter>pixelGeoCodingSubMenu</placeAfter>
+            <placeAfter>computeMaskArea</placeAfter>
+            <placeBefore>createDemRelatedBands</placeBefore>
             <text>Extract Pixel Values...</text>
             <class>org.esa.beam.pixex.visat.PixelExtractionAction</class>
             <helpId>pixelExtraction</helpId>
