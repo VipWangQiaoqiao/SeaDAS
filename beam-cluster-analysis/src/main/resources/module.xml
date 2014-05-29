@@ -35,7 +35,7 @@
         <action>
             <parent>processing.imageAnalysis</parent>
             <id>emClusterAnalysis</id>
-            <text>EM Cluster Analysis...</text>
+            <text>EM Cluster...</text>
             <class>org.esa.beam.visat.actions.DefaultOperatorAction</class>
             <mnemonic>C</mnemonic>
             <operatorName>EMClusterAnalysis</operatorName>
@@ -46,7 +46,7 @@
         <action>
             <parent>processing.imageAnalysis</parent>
             <id>kmeansClusterAnalysis</id>
-            <text>K-Means Cluster Analysis...</text>
+            <text>K-Means Cluster...</text>
             <class>org.esa.beam.visat.actions.DefaultOperatorAction</class>
             <mnemonic>C</mnemonic>
             <operatorName>KMeansClusterAnalysis</operatorName>
@@ -57,7 +57,7 @@
         <action>
             <parent>processing.imageAnalysis</parent>
             <id>principleComponentAnalysis</id>
-            <text>Principle Component Analysis...</text>
+            <text>Principle Component...</text>
             <class>org.esa.beam.visat.actions.DefaultOperatorAction</class>
             <operatorName>PCA</operatorName>
             <dialogTitle>Principle Component Analysis</dialogTitle>

@@ -345,7 +345,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</class>
-            <title>GCP Manager</title>
+            <title>Ground-Control-Points</title>
             <mnemonic>c</mnemonic>
             <accelerator>ctrl alt G</accelerator>
             <description>Manage ground control points of a data product.</description>
@@ -478,8 +478,8 @@
             <mnemonic>D</mnemonic>
             <accelerator>ctrl alt D</accelerator>
             <initState>HIDDEN</initState>
-            <initSide>WEST</initSide>
-            <initIndex>0</initIndex>
+            <!--<initSide>WEST</initSide>-->
+            <!--<initIndex>0</initIndex>-->
             <smallIcon>/org/esa/beam/resources/images/icons/TileCacheDiagnosis16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/TileCacheDiagnosis24.png</largeIcon>
         </toolView>
@@ -1012,6 +1012,24 @@
         <!-- start of -->
         <!-- View menu -->
 
+        <action>
+            <id>resetLayout</id>
+            <class>org.esa.beam.visat.actions.layout.ResetLayoutAction</class>
+            <parent>view</parent>
+            <placeAtContextTop>true</placeAtContextTop>
+            <text>Default Layout</text>
+            <shortDescr>Reset to initial layout.</shortDescr>
+        </action>
+
+        <action>
+            <id>loadUserLayout</id>
+            <class>org.esa.beam.visat.actions.layout.LoadUserLayoutAction</class>
+            <parent>view</parent>
+            <text>User Layout</text>
+            <placeAfter>resetLayout</placeAfter>
+            <shortDescr>User Layout</shortDescr>
+            <separatorAfter>true</separatorAfter>
+        </action>
 
         <action>
             <id>toolBars</id>
@@ -1023,81 +1041,25 @@
             <description>Toggle Tool Bars visibility</description>
             <sortChildren>true</sortChildren>
             <helpId>toolBars</helpId>
-            <placeAfter>showToolViews</placeAfter>
+            <placeAfter>loadUserLayout</placeAfter>
         </action>
 
-        <!--<action>-->
-        <!--<id>layout</id>-->
-        <!--<parent>view</parent>-->
-        <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
-        <!--<text>Manage Layout</text>-->
-        <!--<mnemonic>L</mnemonic>-->
-        <!--<shortDescr>Load or save layout.</shortDescr>-->
-        <!--<separatorAfter>true</separatorAfter>-->
-        <!--<placeAfter>toolBars</placeAfter>-->
-        <!--</action>-->
-
-        <action>
-            <id>showOverlaysMenu</id>
-            <parent>view</parent>
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Overlays</text>
-            <sortChildren>true</sortChildren>
-            <placeAfter>toolBars</placeAfter>
-        </action>
 
         <action>
             <id>openViewsMenu</id>
             <parent>view</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Views</text>
+            <text>Windows</text>
             <sortChildren>true</sortChildren>
-            <placeAfter>showOverlaysMenu</placeAfter>
+            <placeAfter>toolBars</placeAfter>
             <separatorAfter>true</separatorAfter>
         </action>
 
 
+
+
         <action>
-            <id>resetLayout</id>
-            <class>org.esa.beam.visat.actions.layout.ResetLayoutAction</class>
             <parent>view</parent>
-            <placeAfter>openViewsMenu</placeAfter>
-            <text>Default Layout</text>
-            <shortDescr>Reset to initial layout.</shortDescr>
-        </action>
-
-        <action>
-            <id>loadUserLayout</id>
-            <class>org.esa.beam.visat.actions.layout.LoadUserLayoutAction</class>
-            <parent>view</parent>
-            <text>Custom Layout</text>
-            <placeAfter>resetLayout</placeAfter>
-            <shortDescr>Load the user layout.</shortDescr>
-        </action>
-
-
-
-        <action>
-            <id>saveAsUserLayout</id>
-            <class>org.esa.beam.visat.actions.layout.SaveAsUserLayoutAction</class>
-            <parent>view</parent>
-            <placeAfter>loadUserLayout</placeAfter>
-            <text>Save as Custom Layout</text>
-            <shortDescr>Save as user layout.</shortDescr>
-            <longDescr>Save the current layout as user layout.</longDescr>
-        </action>
-
-
-
-        <!-- end of -->
-        <!-- View menu -->
-
-
-        <!-- start of -->
-        <!-- View : Show Overlays sub-menu -->
-
-        <action>
-            <parent>showOverlaysMenu</parent>
             <id>showNoDataOverlay</id>
             <class>org.esa.beam.visat.actions.ShowNoDataOverlayAction</class>
             <text>No-Data</text>
@@ -1112,10 +1074,10 @@
         </action>
 
         <action>
-            <parent>showOverlaysMenu</parent>
+            <parent>view</parent>
             <id>showShapeOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGeometryOverlayAction</class>
-            <text>Geometry</text>
+            <text>Geometries</text>
             <toggle>true</toggle>
             <mnemonic>O</mnemonic>
             <shortDescr>Show/hide geometry overlay</shortDescr>
@@ -1128,10 +1090,10 @@
         </action>
 
         <action>
-            <parent>showOverlaysMenu</parent>
+            <parent>view</parent>
             <id>showGraticuleOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGraticuleOverlayAction</class>
-            <text>Graticule</text>
+            <text>Map Grid Lines</text>
             <toggle>true</toggle>
             <mnemonic>G</mnemonic>
             <shortDescr>Show/hide graticule overlay</shortDescr>
@@ -1146,8 +1108,8 @@
         <action>
             <id>showPinOverlay</id>
             <class>org.esa.beam.visat.actions.ShowPinOverlayAction</class>
-            <parent>showOverlaysMenu</parent>
-            <text>Pin</text>
+            <parent>view</parent>
+            <text>Pins</text>
             <toggle>true</toggle>
             <shortDescr>Show pin overlay</shortDescr>
             <description>Show pin overlay for the selected image</description>
@@ -1162,8 +1124,8 @@
         <action>
             <id>showGcpOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGcpOverlayAction</class>
-            <parent>showOverlaysMenu</parent>
-            <text>GCP</text>
+            <parent>view</parent>
+            <text>Ground-Control-Points</text>
             <toggle>true</toggle>
             <shortDescr>Show GCP overlay</shortDescr>
             <description>Show GCP overlay for the selected image</description>
@@ -1176,7 +1138,7 @@
         <action>
             <id>showWorldMapOverlay</id>
             <class>org.esa.beam.visat.actions.ShowWorldMapOverlayAction</class>
-            <parent>showOverlaysMenu</parent>
+            <parent>view</parent>
             <text>World Map</text>
             <toggle>true</toggle>
             <shortDescr>Show World Map overlay</shortDescr>
@@ -1187,6 +1149,54 @@
             <context>image</context>
             <helpId>showWorldMapOverlay</helpId>
         </action>
+
+
+
+
+        <!--<action>-->
+        <!--<id>layout</id>-->
+        <!--<parent>view</parent>-->
+        <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
+        <!--<text>Manage Layout</text>-->
+        <!--<mnemonic>L</mnemonic>-->
+        <!--<shortDescr>Load or save layout.</shortDescr>-->
+        <!--<separatorAfter>true</separatorAfter>-->
+        <!--<placeAfter>toolBars</placeAfter>-->
+        <!--</action>-->
+
+        <!--<action>-->
+            <!--<id>showOverlaysMenu</id>-->
+            <!--<parent>view</parent>-->
+            <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
+            <!--<text>Overlays</text>-->
+            <!--<sortChildren>true</sortChildren>-->
+            <!--<placeAfter>toolBars</placeAfter>-->
+        <!--</action>-->
+
+
+
+
+        <!-- end of -->
+        <!-- View menu -->
+
+
+
+
+        <action>
+            <id>saveAsUserLayout</id>
+            <class>org.esa.beam.visat.actions.layout.SaveAsUserLayoutAction</class>
+            <parent>edit</parent>
+            <placeAfter>loadUserLayout</placeAfter>
+            <text>Save User Layout</text>
+            <shortDescr>Save as user layout.</shortDescr>
+            <longDescr>Save the current layout as user layout.</longDescr>
+        </action>
+
+
+
+        <!-- start of -->
+        <!-- View : Show Overlays sub-menu -->
+
 
         <!-- end of -->
         <!-- View : Show Overlays sub-menu -->
@@ -1445,28 +1455,12 @@
         </action>
 
 
-
-
-        <action>
-            <id>convertComputedBand2Band</id>
-            <parent>tools</parent>
-            <placeAfter>createXYDisplacementBandsAction</placeAfter>
-
-            <text>Real Band</text>
-            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
-            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
-            <context>virtualBand</context>
-            <helpId>convertComputedBand2Band</helpId>
-        </action>
-
-
         <action>
             <id>bandArithmetic</id>
             <parent>tools</parent>
-            <placeAfter>convertComputedBand2Band</placeAfter>
-            <separatorAfter>true</separatorAfter>
+            <placeAfter>createXYDisplacementBandsAction</placeAfter>
 
-            <text>Virtual Band...</text>
+            <text>Logical Expression Band...</text>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
             <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
             <context>image,band,tiePointGrid</context>
@@ -1476,6 +1470,23 @@
             <largeIcon>icons/dannys_band_maths24.png</largeIcon>
             <helpId>mosaicAction</helpId>
         </action>
+
+
+
+        <action>
+            <id>convertComputedBand2Band</id>
+            <parent>tools</parent>
+            <placeAfter>bandArithmetic</placeAfter>
+            <separatorAfter>true</separatorAfter>
+
+            <text>Real Band</text>
+            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
+            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
+            <context>virtualBand</context>
+            <helpId>convertComputedBand2Band</helpId>
+        </action>
+
+
 
 
 
@@ -1589,7 +1600,6 @@
             <helpId>subsetFromView</helpId>
             <parent>processing</parent>
             <largeIcon>icons/dannys_spatial_subset24.png</largeIcon>
-            <separatorAfter>true</separatorAfter>
 
         </action>
 
@@ -1601,7 +1611,7 @@
             <largeIcon>icons/dannys_mosaic.png</largeIcon>
             <shortDescr>Create a mosaic of multiple products.</shortDescr>
             <helpId>mosaicAction</helpId>
-            <placeAfter>createSubsetFromView</placeAfter>
+            <!--<placeAfter>createSubsetFromView</placeAfter>-->
         </action>
 
 
@@ -1628,8 +1638,7 @@
             <id>flipping</id>
             <text>Data Flipped File...</text>
             <parent>processing</parent>
-            <placeAfter>mosaicAction</placeAfter>
-            <separatorBefore>true</separatorBefore>
+            <!--<placeAfter>mosaicAction</placeAfter>-->
             <class>org.esa.beam.visat.actions.FlippingAction</class>
             <shortDescr>Apply Data Flip</shortDescr>
             <helpId>flipDialog</helpId>
@@ -1640,7 +1649,7 @@
             <id>orthorectificationAction</id>
             <text>Orthorectified File...</text>
             <parent>processing</parent>
-            <placeAfter>flipping</placeAfter>
+            <!--<placeAfter>flipping</placeAfter>-->
             <shortDescr>Apply an orthorectification.</shortDescr>
             <class>org.esa.beam.gpf.operators.reproject.OrthorectificationAction</class>
             <helpId>orthorectificationAction</helpId>
@@ -1651,8 +1660,7 @@
             <id>reprojectionAction</id>
             <text>Reprojected File...</text>
             <parent>processing</parent>
-            <placeAfter>orthorectificationAction</placeAfter>
-            <separatorAfter>true</separatorAfter>
+            <!--<placeAfter>orthorectificationAction</placeAfter>-->
             <class>org.esa.beam.gpf.operators.reproject.ReprojectionAction</class>
             <shortDescr>Apply a reprojection.</shortDescr>
             <helpId>reprojectionAction</helpId>
@@ -1667,8 +1675,8 @@
         <action>
             <parent>processing</parent>
             <id>processing.imageAnalysis</id>
-            <placeAfter>reprojectionAction</placeAfter>
-            <text>Image Analysis</text>
+            <!--<placeAfter>reprojectionAction</placeAfter>-->
+            <text>Image Analysis Files</text>
             <shortDescr>Group of Image Analysis Processing Steps</shortDescr>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <mnemonic>A</mnemonic>

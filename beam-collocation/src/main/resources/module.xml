@@ -37,8 +37,8 @@
             <class>org.esa.beam.collocation.visat.CollocationAction</class>
             <parent>tools</parent>
             <text>Collocated File...</text>
-            <placeAfter>createSubsetFromView</placeAfter>
-            <placeBefore>mosaicAction</placeBefore>
+            <!--<placeAfter>createSubsetFromView</placeAfter>-->
+            <!--<placeBefore>mosaicAction</placeBefore>-->
             <shortDescr>Collocate two products into a single product (useful for parameter comparisons, etc.)</shortDescr>
             <description>Collocate two products into a single product (useful for parameter comparisons, etc.)</description>
             <!--<smallIcon>icons/Collocation16.gif</smallIcon>-->
