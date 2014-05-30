@@ -81,7 +81,8 @@ public class PixelInfoToolView extends AbstractToolView {
 
         pixelInfoView = new PixelInfoView(visatApp);
         final DisplayFilter bandDisplayValidator = new DisplayFilter(visatApp);
-        pixelInfoView.setPreferredSize(new Dimension(320, 480));
+        pixelInfoView.setPreferredSize(new Dimension(320, 300));
+        pixelInfoView.setMinimumSize(new Dimension(300, 150));
         pixelInfoView.setDisplayFilter(bandDisplayValidator);
         final PropertyMap preferences = visatApp.getPreferences();
         preferences.addPropertyChangeListener(new PropertyChangeListener() {
@@ -144,7 +145,7 @@ public class PixelInfoToolView extends AbstractToolView {
 
 
         AbstractButton coordToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.GEOLOCATION,
-                                                              true);
+                                                              false);
         AbstractButton timeToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.SCANLINE,
                                                              false);
         AbstractButton tpgsToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.TIEPOINTS,
@@ -153,10 +154,10 @@ public class PixelInfoToolView extends AbstractToolView {
         AbstractButton flagsToggleButton = createToggleButton(pixelInfoView, PixelInfoView.DockablePaneKey.FLAGS,
                                                               false);
 
+        optionPanel.add(bandsToggleButton);
         optionPanel.add(coordToggleButton);
         optionPanel.add(timeToggleButton);
         optionPanel.add(tpgsToggleButton);
-        optionPanel.add(bandsToggleButton);
         optionPanel.add(flagsToggleButton);
 
         optionPanel.add(pinCheckbox);

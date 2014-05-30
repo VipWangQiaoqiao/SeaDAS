@@ -36,6 +36,7 @@ class MaskManagerForm extends MaskForm {
         helpButton.setName("helpButton");
         actions = new MaskFormActions(maskToolView, this);
 
+
         updateState();
     }
 
@@ -60,6 +61,9 @@ class MaskManagerForm extends MaskForm {
     public JPanel createContentPanel() {
         JPanel buttonPanel = GridBagUtils.createPanel();
         GridBagConstraints gbc = new GridBagConstraints();
+
+
+
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
@@ -67,23 +71,41 @@ class MaskManagerForm extends MaskForm {
 
         gbc.insets.bottom = 0;
         gbc.gridwidth = 1;
+
+        gbc.gridx = 0;
         final MaskAction[] allActions = actions.getAllActions();
-        for (int i = 0; i < allActions.length; i += 2) {
-            buttonPanel.add(allActions[i].createComponent(), gbc);
-            buttonPanel.add(allActions[i + 1].createComponent(), gbc);
-            gbc.gridy++;
+        for (int i = 0; i < allActions.length; i += 1) {
+            if (allActions[i].toString().contains("NullAction")) {
+                if (gbc.gridy == 0) {
+                    gbc.gridx += 3;
+                    buttonPanel.add(helpButton, gbc);
+                }
+                gbc.gridx = 0;
+                gbc.gridy++;
+            } else {
+//                if (gbc.gridx > 5) {
+//                    gbc.gridx = 0;
+//                    gbc.gridy++;
+//                }
+
+                buttonPanel.add(allActions[i].createComponent(), gbc);
+                //          buttonPanel.add(allActions[i + 1].createComponent(), gbc);
+                gbc.gridx++;
+            }
+
         }
 
-        gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.weighty = 1.0;
-        gbc.gridwidth = 2;
-        buttonPanel.add(new JLabel(" "), gbc); // filler
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weighty = 0.0;
-        gbc.gridx = 1;
-        gbc.gridy++;
-        gbc.gridwidth = 1;
-        buttonPanel.add(helpButton, gbc);
+
+//        gbc.fill = GridBagConstraints.VERTICAL;
+//        gbc.weighty = 1.0;
+//        gbc.gridwidth = 2;
+//        buttonPanel.add(new JLabel(" "), gbc); // filler
+//        gbc.fill = GridBagConstraints.NONE;
+//        gbc.weighty = 0.0;
+//        gbc.gridx = 1;
+//        gbc.gridy++;
+//        gbc.gridwidth = 1;
+//        buttonPanel.add(helpButton, gbc);
 
         JPanel tablePanel = new JPanel(new BorderLayout(4, 4));
         tablePanel.add(new JScrollPane(getMaskTable()), BorderLayout.CENTER);
@@ -91,7 +113,9 @@ class MaskManagerForm extends MaskForm {
         JPanel contentPane1 = new JPanel(new BorderLayout(4, 4));
         contentPane1.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         contentPane1.add(BorderLayout.CENTER, tablePanel);
-        contentPane1.add(BorderLayout.EAST, buttonPanel);
+        contentPane1.add(BorderLayout.NORTH, buttonPanel);
+
+        contentPane1.setMinimumSize(new Dimension(300, 100));
 
         updateState();
 

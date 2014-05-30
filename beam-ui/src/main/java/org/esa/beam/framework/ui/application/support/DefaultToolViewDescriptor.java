@@ -438,7 +438,6 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
      * application window.
      *
      * @param applicationPage The window
-     *
      * @return The show page component command.
      */
     @Override
@@ -462,7 +461,25 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
             }
         });
 
-        command.setParent("showToolViews");
+
+        if (commandId.contains("ScatterPlotToolView") ||
+                commandId.contains("HistogramPlotToolView") ||
+                commandId.contains("ProfilePlotToolView") ||
+                commandId.contains("StatisticsToolView") ||
+                commandId.contains("SpectrumToolView") ||
+                commandId.contains("DensityPlotToolView")) {
+            command.setParent("analysis");
+        } else if (commandId.contains("PixelInfoToolView") ||
+                commandId.contains("GeoCodingToolView") ||
+                commandId.contains("TileCacheDiagnosisToolView") ||
+                commandId.contains("PlacemarkEditorToolView") ||
+                commandId.contains("InformationToolView")) {
+            command.setParent("info");
+        } else if (commandId.contains("timeSeries")) {
+            command.setParent("timeSeriesFolder");
+        } else {
+            command.setParent("showToolViews");
+        }
         command.setSmallIcon(getSmallIcon());
         command.setLargeIcon(getLargeIcon());
         command.setShortDescription(getDescription());

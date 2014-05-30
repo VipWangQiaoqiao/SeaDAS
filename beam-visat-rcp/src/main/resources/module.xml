@@ -241,7 +241,7 @@
             <helpId>showWorldMapWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>EAST</initSide>
-            <initIndex>1</initIndex>
+            <initIndex>2</initIndex>
         </toolView>
 
         <toolView>
@@ -256,7 +256,7 @@
             <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>-->
             <helpId>showColorManipulationWnd</helpId>
-            <initState>DOCKED</initState>
+            <initState>HIDDEN</initState>
             <initSide>EAST</initSide>
             <initIndex>1</initIndex>
         </toolView>
@@ -340,7 +340,7 @@
             <largeIcon>/org/esa/beam/resources/images/icons/PinManager24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>-->
             <helpId>showPinManagerWnd</helpId>
-            <initState>DOCKED</initState>
+            <initState>HIDDEN</initState>
             <initSide>EAST</initSide>
             <initIndex>1</initIndex>
         </toolView>
@@ -348,7 +348,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</class>
-            <title>Ground-Control-Points</title>
+            <title>Ground Control Points</title>
             <mnemonic>c</mnemonic>
             <accelerator>ctrl alt G</accelerator>
             <description>Manage ground control points of a data product.</description>
@@ -1139,7 +1139,7 @@
             <id>showGcpOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGcpOverlayAction</class>
             <parent>view</parent>
-            <text>Ground-Control-Points</text>
+            <text>Ground Control Points</text>
             <toggle>true</toggle>
             <shortDescr>Show GCP overlay</shortDescr>
             <description>Show GCP overlay for the selected image</description>
@@ -1507,7 +1507,7 @@
             <id>insertWktAsGeometry</id>
             <placeAfter>computeMaskArea</placeAfter>
             <!--<text>Geometry from WKT...</text>-->
-            <text>New (Coordinates)...</text>
+            <text>New (Text-Based)...</text>
             <class>org.esa.beam.visat.actions.InsertWktGeometryAction</class>
             <popuptext>Geometry from WKT...</popuptext>
             <!--<shortDescr>Creates a geometry from well-known-text (WKT) representation.</shortDescr>-->
@@ -1519,11 +1519,11 @@
         </action>
 
         <action>
-            <parent>geometryFolder</parent>
+            <parent>info</parent>
             <id>showGeometryAsWkt</id>
             <!--<placeAfter>insertWktAsGeometry</placeAfter>-->
             <!--<text>WKT from Geometry...</text>-->
-            <text>Info...</text>
+            <text>Geometry Info...</text>
             <class>org.esa.beam.visat.actions.ShowGeometryWktAction</class>
             <popuptext>Geometry Info...</popuptext>
             <!--<popuptext>WKT from Geometry...</popuptext>-->
@@ -1568,7 +1568,7 @@
             <id>createXYDisplacementBandsAction</id>
             <parent>geocodingFolder</parent>
 
-            <text>Geo-Coding Displacement Bands...</text>
+            <text>Create Displacement Bands...</text>
             <class>org.esa.beam.visat.actions.CreateGeoCodingDisplacementBandsAction</class>
             <shortDescr>&lt;html&gt;Computes actual pixel position minus pixel position c
                 geo-coding&lt;br/&gt;
@@ -1663,7 +1663,17 @@
 
 
 
+        <action>
+            <id>timeSeriesFolder</id>
+            <parent>processing</parent>
 
+            <sortChildren>true</sortChildren>
+
+            <class>org.esa.beam.visat.actions.ActionGroup</class>
+            <text>Time Series...</text>
+            <shortDescr>Time Series</shortDescr>
+            <longDescr>Time Series</longDescr>
+        </action>
 
 
 
