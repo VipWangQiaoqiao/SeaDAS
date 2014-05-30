@@ -115,7 +115,7 @@ class MaskManagerForm extends MaskForm {
         contentPane1.add(BorderLayout.CENTER, tablePanel);
         contentPane1.add(BorderLayout.NORTH, buttonPanel);
 
-        contentPane1.setMinimumSize(new Dimension(300, 100));
+        contentPane1.setMinimumSize(new Dimension(260, 400));
 
         updateState();
 

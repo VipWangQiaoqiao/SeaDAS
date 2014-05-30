@@ -278,20 +278,20 @@ public class PixelInfoView extends JPanel {
                                                        tiePointModel);
         flagPixelInfoPane = createDockablePane("Flags", 4, UIUtils.loadImageIcon("icons/RsBandFlags16.gif"), flagModel);
 
-        geolocInfoPane.setPreferredSize(new Dimension(128, 512));
-        geolocInfoPane.setVisible(false);
-        scanLineInfoPane.setPreferredSize(new Dimension(128, 128));
-        bandPixelInfoPane.setPreferredSize(new Dimension(128, 512));
-        tiePointGridPixelInfoPane.setPreferredSize(new Dimension(128, 128));
-        flagPixelInfoPane.setPreferredSize(new Dimension(128, 128));
+        geolocInfoPane.setPreferredSize(new Dimension(128, 100));
+        scanLineInfoPane.setPreferredSize(new Dimension(128, 100));
+        bandPixelInfoPane.setPreferredSize(new Dimension(128, 100));
+        tiePointGridPixelInfoPane.setPreferredSize(new Dimension(128, 100));
+        flagPixelInfoPane.setPreferredSize(new Dimension(128, 100));
         flagPixelInfoPane.setVisible(false);
         tiePointGridPixelInfoPane.setVisible(false);
         scanLineInfoPane.setVisible(false);
 
+        dockablePaneMap.put(DockablePaneKey.BANDS, bandPixelInfoPane);
         dockablePaneMap.put(DockablePaneKey.GEOLOCATION, geolocInfoPane);
         dockablePaneMap.put(DockablePaneKey.SCANLINE, scanLineInfoPane);
         dockablePaneMap.put(DockablePaneKey.TIEPOINTS, tiePointGridPixelInfoPane);
-        dockablePaneMap.put(DockablePaneKey.BANDS, bandPixelInfoPane);
+
         dockablePaneMap.put(DockablePaneKey.FLAGS, flagPixelInfoPane);
 
         multiSplitPane = new JideSplitPane();

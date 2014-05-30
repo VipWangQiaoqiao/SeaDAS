@@ -340,9 +340,9 @@
             <largeIcon>/org/esa/beam/resources/images/icons/PinManager24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>-->
             <helpId>showPinManagerWnd</helpId>
-            <initState>HIDDEN</initState>
-            <initSide>EAST</initSide>
-            <initIndex>1</initIndex>
+            <initState>DOCKED</initState>
+            <initSide>WEST</initSide>
+            <!--<initIndex>1</initIndex>-->
         </toolView>
 
         <toolView>
@@ -1825,8 +1825,8 @@
             <parent>tools</parent>
             <placeAfter>pinTool</placeAfter>
             <placeBefore>drawLineTool</placeBefore>
-            <text>GCP Tool</text>
-            <shortDescr>GCP placing tool</shortDescr>
+            <text>Ground Control Points Tool</text>
+            <shortDescr>Ground Control Points placing tool</shortDescr>
             <description>Sets, edits or deletes ground control points</description>
             <largeIcon>icons/GcpTool24.png</largeIcon>
             <!--<largeIcon>icons/GcpTool24.gif</largeIcon>-->
@@ -1922,7 +1922,7 @@
             <text>Range Finder</text>
             <shortDescr>Range finder tool</shortDescr>
             <description>Determine the distance between two points</description>
-            <largeIcon>icons/RangeFinder24.gif</largeIcon>
+            <largeIcon>icons/RangeFinder24.png</largeIcon>
             <selected>false</selected>
             <context>image</context>
             <helpId>rangeFinder</helpId>

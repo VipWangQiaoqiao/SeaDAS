@@ -322,8 +322,8 @@ public class NavigationToolView extends AbstractToolView {
         mainPane.add(centerPane, BorderLayout.CENTER);
         mainPane.add(eastPane, BorderLayout.EAST);
 
-      //  mainPane.setPreferredSize(new Dimension(320, 320));
-        mainPane.setMinimumSize(new Dimension(300, 290));
+//        mainPane.setPreferredSize(new Dimension(250, 180));
+        mainPane.setMinimumSize(new Dimension(250, 180));
 
         if (getDescriptor().getHelpId() != null) {
             HelpSys.enableHelpOnButton(helpButton, getDescriptor().getHelpId());
