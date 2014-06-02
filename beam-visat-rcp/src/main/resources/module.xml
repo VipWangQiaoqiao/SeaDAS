@@ -173,7 +173,7 @@
             <description>Display all opened data products in a tree view.</description>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <!--<initIndex>0</initIndex>-->
+            <initIndex>0</initIndex>
         </toolView>
 
         <toolView>
@@ -247,7 +247,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</id>
             <class>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</class>
-            <title>Color Palette Manager</title>
+            <title>Color Palette</title>
             <tabTitle>Colors</tabTitle>
             <mnemonic>C</mnemonic>
             <accelerator>ctrl alt C</accelerator>
@@ -256,9 +256,9 @@
             <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>-->
             <helpId>showColorManipulationWnd</helpId>
-            <initState>HIDDEN</initState>
-            <initSide>EAST</initSide>
-            <initIndex>1</initIndex>
+            <initState>DOCKED</initState>
+            <initSide>WEST</initSide>
+            <initIndex>0</initIndex>
         </toolView>
 
 
@@ -307,7 +307,7 @@
             <helpId>showMaskROIManagerWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <!--<initIndex>0</initIndex>-->
+            <initIndex>0</initIndex>
         </toolView>
 
         <toolView>
@@ -324,7 +324,7 @@
             <!-- todo provide help -->
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
-            <!--<initIndex>0</initIndex>-->
+            <initIndex>0</initIndex>
         </toolView>
 
 
@@ -340,9 +340,9 @@
             <largeIcon>/org/esa/beam/resources/images/icons/PinManager24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>-->
             <helpId>showPinManagerWnd</helpId>
-            <initState>DOCKED</initState>
-            <initSide>WEST</initSide>
-            <!--<initIndex>1</initIndex>-->
+            <initState>HIDDEN</initState>
+            <initSide>SOUTH</initSide>
+            <initIndex>0</initIndex>
         </toolView>
 
         <toolView>
@@ -1239,6 +1239,21 @@
         </action>
 
         <action>
+            <id>showSeadasDefaultToolBar</id>
+            <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
+            <context>seadasDefaultToolBar</context>
+            <parent>toolBars</parent>
+            <text>SeaDAS Preferred</text>
+            <mnemonic>A</mnemonic>
+            <selected>true</selected>
+            <toggle>true</toggle>
+            <shortDescr>Toggle visibility of the analysis tool bar.</shortDescr>
+            <description>Toggle visibility of the analysis tool bar.</description>
+            <!--<helpId>showAnalysisToolBar</helpId>-->
+        </action>
+
+
+        <action>
             <id>showLayersToolBar</id>
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>layersToolBar</context>
@@ -1257,7 +1272,7 @@
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>toolsToolBar</context>
             <parent>toolBars</parent>
-            <text>Tools</text>
+            <text>Image Interactions</text>
             <mnemonic>T</mnemonic>
             <selected>true</selected>
             <toggle>true</toggle>
@@ -1280,13 +1295,15 @@
             <helpId>showViewsToolBar</helpId>
         </action>
 
+
+
         <action>
             <id>showStatusBar</id>
             <parent>toolBars</parent>
             <class>org.esa.beam.visat.actions.ShowStatusBarAction</class>
             <text>Status Bar</text>
             <mnemonic>S</mnemonic>
-            <selected>true</selected>
+            <selected>false</selected>
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the status bar.</shortDescr>
             <description>Toggle visibility of the status bar.</description>
@@ -1401,7 +1418,7 @@
 
         <action>
             <id>computeMaskArea</id>
-            <parent>tools</parent>
+            <parent>info</parent>
             <placeAfter>geocodingFolder</placeAfter>
 
             <text>Mask Area...</text>
@@ -1415,7 +1432,7 @@
         <action>
             <id>createDemRelatedBands</id>
             <parent>tools</parent>
-            <placeAfter>computeMaskArea</placeAfter>
+            <placeAfter>geocodingFolder</placeAfter>
             <separatorBefore>true</separatorBefore>
 
 
@@ -1433,7 +1450,7 @@
             <parent>tools</parent>
             <placeAfter>createDemRelatedBands</placeAfter>
 
-            <text>Filtered Band...</text>
+            <text>Filtered VBand...</text>
             <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
             <shortDescr>Creates a filtered band</shortDescr>
             <description>Creates a filtered band from the currently selected band</description>
@@ -1443,28 +1460,13 @@
 
 
 
-
-
-        <action>
-            <id>convertComputedBand2Band</id>
-            <parent>tools</parent>
-            <placeAfter>createFilteredBand</placeAfter>
-
-            <text>Real Band</text>
-            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
-            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
-            <context>virtualBand</context>
-            <helpId>convertComputedBand2Band</helpId>
-        </action>
-
-
         <action>
             <id>bandArithmetic</id>
             <parent>tools</parent>
-            <placeAfter>convertComputedBand2Band</placeAfter>
+            <placeAfter>createFilteredBand</placeAfter>
             <separatorAfter>true</separatorAfter>
 
-            <text>Virtual Band...</text>
+            <text>Math VBand...</text>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
             <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
             <context>image,band,tiePointGrid</context>
@@ -1475,6 +1477,19 @@
             <helpId>mosaicAction</helpId>
         </action>
 
+
+
+        <action>
+            <id>convertComputedBand2Band</id>
+            <parent>tools</parent>
+            <placeAfter>bandArithmetic</placeAfter>
+
+            <text>VBand Converter</text>
+            <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
+            <shortDescr>Computes a "real" band from a virtual band or filtered band</shortDescr>
+            <context>virtualBand</context>
+            <helpId>convertComputedBand2Band</helpId>
+        </action>
 
 
 
