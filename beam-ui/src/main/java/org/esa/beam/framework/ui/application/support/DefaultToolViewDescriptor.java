@@ -21,6 +21,7 @@ import com.bc.ceres.core.Assert;
 import com.bc.ceres.core.CoreException;
 import com.bc.ceres.core.runtime.ConfigurableExtension;
 import com.bc.ceres.core.runtime.ConfigurationElement;
+import com.sun.org.apache.xerces.internal.dom.DeferredAttrNSImpl;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 import org.esa.beam.framework.ui.UIUtils;
@@ -461,7 +462,7 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
             }
         });
 
-
+      //todo  Danny was here
         if (commandId.contains("ScatterPlotToolView") ||
                 commandId.contains("HistogramPlotToolView") ||
                 commandId.contains("ProfilePlotToolView") ||

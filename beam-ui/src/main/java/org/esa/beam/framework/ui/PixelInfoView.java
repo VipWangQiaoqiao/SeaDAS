@@ -271,7 +271,7 @@ public class PixelInfoView extends JPanel {
                                             geolocModel);
         scanLineInfoPane = createDockablePane("Time Info", 1, UIUtils.loadImageIcon("icons/Clock16.gif"),
                                               scanlineModel);
-        bandPixelInfoPane = createDockablePane("Bands", 2, UIUtils.loadImageIcon("icons/RsBandAsSwath16.gif"),
+        bandPixelInfoPane = createDockablePane("Bands (Products)", 2, UIUtils.loadImageIcon("icons/RsBandAsSwath16.gif"),
                                                bandModel);
         tiePointGridPixelInfoPane = createDockablePane("Tie Point Grids", 3,
                                                        UIUtils.loadImageIcon("icons/RsBandAsTiePoint16.gif"),

@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 class ProductTN extends AbstractTN {
     private static final String METADATA = "Metadata";
-    private static final String BANDS = "Bands";
+    private static final String BANDS = "Bands (Products)";
     private static final String VECTOR_DATA = "Vector data";
     private static final String TIE_POINT_GRIDS = "Tie-point grids";
     private static final String FLAG_CODINGS = "Flag codings";

@@ -167,7 +167,7 @@
             <tabTitle>Files</tabTitle>
             <mnemonic>P</mnemonic>
             <accelerator>ctrl alt P</accelerator>
-            <smallIcon>/org/esa/beam/resources/images/icons/RsProduct16.gif</smallIcon>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/RsProduct16.gif</smallIcon>-->
             <largeIcon>/org/esa/beam/resources/images/icons/RsProduct24.gif</largeIcon>
             <helpId>productBrowser</helpId>
             <description>Display all opened data products in a tree view.</description>
@@ -223,7 +223,7 @@
             <helpId>showNavigationWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>EAST</initSide>
-            <initIndex>0</initIndex>
+            <initIndex>2</initIndex>
         </toolView>
 
         <toolView>
@@ -241,7 +241,7 @@
             <helpId>showWorldMapWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>EAST</initSide>
-            <initIndex>2</initIndex>
+            <initIndex>0</initIndex>
         </toolView>
 
         <toolView>
@@ -252,7 +252,7 @@
             <mnemonic>C</mnemonic>
             <accelerator>ctrl alt C</accelerator>
             <description>Image color manipulation and enhancements.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.png</smallIcon>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.png</smallIcon>-->
             <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>-->
             <helpId>showColorManipulationWnd</helpId>
@@ -302,8 +302,9 @@
             <mnemonic>M</mnemonic>
             <accelerator>ctrl alt M</accelerator>
             <description>Manage binary data masks and ROIs.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/MaskManager16.png</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/MaskManager24.png</largeIcon>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/MaskManager16.png</smallIcon>-->
+            <largeIcon>/org/esa/beam/resources/images/icons/MaskManager16.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/MaskManager24.png</largeIcon>-->
             <helpId>showMaskROIManagerWnd</helpId>
             <initState>DOCKED</initState>
             <initSide>WEST</initSide>
@@ -318,8 +319,9 @@
             <mnemonic>L</mnemonic>
             <accelerator>ctrl alt L</accelerator>
             <description>Manage view layer visibility and transparency.</description>
-            <smallIcon>/org/esa/beam/resources/images/icons/LayerManager16.png</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/LayerManager24.png</largeIcon>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/LayerManager16.png</smallIcon>-->
+            <largeIcon>/org/esa/beam/resources/images/icons/LayerManager16.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/LayerManager24.png</largeIcon>-->
             <helpId>showLayerManagerWnd</helpId>
             <!-- todo provide help -->
             <initState>DOCKED</initState>
@@ -353,7 +355,7 @@
             <accelerator>ctrl alt G</accelerator>
             <description>Manage ground control points of a data product.</description>
             <smallIcon>/org/esa/beam/resources/images/icons/GcpManager16.gif</smallIcon>
-            <largeIcon>/org/esa/beam/resources/images/icons/GcpTool24.png</largeIcon>
+            <largeIcon>/org/esa/beam/resources/images/icons/GcpManager24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/GcpManager24.gif</largeIcon>-->
             <helpId>showGcpManagerWnd</helpId>/
             <initState>HIDDEN</initState>
@@ -1211,40 +1213,11 @@
         <!-- View : ToolBars sub-menu -->
 
         <action>
-            <id>showStandardToolBar</id>
-            <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
-            <context>mainToolBar</context>
-            <parent>toolBars</parent>
-            <text>Standard</text>
-            <mnemonic>S</mnemonic>
-            <selected>true</selected>
-            <toggle>true</toggle>
-            <shortDescr>Toggle visibility of the standard tool bar.</shortDescr>
-            <description>Toggle visibility of the standard tool bar.</description>
-            <helpId>showStandardToolBar</helpId>
-        </action>
-
-        <action>
-            <id>showAnalysisToolBar</id>
-            <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
-            <context>analysisToolBar</context>
-            <parent>toolBars</parent>
-            <text>Analysis</text>
-            <mnemonic>A</mnemonic>
-            <selected>true</selected>
-            <toggle>true</toggle>
-            <shortDescr>Toggle visibility of the analysis tool bar.</shortDescr>
-            <description>Toggle visibility of the analysis tool bar.</description>
-            <helpId>showAnalysisToolBar</helpId>
-        </action>
-
-        <action>
             <id>showSeadasDefaultToolBar</id>
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>seadasDefaultToolBar</context>
             <parent>toolBars</parent>
-            <text>SeaDAS Preferred</text>
-            <mnemonic>A</mnemonic>
+            <text>Proc</text>
             <selected>true</selected>
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the analysis tool bar.</shortDescr>
@@ -1252,48 +1225,129 @@
             <!--<helpId>showAnalysisToolBar</helpId>-->
         </action>
 
-
         <action>
-            <id>showLayersToolBar</id>
+            <id>showSeadasBandToolsToolBar</id>
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
-            <context>layersToolBar</context>
+            <context>seadasBandToolsToolBar</context>
             <parent>toolBars</parent>
-            <text>Layers</text>
-            <mnemonic>L</mnemonic>
+            <text>Band Tools</text>
             <selected>true</selected>
             <toggle>true</toggle>
-            <shortDescr>Toggle visibility of the layers tool bar.</shortDescr>
-            <description>Toggle visibility of the layers tool bar.</description>
-            <helpId>showLayersToolBar</helpId>
+            <shortDescr>Toggle visibility of the analysis tool bar.</shortDescr>
+            <description>Toggle visibility of the analysis tool bar.</description>
+            <!--<helpId>showAnalysisToolBar</helpId>-->
         </action>
 
+        <!--<action>-->
+            <!--<id>showSeadasExtrasToolBar</id>-->
+            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
+            <!--<context>seadasExtrasToolBar</context>-->
+            <!--<parent>toolBars</parent>-->
+            <!--<text> SeaDAS: Main (Extras)</text>-->
+            <!--<placeAfter>showSeadasDefaultToolBar</placeAfter>-->
+            <!--&lt;!&ndash;<mnemonic>A</mnemonic>&ndash;&gt;-->
+            <!--<selected>false</selected>-->
+            <!--<toggle>true</toggle>-->
+            <!--<shortDescr>Toggle visibility of the analysis tool bar.</shortDescr>-->
+            <!--<description>Toggle visibility of the analysis tool bar.</description>-->
+            <!--&lt;!&ndash;<helpId>showAnalysisToolBar</helpId>&ndash;&gt;-->
+        <!--</action>-->
+
+
+        <!--<action>-->
+            <!--<id>showSeaDASInteractionsToolBar</id>-->
+            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
+            <!--<context>seadasInteractionsToolBar</context>-->
+            <!--<parent>toolBars</parent>-->
+            <!--<text>Image Interactions</text>-->
+            <!--<selected>true</selected>-->
+            <!--<toggle>false</toggle>-->
+            <!--<shortDescr>Toggle visibility of the tools tool bar.</shortDescr>-->
+            <!--<description>Toggle visibility of the tools tool bar.</description>-->
+        <!--</action>-->
+
+        <!--<action>-->
+            <!--<id>showSeaDASInteractionsExtrasToolBar</id>-->
+            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
+            <!--<context>seadasInteractionsExtrasToolBar</context>-->
+            <!--<parent>toolBars</parent>-->
+            <!--<text> SeaDAS: Image Interactions (Extras)</text>-->
+            <!--<placeAfter>showSeaDASInteractionsToolBar</placeAfter>-->
+            <!--&lt;!&ndash;<mnemonic>T</mnemonic>&ndash;&gt;-->
+            <!--<selected>false</selected>-->
+            <!--<toggle>true</toggle>-->
+            <!--<shortDescr>Toggle visibility of the tools tool bar.</shortDescr>-->
+            <!--<description>Toggle visibility of the tools tool bar.</description>-->
+        <!--</action>-->
+
+
         <action>
-            <id>showToolsToolBar</id>
+            <id>showSeadasAnalysisToolBar</id>
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
-            <context>toolsToolBar</context>
+            <context>seadasAnalysisToolBar</context>
             <parent>toolBars</parent>
-            <text>Image Interactions</text>
-            <mnemonic>T</mnemonic>
+            <text>Analysis</text>
             <selected>true</selected>
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the tools tool bar.</shortDescr>
             <description>Toggle visibility of the tools tool bar.</description>
-            <helpId>showToolsToolBar</helpId>
+        </action>
+
+
+
+        <!--<action>-->
+            <!--<id>showSeadasWestDockToolBar</id>-->
+            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
+            <!--<context>seadasWestDockToolBar</context>-->
+            <!--<parent>toolBars</parent>-->
+            <!--<text>West Dock</text>-->
+            <!--<selected>true</selected>-->
+            <!--<toggle>false</toggle>-->
+            <!--<shortDescr>Toggle visibility of the tools tool bar.</shortDescr>-->
+            <!--<description>Toggle visibility of the tools tool bar.</description>-->
+        <!--</action>-->
+
+
+
+
+        <action>
+            <id>showSeadasGeometryToolBar</id>
+            <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
+            <context>seadasGeometryToolBar</context>
+            <parent>toolBars</parent>
+            <text>Geometries</text>
+            <selected>true</selected>
+            <toggle>true</toggle>
+            <shortDescr>Toggle visibility of the tools tool bar.</shortDescr>
+            <description>Toggle visibility of the tools tool bar.</description>
+        </action>
+
+
+        <action>
+            <id>showSeadasPinsToolBar</id>
+            <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
+            <context>seadasPinsToolBar</context>
+            <parent>toolBars</parent>
+            <text>Pins</text>
+            <selected>true</selected>
+            <toggle>true</toggle>
+            <shortDescr>Toggle visibility of the tools tool bar.</shortDescr>
+            <description>Toggle visibility of the tools tool bar.</description>
         </action>
 
         <action>
-            <id>showViewsToolBar</id>
+            <id>showSeadasGcpToolBar</id>
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
-            <context>viewsToolBar</context>
+            <context>seadasGcpToolBar</context>
             <parent>toolBars</parent>
-            <text>Views</text>
-            <mnemonic>V</mnemonic>
-            <selected>false</selected>
+            <text>Ground Control Points</text>
+
+            <selected>true</selected>
             <toggle>true</toggle>
-            <shortDescr>Toggle visibility of the views tool bar.</shortDescr>
-            <description>Toggle visibility of the views tool bar.</description>
-            <helpId>showViewsToolBar</helpId>
+            <shortDescr>Toggle visibility of the tools tool bar.</shortDescr>
+            <description>Toggle visibility of the tools tool bar.</description>
         </action>
+
 
 
 
@@ -1302,13 +1356,100 @@
             <parent>toolBars</parent>
             <class>org.esa.beam.visat.actions.ShowStatusBarAction</class>
             <text>Status Bar</text>
-            <mnemonic>S</mnemonic>
-            <selected>false</selected>
+            <!--<mnemonic>S</mnemonic>-->
+            <selected>true</selected>
+
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the status bar.</shortDescr>
             <description>Toggle visibility of the status bar.</description>
             <helpId>showStatusBar</helpId>
         </action>
+
+
+
+
+        <!--<action>-->
+            <!--<id>showAnalysisToolBar</id>-->
+            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
+            <!--<context>analysisToolBar</context>-->
+            <!--<parent>toolBars</parent>-->
+            <!--<text>BEAM: Analysis</text>-->
+            <!--<placeAfter>showStatusBar</placeAfter>-->
+            <!--<mnemonic>A</mnemonic>-->
+            <!--<selected>false</selected>-->
+            <!--<toggle>true</toggle>-->
+            <!--<shortDescr>Toggle visibility of the analysis tool bar.</shortDescr>-->
+            <!--<description>Toggle visibility of the analysis tool bar.</description>-->
+            <!--<helpId>showAnalysisToolBar</helpId>-->
+        <!--</action>-->
+
+
+        <!--<action>-->
+            <!--<id>showToolsToolBar</id>-->
+            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
+            <!--<context>toolsToolBar</context>-->
+            <!--<parent>toolBars</parent>-->
+            <!--<text>BEAM: Image Interactions</text>-->
+            <!--<placeAfter>showAnalysisToolBar</placeAfter>-->
+            <!--&lt;!&ndash;<mnemonic>T</mnemonic>&ndash;&gt;-->
+            <!--<selected>false</selected>-->
+            <!--<toggle>true</toggle>-->
+            <!--<shortDescr>Toggle visibility of the tools tool bar.</shortDescr>-->
+            <!--<description>Toggle visibility of the tools tool bar.</description>-->
+            <!--<helpId>showToolsToolBar</helpId>-->
+        <!--</action>-->
+
+
+        <action>
+            <id>showLayersToolBar</id>
+            <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
+            <context>layersToolBar</context>
+            <parent>toolBars</parent>
+            <text>Layers</text>
+            <selected>true</selected>
+            <toggle>true</toggle>
+            <shortDescr>Toggle visibility of the layers tool bar.</shortDescr>
+            <description>Toggle visibility of the layers tool bar.</description>
+            <helpId>showLayersToolBar</helpId>
+        </action>
+
+
+
+        <!--<action>-->
+            <!--<id>showStandardToolBar</id>-->
+            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
+            <!--<context>mainToolBar</context>-->
+            <!--<parent>toolBars</parent>-->
+            <!--<text>File</text>-->
+            <!--<selected>true</selected>-->
+            <!--<toggle>true</toggle>-->
+            <!--<shortDescr>Toggle visibility of the standard tool bar.</shortDescr>-->
+            <!--<description>Toggle visibility of the standard tool bar.</description>-->
+            <!--<helpId>showStandardToolBar</helpId>-->
+        <!--</action>-->
+
+
+
+
+
+        <!--<action>-->
+            <!--<id>showViewsToolBar</id>-->
+            <!--<class>org.esa.beam.visat.actions.ShowToolBarAction</class>-->
+            <!--<context>viewsToolBar</context>-->
+            <!--<parent>toolBars</parent>-->
+            <!--<text>BEAM: Views</text>-->
+            <!--<placeAfter>showStandardToolBar</placeAfter>-->
+            <!--<mnemonic>V</mnemonic>-->
+            <!--<selected>false</selected>-->
+            <!--<toggle>true</toggle>-->
+            <!--<shortDescr>Toggle visibility of the views tool bar.</shortDescr>-->
+            <!--<description>Toggle visibility of the views tool bar.</description>-->
+            <!--<separatorAfter>true</separatorAfter>-->
+            <!--<helpId>showViewsToolBar</helpId>-->
+        <!--</action>-->
+
+
+
 
         <!-- end of -->
         <!-- View : ToolBars sub-menu -->
@@ -1454,6 +1595,7 @@
             <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
             <shortDescr>Creates a filtered band</shortDescr>
             <description>Creates a filtered band from the currently selected band</description>
+            <largeIcon>icons/FilteredBand24.png</largeIcon>
             <context>band</context>
             <helpId>createFilteredBand</helpId>
         </action>
@@ -1827,7 +1969,8 @@
             <text>Pin Tool</text>
             <shortDescr>Pin placing tool</shortDescr>
             <description>Sets, edits or deletes pins</description>
-            <largeIcon>icons/PinTool24.png</largeIcon>
+            <largeIcon>icons/PinPlacer24.png</largeIcon>
+            <!--<largeIcon>icons/PinTool24.png</largeIcon>-->
             <!--<largeIcon>icons/PinTool24.gif</largeIcon>-->
             <selected>false</selected>
             <helpId>pinTool</helpId>
