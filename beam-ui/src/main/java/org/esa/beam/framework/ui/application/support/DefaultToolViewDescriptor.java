@@ -480,7 +480,7 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
             command.setParent("timeSeriesFolder");
         } else if (commandId.contains("PinManagerToolView") ||
                 commandId.contains("GcpManagerToolView")) {
-            command.setParent("tools");
+            command.setParent("vectorsFolder");
             command.setPlaceAfter("convertComputedBand2Band");
         } else {
             command.setParent("showToolViews");

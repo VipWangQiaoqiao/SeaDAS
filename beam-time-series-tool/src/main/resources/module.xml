@@ -43,9 +43,9 @@
             <class>org.esa.beam.timeseries.ui.player.TimeSeriesPlayerToolView</class>
             <title>Time Series Player</title>
             <tabTitle>Player</tabTitle>
-            <mnemonic>T</mnemonic>
+            <!--<mnemonic>T</mnemonic>-->
             <description>Time Series Player</description>
-            <accelerator>ctrl alt T</accelerator>
+            <!--<accelerator>ctrl alt T</accelerator>-->
             <!--<smallIcon>/org/esa/beam/timeseries/ui/icons/timeseries-player16.png</smallIcon>-->
             <largeIcon>/org/esa/beam/timeseries/ui/icons/timeseries-player24.png</largeIcon>
             <initState>HIDDEN</initState>
@@ -61,8 +61,8 @@
             <title>Time Series Manager</title>
             <tabTitle>Manager</tabTitle>
             <description>Time Series Manager</description>
-            <mnemonic>C</mnemonic>
-            <accelerator>ctrl alt C</accelerator>
+            <!--<mnemonic>C</mnemonic>-->
+            <!--<accelerator>ctrl alt C</accelerator>-->
             <!--<smallIcon>/org/esa/beam/timeseries/ui/icons/timeseries-manager16.png</smallIcon>-->
             <largeIcon>/org/esa/beam/timeseries/ui/icons/timeseries-manager24.png</largeIcon>
             <initState>HIDDEN</initState>
@@ -78,8 +78,8 @@
             <title>Time Series Graph</title>
             <tabTitle>Graph</tabTitle>
             <description>Time Series Graph</description>
-            <mnemonic>T</mnemonic>
-            <accelerator>ctrl alt T</accelerator>
+            <!--<mnemonic>T</mnemonic>-->
+            <!--<accelerator>ctrl alt T</accelerator>-->
             <!--<smallIcon>/org/esa/beam/timeseries/ui/icons/timeseries-plot16.png</smallIcon>-->
             <largeIcon>/org/esa/beam/timeseries/ui/icons/timeseries-plot24.png</largeIcon>
             <initState>HIDDEN</initState>
@@ -95,8 +95,8 @@
             <title>Time Series Matrix</title>
             <tabTitle>Matrix</tabTitle>
             <description>Time Series Matrix</description>
-            <mnemonic>M</mnemonic>
-            <accelerator>ctrl alt M</accelerator>
+            <!--<mnemonic>M</mnemonic>-->
+            <!--<accelerator>ctrl alt M</accelerator>-->
             <!--<smallIcon>/org/esa/beam/timeseries/ui/icons/timeseries-matrix16.png</smallIcon>-->
             <largeIcon>/org/esa/beam/timeseries/ui/icons/timeseries-matrix24.png</largeIcon>
             <initState>HIDDEN</initState>
@@ -132,7 +132,7 @@
             <id>exportTimeBasedKmz</id>
             <class>org.esa.beam.timeseries.export.kmz.ExportTimeBasedKmz</class>
             <text>Time Series...</text>
-            <mnemonic>K</mnemonic>
+            <!--<mnemonic>K</mnemonic>-->
             <shortDescr>Export Time Series as KMZ.</shortDescr>
         </action>
 
