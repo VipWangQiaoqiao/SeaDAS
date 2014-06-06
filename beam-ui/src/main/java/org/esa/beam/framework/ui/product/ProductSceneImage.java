@@ -397,6 +397,18 @@ public class ProductSceneImage implements ProductLayerContext {
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS,
                                     configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS,
                                                                  GraticuleLayerType.DEFAULT_RES_PIXELS));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
+                        GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
+                        GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
+                        GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD));
+
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_RES_LAT,
                                     configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_RES_LAT,
                                                                     GraticuleLayerType.DEFAULT_RES_LAT));

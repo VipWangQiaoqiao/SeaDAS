@@ -135,6 +135,13 @@ public class GraticuleLayer extends Layer {
         final float tx = 3;
         final float ty = -3;
 
+        // Danny added this
+        int textOutwardsOffset = getTextOffsetOutward();
+        int textSidewardsOffset = getTextOffsetSideward();
+
+        Font font = new Font("SansSerif", Font.ITALIC, getTextFontSize());
+        g2d.setFont(font);
+
         if (getTextBgTransparency() < 1.0) {
             Composite oldComposite = null;
             if (getTextBgTransparency() > 0.0) {
@@ -144,13 +151,14 @@ public class GraticuleLayer extends Layer {
 
             g2d.setPaint(getTextBgColor());
             g2d.setStroke(new BasicStroke(0));
+
             for (Graticule.TextGlyph glyph : textGlyphs) {
                 g2d.translate(glyph.getX(), glyph.getY());
                 g2d.rotate(glyph.getAngle());
 
                 Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(glyph.getText(), g2d);
-                labelBounds.setRect(labelBounds.getX() + tx - 1,
-                                    labelBounds.getY() + ty - 1,
+                labelBounds.setRect(labelBounds.getX() + tx + textOutwardsOffset - 1,
+                                    labelBounds.getY() + ty + textSidewardsOffset - 1,
                                     labelBounds.getWidth() + 4,
                                     labelBounds.getHeight());
                 g2d.fill(labelBounds);
@@ -164,13 +172,26 @@ public class GraticuleLayer extends Layer {
             }
         }
 
-        g2d.setFont(getTextFont());
+
+//        g2d.setFont(getTextFont());
         g2d.setPaint(getTextFgColor());
         for (Graticule.TextGlyph glyph : textGlyphs) {
             g2d.translate(glyph.getX(), glyph.getY());
             g2d.rotate(glyph.getAngle());
 
-            g2d.drawString(glyph.getText(), tx, ty);
+
+            g2d.drawString(glyph.getText(), tx+textOutwardsOffset, ty+textSidewardsOffset);
+//
+//           if (glyph.getText().endsWith("N") || glyph.getText().endsWith("S")) {
+//
+//           } else {
+//
+//           }
+
+
+
+
+      //      g2d.drawString(glyph.getText(), tx, ty);
 
             g2d.rotate(-glyph.getAngle());
             g2d.translate(-glyph.getX(), -glyph.getY());
@@ -250,6 +271,21 @@ public class GraticuleLayer extends Layer {
     private Font getTextFont() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT,
                                         GraticuleLayerType.DEFAULT_TEXT_FONT);
+    }
+
+    private Integer getTextFontSize() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
+                GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE);
+    }
+
+    private Integer getTextOffsetOutward() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
+                GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD);
+    }
+
+    private Integer getTextOffsetSideward() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
+                GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD);
     }
 
     private Color getTextFgColor() {

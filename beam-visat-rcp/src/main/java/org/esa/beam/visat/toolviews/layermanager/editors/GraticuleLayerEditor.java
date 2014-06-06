@@ -112,6 +112,25 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd10.setAttribute("propertyEditor", propertyEditorRegistry.getPropertyEditor(RangeEditor.class.getName()));
         addPropertyDescriptor(vd10);
 
+        PropertyDescriptor vd11 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, Integer.class);
+        vd11.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE);
+        vd11.setDisplayName("Text font size");
+        vd11.setDefaultConverter();
+        addPropertyDescriptor(vd11);
+
+        PropertyDescriptor vd12 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, Integer.class);
+        vd12.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD);
+        vd12.setDisplayName("Text offset outward");
+        vd12.setDefaultConverter();
+        addPropertyDescriptor(vd12);
+
+        PropertyDescriptor vd13 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, Integer.class);
+        vd13.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD);
+        vd13.setDisplayName("Text offset sideward");
+        vd13.setDefaultConverter();
+        addPropertyDescriptor(vd13);
+
+
         BindingContext bindingContext = getBindingContext();
         boolean resAuto = (Boolean) bindingContext.getPropertySet().getValue(
                 GraticuleLayerType.PROPERTY_NAME_RES_AUTO);
@@ -124,6 +143,15 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
         boolean textEnabled = (Boolean) bindingContext.getPropertySet().getValue(
                 GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED);
+        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, textEnabled,
+                GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED, textEnabled);
+
+        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, textEnabled,
+                GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, textEnabled);
+
+        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, textEnabled,
+                GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, textEnabled);
+
         bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, textEnabled,
                                         GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED, textEnabled);
         bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, textEnabled,
