@@ -22,6 +22,7 @@ import org.esa.beam.framework.datamodel.ImageInfo;
 import org.esa.beam.framework.datamodel.ProductNodeEvent;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.datamodel.Stx;
+import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.util.math.Range;
 
@@ -45,6 +46,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
     private enum RangeKey {FromPaletteSource, FromData, FromMinMaxFields, FromCurrentPalette;}
+
     private boolean shouldFireChooserEvent;
     private boolean hidden = false;
 
@@ -53,96 +55,176 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         this.parentForm = parentForm;
 
-        final TableLayout layout = new TableLayout();
-        layout.setTableWeightX(1.0);
-        layout.setTableWeightY(1.0);
-        layout.setTablePadding(2, 1);
-        layout.setTableFill(TableLayout.Fill.HORIZONTAL);
-        layout.setTableAnchor(TableLayout.Anchor.NORTH);
-        layout.setCellPadding(0, 0, new Insets(8, 2, 8, 2));
-//        layout.setCellPadding(1, 0, new Insets(8, 2, 2, 2));
-//        layout.setCellPadding(1, 0, new Insets(13, 2, 5, 2));
+        JPanel basicPanel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        final JPanel editorPanel = new JPanel(layout);
-//        editorPanel.add(new JLabel("Colour ramp:"));
+
         colorPaletteChooser = new ColorPaletteChooser();
+        colorPaletteChooser.setPreferredSize(new Dimension(180, 40));
 
-      //  editorPanel.add(colorPaletteChooser);
-//        editorPanel.add(new JLabel("Display range"));
 
-        colorPaletteChooser.setPreferredSize(new Dimension(220,40));
-        colorPaletteChooser.setMaximumSize(new Dimension(220,40));
-        colorPaletteChooser.setMinimumSize(new Dimension(220,40));
-        final JPanel colorChoosePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        colorChoosePanel.add(colorPaletteChooser);
-        colorChoosePanel.add(new JLabel(""));
-        editorPanel.add(colorChoosePanel);
+        basicPanel.add(colorPaletteChooser, gbc);
+
+
+        minField = getNumberTextField(0);
+        maxField = getNumberTextField(1);
+
+//        JTextField tmpSizeTextField = new JTextField(("123456789012345678"));
+//        minField.setMinimumSize(tmpSizeTextField.getPreferredSize());
+//        minField.setMaximumSize(tmpSizeTextField.getPreferredSize());
+//        minField.setPreferredSize(tmpSizeTextField.getPreferredSize());
+//        maxField.setMinimumSize(tmpSizeTextField.getPreferredSize());
+//        maxField.setMaximumSize(tmpSizeTextField.getPreferredSize());
+//        maxField.setPreferredSize(tmpSizeTextField.getPreferredSize());
+
+
+        JPanel minMaxTextfields = getMinMaxTextfields();
+
+
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        basicPanel.add(minMaxTextfields, gbc);
+
+
+        final JButton cpdRange = new JButton("Set Range from CPD File");
+        cpdRange.setToolTipText("Set min and max value to be value in cpd file");
+        cpdRange.setMaximumSize(cpdRange.getMinimumSize());
+        cpdRange.setPreferredSize(cpdRange.getMinimumSize());
+        cpdRange.setMinimumSize(cpdRange.getMinimumSize());
+
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.NONE;
+        basicPanel.add(cpdRange, gbc);
+
+        final JButton bandRange = new JButton("Set Range from Band");
+        bandRange.setToolTipText("Set min and max value to corresponding data value in the band statistics");
+        bandRange.setMaximumSize(bandRange.getMinimumSize());
+        bandRange.setPreferredSize(bandRange.getMinimumSize());
+        bandRange.setMinimumSize(bandRange.getMinimumSize());
+
+
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.NONE;
+        basicPanel.add(bandRange, gbc);
+
+
+        contentPanel = GridBagUtils.createPanel();
+
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.weighty = 1.0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        contentPanel.add(basicPanel,gbc);
+
+
+
+
+
+//        final TableLayout layout = new TableLayout();
+//        layout.setTableWeightX(1.0);
+//        layout.setTableWeightY(1.0);
+//        layout.setTablePadding(2, 1);
+//        layout.setTableFill(TableLayout.Fill.HORIZONTAL);
+//        layout.setTableAnchor(TableLayout.Anchor.NORTH);
+//        layout.setCellPadding(0, 0, new Insets(8, 2, 8, 2));
+////        layout.setCellPadding(1, 0, new Insets(8, 2, 2, 2));
+////        layout.setCellPadding(1, 0, new Insets(13, 2, 5, 2));
+//
+//        final JPanel editorPanel = new JPanel(layout);
+////        editorPanel.add(new JLabel("Colour ramp:"));
+//        colorPaletteChooser = new ColorPaletteChooser();
+//
+//      //  editorPanel.add(colorPaletteChooser);
+////        editorPanel.add(new JLabel("Display range"));
+//
+//        colorPaletteChooser.setPreferredSize(new Dimension(180,40));
+//    //    colorPaletteChooser.setMaximumSize(new Dimension(220,40));
+//    //    colorPaletteChooser.setMinimumSize(new Dimension(220,40));
+//        final JPanel colorChoosePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+//
+//        colorChoosePanel.add(colorPaletteChooser);
+//        colorChoosePanel.add(new JLabel(""));
+//        editorPanel.add(colorChoosePanel);
+//
 
 
 //        minField = getNumberTextField(0.00001);
 //        maxField = getNumberTextField(1);
-        minField = getNumberTextField(0);
-        maxField = getNumberTextField(1);
-
-        JTextField tmpSizeTextField = new JTextField(("123456789012345678"));
-        minField.setMinimumSize(tmpSizeTextField.getPreferredSize());
-        minField.setMaximumSize(tmpSizeTextField.getPreferredSize());
-        minField.setPreferredSize(tmpSizeTextField.getPreferredSize());
-        maxField.setMinimumSize(tmpSizeTextField.getPreferredSize());
-        maxField.setMaximumSize(tmpSizeTextField.getPreferredSize());
-        maxField.setPreferredSize(tmpSizeTextField.getPreferredSize());
-
-
+//        minField = getNumberTextField(0);
+//        maxField = getNumberTextField(1);
+//
+//        JTextField tmpSizeTextField = new JTextField(("123456789012345678"));
+//        minField.setMinimumSize(tmpSizeTextField.getPreferredSize());
+//        minField.setMaximumSize(tmpSizeTextField.getPreferredSize());
+//        minField.setPreferredSize(tmpSizeTextField.getPreferredSize());
+//        maxField.setMinimumSize(tmpSizeTextField.getPreferredSize());
+//        maxField.setMaximumSize(tmpSizeTextField.getPreferredSize());
+//        maxField.setPreferredSize(tmpSizeTextField.getPreferredSize());
 
 
+//
+//        final JPanel minPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+//        minPanel.add(new JLabel("Min:"));
+//        minPanel.add(minField);
+//
+//        final JPanel maxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+//        maxPanel.add(new JLabel("Max:"));
+//        maxPanel.add(maxField);
+//
+////        final JPanel minMaxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
+//        editorPanel.add(minPanel);
+//        editorPanel.add(maxPanel);
+////        minMaxPanel.add(minPanel);
+////        minMaxPanel.add(maxPanel);
+////        editorPanel.add(minMaxPanel);
 
-        final JPanel minPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
-        minPanel.add(new JLabel("Min:"));
-        minPanel.add(minField);
-
-        final JPanel maxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
-        maxPanel.add(new JLabel("Max:"));
-        maxPanel.add(maxField);
-
-//        final JPanel minMaxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
-        editorPanel.add(minPanel);
-        editorPanel.add(maxPanel);
-//        minMaxPanel.add(minPanel);
-//        minMaxPanel.add(maxPanel);
-//        editorPanel.add(minMaxPanel);
-
-        final JButton fromFile = new JButton("CPD Range");
-        fromFile.setToolTipText("Set min and max value to be value in cpd file");
-        final JPanel fromFileRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
-        fromFile.setMaximumSize(fromFile.getMinimumSize());
-        fromFile.setPreferredSize(fromFile.getMinimumSize());
-        fromFile.setMinimumSize(fromFile.getMinimumSize());
+//        final JButton fromFile = new JButton("CPD Range");
+//        fromFile.setToolTipText("Set min and max value to be value in cpd file");
+//        final JPanel fromFileRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+//        fromFile.setMaximumSize(fromFile.getMinimumSize());
+//        fromFile.setPreferredSize(fromFile.getMinimumSize());
+//        fromFile.setMinimumSize(fromFile.getMinimumSize());
+//
+//
+//
+//        final JButton fromData = new JButton("Band Range");
+//        fromData.setToolTipText("Set min and max value to corresponding data value in the band statistics");
+//        final JPanel fromDataRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+//        fromData.setMaximumSize(fromData.getMinimumSize());
+//        fromData.setPreferredSize(fromData.getMinimumSize());
+//        fromData.setMinimumSize(fromData.getMinimumSize());
+//
+//        fromFileRow.add(fromFile);
+//        fromFileRow.add(new JLabel(""));
+//        fromFileRow.add(fromData);
 
 
-        final JButton fromData = new JButton("Band Range");
-        fromData.setToolTipText("Set min and max value to corresponding data value in the band statistics");
-        final JPanel fromDataRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
-        fromData.setMaximumSize(fromData.getMinimumSize());
-        fromData.setPreferredSize(fromData.getMinimumSize());
-        fromData.setMinimumSize(fromData.getMinimumSize());
-
-        fromFileRow.add(fromFile);
-        fromFileRow.add(new JLabel(""));
-        fromFileRow.add(fromData);
-
-
-//        fromDataRow.add(fromData);
-//        fromDataRow.add(new JLabel(""));
-
-        editorPanel.add(fromFileRow);
-//        editorPanel.add(fromDataRow);
-
-//        final JPanel buttonPanel = new JPanel(new BorderLayout(5, 5));
-//        buttonPanel.add(fromFile, BorderLayout.WEST);
-//        buttonPanel.add(fromData, BorderLayout.EAST);
-//        editorPanel.add(new JLabel(" "));
-//        editorPanel.add(buttonPanel);
+//
+////        fromDataRow.add(fromData);
+////        fromDataRow.add(new JLabel(""));
+//
+//        editorPanel.add(fromFileRow);
+////        editorPanel.add(fromDataRow);
+//
+////        final JPanel buttonPanel = new JPanel(new BorderLayout(5, 5));
+////        buttonPanel.add(fromFile, BorderLayout.WEST);
+////        buttonPanel.add(fromData, BorderLayout.EAST);
+////        editorPanel.add(new JLabel(" "));
+////        editorPanel.add(buttonPanel);
 
 
         shouldFireChooserEvent = true;
@@ -150,11 +232,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteChooser.addActionListener(createListener(RangeKey.FromCurrentPalette));
         minField.addActionListener(createListener(RangeKey.FromMinMaxFields));
         maxField.addActionListener(createListener(RangeKey.FromMinMaxFields));
-        fromFile.addActionListener(createListener(RangeKey.FromPaletteSource));
-        fromData.addActionListener(createListener(RangeKey.FromData));
+        cpdRange.addActionListener(createListener(RangeKey.FromPaletteSource));
+        bandRange.addActionListener(createListener(RangeKey.FromData));
 
-        contentPanel = new JPanel(new BorderLayout());
-        contentPanel.add(editorPanel, BorderLayout.NORTH);
+//        contentPanel = new JPanel(new BorderLayout());
+//        contentPanel.add(basicPanel, BorderLayout.NORTH);
+//        contentPanel.add(editorPanel, BorderLayout.NORTH);
         moreOptionsForm = new MoreOptionsForm(parentForm, true);
         discreteCheckBox = new DiscreteCheckBox(parentForm);
         moreOptionsForm.addRow(discreteCheckBox);
@@ -182,6 +265,40 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 }
             }
         });
+    }
+
+    private JPanel getMinMaxTextfields() {
+        JPanel minMaxTextfields = GridBagUtils.createPanel();
+        GridBagConstraints gbc = new GridBagConstraints();
+
+
+        gbc.anchor = GridBagConstraints.WEST;
+
+
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
+        minMaxTextfields.add(new JLabel("Min:"), gbc);
+
+        gbc.gridy = 0;
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        minMaxTextfields.add(minField, gbc);
+
+
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
+        minMaxTextfields.add(new JLabel("Max:"), gbc);
+        gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        minMaxTextfields.add(maxField, gbc);
+        return minMaxTextfields;
     }
 
     @Override
@@ -252,7 +369,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     @Override
     public AbstractButton[] getToolButtons() {
         return new AbstractButton[]{
-                    logDisplayButton,
+                logDisplayButton,
         };
     }
 
@@ -288,27 +405,27 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             final double max;
             final ColorPaletteDef cpd;
             switch (key) {
-            case FromPaletteSource:
-                final Range rangeFromFile = colorPaletteChooser.getRangeFromFile();
-                min = rangeFromFile.getMin();
-                max = rangeFromFile.getMax();
-                cpd = currentCPD;
-                break;
-            case FromData:
-                final Stx stx = parentForm.getStx(parentForm.getProductSceneView().getRaster());
-                min = stx.getMinimum();
-                max = stx.getMaximum();
-                cpd = currentCPD;
-                break;
-            case FromMinMaxFields:
-                min = new Double(minField.getValue().toString());//(double) minField.getValue();
-                max = new Double(maxField.getValue().toString());//(double) maxField.getValue();
-                cpd = currentCPD;
-                break;
-            default:
-                min = currentCPD.getMinDisplaySample();
-                max = currentCPD.getMaxDisplaySample();
-                cpd = deepCopy;
+                case FromPaletteSource:
+                    final Range rangeFromFile = colorPaletteChooser.getRangeFromFile();
+                    min = rangeFromFile.getMin();
+                    max = rangeFromFile.getMax();
+                    cpd = currentCPD;
+                    break;
+                case FromData:
+                    final Stx stx = parentForm.getStx(parentForm.getProductSceneView().getRaster());
+                    min = stx.getMinimum();
+                    max = stx.getMaximum();
+                    cpd = currentCPD;
+                    break;
+                case FromMinMaxFields:
+                    min = new Double(minField.getValue().toString());//(double) minField.getValue();
+                    max = new Double(maxField.getValue().toString());//(double) maxField.getValue();
+                    cpd = currentCPD;
+                    break;
+                default:
+                    min = currentCPD.getMinDisplaySample();
+                    max = currentCPD.getMaxDisplaySample();
+                    cpd = deepCopy;
             }
             final boolean autoDistribute = true;
             currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute);

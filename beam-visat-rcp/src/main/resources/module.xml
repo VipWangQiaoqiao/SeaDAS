@@ -1024,7 +1024,7 @@
             <class>org.esa.beam.visat.actions.layout.ResetLayoutAction</class>
             <parent>view</parent>
             <placeAtContextTop>true</placeAtContextTop>
-            <text>Load Default Layout</text>
+            <text>Reset to Default Layout</text>
             <shortDescr>Reset to initial layout.</shortDescr>
         </action>
 
