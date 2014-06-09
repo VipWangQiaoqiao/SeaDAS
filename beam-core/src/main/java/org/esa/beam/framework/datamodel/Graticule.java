@@ -31,19 +31,58 @@ import java.util.List;
 public class Graticule {
 
     private final GeneralPath[] _linePaths;
+    private final GeneralPath[] _borderPaths;
     private final TextGlyph[] _textGlyphs;
+    private final TextGlyph[] _textGlyphsNorth;
+    private final TextGlyph[] _textGlyphsSouth;
+    private final TextGlyph[] _textGlyphsWest;
+    private final TextGlyph[] _textGlyphsEast;
 
-    private Graticule(GeneralPath[] paths, TextGlyph[] textGlyphs) {
+    public enum TextLocation {
+        NORTH,
+        SOUTH,
+        WEST,
+        EAST
+    }
+
+
+    private Graticule(GeneralPath[] paths, TextGlyph[] textGlyphs, GeneralPath[] borderPaths,
+                      TextGlyph[] textGlyphsNorth, TextGlyph[] textGlyphsSouth, TextGlyph[] textGlyphsWest, TextGlyph[] textGlyphsEast) {
         _linePaths = paths;
         _textGlyphs = textGlyphs;
+        _borderPaths = borderPaths;
+        _textGlyphsNorth = textGlyphsNorth;
+        _textGlyphsSouth = textGlyphsSouth;
+        _textGlyphsWest = textGlyphsWest;
+        _textGlyphsEast = textGlyphsEast;
     }
 
     public GeneralPath[] getLinePaths() {
         return _linePaths;
     }
 
+    public GeneralPath[] getBorderPaths() {
+        return _borderPaths;
+    }
+
     public TextGlyph[] getTextGlyphs() {
         return _textGlyphs;
+    }
+
+    public TextGlyph[] getTextGlyphsNorth() {
+        return _textGlyphsNorth;
+    }
+
+    public TextGlyph[] getTextGlyphsSouth() {
+        return _textGlyphsSouth;
+    }
+
+    public TextGlyph[] getTextGlyphsWest() {
+        return _textGlyphsWest;
+    }
+
+    public TextGlyph[] getTextGlyphsEast() {
+        return _textGlyphsEast;
     }
 
     /**
@@ -108,12 +147,21 @@ public class Graticule {
             yMax = Math.max(yMax, geoPos.lat);
         }
 
+
+        final List<List<Coord>> borderList = computeBorderList(product.getGeoCoding(), geoBoundary);
         final List<List<Coord>> parallelList = computeParallelList(product.getGeoCoding(), geoBoundary, latMajorStep, lonMinorStep, yMin, yMax);
         final List<List<Coord>> meridianList = computeMeridianList(product.getGeoCoding(), geoBoundary, lonMajorStep, latMinorStep, xMin, xMax);
         final GeneralPath[] paths = createPaths(parallelList, meridianList);
+        final GeneralPath[] borderPaths = createBorderPaths(borderList);
         final TextGlyph[] textGlyphs = createTextGlyphs(parallelList, meridianList);
+        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH);
+        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH);
 
-        return new Graticule(paths, textGlyphs);
+        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST);
+        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST);
+
+        return new Graticule(paths, textGlyphs, borderPaths, textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
+
     }
 
     /**
@@ -178,12 +226,21 @@ public class Graticule {
             yMax = Math.max(yMax, geoPos.lat);
         }
 
+
         final List<List<Coord>> parallelList = computeParallelList(raster.getGeoCoding(), geoBoundary, latMajorStep, lonMinorStep, yMin, yMax);
+        final List<List<Coord>> borderList = computeBorderList(raster.getGeoCoding(), geoBoundary);
         final List<List<Coord>> meridianList = computeMeridianList(raster.getGeoCoding(), geoBoundary, lonMajorStep, latMinorStep, xMin, xMax);
         final GeneralPath[] paths = createPaths(parallelList, meridianList);
-        final TextGlyph[] textGlyphs = createTextGlyphs(parallelList, meridianList);
+        final GeneralPath[] borderPaths = createBorderPaths(borderList);
 
-        return new Graticule(paths, textGlyphs);
+        final TextGlyph[] textGlyphs = createTextGlyphs(parallelList, meridianList);
+        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH);
+        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH);
+
+        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST);
+        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST);
+
+        return new Graticule(paths, textGlyphs, borderPaths, textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
     }
 
     private static int getGeoBoundaryStep(final GeoCoding geoCoding) {
@@ -237,6 +294,85 @@ public class Graticule {
         }
         return parallelList;
     }
+
+
+    private static List<List<Coord>> computeBorderList(final GeoCoding geoCoding,
+                                                       final GeoPos[] geoBoundary) {
+
+        double xMin = +1.0e10;
+        double yMin = +1.0e10;
+        double xMax = -1.0e10;
+        double yMax = -1.0e10;
+
+        for (GeoPos geoPos : geoBoundary) {
+            xMin = Math.min(xMin, geoPos.lon);
+            yMin = Math.min(yMin, geoPos.lat);
+            xMax = Math.max(xMax, geoPos.lon);
+            yMax = Math.max(yMax, geoPos.lat);
+        }
+
+
+        List<List<Coord>> parallelList = new ArrayList<List<Coord>>();
+
+        GeoPos geoPos;
+        PixelPos pixelPos;
+
+
+        List<Coord> southernParallel = new ArrayList<Coord>();
+
+        geoPos = new GeoPos((float) yMin, limitLon((float) xMin));
+        pixelPos = geoCoding.getPixelPos(geoPos, null);
+        southernParallel.add(new Coord(geoPos, pixelPos));
+
+        geoPos = new GeoPos((float) yMin, limitLon((float) xMax));
+        pixelPos = geoCoding.getPixelPos(geoPos, null);
+        southernParallel.add(new Coord(geoPos, pixelPos));
+
+        parallelList.add(southernParallel);
+
+
+        List<Coord> northernParallel = new ArrayList<Coord>();
+
+        geoPos = new GeoPos((float) yMax, limitLon((float) xMin));
+        pixelPos = geoCoding.getPixelPos(geoPos, null);
+        northernParallel.add(new Coord(geoPos, pixelPos));
+
+        geoPos = new GeoPos((float) yMax, limitLon((float) xMax));
+        pixelPos = geoCoding.getPixelPos(geoPos, null);
+        northernParallel.add(new Coord(geoPos, pixelPos));
+
+        parallelList.add(northernParallel);
+
+
+        List<Coord> westernMeridian = new ArrayList<Coord>();
+
+        geoPos = new GeoPos((float) yMin, limitLon((float) xMin));
+        pixelPos = geoCoding.getPixelPos(geoPos, null);
+        westernMeridian.add(new Coord(geoPos, pixelPos));
+
+        geoPos = new GeoPos((float) yMax, limitLon((float) xMin));
+        pixelPos = geoCoding.getPixelPos(geoPos, null);
+        westernMeridian.add(new Coord(geoPos, pixelPos));
+
+        parallelList.add(westernMeridian);
+
+
+        List<Coord> easternMeridian = new ArrayList<Coord>();
+
+        geoPos = new GeoPos((float) yMin, limitLon((float) xMax));
+        pixelPos = geoCoding.getPixelPos(geoPos, null);
+        easternMeridian.add(new Coord(geoPos, pixelPos));
+
+        geoPos = new GeoPos((float) yMax, limitLon((float) xMax));
+        pixelPos = geoCoding.getPixelPos(geoPos, null);
+        easternMeridian.add(new Coord(geoPos, pixelPos));
+
+        parallelList.add(easternMeridian);
+
+
+        return parallelList;
+    }
+
 
     private static List<List<Coord>> computeMeridianList(final GeoCoding geoCoding,
                                                          final GeoPos[] geoBoundary,
@@ -340,6 +476,12 @@ public class Graticule {
         return generalPathList.toArray(new GeneralPath[generalPathList.size()]);
     }
 
+    private static GeneralPath[] createBorderPaths(List<List<Coord>> borderList) {
+        final ArrayList<GeneralPath> generalPathList = new ArrayList<GeneralPath>();
+        addToPath(borderList, generalPathList);
+        return generalPathList.toArray(new GeneralPath[generalPathList.size()]);
+    }
+
     private static void addToPath(List<List<Coord>> lineList, List<GeneralPath> generalPathList) {
         for (final List<Coord> coordList : lineList) {
             if (coordList.size() >= 2) {
@@ -365,26 +507,76 @@ public class Graticule {
 
     private static TextGlyph[] createTextGlyphs(List<List<Coord>> parallelList, List<List<Coord>> meridianList) {
         final List<TextGlyph> textGlyphList = new ArrayList<TextGlyph>();
-        createParallelTextGlyphs(parallelList, textGlyphList);
-        createMeridianTextGlyphs(meridianList, textGlyphList);
+        createParallelWestTextGlyphs(parallelList, textGlyphList);
+        createMeridianNorthTextGlyphs(meridianList, textGlyphList);
+        return textGlyphList.toArray(new TextGlyph[textGlyphList.size()]);
+    }
+
+    private static TextGlyph[] createTextGlyphs(List<List<Coord>> parallelList, List<List<Coord>> meridianList, TextLocation textLocation) {
+        final List<TextGlyph> textGlyphList = new ArrayList<TextGlyph>();
+
+        switch (textLocation) {
+            case NORTH:
+                createMeridianNorthTextGlyphs(meridianList, textGlyphList);
+                break;
+            case SOUTH:
+                createMeridianSouthTextGlyphs(meridianList, textGlyphList);
+                break;
+            case WEST:
+                createParallelWestTextGlyphs(parallelList, textGlyphList);
+                break;
+            case EAST:
+                createParallelEastTextGlyphs(parallelList, textGlyphList);
+                break;
+        }
+
         return textGlyphList.toArray(new TextGlyph[textGlyphList.size()]);
     }
 
 
-    private static void createParallelTextGlyphs(List<List<Coord>> parallelList,
+    private static TextGlyph[] createTextGlyphsSouth(List<List<Coord>> parallelList, List<List<Coord>> meridianList) {
+        final List<TextGlyph> textGlyphList = new ArrayList<TextGlyph>();
+        createMeridianSouthTextGlyphs(meridianList, textGlyphList);
+        return textGlyphList.toArray(new TextGlyph[textGlyphList.size()]);
+    }
+
+
+    private static void createParallelWestTextGlyphs(List<List<Coord>> parallelList,
                                                  List<TextGlyph> textGlyphList) {
         Coord coord1;
         Coord coord2;
         for (final List<Coord> parallel : parallelList) {
-            if (parallel.size() >= 3) {
-                coord1 = parallel.get(1);
-                coord2 = parallel.get(2);
-                if (isCoordPairValid(coord1, coord2)) {
-                    textGlyphList.add(createLatTextGlyph(coord1, coord2));
-                }
-            } else if (parallel.size() >= 2) {
+//            if (parallel.size() >= 3) {
+//                coord1 = parallel.get(1);
+//                coord2 = parallel.get(2);
+//                if (isCoordPairValid(coord1, coord2)) {
+//                    textGlyphList.add(createLatTextGlyph(coord1, coord2));
+//                }
+//            } else if (parallel.size() >= 2) {
+//                coord1 = parallel.get(0);
+//                coord2 = parallel.get(1);
+//                if (isCoordPairValid(coord1, coord2)) {
+//                    textGlyphList.add(createLatTextGlyph(coord1, coord2));
+//                }
+//            }
+
+
+            if (parallel.size() > 0) {
                 coord1 = parallel.get(0);
                 coord2 = parallel.get(1);
+
+                int last = parallel.size() - 1;
+                int nextToLast = last - 1;
+// put lat labels on right
+
+//                coord1 = parallel.get(nextToLast);
+//                coord2 = parallel.get(last);
+
+                // put lat label on left
+                    coord1 = parallel.get(0);
+                    coord2 = parallel.get(1);
+
+
                 if (isCoordPairValid(coord1, coord2)) {
                     textGlyphList.add(createLatTextGlyph(coord1, coord2));
                 }
@@ -392,26 +584,128 @@ public class Graticule {
         }
     }
 
-    private static void createMeridianTextGlyphs(List<List<Coord>> meridianList,
+
+
+    private static void createParallelEastTextGlyphs(List<List<Coord>> parallelList,
                                                  List<TextGlyph> textGlyphList) {
         Coord coord1;
         Coord coord2;
-        for (List<Coord> meridian : meridianList) {
-            if (meridian.size() >= 3) {
-                coord1 = meridian.get(1);
-                coord2 = meridian.get(2);
+        for (final List<Coord> parallel : parallelList) {
+//            if (parallel.size() >= 3) {
+//                coord1 = parallel.get(1);
+//                coord2 = parallel.get(2);
+//                if (isCoordPairValid(coord1, coord2)) {
+//                    textGlyphList.add(createLatTextGlyph(coord1, coord2));
+//                }
+//            } else if (parallel.size() >= 2) {
+//                coord1 = parallel.get(0);
+//                coord2 = parallel.get(1);
+//                if (isCoordPairValid(coord1, coord2)) {
+//                    textGlyphList.add(createLatTextGlyph(coord1, coord2));
+//                }
+//            }
+
+
+            if (parallel.size() > 0) {
+                coord1 = parallel.get(0);
+                coord2 = parallel.get(1);
+
+                int last = parallel.size() - 1;
+                int nextToLast = last - 1;
+// put lat labels on right
+
+                coord1 = parallel.get(nextToLast);
+                coord2 = parallel.get(last);
+
+                // put lat label on left
+//                   coord1 = parallel.get(0);
+ //                   coord2 = parallel.get(1);
+
+
                 if (isCoordPairValid(coord1, coord2)) {
-                    textGlyphList.add(createLonTextGlyph(coord1, coord2));
+                    textGlyphList.add(createLatTextGlyph(coord1, coord2));
                 }
-            } else if (meridian.size() >= 2) {
+            }
+        }
+    }
+
+    private static void createMeridianNorthTextGlyphs(List<List<Coord>> meridianList,
+                                                      List<TextGlyph> textGlyphList) {
+        Coord coord1;
+        Coord coord2;
+        for (List<Coord> meridian : meridianList) {
+            // DANNY made this edit
+            // BEAM Version puts anchor point inside of the image with an offset.
+            // Since we want the ability to best put the label outside the image
+            // it's better to put the anchor point at the edge of the image
+//            if (meridian.size() >= 3) {
+//                coord1 = meridian.get(1);
+//                coord2 = meridian.get(2);
+//                if (isCoordPairValid(coord1, coord2)) {
+//                    textGlyphList.add(createLonTextGlyph(coord1, coord2));
+//                }
+//            } else if (meridian.size() >= 2) {
+//                coord1 = meridian.get(0);
+//                coord2 = meridian.get(1);
+//                if (isCoordPairValid(coord1, coord2)) {
+//                    textGlyphList.add(createLonTextGlyph(coord1, coord2));
+//                }
+//            }
+
+            if (meridian.size() >= 2) {
                 coord1 = meridian.get(0);
                 coord2 = meridian.get(1);
+
+                int last = meridian.size() - 1;
+                int nextToLast = last - 1;
+// put lon labels on bottom
+
+//                    coord1 = meridian.get(nextToLast);
+                //                  coord2 = meridian.get(last);
+
+
+                // put lon labels on top
+                coord1 = meridian.get(0);
+                coord2 = meridian.get(1);
+
+
                 if (isCoordPairValid(coord1, coord2)) {
                     textGlyphList.add(createLonTextGlyph(coord1, coord2));
                 }
             }
         }
     }
+
+    private static void createMeridianSouthTextGlyphs(List<List<Coord>> meridianList,
+                                                      List<TextGlyph> textGlyphList) {
+        Coord coord1;
+        Coord coord2;
+        for (List<Coord> meridian : meridianList) {
+
+            if (meridian.size() >= 2) {
+                coord1 = meridian.get(0);
+                coord2 = meridian.get(1);
+
+                int last = meridian.size() - 1;
+                int nextToLast = last - 1;
+// put lon labels on bottom
+
+                coord1 = meridian.get(nextToLast);
+                coord2 = meridian.get(last);
+
+
+                // put lon labels on top
+//                    coord1 = meridian.get(0);
+//                    coord2 = meridian.get(1);
+
+
+                if (isCoordPairValid(coord1, coord2)) {
+                    textGlyphList.add(createLonTextGlyph(coord1, coord2));
+                }
+            }
+        }
+    }
+
 
     private static boolean isCoordPairValid(Coord coord1, Coord coord2) {
         return coord1.pixelPos.isValid() && coord2.pixelPos.isValid();
@@ -427,7 +721,7 @@ public class Graticule {
 
     private static TextGlyph createTextGlyph(String text, Coord coord1, Coord coord2) {
         final float angle = (float) Math.atan2(coord2.pixelPos.y - coord1.pixelPos.y,
-                                               coord2.pixelPos.x - coord1.pixelPos.x);
+                coord2.pixelPos.x - coord1.pixelPos.x);
         return new TextGlyph(text, coord1.pixelPos.x, coord1.pixelPos.y, angle);
     }
 

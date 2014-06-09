@@ -120,7 +120,7 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
         PropertyDescriptor vd12 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, Integer.class);
         vd12.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD);
-        vd12.setDisplayName("Text offset outward");
+        vd12.setDisplayName("Text offset inward");
         vd12.setDefaultConverter();
         addPropertyDescriptor(vd12);
 
@@ -129,6 +129,14 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd13.setDisplayName("Text offset sideward");
         vd13.setDefaultConverter();
         addPropertyDescriptor(vd13);
+
+
+        PropertyDescriptor vd14 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, Boolean.class);
+        vd14.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OUTSIDE);
+        vd14.setDisplayName("Labels on outside");
+        vd14.setDefaultConverter();
+        addPropertyDescriptor(vd14);
+
 
 
         BindingContext bindingContext = getBindingContext();
@@ -151,6 +159,9 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
         bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, textEnabled,
                 GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, textEnabled);
+
+        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, textEnabled,
+                GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, textEnabled);
 
         bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, textEnabled,
                                         GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED, textEnabled);

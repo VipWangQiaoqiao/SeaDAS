@@ -45,6 +45,7 @@ public class GraticuleLayerType extends LayerType {
     public static final String PROPERTY_NAME_TEXT_ENABLED = "graticule.text.enabled";
     public static final String PROPERTY_NAME_TEXT_FONT = "graticule.text.font";
     public static final String PROPERTY_NAME_TEXT_FONT_SIZE = "graticule.text.font.size";
+    public static final String PROPERTY_NAME_TEXT_OUTSIDE = "graticule.text.outside";
     public static final String PROPERTY_NAME_TEXT_OFFSET_OUTWARD = "graticule.text.offset.outward";
     public static final String PROPERTY_NAME_TEXT_OFFSET_SIDEWARD = "graticule.text.offset.sideward";
     public static final String PROPERTY_NAME_TEXT_FG_COLOR = "graticule.text.fg.color";
@@ -58,13 +59,14 @@ public class GraticuleLayerType extends LayerType {
     public static final double DEFAULT_LINE_TRANSPARENCY = 0.0;
     public static final double DEFAULT_LINE_WIDTH = 0.5;
     public static final boolean DEFAULT_TEXT_ENABLED = true;
+    public static final boolean DEFAULT_TEXT_OUTSIDE = true;
     public static final Font DEFAULT_TEXT_FONT = new Font("SansSerif", Font.ITALIC, 12);
     public static final int DEFAULT_TEXT_FONT_SIZE = 12;
     public static final int DEFAULT_TEXT_OFFSET_OUTWARD = 0;
     public static final int DEFAULT_TEXT_OFFSET_SIDEWARD = 0;
-    public static final Color DEFAULT_TEXT_FG_COLOR = Color.WHITE;
-    public static final Color DEFAULT_TEXT_BG_COLOR = Color.BLACK;
-    public static final double DEFAULT_TEXT_BG_TRANSPARENCY = 0.7;
+    public static final Color DEFAULT_TEXT_FG_COLOR = Color.BLACK;
+    public static final Color DEFAULT_TEXT_BG_COLOR = Color.WHITE;
+    public static final double DEFAULT_TEXT_BG_TRANSPARENCY = 1.0;
 
     private static final String ALIAS_NAME_RES_AUTO = "resAuto";
     private static final String ALIAS_NAME_RES_PIXELS = "resPixels";
@@ -75,6 +77,7 @@ public class GraticuleLayerType extends LayerType {
     private static final String ALIAS_NAME_LINE_WIDTH = "lineWidth";
     private static final String ALIAS_NAME_TEXT_ENABLED = "textEnabled";
     private static final String ALIAS_NAME_TEXT_FONT = "textFont";
+    private static final String ALIAS_NAME_TEXT_OUTSIDE = "textOutside";
     private static final String ALIAS_NAME_TEXT_FONT_SIZE = "textFontSize";
     private static final String ALIAS_NAME_TEXT_OFFSET_OUTWARD = "textOffsetOutward";
     private static final String ALIAS_NAME_TEXT_OFFSET_SIDEWARD = "textOffsetSideward";
@@ -142,6 +145,11 @@ public class GraticuleLayerType extends LayerType {
         final Property textEnabledModel = Property.create(PROPERTY_NAME_TEXT_ENABLED, Boolean.class, DEFAULT_TEXT_ENABLED, true);
         textEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_ENABLED);
         vc.addProperty(textEnabledModel);
+
+
+        final Property textOutsideModel = Property.create(PROPERTY_NAME_TEXT_OUTSIDE, Boolean.class, DEFAULT_TEXT_OUTSIDE, true);
+        textOutsideModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_OUTSIDE);
+        vc.addProperty(textOutsideModel);
 
         final Property textFontModel = Property.create(PROPERTY_NAME_TEXT_FONT, Font.class, DEFAULT_TEXT_FONT, true);
         textFontModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_FONT);

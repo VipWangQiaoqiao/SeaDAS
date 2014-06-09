@@ -1009,7 +1009,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             configParams.addParameter(param);
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, 0);
-            param.getProperties().setLabel("Text offset outward"); /*I18N*/
+            param.getProperties().setLabel("Text offset inward"); /*I18N*/
             param.getProperties().setMinValue(-300);
             param.getProperties().setMaxValue(300);
             configParams.addParameter(param);
@@ -1018,6 +1018,11 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setLabel("Text offset sideward"); /*I18N*/
             param.getProperties().setMinValue(-300);
             param.getProperties().setMaxValue(300);
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, Boolean.TRUE);
+            param.addParamChangeListener(paramChangeListener);
+            param.getProperties().setLabel("Labels outside"); /*I18N*/
             configParams.addParameter(param);
 
 
@@ -1133,12 +1138,24 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbc.insets.top = _LINE_INSET_TOP;
 
 
+
+            param = getConfigParam("graticule.text.outside");
+            gbc.weightx = 0;
+            gbc.gridwidth = 2;
+            gbc.weightx = 1;
+            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridwidth = 1;
+            gbc.gridy++;
+
+
+
             param = getConfigParam("graticule.text.font.size");
             gbc.weightx = 0;
             pageUI.add(param.getEditor().getLabelComponent(), gbc);
             gbc.weightx = 1;
             pageUI.add(param.getEditor().getEditorComponent(), gbc);
             gbc.gridy++;
+
 
             param = getConfigParam("graticule.text.offset.outward");
             gbc.weightx = 0;
@@ -1192,6 +1209,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam("graticule.text.bg.color").setUIEnabled(textEnabled);
             getConfigParam("graticule.text.bg.transparency").setUIEnabled(textEnabled);
             getConfigParam("graticule.text.font.size").setUIEnabled(textEnabled);
+            getConfigParam("graticule.text.outside").setUIEnabled(textEnabled);
             getConfigParam("graticule.text.offset.outward").setUIEnabled(textEnabled);
             getConfigParam("graticule.text.offset.sideward").setUIEnabled(textEnabled);
         }

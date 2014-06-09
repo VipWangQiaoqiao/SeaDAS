@@ -26,12 +26,7 @@ import org.esa.beam.framework.datamodel.ProductNodeEvent;
 import org.esa.beam.framework.datamodel.ProductNodeListenerAdapter;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Font;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
@@ -63,7 +58,9 @@ public class GraticuleLayer extends Layer {
         productNodeHandler = new ProductNodeHandler();
         raster.getProduct().addProductNodeListener(productNodeHandler);
 
-        setTransparency(0.5);
+        // DANNY master transparency
+        //      setTransparency(0.5);
+        setTransparency(0.0);
 
     }
 
@@ -84,10 +81,10 @@ public class GraticuleLayer extends Layer {
     public void renderLayer(Rendering rendering) {
         if (graticule == null) {
             graticule = Graticule.create(raster,
-                                         getResAuto(),
-                                         getResPixels(),
-                                         (float) getResLat(),
-                                         (float) getResLon());
+                    getResAuto(),
+                    getResPixels(),
+                    (float) getResLat(),
+                    (float) getResLon());
         }
         if (graticule != null) {
             final Graphics2D g2d = rendering.getGraphics();
@@ -103,11 +100,35 @@ public class GraticuleLayer extends Layer {
                 if (linePaths != null) {
                     drawLinePaths(g2d, linePaths);
                 }
+                final GeneralPath[] borderPaths = graticule.getBorderPaths();
+                if (borderPaths != null) {
+                    drawBorderPaths(g2d, borderPaths);
+                }
                 if (isTextEnabled()) {
-                    final Graticule.TextGlyph[] textGlyphs = graticule.getTextGlyphs();
-                    if (textGlyphs != null) {
-                        drawTextLabels(g2d, textGlyphs);
+//                    final Graticule.TextGlyph[] textGlyphs = graticule.getTextGlyphs();
+//                    if (textGlyphs != null) {
+//                        drawTextLabels(g2d, textGlyphs);
+//                    }
+
+                    final Graticule.TextGlyph[] textGlyphsNorth = graticule.getTextGlyphsNorth();
+                    if (textGlyphsNorth != null) {
+                        drawTextLabels(g2d, textGlyphsNorth, true);
                     }
+
+//                    final Graticule.TextGlyph[] textGlyphsSouth = graticule.getTextGlyphsSouth();
+//                    if (textGlyphsSouth != null) {
+//                        drawTextLabels(g2d, textGlyphsSouth, false);
+//                    }
+
+                    final Graticule.TextGlyph[] textGlyphsWest = graticule.getTextGlyphsWest();
+                    if (textGlyphsWest != null) {
+                        drawTextLabels(g2d, textGlyphsWest, true);
+                    }
+
+//                    final Graticule.TextGlyph[] textGlyphsEast = graticule.getTextGlyphsEast();
+//                    if (textGlyphsEast != null) {
+//                        drawTextLabels(g2d, textGlyphsEast, false);
+//                    }
                 }
             } finally {
                 g2d.setTransform(transformSave);
@@ -122,7 +143,17 @@ public class GraticuleLayer extends Layer {
             g2d.setComposite(getAlphaComposite(getLineTransparency()));
         }
         g2d.setPaint(getLineColor());
-        g2d.setStroke(new BasicStroke((float) getLineWidth()));
+
+
+// DANNY
+// if dashed line
+        Stroke drawingStroke = new BasicStroke((float) getLineWidth(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+
+// else
+        //    g2d.setStroke(new BasicStroke((float) getLineWidth()));
+
+
+        g2d.setStroke(drawingStroke);
         for (GeneralPath linePath : linePaths) {
             g2d.draw(linePath);
         }
@@ -131,7 +162,34 @@ public class GraticuleLayer extends Layer {
         }
     }
 
-    private void drawTextLabels(Graphics2D g2d, final Graticule.TextGlyph[] textGlyphs) {
+    private void drawBorderPaths(Graphics2D g2d, final GeneralPath[] linePaths) {
+        Composite oldComposite = null;
+        if (getLineTransparency() > 0.0) {
+            oldComposite = g2d.getComposite();
+            g2d.setComposite(getAlphaComposite(getLineTransparency()));
+        }
+        g2d.setPaint(getLineColor());
+
+
+// DANNY
+// if dashed line
+        //      Stroke drawingStroke = new BasicStroke((float) getLineWidth(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+
+// else
+        Stroke drawingStroke = new BasicStroke((float) getLineWidth());
+
+
+        g2d.setStroke(drawingStroke);
+        for (GeneralPath linePath : linePaths) {
+            g2d.draw(linePath);
+        }
+        if (oldComposite != null) {
+            g2d.setComposite(oldComposite);
+        }
+    }
+
+
+    private void drawTextLabels(Graphics2D g2d, final Graticule.TextGlyph[] textGlyphs, boolean northOrWest) {
         final float tx = 3;
         final float ty = -3;
 
@@ -141,6 +199,7 @@ public class GraticuleLayer extends Layer {
 
         Font font = new Font("SansSerif", Font.ITALIC, getTextFontSize());
         g2d.setFont(font);
+
 
         if (getTextBgTransparency() < 1.0) {
             Composite oldComposite = null;
@@ -157,10 +216,28 @@ public class GraticuleLayer extends Layer {
                 g2d.rotate(glyph.getAngle());
 
                 Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(glyph.getText(), g2d);
-                labelBounds.setRect(labelBounds.getX() + tx + textOutwardsOffset - 1,
-                                    labelBounds.getY() + ty + textSidewardsOffset - 1,
-                                    labelBounds.getWidth() + 4,
-                                    labelBounds.getHeight());
+                float width = (float) labelBounds.getWidth();
+                float height = (float) labelBounds.getHeight();
+                float shiftSideways = height / 3;
+                double nudge = height / 2;
+                int offsetNudge = (int) nudge;
+
+                // todo Danny adjust this like the one 20 lines  later in the code
+                if (isTextOutside()) {
+                    labelBounds.setRect(labelBounds.getX() - width - offsetNudge + textOutwardsOffset - 1,
+                            labelBounds.getY() + shiftSideways + ty + textSidewardsOffset - 1,
+                            labelBounds.getWidth() + 15 + 4,
+                            labelBounds.getHeight());
+                } else {
+                    labelBounds.setRect(labelBounds.getX() + offsetNudge + textOutwardsOffset - 1,
+                            labelBounds.getY() + textSidewardsOffset - 1,
+                            labelBounds.getWidth() + 4,
+                            labelBounds.getHeight());
+//                    labelBounds.setRect(labelBounds.getX() + tx +  - 1,
+//                            labelBounds.getY() + ty +  - 1,
+//                            labelBounds.getWidth() + 4,
+//                            labelBounds.getHeight());
+                }
                 g2d.fill(labelBounds);
 
                 g2d.rotate(-glyph.getAngle());
@@ -179,8 +256,24 @@ public class GraticuleLayer extends Layer {
             g2d.translate(glyph.getX(), glyph.getY());
             g2d.rotate(glyph.getAngle());
 
+            Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(glyph.getText(), g2d);
+            float width = (float) labelBounds.getWidth();
+            float height = (float) labelBounds.getHeight();
 
-            g2d.drawString(glyph.getText(), tx+textOutwardsOffset, ty+textSidewardsOffset);
+            float shiftSideways = height / 3;
+            double nudge = height / 2;
+            int offsetNudge = (int) nudge;
+            int newNudge = (int) (height * 2);
+
+            if (isTextOutside()) {
+                if (northOrWest) {
+                    g2d.drawString(glyph.getText(), -width - offsetNudge + textOutwardsOffset, shiftSideways + textSidewardsOffset);
+                } else {
+                    g2d.drawString(glyph.getText(), newNudge +  textOutwardsOffset, shiftSideways + textSidewardsOffset);
+                }
+            } else {
+                g2d.drawString(glyph.getText(), offsetNudge + textOutwardsOffset, ty + textSidewardsOffset);
+            }
 //
 //           if (glyph.getText().endsWith("N") || glyph.getText().endsWith("S")) {
 //
@@ -188,10 +281,7 @@ public class GraticuleLayer extends Layer {
 //
 //           }
 
-
-
-
-      //      g2d.drawString(glyph.getText(), tx, ty);
+            //      g2d.drawString(glyph.getText(), tx, ty);
 
             g2d.rotate(-glyph.getAngle());
             g2d.translate(-glyph.getX(), -glyph.getY());
@@ -217,9 +307,9 @@ public class GraticuleLayer extends Layer {
     protected void fireLayerPropertyChanged(PropertyChangeEvent event) {
         String propertyName = event.getPropertyName();
         if (propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_AUTO) ||
-            propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LAT) ||
-            propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LON) ||
-            propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS)) {
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LAT) ||
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LON) ||
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS)) {
             graticule = null;
         }
         if (getConfiguration().getProperty(propertyName) != null) {
@@ -230,47 +320,47 @@ public class GraticuleLayer extends Layer {
 
     private boolean getResAuto() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_RES_AUTO,
-                                        GraticuleLayerType.DEFAULT_RES_AUTO);
+                GraticuleLayerType.DEFAULT_RES_AUTO);
     }
 
     private double getResLon() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_RES_LON,
-                                        GraticuleLayerType.DEFAULT_RES_LON);
+                GraticuleLayerType.DEFAULT_RES_LON);
     }
 
     private double getResLat() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_RES_LAT,
-                                        GraticuleLayerType.DEFAULT_RES_LAT);
+                GraticuleLayerType.DEFAULT_RES_LAT);
     }
 
     private int getResPixels() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS,
-                                        GraticuleLayerType.DEFAULT_RES_PIXELS);
+                GraticuleLayerType.DEFAULT_RES_PIXELS);
     }
 
     private boolean isTextEnabled() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED,
-                                        GraticuleLayerType.DEFAULT_TEXT_ENABLED);
+                GraticuleLayerType.DEFAULT_TEXT_ENABLED);
     }
 
     private Color getLineColor() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR,
-                                        GraticuleLayerType.DEFAULT_LINE_COLOR);
+                GraticuleLayerType.DEFAULT_LINE_COLOR);
     }
 
     private double getLineTransparency() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY,
-                                        GraticuleLayerType.DEFAULT_LINE_TRANSPARENCY);
+                GraticuleLayerType.DEFAULT_LINE_TRANSPARENCY);
     }
 
     private double getLineWidth() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
-                                        GraticuleLayerType.DEFAULT_LINE_WIDTH);
+                GraticuleLayerType.DEFAULT_LINE_WIDTH);
     }
 
     private Font getTextFont() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT,
-                                        GraticuleLayerType.DEFAULT_TEXT_FONT);
+                GraticuleLayerType.DEFAULT_TEXT_FONT);
     }
 
     private Integer getTextFontSize() {
@@ -288,19 +378,25 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD);
     }
 
+    private boolean isTextOutside() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
+                GraticuleLayerType.DEFAULT_TEXT_OUTSIDE);
+    }
+
+
     private Color getTextFgColor() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR,
-                                        GraticuleLayerType.DEFAULT_TEXT_FG_COLOR);
+                GraticuleLayerType.DEFAULT_TEXT_FG_COLOR);
     }
 
     private Color getTextBgColor() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR,
-                                        GraticuleLayerType.DEFAULT_TEXT_BG_COLOR);
+                GraticuleLayerType.DEFAULT_TEXT_BG_COLOR);
     }
 
     private double getTextBgTransparency() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY,
-                                        GraticuleLayerType.DEFAULT_TEXT_BG_TRANSPARENCY);
+                GraticuleLayerType.DEFAULT_TEXT_BG_TRANSPARENCY);
     }
 
     private class ProductNodeHandler extends ProductNodeListenerAdapter {

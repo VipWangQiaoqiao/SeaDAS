@@ -401,6 +401,10 @@ public class ProductSceneImage implements ProductLayerContext {
                 configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
                         GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE));
 
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
+                        GraticuleLayerType.DEFAULT_TEXT_OUTSIDE));
+
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
                 configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
                         GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD));
