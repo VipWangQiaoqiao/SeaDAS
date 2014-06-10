@@ -1009,7 +1009,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             configParams.addParameter(param);
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, 0);
-            param.getProperties().setLabel("Text offset inward"); /*I18N*/
+            param.getProperties().setLabel("Text offset outward"); /*I18N*/
             param.getProperties().setMinValue(-300);
             param.getProperties().setMaxValue(300);
             configParams.addParameter(param);

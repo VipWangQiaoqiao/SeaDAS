@@ -96,39 +96,36 @@ public class GraticuleLayer extends Layer {
                 transform.concatenate(vp.getModelToViewTransform());
                 transform.concatenate(raster.getSourceImage().getModel().getImageToModelTransform(0));
                 g2d.setTransform(transform);
+
+
                 final GeneralPath[] linePaths = graticule.getLinePaths();
                 if (linePaths != null) {
                     drawLinePaths(g2d, linePaths);
                 }
-                final GeneralPath[] borderPaths = graticule.getBorderPaths();
-                if (borderPaths != null) {
-                    drawBorderPaths(g2d, borderPaths);
-                }
+
+                drawBorderPath(g2d, raster);
+
                 if (isTextEnabled()) {
-//                    final Graticule.TextGlyph[] textGlyphs = graticule.getTextGlyphs();
-//                    if (textGlyphs != null) {
-//                        drawTextLabels(g2d, textGlyphs);
-//                    }
 
                     final Graticule.TextGlyph[] textGlyphsNorth = graticule.getTextGlyphsNorth();
                     if (textGlyphsNorth != null) {
-                        drawTextLabels(g2d, textGlyphsNorth, true);
+                        drawTextLabels(g2d, textGlyphsNorth, Graticule.TextLocation.NORTH);
                     }
 
-//                    final Graticule.TextGlyph[] textGlyphsSouth = graticule.getTextGlyphsSouth();
-//                    if (textGlyphsSouth != null) {
-//                        drawTextLabels(g2d, textGlyphsSouth, false);
-//                    }
+                    final Graticule.TextGlyph[] textGlyphsSouth = graticule.getTextGlyphsSouth();
+                    if (textGlyphsSouth != null) {
+                        drawTextLabels(g2d, textGlyphsSouth, Graticule.TextLocation.SOUTH);
+                    }
 
                     final Graticule.TextGlyph[] textGlyphsWest = graticule.getTextGlyphsWest();
                     if (textGlyphsWest != null) {
-                        drawTextLabels(g2d, textGlyphsWest, true);
+                        drawTextLabels(g2d, textGlyphsWest, Graticule.TextLocation.WEST);
                     }
 
-//                    final Graticule.TextGlyph[] textGlyphsEast = graticule.getTextGlyphsEast();
-//                    if (textGlyphsEast != null) {
-//                        drawTextLabels(g2d, textGlyphsEast, false);
-//                    }
+                    final Graticule.TextGlyph[] textGlyphsEast = graticule.getTextGlyphsEast();
+                    if (textGlyphsEast != null) {
+                        drawTextLabels(g2d, textGlyphsEast, Graticule.TextLocation.EAST);
+                    }
                 }
             } finally {
                 g2d.setTransform(transformSave);
@@ -162,7 +159,9 @@ public class GraticuleLayer extends Layer {
         }
     }
 
-    private void drawBorderPaths(Graphics2D g2d, final GeneralPath[] linePaths) {
+
+
+    private void drawBorderPath(Graphics2D g2d, RasterDataNode raster) {
         Composite oldComposite = null;
         if (getLineTransparency() > 0.0) {
             oldComposite = g2d.getComposite();
@@ -180,16 +179,40 @@ public class GraticuleLayer extends Layer {
 
 
         g2d.setStroke(drawingStroke);
-        for (GeneralPath linePath : linePaths) {
-            g2d.draw(linePath);
-        }
+
+
+        GeneralPath westBorderPath = new GeneralPath();
+        westBorderPath.moveTo(0, 0);
+        westBorderPath.lineTo(0, raster.getRasterHeight());
+        westBorderPath.closePath();
+        g2d.draw(westBorderPath);
+
+        GeneralPath northBorderPath = new GeneralPath();
+        northBorderPath.moveTo(0, raster.getRasterHeight());
+        northBorderPath.lineTo(raster.getRasterWidth(), raster.getRasterHeight());
+        northBorderPath.closePath();
+        g2d.draw(northBorderPath);
+
+        GeneralPath eastBorderPath = new GeneralPath();
+        eastBorderPath.moveTo(raster.getRasterWidth(), raster.getRasterHeight());
+        eastBorderPath.lineTo(raster.getRasterWidth(), 0);
+        eastBorderPath.closePath();
+        g2d.draw(eastBorderPath);
+
+        GeneralPath southBorderPath = new GeneralPath();
+        southBorderPath.moveTo(raster.getRasterWidth(), 0);
+        southBorderPath.lineTo(0, 0);
+        southBorderPath.closePath();
+        g2d.draw(southBorderPath);
+
+
         if (oldComposite != null) {
             g2d.setComposite(oldComposite);
         }
     }
 
 
-    private void drawTextLabels(Graphics2D g2d, final Graticule.TextGlyph[] textGlyphs, boolean northOrWest) {
+    private void drawTextLabels(Graphics2D g2d, final Graticule.TextGlyph[] textGlyphs, Graticule.TextLocation textLocation) {
         final float tx = 3;
         final float ty = -3;
 
@@ -265,12 +288,29 @@ public class GraticuleLayer extends Layer {
             int offsetNudge = (int) nudge;
             int newNudge = (int) (height * 2);
 
+            Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("W", g2d);
+            double letterWidth = singleLetter.getWidth();
+            float halfLetterWidth = (float) (letterWidth / 2.0);
+
+            boolean rotateSouth = false;
+            boolean rotateNorth = false;
+
             if (isTextOutside()) {
-                if (northOrWest) {
-                    g2d.drawString(glyph.getText(), -width - offsetNudge + textOutwardsOffset, shiftSideways + textSidewardsOffset);
+                if (textLocation == Graticule.TextLocation.NORTH && !rotateNorth ||
+                        textLocation == Graticule.TextLocation.WEST ||
+                        textLocation == Graticule.TextLocation.SOUTH && rotateSouth) {
+                    g2d.drawString(glyph.getText(), -width - halfLetterWidth - textOutwardsOffset, shiftSideways + textSidewardsOffset);
                 } else {
-                    g2d.drawString(glyph.getText(), newNudge +  textOutwardsOffset, shiftSideways + textSidewardsOffset);
+
+                    AffineTransform orig = g2d.getTransform();
+                    g2d.rotate(-Math.PI);
+                    g2d.drawString(glyph.getText(), +halfLetterWidth + textOutwardsOffset, shiftSideways + textSidewardsOffset);
+
+                    g2d.setTransform(orig);
                 }
+
+                //        g2d.drawString(glyph.getText(), textOutwardsOffset, shiftSideways + textSidewardsOffset);
+
             } else {
                 g2d.drawString(glyph.getText(), offsetNudge + textOutwardsOffset, ty + textSidewardsOffset);
             }
