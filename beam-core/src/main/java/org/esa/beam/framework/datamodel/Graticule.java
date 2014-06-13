@@ -142,10 +142,10 @@ public class Graticule {
         final GeneralPath[] paths = createPaths(parallelList, meridianList);
 
 
-        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH);
-        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH);
-        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST);
-        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST);
+        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, null);
+        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH,null);
+        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST, null);
+        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST,null);
 
         return new Graticule(paths,  textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
 
@@ -220,11 +220,11 @@ public class Graticule {
         final GeneralPath[] paths = createPaths(parallelList, meridianList);
 
 
-        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH);
-        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH);
+        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, raster);
+        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH,raster);
 
-        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST);
-        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST);
+        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST,raster);
+        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST,raster);
 
         return new Graticule(paths, textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
     }
@@ -424,7 +424,28 @@ public class Graticule {
 
 
 
-    private static TextGlyph[] createTextGlyphs(List<List<Coord>> latitudeGridLinePoints, List<List<Coord>> longitudeGridLinePoints, TextLocation textLocation) {
+    public static TextGlyph getBorderGlyphNorthWestCornerLat (RasterDataNode raster) {
+
+        GeoPos geoPos = null;
+
+        PixelPos pixelPos = new PixelPos(0, 0);
+        raster.getGeoCoding().getGeoPos(pixelPos, geoPos);
+        Coord coord1 = new Coord(geoPos,pixelPos);
+
+        pixelPos = new PixelPos(1,0);
+        raster.getGeoCoding().getGeoPos(pixelPos, geoPos);
+        Coord coord2 = new Coord(geoPos,pixelPos);
+
+
+        TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(), coord1, coord2);
+
+        return textGlyph;
+
+    }
+
+
+
+    private static TextGlyph[] createTextGlyphs(List<List<Coord>> latitudeGridLinePoints, List<List<Coord>> longitudeGridLinePoints, TextLocation textLocation, RasterDataNode raster) {
         final List<TextGlyph> textGlyphs = new ArrayList<TextGlyph>();
 
         switch (textLocation) {
@@ -517,6 +538,8 @@ public class Graticule {
                 }
             }
         }
+
+
     }
 
 

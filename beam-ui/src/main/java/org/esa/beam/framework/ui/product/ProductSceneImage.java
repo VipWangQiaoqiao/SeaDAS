@@ -397,21 +397,6 @@ public class ProductSceneImage implements ProductLayerContext {
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS,
                                     configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS,
                                                                  GraticuleLayerType.DEFAULT_RES_PIXELS));
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
-                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
-                        GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE));
-
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
-                        GraticuleLayerType.DEFAULT_TEXT_OUTSIDE));
-
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
-                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
-                        GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD));
-
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
-                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
-                        GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_RES_LAT,
                                     configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_RES_LAT,
@@ -443,6 +428,87 @@ public class ProductSceneImage implements ProductLayerContext {
                                     configuration.getPropertyDouble(
                                             GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY,
                                             GraticuleLayerType.DEFAULT_TEXT_BG_TRANSPARENCY));
+
+
+        // DANNY added these
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
+                        GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_ITALIC,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_ITALIC,
+                        GraticuleLayerType.DEFAULT_TEXT_FONT_ITALIC));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
+                        GraticuleLayerType.DEFAULT_TEXT_OUTSIDE));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
+                        GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
+                        GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH,
+                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH,
+                        GraticuleLayerType.DEFAULT_TEXT_ROTATION_NORTH));
+
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST,
+                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST,
+                        GraticuleLayerType.DEFAULT_TEXT_ROTATION_WEST));
+
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_NORTH,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_NORTH,
+                        GraticuleLayerType.DEFAULT_TEXT_ENABLED_NORTH));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_SOUTH,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_SOUTH,
+                        GraticuleLayerType.DEFAULT_TEXT_ENABLED_SOUTH));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_WEST,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_WEST,
+                        GraticuleLayerType.DEFAULT_TEXT_ENABLED_WEST));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_EAST,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_EAST,
+                        GraticuleLayerType.DEFAULT_TEXT_ENABLED_EAST));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_LINE_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_LINE_ENABLED,
+                        GraticuleLayerType.DEFAULT_LINE_ENABLED));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED,
+                        GraticuleLayerType.DEFAULT_LINE_DASHED));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE,
+                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE,
+                        GraticuleLayerType.DEFAULT_LINE_DASHED_PHASE));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED,
+                        GraticuleLayerType.DEFAULT_BORDER_ENABLED));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
+                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
+                        GraticuleLayerType.DEFAULT_BORDER_WIDTH));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR,
+                configuration.getPropertyColor(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR,
+                        GraticuleLayerType.DEFAULT_BORDER_COLOR));
+
+
+
+
+
+
+
+
     }
 
     private BandImageMultiLevelSource getBandImageMultiLevelSource() {

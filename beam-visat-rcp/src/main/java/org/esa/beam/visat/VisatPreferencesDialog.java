@@ -1002,29 +1002,6 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setLabel("Show text labels"); /*I18N*/
             configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, 12);
-            param.getProperties().setLabel("Text font size"); /*I18N*/
-            param.getProperties().setMinValue(6);
-            param.getProperties().setMaxValue(150);
-            configParams.addParameter(param);
-
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, 0);
-            param.getProperties().setLabel("Text offset outward"); /*I18N*/
-            param.getProperties().setMinValue(-300);
-            param.getProperties().setMaxValue(300);
-            configParams.addParameter(param);
-
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, 0);
-            param.getProperties().setLabel("Text offset sideward"); /*I18N*/
-            param.getProperties().setMinValue(-300);
-            param.getProperties().setMaxValue(300);
-            configParams.addParameter(param);
-
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, Boolean.TRUE);
-            param.addParamChangeListener(paramChangeListener);
-            param.getProperties().setLabel("Labels outside"); /*I18N*/
-            configParams.addParameter(param);
-
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, Color.white);
             param.getProperties().setLabel("Text foreground colour"); /*I18N*/
@@ -1039,6 +1016,31 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setMinValue(0.0);
             param.getProperties().setMaxValue(1.0);
             configParams.addParameter(param);
+
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, 12);
+//            param.getProperties().setLabel("Text font size"); /*I18N*/
+//            param.getProperties().setMinValue(6);
+//            param.getProperties().setMaxValue(150);
+//            configParams.addParameter(param);
+//
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, 0);
+//            param.getProperties().setLabel("Text offset outward"); /*I18N*/
+//            param.getProperties().setMinValue(-300);
+//            param.getProperties().setMaxValue(300);
+//            configParams.addParameter(param);
+//
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, 0);
+//            param.getProperties().setLabel("Text offset sideward"); /*I18N*/
+//            param.getProperties().setMinValue(-300);
+//            param.getProperties().setMaxValue(300);
+//            configParams.addParameter(param);
+//
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, Boolean.TRUE);
+//            param.addParamChangeListener(paramChangeListener);
+//            param.getProperties().setLabel("Labels outside"); /*I18N*/
+//            configParams.addParameter(param);
+
+
         }
 
         @Override
@@ -1138,39 +1140,39 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbc.insets.top = _LINE_INSET_TOP;
 
 
-
-            param = getConfigParam("graticule.text.outside");
-            gbc.weightx = 0;
-            gbc.gridwidth = 2;
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridwidth = 1;
-            gbc.gridy++;
-
-
-
-            param = getConfigParam("graticule.text.font.size");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-
-            param = getConfigParam("graticule.text.offset.outward");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-
-            param = getConfigParam("graticule.text.offset.sideward");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+//
+//            param = getConfigParam("graticule.text.outside");
+//            gbc.weightx = 0;
+//            gbc.gridwidth = 2;
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridwidth = 1;
+//            gbc.gridy++;
+//
+//
+//
+//            param = getConfigParam("graticule.text.font.size");
+//            gbc.weightx = 0;
+//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
+//
+//
+//            param = getConfigParam("graticule.text.offset.outward");
+//            gbc.weightx = 0;
+//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
+//
+//
+//            param = getConfigParam("graticule.text.offset.sideward");
+//            gbc.weightx = 0;
+//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
 
 
             param = getConfigParam("graticule.text.fg.color");
@@ -1208,10 +1210,10 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam("graticule.text.fg.color").setUIEnabled(textEnabled);
             getConfigParam("graticule.text.bg.color").setUIEnabled(textEnabled);
             getConfigParam("graticule.text.bg.transparency").setUIEnabled(textEnabled);
-            getConfigParam("graticule.text.font.size").setUIEnabled(textEnabled);
-            getConfigParam("graticule.text.outside").setUIEnabled(textEnabled);
-            getConfigParam("graticule.text.offset.outward").setUIEnabled(textEnabled);
-            getConfigParam("graticule.text.offset.sideward").setUIEnabled(textEnabled);
+//            getConfigParam("graticule.text.font.size").setUIEnabled(textEnabled);
+//            getConfigParam("graticule.text.outside").setUIEnabled(textEnabled);
+//            getConfigParam("graticule.text.offset.outward").setUIEnabled(textEnabled);
+//            getConfigParam("graticule.text.offset.sideward").setUIEnabled(textEnabled);
         }
     }
 
