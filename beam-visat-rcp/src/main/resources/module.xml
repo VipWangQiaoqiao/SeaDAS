@@ -163,11 +163,11 @@
         <toolView>
             <id>org.esa.beam.visat.ProductsToolView</id>
             <class>org.esa.beam.visat.ProductsToolView</class>
-            <title>Files</title>
-            <tabTitle>Files</tabTitle>
+            <title>File Manager</title>
+            <tabTitle>File Manager</tabTitle>
             <!--<mnemonic>F</mnemonic>-->
             <!--<accelerator>ctrl alt F</accelerator>-->
-            <!--<smallIcon>/org/esa/beam/resources/images/icons/RsProduct16.gif</smallIcon>-->
+            <smallIcon>/org/esa/beam/resources/images/icons/RsProduct16.gif</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/RsProduct24.gif</largeIcon>
             <helpId>productBrowser</helpId>
             <description>Display all opened files in a tree view.</description>
@@ -215,10 +215,11 @@
             <id>org.esa.beam.visat.toolviews.nav.NavigationToolView</id>
             <class>org.esa.beam.visat.toolviews.nav.NavigationToolView</class>
             <title>Navigation</title>
+            <tabTitle>Navigation Controls</tabTitle>
             <!--<mnemonic>N</mnemonic>-->
             <!--<accelerator>ctrl alt N</accelerator>-->
             <description>Zoom and pan a selected image view.</description>
-            <!--<smallIcon>/org/esa/beam/resources/images/icons/Navigation16.png</smallIcon>-->
+            <smallIcon>/org/esa/beam/resources/images/icons/Navigation16.png</smallIcon>
             <!--<smallIcon>/org/esa/beam/resources/images/icons/Navigation16.gif</smallIcon>-->
             <largeIcon>/org/esa/beam/resources/images/icons/Navigation24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/Navigation24.gif</largeIcon>-->
@@ -232,11 +233,11 @@
             <id>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</id>
             <class>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</class>
             <title>World Map</title>
-            <tabTitle>World</tabTitle>
+            <tabTitle>World Map Location</tabTitle>
             <!--<mnemonic>W</mnemonic>-->
             <!--<accelerator>ctrl alt W</accelerator>-->
             <description>Display file geographic boundaries on a world map.</description>
-            <!--<smallIcon>/org/esa/beam/resources/images/icons/WorldMapBoundaries16.png</smallIcon>-->
+            <smallIcon>/org/esa/beam/resources/images/icons/WorldMapBoundaries16.png</smallIcon>
             <!--<smallIcon>/org/esa/beam/resources/images/icons/WorldMap16.gif</smallIcon>-->
             <largeIcon>/org/esa/beam/resources/images/icons/WorldMapBoundaries24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/WorldMap24.gif</largeIcon>-->
@@ -249,12 +250,12 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</id>
             <class>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</class>
-            <title>Color Palette</title>
-            <tabTitle>Colors</tabTitle>
+            <title>Color Palette Manager</title>
+            <tabTitle>Color Manager</tabTitle>
             <!--<mnemonic>C</mnemonic>-->
             <!--<accelerator>ctrl alt C</accelerator>-->
             <description>Add or alter the color palette of an image</description>
-            <!--<smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.png</smallIcon>-->
+            <smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.gif</largeIcon>-->
             <helpId>showColorManipulationWnd</helpId>
@@ -272,7 +273,7 @@
             <!--<mnemonic>E</mnemonic>-->
             <!--<accelerator>ctrl alt E</accelerator>-->
             <description>Edit layer properties.</description>
-            <!--<smallIcon>/org/esa/beam/resources/images/icons/LayerEditor16.png</smallIcon>-->
+            <smallIcon>/org/esa/beam/resources/images/icons/LayerEditor16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/LayerEditor24.png</largeIcon>
             <helpId>showLayerEditorWnd</helpId>
             <!--<placeAfter>MaskManagerToolView</placeAfter>-->
@@ -300,11 +301,11 @@
             <id>org.esa.beam.visat.toolviews.mask.MaskManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.mask.MaskManagerToolView</class>
             <title>Mask Manager</title>
-            <tabTitle>Masks</tabTitle>
+            <tabTitle>Mask Manager</tabTitle>
             <!--<mnemonic>M</mnemonic>-->
             <!--<accelerator>ctrl alt M</accelerator>-->
             <description>Manage binary data masks and ROIs.</description>
-            <!--<smallIcon>/org/esa/beam/resources/images/icons/MaskManager16.png</smallIcon>-->
+            <smallIcon>/org/esa/beam/resources/images/icons/MaskManager16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/MaskManager24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/MaskManager24.png</largeIcon>-->
             <helpId>showMaskROIManagerWnd</helpId>
@@ -317,11 +318,11 @@
             <id>org.esa.beam.visat.toolviews.layermanager.LayerManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.layermanager.LayerManagerToolView</class>
             <title>Layer Manager</title>
-            <tabTitle>Layers</tabTitle>
+            <tabTitle>Layer Manager</tabTitle>
             <!--<mnemonic>L</mnemonic>-->
             <!--<accelerator>ctrl alt L</accelerator>-->
             <description>Manage view layer visibility and transparency.</description>
-            <!--<smallIcon>/org/esa/beam/resources/images/icons/LayerManager16.png</smallIcon>-->
+            <smallIcon>/org/esa/beam/resources/images/icons/LayerManager16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/LayerManager24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/LayerManager24.png</largeIcon>-->
             <helpId>showLayerManagerWnd</helpId>
@@ -336,7 +337,7 @@
             <id>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</class>
             <title>Pin Manager</title>
-            <tabTitle>Pins</tabTitle>
+            <tabTitle>Pin Manager</tabTitle>
             <!--<mnemonic>a</mnemonic>-->
             <!--<accelerator>ctrl alt A</accelerator>-->
             <description>Manage placement of pins.</description>
@@ -1078,9 +1079,9 @@
             <parent>view</parent>
             <id>showNoDataOverlay</id>
             <class>org.esa.beam.visat.actions.ShowNoDataOverlayAction</class>
-            <text>No-Data</text>
+            <text>No-Data Layer</text>
             <toggle>true</toggle>
-            <shortDescr>Show no-data overlay</shortDescr>
+            <shortDescr>Show no-data layer</shortDescr>
             <description>Show no-data overlay for the selected image</description>
             <context>image</context>
             <placeAfter>openViewsMenu</placeAfter>
@@ -1094,7 +1095,7 @@
             <parent>view</parent>
             <id>showShapeOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGeometryOverlayAction</class>
-            <text>Geometries</text>
+            <text>Geometry Layer(s)</text>
             <toggle>true</toggle>
             <!--<mnemonic>O</mnemonic>-->
             <shortDescr>Show/hide geometry overlay</shortDescr>
@@ -1111,10 +1112,10 @@
             <parent>view</parent>
             <id>showGraticuleOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGraticuleOverlayAction</class>
-            <text>Map Grid Lines</text>
+            <text>Map Grid Layer</text>
             <toggle>true</toggle>
             <!--<mnemonic>G</mnemonic>-->
-            <shortDescr>Show/hide graticule overlay</shortDescr>
+            <shortDescr>Show/hide graticule layer</shortDescr>
             <description>Show/hide graticule overlay for the selected image</description>
             <context>image</context>
             <!--<smallIcon>icons/GraticuleOverlay16.gif</smallIcon>-->
@@ -1128,7 +1129,7 @@
             <id>showPinOverlay</id>
             <class>org.esa.beam.visat.actions.ShowPinOverlayAction</class>
             <parent>view</parent>
-            <text>Pins</text>
+            <text>Pin Layer</text>
             <toggle>true</toggle>
             <shortDescr>Show pin overlay</shortDescr>
             <description>Show pin overlay for the selected image</description>
@@ -1145,7 +1146,7 @@
             <id>showGcpOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGcpOverlayAction</class>
             <parent>view</parent>
-            <text>Ground Control Points</text>
+            <text>GCP Layer</text>
             <toggle>true</toggle>
             <shortDescr>Show GCP overlay</shortDescr>
             <description>Show GCP overlay for the selected image</description>
@@ -1160,9 +1161,9 @@
             <id>showWorldMapOverlay</id>
             <class>org.esa.beam.visat.actions.ShowWorldMapOverlayAction</class>
             <parent>view</parent>
-            <text>World Map</text>
+            <text>World Map Layer</text>
             <toggle>true</toggle>
-            <shortDescr>Show World Map overlay</shortDescr>
+            <shortDescr>Show World Map layer</shortDescr>
             <description>Show World Map overlay for the selected image</description>
             <!--<smallIcon>icons/WorldMapOverlay16.png</smallIcon>-->
             <largeIcon>icons/WorldMap24.png</largeIcon>
@@ -1606,11 +1607,11 @@
 
         <action>
             <id>vectorsFolder</id>
-            <parent>tools</parent>
+            <parent>layers</parent>
             <placeAfter>showToolViews</placeAfter>
             <sortChildren>true</sortChildren>
 
-            <text>Vector</text>
+            <text>Vector Managers</text>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
         </action>
 
@@ -1675,7 +1676,7 @@
             <id>bandArithmetic</id>
             <parent>tools</parent>
             <placeAfter>createFilteredBand</placeAfter>
-            <separatorAfter>true</separatorAfter>
+
 
             <text>Math Band...</text>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
@@ -1699,6 +1700,7 @@
             <class>org.esa.beam.visat.actions.ConvertComputedBandIntoBandAction</class>
             <shortDescr>Computes a "real" band from a virtual/filtered band</shortDescr>
             <context>virtualBand</context>
+            <separatorAfter>true</separatorAfter>
             <helpId>convertComputedBand2Band</helpId>
         </action>
 

@@ -482,9 +482,16 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
                 commandId.contains("GcpManagerToolView")) {
             command.setParent("vectorsFolder");
             command.setPlaceAfter("convertComputedBand2Band");
+        } else if (commandId.contains("LayerEditorToolView") ||
+                commandId.contains("MaskManagerToolView") ||
+                commandId.contains("LayerManagerToolView")) {
+            command.setParent("layers");
+            command.setPlaceAfter("convertComputedBand2Band");
         } else {
             command.setParent("showToolViews");
         }
+
+
         command.setSmallIcon(getSmallIcon());
         command.setLargeIcon(getLargeIcon());
         command.setShortDescription(getDescription());
