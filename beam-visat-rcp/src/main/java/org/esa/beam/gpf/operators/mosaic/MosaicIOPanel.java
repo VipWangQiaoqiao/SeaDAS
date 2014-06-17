@@ -85,7 +85,7 @@ class MosaicIOPanel extends JPanel {
             @Override
             protected JFileChooser createFileChooserDialog() {
                 final JFileChooser fileChooser = super.createFileChooserDialog();
-                fileChooser.setDialogTitle("Mosaic - Open Source Product(s)");
+                fileChooser.setDialogTitle("Mosaic - Open Source File(s)");
                 return fileChooser;
             }
         };
@@ -179,7 +179,7 @@ class MosaicIOPanel extends JPanel {
         tableLayout.setTableFill(TableLayout.Fill.BOTH);
 
         final JPanel sourceProductPanel = new JPanel(tableLayout);
-        sourceProductPanel.setBorder(BorderFactory.createTitledBorder("Source Products"));
+        sourceProductPanel.setBorder(BorderFactory.createTitledBorder("Source Files"));
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(addFileButton);
         buttonPanel.add(removeFileButton);
@@ -203,8 +203,8 @@ class MosaicIOPanel extends JPanel {
         tableLayout.setTablePadding(3, 3);
 
         final JPanel targetProductPanel = new JPanel(tableLayout);
-        targetProductPanel.setBorder(BorderFactory.createTitledBorder("Target Product"));
-        final JCheckBox updateTargetCheckBox = new JCheckBox("Update target product", false);
+        targetProductPanel.setBorder(BorderFactory.createTitledBorder("Target File"));
+        final JCheckBox updateTargetCheckBox = new JCheckBox("Update target file", false);
         final BindingContext context = new BindingContext(propertySet);
         context.bind(MosaicFormModel.PROPERTY_UPDATE_MODE, updateTargetCheckBox);
         targetProductPanel.add(updateTargetCheckBox);

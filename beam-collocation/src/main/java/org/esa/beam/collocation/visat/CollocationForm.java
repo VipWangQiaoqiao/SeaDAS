@@ -61,11 +61,11 @@ class CollocationForm extends JPanel {
     public CollocationForm(PropertySet propertySet, TargetProductSelector targetProductSelector, AppContext appContext) {
         this.targetProductSelector = targetProductSelector;
         masterProductSelector = new SourceProductSelector(appContext,
-                                                          "Reference (pixel values are conserved):");
+                                                          "Reference File (pixel values are conserved):");
         slaveProductSelector = new SourceProductSelector(appContext,
-                                                         "Dependent (pixel values are resampled onto the reference grid):");
-        renameMasterComponentsCheckBox = new JCheckBox("Rename reference components:");
-        renameSlaveComponentsCheckBox = new JCheckBox("Rename dependent components:");
+                                                         "Dependent File (pixel values are resampled to those of the reference file):");
+        renameMasterComponentsCheckBox = new JCheckBox("Rename bands copied from reference file:");
+        renameSlaveComponentsCheckBox = new JCheckBox("Rename bands copied from dependent file:");
         masterComponentPatternField = new JTextField();
         slaveComponentPatternField = new JTextField();
         resamplingComboBoxModel = new DefaultComboBoxModel<>(ResamplingType.values());
@@ -148,7 +148,7 @@ class CollocationForm extends JPanel {
         layout.setCellPadding(1, 0, new Insets(3, 3, 3, 3));
 
         final JPanel panel = new JPanel(layout);
-        panel.setBorder(BorderFactory.createTitledBorder("Source Products"));
+        panel.setBorder(BorderFactory.createTitledBorder("Source Files"));
         panel.add(masterPanel);
         panel.add(slavePanel);
 
@@ -169,7 +169,7 @@ class CollocationForm extends JPanel {
         layout.setCellPadding(1, 0, new Insets(3, 3, 3, 3));
 
         final JPanel panel = new JPanel(layout);
-        panel.setBorder(BorderFactory.createTitledBorder("Renaming of Source Product Components"));
+        panel.setBorder(BorderFactory.createTitledBorder("Naming the Target File Bands (based on the Source File names)"));
         panel.add(renameMasterComponentsCheckBox);
         panel.add(masterComponentPatternField);
         panel.add(renameSlaveComponentsCheckBox);

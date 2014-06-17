@@ -164,7 +164,7 @@ public class ProductSubsetDialog extends ModalDialog {
                                ProductSubsetDef productSubsetDef,
                                double memWarnLimit) {
         super(window,
-              "Specify Product Subset", /*I18N*/
+              "Specify File Crop Parameters", /*I18N*/
               ModalDialog.ID_OK
               | ModalDialog.ID_CANCEL
               | ModalDialog.ID_HELP,

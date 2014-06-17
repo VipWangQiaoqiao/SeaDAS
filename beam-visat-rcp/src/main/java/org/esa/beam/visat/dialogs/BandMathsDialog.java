@@ -280,7 +280,7 @@ public class BandMathsDialog extends ModalDialog {
         productName = targetProduct.getDisplayName();
         PropertyDescriptor descriptor = container.getDescriptor(PROPERTY_NAME_PRODUCT);
         descriptor.setValueSet(new ValueSet(productsList.getDisplayNames()));
-        descriptor.setDisplayName("Target product");
+        descriptor.setDisplayName("Target file");
 
         descriptor = container.getDescriptor(PROPERTY_NAME_BAND_NAME);
         descriptor.setDisplayName("Name");

@@ -109,7 +109,7 @@ public class SourceProductSelector {
                         productNameComboBox.setToolTipText(product.getDisplayName());
                     }
                 } else {
-                    productNameComboBox.setToolTipText("Select a source product.");
+                    productNameComboBox.setToolTipText("Select a source file.");
                 }
             }
         });
@@ -262,7 +262,7 @@ public class SourceProductSelector {
         tableLayout.setRowFill(1, TableLayout.Fill.HORIZONTAL);
         tableLayout.setTablePadding(3, 3);
         JPanel panel = new JPanel(tableLayout);
-        panel.setBorder(BorderFactory.createTitledBorder("Source Product"));
+        panel.setBorder(BorderFactory.createTitledBorder("Source File"));
         panel.add(getProductNameLabel());
         panel.add(subPanel);
         panel.add(tableLayout.createVerticalSpacer());
@@ -277,7 +277,7 @@ public class SourceProductSelector {
         private ProductFileChooserAction() {
             super("...");
             chooser = new BeamFileChooser();
-            chooser.setDialogTitle("Select Source Product");
+            chooser.setDialogTitle("Select Source File");
             final Iterator<ProductReaderPlugIn> iterator = ProductIOPlugInManager.getInstance().getAllReaderPlugIns();
             List<BeamFileFilter> sortedFileFilters = BeamFileFilter.getSortedFileFilters(iterator);
             for (BeamFileFilter fileFilter : sortedFileFilters) {

@@ -109,7 +109,7 @@ class ReprojectionForm extends JTabbedPane {
         this.targetProductSelector = targetProductSelector;
         this.orthoMode = orthorectify;
         this.appContext = appContext;
-        this.sourceProductSelector = new SourceProductSelector(appContext, "Source Product:");
+        this.sourceProductSelector = new SourceProductSelector(appContext, "Source File:");
         if (orthoMode) {
             targetProductSuffix = "orthorectified";
             this.sourceProductSelector.setProductFilter(new OrthorectifyProductFilter());

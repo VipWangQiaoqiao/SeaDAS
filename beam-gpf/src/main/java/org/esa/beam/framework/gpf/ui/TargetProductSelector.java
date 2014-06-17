@@ -186,7 +186,7 @@ public class TargetProductSelector {
         tableLayout.setCellPadding(3, 0, new Insets(3, 3, 3, 3));
 
         final JPanel panel = new JPanel(tableLayout);
-        panel.setBorder(BorderFactory.createTitledBorder("Target Product"));
+        panel.setBorder(BorderFactory.createTitledBorder("Target File"));
         panel.add(subPanel1);
 
         if (!alwaysWriteOutput) {
