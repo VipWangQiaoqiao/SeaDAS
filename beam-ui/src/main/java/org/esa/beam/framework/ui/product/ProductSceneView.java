@@ -188,7 +188,7 @@ public class ProductSceneView extends BasicView
      */
     public static final String PROPERTY_NAME_SELECTED_PIN = "selectedPin";
 
-    public static final Color DEFAULT_IMAGE_BACKGROUND_COLOR = new Color(51, 51, 51);
+    public static final Color DEFAULT_IMAGE_BACKGROUND_COLOR = new Color(240, 240, 245);
     public static final int DEFAULT_IMAGE_VIEW_BORDER_SIZE = 64;
 
 

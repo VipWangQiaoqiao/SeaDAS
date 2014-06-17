@@ -36,7 +36,8 @@ public class NoDataLayerEditor extends AbstractLayerConfigurationEditor {
     protected void addEditablePropertyDescriptors() {
 
         PropertyDescriptor vd = new PropertyDescriptor(NoDataLayerType.PROPERTY_NAME_COLOR, Color.class);
-        vd.setDefaultValue(Color.ORANGE);
+     //   vd.setDefaultValue(Color.ORANGE);
+        vd.setDefaultValue(Color.GRAY);
         vd.setDisplayName("No-data colour");
         vd.setDefaultConverter();
 

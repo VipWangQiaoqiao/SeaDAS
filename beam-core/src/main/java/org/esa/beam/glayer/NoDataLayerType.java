@@ -46,7 +46,8 @@ public class NoDataLayerType extends ImageLayer.Type {
     public static final String NO_DATA_LAYER_ID = "org.esa.beam.layers.noData";
     public static final String PROPERTY_NAME_COLOR = "color";
     public static final String PROPERTY_NAME_RASTER = "raster";
-    public static final Color DEFAULT_COLOR = Color.ORANGE;
+  //  public static final Color DEFAULT_COLOR = Color.ORANGE;
+    public static final Color DEFAULT_COLOR = Color.GRAY;
 
     @Override
     public Layer createLayer(LayerContext ctx, PropertySet configuration) {

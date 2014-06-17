@@ -1229,7 +1229,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
         @Override
         protected void initConfigParams(ParamGroup configParams) {
 
-            Parameter param = new Parameter(PARAMETER_NAME_MASK_COLOR, Mask.ImageType.DEFAULT_COLOR.RED);
+            Parameter param = new Parameter(PARAMETER_NAME_MASK_COLOR, Mask.ImageType.DEFAULT_COLOR);
             param.getProperties().setLabel("Mask colour"); /*I18N*/
             configParams.addParameter(param);
 
