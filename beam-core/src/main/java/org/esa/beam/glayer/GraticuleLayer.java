@@ -69,6 +69,7 @@ public class GraticuleLayer extends Layer {
     int textOutwardsOffset = 0;
     int textSidewardsOffset = 0;
     int fontSize = 50;
+    boolean autoFontSize = true;
     boolean textOutside = false;
 
     public GraticuleLayer(RasterDataNode raster) {
@@ -205,7 +206,21 @@ public class GraticuleLayer extends Layer {
       //  rotationThetaEastLabels = 90 - getTextRotationEast();   // in degrees
         textOutwardsOffset = getTextOffsetOutward();
         textSidewardsOffset = getTextOffsetSideward();
+        if (autoFontSize) {
+            int height = raster.getRasterHeight();
+            int width = raster.getRasterWidth();
+            int min = width;
+
+            if (height < min) {
+                min = height;
+            }
+
+            // make font 3% of total image
+            fontSize = (int) Math.floor(0.025*min);
+
+        } else {
         fontSize = getTextFontSize();
+        }
         textOutside = isTextOutside();
 
     }

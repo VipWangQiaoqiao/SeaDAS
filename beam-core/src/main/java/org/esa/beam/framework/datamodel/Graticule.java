@@ -105,6 +105,20 @@ public class Graticule {
             if (deltaLon > 180) {
                 deltaLon += 360;
             }
+// todo Danny adding new code for the raster version of this below but only in part here
+            // is this code being used?
+            //
+
+            int height = product.getSceneRasterHeight();
+            int width = product.getSceneRasterWidth();
+            int min = width;
+
+            if (height < min) {
+                min = height;
+            }
+
+            double ratio = min / 4.0;
+            gridCellSize = (int) Math.floor(ratio);
             Debug.trace("Graticule.create: deltaLat=" + deltaLat + ", deltaLon=" + deltaLon);
             latMajorStep = (float) compose(normalize(gridCellSize * 0.5 * (deltaLon + deltaLat), null));
             lonMajorStep = latMajorStep;
@@ -143,11 +157,11 @@ public class Graticule {
 
 
         final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, null);
-        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH,null);
+        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH, null);
         final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST, null);
-        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST,null);
+        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST, null);
 
-        return new Graticule(paths,  textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
+        return new Graticule(paths, textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
 
     }
 
@@ -156,16 +170,22 @@ public class Graticule {
      *
      * @param raster               the product
      * @param autoDeterminingSteps if true, <code>gridCellSize</code> is used to compute <code>latMajorStep</code>, <code>lonMajorStep</code> for the given product
-     * @param gridCellSize         the grid cell size in pixels, ignored if <code>autoDeterminingSteps</code> if false
+     * @param minDivisions         the grid cell size in pixels, ignored if <code>autoDeterminingSteps</code> if false
      * @param latMajorStep         the grid cell size in meridional direction, ignored if <code>autoDeterminingSteps</code> if true
      * @param lonMajorStep         the grid cell size in parallel direction, ignored if <code>autoDeterminingSteps</code> if true
      * @return the graticule or null, if it could not be created
      */
     public static Graticule create(RasterDataNode raster,
                                    boolean autoDeterminingSteps,
-                                   int gridCellSize,
+                                   int minDivisions,
                                    float latMajorStep,
                                    float lonMajorStep) {
+
+        int gridCellSize = 0;
+        if (minDivisions <= 1) {
+            minDivisions = 2;
+        }
+
         Guardian.assertNotNull("product", raster);
         final GeoCoding geoCoding = raster.getGeoCoding();
         if (geoCoding == null || raster.getSceneRasterWidth() < 16 || raster.getSceneRasterHeight() < 16) {
@@ -182,8 +202,34 @@ public class Graticule {
             if (deltaLon > 180) {
                 deltaLon += 360;
             }
+
+            int height = raster.getRasterHeight();
+            int width = raster.getRasterWidth();
+            int min = width;
+            double minDegrees = deltaLon * width;
+
+            if (height < min) {
+                min = height;
+                minDegrees = deltaLat * height;
+            }
+
+            double ratio = min / (minDivisions - 1);
+            gridCellSize = (int) Math.floor(ratio);
             Debug.trace("Graticule.create: deltaLat=" + deltaLat + ", deltaLon=" + deltaLon);
-            latMajorStep = (float) compose(normalize(gridCellSize * 0.5 * (deltaLon + deltaLat), null));
+            // this is what BEAM had
+            // it has some cool behaviour but is a bit rigid when adjusted desireed gridline count
+            //     latMajorStep = (float) compose(normalize(gridCellSize * 0.5 * (deltaLon + deltaLat), null));
+
+            double tmpLatMajorStep = gridCellSize * 0.5 * (deltaLon + deltaLat);
+
+            // if each division is greater than 5 degrees then round to nearest 5 degrees
+            if (minDegrees > (5 * minDivisions)) {
+                tmpLatMajorStep = 5 * Math.round((tmpLatMajorStep / 5));
+            } else {
+                tmpLatMajorStep = Math.round(tmpLatMajorStep);
+            }
+
+            latMajorStep = (float) tmpLatMajorStep;
             lonMajorStep = latMajorStep;
         }
         Debug.trace("Graticule.create: latMajorStep=" + latMajorStep + ", lonMajorStep=" + lonMajorStep);
@@ -221,10 +267,10 @@ public class Graticule {
 
 
         final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, raster);
-        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH,raster);
+        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH, raster);
 
-        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST,raster);
-        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST,raster);
+        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST, raster);
+        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST, raster);
 
         return new Graticule(paths, textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
     }
@@ -423,18 +469,17 @@ public class Graticule {
     }
 
 
-
-    public static TextGlyph getBorderGlyphNorthWestCornerLat (RasterDataNode raster) {
+    public static TextGlyph getBorderGlyphNorthWestCornerLat(RasterDataNode raster) {
 
         GeoPos geoPos = null;
 
         PixelPos pixelPos = new PixelPos(0, 0);
         raster.getGeoCoding().getGeoPos(pixelPos, geoPos);
-        Coord coord1 = new Coord(geoPos,pixelPos);
+        Coord coord1 = new Coord(geoPos, pixelPos);
 
-        pixelPos = new PixelPos(1,0);
+        pixelPos = new PixelPos(1, 0);
         raster.getGeoCoding().getGeoPos(pixelPos, geoPos);
-        Coord coord2 = new Coord(geoPos,pixelPos);
+        Coord coord2 = new Coord(geoPos, pixelPos);
 
 
         TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(), coord1, coord2);
@@ -442,7 +487,6 @@ public class Graticule {
         return textGlyph;
 
     }
-
 
 
     private static TextGlyph[] createTextGlyphs(List<List<Coord>> latitudeGridLinePoints, List<List<Coord>> longitudeGridLinePoints, TextLocation textLocation, RasterDataNode raster) {
@@ -515,8 +559,6 @@ public class Graticule {
     }
 
 
-
-
     private static void createNorthernLongitudeTextGlyphs(List<List<Coord>> longitudeGridLinePoints,
                                                           List<TextGlyph> textGlyphs) {
 
@@ -541,8 +583,6 @@ public class Graticule {
 
 
     }
-
-
 
 
     private static void createSouthernLongitudeTextGlyphs(List<List<Coord>> longitudeGridLinePoints,

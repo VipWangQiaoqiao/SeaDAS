@@ -73,7 +73,7 @@ public class GraticuleLayerType extends LayerType {
 
 
     public static final boolean DEFAULT_RES_AUTO = true;
-    public static final int DEFAULT_RES_PIXELS = 128;
+    public static final int DEFAULT_RES_PIXELS = 5;
     public static final double DEFAULT_RES_LAT = 1.0;
     public static final double DEFAULT_RES_LON = 1.0;
     public static final Color DEFAULT_LINE_COLOR = new Color(204, 204, 255);
@@ -91,7 +91,7 @@ public class GraticuleLayerType extends LayerType {
     public static final boolean DEFAULT_TEXT_FONT_ITALIC = true;
     public static final int DEFAULT_TEXT_OFFSET_OUTWARD = 0;
     public static final int DEFAULT_TEXT_OFFSET_SIDEWARD = 0;
-    public static final boolean DEFAULT_TEXT_OUTSIDE = false;
+    public static final boolean DEFAULT_TEXT_OUTSIDE = true;
     public static final double DEFAULT_TEXT_ROTATION_NORTH = 45;
 //    public static final double DEFAULT_TEXT_ROTATION_SOUTH = 45;
     public static final double DEFAULT_TEXT_ROTATION_WEST = 90;
