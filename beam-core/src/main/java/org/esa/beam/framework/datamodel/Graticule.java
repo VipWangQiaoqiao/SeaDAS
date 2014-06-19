@@ -156,10 +156,10 @@ public class Graticule {
         final GeneralPath[] paths = createPaths(parallelList, meridianList);
 
 
-        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, null);
-        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH, null);
-        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST, null);
-        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST, null);
+        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, null, false, false);
+        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH, null, false, false);
+        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST, null, false, false);
+        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST, null, false, false);
 
         return new Graticule(paths, textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
 
@@ -179,7 +179,11 @@ public class Graticule {
                                    boolean autoDeterminingSteps,
                                    int minDivisions,
                                    float latMajorStep,
-                                   float lonMajorStep) {
+                                   float lonMajorStep,
+                                   boolean includeWestLonBorderText,
+                                   boolean includeEastLonBorderText,
+                                   boolean includeNorthLatBorderText,
+                                   boolean includeSouthLatBorderText) {
 
         int gridCellSize = 0;
         if (minDivisions <= 1) {
@@ -223,7 +227,7 @@ public class Graticule {
             double tmpLatMajorStep = gridCellSize * 0.5 * (deltaLon + deltaLat);
 
             // if each division is greater than 5 degrees then round to nearest 5 degrees
-            if (minDegrees > (5 * minDivisions)) {
+            if (tmpLatMajorStep > 5) {
                 tmpLatMajorStep = 5 * Math.round((tmpLatMajorStep / 5));
             } else {
                 tmpLatMajorStep = Math.round(tmpLatMajorStep);
@@ -266,11 +270,11 @@ public class Graticule {
         final GeneralPath[] paths = createPaths(parallelList, meridianList);
 
 
-        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, raster);
-        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH, raster);
+        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, raster, includeWestLonBorderText, includeEastLonBorderText);
+        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH, raster, includeWestLonBorderText, includeEastLonBorderText);
 
-        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST, raster);
-        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST, raster);
+        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST, raster, includeNorthLatBorderText, includeSouthLatBorderText);
+        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST, raster, includeNorthLatBorderText, includeSouthLatBorderText);
 
         return new Graticule(paths, textGlyphsNorth, textGlyphsSouth, textGlyphsWest, textGlyphsEast);
     }
@@ -489,21 +493,25 @@ public class Graticule {
     }
 
 
-    private static TextGlyph[] createTextGlyphs(List<List<Coord>> latitudeGridLinePoints, List<List<Coord>> longitudeGridLinePoints, TextLocation textLocation, RasterDataNode raster) {
+    private static TextGlyph[] createTextGlyphs(List<List<Coord>> latitudeGridLinePoints, List<List<Coord>> longitudeGridLinePoints, TextLocation textLocation, RasterDataNode raster, boolean border1, boolean border2) {
         final List<TextGlyph> textGlyphs = new ArrayList<TextGlyph>();
 
         switch (textLocation) {
             case NORTH:
                 createNorthernLongitudeTextGlyphs(longitudeGridLinePoints, textGlyphs);
+                addBorderNorthernLongitudeTextGlyphs(raster, textGlyphs, border1, border2);
                 break;
             case SOUTH:
                 createSouthernLongitudeTextGlyphs(longitudeGridLinePoints, textGlyphs);
+                addBorderSouthernLongitudeTextGlyphs(raster, textGlyphs, border1, border2);
                 break;
             case WEST:
                 createWesternLatitudeTextGlyphs(latitudeGridLinePoints, textGlyphs);
+                addBorderWesternLatitudeTextGlyphs(raster, textGlyphs, border1, border2);
                 break;
             case EAST:
                 createEasternLatitudeTextGlyphs(latitudeGridLinePoints, textGlyphs);
+                addBorderEasternLatitudeTextGlyphs(raster, textGlyphs, border1, border2);
                 break;
         }
 
@@ -584,6 +592,104 @@ public class Graticule {
 
     }
 
+    private static void addBorderNorthernLongitudeTextGlyphs(RasterDataNode raster,
+                                                             List<TextGlyph> textGlyphs, boolean border1, boolean border2) {
+        if (border1) {
+            PixelPos pixelPos1 = new PixelPos(0, 0);
+            PixelPos pixelPos2 = new PixelPos(0, 1);
+            addBorderLonTextGlyphs(raster, textGlyphs, pixelPos1, pixelPos2);
+        }
+
+        if (border2) {
+            PixelPos pixelPos1 = new PixelPos(raster.getRasterWidth(), 0);
+            PixelPos pixelPos2 = new PixelPos(raster.getRasterWidth(), 1);
+            addBorderLonTextGlyphs(raster, textGlyphs, pixelPos1, pixelPos2);
+        }
+    }
+
+    private static void addBorderSouthernLongitudeTextGlyphs(RasterDataNode raster,
+                                                             List<TextGlyph> textGlyphs, boolean border1, boolean border2) {
+        if (border1) {
+            PixelPos pixelPos1 = new PixelPos(0, raster.getRasterHeight());
+            PixelPos pixelPos2 = new PixelPos(0, raster.getRasterHeight()-1);
+            addBorderLonTextGlyphs(raster, textGlyphs, pixelPos1, pixelPos2);
+        }
+
+        if (border2) {
+            PixelPos pixelPos1 = new PixelPos(raster.getRasterWidth(), raster.getRasterHeight());
+            PixelPos pixelPos2 = new PixelPos(raster.getRasterWidth(), raster.getRasterHeight()-1);
+            addBorderLonTextGlyphs(raster, textGlyphs, pixelPos1, pixelPos2);
+        }
+    }
+
+    private static void addBorderWesternLatitudeTextGlyphs(RasterDataNode raster,
+                                                             List<TextGlyph> textGlyphs, boolean border1, boolean border2) {
+        if (border1) {
+            PixelPos pixelPos1 = new PixelPos(0, 0);
+            PixelPos pixelPos2 = new PixelPos(1, 0);
+            addBorderLatTextGlyphs(raster, textGlyphs, pixelPos1, pixelPos2);
+        }
+
+        if (border2) {
+            PixelPos pixelPos1 = new PixelPos(0, raster.getRasterHeight());
+            PixelPos pixelPos2 = new PixelPos(1, raster.getRasterHeight());
+            addBorderLatTextGlyphs(raster, textGlyphs, pixelPos1, pixelPos2);
+        }
+    }
+
+
+    private static void addBorderEasternLatitudeTextGlyphs(RasterDataNode raster,
+                                                           List<TextGlyph> textGlyphs, boolean border1, boolean border2) {
+        if (border1) {
+            PixelPos pixelPos1 = new PixelPos(raster.getRasterWidth(), 0);
+            PixelPos pixelPos2 = new PixelPos(raster.getRasterWidth()-1, 0);
+            addBorderLatTextGlyphs(raster, textGlyphs, pixelPos1, pixelPos2);
+        }
+
+        if (border2) {
+            PixelPos pixelPos1 = new PixelPos(raster.getRasterWidth(), raster.getRasterHeight());
+            PixelPos pixelPos2 = new PixelPos(raster.getRasterWidth()-1, raster.getRasterHeight());
+            addBorderLatTextGlyphs(raster, textGlyphs, pixelPos1, pixelPos2);
+        }
+    }
+
+    private static void addBorderLatTextGlyphs(RasterDataNode raster, List<TextGlyph> textGlyphs, PixelPos pixelPos1, PixelPos pixelPos2) {
+
+        GeoCoding geoCoding = raster.getGeoCoding();
+
+        if (geoCoding != null && raster.getSceneRasterHeight() >= 2 && raster.getSceneRasterWidth() >= 2) {
+
+            GeoPos geoPos1 = geoCoding.getGeoPos(pixelPos1, null);
+            Coord coord1 = new Coord(geoPos1, pixelPos1);
+
+            GeoPos geoPos2 = geoCoding.getGeoPos(pixelPos2, null);
+            Coord coord2 = new Coord(geoPos2, pixelPos2);
+
+            if (isCoordPairValid(coord1, coord2)) {
+                TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(), coord1, coord2);
+                textGlyphs.add(textGlyph);
+            }
+        }
+    }
+
+    private static void addBorderLonTextGlyphs(RasterDataNode raster, List<TextGlyph> textGlyphs, PixelPos pixelPos1, PixelPos pixelPos2) {
+
+        GeoCoding geoCoding = raster.getGeoCoding();
+
+        if (geoCoding != null && raster.getSceneRasterHeight() >= 2 && raster.getSceneRasterWidth() >= 2) {
+
+            GeoPos geoPos1 = geoCoding.getGeoPos(pixelPos1, null);
+            Coord coord1 = new Coord(geoPos1, pixelPos1);
+
+            GeoPos geoPos2 = geoCoding.getGeoPos(pixelPos2, null);
+            Coord coord2 = new Coord(geoPos2, pixelPos2);
+
+            if (isCoordPairValid(coord1, coord2)) {
+                TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLonString(), coord1, coord2);
+                textGlyphs.add(textGlyph);
+            }
+        }
+    }
 
     private static void createSouthernLongitudeTextGlyphs(List<List<Coord>> longitudeGridLinePoints,
                                                           List<TextGlyph> textGlyphs) {

@@ -20,11 +20,7 @@ import com.bc.ceres.glayer.Layer;
 import com.bc.ceres.glayer.LayerTypeRegistry;
 import com.bc.ceres.grender.Rendering;
 import com.bc.ceres.grender.Viewport;
-import org.esa.beam.framework.datamodel.Graticule;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductNodeEvent;
-import org.esa.beam.framework.datamodel.ProductNodeListenerAdapter;
-import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.datamodel.*;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -48,9 +44,16 @@ public class GraticuleLayer extends Layer {
 
 
     // DANNY new fields to add to preferences
+
+    boolean includeWestLonBorderText = true;
+    boolean includeEastLonBorderText = true;
+    boolean includeNorthLatBorderText = true;
+    boolean includeSouthLatBorderText = true;
+
+
     private boolean dashedLine = true;
     private double dashedLinePhase = 9.0;
-//    private boolean rotateLongitudeLabelsSouthside = false;
+    //    private boolean rotateLongitudeLabelsSouthside = false;
 //    private boolean rotateLongitudeLabelsNorthside = false;
 //    private boolean rotateLongitudeLabelsWestside = false;
 //    private boolean rotateLongitudeLabelsEastside = false;
@@ -63,14 +66,18 @@ public class GraticuleLayer extends Layer {
     private boolean showGridLines = true;
     private int minorStep = 4;
     private double rotationThetaNorthLabels = 60;   // in degrees
- //   private double rotationThetaSouthLabels = 60;   // in degrees
+    //   private double rotationThetaSouthLabels = 60;   // in degrees
     private double rotationThetaWestLabels = 60;   // in degrees
- //   private double rotationThetaEastLabels = 60;   // in degrees
+    //   private double rotationThetaEastLabels = 60;   // in degrees
     int textOutwardsOffset = 0;
     int textSidewardsOffset = 0;
     int fontSize = 50;
     boolean autoFontSize = true;
     boolean textOutside = false;
+    int gridLineWidth = GraticuleLayerType.DEFAULT_LINE_WIDTH;
+    int borderWidth = GraticuleLayerType.DEFAULT_BORDER_WIDTH;
+
+    double borderTransparency = 0.0;
 
     public GraticuleLayer(RasterDataNode raster) {
         this(LAYER_TYPE, raster, initConfiguration(LAYER_TYPE.createLayerConfig(null), raster));
@@ -108,12 +115,19 @@ public class GraticuleLayer extends Layer {
 
         getUserValues();
 
+        if (!textOutside) {
+            includeWestLonBorderText = false;
+            includeEastLonBorderText = false;
+            includeNorthLatBorderText = false;
+            includeSouthLatBorderText = false;
+        }
+
         if (graticule == null) {
             graticule = Graticule.create(raster,
                     getResAuto(),
                     getResPixels(),
                     (float) getResLat(),
-                    (float) getResLon());
+                    (float) getResLon(), includeWestLonBorderText, includeEastLonBorderText, includeNorthLatBorderText, includeSouthLatBorderText);
         }
         if (graticule != null) {
 
@@ -191,8 +205,16 @@ public class GraticuleLayer extends Layer {
     }
 
     private void getUserValues() {
+        int height = raster.getRasterHeight();
+        int width = raster.getRasterWidth();
+        int min = width;
+
+        if (height < min) {
+            min = height;
+        }
+
         dashedLine = isLineDashed();
-        dashedLinePhase = getLineDashedPhase();
+
         showLatitudeLabelsEastside = isTextEnabledEast();
         showLatitudeLabelsWestside = isTextEnabledWest();
         showLongitudeLabelsNorthside = isTextEnabledNorth();
@@ -201,27 +223,52 @@ public class GraticuleLayer extends Layer {
         showGridLines = isLineEnabled();
         //    minorStep = 4;
         rotationThetaNorthLabels = 90 - getTextRotationNorth();   // in degrees
-     //   rotationThetaSouthLabels = 90 - getTextRotationSouth();   // in degrees
+        //   rotationThetaSouthLabels = 90 - getTextRotationSouth();   // in degrees
         rotationThetaWestLabels = 90 - getTextRotationWest();   // in degrees
-      //  rotationThetaEastLabels = 90 - getTextRotationEast();   // in degrees
+        //  rotationThetaEastLabels = 90 - getTextRotationEast();   // in degrees
         textOutwardsOffset = getTextOffsetOutward();
         textSidewardsOffset = getTextOffsetSideward();
-        if (autoFontSize) {
-            int height = raster.getRasterHeight();
-            int width = raster.getRasterWidth();
-            int min = width;
 
-            if (height < min) {
-                min = height;
-            }
-
-            // make font 3% of total image
-            fontSize = (int) Math.floor(0.025*min);
-
-        } else {
         fontSize = getTextFontSize();
+        if (fontSize < 1) {
+            // make font 2.5% of total image
+            fontSize = (int) Math.floor(0.025 * min);
+            if (fontSize < 1) {
+                fontSize = 1;
+            }
         }
+
         textOutside = isTextOutside();
+
+
+        gridLineWidth = getLineWidth();
+        if (gridLineWidth < 1) {
+            gridLineWidth = (int) Math.ceil(0.001 * min);
+            if (gridLineWidth < 1) {
+                gridLineWidth = 1;
+            }
+        }
+
+        borderWidth = getBorderWidth();
+        if (borderWidth < 1) {
+            borderWidth = (int) Math.ceil(0.002 * min);
+            if (borderWidth < 1) {
+                borderWidth = 1;
+            }
+        }
+
+        dashedLinePhase = getLineDashedPhase();
+        if (dashedLinePhase < 1) {
+            dashedLinePhase = Math.round(0.01 * min);
+            if (dashedLinePhase < 1) {
+                dashedLinePhase = 1;
+            }
+        }
+
+        includeWestLonBorderText = getTextBorderLonWestEnabled();
+        includeEastLonBorderText = getTextBorderLonEastEnabled();
+        includeNorthLatBorderText = getTextBorderLatNorthEnabled();
+        includeSouthLatBorderText = getTextBorderLatSouthEnabled();
 
     }
 
@@ -238,10 +285,10 @@ public class GraticuleLayer extends Layer {
 
 
         if (dashedLine) {
-            drawingStroke = new BasicStroke((float) getLineWidth(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{(float) dashedLinePhase}, 0);
+            drawingStroke = new BasicStroke((float) gridLineWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{(float) dashedLinePhase}, 0);
         } else {
 
-            drawingStroke = new BasicStroke((float) getLineWidth());
+            drawingStroke = new BasicStroke((float) gridLineWidth);
         }
 
         g2d.setStroke(drawingStroke);
@@ -261,15 +308,27 @@ public class GraticuleLayer extends Layer {
 
         //   Graticule.TextGlyph textGlyph =  graticule.getBorderGlyphNorthWestCornerLat(raster);
 
+//        PixelPos pixelPos = new PixelPos(0,0);
+//       GeoCoding geoCoding = raster.getGeoCoding();
+//        GeoPos geoPos = new GeoPos();
+//      GeoPos test =   geoCoding.getGeoPos(pixelPos, null);
+//    String lon =    test.getLonString();
+//    String lat =    test.getLatString();
+//
+////
+////        Graticule.TextGlyph
+//        new Graticule.TextGlyph(text, coord1.pixelPos.x, coord1.pixelPos.y);
+
+
         Composite oldComposite = null;
         if (getLineTransparency() > 0.0) {
             oldComposite = g2d.getComposite();
-            g2d.setComposite(getAlphaComposite(getLineTransparency()));
+            g2d.setComposite(getAlphaComposite(borderTransparency));
         }
         g2d.setPaint(getBorderColor());
 
 
-        Stroke drawingStroke = new BasicStroke((float) getBorderWidth());
+        Stroke drawingStroke = new BasicStroke((float) borderWidth);
 
 
         g2d.setStroke(drawingStroke);
@@ -421,7 +480,6 @@ public class GraticuleLayer extends Layer {
             AffineTransform orig = g2d.getTransform();
 
 
-
 //            float zPrime = (float) (letterWidth * Math.cos(theta));
 //            zPrime = (float) letterWidth;
 
@@ -487,17 +545,17 @@ public class GraticuleLayer extends Layer {
 //                            yOffset = height / 3;
 //                        }
 //                    } else {
-                        xOffset = -width;
-                        yOffset = 2 * height / 3;
-                        verticalShift = -letterWidth / 2;
+                    xOffset = -width;
+                    yOffset = 2 * height / 3;
+                    verticalShift = -letterWidth / 2;
 
-                        if (rotationThetaNorthLabels > 85) {
-                            xOffset = xOffset + halfLabelWidth;
-                        }
+                    if (rotationThetaNorthLabels > 85) {
+                        xOffset = xOffset + halfLabelWidth;
+                    }
 
-                        if (rotationThetaNorthLabels < 5) {
-                            yOffset = yOffset - height / 3;
-                        }
+                    if (rotationThetaNorthLabels < 5) {
+                        yOffset = yOffset - height / 3;
+                    }
 //                    }
 
                     float xMod = (float) (verticalShift * Math.cos(theta));
@@ -566,17 +624,17 @@ public class GraticuleLayer extends Layer {
 //                            yOffset = height / 3;
 //                        }
 //                    } else {
-                        xOffset = -width;
-                        yOffset = 0;
-                        verticalShift = -letterWidth / 2;
+                    xOffset = -width;
+                    yOffset = 0;
+                    verticalShift = -letterWidth / 2;
 
-                        if (rotationThetaWestLabels > 85) {
-                            xOffset = xOffset + halfLabelWidth;
-                        }
+                    if (rotationThetaWestLabels > 85) {
+                        xOffset = xOffset + halfLabelWidth;
+                    }
 
-                        if (rotationThetaWestLabels < 5) {
-                            yOffset = yOffset + height / 3;
-                        }
+                    if (rotationThetaWestLabels < 5) {
+                        yOffset = yOffset + height / 3;
+                    }
 //                    }
 
                     float xMod = (float) (verticalShift * Math.cos(theta));
@@ -595,19 +653,19 @@ public class GraticuleLayer extends Layer {
 //                        }
 //                        g2d.drawString(glyph.getText(), -width - halfLetterWidth - textOutwardsOffset, shiftSideways + textSidewardsOffset);
 //                    } else {
-                        g2d.drawString(glyph.getText(), halfLetterWidth - textOutwardsOffset, shiftSideways + textSidewardsOffset);
+                    g2d.drawString(glyph.getText(), halfLetterWidth - textOutwardsOffset, shiftSideways + textSidewardsOffset);
 //                    }
                 } else {
 //                    if (textLocation == Graticule.TextLocation.NORTH) {
 //                        g2d.rotate(-0.75 * Math.PI);
 //                    } else {
-                        g2d.rotate(-Math.PI);
+                    g2d.rotate(-Math.PI);
 //                    }
 //                    if (isTextOutside()) {
 //                        g2d.drawString(glyph.getText(), +halfLetterWidth + textOutwardsOffset, shiftSideways + textSidewardsOffset);
 //                    } else
 //                    {
-                        g2d.drawString(glyph.getText(), -width - halfLetterWidth + textOutwardsOffset, shiftSideways + textSidewardsOffset);
+                    g2d.drawString(glyph.getText(), -width - halfLetterWidth + textOutwardsOffset, shiftSideways + textSidewardsOffset);
 //                    }
                 }
             }
@@ -651,7 +709,7 @@ public class GraticuleLayer extends Layer {
                 double letterWidth = singleLetter.getWidth();
                 float halfLetterWidth = (float) (letterWidth / 2.0);
 
-                if (textLocation == Graticule.TextLocation.NORTH  ||
+                if (textLocation == Graticule.TextLocation.NORTH ||
                         textLocation == Graticule.TextLocation.WEST ||
                         textLocation == Graticule.TextLocation.SOUTH) {
                     if (textOutside) {
@@ -775,7 +833,13 @@ public class GraticuleLayer extends Layer {
         if (propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_AUTO) ||
                 propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LAT) ||
                 propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LON) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS)) {
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS) ||
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE) ||
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST) ||
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST) ||
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH) ||
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH)
+                ) {
             graticule = null;
         }
         if (getConfiguration().getProperty(propertyName) != null) {
@@ -819,7 +883,7 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_LINE_TRANSPARENCY);
     }
 
-    private double getLineWidth() {
+    private int getLineWidth() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
                 GraticuleLayerType.DEFAULT_LINE_WIDTH);
     }
@@ -872,7 +936,7 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_TEXT_OUTSIDE);
     }
 
-    private double getTextRotationNorth() {
+    private int getTextRotationNorth() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH,
                 GraticuleLayerType.DEFAULT_TEXT_ROTATION_NORTH);
     }
@@ -882,7 +946,7 @@ public class GraticuleLayer extends Layer {
 //                GraticuleLayerType.DEFAULT_TEXT_ROTATION_SOUTH);
 //    }
 
-    private double getTextRotationWest() {
+    private int getTextRotationWest() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST,
                 GraticuleLayerType.DEFAULT_TEXT_ROTATION_WEST);
     }
@@ -937,7 +1001,7 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_BORDER_ENABLED);
     }
 
-    private double getBorderWidth() {
+    private int getBorderWidth() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
                 GraticuleLayerType.DEFAULT_BORDER_WIDTH);
     }
@@ -945,6 +1009,27 @@ public class GraticuleLayer extends Layer {
     private Color getBorderColor() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR,
                 GraticuleLayerType.DEFAULT_BORDER_COLOR);
+    }
+
+
+    private boolean getTextBorderLonWestEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST,
+                GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_WEST);
+    }
+
+    private boolean getTextBorderLonEastEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST,
+                GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_EAST);
+    }
+
+    private boolean getTextBorderLatNorthEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH,
+                GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH);
+    }
+
+    private boolean getTextBorderLatSouthEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH,
+                GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH);
     }
 
 

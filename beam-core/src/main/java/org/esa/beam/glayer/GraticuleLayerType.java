@@ -36,7 +36,7 @@ public class GraticuleLayerType extends LayerType {
 
     public static final String PROPERTY_NAME_RASTER = "raster";
     public static final String PROPERTY_NAME_RES_AUTO = "graticule.res.auto";
-    public static final String PROPERTY_NAME_RES_PIXELS = "graticule.res.pixels";
+    public static final String PROPERTY_NAME_RES_PIXELS = "graticule.res.pixels"; // todo Danny changed this to number of lines so need to change variable names
     public static final String PROPERTY_NAME_RES_LAT = "graticule.res.lat";
     public static final String PROPERTY_NAME_RES_LON = "graticule.res.lon";
     public static final String PROPERTY_NAME_LINE_COLOR = "graticule.line.color";
@@ -71,30 +71,37 @@ public class GraticuleLayerType extends LayerType {
     public static final String PROPERTY_NAME_BORDER_WIDTH = "graticule.border.width";
     public static final String PROPERTY_NAME_BORDER_COLOR = "graticule.border.color";
 
+    public static final String PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST =  "graticule.text.border.enabled.lon.west";
+    public static final String PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST = "graticule.text.border.enabled.lon.east";
+    public static final String PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH = "graticule.text.border.enabled.lat.north";
+    public static final String PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH = "graticule.text.border.enabled.lat.south";
+
+
 
     public static final boolean DEFAULT_RES_AUTO = true;
     public static final int DEFAULT_RES_PIXELS = 5;
     public static final double DEFAULT_RES_LAT = 1.0;
     public static final double DEFAULT_RES_LON = 1.0;
-    public static final Color DEFAULT_LINE_COLOR = new Color(204, 204, 255);
-    public static final double DEFAULT_LINE_TRANSPARENCY = 0.0;
-    public static final double DEFAULT_LINE_WIDTH = 0.5;
+  //  public static final Color DEFAULT_LINE_COLOR = new Color(204, 204, 255);
+    public static final Color DEFAULT_LINE_COLOR = Color.BLACK;
+    public static final double DEFAULT_LINE_TRANSPARENCY = 0.7;
+    public static final int DEFAULT_LINE_WIDTH = 0;
     public static final Font DEFAULT_TEXT_FONT = new Font("SansSerif", Font.ITALIC, 12);
     public static final boolean DEFAULT_TEXT_ENABLED = true;
     public static final Color DEFAULT_TEXT_FG_COLOR = Color.BLACK;
     public static final Color DEFAULT_TEXT_BG_COLOR = Color.WHITE;
-    public static final double DEFAULT_TEXT_BG_TRANSPARENCY = 1.0;
+    public static final double DEFAULT_TEXT_BG_TRANSPARENCY = 0.7;
 
 
     // DANNY added these
-    public static final int DEFAULT_TEXT_FONT_SIZE = 12;
+    public static final int DEFAULT_TEXT_FONT_SIZE = 0;
     public static final boolean DEFAULT_TEXT_FONT_ITALIC = true;
     public static final int DEFAULT_TEXT_OFFSET_OUTWARD = 0;
     public static final int DEFAULT_TEXT_OFFSET_SIDEWARD = 0;
     public static final boolean DEFAULT_TEXT_OUTSIDE = true;
-    public static final double DEFAULT_TEXT_ROTATION_NORTH = 45;
+    public static final int DEFAULT_TEXT_ROTATION_NORTH = 45;
 //    public static final double DEFAULT_TEXT_ROTATION_SOUTH = 45;
-    public static final double DEFAULT_TEXT_ROTATION_WEST = 90;
+    public static final int DEFAULT_TEXT_ROTATION_WEST = 90;
 //    public static final double DEFAULT_TEXT_ROTATION_EAST = 90;
 //    public static final boolean DEFAULT_TEXT_ROTATION_ANCHORED = true;
     public static final boolean DEFAULT_TEXT_ENABLED_NORTH = true;
@@ -103,10 +110,15 @@ public class GraticuleLayerType extends LayerType {
     public static final boolean DEFAULT_TEXT_ENABLED_EAST = true;
     public static final boolean DEFAULT_LINE_ENABLED = true;
     public static final boolean DEFAULT_LINE_DASHED = true;
-    public static final double DEFAULT_LINE_DASHED_PHASE = 9;
+    public static final double DEFAULT_LINE_DASHED_PHASE = 0;
     public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
     public static final boolean DEFAULT_BORDER_ENABLED = true;
-    public static final double DEFAULT_BORDER_WIDTH = 1.0;
+    public static final int DEFAULT_BORDER_WIDTH = 0;
+
+    public static final boolean DEFAULT_TEXT_BORDER_ENABLED_LON_WEST =  false;
+    public static final boolean DEFAULT_TEXT_BORDER_ENABLED_LON_EAST = false;
+    public static final boolean DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH = false;
+    public static final boolean DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH = false;
 
 
     private static final String ALIAS_NAME_RES_AUTO = "resAuto";
@@ -146,6 +158,10 @@ public class GraticuleLayerType extends LayerType {
     private static final String ALIAS_NAME_BORDER_WIDTH = "graticuleBorderWidth";
     private static final String ALIAS_NAME_BORDER_COLOR = "graticuleBorderColor";
 
+    public static final String ALIAS_NAME_TEXT_BORDER_ENABLED_LON_WEST =  "graticuleTextBorderEnabledLonWest";
+    public static final String ALIAS_NAME_TEXT_BORDER_ENABLED_LON_EAST = "graticuleTextBorderEnabledLonEast";
+    public static final String ALIAS_NAME_TEXT_BORDER_ENABLED_LAT_NORTH = "graticuleTextBorderEnabledLatNorth";
+    public static final String ALIAS_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH = "graticuleTextBorderEnabledLatSouth";
 
     /**
      * @deprecated since BEAM 4.7, no replacement; kept for compatibility of sessions
@@ -200,7 +216,7 @@ public class GraticuleLayerType extends LayerType {
         lineTransparencyModel.getDescriptor().setAlias(ALIAS_NAME_LINE_TRANSPARENCY);
         vc.addProperty(lineTransparencyModel);
 
-        final Property lineWidthModel = Property.create(PROPERTY_NAME_LINE_WIDTH, Double.class, DEFAULT_LINE_WIDTH, true);
+        final Property lineWidthModel = Property.create(PROPERTY_NAME_LINE_WIDTH, Integer.class, DEFAULT_LINE_WIDTH, true);
         lineWidthModel.getDescriptor().setAlias(ALIAS_NAME_LINE_WIDTH);
         vc.addProperty(lineWidthModel);
 
@@ -249,7 +265,7 @@ public class GraticuleLayerType extends LayerType {
         textOutsideModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_OUTSIDE);
         vc.addProperty(textOutsideModel);
 
-        final Property textRotationNorthModel = Property.create(PROPERTY_NAME_TEXT_ROTATION_NORTH, Double.class, DEFAULT_TEXT_ROTATION_NORTH, true);
+        final Property textRotationNorthModel = Property.create(PROPERTY_NAME_TEXT_ROTATION_NORTH, Integer.class, DEFAULT_TEXT_ROTATION_NORTH, true);
         textRotationNorthModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_ROTATION_NORTH);
         vc.addProperty(textRotationNorthModel);
 
@@ -257,7 +273,7 @@ public class GraticuleLayerType extends LayerType {
 //        textRotationSouthModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_ROTATION_SOUTH);
 //        vc.addProperty(textRotationSouthModel);
 
-        final Property textRotationWestModel = Property.create(PROPERTY_NAME_TEXT_ROTATION_WEST, Double.class, DEFAULT_TEXT_ROTATION_WEST, true);
+        final Property textRotationWestModel = Property.create(PROPERTY_NAME_TEXT_ROTATION_WEST, Integer.class, DEFAULT_TEXT_ROTATION_WEST, true);
         textRotationWestModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_ROTATION_WEST);
         vc.addProperty(textRotationWestModel);
 
@@ -305,9 +321,29 @@ public class GraticuleLayerType extends LayerType {
         borderColorModel.getDescriptor().setAlias(ALIAS_NAME_BORDER_COLOR);
         vc.addProperty(borderColorModel);
 
-        final Property borderWidthModel = Property.create(PROPERTY_NAME_BORDER_WIDTH, Double.class, DEFAULT_BORDER_WIDTH, true);
+        final Property borderWidthModel = Property.create(PROPERTY_NAME_BORDER_WIDTH, Integer.class, DEFAULT_BORDER_WIDTH, true);
         borderWidthModel.getDescriptor().setAlias(ALIAS_NAME_BORDER_WIDTH);
         vc.addProperty(borderWidthModel);
+
+
+        final Property textBorderLonWestEnabledModel = Property.create(PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST, Boolean.class, DEFAULT_TEXT_BORDER_ENABLED_LON_WEST, true);
+        textBorderLonWestEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BORDER_ENABLED_LON_WEST);
+        vc.addProperty(textBorderLonWestEnabledModel);
+
+        final Property textBorderLonEastEnabledModel = Property.create(PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST, Boolean.class, DEFAULT_TEXT_BORDER_ENABLED_LON_EAST, true);
+        textBorderLonEastEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BORDER_ENABLED_LON_EAST);
+        vc.addProperty(textBorderLonEastEnabledModel);
+
+        final Property textBorderLatNorthEnabledModel = Property.create(PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH, Boolean.class, DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH, true);
+        textBorderLatNorthEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BORDER_ENABLED_LAT_NORTH);
+        vc.addProperty(textBorderLatNorthEnabledModel);
+
+        final Property textBorderLatSouthEnabledModel = Property.create(PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH, Boolean.class, DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH, true);
+        textBorderLatSouthEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH);
+        vc.addProperty(textBorderLatSouthEnabledModel);
+
+
+
 
 
         return vc;

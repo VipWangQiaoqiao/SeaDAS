@@ -410,7 +410,7 @@ public class ProductSceneImage implements ProductLayerContext {
                                     configuration.getPropertyColor(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR,
                                                                    GraticuleLayerType.DEFAULT_LINE_COLOR));
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
-                                    configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
+                                    configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
                                                                     GraticuleLayerType.DEFAULT_LINE_WIDTH));
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY,
                                     configuration.getPropertyDouble(
@@ -454,12 +454,12 @@ public class ProductSceneImage implements ProductLayerContext {
                         GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH,
-                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH,
                         GraticuleLayerType.DEFAULT_TEXT_ROTATION_NORTH));
 
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST,
-                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST,
                         GraticuleLayerType.DEFAULT_TEXT_ROTATION_WEST));
 
 
@@ -496,7 +496,7 @@ public class ProductSceneImage implements ProductLayerContext {
                         GraticuleLayerType.DEFAULT_BORDER_ENABLED));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
-                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
                         GraticuleLayerType.DEFAULT_BORDER_WIDTH));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR,
@@ -504,7 +504,22 @@ public class ProductSceneImage implements ProductLayerContext {
                         GraticuleLayerType.DEFAULT_BORDER_COLOR));
 
 
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST,
+                        GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_WEST));
 
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST,
+                        GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_EAST));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH,
+                        GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH,
+                        GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH));
 
 
 

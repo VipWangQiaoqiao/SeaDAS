@@ -962,7 +962,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_AUTO, Boolean.TRUE);
             param.addParamChangeListener(paramChangeListener);
-            param.getProperties().setLabel("Compute latitude and longitude steps"); /*I18N*/
+            param.getProperties().setLabel("Auto Grid Spacing"); /*I18N*/
             configParams.addParameter(param);
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS, 128);
@@ -987,8 +987,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setLabel("Line colour"); /*I18N*/
             configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, 0.5);
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, 0);
             param.getProperties().setLabel("Line width"); /*I18N*/
+            param.getProperties().setMinValue(0);
             configParams.addParameter(param);
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY, 0.0);
