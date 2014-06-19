@@ -602,7 +602,10 @@ public class ProductSceneView extends BasicView
 
     public void setGraticuleOverlayEnabled(boolean enabled) {
         if (isGraticuleOverlayEnabled() != enabled) {
-            getGraticuleLayer(true).setVisible(enabled);
+            Layer graticuleLayer = getGraticuleLayer(true);
+            //getGraticuleLayer(true).setVisible(enabled);
+            graticuleLayer.setVisible(enabled);
+            if (enabled) setSelectedLayer(graticuleLayer);
         }
     }
 
