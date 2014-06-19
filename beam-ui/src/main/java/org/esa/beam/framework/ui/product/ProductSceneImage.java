@@ -105,7 +105,7 @@ public class ProductSceneImage implements ProductLayerContext {
         initRootLayer();
     }
 
-    private ProductSceneImage(String name, RasterDataNode[] rasters, PropertyMap configuration) {
+    public ProductSceneImage(String name, RasterDataNode[] rasters, PropertyMap configuration) {
         this.name = name;
         this.rasters = rasters;
         this.configuration = configuration;

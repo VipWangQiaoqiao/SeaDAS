@@ -341,7 +341,7 @@ public class ProductSceneView extends BasicView
         return scrollPane;
     }
 
-    ProductSceneImage getSceneImage() {
+    public ProductSceneImage getSceneImage() {
         return sceneImage;
     }
 
