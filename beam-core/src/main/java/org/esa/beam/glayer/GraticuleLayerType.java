@@ -52,7 +52,7 @@ public class GraticuleLayerType extends LayerType {
     // DANNY added these
     public static final String PROPERTY_NAME_TEXT_FONT_SIZE = "graticule.text.font.size";
     public static final String PROPERTY_NAME_TEXT_FONT_ITALIC = "graticule.text.font.italic";
-    public static final String PROPERTY_NAME_TEXT_OUTSIDE = "graticule.text.outside";
+    public static final String PROPERTY_NAME_TEXT_INSIDE = "graticule.text.inside";
     public static final String PROPERTY_NAME_TEXT_OFFSET_OUTWARD = "graticule.text.offset.outward";
     public static final String PROPERTY_NAME_TEXT_OFFSET_SIDEWARD = "graticule.text.offset.sideward";
     public static final String PROPERTY_NAME_TEXT_ROTATION_NORTH = "graticule.text.rotation.north";
@@ -71,17 +71,21 @@ public class GraticuleLayerType extends LayerType {
     public static final String PROPERTY_NAME_BORDER_WIDTH = "graticule.border.width";
     public static final String PROPERTY_NAME_BORDER_COLOR = "graticule.border.color";
 
-    public static final String PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST =  "graticule.text.border.enabled.lon.west";
-    public static final String PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST = "graticule.text.border.enabled.lon.east";
-    public static final String PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH = "graticule.text.border.enabled.lat.north";
-    public static final String PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH = "graticule.text.border.enabled.lat.south";
+    public static final String PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED =  "graticule.text.corner.top.left.lon.enabled";
+    public static final String PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED = "graticule.text.corner.top.left.lat.enabled";
+    public static final String PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED = "graticule.text.corner.top.right.lon.enabled";
+    public static final String PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED = "graticule.text.corner.top.right.lat.enabled";
+    public static final String PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED =  "graticule.text.corner.bottom.left.lon.enabled";
+    public static final String PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED = "graticule.text.corner.bottom.left.lat.enabled";
+    public static final String PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED = "graticule.text.corner.bottom.right.lon.enabled";
+    public static final String PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED = "graticule.text.corner.bottom.right.lat.enabled";
 
 
 
     public static final boolean DEFAULT_RES_AUTO = true;
     public static final int DEFAULT_RES_PIXELS = 5;
-    public static final double DEFAULT_RES_LAT = 1.0;
-    public static final double DEFAULT_RES_LON = 1.0;
+    public static final double DEFAULT_RES_LAT = 0.0;
+    public static final double DEFAULT_RES_LON = 0.0;
   //  public static final Color DEFAULT_LINE_COLOR = new Color(204, 204, 255);
     public static final Color DEFAULT_LINE_COLOR = Color.BLACK;
     public static final double DEFAULT_LINE_TRANSPARENCY = 0.7;
@@ -98,10 +102,10 @@ public class GraticuleLayerType extends LayerType {
     public static final boolean DEFAULT_TEXT_FONT_ITALIC = true;
     public static final int DEFAULT_TEXT_OFFSET_OUTWARD = 0;
     public static final int DEFAULT_TEXT_OFFSET_SIDEWARD = 0;
-    public static final boolean DEFAULT_TEXT_OUTSIDE = true;
-    public static final int DEFAULT_TEXT_ROTATION_NORTH = 45;
+    public static final boolean DEFAULT_TEXT_INSIDE = false;
+    public static final int DEFAULT_TEXT_ROTATION_NORTH = 30;
 //    public static final double DEFAULT_TEXT_ROTATION_SOUTH = 45;
-    public static final int DEFAULT_TEXT_ROTATION_WEST = 90;
+    public static final int DEFAULT_TEXT_ROTATION_WEST = 0;
 //    public static final double DEFAULT_TEXT_ROTATION_EAST = 90;
 //    public static final boolean DEFAULT_TEXT_ROTATION_ANCHORED = true;
     public static final boolean DEFAULT_TEXT_ENABLED_NORTH = true;
@@ -115,10 +119,15 @@ public class GraticuleLayerType extends LayerType {
     public static final boolean DEFAULT_BORDER_ENABLED = true;
     public static final int DEFAULT_BORDER_WIDTH = 0;
 
-    public static final boolean DEFAULT_TEXT_BORDER_ENABLED_LON_WEST =  false;
-    public static final boolean DEFAULT_TEXT_BORDER_ENABLED_LON_EAST = false;
-    public static final boolean DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH = false;
-    public static final boolean DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH = false;
+    public static final boolean DEFAULT_TEXT_CORNER_TOP_LEFT_LON_ENABLED =  false;
+    public static final boolean DEFAULT_TEXT_CORNER_TOP_LEFT_LAT_ENABLED = false;
+    public static final boolean DEFAULT_TEXT_CORNER_TOP_RIGHT_LON_ENABLED = false;
+    public static final boolean DEFAULT_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED = false;
+    public static final boolean DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED =  false;
+    public static final boolean DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED = false;
+    public static final boolean DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED = false;
+    public static final boolean DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED = false;
+
 
 
     private static final String ALIAS_NAME_RES_AUTO = "resAuto";
@@ -141,7 +150,7 @@ public class GraticuleLayerType extends LayerType {
     private static final String ALIAS_NAME_TEXT_FONT_ITALIC = "graticuleTextFontItalic";
     private static final String ALIAS_NAME_TEXT_OFFSET_OUTWARD = "textOffsetOutward";
     private static final String ALIAS_NAME_TEXT_OFFSET_SIDEWARD = "textOffsetSideward";
-    private static final String ALIAS_NAME_TEXT_OUTSIDE = "textOutside";
+    private static final String ALIAS_NAME_TEXT_INSIDE = "textInside";
     private static final String ALIAS_NAME_TEXT_ENABLED_NORTH = "textEnabledNorth";
     private static final String ALIAS_NAME_TEXT_ENABLED_SOUTH = "textEnabledSouth";
     private static final String ALIAS_NAME_TEXT_ENABLED_WEST = "textEnabledWest";
@@ -158,10 +167,17 @@ public class GraticuleLayerType extends LayerType {
     private static final String ALIAS_NAME_BORDER_WIDTH = "graticuleBorderWidth";
     private static final String ALIAS_NAME_BORDER_COLOR = "graticuleBorderColor";
 
-    public static final String ALIAS_NAME_TEXT_BORDER_ENABLED_LON_WEST =  "graticuleTextBorderEnabledLonWest";
-    public static final String ALIAS_NAME_TEXT_BORDER_ENABLED_LON_EAST = "graticuleTextBorderEnabledLonEast";
-    public static final String ALIAS_NAME_TEXT_BORDER_ENABLED_LAT_NORTH = "graticuleTextBorderEnabledLatNorth";
-    public static final String ALIAS_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH = "graticuleTextBorderEnabledLatSouth";
+    public static final String ALIAS_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED =  "graticuleTextCornerTopLeftLonEnabled";
+    public static final String ALIAS_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED = "graticuleTextCornerTopLeftLatEnabled";
+    public static final String ALIAS_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED = "graticuleTextCornerTopRightLonEnabled";
+    public static final String ALIAS_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED = "graticuleTextCornerTopRightLatEnabled";
+    public static final String ALIAS_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED =  "graticuleTextCornerBottomLeftLonEnabled";
+    public static final String ALIAS_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED = "graticuleTextCornerBottomLeftLatEnabled";
+    public static final String ALIAS_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED = "graticuleTextCornerBottomRightLonEnabled";
+    public static final String ALIAS_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED = "graticuleTextCornerBottomRightLatEnabled";
+
+
+
 
     /**
      * @deprecated since BEAM 4.7, no replacement; kept for compatibility of sessions
@@ -261,8 +277,8 @@ public class GraticuleLayerType extends LayerType {
         textOffsetSidewardModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_OFFSET_SIDEWARD);
         vc.addProperty(textOffsetSidewardModel);
 
-        final Property textOutsideModel = Property.create(PROPERTY_NAME_TEXT_OUTSIDE, Boolean.class, DEFAULT_TEXT_OUTSIDE, true);
-        textOutsideModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_OUTSIDE);
+        final Property textOutsideModel = Property.create(PROPERTY_NAME_TEXT_INSIDE, Boolean.class, DEFAULT_TEXT_INSIDE, true);
+        textOutsideModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_INSIDE);
         vc.addProperty(textOutsideModel);
 
         final Property textRotationNorthModel = Property.create(PROPERTY_NAME_TEXT_ROTATION_NORTH, Integer.class, DEFAULT_TEXT_ROTATION_NORTH, true);
@@ -326,24 +342,38 @@ public class GraticuleLayerType extends LayerType {
         vc.addProperty(borderWidthModel);
 
 
-        final Property textBorderLonWestEnabledModel = Property.create(PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST, Boolean.class, DEFAULT_TEXT_BORDER_ENABLED_LON_WEST, true);
-        textBorderLonWestEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BORDER_ENABLED_LON_WEST);
-        vc.addProperty(textBorderLonWestEnabledModel);
+        final Property textCornerTopLeftLonEnabledModel = Property.create(PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED, Boolean.class, DEFAULT_TEXT_CORNER_TOP_LEFT_LON_ENABLED, true);
+        textCornerTopLeftLonEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED);
+        vc.addProperty(textCornerTopLeftLonEnabledModel);
 
-        final Property textBorderLonEastEnabledModel = Property.create(PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST, Boolean.class, DEFAULT_TEXT_BORDER_ENABLED_LON_EAST, true);
-        textBorderLonEastEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BORDER_ENABLED_LON_EAST);
-        vc.addProperty(textBorderLonEastEnabledModel);
+        final Property textCornerTopLeftLatEnabledModel = Property.create(PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED, Boolean.class, DEFAULT_TEXT_CORNER_TOP_LEFT_LAT_ENABLED, true);
+        textCornerTopLeftLatEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED);
+        vc.addProperty(textCornerTopLeftLatEnabledModel);
 
-        final Property textBorderLatNorthEnabledModel = Property.create(PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH, Boolean.class, DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH, true);
-        textBorderLatNorthEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BORDER_ENABLED_LAT_NORTH);
-        vc.addProperty(textBorderLatNorthEnabledModel);
+        final Property textCornerTopRightLonEnabledModel = Property.create(PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED, Boolean.class, DEFAULT_TEXT_CORNER_TOP_RIGHT_LON_ENABLED, true);
+        textCornerTopRightLonEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED);
+        vc.addProperty(textCornerTopRightLonEnabledModel);
 
-        final Property textBorderLatSouthEnabledModel = Property.create(PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH, Boolean.class, DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH, true);
-        textBorderLatSouthEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH);
-        vc.addProperty(textBorderLatSouthEnabledModel);
+        final Property textCornerTopRightLatEnabledModel = Property.create(PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED, Boolean.class, DEFAULT_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED, true);
+        textCornerTopRightLatEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED);
+        vc.addProperty(textCornerTopRightLatEnabledModel);
 
 
+        final Property textCornerBottomLeftLonEnabledModel = Property.create(PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED, Boolean.class, DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED, true);
+        textCornerBottomLeftLonEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED);
+        vc.addProperty(textCornerBottomLeftLonEnabledModel);
 
+        final Property textCornerBottomLeftLatEnabledModel = Property.create(PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED, Boolean.class, DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED, true);
+        textCornerBottomLeftLatEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED);
+        vc.addProperty(textCornerBottomLeftLatEnabledModel);
+
+        final Property textCornerBottomRightLonEnabledModel = Property.create(PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED, Boolean.class, DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED, true);
+        textCornerBottomRightLonEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED);
+        vc.addProperty(textCornerBottomRightLonEnabledModel);
+
+        final Property textCornerBottomRightLatEnabledModel = Property.create(PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED, Boolean.class, DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED, true);
+        textCornerBottomRightLatEnabledModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED);
+        vc.addProperty(textCornerBottomRightLatEnabledModel);
 
 
         return vc;

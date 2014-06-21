@@ -441,9 +441,9 @@ public class ProductSceneImage implements ProductLayerContext {
                 configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_ITALIC,
                         GraticuleLayerType.DEFAULT_TEXT_FONT_ITALIC));
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
-                        GraticuleLayerType.DEFAULT_TEXT_OUTSIDE));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE,
+                        GraticuleLayerType.DEFAULT_TEXT_INSIDE));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
                 configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
@@ -504,24 +504,41 @@ public class ProductSceneImage implements ProductLayerContext {
                         GraticuleLayerType.DEFAULT_BORDER_COLOR));
 
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST,
-                        GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_WEST));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LON_ENABLED));
 
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST,
-                        GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_EAST));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LAT_ENABLED));
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH,
-                        GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LON_ENABLED));
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH,
-                        GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED));
 
 
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED));
+
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED));
 
 
 

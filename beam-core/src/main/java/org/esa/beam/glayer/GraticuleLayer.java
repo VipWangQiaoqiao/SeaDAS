@@ -27,6 +27,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 
 /**
  * @author Marco Zuehlke
@@ -45,10 +46,10 @@ public class GraticuleLayer extends Layer {
 
     // DANNY new fields to add to preferences
 
-    boolean includeWestLonBorderText = true;
-    boolean includeEastLonBorderText = true;
-    boolean includeNorthLatBorderText = true;
-    boolean includeSouthLatBorderText = true;
+//    boolean includeWestLonBorderText = true;
+//    boolean includeEastLonBorderText = true;
+//    boolean includeNorthLatBorderText = true;
+//    boolean includeSouthLatBorderText = true;
 
 
     private boolean dashedLine = true;
@@ -115,19 +116,21 @@ public class GraticuleLayer extends Layer {
 
         getUserValues();
 
-        if (!textOutside) {
-            includeWestLonBorderText = false;
-            includeEastLonBorderText = false;
-            includeNorthLatBorderText = false;
-            includeSouthLatBorderText = false;
-        }
+//        if (!textOutside) {
+//            includeWestLonBorderText = false;
+//            includeEastLonBorderText = false;
+//            includeNorthLatBorderText = false;
+//            includeSouthLatBorderText = false;
+//        }
 
         if (graticule == null) {
             graticule = Graticule.create(raster,
                     getResAuto(),
                     getResPixels(),
                     (float) getResLat(),
-                    (float) getResLon(), includeWestLonBorderText, includeEastLonBorderText, includeNorthLatBorderText, includeSouthLatBorderText);
+                    //           (float) getResLon(), includeWestLonBorderText, includeEastLonBorderText, includeNorthLatBorderText, includeSouthLatBorderText);
+                    (float) getResLon(),
+                    false, false, false, false);
         }
         if (graticule != null) {
 
@@ -154,7 +157,7 @@ public class GraticuleLayer extends Layer {
 
                 final Graticule.TextGlyph[] textGlyphsNorth = graticule.getTextGlyphsNorth();
                 if (textGlyphsNorth != null) {
-                    if (isTextEnabled() && showLongitudeLabelsNorthside) {
+                    if (showLongitudeLabelsNorthside) {
 
                         drawTextLabels(g2d, textGlyphsNorth, Graticule.TextLocation.NORTH);
                     }
@@ -166,7 +169,7 @@ public class GraticuleLayer extends Layer {
 
                 final Graticule.TextGlyph[] textGlyphsSouth = graticule.getTextGlyphsSouth();
                 if (textGlyphsSouth != null) {
-                    if (isTextEnabled() && showLongitudeLabelsSouthside) {
+                    if (showLongitudeLabelsSouthside) {
                         drawTextLabels(g2d, textGlyphsSouth, Graticule.TextLocation.SOUTH);
                     }
 
@@ -175,20 +178,40 @@ public class GraticuleLayer extends Layer {
                     }
                 }
 
-                final Graticule.TextGlyph[] textGlyphsWest = graticule.getTextGlyphsWest();
-                if (textGlyphsWest != null) {
-                    if (isTextEnabled() && showLatitudeLabelsWestside) {
-                        drawTextLabels(g2d, textGlyphsWest, Graticule.TextLocation.WEST);
-                    }
+                if (showLatitudeLabelsWestside) {
+                    final Graticule.TextGlyph[] textGlyphsWest = graticule.getTextGlyphsWest();
 
-                    if (showTickMarks) {
-                        drawTickMarks(g2d, textGlyphsWest, Graticule.TextLocation.WEST);
+                    if (textGlyphsWest != null) {
+                        drawTextLabels(g2d, textGlyphsWest, Graticule.TextLocation.WEST);
                     }
                 }
 
+
+                // Draw Left Side Corner Labels
+//                if (getTextCornerTopLeftLatEnabled() || getTextCornerBottomLeftLatEnabled()) {
+                if (getTextCornerTopLeftLatEnabled()) {
+                    drawLeftSideLatCornerLabels(g2d);
+                }
+
+//                if (getTextCornerTopRightLatEnabled() || getTextCornerBottomRightLatEnabled()) {
+                if (getTextCornerTopRightLatEnabled()) {
+                    drawRightSideLatCornerLabels(g2d);
+                }
+
+//                if (getTextCornerTopLeftLonEnabled() || getTextCornerTopRightLonEnabled()) {
+                if (getTextCornerTopLeftLonEnabled()) {
+                    drawNorthSideLonCornerLabels(g2d);
+                }
+
+//                if (getTextCornerBottomLeftLonEnabled() || getTextCornerBottomRightLonEnabled()) {
+                if (getTextCornerBottomLeftLonEnabled()) {
+                    drawSouthSideLonCornerLabels(g2d);
+                }
+
+
                 final Graticule.TextGlyph[] textGlyphsEast = graticule.getTextGlyphsEast();
                 if (textGlyphsEast != null) {
-                    if (isTextEnabled() && showLatitudeLabelsEastside) {
+                    if (showLatitudeLabelsEastside) {
                         drawTextLabels(g2d, textGlyphsEast, Graticule.TextLocation.EAST);
                     }
 
@@ -203,6 +226,110 @@ public class GraticuleLayer extends Layer {
             }
         }
     }
+
+
+    private void drawLeftSideLatCornerLabels(Graphics2D g2d) {
+
+        final ArrayList<Graticule.TextGlyph> textGlyphArrayList = new ArrayList<>();
+
+        //    if (getTextCornerTopLeftLatEnabled()) {
+        Graticule.TextGlyph textGlyph = graticule.getTextGlyphsLatCorners()[Graticule.TOP_LEFT_CORNER_INDEX];
+        if (textGlyph != null) {
+            textGlyphArrayList.add(textGlyph);
+        }
+        //    }
+        //    if (getTextCornerBottomLeftLatEnabled()) {
+        //        Graticule.TextGlyph textGlyph = graticule.getTextGlyphsLatCorners()[Graticule.BOTTOM_LEFT_CORNER_INDEX];
+        textGlyph = graticule.getTextGlyphsLatCorners()[Graticule.BOTTOM_LEFT_CORNER_INDEX];
+        if (textGlyph != null) {
+            textGlyphArrayList.add(textGlyph);
+        }
+        //    }
+
+        final Graticule.TextGlyph[] textGlyphs = textGlyphArrayList.toArray(new Graticule.TextGlyph[textGlyphArrayList.size()]);
+
+        if (textGlyphs != null) {
+            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.WEST);
+        }
+
+    }
+
+    private void drawRightSideLatCornerLabels(Graphics2D g2d) {
+
+        final ArrayList<Graticule.TextGlyph> textGlyphArrayList = new ArrayList<>();
+
+        //      if (getTextCornerTopRightLatEnabled()) {
+        Graticule.TextGlyph textGlyph = graticule.getTextGlyphsLatCorners()[Graticule.TOP_RIGHT_CORNER_INDEX];
+        if (textGlyph != null) {
+            textGlyphArrayList.add(textGlyph);
+        }
+        //      }
+        //      if (getTextCornerBottomRightLatEnabled()) {
+//            Graticule.TextGlyph textGlyph = graticule.getTextGlyphsLatCorners()[Graticule.BOTTOM_RIGHT_CORNER_INDEX];
+        textGlyph = graticule.getTextGlyphsLatCorners()[Graticule.BOTTOM_RIGHT_CORNER_INDEX];
+        if (textGlyph != null) {
+            textGlyphArrayList.add(textGlyph);
+        }
+        //      }
+
+        final Graticule.TextGlyph[] textGlyphs = textGlyphArrayList.toArray(new Graticule.TextGlyph[textGlyphArrayList.size()]);
+
+        if (textGlyphs != null) {
+            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.EAST);
+        }
+
+    }
+
+    private void drawNorthSideLonCornerLabels(Graphics2D g2d) {
+
+        final ArrayList<Graticule.TextGlyph> textGlyphArrayList = new ArrayList<>();
+
+        //      if (getTextCornerTopLeftLonEnabled()) {
+        Graticule.TextGlyph textGlyph = graticule.getTextGlyphsLonCorners()[Graticule.TOP_LEFT_CORNER_INDEX];
+        if (textGlyph != null) {
+            textGlyphArrayList.add(textGlyph);
+        }
+        //      }
+        //      if (getTextCornerTopRightLonEnabled()) {
+//            Graticule.TextGlyph textGlyph = graticule.getTextGlyphsLonCorners()[Graticule.TOP_RIGHT_CORNER_INDEX];
+        textGlyph = graticule.getTextGlyphsLonCorners()[Graticule.TOP_RIGHT_CORNER_INDEX];
+        if (textGlyph != null) {
+            textGlyphArrayList.add(textGlyph);
+        }
+        //      }
+
+        final Graticule.TextGlyph[] textGlyphs = textGlyphArrayList.toArray(new Graticule.TextGlyph[textGlyphArrayList.size()]);
+
+        if (textGlyphs != null) {
+            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.NORTH);
+        }
+    }
+
+    private void drawSouthSideLonCornerLabels(Graphics2D g2d) {
+
+        final ArrayList<Graticule.TextGlyph> textGlyphArrayList = new ArrayList<>();
+
+        //      if (getTextCornerBottomLeftLonEnabled()) {
+        Graticule.TextGlyph textGlyph = graticule.getTextGlyphsLonCorners()[Graticule.BOTTOM_LEFT_CORNER_INDEX];
+        if (textGlyph != null) {
+            textGlyphArrayList.add(textGlyph);
+            //          }
+        }
+        //      if (getTextCornerBottomRightLonEnabled()) {
+//            Graticule.TextGlyph textGlyph = graticule.getTextGlyphsLonCorners()[Graticule.BOTTOM_RIGHT_CORNER_INDEX];
+        textGlyph = graticule.getTextGlyphsLonCorners()[Graticule.BOTTOM_RIGHT_CORNER_INDEX];
+        if (textGlyph != null) {
+            textGlyphArrayList.add(textGlyph);
+            //         }
+        }
+
+        final Graticule.TextGlyph[] textGlyphs = textGlyphArrayList.toArray(new Graticule.TextGlyph[textGlyphArrayList.size()]);
+
+        if (textGlyphs != null) {
+            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.SOUTH);
+        }
+    }
+
 
     private void getUserValues() {
         int height = raster.getRasterHeight();
@@ -223,8 +350,14 @@ public class GraticuleLayer extends Layer {
         showGridLines = isLineEnabled();
         //    minorStep = 4;
         rotationThetaNorthLabels = 90 - getTextRotationNorth();   // in degrees
+        rotationThetaNorthLabels = getTextRotationNorth();   // in degrees
+
+
         //   rotationThetaSouthLabels = 90 - getTextRotationSouth();   // in degrees
         rotationThetaWestLabels = 90 - getTextRotationWest();   // in degrees
+        rotationThetaWestLabels = getTextRotationWest();   // in degrees
+
+
         //  rotationThetaEastLabels = 90 - getTextRotationEast();   // in degrees
         textOutwardsOffset = getTextOffsetOutward();
         textSidewardsOffset = getTextOffsetSideward();
@@ -238,7 +371,7 @@ public class GraticuleLayer extends Layer {
             }
         }
 
-        textOutside = isTextOutside();
+        textOutside = !isTextInside();
 
 
         gridLineWidth = getLineWidth();
@@ -265,10 +398,10 @@ public class GraticuleLayer extends Layer {
             }
         }
 
-        includeWestLonBorderText = getTextBorderLonWestEnabled();
-        includeEastLonBorderText = getTextBorderLonEastEnabled();
-        includeNorthLatBorderText = getTextBorderLatNorthEnabled();
-        includeSouthLatBorderText = getTextBorderLatSouthEnabled();
+//        includeWestLonBorderText = getTextBorderLonWestEnabled();
+//        includeEastLonBorderText = getTextBorderLonEastEnabled();
+//        includeNorthLatBorderText = getTextBorderLatNorthEnabled();
+//        includeSouthLatBorderText = getTextBorderLatSouthEnabled();
 
     }
 
@@ -487,7 +620,7 @@ public class GraticuleLayer extends Layer {
             double verticalShift = 0;
 
 
-            if (isTextOutside()) {
+            if (textOutside) {
                 if (textLocation == Graticule.TextLocation.NORTH) {
                     double theta = (rotationThetaNorthLabels / 180) * Math.PI;
                     float xOffset = 0;
@@ -833,12 +966,13 @@ public class GraticuleLayer extends Layer {
         if (propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_AUTO) ||
                 propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LAT) ||
                 propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LON) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH)
+                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS)
+//                ||
+//                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE) ||
+//                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED) ||
+//                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED) ||
+//                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED) ||
+//                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED)
                 ) {
             graticule = null;
         }
@@ -931,9 +1065,9 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD);
     }
 
-    private boolean isTextOutside() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE,
-                GraticuleLayerType.DEFAULT_TEXT_OUTSIDE);
+    private boolean isTextInside() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE,
+                GraticuleLayerType.DEFAULT_TEXT_INSIDE);
     }
 
     private int getTextRotationNorth() {
@@ -1012,26 +1146,46 @@ public class GraticuleLayer extends Layer {
     }
 
 
-    private boolean getTextBorderLonWestEnabled() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST,
-                GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_WEST);
+    private boolean getTextCornerTopLeftLonEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LON_ENABLED);
     }
 
-    private boolean getTextBorderLonEastEnabled() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST,
-                GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_EAST);
+    private boolean getTextCornerTopLeftLatEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LAT_ENABLED);
     }
 
-    private boolean getTextBorderLatNorthEnabled() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH,
-                GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH);
+    private boolean getTextCornerTopRightLonEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LON_ENABLED);
     }
 
-    private boolean getTextBorderLatSouthEnabled() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH,
-                GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH);
+    private boolean getTextCornerTopRightLatEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED);
     }
 
+
+    private boolean getTextCornerBottomLeftLonEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED);
+    }
+
+    private boolean getTextCornerBottomLeftLatEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED);
+    }
+
+    private boolean getTextCornerBottomRightLonEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED);
+    }
+
+    private boolean getTextCornerBottomRightLatEnabled() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED);
+    }
 
     private class ProductNodeHandler extends ProductNodeListenerAdapter {
 

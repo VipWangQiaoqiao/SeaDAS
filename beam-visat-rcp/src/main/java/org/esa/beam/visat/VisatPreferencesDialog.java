@@ -1036,9 +1036,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
 //            param.getProperties().setMaxValue(300);
 //            configParams.addParameter(param);
 //
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, Boolean.TRUE);
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, Boolean.TRUE);
 //            param.addParamChangeListener(paramChangeListener);
-//            param.getProperties().setLabel("Labels outside"); /*I18N*/
+//            param.getProperties().setLabel("Labels inside"); /*I18N*/
 //            configParams.addParameter(param);
 
 
@@ -1142,7 +1142,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
 //
-//            param = getConfigParam("graticule.text.outside");
+//            param = getConfigParam("graticule.text.inside");
 //            gbc.weightx = 0;
 //            gbc.gridwidth = 2;
 //            gbc.weightx = 1;
@@ -1212,7 +1212,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam("graticule.text.bg.color").setUIEnabled(textEnabled);
             getConfigParam("graticule.text.bg.transparency").setUIEnabled(textEnabled);
 //            getConfigParam("graticule.text.font.size").setUIEnabled(textEnabled);
-//            getConfigParam("graticule.text.outside").setUIEnabled(textEnabled);
+//            getConfigParam("graticule.text.inside").setUIEnabled(textEnabled);
 //            getConfigParam("graticule.text.offset.outward").setUIEnabled(textEnabled);
 //            getConfigParam("graticule.text.offset.sideward").setUIEnabled(textEnabled);
         }

@@ -40,66 +40,125 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         final PropertyEditorRegistry propertyEditorRegistry = PropertyEditorRegistry.getInstance();
 
 
-        PropertyDescriptor vd14 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, Boolean.class);
-        vd14.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OUTSIDE);
-        vd14.setDisplayName("Put Labels on Outside");
-        vd14.setDefaultConverter();
-        addPropertyDescriptor(vd14);
-
 //        PropertyDescriptor vd7 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED, Boolean.class);
 //        vd7.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ENABLED);
 //        vd7.setDisplayName("Show Labels");
 //        vd7.setDefaultConverter();
 //        addPropertyDescriptor(vd7);
 
+        PropertyDescriptor vd2 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_LAT, Double.class);
+        vd2.setDefaultValue(GraticuleLayerType.DEFAULT_RES_LAT);
+        vd2.setValueRange(new ValueRange(0.0, 90.00));
+//        vd2.setValueRange(new ValueRange(0.01, 90.00));
+        vd2.setDisplayName("Latitude Step Size (0=AUTO-SIZING)");
+        vd2.setDefaultConverter();
+        addPropertyDescriptor(vd2);
+
+        PropertyDescriptor vd3 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_LON, Double.class);
+        vd3.setDefaultValue(GraticuleLayerType.DEFAULT_RES_LON);
+        vd3.setValueRange(new ValueRange(0.0, 180.00));
+//        vd3.setValueRange(new ValueRange(0.01, 180.00));
+        vd3.setDisplayName("Longitude Step Size (0=AUTO-SIZING)");
+        vd3.setDefaultConverter();
+        addPropertyDescriptor(vd3);
+
+
         PropertyDescriptor vd20 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_NORTH, Boolean.class);
         vd20.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ENABLED_NORTH);
-        vd20.setDisplayName("Show Labels - Northside");
+        vd20.setDisplayName("Show Longitude Labels - North");
         vd20.setDefaultConverter();
         addPropertyDescriptor(vd20);
 
 
-
         PropertyDescriptor vd21 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_SOUTH, Boolean.class);
         vd21.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ENABLED_SOUTH);
-        vd21.setDisplayName("Show Labels - Southside");
+        vd21.setDisplayName("Show Longitude Labels - South");
         vd21.setDefaultConverter();
         addPropertyDescriptor(vd21);
 
         PropertyDescriptor vd22 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_WEST, Boolean.class);
         vd22.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ENABLED_WEST);
-        vd22.setDisplayName("Show Labels - Westside");
+        vd22.setDisplayName("Show Latitude Labels - West");
         vd22.setDefaultConverter();
         addPropertyDescriptor(vd22);
 
         PropertyDescriptor vd23 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_EAST, Boolean.class);
         vd23.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ENABLED_EAST);
-        vd23.setDisplayName("Show Labels - Eastside");
+        vd23.setDisplayName("Show Latitude Labels - East");
         vd23.setDefaultConverter();
         addPropertyDescriptor(vd23);
 
 
-        PropertyDescriptor vd31 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_WEST, Boolean.class);
-        vd31.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_WEST);
-        vd31.setDisplayName("Include Labels at Border - Western Longitude");
+//        PropertyDescriptor vd31 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED, Boolean.class);
+//        vd31.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LON_ENABLED);
+//        vd31.setDisplayName("Show Corner Labels -  Top Left Longitude");
+//        vd31.setDefaultConverter();
+//        addPropertyDescriptor(vd31);
+//
+//        PropertyDescriptor vd32 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED, Boolean.class);
+//        vd32.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LAT_ENABLED);
+//        vd32.setDisplayName("Show Corner Labels - Top Left Latitude");
+//        vd32.setDefaultConverter();
+//        addPropertyDescriptor(vd32);
+//
+//        PropertyDescriptor vd33 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED, Boolean.class);
+//        vd33.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LON_ENABLED);
+//        vd33.setDisplayName("Show Corner Labels - Top Right Longitude");
+//        vd33.setDefaultConverter();
+//        addPropertyDescriptor(vd33);
+//
+//        PropertyDescriptor vd34 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED, Boolean.class);
+//        vd34.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED);
+//        vd34.setDisplayName("Show Corner Labels - Top Right Latitude");
+//        vd34.setDefaultConverter();
+//        addPropertyDescriptor(vd34);
+//
+//        PropertyDescriptor vd35 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED, Boolean.class);
+//        vd35.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED);
+//        vd35.setDisplayName("Show Corner Labels -  Bottom Left Longitude");
+//        vd35.setDefaultConverter();
+//        addPropertyDescriptor(vd35);
+//
+//        PropertyDescriptor vd36 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED, Boolean.class);
+//        vd36.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED);
+//        vd36.setDisplayName("Show Corner Labels - Bottom Left Latitude");
+//        vd36.setDefaultConverter();
+//        addPropertyDescriptor(vd36);
+//
+//        PropertyDescriptor vd37 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED, Boolean.class);
+//        vd37.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED);
+//        vd37.setDisplayName("Show Corner Labels - Bottom Right Longitude");
+//        vd37.setDefaultConverter();
+//        addPropertyDescriptor(vd37);
+//
+//        PropertyDescriptor vd38 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED, Boolean.class);
+//        vd38.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED);
+//        vd38.setDisplayName("Show Corner Labels - Bottom Right Latitude");
+//        vd38.setDefaultConverter();
+//        addPropertyDescriptor(vd38);
+
+
+        PropertyDescriptor vd31 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED, Boolean.class);
+        vd31.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LON_ENABLED);
+        vd31.setDisplayName("Show Longitude Corner Labels -  Top");
         vd31.setDefaultConverter();
         addPropertyDescriptor(vd31);
 
-        PropertyDescriptor vd32 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LON_EAST, Boolean.class);
-        vd32.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LON_EAST);
-        vd32.setDisplayName("Include Labels at Border - Eastern Longitude");
+        PropertyDescriptor vd35 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED, Boolean.class);
+        vd35.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED);
+        vd35.setDisplayName("Show Longitude Corner Labels -  Bottom");
+        vd35.setDefaultConverter();
+        addPropertyDescriptor(vd35);
+
+        PropertyDescriptor vd32 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED, Boolean.class);
+        vd32.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LAT_ENABLED);
+        vd32.setDisplayName("Show Latitude Corner Labels - Left");
         vd32.setDefaultConverter();
         addPropertyDescriptor(vd32);
 
-        PropertyDescriptor vd33 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_NORTH, Boolean.class);
-        vd33.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_NORTH);
-        vd33.setDisplayName("Include Labels at Border - Northern Latitude");
-        vd33.setDefaultConverter();
-        addPropertyDescriptor(vd33);
-
-        PropertyDescriptor vd34 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_BORDER_ENABLED_LAT_SOUTH, Boolean.class);
-        vd34.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_BORDER_ENABLED_LAT_SOUTH);
-        vd34.setDisplayName("Include Labels at Border - Southern Latitude");
+        PropertyDescriptor vd34 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED, Boolean.class);
+        vd34.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED);
+        vd34.setDisplayName("Show Latitude Corner Labels - Right");
         vd34.setDefaultConverter();
         addPropertyDescriptor(vd34);
 
@@ -114,11 +173,63 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
 
 
-        PropertyDescriptor vd27 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED, Boolean.class);
-        vd27.setDefaultValue(GraticuleLayerType.DEFAULT_BORDER_ENABLED);
-        vd27.setDisplayName("Show Border");
-        vd27.setDefaultConverter();
-        addPropertyDescriptor(vd27);
+
+
+//        PropertyDescriptor vd0 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_AUTO, Boolean.class);
+//        vd0.setDefaultValue(GraticuleLayerType.DEFAULT_RES_AUTO);
+//        vd0.setDisplayName("Grid Line Spacing (Number of Grid Lines) .....");
+//        vd0.setDefaultConverter();
+//        addPropertyDescriptor(vd0);
+//
+//        PropertyDescriptor vd1 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS, Integer.class);
+//        vd1.setDefaultValue(GraticuleLayerType.DEFAULT_RES_PIXELS);
+//        vd1.setValueRange(new ValueRange(2, 50));
+//        vd1.setDisplayName("....... Number of Grid Lines");
+//        vd1.setDefaultConverter();
+//        addPropertyDescriptor(vd1);
+
+
+
+
+
+
+
+
+
+//        PropertyDescriptor vd26 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE, Double.class);
+//        vd26.setDefaultValue(GraticuleLayerType.DEFAULT_LINE_DASHED_PHASE);
+//        vd26.setDisplayName("Dashed Grid Lines (Dash Lengths)");
+//        vd26.setDefaultConverter();
+//        addPropertyDescriptor(vd26);
+//
+
+
+
+//
+//        PropertyDescriptor vd19 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_EAST, Double.class);
+//        vd19.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ROTATION_EAST);
+//        vd19.setDisplayName("   Rotate Labels - Eastside (degrees)");
+//        vd19.setDefaultConverter();
+//        addPropertyDescriptor(vd19);
+//
+//        PropertyDescriptor vd19b = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_ANCHORED, Boolean.class);
+//        vd19b.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ROTATION_ANCHORED);
+//        vd19b.setDisplayName("  Anchor Rotated Labels");
+//        vd19b.setDefaultConverter();
+//        addPropertyDescriptor(vd19b);
+
+
+
+
+
+
+//        PropertyDescriptor vd15 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_ITALIC, Boolean.class);
+//        vd15.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_FONT_ITALIC);
+//        vd15.setDisplayName("Labels (Italic)");
+//        vd15.setDefaultConverter();
+//        addPropertyDescriptor(vd15);
+
+
 
 
         PropertyDescriptor vd24 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_ENABLED, Boolean.class);
@@ -134,66 +245,6 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         addPropertyDescriptor(vd25);
 
 
-        PropertyDescriptor vd0 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_AUTO, Boolean.class);
-        vd0.setDefaultValue(GraticuleLayerType.DEFAULT_RES_AUTO);
-        vd0.setDisplayName("Grid Line Spacing (Number of Grid Lines) .....");
-        vd0.setDefaultConverter();
-        addPropertyDescriptor(vd0);
-
-        PropertyDescriptor vd1 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS, Integer.class);
-        vd1.setDefaultValue(GraticuleLayerType.DEFAULT_RES_PIXELS);
-        vd1.setValueRange(new ValueRange(2, 50));
-        vd1.setDisplayName("....... Number of Grid Lines");
-        vd1.setDefaultConverter();
-        addPropertyDescriptor(vd1);
-
-        PropertyDescriptor vd2 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_LAT, Double.class);
-        vd2.setDefaultValue(GraticuleLayerType.DEFAULT_RES_LAT);
-        vd2.setValueRange(new ValueRange(0.01, 90.00));
-        vd2.setDisplayName("....... Latitude Step Size");
-        vd2.setDefaultConverter();
-        addPropertyDescriptor(vd2);
-
-        PropertyDescriptor vd3 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_LON, Double.class);
-        vd3.setDefaultValue(GraticuleLayerType.DEFAULT_RES_LON);
-        vd3.setValueRange(new ValueRange(0.01, 180.00));
-        vd3.setDisplayName("....... Longitude Step Size");
-        vd3.setDefaultConverter();
-        addPropertyDescriptor(vd3);
-
-
-
-        PropertyDescriptor vd11 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, Integer.class);
-        vd11.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE);
-        vd11.setDisplayName("Font Size (0 = AUTO-SIZING)");
-        vd11.setDefaultConverter();
-        addPropertyDescriptor(vd11);
-
-
-
-
-        PropertyDescriptor vd5 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, Integer.class);
-        vd5.setDefaultValue(GraticuleLayerType.DEFAULT_LINE_WIDTH);
-        vd5.setDisplayName("Grid Line Width (0 = AUTO-SIZING)");
-        vd5.setDefaultConverter();
-        addPropertyDescriptor(vd5);
-
-        PropertyDescriptor vd29 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH, Integer.class);
-        vd29.setDefaultValue(GraticuleLayerType.DEFAULT_BORDER_WIDTH);
-        vd29.setDisplayName("Border Width (0 = AUTO-SIZING)");
-        vd29.setDefaultConverter();
-        addPropertyDescriptor(vd29);
-
-
-
-
-
-//        PropertyDescriptor vd26 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE, Double.class);
-//        vd26.setDefaultValue(GraticuleLayerType.DEFAULT_LINE_DASHED_PHASE);
-//        vd26.setDisplayName("Dashed Grid Lines (Dash Lengths)");
-//        vd26.setDefaultConverter();
-//        addPropertyDescriptor(vd26);
-//
 
 
 
@@ -203,10 +254,11 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
 
 
-
-
-
-
+        PropertyDescriptor vd27 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED, Boolean.class);
+        vd27.setDefaultValue(GraticuleLayerType.DEFAULT_BORDER_ENABLED);
+        vd27.setDisplayName("Show Border");
+        vd27.setDefaultConverter();
+        addPropertyDescriptor(vd27);
 
 
         PropertyDescriptor vd16 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH, Integer.class);
@@ -231,56 +283,34 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd18.setValueRange(new ValueRange(0, 90));
 //        vd18.setAttribute("propertyEditor", propertyEditorRegistry.getPropertyEditor(RangeEditor.class.getName()));
         addPropertyDescriptor(vd18);
-//
-//        PropertyDescriptor vd19 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_EAST, Double.class);
-//        vd19.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ROTATION_EAST);
-//        vd19.setDisplayName("   Rotate Labels - Eastside (degrees)");
-//        vd19.setDefaultConverter();
-//        addPropertyDescriptor(vd19);
-//
-//        PropertyDescriptor vd19b = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_ANCHORED, Boolean.class);
-//        vd19b.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ROTATION_ANCHORED);
-//        vd19b.setDisplayName("  Anchor Rotated Labels");
-//        vd19b.setDefaultConverter();
-//        addPropertyDescriptor(vd19b);
+        
+
+        PropertyDescriptor vd11 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, Integer.class);
+        vd11.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE);
+        vd11.setDisplayName("Font Size (0=AUTO-SIZING)");
+        vd11.setDefaultConverter();
+        addPropertyDescriptor(vd11);
+
+        PropertyDescriptor vd5 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, Integer.class);
+        vd5.setDefaultValue(GraticuleLayerType.DEFAULT_LINE_WIDTH);
+        vd5.setDisplayName("Grid Line Width (0=AUTO-SIZING)");
+        vd5.setDefaultConverter();
+        addPropertyDescriptor(vd5);
+
+
+        PropertyDescriptor vd29 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH, Integer.class);
+        vd29.setDefaultValue(GraticuleLayerType.DEFAULT_BORDER_WIDTH);
+        vd29.setDisplayName("Border Width (0=AUTO-SIZING)");
+        vd29.setDefaultConverter();
+        addPropertyDescriptor(vd29);
 
 
 
-
-
-
-
-
-
-
-
-
-
-        PropertyDescriptor vd15 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_ITALIC, Boolean.class);
-        vd15.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_FONT_ITALIC);
-        vd15.setDisplayName("Labels (Italic)");
-        vd15.setDefaultConverter();
-        addPropertyDescriptor(vd15);
-
-
-
-        PropertyDescriptor vd8 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, Color.class);
-        vd8.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_FG_COLOR);
-        vd8.setDisplayName("Font Color");
-        vd8.setDefaultConverter();
-        addPropertyDescriptor(vd8);
-
-        PropertyDescriptor vd28 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR, Color.class);
-        vd28.setDefaultValue(GraticuleLayerType.DEFAULT_BORDER_COLOR);
-        vd28.setDisplayName("Border Color");
-        vd28.setDefaultConverter();
-        addPropertyDescriptor(vd28);
-
-        PropertyDescriptor vd4 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR, Color.class);
-        vd4.setDefaultValue(GraticuleLayerType.DEFAULT_LINE_COLOR);
-        vd4.setDisplayName("Grid Line Color");
-        vd4.setDefaultConverter();
-        addPropertyDescriptor(vd4);
+        PropertyDescriptor vd14 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, Boolean.class);
+        vd14.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_INSIDE);
+        vd14.setDisplayName("Put Labels on Inside");
+        vd14.setDefaultConverter();
+        addPropertyDescriptor(vd14);
 
 
         PropertyDescriptor vd6 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY, Double.class);
@@ -292,16 +322,10 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         addPropertyDescriptor(vd6);
 
 
-        PropertyDescriptor vd9 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, Color.class);
-        vd9.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_BG_COLOR);
-        vd9.setDisplayName("Label Backdrop Color");
-        vd9.setDefaultConverter();
-        addPropertyDescriptor(vd9);
-
         PropertyDescriptor vd10 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY, Double.class);
         vd10.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_BG_TRANSPARENCY);
         vd10.setValueRange(new ValueRange(0, 1));
-        vd10.setDisplayName("Label Backdrop Transparency");
+        vd10.setDisplayName("Inside Label Backdrop Transparency");
         vd10.setDefaultConverter();
         vd10.setAttribute("propertyEditor", propertyEditorRegistry.getPropertyEditor(RangeEditor.class.getName()));
         addPropertyDescriptor(vd10);
@@ -309,30 +333,56 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
 
 
-        PropertyDescriptor vd12 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, Integer.class);
-        vd12.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD);
-        vd12.setDisplayName("Label Offset Inward");
-        vd12.setDefaultConverter();
-        addPropertyDescriptor(vd12);
 
-        PropertyDescriptor vd13 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, Integer.class);
-        vd13.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD);
-        vd13.setDisplayName("Label Offset Sideward");
-        vd13.setDefaultConverter();
-        addPropertyDescriptor(vd13);
+        PropertyDescriptor vd8 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, Color.class);
+        vd8.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_FG_COLOR);
+        vd8.setDisplayName("Font Color");
+        vd8.setDefaultConverter();
+        addPropertyDescriptor(vd8);
 
 
+        PropertyDescriptor vd4 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR, Color.class);
+        vd4.setDefaultValue(GraticuleLayerType.DEFAULT_LINE_COLOR);
+        vd4.setDisplayName("Grid Line Color");
+        vd4.setDefaultConverter();
+        addPropertyDescriptor(vd4);
+
+        PropertyDescriptor vd28 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR, Color.class);
+        vd28.setDefaultValue(GraticuleLayerType.DEFAULT_BORDER_COLOR);
+        vd28.setDisplayName("Border Color");
+        vd28.setDefaultConverter();
+        addPropertyDescriptor(vd28);
+
+        PropertyDescriptor vd9 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, Color.class);
+        vd9.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_BG_COLOR);
+        vd9.setDisplayName("Inside Label Backdrop Color");
+        vd9.setDefaultConverter();
+        addPropertyDescriptor(vd9);
+
+
+
+//        PropertyDescriptor vd12 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, Integer.class);
+//        vd12.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD);
+//        vd12.setDisplayName("Label Offset Inward");
+//        vd12.setDefaultConverter();
+//        addPropertyDescriptor(vd12);
+//
+//        PropertyDescriptor vd13 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, Integer.class);
+//        vd13.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD);
+//        vd13.setDisplayName("Label Offset Sideward");
+//        vd13.setDefaultConverter();
+//        addPropertyDescriptor(vd13);
 
 
         BindingContext bindingContext = getBindingContext();
-        boolean resAuto = (Boolean) bindingContext.getPropertySet().getValue(
-                GraticuleLayerType.PROPERTY_NAME_RES_AUTO);
-        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS, resAuto,
-                                        GraticuleLayerType.PROPERTY_NAME_RES_AUTO, resAuto);
-        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_RES_LAT, !resAuto,
-                                        GraticuleLayerType.PROPERTY_NAME_RES_AUTO, resAuto);
-        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_RES_LON, !resAuto,
-                                        GraticuleLayerType.PROPERTY_NAME_RES_AUTO, resAuto);
+//        boolean resAuto = (Boolean) bindingContext.getPropertySet().getValue(
+//                GraticuleLayerType.PROPERTY_NAME_RES_AUTO);
+//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS, resAuto,
+//                GraticuleLayerType.PROPERTY_NAME_RES_AUTO, resAuto);
+//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_RES_LAT, !resAuto,
+//                GraticuleLayerType.PROPERTY_NAME_RES_AUTO, resAuto);
+//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_RES_LON, !resAuto,
+//                GraticuleLayerType.PROPERTY_NAME_RES_AUTO, resAuto);
 
 //        boolean textEnabled = (Boolean) bindingContext.getPropertySet().getValue(
 //                GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED);
@@ -359,7 +409,7 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 //        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, textEnabled,
 //                GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED, textEnabled);
 //
-//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_OUTSIDE, textEnabled,
+//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, textEnabled,
 //                GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED, textEnabled);
 //
 //        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH, textEnabled,
@@ -390,7 +440,6 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 //                GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED, textEnabled);
 
 
-
         boolean lineEnabled = (Boolean) bindingContext.getPropertySet().getValue(
                 GraticuleLayerType.PROPERTY_NAME_LINE_ENABLED);
 
@@ -414,7 +463,6 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
                 GraticuleLayerType.PROPERTY_NAME_LINE_ENABLED, lineEnabled);
 
 
-
         boolean borderEnabled = (Boolean) bindingContext.getPropertySet().getValue(
                 GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED);
 
@@ -427,6 +475,15 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
 
 
+        boolean textInsideEnabled = (Boolean) bindingContext.getPropertySet().getValue(
+                GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE);
+
+        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY, textInsideEnabled,
+                GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, textInsideEnabled);
+
+
+        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, textInsideEnabled,
+                GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, textInsideEnabled);
     }
 
 }
