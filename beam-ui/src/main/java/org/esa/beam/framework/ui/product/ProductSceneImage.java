@@ -505,41 +505,35 @@ public class ProductSceneImage implements ProductLayerContext {
 
 
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LON_ENABLED,
-                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LON_ENABLED));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LON_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LON_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LON_ENABLED));
 
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LEFT_LAT_ENABLED,
-                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LEFT_LAT_ENABLED));
-
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LON_ENABLED,
-                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LON_ENABLED));
-
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED,
-                        GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_RIGHT_LAT_ENABLED));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_LEFT_LAT_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_LEFT_LAT_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_LEFT_LAT_ENABLED));
 
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED,
-                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LON_ENABLED));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_RIGHT_LAT_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_RIGHT_LAT_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_RIGHT_LAT_ENABLED));
 
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED,
-                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LEFT_LAT_ENABLED));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LON_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LON_ENABLED,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LON_ENABLED));
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED,
-                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LON_ENABLED));
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED,
-                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED,
-                        GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_RIGHT_LAT_ENABLED));
 
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED,
+                        GraticuleLayerType.DEFAULT_TICKMARK_ENABLED));
+
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE,
+                        GraticuleLayerType.DEFAULT_TICKMARK_INSIDE));
 
 
     }
