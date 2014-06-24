@@ -376,47 +376,47 @@ class ColorManipulationForm {
         multiApplyButton.setEnabled(canApply && (!enabled && (!isRgbMode() && visatApp != null)));
     }
 
+//    void installToolButtons() {
+//        toolButtonsPanel.removeAll();
+//        GridBagConstraints gbc = new GridBagConstraints();
+//        gbc.anchor = GridBagConstraints.CENTER;
+//        gbc.fill = GridBagConstraints.NONE;
+//        gbc.weightx = 1.0;
+//        gbc.gridy = 0;
+//        gbc.insets.bottom = 0;
+//        gbc.gridwidth = 1;
+//        gbc.gridy++;
+//        toolButtonsPanel.add(resetButton, gbc);
+//        toolButtonsPanel.add(multiApplyButton, gbc);
+//        gbc.gridy++;
+//        toolButtonsPanel.add(importButton, gbc);
+//        toolButtonsPanel.add(exportButton, gbc);
+//        gbc.gridy++;
+//        AbstractButton[] additionalButtons = childForm.getToolButtons();
+//        for (int i = 0; i < additionalButtons.length; i++) {
+//            AbstractButton button = additionalButtons[i];
+//            toolButtonsPanel.add(button, gbc);
+//            if (i % 2 == 1) {
+//                gbc.gridy++;
+//            }
+//        }
+//
+//        gbc.gridy++;
+//        gbc.fill = GridBagConstraints.VERTICAL;
+//        gbc.weighty = 1.0;
+//        gbc.gridwidth = 2;
+//        toolButtonsPanel.add(new JLabel(" "), gbc); // filler
+//        gbc.fill = GridBagConstraints.NONE;
+//        gbc.weighty = 0.0;
+//        gbc.gridwidth = 1;
+//        gbc.gridy++;
+//        gbc.gridx = 1;
+//        toolButtonsPanel.add(helpButton, gbc);
+//
+//        installToolButtonsNew();
+//    }
+
     void installToolButtons() {
-        toolButtonsPanel.removeAll();
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 1.0;
-        gbc.gridy = 0;
-        gbc.insets.bottom = 0;
-        gbc.gridwidth = 1;
-        gbc.gridy++;
-        toolButtonsPanel.add(resetButton, gbc);
-        toolButtonsPanel.add(multiApplyButton, gbc);
-        gbc.gridy++;
-        toolButtonsPanel.add(importButton, gbc);
-        toolButtonsPanel.add(exportButton, gbc);
-        gbc.gridy++;
-        AbstractButton[] additionalButtons = childForm.getToolButtons();
-        for (int i = 0; i < additionalButtons.length; i++) {
-            AbstractButton button = additionalButtons[i];
-            toolButtonsPanel.add(button, gbc);
-            if (i % 2 == 1) {
-                gbc.gridy++;
-            }
-        }
-
-        gbc.gridy++;
-        gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.weighty = 1.0;
-        gbc.gridwidth = 2;
-        toolButtonsPanel.add(new JLabel(" "), gbc); // filler
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weighty = 0.0;
-        gbc.gridwidth = 1;
-        gbc.gridy++;
-        gbc.gridx = 1;
-        toolButtonsPanel.add(helpButton, gbc);
-
-        installToolButtonsNew();
-    }
-
-    void installToolButtonsNew() {
         toolButtonsPanel.removeAll();
         GridBagConstraints gbc = new GridBagConstraints();
 
