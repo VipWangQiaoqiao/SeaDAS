@@ -225,22 +225,21 @@ public class Graticule {
     /**
      * Creates a graticule for the given product.
      *
+     *
      * @param raster               the product
-     * @param autoDeterminingSteps if true, <code>gridCellSize</code> is used to compute <code>latMajorStep</code>, <code>lonMajorStep</code> for the given product
-     * @param minDivisions         the grid cell size in pixels, ignored if <code>autoDeterminingSteps</code> if false
+     * @param desiredNumGridLines         the grid cell size in pixels, ignored if <code>autoDeterminingSteps</code> if false
      * @param latMajorStep         the grid cell size in meridional direction, ignored if <code>autoDeterminingSteps</code> if true
      * @param lonMajorStep         the grid cell size in parallel direction, ignored if <code>autoDeterminingSteps</code> if true
      * @return the graticule or null, if it could not be created
      */
     public static Graticule create(RasterDataNode raster,
-                                   boolean autoDeterminingSteps,
-                                   int minDivisions,
+                                   int desiredNumGridLines,
                                    float latMajorStep,
                                    float lonMajorStep) {
 
         int gridCellSize = 0;
-        if (minDivisions <= 1) {
-            minDivisions = 2;
+        if (desiredNumGridLines <= 1) {
+            desiredNumGridLines = 2;
         }
 
         Guardian.assertNotNull("product", raster);
@@ -263,7 +262,7 @@ public class Graticule {
             double deltaLat = Math.abs(geoPos2.lat - geoPos1.lat);
 
             int height = raster.getRasterHeight();
-            double ratio = height / (minDivisions - 1);
+            double ratio = height / (desiredNumGridLines - 1);
             gridCellSize = (int) Math.floor(ratio);
 
             double tmpLatMajorStep = ratio * deltaLat;
@@ -294,7 +293,7 @@ public class Graticule {
 
             int width = raster.getRasterWidth();
 
-            double ratio = width / (minDivisions - 1);
+            double ratio = width / (desiredNumGridLines - 1);
             gridCellSize = (int) Math.floor(ratio);
 
 
@@ -452,7 +451,6 @@ public class Graticule {
                                                          final double latMinorStep,
                                                          final double xMin,
                                                          final double xMax) {
-//        final GeoCoding geoCoding = product.getGeoCoding();
         List<List<Coord>> meridianList = new ArrayList<List<Coord>>();
         List<GeoPos> intersectionList = new ArrayList<GeoPos>();
         GeoPos geoPos, int1, int2;
@@ -576,12 +574,6 @@ public class Graticule {
         }
     }
 
-//    private static TextGlyph[] createTextGlyphs(List<List<Coord>> parallelList, List<List<Coord>> meridianList) {
-//        final List<TextGlyph> textGlyphList = new ArrayList<TextGlyph>();
-//        createWesternLatitudeTextGlyphs(parallelList, textGlyphList);
-//        createNorthernLongitudeTextGlyphs(meridianList, textGlyphList);
-//        return textGlyphList.toArray(new TextGlyph[textGlyphList.size()]);
-//    }
 
 
     private static TextGlyph[] createLonCornerTextGlyphs(RasterDataNode raster) {

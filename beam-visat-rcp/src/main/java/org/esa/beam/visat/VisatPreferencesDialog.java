@@ -960,12 +960,8 @@ public class VisatPreferencesDialog extends ConfigDialog {
                 }
             };
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_AUTO, Boolean.TRUE);
-            param.addParamChangeListener(paramChangeListener);
-            param.getProperties().setLabel("Auto Grid Spacing"); /*I18N*/
-            configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS, 128);
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES, 128);
             param.getProperties().setLabel("Average grid size in pixels"); /*I18N*/
             param.getProperties().setMinValue(16);
             param.getProperties().setMaxValue(512);
@@ -997,12 +993,6 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setMinValue(0.0);
             param.getProperties().setMaxValue(1.0);
             configParams.addParameter(param);
-
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED, Boolean.TRUE);
-            param.addParamChangeListener(paramChangeListener);
-            param.getProperties().setLabel("Show text labels"); /*I18N*/
-            configParams.addParameter(param);
-
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, Color.white);
             param.getProperties().setLabel("Text foreground colour"); /*I18N*/
@@ -1059,12 +1049,12 @@ public class VisatPreferencesDialog extends ConfigDialog {
             GridBagConstraints gbc = GridBagUtils.createConstraints("fill=HORIZONTAL,anchor=WEST");
             gbc.gridy = 0;
 
-            param = getConfigParam("graticule.res.auto");
-            gbc.weightx = 0;
-            gbc.gridwidth = 2;
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+//            param = getConfigParam("graticule.res.auto");
+//            gbc.weightx = 0;
+//            gbc.gridwidth = 2;
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
 
             final JLabel note1 = new JLabel(
                     "Note: Deselect this option only very carefully. The latitude and longitude");
@@ -1080,12 +1070,12 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbc.gridwidth = 1;
             gbc.insets.top = 2 * _LINE_INSET_TOP;
 
-            param = getConfigParam("graticule.res.pixels");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+//            param = getConfigParam("graticule.res.pixels");
+//            gbc.weightx = 0;
+//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
 
             param = getConfigParam("graticule.res.lat");
             gbc.weightx = 0;
@@ -1130,13 +1120,13 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
             gbc.insets.top = 3 * _LINE_INSET_TOP;
 
-            param = getConfigParam("graticule.text.enabled");
-            gbc.weightx = 0;
-            gbc.gridwidth = 2;
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridwidth = 1;
-            gbc.gridy++;
+//            param = getConfigParam("graticule.text.enabled");
+//            gbc.weightx = 0;
+//            gbc.gridwidth = 2;
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridwidth = 1;
+//            gbc.gridy++;
 
             gbc.insets.top = _LINE_INSET_TOP;
 
@@ -1202,15 +1192,15 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
         @Override
         public void updatePageUI() {
-            final boolean resAuto = (Boolean) getConfigParam("graticule.res.auto").getValue();
-            getConfigParam("graticule.res.pixels").setUIEnabled(resAuto);
-            getConfigParam("graticule.res.lat").setUIEnabled(!resAuto);
-            getConfigParam("graticule.res.lon").setUIEnabled(!resAuto);
+//            final boolean resAuto = (Boolean) getConfigParam("graticule.res.auto").getValue();
+//       //     getConfigParam("graticule.res.pixels").setUIEnabled(resAuto);
+//            getConfigParam("graticule.res.lat").setUIEnabled(!resAuto);
+//            getConfigParam("graticule.res.lon").setUIEnabled(!resAuto);
 
-            final boolean textEnabled = (Boolean) getConfigParam("graticule.text.enabled").getValue();
-            getConfigParam("graticule.text.fg.color").setUIEnabled(textEnabled);
-            getConfigParam("graticule.text.bg.color").setUIEnabled(textEnabled);
-            getConfigParam("graticule.text.bg.transparency").setUIEnabled(textEnabled);
+//            final boolean textEnabled = (Boolean) getConfigParam("graticule.text.enabled").getValue();
+//            getConfigParam("graticule.text.fg.color").setUIEnabled(textEnabled);
+//            getConfigParam("graticule.text.bg.color").setUIEnabled(textEnabled);
+//            getConfigParam("graticule.text.bg.transparency").setUIEnabled(textEnabled);
 //            getConfigParam("graticule.text.font.size").setUIEnabled(textEnabled);
 //            getConfigParam("graticule.text.inside").setUIEnabled(textEnabled);
 //            getConfigParam("graticule.text.offset.outward").setUIEnabled(textEnabled);

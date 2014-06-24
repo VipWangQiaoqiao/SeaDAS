@@ -392,12 +392,9 @@ public class ProductSceneImage implements ProductLayerContext {
     static void setGraticuleLayerStyle(PropertyMap configuration, Layer layer) {
         final PropertySet layerConfiguration = layer.getConfiguration();
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_RES_AUTO,
-                                    configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_RES_AUTO,
-                                                                  GraticuleLayerType.DEFAULT_RES_AUTO));
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS,
-                                    configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_RES_PIXELS,
-                                                                 GraticuleLayerType.DEFAULT_RES_PIXELS));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES,
+                                    configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES,
+                                                                 GraticuleLayerType.DEFAULT_NUM_GRID_LINES));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_RES_LAT,
                                     configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_RES_LAT,
@@ -416,9 +413,7 @@ public class ProductSceneImage implements ProductLayerContext {
                                     configuration.getPropertyDouble(
                                             GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY,
                                             GraticuleLayerType.DEFAULT_LINE_TRANSPARENCY));
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED,
-                                    configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED,
-                                                                  GraticuleLayerType.DEFAULT_TEXT_ENABLED));
+
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR,
                                     configuration.getPropertyColor(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR,
                                                                    GraticuleLayerType.DEFAULT_TEXT_FG_COLOR));
@@ -445,22 +440,15 @@ public class ProductSceneImage implements ProductLayerContext {
                 configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE,
                         GraticuleLayerType.DEFAULT_TEXT_INSIDE));
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
-                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD,
-                        GraticuleLayerType.DEFAULT_TEXT_OFFSET_OUTWARD));
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
-                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD,
-                        GraticuleLayerType.DEFAULT_TEXT_OFFSET_SIDEWARD));
-
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH,
-                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH,
-                        GraticuleLayerType.DEFAULT_TEXT_ROTATION_NORTH));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH_SOUTH,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH_SOUTH,
+                        GraticuleLayerType.DEFAULT_TEXT_ROTATION_NORTH_SOUTH));
 
 
-        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST,
-                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST,
-                        GraticuleLayerType.DEFAULT_TEXT_ROTATION_WEST));
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST_EAST,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST_EAST,
+                        GraticuleLayerType.DEFAULT_TEXT_ROTATION_WEST_EAST));
 
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_NORTH,
