@@ -85,6 +85,7 @@ public class Graticule {
         _tickPointsEast = tickPointsEast;
     }
 
+
     public GeneralPath[] getLinePaths() {
         return _linePaths;
     }
@@ -233,10 +234,9 @@ public class Graticule {
      */
     public static Graticule create(RasterDataNode raster,
                                    int desiredNumGridLines,
-                                   float latMajorStep,
-                                   float lonMajorStep) {
+                                   double latMajorStep,
+                                   double lonMajorStep) {
 
-        int gridCellSize = 0;
         if (desiredNumGridLines <= 1) {
             desiredNumGridLines = 2;
         }
@@ -262,23 +262,15 @@ public class Graticule {
 
             int height = raster.getRasterHeight();
             double ratio = height / (desiredNumGridLines - 1);
-            gridCellSize = (int) Math.floor(ratio);
 
             double tmpLatMajorStep = ratio * deltaLat;
 
-            // if each division is greater than 5 degrees then round to nearest 5 degrees
-            if (tmpLatMajorStep > 30) {
-                tmpLatMajorStep = 30;
-            } else if (tmpLatMajorStep > 5) {
-                tmpLatMajorStep = 5 * Math.round((tmpLatMajorStep / 5));
-            } else {
-                tmpLatMajorStep = Math.round(tmpLatMajorStep);
-            }
+            latMajorStep = getSensibleDegreeIncrement(tmpLatMajorStep);
 
-            //            // this is what BEAM had
-//            // it has some cool behaviour but is a bit rigid when adjusted desireed gridline count
-//            //     latMajorStep = (float) compose(normalize(gridCellSize * 0.5 * (deltaLon + deltaLat), null));
-            latMajorStep = (float) tmpLatMajorStep;
+            // this is what BEAM had
+            // it has some cool behaviour but is a bit rigid when adjusted desired gridline count
+            //     latMajorStep = (float) compose(normalize(gridCellSize * 0.5 * (deltaLon + deltaLat), null));
+
         }
 
 
@@ -293,23 +285,11 @@ public class Graticule {
             }
 
             int width = raster.getRasterWidth();
-
             double ratio = width / (desiredNumGridLines - 1);
-            gridCellSize = (int) Math.floor(ratio);
-
 
             double tmpLonMajorStep = ratio * deltaLon;
 
-            // if each division is greater than 5 degrees then round to nearest 5 degrees
-            if (tmpLonMajorStep > 30) {
-                tmpLonMajorStep = 30;
-            } else if (tmpLonMajorStep > 5) {
-                tmpLonMajorStep = 5 * Math.round((tmpLonMajorStep / 5));
-            } else {
-                tmpLonMajorStep = Math.round(tmpLonMajorStep);
-            }
-
-            lonMajorStep = (float) tmpLonMajorStep;
+            lonMajorStep = getSensibleDegreeIncrement(tmpLonMajorStep);
         }
 
 
@@ -322,20 +302,10 @@ public class Graticule {
         }
 
 
-        // Limit min lat step to 30 minute
-        if (latMajorStep < (30 / 60)) {
-            latMajorStep = (float) (30 / 60);
-        }
-
-        // Limit min lon step to 1 minute
-        if (lonMajorStep < (1 / 60)) {
-            lonMajorStep = (float) (30 / 60);
-
-        }
         Debug.trace("Graticule.create: latMajorStep=" + latMajorStep + ", lonMajorStep=" + lonMajorStep);
 
-        float latMinorStep = latMajorStep / 4.0f;
-        float lonMinorStep = lonMajorStep / 4.0f;
+        double latMinorStep = latMajorStep / 4.0f;
+        double lonMinorStep = lonMajorStep / 4.0f;
 
         if (latMajorStep <= 1) {
             latMinorStep = latMajorStep;
@@ -369,36 +339,70 @@ public class Graticule {
 
 
         final List<List<Coord>> parallelList = computeParallelList(raster.getGeoCoding(), geoBoundary, latMajorStep, lonMinorStep, yMin, yMax);
-
         final List<List<Coord>> meridianList = computeMeridianList(raster.getGeoCoding(), geoBoundary, lonMajorStep, latMinorStep, xMin, xMax);
-        final GeneralPath[] paths = createPaths(parallelList, meridianList);
+
+        if (parallelList.size() > 0 && meridianList.size() > 0) {
+            final GeneralPath[] paths = createPaths(parallelList, meridianList);
 
 
-        final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH);
-        final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH);
-        final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST);
-        final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST);
+            final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH);
+            final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH);
+            final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST);
+            final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST);
 
-        final TextGlyph[] textGlyphsLatCorners = createLatCornerTextGlyphs(raster);
-        final TextGlyph[] textGlyphsLonCorners = createLonCornerTextGlyphs(raster);
+            final TextGlyph[] textGlyphsLatCorners = createLatCornerTextGlyphs(raster);
+            final TextGlyph[] textGlyphsLonCorners = createLonCornerTextGlyphs(raster);
 
-        final PixelPos[] tickPointsNorth = createTickPoints(parallelList, meridianList, TextLocation.NORTH);
-        final PixelPos[] tickPointsSouth = createTickPoints(parallelList, meridianList, TextLocation.SOUTH);
-        final PixelPos[] tickPointsWest = createTickPoints(parallelList, meridianList, TextLocation.WEST);
-        final PixelPos[] tickPointsEast = createTickPoints(parallelList, meridianList, TextLocation.EAST);
+            final PixelPos[] tickPointsNorth = createTickPoints(parallelList, meridianList, TextLocation.NORTH);
+            final PixelPos[] tickPointsSouth = createTickPoints(parallelList, meridianList, TextLocation.SOUTH);
+            final PixelPos[] tickPointsWest = createTickPoints(parallelList, meridianList, TextLocation.WEST);
+            final PixelPos[] tickPointsEast = createTickPoints(parallelList, meridianList, TextLocation.EAST);
 
-        return new Graticule(paths,
-                textGlyphsNorth,
-                textGlyphsSouth,
-                textGlyphsWest,
-                textGlyphsEast,
-                textGlyphsLatCorners,
-                textGlyphsLonCorners,
-                tickPointsNorth,
-                tickPointsSouth,
-                tickPointsWest,
-                tickPointsEast);
+            return new Graticule(paths,
+                    textGlyphsNorth,
+                    textGlyphsSouth,
+                    textGlyphsWest,
+                    textGlyphsEast,
+                    textGlyphsLatCorners,
+                    textGlyphsLonCorners,
+                    tickPointsNorth,
+                    tickPointsSouth,
+                    tickPointsWest,
+                    tickPointsEast);
+        } else {
+            return null;
+        }
     }
+
+
+    private static double getSensibleDegreeIncrement(double degreeIncrement) {
+
+        double ONE_MINUTE = 1.0 / 60.0;
+        double TEN_MINUTES = 10.0 / 60.0;
+
+        if (degreeIncrement > 30) {
+            degreeIncrement = 30;
+
+        } else if (degreeIncrement >= 5) {
+            // if each division is greater than 5 degrees then round to nearest 5 degrees
+            degreeIncrement = 5 * Math.round((degreeIncrement / 5));
+        } else if (degreeIncrement >= 1) {
+            // if each division is greater than 1 degrees then round to nearest degree
+            degreeIncrement = Math.round(degreeIncrement);
+        } else if (degreeIncrement >= TEN_MINUTES) {
+            // round to nearest ten minutes of a degree
+            degreeIncrement = Math.round((6 * degreeIncrement)) / 6.0;
+        } else if (degreeIncrement >= ONE_MINUTE) {
+            // round to nearest minute of a degree
+            degreeIncrement = Math.round((60.0 * degreeIncrement)) / 60.0;
+        } else {
+            degreeIncrement = ONE_MINUTE;
+        }
+
+
+        return degreeIncrement;
+    }
+
 
     private static int getGeoBoundaryStep(final GeoCoding geoCoding) {
         int step = 16;
@@ -412,7 +416,13 @@ public class Graticule {
 
     private static int getGeoBoundaryStep(final GeoCoding geoCoding, RasterDataNode raster) {
         double minDimensionLength = Math.min(raster.getRasterHeight(), raster.getRasterWidth());
-        int step = (int) Math.floor(minDimensionLength / 100.0);
+        int step = (int) Math.floor(minDimensionLength / 200.0);
+
+        if (step < 1) {
+            step = 1;
+        }
+        // OVERWRITING ALL THIS BECAUSE I DONT WANT TO MISS CORNERS
+        step = 1;
 
         if (geoCoding instanceof TiePointGeoCoding) {
             final TiePointGeoCoding tiePointGeoCoding = (TiePointGeoCoding) geoCoding;
@@ -437,7 +447,7 @@ public class Graticule {
         double my = latMajorStep * Math.floor(yMin / latMajorStep);
         for (; my <= yMax; my += latMajorStep) {
             intersectionList.clear();
-            computeParallelIntersections(geoBoundary, my, intersectionList);
+            computeParallelIntersectionsTheHumanReadableVersion(geoBoundary, my, intersectionList);
             if (intersectionList.size() > 0 && intersectionList.size() % 2 == 0) {
                 final GeoPos[] intersections = intersectionList.toArray(new GeoPos[intersectionList.size()]);
                 Arrays.sort(intersections, new GeoPosLonComparator());
@@ -483,7 +493,7 @@ public class Graticule {
         double mx = lonMajorStep * Math.floor(xMin / lonMajorStep);
         for (; mx <= xMax; mx += lonMajorStep) {
             intersectionList.clear();
-            computeMeridianIntersections(geoBoundary, mx, intersectionList);
+            computeMeridianIntersectionsTheHumanReadableVersion(geoBoundary, mx, intersectionList);
             if (intersectionList.size() > 0 && intersectionList.size() % 2 == 0) {
                 final GeoPos[] intersections = intersectionList.toArray(new GeoPos[intersectionList.size()]);
                 Arrays.sort(intersections, new GeoPosLatComparator());
@@ -515,6 +525,84 @@ public class Graticule {
         return meridianList;
     }
 
+
+    private static void computeParallelIntersectionsTheHumanReadableVersion(final GeoPos[] geoBoundary,
+                                                                            final double lat,
+                                                                            final List<GeoPos> intersectionList) {
+        double lon;
+        double lonBoundaryCurr;
+        double latBoundaryCurr;
+        double lonBoundaryPrev = 0;
+        double latBoundaryPrev = 0;
+        double interpolationWeight;
+
+        for (int i = 0; i < geoBoundary.length; i++) {
+            GeoPos geoPos = geoBoundary[i];
+            lonBoundaryCurr = geoPos.lon;
+            latBoundaryCurr = geoPos.lat;
+
+            if (i > 0) {
+                // only examine steps around geoBoundary where lat is changing
+                if (latBoundaryCurr != latBoundaryPrev) {
+                    // find the step which crosses over desired lat
+                    if (((lat >= latBoundaryPrev && lat <= latBoundaryCurr) ||
+                            (lat >= latBoundaryCurr && lat <= latBoundaryPrev))) {
+
+                        // compute lon based on interpolation and add geoPos to intersectionList
+                        interpolationWeight = (lat - latBoundaryPrev) / (latBoundaryCurr - latBoundaryPrev);
+                        if (interpolationWeight >= 0.0 && interpolationWeight < 1.0) {
+                            lon = lonBoundaryPrev + interpolationWeight * (lonBoundaryCurr - lonBoundaryPrev);
+                            intersectionList.add(new GeoPos((float) lat, (float) lon));
+                        }
+                    }
+                }
+            }
+
+            lonBoundaryPrev = lonBoundaryCurr;
+            latBoundaryPrev = latBoundaryCurr;
+        }
+    }
+
+
+    private static void computeMeridianIntersectionsTheHumanReadableVersion(final GeoPos[] geoBoundary,
+                                                                            final double lon,
+                                                                            final List<GeoPos> intersectionList) {
+        double lat;
+        double lonBoundaryPrev = 0;
+        double latBoundaryPrev = 0;
+        double lonBoundaryCurr;
+        double latBoundaryCurr;
+        double interpolationWeight;
+
+        for (int i = 0; i < geoBoundary.length; i++) {
+            GeoPos geoPos = geoBoundary[i];
+            lonBoundaryCurr = geoPos.lon;
+            latBoundaryCurr = geoPos.lat;
+
+            if (i > 0) {
+                // only examine steps around geoBoundary where lon is changing
+                if (lonBoundaryCurr != lonBoundaryPrev) {
+                    // find the step which crosses over desired lon
+                    if (((lon >= lonBoundaryPrev && lon <= lonBoundaryCurr) ||
+                            (lon >= lonBoundaryCurr && lon <= lonBoundaryPrev))) {
+
+                        // compute lat based on interpolation and add geoPos to intersectionList
+                        interpolationWeight = (lon - lonBoundaryPrev) / (lonBoundaryCurr - lonBoundaryPrev);
+                        if (interpolationWeight >= 0.0 && interpolationWeight < 1.0) {
+                            lat = latBoundaryPrev + interpolationWeight * (latBoundaryCurr - latBoundaryPrev);
+                            intersectionList.add(new GeoPos((float) lat, (float) lon));
+                        }
+                    }
+                }
+            }
+
+            lonBoundaryPrev = lonBoundaryCurr;
+            latBoundaryPrev = latBoundaryCurr;
+        }
+    }
+
+
+    // please see the human readable version: computeParallelIntersectionsTheHumanReadableVersion
     private static void computeParallelIntersections(final GeoPos[] geoBoundary,
                                                      final double my,
                                                      final List<GeoPos> intersectionList) {
@@ -541,6 +629,8 @@ public class Graticule {
         }
     }
 
+
+    // please see the human readable version: computeMeridianIntersectionsTheHumanReadableVersion
     private static void computeMeridianIntersections(final GeoPos[] geoBoundary,
                                                      final double mx,
                                                      final List<GeoPos> intersectionList) {
@@ -566,6 +656,7 @@ public class Graticule {
             p0y = p1y;
         }
     }
+
 
     private static GeneralPath[] createPaths(List<List<Coord>> parallelList, List<List<Coord>> meridianList) {
         final ArrayList<GeneralPath> generalPathList = new ArrayList<GeneralPath>();

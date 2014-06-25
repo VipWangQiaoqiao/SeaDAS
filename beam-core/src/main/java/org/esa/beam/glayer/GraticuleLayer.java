@@ -86,8 +86,8 @@ public class GraticuleLayer extends Layer {
         if (graticule == null) {
             graticule = Graticule.create(raster,
                     getNumGridLines(),
-                    (float) getResLat(),
-                    (float) getResLon());
+                    getResLat(),
+                    getResLon());
         }
         if (graticule != null) {
 
