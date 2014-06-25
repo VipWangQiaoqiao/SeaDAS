@@ -225,11 +225,10 @@ public class Graticule {
     /**
      * Creates a graticule for the given product.
      *
-     *
-     * @param raster               the product
-     * @param desiredNumGridLines         the grid cell size in pixels, ignored if <code>autoDeterminingSteps</code> if false
-     * @param latMajorStep         the grid cell size in meridional direction, ignored if <code>autoDeterminingSteps</code> if true
-     * @param lonMajorStep         the grid cell size in parallel direction, ignored if <code>autoDeterminingSteps</code> if true
+     * @param raster              the product
+     * @param desiredNumGridLines the grid cell size in pixels, ignored if <code>autoDeterminingSteps</code> if false
+     * @param latMajorStep        the grid cell size in meridional direction, ignored if <code>autoDeterminingSteps</code> if true
+     * @param lonMajorStep        the grid cell size in parallel direction, ignored if <code>autoDeterminingSteps</code> if true
      * @return the graticule or null, if it could not be created
      */
     public static Graticule create(RasterDataNode raster,
@@ -268,7 +267,9 @@ public class Graticule {
             double tmpLatMajorStep = ratio * deltaLat;
 
             // if each division is greater than 5 degrees then round to nearest 5 degrees
-            if (tmpLatMajorStep > 5) {
+            if (tmpLatMajorStep > 30) {
+                tmpLatMajorStep = 30;
+            } else if (tmpLatMajorStep > 5) {
                 tmpLatMajorStep = 5 * Math.round((tmpLatMajorStep / 5));
             } else {
                 tmpLatMajorStep = Math.round(tmpLatMajorStep);
@@ -300,7 +301,9 @@ public class Graticule {
             double tmpLonMajorStep = ratio * deltaLon;
 
             // if each division is greater than 5 degrees then round to nearest 5 degrees
-            if (tmpLonMajorStep > 5) {
+            if (tmpLonMajorStep > 30) {
+                tmpLonMajorStep = 30;
+            } else if (tmpLonMajorStep > 5) {
                 tmpLonMajorStep = 5 * Math.round((tmpLonMajorStep / 5));
             } else {
                 tmpLonMajorStep = Math.round(tmpLonMajorStep);
@@ -319,14 +322,14 @@ public class Graticule {
         }
 
 
-        // Limit min lat step to 1 minute
-        if (latMajorStep < (1 / 60)) {
-            latMajorStep = (float) (1 / 60);
+        // Limit min lat step to 30 minute
+        if (latMajorStep < (30 / 60)) {
+            latMajorStep = (float) (30 / 60);
         }
 
         // Limit min lon step to 1 minute
         if (lonMajorStep < (1 / 60)) {
-            lonMajorStep = (float) (1 / 60);
+            lonMajorStep = (float) (30 / 60);
 
         }
         Debug.trace("Graticule.create: latMajorStep=" + latMajorStep + ", lonMajorStep=" + lonMajorStep);
@@ -334,7 +337,15 @@ public class Graticule {
         float latMinorStep = latMajorStep / 4.0f;
         float lonMinorStep = lonMajorStep / 4.0f;
 
-        int geoBoundaryStep = getGeoBoundaryStep(geoCoding);
+        if (latMajorStep <= 1) {
+            latMinorStep = latMajorStep;
+        }
+
+        if (lonMajorStep <= 1) {
+            lonMinorStep = lonMajorStep;
+        }
+
+        int geoBoundaryStep = getGeoBoundaryStep(geoCoding, raster);
         Debug.trace("Graticule.create: geoBoundaryStep=" + geoBoundaryStep);
         final GeoPos[] geoBoundary = ProductUtils.createGeoBoundary(raster, null, geoBoundaryStep);
         ProductUtils.normalizeGeoPolygon(geoBoundary);
@@ -398,6 +409,19 @@ public class Graticule {
         return step;
     }
 
+
+    private static int getGeoBoundaryStep(final GeoCoding geoCoding, RasterDataNode raster) {
+        double minDimensionLength = Math.min(raster.getRasterHeight(), raster.getRasterWidth());
+        int step = (int) Math.floor(minDimensionLength / 100.0);
+
+        if (geoCoding instanceof TiePointGeoCoding) {
+            final TiePointGeoCoding tiePointGeoCoding = (TiePointGeoCoding) geoCoding;
+            step = Math.round(Math.min(tiePointGeoCoding.getLonGrid().getSubSamplingX(), tiePointGeoCoding.getLonGrid().getSubSamplingY()));
+        }
+        return step;
+    }
+
+
     private static List<List<Coord>> computeParallelList(final GeoCoding geoCoding,
                                                          final GeoPos[] geoBoundary,
                                                          final double latMajorStep,
@@ -427,7 +451,7 @@ public class Graticule {
                     for (int k = 0; k <= 1; ) {
                         geoPos = new GeoPos(lat, limitLon(lon));
                         pixelPos = geoCoding.getPixelPos(geoPos, null);
-                        // DANNY added this to avoid adding in null pixels
+//                        DANNY added this to avoid adding in null pixels
                         if (!Double.isNaN(pixelPos.getX()) && !Double.isNaN(pixelPos.getY())) {
                             parallel.add(new Coord(geoPos, pixelPos));
                         }
@@ -575,7 +599,6 @@ public class Graticule {
     }
 
 
-
     private static TextGlyph[] createLonCornerTextGlyphs(RasterDataNode raster) {
         final TextGlyph[] textGlyphs;
         textGlyphs = new TextGlyph[4];
@@ -638,8 +661,8 @@ public class Graticule {
     }
 
     private static PixelPos[] createTickPoints(List<List<Coord>> latitudeGridLinePoints,
-                                                List<List<Coord>> longitudeGridLinePoints,
-                                                TextLocation textLocation) {
+                                               List<List<Coord>> longitudeGridLinePoints,
+                                               TextLocation textLocation) {
         final List<PixelPos> pixelPoses = new ArrayList<PixelPos>();
 
         switch (textLocation) {
@@ -700,7 +723,6 @@ public class Graticule {
             }
         }
     }
-
 
 
     private static void createWesternLatitudeTextGlyphs(List<List<Coord>> latitudeGridLinePoints,
@@ -768,7 +790,7 @@ public class Graticule {
     }
 
     private static void createNorthernLongitudeTickPoints(List<List<Coord>> longitudeGridLinePoints,
-                                                        List<PixelPos> pixelPoses) {
+                                                          List<PixelPos> pixelPoses) {
 
         for (final List<Coord> longitudeGridLinePoint : longitudeGridLinePoints) {
 
@@ -885,7 +907,6 @@ public class Graticule {
 
         return null;
     }
-
 
 
     private static boolean isCoordPairValid(Coord coord1, Coord coord2) {

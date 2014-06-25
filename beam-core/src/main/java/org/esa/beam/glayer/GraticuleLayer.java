@@ -43,31 +43,11 @@ public class GraticuleLayer extends Layer {
     private ProductNodeHandler productNodeHandler;
     private Graticule graticule;
 
-    double PTS_PER_INCH = 72.0;
-    double TICK_MARK_PERCENT_LENGTH = 0.01;
-
-
-    // DANNY new fields to add to preferences
-    private int NULL_INT = -1;
     private double NULL_DOUBLE = -1.0;
-
-    private double fontSizePts = NULL_DOUBLE;
-    private int fontSizePixels = NULL_INT;
-
-    private double gridLineWidthPts = NULL_DOUBLE;
-    private double gridLineWidthPixels = NULL_DOUBLE;
-
-    private double borderLineWidthPts = NULL_DOUBLE;
-    private double borderLineWidthPixels = NULL_DOUBLE;
-
-    private double dashLengthPts = NULL_DOUBLE;
-    private double dashLengthPixels = NULL_DOUBLE;
-
-    double tickmarkLength = NULL_DOUBLE;
+    private double ptsToPixelsMultiplier = NULL_DOUBLE;
 
 
     private int minorStep = 4;
-
 
 
     public GraticuleLayer(RasterDataNode raster) {
@@ -296,7 +276,6 @@ public class GraticuleLayer extends Layer {
     private void getUserValues() {
 
 
-
     }
 
     private void drawLinePaths(Graphics2D g2d, final GeneralPath[] linePaths) {
@@ -311,7 +290,7 @@ public class GraticuleLayer extends Layer {
         Stroke drawingStroke;
 
 
-     //   if (isDashedLine() || getDashLengthPixels() != 0.0) {
+        //   if (isDashedLine() || getDashLengthPixels() != 0.0) {
         if (getDashLengthPixels() > 0.0) {
             drawingStroke = new BasicStroke((float) getGridLineWidthPixels(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{(float) getDashLengthPixels()}, 0);
         } else {
@@ -692,8 +671,8 @@ public class GraticuleLayer extends Layer {
         String propertyName = event.getPropertyName();
         if (
                 propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LAT) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LON) ||
-                propertyName.equals(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES)) {
+                        propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LON) ||
+                        propertyName.equals(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES)) {
             graticule = null;
         }
         if (getConfiguration().getProperty(propertyName) != null) {
@@ -701,7 +680,6 @@ public class GraticuleLayer extends Layer {
         }
         super.fireLayerPropertyChanged(event);
     }
-
 
 
     private double getResLon() {
@@ -730,11 +708,6 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_LINE_TRANSPARENCY);
     }
 
-    private int getLineWidth() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
-                GraticuleLayerType.DEFAULT_LINE_WIDTH);
-    }
-
 
     private Color getTextFgColor() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR,
@@ -753,77 +726,57 @@ public class GraticuleLayer extends Layer {
 
 
     private double getGridLineWidthPixels() {
-        int newGridLineWidthPts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
+        double gridLineWidthPts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
                 GraticuleLayerType.DEFAULT_LINE_WIDTH);
 
-        if (gridLineWidthPixels == NULL_DOUBLE || newGridLineWidthPts != gridLineWidthPts) {
-            if (newGridLineWidthPts == 0) {
-                newGridLineWidthPts = GraticuleLayerType.DEFAULT_LINE_WIDTH;
-            }
-
-            double linePercent = newGridLineWidthPts / (PTS_PER_INCH * 11.0);
-
-            gridLineWidthPixels = Math.round(linePercent * raster.getRasterHeight());
-            gridLineWidthPts = newGridLineWidthPts;
-        }
-
-        return gridLineWidthPixels;
+        return getPtsToPixelsMultiplier() * gridLineWidthPts;
     }
 
+
     private double getBorderLineWidthPixels() {
-        int newBorderLineWidthPts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
+        double borderLineWidthPts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
                 GraticuleLayerType.DEFAULT_BORDER_WIDTH);
 
-        if (borderLineWidthPixels == NULL_DOUBLE || newBorderLineWidthPts != borderLineWidthPts) {
-            if (newBorderLineWidthPts == 0) {
-                newBorderLineWidthPts = GraticuleLayerType.DEFAULT_BORDER_WIDTH;
-            }
-
-            double linePercent = newBorderLineWidthPts / (PTS_PER_INCH * 11.0);
-
-            borderLineWidthPixels = Math.round(linePercent * raster.getRasterHeight());
-            borderLineWidthPts = newBorderLineWidthPts;
-        }
-
-        return borderLineWidthPixels;
+        return getPtsToPixelsMultiplier() * borderLineWidthPts;
     }
 
 
     private double getDashLengthPixels() {
-        double newDashLengthPts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE,
+        double dashLengthPts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE,
                 GraticuleLayerType.DEFAULT_LINE_DASHED_PHASE);
 
-        if (dashLengthPixels == NULL_DOUBLE || newDashLengthPts != dashLengthPts) {
-//            if (newDashLengthPts == 0) {
-//                newDashLengthPts = GraticuleLayerType.DEFAULT_LINE_DASHED_PHASE;
-//            }
-
-            double linePercent = newDashLengthPts / (PTS_PER_INCH * 11.0);
-
-            dashLengthPixels = Math.round(linePercent * raster.getRasterHeight());
-            dashLengthPts = newDashLengthPts;
-        }
-
-        return dashLengthPixels;
+        return getPtsToPixelsMultiplier() * dashLengthPts;
     }
 
 
     private int getFontSizePixels() {
-        int newFontSizePts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
+        int fontSizePts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
                 GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE);
 
-        if (fontSizePixels == NULL_INT || newFontSizePts != fontSizePts) {
-            if (newFontSizePts == 0) {
-                newFontSizePts = GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE;
+        return (int) Math.round(getPtsToPixelsMultiplier() * fontSizePts);
+    }
+
+
+    private double getPtsToPixelsMultiplier() {
+
+        if (ptsToPixelsMultiplier == NULL_DOUBLE) {
+            final double PTS_PER_INCH = 72.0;
+            final double PAPER_HEIGHT = 11.0;
+            final double PAPER_WIDTH = 8.5;
+
+            double heightToWidthRatioPaper = (PAPER_HEIGHT) / (PAPER_WIDTH);
+            double heightToWidthRatioRaster = raster.getRasterHeight() / raster.getRasterWidth();
+
+            if (heightToWidthRatioRaster > heightToWidthRatioPaper) {
+                // use height
+                ptsToPixelsMultiplier = (1 / PTS_PER_INCH) * (raster.getRasterHeight() / (PAPER_HEIGHT));
+            } else {
+                // use width
+                ptsToPixelsMultiplier = (1 / PTS_PER_INCH) * (raster.getRasterWidth() / (PAPER_WIDTH));
             }
-
-            double fontPercent = newFontSizePts / (PTS_PER_INCH * 11.0);
-
-            fontSizePixels = (int) Math.round(fontPercent * raster.getRasterHeight());
-            fontSizePts = newFontSizePts;
         }
 
-        return fontSizePixels;
+        return ptsToPixelsMultiplier;
     }
 
 
@@ -831,7 +784,6 @@ public class GraticuleLayer extends Layer {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_ITALIC,
                 GraticuleLayerType.DEFAULT_TEXT_FONT_ITALIC);
     }
-
 
 
     private boolean isTextInside() {
@@ -880,25 +832,12 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_LINE_ENABLED);
     }
 
-    private boolean isDashedLine() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED,
-                GraticuleLayerType.DEFAULT_LINE_DASHED);
-    }
-
-    private double getLineDashedPhase() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE,
-                GraticuleLayerType.DEFAULT_LINE_DASHED_PHASE);
-    }
 
     private boolean isBorderEnabled() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED,
                 GraticuleLayerType.DEFAULT_BORDER_ENABLED);
     }
 
-    private int getBorderWidth() {
-        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
-                GraticuleLayerType.DEFAULT_BORDER_WIDTH);
-    }
 
     private Color getBorderColor() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR,
@@ -941,12 +880,10 @@ public class GraticuleLayer extends Layer {
 
 
     private double getTickMarkLength() {
-        if (tickmarkLength == NULL_DOUBLE) {
-            double min = Math.min(raster.getRasterHeight(), raster.getRasterWidth());
-            tickmarkLength = Math.round(TICK_MARK_PERCENT_LENGTH * min);
-        }
+        double tickMarkLengthPts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH,
+                GraticuleLayerType.DEFAULT_TICKMARK_LENGTH);
 
-        return tickmarkLength;
+        return getPtsToPixelsMultiplier() * tickMarkLengthPts;
     }
 
 

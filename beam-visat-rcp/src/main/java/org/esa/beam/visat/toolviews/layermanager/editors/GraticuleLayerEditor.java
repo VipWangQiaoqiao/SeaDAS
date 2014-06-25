@@ -209,7 +209,7 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd11.setDefaultConverter();
         addPropertyDescriptor(vd11);
 
-        PropertyDescriptor vd5 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, Integer.class);
+        PropertyDescriptor vd5 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, Double.class);
         vd5.setDefaultValue(GraticuleLayerType.DEFAULT_LINE_WIDTH);
         vd5.setDisplayName("Grid Line / Tick Mark Width");
         vd5.setDefaultConverter();
@@ -221,7 +221,13 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd26.setDefaultConverter();
         addPropertyDescriptor(vd26);
 
-        PropertyDescriptor vd29 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH, Integer.class);
+        PropertyDescriptor vdTickMarkLength = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH, Double.class);
+        vdTickMarkLength.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_LENGTH);
+        vdTickMarkLength.setDisplayName("Tick Mark Length");
+        vdTickMarkLength.setDefaultConverter();
+        addPropertyDescriptor(vdTickMarkLength);
+
+        PropertyDescriptor vd29 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH, Double.class);
         vd29.setDefaultValue(GraticuleLayerType.DEFAULT_BORDER_WIDTH);
         vd29.setDisplayName("Border Width");
         vd29.setDefaultConverter();

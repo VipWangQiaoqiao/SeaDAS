@@ -63,6 +63,7 @@ public class GraticuleLayerType extends LayerType {
     public static final String PROPERTY_NAME_BORDER_COLOR = "graticule.border.color";
     public static final String PROPERTY_NAME_TICKMARK_ENABLED = "graticule.tickmark.enabled";
     public static final String PROPERTY_NAME_TICKMARK_INSIDE = "graticule.tickmark.inside";
+    public static final String PROPERTY_NAME_TICKMARK_LENGTH = "graticule.tickmark.length";
 
 
     public static final String PROPERTY_NAME_TEXT_CORNER_TOP_LON_ENABLED =  "graticule.text.corner.top.left.lon.enabled";
@@ -77,13 +78,13 @@ public class GraticuleLayerType extends LayerType {
     public static final double DEFAULT_RES_LON = 0.0;
     public static final Color DEFAULT_LINE_COLOR = Color.BLACK;
     public static final double DEFAULT_LINE_TRANSPARENCY = 0.7;
-    public static final int DEFAULT_LINE_WIDTH = 2;
+    public static final double DEFAULT_LINE_WIDTH = 1.0;
     public static final Color DEFAULT_TEXT_FG_COLOR = Color.BLACK;
     public static final Color DEFAULT_TEXT_BG_COLOR = Color.WHITE;
     public static final double DEFAULT_TEXT_BG_TRANSPARENCY = 0.7;
 
 
-    public static final int DEFAULT_TEXT_FONT_SIZE = 14;
+    public static final int DEFAULT_TEXT_FONT_SIZE = 12;
     public static final boolean DEFAULT_TEXT_FONT_ITALIC = false;
     public static final boolean DEFAULT_TEXT_INSIDE = false;
     public static final int DEFAULT_TEXT_ROTATION_NORTH_SOUTH = 30;
@@ -97,7 +98,7 @@ public class GraticuleLayerType extends LayerType {
     public static final double DEFAULT_LINE_DASHED_PHASE = 6;
     public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
     public static final boolean DEFAULT_BORDER_ENABLED = true;
-    public static final int DEFAULT_BORDER_WIDTH = 1;
+    public static final double DEFAULT_BORDER_WIDTH = 1.0;
 
     public static final boolean DEFAULT_TEXT_CORNER_TOP_LON_ENABLED =  false;
     public static final boolean DEFAULT_TEXT_CORNER_LEFT_LAT_ENABLED = false;
@@ -107,6 +108,7 @@ public class GraticuleLayerType extends LayerType {
 
     public static final boolean DEFAULT_TICKMARK_ENABLED = true;
     public static final boolean DEFAULT_TICKMARK_INSIDE = false;
+    public static final double DEFAULT_TICKMARK_LENGTH = 6.0;
 
     private static final String ALIAS_NAME_NUM_GRID_LINES = "numGridLines";
     private static final String ALIAS_NAME_RES_LAT = "resLat";
@@ -145,6 +147,7 @@ public class GraticuleLayerType extends LayerType {
 
     public static final String ALIAS_NAME_TICKMARK_ENABLED = "graticuleTickMarkEnabled";
     public static final String ALIAS_NAME_TICKMARK_INSIDE = "graticuleTickMarkInside";
+    public static final String ALIAS_NAME_TICKMARK_LENGTH = "graticuleTickMarkLength";
 
     private static final String ALIAS_NAME_TEXT_FONT_ITALIC = "graticuleTextFontItalic";
 
@@ -199,7 +202,7 @@ public class GraticuleLayerType extends LayerType {
         lineTransparencyModel.getDescriptor().setAlias(ALIAS_NAME_LINE_TRANSPARENCY);
         vc.addProperty(lineTransparencyModel);
 
-        final Property lineWidthModel = Property.create(PROPERTY_NAME_LINE_WIDTH, Integer.class, DEFAULT_LINE_WIDTH, true);
+        final Property lineWidthModel = Property.create(PROPERTY_NAME_LINE_WIDTH, Double.class, DEFAULT_LINE_WIDTH, true);
         lineWidthModel.getDescriptor().setAlias(ALIAS_NAME_LINE_WIDTH);
         vc.addProperty(lineWidthModel);
 
@@ -278,7 +281,7 @@ public class GraticuleLayerType extends LayerType {
         borderColorModel.getDescriptor().setAlias(ALIAS_NAME_BORDER_COLOR);
         vc.addProperty(borderColorModel);
 
-        final Property borderWidthModel = Property.create(PROPERTY_NAME_BORDER_WIDTH, Integer.class, DEFAULT_BORDER_WIDTH, true);
+        final Property borderWidthModel = Property.create(PROPERTY_NAME_BORDER_WIDTH, Double.class, DEFAULT_BORDER_WIDTH, true);
         borderWidthModel.getDescriptor().setAlias(ALIAS_NAME_BORDER_WIDTH);
         vc.addProperty(borderWidthModel);
 
@@ -309,6 +312,10 @@ public class GraticuleLayerType extends LayerType {
         final Property tickMarkInsideModel = Property.create(PROPERTY_NAME_TICKMARK_INSIDE, Boolean.class, DEFAULT_TICKMARK_INSIDE, true);
         tickMarkInsideModel.getDescriptor().setAlias(ALIAS_NAME_TICKMARK_INSIDE);
         vc.addProperty(tickMarkInsideModel);
+
+        final Property tickMarkLengthModel = Property.create(PROPERTY_NAME_TICKMARK_LENGTH, Double.class, DEFAULT_TICKMARK_LENGTH, true);
+        tickMarkLengthModel.getDescriptor().setAlias(ALIAS_NAME_TICKMARK_LENGTH);
+        vc.addProperty(tickMarkLengthModel);
 
         return vc;
     }

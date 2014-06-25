@@ -407,7 +407,7 @@ public class ProductSceneImage implements ProductLayerContext {
                                     configuration.getPropertyColor(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR,
                                                                    GraticuleLayerType.DEFAULT_LINE_COLOR));
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
-                                    configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
+                                    configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH,
                                                                     GraticuleLayerType.DEFAULT_LINE_WIDTH));
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY,
                                     configuration.getPropertyDouble(
@@ -484,7 +484,7 @@ public class ProductSceneImage implements ProductLayerContext {
                         GraticuleLayerType.DEFAULT_BORDER_ENABLED));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
-                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
+                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
                         GraticuleLayerType.DEFAULT_BORDER_WIDTH));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR,
@@ -523,7 +523,9 @@ public class ProductSceneImage implements ProductLayerContext {
                 configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE,
                         GraticuleLayerType.DEFAULT_TICKMARK_INSIDE));
 
-
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH,
+                configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH,
+                        GraticuleLayerType.DEFAULT_TICKMARK_LENGTH));
     }
 
     private BandImageMultiLevelSource getBandImageMultiLevelSource() {
