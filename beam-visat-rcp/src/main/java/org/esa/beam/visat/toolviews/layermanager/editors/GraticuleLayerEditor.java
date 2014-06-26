@@ -89,6 +89,12 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vdTickMarkEnabled.setDefaultConverter();
         addPropertyDescriptor(vdTickMarkEnabled);
 
+        PropertyDescriptor vdTickMarkInside = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, Boolean.class);
+        vdTickMarkInside.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_INSIDE);
+        vdTickMarkInside.setDisplayName("Put Tick Marks Inside");
+        vdTickMarkInside.setDefaultConverter();
+        addPropertyDescriptor(vdTickMarkInside);
+
 
 
         PropertyDescriptor vd31 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LON_ENABLED, Boolean.class);
@@ -177,11 +183,6 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         addPropertyDescriptor(vd14);
 
 
-//        PropertyDescriptor vdTickMarkInside = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, Boolean.class);
-//        vdTickMarkInside.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_INSIDE);
-//        vdTickMarkInside.setDisplayName("Put Tick Marks Inside");
-//        vdTickMarkInside.setDefaultConverter();
-//        addPropertyDescriptor(vdTickMarkInside);
 
 
 
@@ -343,6 +344,17 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
         bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, textInsideEnabled,
                 GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, textInsideEnabled);
+
+
+//        boolean tickMarkEnabled = (Boolean) bindingContext.getPropertySet().getValue(
+//                GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED);
+//
+//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, tickMarkEnabled,
+//                GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, tickMarkEnabled);
+//
+//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH, tickMarkEnabled,
+//                GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH, tickMarkEnabled);
+
     }
 
 }

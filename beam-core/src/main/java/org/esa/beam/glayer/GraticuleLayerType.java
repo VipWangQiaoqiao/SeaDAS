@@ -111,7 +111,7 @@ public class GraticuleLayerType extends LayerType {
 
 
     public static final boolean DEFAULT_TICKMARK_ENABLED = true;
-    public static final boolean DEFAULT_TICKMARK_INSIDE = true;
+    public static final boolean DEFAULT_TICKMARK_INSIDE = false;
     public static final double DEFAULT_TICKMARK_LENGTH = 3.0;
 
     private static final String ALIAS_NAME_NUM_GRID_LINES = "numGridLines";

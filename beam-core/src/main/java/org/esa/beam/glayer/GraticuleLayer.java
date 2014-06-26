@@ -573,7 +573,7 @@ public class GraticuleLayer extends Layer {
                         float yOffset = 0;
                         double verticalShift = halfPixelCorrection + getBorderLineWidthPixels() + spacerBetweenTextAndBorder;
 
-                        if (isTickMarkEnabled() && !isTickMarkInside()) {
+                        if (isTickMarkEnabled() && !isTickMarkInside() && !isCorner) {
                             verticalShift += getTickMarkLength();
                         }
 
@@ -599,7 +599,7 @@ public class GraticuleLayer extends Layer {
                         float yOffset = 2 * height / 3;
                         double verticalShift = -halfPixelCorrection - getBorderLineWidthPixels() - spacerBetweenTextAndBorder;
 
-                        if (isTickMarkEnabled() && !isTickMarkInside()) {
+                        if (isTickMarkEnabled() && !isTickMarkInside() && !isCorner) {
                             verticalShift -= getTickMarkLength();
                         }
 
@@ -626,7 +626,7 @@ public class GraticuleLayer extends Layer {
                         float yOffset = 2 * height / 3;
                         double verticalShift = halfPixelCorrection + getBorderLineWidthPixels() + spacerBetweenTextAndBorder;
 
-                        if (isTickMarkEnabled() && !isTickMarkInside()) {
+                        if (isTickMarkEnabled() && !isTickMarkInside() && !isCorner) {
                             verticalShift += getTickMarkLength();
                         }
 
@@ -655,7 +655,7 @@ public class GraticuleLayer extends Layer {
                         float yOffset = 0;
                         double verticalShift = -halfPixelCorrection - getBorderLineWidthPixels() - spacerBetweenTextAndBorder;
 
-                        if (isTickMarkEnabled() && !isTickMarkInside()) {
+                        if (isTickMarkEnabled() && !isTickMarkInside() && !isCorner) {
                             verticalShift -= getTickMarkLength();
                         }
 
