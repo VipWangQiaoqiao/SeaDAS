@@ -116,10 +116,10 @@ public class GraticuleLayer extends Layer {
                     final Graticule.TextGlyph[] textGlyphsNorth = graticule.getTextGlyphsNorth();
                     if (textGlyphsNorth != null) {
                         if (isTickMarkEnabled()) {
-                            drawTickMarks(g2d, graticule.getTickPointsNorth(), Graticule.TextLocation.NORTH);
+                            drawTickMarks(g2d, graticule.getTickPointsNorth(), Graticule.TextLocation.NORTH, false);
                         }
 
-                        drawTextLabels(g2d, textGlyphsNorth, Graticule.TextLocation.NORTH);
+                        drawTextLabels(g2d, textGlyphsNorth, Graticule.TextLocation.NORTH, false, raster);
                     }
                 }
 
@@ -128,9 +128,9 @@ public class GraticuleLayer extends Layer {
                     if (textGlyphsSouth != null) {
 
                         if (isTickMarkEnabled()) {
-                            drawTickMarks(g2d, graticule.getTickPointsSouth(), Graticule.TextLocation.SOUTH);
+                            drawTickMarks(g2d, graticule.getTickPointsSouth(), Graticule.TextLocation.SOUTH, false);
                         }
-                        drawTextLabels(g2d, textGlyphsSouth, Graticule.TextLocation.SOUTH);
+                        drawTextLabels(g2d, textGlyphsSouth, Graticule.TextLocation.SOUTH, false, raster);
                     }
                 }
 
@@ -138,9 +138,9 @@ public class GraticuleLayer extends Layer {
                     final Graticule.TextGlyph[] textGlyphsWest = graticule.getTextGlyphsWest();
                     if (textGlyphsWest != null) {
                         if (isTickMarkEnabled()) {
-                            drawTickMarks(g2d, graticule.getTickPointsWest(), Graticule.TextLocation.WEST);
+                            drawTickMarks(g2d, graticule.getTickPointsWest(), Graticule.TextLocation.WEST, false);
                         }
-                        drawTextLabels(g2d, textGlyphsWest, Graticule.TextLocation.WEST);
+                        drawTextLabels(g2d, textGlyphsWest, Graticule.TextLocation.WEST, false, raster);
                     }
                 }
 
@@ -149,9 +149,9 @@ public class GraticuleLayer extends Layer {
                     final Graticule.TextGlyph[] textGlyphsEast = graticule.getTextGlyphsEast();
                     if (textGlyphsEast != null) {
                         if (isTickMarkEnabled()) {
-                            drawTickMarks(g2d, graticule.getTickPointsEast(), Graticule.TextLocation.EAST);
+                            drawTickMarks(g2d, graticule.getTickPointsEast(), Graticule.TextLocation.EAST, false);
                         }
-                        drawTextLabels(g2d, textGlyphsEast, Graticule.TextLocation.EAST);
+                        drawTextLabels(g2d, textGlyphsEast, Graticule.TextLocation.EAST, false, raster);
                     }
                 }
 
@@ -160,28 +160,40 @@ public class GraticuleLayer extends Layer {
                     if (isTickMarkEnabled()) {
                         drawCornerTickMarks(g2d, raster, Graticule.TextLocation.WEST);
                     }
-                    drawLeftSideLatCornerLabels(g2d);
+
+                    if (!isTextInside()) {
+                        drawLeftSideLatCornerLabels(g2d);
+                    }
                 }
 
                 if (isTextCornerRightLatEnabled()) {
                     if (isTickMarkEnabled()) {
                         drawCornerTickMarks(g2d, raster, Graticule.TextLocation.EAST);
                     }
-                    drawRightSideLatCornerLabels(g2d);
+
+                    if (!isTextInside()) {
+                        drawRightSideLatCornerLabels(g2d);
+                    }
                 }
 
                 if (isTextCornerTopLonEnabled()) {
                     if (isTickMarkEnabled()) {
                         drawCornerTickMarks(g2d, raster, Graticule.TextLocation.NORTH);
                     }
-                    drawNorthSideLonCornerLabels(g2d);
+
+                    if (!isTextInside()) {
+                        drawNorthSideLonCornerLabels(g2d);
+                    }
                 }
 
                 if (isTextCornerBottomLonEnabled()) {
                     if (isTickMarkEnabled()) {
                         drawCornerTickMarks(g2d, raster, Graticule.TextLocation.SOUTH);
                     }
-                    drawSouthSideLonCornerLabels(g2d);
+
+                    if (!isTextInside()) {
+                        drawSouthSideLonCornerLabels(g2d);
+                    }
                 }
 
 
@@ -208,7 +220,7 @@ public class GraticuleLayer extends Layer {
 
         final Graticule.TextGlyph[] textGlyphs = textGlyphArrayList.toArray(new Graticule.TextGlyph[textGlyphArrayList.size()]);
         if (textGlyphs != null) {
-            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.WEST);
+            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.WEST, true, raster);
         }
     }
 
@@ -228,7 +240,7 @@ public class GraticuleLayer extends Layer {
 
         final Graticule.TextGlyph[] textGlyphs = textGlyphArrayList.toArray(new Graticule.TextGlyph[textGlyphArrayList.size()]);
         if (textGlyphs != null) {
-            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.EAST);
+            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.EAST, true, raster);
         }
     }
 
@@ -248,7 +260,7 @@ public class GraticuleLayer extends Layer {
 
         final Graticule.TextGlyph[] textGlyphs = textGlyphArrayList.toArray(new Graticule.TextGlyph[textGlyphArrayList.size()]);
         if (textGlyphs != null) {
-            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.NORTH);
+            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.NORTH, true, raster);
         }
     }
 
@@ -268,7 +280,7 @@ public class GraticuleLayer extends Layer {
 
         final Graticule.TextGlyph[] textGlyphs = textGlyphArrayList.toArray(new Graticule.TextGlyph[textGlyphArrayList.size()]);
         if (textGlyphs != null) {
-            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.SOUTH);
+            drawTextLabels(g2d, textGlyphs, Graticule.TextLocation.SOUTH, true, raster);
         }
     }
 
@@ -279,8 +291,13 @@ public class GraticuleLayer extends Layer {
     }
 
     private void drawLinePaths(Graphics2D g2d, final GeneralPath[] linePaths) {
+
+        Color origPaint = (Color) g2d.getPaint();
+        Stroke origStroke = g2d.getStroke();
+
         Composite oldComposite = null;
         if (getLineTransparency() > 0.0) {
+
             oldComposite = g2d.getComposite();
             g2d.setComposite(getAlphaComposite(getLineTransparency()));
         }
@@ -288,8 +305,6 @@ public class GraticuleLayer extends Layer {
 
 
         Stroke drawingStroke;
-
-
         //   if (isDashedLine() || getDashLengthPixels() != 0.0) {
         if (getDashLengthPixels() > 0.0) {
             drawingStroke = new BasicStroke((float) getGridLineWidthPixels(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{(float) getDashLengthPixels()}, 0);
@@ -301,11 +316,12 @@ public class GraticuleLayer extends Layer {
         for (GeneralPath linePath : linePaths) {
             g2d.draw(linePath);
         }
+
         if (oldComposite != null) {
             g2d.setComposite(oldComposite);
         }
-
-
+        g2d.setStroke(origStroke);
+        g2d.setPaint(origPaint);
     }
 
     private void drawCornerTickMarks(Graphics2D g2d, RasterDataNode raster, Graticule.TextLocation textLocation) {
@@ -338,223 +354,368 @@ public class GraticuleLayer extends Layer {
             pixelPos[0] = pixelPos1;
             pixelPos[1] = pixelPos2;
 
-            drawTickMarks(g2d, pixelPos, textLocation);
+            boolean drawCornerTicks = false;  // not sure we need this so I'm turning it off
+            if (drawCornerTicks) {
+                if (!isTickMarkInside()) {
+                    drawTickMarks(g2d, pixelPos, textLocation, true);
+                }
+            }
         }
     }
 
 
     private void drawBorder(Graphics2D g2d, RasterDataNode raster) {
 
-        GeneralPath northBorderPath = new GeneralPath();
-        northBorderPath.moveTo(0, raster.getRasterHeight());
-        northBorderPath.lineTo(raster.getRasterWidth(), raster.getRasterHeight());
-        northBorderPath.closePath();
+        Color origColor = (Color) g2d.getPaint();
+        Stroke origStroke = g2d.getStroke();
 
+        double sidewaysShift = getBorderLineWidthPixels() / 2;
+        double lengthWiseAddOn = getBorderLineWidthPixels();
+
+
+        GeneralPath northBorderPath = new GeneralPath();
         GeneralPath southBorderPath = new GeneralPath();
-        southBorderPath.moveTo(raster.getRasterWidth(), 0);
-        southBorderPath.lineTo(0, 0);
-        southBorderPath.closePath();
+        {
+            double xStart = 0 - lengthWiseAddOn;
+            double xEnd = raster.getRasterWidth() + lengthWiseAddOn;
+
+            double y = 0 - sidewaysShift;
+            northBorderPath.moveTo(xStart, y);
+            northBorderPath.lineTo(xEnd, y);
+            northBorderPath.closePath();
+
+            y = raster.getRasterHeight() + sidewaysShift;
+            southBorderPath.moveTo(xStart, y);
+            southBorderPath.lineTo(xEnd, y);
+            southBorderPath.closePath();
+        }
 
         GeneralPath westBorderPath = new GeneralPath();
-        westBorderPath.moveTo(0, 0);
-        westBorderPath.lineTo(0, raster.getRasterHeight());
-        westBorderPath.closePath();
-
         GeneralPath eastBorderPath = new GeneralPath();
-        eastBorderPath.moveTo(raster.getRasterWidth(), raster.getRasterHeight());
-        eastBorderPath.lineTo(raster.getRasterWidth(), 0);
-        eastBorderPath.closePath();
+        {
+            double yStart = 0 - lengthWiseAddOn;
+            double yEnd = raster.getRasterHeight() + lengthWiseAddOn;
 
+            double x = 0 - sidewaysShift;
+            westBorderPath.moveTo(x, yStart);
+            westBorderPath.lineTo(x, yEnd);
+            westBorderPath.closePath();
 
-        g2d.setPaint(getBorderColor());
+            x = raster.getRasterWidth() + sidewaysShift;
+            eastBorderPath.moveTo(x, yStart);
+            eastBorderPath.lineTo(x, yEnd);
+            eastBorderPath.closePath();
+        }
 
         Stroke drawingStroke = new BasicStroke((float) getBorderLineWidthPixels());
         g2d.setStroke(drawingStroke);
+        g2d.setPaint(getBorderColor());
 
-        g2d.draw(northBorderPath);
         g2d.draw(southBorderPath);
+        g2d.draw(northBorderPath);
         g2d.draw(westBorderPath);
         g2d.draw(eastBorderPath);
+
+        g2d.setPaint(origColor);
+        g2d.setStroke(origStroke);
     }
 
 
-    private void drawTextLabels(Graphics2D g2d, final Graticule.TextGlyph[] textGlyphs, Graticule.TextLocation textLocation) {
 
-        int fontStyle = Font.PLAIN;
-        if (isTextFontItalic()) {
-            fontStyle = Font.ITALIC;
+    private boolean isTextConflict(PixelPos pixelPos, Graphics2D g2d, Graticule.TextLocation textLocation,
+                                   boolean isCorner,
+                                   RasterDataNode raster) {
+        Font origFont = g2d.getFont();
+        Font font = null;
+        if (isCorner) {
+            font = new Font("SansSerif", Font.ITALIC, getCornerFontSizePixels());
+        } else {
+            font = new Font("SansSerif", Font.PLAIN, getFontSizePixels());
         }
-
-        Font font = new Font("SansSerif", fontStyle, getFontSizePixels());
         g2d.setFont(font);
 
-        if (getTextBgTransparency() < 1.0 && isTextInside()) {
-            drawRectangle(g2d, textGlyphs);
+        Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("W", g2d);
+
+        double WRONG_AXIS_BUFFER_PERCENT = 0.02;
+
+        boolean conflict = false;
+        double overlapMultiplierBuffer = 1.0;
+        double xAllowedMin = 0 + overlapMultiplierBuffer * singleLetter.getHeight();
+        double xAllowedMax = raster.getRasterWidth() - overlapMultiplierBuffer * singleLetter.getHeight();
+        double yAllowedMin = 0 + overlapMultiplierBuffer * singleLetter.getHeight();
+        double yAllowedMax = raster.getRasterHeight() - overlapMultiplierBuffer * singleLetter.getHeight();
+        double buffer = 0;
+
+        switch (textLocation) {
+            case NORTH:
+                if (isTextCornerTopLonEnabled() && !isCorner) {
+                    if (pixelPos.getX() < xAllowedMin || pixelPos.getX() > xAllowedMax) {
+                        conflict = true;
+                    }
+                }
+
+                buffer = WRONG_AXIS_BUFFER_PERCENT * raster.getRasterHeight();
+                if (pixelPos.getY() > buffer) {
+                    conflict = true;
+                }
+                break;
+            case SOUTH:
+                if (isTextCornerBottomLonEnabled() && !isCorner) {
+                    if (pixelPos.getX() < xAllowedMin || pixelPos.getX() > xAllowedMax) {
+                        conflict = true;
+                    }
+                }
+
+                buffer = WRONG_AXIS_BUFFER_PERCENT * raster.getRasterHeight();
+                if (pixelPos.getY() < (raster.getRasterHeight() - buffer)) {
+                    conflict = true;
+                }
+                break;
+            case WEST:
+                if (isTextCornerLeftLatEnabled() && !isCorner) {
+                    if (pixelPos.getY() < yAllowedMin || pixelPos.getY() > yAllowedMax) {
+                        conflict = true;
+                    }
+                }
+
+                buffer = WRONG_AXIS_BUFFER_PERCENT * raster.getRasterWidth();
+                if (pixelPos.getX() > buffer) {
+                    conflict = true;
+                }
+                break;
+            case EAST:
+                if (isTextCornerRightLatEnabled() && !isCorner) {
+                    if (pixelPos.getY() < yAllowedMin || pixelPos.getY() > yAllowedMax) {
+                        conflict = true;
+                    }
+                }
+
+                buffer = WRONG_AXIS_BUFFER_PERCENT * raster.getRasterWidth();
+                if (pixelPos.getX() < (raster.getRasterWidth() - buffer)) {
+                    conflict = true;
+                }
+                break;
+
         }
+
+        g2d.setFont(origFont);
+
+        return conflict;
+    }
+
+
+    private void drawTextLabels(Graphics2D g2d,
+                                final Graticule.TextGlyph[] textGlyphs,
+                                Graticule.TextLocation textLocation,
+                                boolean isCorner,
+                                RasterDataNode raster) {
+
+        double halfPixelCorrection = 0.0;
+        if (!isCorner) {
+            halfPixelCorrection = 0.5;
+        }
+
+
+        Color origColor = (Color) g2d.getPaint();
+        if (isCorner) {
+            g2d.setPaint(getTextCornerFontColor());
+        } else {
+            g2d.setPaint(getTextFgColor());
+        }
+
+
+        Font origFont = g2d.getFont();
+        Font font = null;
+        if (isCorner) {
+            font = new Font("SansSerif", Font.ITALIC, getCornerFontSizePixels());
+        } else {
+            font = new Font("SansSerif", Font.PLAIN, getFontSizePixels());
+        }
+        g2d.setFont(font);
+
 
         Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("W", g2d);
         double letterWidth = singleLetter.getWidth();
-        float halfLetterWidth = (float) (letterWidth / 2.0);
+        float spacerBetweenTextAndBorder = (float) (letterWidth / 2.0);
 
 
-        g2d.setPaint(getTextFgColor());
         for (Graticule.TextGlyph glyph : textGlyphs) {
-            g2d.translate(glyph.getX(), glyph.getY());
-            g2d.rotate(glyph.getAngle());
-
-            Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(glyph.getText(), g2d);
-            float width = (float) labelBounds.getWidth();
-            float height = (float) labelBounds.getHeight();
 
 
-            float halfLabelWidth = width / 2;
+            PixelPos pixelPos = new PixelPos(glyph.getX(), glyph.getY());
 
 
-            AffineTransform orig = g2d.getTransform();
+            if (!isTextConflict(pixelPos, g2d, textLocation, isCorner, raster)) {
 
-
-            if (!isTextInside()) {
-                if (textLocation == Graticule.TextLocation.NORTH) {
-                    double theta = (getTextRotationNorth() / 180) * Math.PI;
-
-                    float xOffset = 0;
-                    float yOffset = 0;
-                    double verticalShift = letterWidth / 2;
-
-                    if (isTickMarkEnabled() && !isTickMarkInside()) {
-                        verticalShift += getTickMarkLength();
-                    }
-
-                    if (getTextRotationNorth() > 85) {
-                        xOffset = -halfLabelWidth;
-                    }
-
-                    if (getTextRotationNorth() < 5) {
-                        yOffset = height / 3;
-                    }
-
-                    float xMod = (float) (verticalShift * Math.cos(theta));
-                    float yMod = -1 * (float) (verticalShift * Math.sin(theta));
-
-                    g2d.rotate(-1 * Math.PI + theta);
-                    g2d.drawString(glyph.getText(), xMod + xOffset, +yMod + yOffset);
+                if (isTextInside() && getTextBgTransparency() < 1.0) {
+                    drawRectangle(g2d, glyph);
                 }
 
-                if (textLocation == Graticule.TextLocation.SOUTH) {
-                    double theta = (getTextRotationNorth() / 180) * Math.PI;
+                g2d.translate(glyph.getX(), glyph.getY());
+                g2d.rotate(glyph.getAngle());
 
-                    float xOffset = -width;
-                    float yOffset = 2 * height / 3;
-                    double verticalShift = -letterWidth / 2;
+                Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(glyph.getText(), g2d);
+                float width = (float) labelBounds.getWidth();
+                float height = (float) labelBounds.getHeight();
 
-                    if (isTickMarkEnabled() && !isTickMarkInside()) {
-                        verticalShift -= getTickMarkLength();
+
+                float halfLabelWidth = width / 2;
+
+
+                AffineTransform orig = g2d.getTransform();
+
+
+                if (!isTextInside()) {
+                    if (textLocation == Graticule.TextLocation.NORTH) {
+                        double theta = (getTextRotationNorth() / 180) * Math.PI;
+
+                        float xOffset = 0;
+                        float yOffset = 0;
+                        double verticalShift = halfPixelCorrection + getBorderLineWidthPixels() + spacerBetweenTextAndBorder;
+
+                        if (isTickMarkEnabled() && !isTickMarkInside()) {
+                            verticalShift += getTickMarkLength();
+                        }
+
+                        if (getTextRotationNorth() > 85) {
+                            xOffset = -halfLabelWidth;
+                        }
+
+                        if (getTextRotationNorth() < 5) {
+                            yOffset = height / 3;
+                        }
+
+                        float xMod = (float) (verticalShift * Math.cos(theta));
+                        float yMod = -1 * (float) (verticalShift * Math.sin(theta));
+
+                        g2d.rotate(-1 * Math.PI + theta);
+                        g2d.drawString(glyph.getText(), xMod + xOffset, +yMod + yOffset);
                     }
 
-                    if (getTextRotationNorth() > 85) {
-                        xOffset = xOffset + halfLabelWidth;
+                    if (textLocation == Graticule.TextLocation.SOUTH) {
+                        double theta = (getTextRotationNorth() / 180) * Math.PI;
+
+                        float xOffset = -width;
+                        float yOffset = 2 * height / 3;
+                        double verticalShift = -halfPixelCorrection - getBorderLineWidthPixels() - spacerBetweenTextAndBorder;
+
+                        if (isTickMarkEnabled() && !isTickMarkInside()) {
+                            verticalShift -= getTickMarkLength();
+                        }
+
+                        if (getTextRotationNorth() > 85) {
+                            xOffset = xOffset + halfLabelWidth;
+                        }
+
+                        if (getTextRotationNorth() < 5) {
+                            yOffset = yOffset - height / 3;
+                        }
+
+                        float xMod = (float) (verticalShift * Math.cos(theta));
+                        float yMod = -1 * (float) (verticalShift * Math.sin(theta));
+
+                        g2d.rotate(theta);
+                        g2d.drawString(glyph.getText(), xMod + xOffset, +yMod + yOffset);
                     }
 
-                    if (getTextRotationNorth() < 5) {
-                        yOffset = yOffset - height / 3;
+                    if (textLocation == Graticule.TextLocation.EAST) {
+
+                        double theta = (getTextRotationWest() / 180) * Math.PI;
+
+                        float xOffset = 0;
+                        float yOffset = 2 * height / 3;
+                        double verticalShift = halfPixelCorrection + getBorderLineWidthPixels() + spacerBetweenTextAndBorder;
+
+                        if (isTickMarkEnabled() && !isTickMarkInside()) {
+                            verticalShift += getTickMarkLength();
+                        }
+
+                        if (getTextRotationWest() > 85) {
+                            xOffset = -halfLabelWidth;
+                        }
+
+                        if (getTextRotationWest() < 5) {
+                            yOffset = height / 3;
+                        }
+
+                        float xMod = (float) (verticalShift * Math.cos(theta));
+                        float yMod = (float) (verticalShift * Math.sin(theta));
+
+
+                        g2d.rotate(-1 * Math.PI - theta);
+                        g2d.drawString(glyph.getText(), xMod + xOffset, +yMod + yOffset);
                     }
 
-                    float xMod = (float) (verticalShift * Math.cos(theta));
-                    float yMod = -1 * (float) (verticalShift * Math.sin(theta));
 
-                    g2d.rotate(theta);
-                    g2d.drawString(glyph.getText(), xMod + xOffset, +yMod + yOffset);
-                }
+                    if (textLocation == Graticule.TextLocation.WEST) {
 
-                if (textLocation == Graticule.TextLocation.EAST) {
-                    double theta = (getTextRotationWest() / 180) * Math.PI;
+                        double theta = (getTextRotationWest() / 180) * Math.PI;
 
-                    float xOffset = 0;
-                    float yOffset = 2 * height / 3;
-                    double verticalShift = letterWidth / 2;
+                        float xOffset = -width;
+                        float yOffset = 0;
+                        double verticalShift = -halfPixelCorrection - getBorderLineWidthPixels() - spacerBetweenTextAndBorder;
 
-                    if (isTickMarkEnabled() && !isTickMarkInside()) {
-                        verticalShift += getTickMarkLength();
+                        if (isTickMarkEnabled() && !isTickMarkInside()) {
+                            verticalShift -= getTickMarkLength();
+                        }
+
+                        if (getTextRotationWest() > 85) {
+                            xOffset = xOffset + halfLabelWidth;
+                        }
+
+                        if (getTextRotationWest() < 5) {
+                            yOffset = yOffset + height / 3;
+                        }
+
+                        float xMod = (float) (verticalShift * Math.cos(theta));
+                        float yMod = (float) (verticalShift * Math.sin(theta));
+
+
+                        g2d.rotate(-theta);
+                        g2d.drawString(glyph.getText(), xMod + xOffset, +yMod + yOffset);
                     }
-
-                    if (getTextRotationWest() > 85) {
-                        xOffset = -halfLabelWidth;
-                    }
-
-                    if (getTextRotationWest() < 5) {
-                        yOffset = height / 3;
-                    }
-
-                    float xMod = (float) (verticalShift * Math.cos(theta));
-                    float yMod = (float) (verticalShift * Math.sin(theta));
-
-
-                    g2d.rotate(-1 * Math.PI - theta);
-                    g2d.drawString(glyph.getText(), xMod + xOffset, +yMod + yOffset);
-                }
-
-
-                if (textLocation == Graticule.TextLocation.WEST) {
-                    double theta = (getTextRotationWest() / 180) * Math.PI;
-
-                    float xOffset = -width;
-                    float yOffset = 0;
-                    double verticalShift = -letterWidth / 2;
-
-                    if (isTickMarkEnabled() && !isTickMarkInside()) {
-                        verticalShift -= getTickMarkLength();
-                    }
-
-                    if (getTextRotationWest() > 85) {
-                        xOffset = xOffset + halfLabelWidth;
-                    }
-
-                    if (getTextRotationWest() < 5) {
-                        yOffset = yOffset + height / 3;
-                    }
-
-                    float xMod = (float) (verticalShift * Math.cos(theta));
-                    float yMod = (float) (verticalShift * Math.sin(theta));
-
-
-                    g2d.rotate(-theta);
-                    g2d.drawString(glyph.getText(), xMod + xOffset, +yMod + yOffset);
-                }
-            } else {
-
-                if (textLocation == Graticule.TextLocation.WEST ||
-                        textLocation == Graticule.TextLocation.SOUTH) {
-
-                    float xOffset = halfLetterWidth;
-                    float yOffset = height / 3;
-
-                    if (isTickMarkEnabled() && isTickMarkInside()) {
-                        xOffset += getTickMarkLength();
-                    }
-
-                    g2d.drawString(glyph.getText(), xOffset, yOffset);
                 } else {
-                    float xOffset = -width - halfLetterWidth;
-                    float yOffset = height / 3;
 
-                    if (isTickMarkEnabled() && isTickMarkInside()) {
-                        xOffset -= getTickMarkLength();
+                    if (textLocation == Graticule.TextLocation.WEST ||
+                            textLocation == Graticule.TextLocation.SOUTH) {
+
+                        float xOffset = spacerBetweenTextAndBorder;
+                        float yOffset = height / 3;
+
+                        if (isTickMarkEnabled() && isTickMarkInside()) {
+                            xOffset += getTickMarkLength();
+                        }
+
+                        g2d.drawString(glyph.getText(), xOffset, yOffset);
+                    } else {
+                        float xOffset = -width - spacerBetweenTextAndBorder;
+                        float yOffset = height / 3;
+
+                        if (isTickMarkEnabled() && isTickMarkInside()) {
+                            xOffset -= getTickMarkLength();
+                        }
+
+                        g2d.rotate(-Math.PI);
+                        g2d.drawString(glyph.getText(), xOffset, yOffset);
                     }
-
-                    g2d.rotate(-Math.PI);
-                    g2d.drawString(glyph.getText(), xOffset, yOffset);
                 }
+
+                g2d.setTransform(orig);
+
+                g2d.rotate(-glyph.getAngle());
+                g2d.translate(-glyph.getX(), -glyph.getY());
+
             }
-
-            g2d.setTransform(orig);
-
-            g2d.rotate(-glyph.getAngle());
-            g2d.translate(-glyph.getX(), -glyph.getY());
         }
+
+
+        g2d.setPaint(origColor);
+        g2d.setFont(origFont);
+
     }
 
 
-    private void drawRectangle(Graphics2D g2d, final Graticule.TextGlyph[] textGlyphs) {
+    private void drawRectangle(Graphics2D g2d, final Graticule.TextGlyph glyph) {
 
         Composite oldComposite = null;
         if (getTextBgTransparency() > 0.0) {
@@ -562,89 +723,143 @@ public class GraticuleLayer extends Layer {
             g2d.setComposite(getAlphaComposite(getTextBgTransparency()));
         }
 
+        Color origPaint = (Color) g2d.getPaint();
+        Stroke origStroke = g2d.getStroke();
+
         g2d.setPaint(getTextBgColor());
         g2d.setStroke(new BasicStroke(0));
 
-        for (Graticule.TextGlyph glyph : textGlyphs) {
-            g2d.translate(glyph.getX(), glyph.getY());
-            g2d.rotate(glyph.getAngle());
 
-            Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("W", g2d);
-            double xOffset = singleLetter.getWidth() / 2.0;
-            double yOffset = singleLetter.getHeight() / 3.0;
+        g2d.translate(glyph.getX(), glyph.getY());
+        g2d.rotate(glyph.getAngle());
 
-            if (isTickMarkEnabled() && isTickMarkInside()) {
-                xOffset += getTickMarkLength();
-            }
+        Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("W", g2d);
+        double xOffset = singleLetter.getWidth() / 2.0;
+        double yOffset = singleLetter.getHeight() / 3.0;
 
-            Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(glyph.getText(), g2d);
-            labelBounds.setRect(labelBounds.getX() + xOffset - 1,
-                    labelBounds.getY() + yOffset - 1,
-                    labelBounds.getWidth(),
-                    labelBounds.getHeight());
-
-            g2d.fill(labelBounds);
-
-            g2d.rotate(-glyph.getAngle());
-            g2d.translate(-glyph.getX(), -glyph.getY());
+        if (isTickMarkEnabled() && isTickMarkInside()) {
+            xOffset += getTickMarkLength();
         }
 
+        Rectangle2D labelBounds = g2d.getFontMetrics().getStringBounds(glyph.getText(), g2d);
+        labelBounds.setRect(labelBounds.getX() + xOffset - 1,
+                labelBounds.getY() + yOffset - 1,
+                labelBounds.getWidth(),
+                labelBounds.getHeight());
+
+        g2d.fill(labelBounds);
+
+        g2d.rotate(-glyph.getAngle());
+        g2d.translate(-glyph.getX(), -glyph.getY());
+
+
+        g2d.setPaint(origPaint);
+        g2d.setStroke(origStroke);
         if (oldComposite != null) {
             g2d.setComposite(oldComposite);
         }
     }
 
 
-    private void drawTickMarks(Graphics2D g2d, final PixelPos[] pixelPoses, Graticule.TextLocation textLocation) {
+    private void drawTickMarks(Graphics2D g2d, final PixelPos[] pixelPoses, Graticule.TextLocation textLocation, boolean isCorner) {
 
         Composite oldComposite = g2d.getComposite();
+        Stroke origStroke = g2d.getStroke();
 
         Stroke drawingStroke = new BasicStroke((float) getGridLineWidthPixels());
         g2d.setStroke(drawingStroke);
 
+        Color origPaint = (Color) g2d.getPaint();
+        g2d.setPaint(getTextFgColor());
+
+
+        double halfPixelCorrection = 0.0;
+        if (!isCorner) {
+            halfPixelCorrection = 0.5;
+        }
+
+        double xStart = 0, xEnd = 0, yStart = 0, yEnd = 0;
+
+        boolean validCase = false;
+
         for (PixelPos pixelPos : pixelPoses) {
 
-            GeneralPath path = new GeneralPath();
-            path.moveTo(pixelPos.getX(), pixelPos.getY());
+            if (!isTextConflict(pixelPos, g2d, textLocation, isCorner, raster)) {
+                switch (textLocation) {
+                    case NORTH:
+                        xStart = pixelPos.getX();
+                        xEnd = pixelPos.getX();
 
+                        if (isTickMarkInside()) {
+                            yStart = pixelPos.getY() - halfPixelCorrection;
+                            yEnd = yStart + getTickMarkLength();
+                        } else {
+                            yStart = pixelPos.getY() - halfPixelCorrection - getBorderLineWidthPixels();
+                            yEnd = yStart - getTickMarkLength();
+                        }
+                        validCase = true;
+                        break;
 
-            switch (textLocation) {
-                case NORTH:
-                    if (isTickMarkInside()) {
-                        path.lineTo(pixelPos.getX(), pixelPos.getY() + getTickMarkLength());
-                    } else {
-                        path.lineTo(pixelPos.getX(), pixelPos.getY() - getTickMarkLength());
-                    }
-                    break;
-                case SOUTH:
-                    if (isTickMarkInside()) {
-                        path.lineTo(pixelPos.getX(), pixelPos.getY() - getTickMarkLength());
-                    } else {
-                        path.lineTo(pixelPos.getX(), pixelPos.getY() + getTickMarkLength());
-                    }
-                    break;
-                case WEST:
-                    if (isTickMarkInside()) {
-                        path.lineTo(pixelPos.getX() + getTickMarkLength(), pixelPos.getY());
-                    } else {
-                        path.lineTo(pixelPos.getX() - getTickMarkLength(), pixelPos.getY());
-                    }
-                    break;
-                case EAST:
-                    if (isTickMarkInside()) {
-                        path.lineTo(pixelPos.getX() - getTickMarkLength(), pixelPos.getY());
-                    } else {
-                        path.lineTo(pixelPos.getX() + getTickMarkLength(), pixelPos.getY());
-                    }
-                    break;
+                    case SOUTH:
+                        xStart = pixelPos.getX();
+                        xEnd = pixelPos.getX();
 
+                        if (isTickMarkInside()) {
+                            yStart = pixelPos.getY() + halfPixelCorrection;
+                            yEnd = yStart - getTickMarkLength();
+                        } else {
+                            yStart = pixelPos.getY() + halfPixelCorrection + getBorderLineWidthPixels();
+                            yEnd = yStart + getTickMarkLength();
+                        }
+
+                        validCase = true;
+                        break;
+
+                    case WEST:
+                        yStart = pixelPos.getY();
+                        yEnd = pixelPos.getY();
+
+                        if (isTickMarkInside()) {
+                            xStart = pixelPos.getX() - halfPixelCorrection;
+                            xEnd = xStart + getTickMarkLength();
+                        } else {
+                            xStart = pixelPos.getX() - halfPixelCorrection - getBorderLineWidthPixels();
+                            xEnd = xStart - getTickMarkLength();
+                        }
+
+                        validCase = true;
+                        break;
+
+                    case EAST:
+                        yStart = pixelPos.getY();
+                        yEnd = pixelPos.getY();
+
+                        if (isTickMarkInside()) {
+                            xStart = pixelPos.getX() + halfPixelCorrection;
+                            xEnd = xStart - getTickMarkLength();
+                        } else {
+                            xStart = pixelPos.getX() + halfPixelCorrection + getBorderLineWidthPixels();
+                            xEnd = xStart + getTickMarkLength();
+                        }
+
+                        validCase = true;
+                        break;
+                }
+
+                if (validCase) {
+                    GeneralPath path = new GeneralPath();
+                    path.moveTo(xStart, yStart);
+                    path.lineTo(xEnd, yEnd);
+
+                    path.closePath();
+                    g2d.draw(path);
+                }
             }
-
-            path.closePath();
-            g2d.draw(path);
 
         }
 
+        g2d.setPaint(origPaint);
+        g2d.setStroke(origStroke);
         if (oldComposite != null) {
             g2d.setComposite(oldComposite);
         }
@@ -714,6 +929,11 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_TEXT_FG_COLOR);
     }
 
+    private Color getTextCornerFontColor() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_COLOR,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_FONT_COLOR);
+    }
+
     private Color getTextBgColor() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR,
                 GraticuleLayerType.DEFAULT_TEXT_BG_COLOR);
@@ -754,6 +974,14 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE);
 
         return (int) Math.round(getPtsToPixelsMultiplier() * fontSizePts);
+    }
+
+
+    private int getCornerFontSizePixels() {
+        int cornerFontSizePts = getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_SIZE,
+                GraticuleLayerType.DEFAULT_TEXT_CORNER_FONT_SIZE);
+
+        return (int) Math.round(getPtsToPixelsMultiplier() * cornerFontSizePts);
     }
 
 
@@ -885,7 +1113,6 @@ public class GraticuleLayer extends Layer {
 
         return getPtsToPixelsMultiplier() * tickMarkLengthPts;
     }
-
 
 
     private class ProductNodeHandler extends ProductNodeListenerAdapter {

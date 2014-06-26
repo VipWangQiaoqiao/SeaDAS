@@ -41,12 +41,14 @@ public class GraticuleLayerType extends LayerType {
     public static final String PROPERTY_NAME_LINE_TRANSPARENCY = "graticule.line.transparency";
     public static final String PROPERTY_NAME_LINE_WIDTH = "graticule.line.width";
     public static final String PROPERTY_NAME_TEXT_FG_COLOR = "graticule.text.fg.color";
+    public static final String PROPERTY_NAME_TEXT_CORNER_FONT_COLOR = "graticule.text.corner.font.color";
     public static final String PROPERTY_NAME_TEXT_BG_COLOR = "graticule.text.bg.color";
     public static final String PROPERTY_NAME_TEXT_BG_TRANSPARENCY = "graticule.text.bg.transparency";
 
 
     // DANNY added these
     public static final String PROPERTY_NAME_TEXT_FONT_SIZE = "graticule.text.font.size";
+    public static final String PROPERTY_NAME_TEXT_CORNER_FONT_SIZE = "graticule.text.corner.font.size";
     public static final String PROPERTY_NAME_TEXT_FONT_ITALIC = "graticule.text.font.italic";
     public static final String PROPERTY_NAME_TEXT_INSIDE = "graticule.text.inside";
     public static final String PROPERTY_NAME_TEXT_ROTATION_NORTH_SOUTH = "graticule.text.rotation.north.south";
@@ -76,15 +78,17 @@ public class GraticuleLayerType extends LayerType {
     public static final int DEFAULT_NUM_GRID_LINES = 5;
     public static final double DEFAULT_RES_LAT = 0.0;
     public static final double DEFAULT_RES_LON = 0.0;
-    public static final Color DEFAULT_LINE_COLOR = Color.BLACK;
-    public static final double DEFAULT_LINE_TRANSPARENCY = 0.7;
-    public static final double DEFAULT_LINE_WIDTH = 1.0;
+    public static final Color DEFAULT_LINE_COLOR = new Color(0,0,80);
+    public static final double DEFAULT_LINE_TRANSPARENCY = 0.6;
+    public static final double DEFAULT_LINE_WIDTH = 0.8;
     public static final Color DEFAULT_TEXT_FG_COLOR = Color.BLACK;
+    public static final Color DEFAULT_TEXT_CORNER_FONT_COLOR = new Color(0,80,0);
     public static final Color DEFAULT_TEXT_BG_COLOR = Color.WHITE;
-    public static final double DEFAULT_TEXT_BG_TRANSPARENCY = 0.7;
+    public static final double DEFAULT_TEXT_BG_TRANSPARENCY = 0.3;
 
 
     public static final int DEFAULT_TEXT_FONT_SIZE = 12;
+    public static final int DEFAULT_TEXT_CORNER_FONT_SIZE = 9;
     public static final boolean DEFAULT_TEXT_FONT_ITALIC = false;
     public static final boolean DEFAULT_TEXT_INSIDE = false;
     public static final int DEFAULT_TEXT_ROTATION_NORTH_SOUTH = 30;
@@ -95,20 +99,20 @@ public class GraticuleLayerType extends LayerType {
     public static final boolean DEFAULT_TEXT_ENABLED_EAST = true;
     public static final boolean DEFAULT_LINE_ENABLED = true;
     public static final boolean DEFAULT_LINE_DASHED = true;
-    public static final double DEFAULT_LINE_DASHED_PHASE = 6;
+    public static final double DEFAULT_LINE_DASHED_PHASE = 3;
     public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
     public static final boolean DEFAULT_BORDER_ENABLED = true;
-    public static final double DEFAULT_BORDER_WIDTH = 1.0;
+    public static final double DEFAULT_BORDER_WIDTH = 1.2;
 
-    public static final boolean DEFAULT_TEXT_CORNER_TOP_LON_ENABLED =  false;
-    public static final boolean DEFAULT_TEXT_CORNER_LEFT_LAT_ENABLED = false;
-    public static final boolean DEFAULT_TEXT_CORNER_RIGHT_LAT_ENABLED = false;
-    public static final boolean DEFAULT_TEXT_CORNER_BOTTOM_LON_ENABLED =  false;
+    public static final boolean DEFAULT_TEXT_CORNER_TOP_LON_ENABLED =  true;
+    public static final boolean DEFAULT_TEXT_CORNER_LEFT_LAT_ENABLED = true;
+    public static final boolean DEFAULT_TEXT_CORNER_RIGHT_LAT_ENABLED = true;
+    public static final boolean DEFAULT_TEXT_CORNER_BOTTOM_LON_ENABLED =  true;
 
 
     public static final boolean DEFAULT_TICKMARK_ENABLED = true;
-    public static final boolean DEFAULT_TICKMARK_INSIDE = false;
-    public static final double DEFAULT_TICKMARK_LENGTH = 6.0;
+    public static final boolean DEFAULT_TICKMARK_INSIDE = true;
+    public static final double DEFAULT_TICKMARK_LENGTH = 3.0;
 
     private static final String ALIAS_NAME_NUM_GRID_LINES = "numGridLines";
     private static final String ALIAS_NAME_RES_LAT = "resLat";
@@ -118,12 +122,14 @@ public class GraticuleLayerType extends LayerType {
     private static final String ALIAS_NAME_LINE_WIDTH = "lineWidth";
 
     private static final String ALIAS_NAME_TEXT_FG_COLOR = "textFgColor";
+    private static final String ALIAS_NAME_TEXT_CORNER_FONT_COLOR = "textCornerFontColor";
     private static final String ALIAS_NAME_TEXT_BG_COLOR = "textBgColor";
     private static final String ALIAS_NAME_TEXT_BG_TRANSPARENCY = "textBgTransparency";
 
 
     //     DANNY added these
     private static final String ALIAS_NAME_TEXT_FONT_SIZE = "textFontSize";
+    private static final String ALIAS_NAME_TEXT_CORNER_FONT_SIZE = "textCornerFontSize";
 
     private static final String ALIAS_NAME_TEXT_INSIDE = "textInside";
     private static final String ALIAS_NAME_TEXT_ENABLED_NORTH = "textEnabledNorth";
@@ -211,6 +217,11 @@ public class GraticuleLayerType extends LayerType {
         textFgColorModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_FG_COLOR);
         vc.addProperty(textFgColorModel);
 
+        final Property textCornerFontColorModel = Property.create(PROPERTY_NAME_TEXT_CORNER_FONT_COLOR, Color.class, DEFAULT_TEXT_CORNER_FONT_COLOR, true);
+        textCornerFontColorModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_FONT_COLOR);
+        vc.addProperty(textCornerFontColorModel);
+
+
         final Property textBgColorModel = Property.create(PROPERTY_NAME_TEXT_BG_COLOR, Color.class, DEFAULT_TEXT_BG_COLOR, true);
         textBgColorModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_BG_COLOR);
         vc.addProperty(textBgColorModel);
@@ -226,6 +237,10 @@ public class GraticuleLayerType extends LayerType {
         final Property textFontSizeModel = Property.create(PROPERTY_NAME_TEXT_FONT_SIZE, Integer.class, DEFAULT_TEXT_FONT_SIZE, true);
         textFontSizeModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_FONT_SIZE);
         vc.addProperty(textFontSizeModel);
+
+        final Property textCornerFontSizeModel = Property.create(PROPERTY_NAME_TEXT_CORNER_FONT_SIZE, Integer.class, DEFAULT_TEXT_CORNER_FONT_SIZE, true);
+        textCornerFontSizeModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_CORNER_FONT_SIZE);
+        vc.addProperty(textCornerFontSizeModel);
 
         final Property textFontItalicModel = Property.create(PROPERTY_NAME_TEXT_FONT_ITALIC, Boolean.class, DEFAULT_TEXT_FONT_ITALIC, true);
         textFontItalicModel.getDescriptor().setAlias(ALIAS_NAME_TEXT_FONT_ITALIC);
