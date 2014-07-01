@@ -92,7 +92,7 @@ public class ImageInfo implements Cloneable {
      * Gets the color palette definition as used for images created from single bands.
      *
      * @return The color palette definition. Can be {@code null}.
-     * In this case {@link #getRgbChannelDef()} is non-null.
+     *         In this case {@link #getRgbChannelDef()} is non-null.
      */
     public ColorPaletteDef getColorPaletteDef() {
         return colorPaletteDef;
@@ -102,7 +102,7 @@ public class ImageInfo implements Cloneable {
      * Gets the RGB(A) channel definition as used for images created from 3 tp 4 bands.
      *
      * @return The RGB(A) channel definition.
-     * Can be {@code null}. In this case {@link #getColorPaletteDef()} is non-null.
+     *         Can be {@code null}. In this case {@link #getColorPaletteDef()} is non-null.
      */
     public RGBChannelDef getRgbChannelDef() {
         return rgbChannelDef;
@@ -187,16 +187,16 @@ public class ImageInfo implements Cloneable {
         ComponentColorModel cm;
         if (getColorComponentCount() == 4) {
             cm = new ComponentColorModel(cs,
-                                         true, // hasAlpha,
-                                         false, //isAlphaPremultiplied,
-                                         Transparency.TRANSLUCENT, //  transparency,
-                                         DataBuffer.TYPE_BYTE); //transferType
+                    true, // hasAlpha,
+                    false, //isAlphaPremultiplied,
+                    Transparency.TRANSLUCENT, //  transparency,
+                    DataBuffer.TYPE_BYTE); //transferType
         } else {
             cm = new ComponentColorModel(cs,
-                                         false, // hasAlpha,
-                                         false, //isAlphaPremultiplied,
-                                         Transparency.OPAQUE, //  transparency,
-                                         DataBuffer.TYPE_BYTE); //transferType
+                    false, // hasAlpha,
+                    false, //isAlphaPremultiplied,
+                    Transparency.OPAQUE, //  transparency,
+                    DataBuffer.TYPE_BYTE); //transferType
 
         }
         return cm;
@@ -292,14 +292,36 @@ public class ImageInfo implements Cloneable {
             double delta2 = (maxDisplaySample > minDisplaySample) ? maxDisplaySample - minDisplaySample : 1.0;
             double b = delta1 / delta2;
             double a = minSample - minDisplaySample * b;
-            for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
-                targetCPD.getPointAt(i).setSample(a + b * sourceCPD.getPointAt(i).getSample());
-                targetCPD.getPointAt(i).setColor(sourceCPD.getPointAt(i).getColor());
-                targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
+
+//            if (1 == 1) {
+//                for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
+//                    if (maxSample != minSample) {
+//                        double weight = (sourceCPD.getPointAt(i).getSample() - minSample) / (minSample - maxSample);
+//                        double logValue = getLogarithmicValue(weight, minSample, maxSample);
+//                        targetCPD.getPointAt(i).setSample(logValue);
+//                        targetCPD.getPointAt(i).setColor(sourceCPD.getPointAt(i).getColor());
+//                        targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
+//                    }
+//                }
+//            } else {
+                for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
+                    targetCPD.getPointAt(i).setSample(a + b * sourceCPD.getPointAt(i).getSample());
+                    targetCPD.getPointAt(i).setColor(sourceCPD.getPointAt(i).getColor());
+                    targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
+//                }
             }
         } else {
             targetCPD.setPoints(sourceCPD.getPoints().clone());
         }
+    }
+
+    private static double getLogarithmicValue(double linearWeight, double min, double max) {
+
+        double b = Math.log(max / min) / (max - min);
+        double a = min / (Math.exp(b * min));
+        double logValue = a * Math.exp(b * linearWeight);
+
+        return logValue;
     }
 
     private static void alignNumPoints(ColorPaletteDef sourceCPD, ColorPaletteDef targetCPD) {
@@ -319,7 +341,6 @@ public class ImageInfo implements Cloneable {
      * Converts a string to a histogram matching.
      *
      * @param mode the histogram matching string
-     *
      * @return the histogram matching. {@link ImageInfo.HistogramMatching#None} if {@code maode} is not "Equalize" or "Normalize".
      */
     public static ImageInfo.HistogramMatching getHistogramMatching(String mode) {

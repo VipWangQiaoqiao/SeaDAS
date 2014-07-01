@@ -253,13 +253,21 @@ public class Graticule {
         }
 
 
-        if (latMajorStep == 0) {
-            final PixelPos pixelPos1 = new PixelPos(0.5f * raster.getSceneRasterWidth(), 0.5f * raster.getSceneRasterHeight());
-            final PixelPos pixelPos2 = new PixelPos(pixelPos1.x + 1f, pixelPos1.y + 1f);
-            final GeoPos geoPos1 = geoCoding.getGeoPos(pixelPos1, null);
-            final GeoPos geoPos2 = geoCoding.getGeoPos(pixelPos2, null);
-            double deltaLat = Math.abs(geoPos2.lat - geoPos1.lat);
+        final PixelPos pixelPos1 = new PixelPos(0.5f * raster.getSceneRasterWidth(), 0.5f * raster.getSceneRasterHeight());
+        final PixelPos pixelPos2 = new PixelPos(pixelPos1.x + 1f, pixelPos1.y + 1f);
+        final GeoPos geoPos1 = geoCoding.getGeoPos(pixelPos1, null);
+        final GeoPos geoPos2 = geoCoding.getGeoPos(pixelPos2, null);
 
+        double deltaLat = 0;
+        deltaLat = Math.abs(geoPos2.lat - geoPos1.lat);
+
+
+        double deltaLon = 0;
+        deltaLon = Math.abs(geoPos2.lon - geoPos1.lon);
+        if (deltaLon > 180) {
+            deltaLon += 360;
+        }
+        if (latMajorStep == 0) {
             int height = raster.getRasterHeight();
             double ratio = height / (desiredNumGridLines - 1);
 
@@ -270,20 +278,10 @@ public class Graticule {
             // this is what BEAM had
             // it has some cool behaviour but is a bit rigid when adjusted desired gridline count
             //     latMajorStep = (float) compose(normalize(gridCellSize * 0.5 * (deltaLon + deltaLat), null));
-
         }
 
 
         if (lonMajorStep == 0) {
-            final PixelPos pixelPos1 = new PixelPos(0.5f * raster.getSceneRasterWidth(), 0.5f * raster.getSceneRasterHeight());
-            final PixelPos pixelPos2 = new PixelPos(pixelPos1.x + 1f, pixelPos1.y + 1f);
-            final GeoPos geoPos1 = geoCoding.getGeoPos(pixelPos1, null);
-            final GeoPos geoPos2 = geoCoding.getGeoPos(pixelPos2, null);
-            double deltaLon = Math.abs(geoPos2.lon - geoPos1.lon);
-            if (deltaLon > 180) {
-                deltaLon += 360;
-            }
-
             int width = raster.getRasterWidth();
             double ratio = width / (desiredNumGridLines - 1);
 
@@ -304,16 +302,35 @@ public class Graticule {
 
         Debug.trace("Graticule.create: latMajorStep=" + latMajorStep + ", lonMajorStep=" + lonMajorStep);
 
-        double latMinorStep = latMajorStep / 4.0f;
-        double lonMinorStep = lonMajorStep / 4.0f;
+//        double latMinorStep = latMajorStep / 16.0f;
+//        double lonMinorStep = lonMajorStep / 16.0f;
 
-        if (latMajorStep <= 1) {
-            latMinorStep = latMajorStep;
+
+        // make minor steps approx 0.5% image
+
+        int desiredMinorSteps = 200;
+
+      desiredMinorSteps = (int) Math.min((raster.getRasterHeight()/4.0), (raster.getRasterWidth()/4.0));
+
+        if (desiredMinorSteps > 200) {
+            desiredMinorSteps = 200;
+        } else if (desiredMinorSteps < 3) {
+            desiredMinorSteps = 3;
         }
 
-        if (lonMajorStep <= 1) {
-            lonMinorStep = lonMajorStep;
-        }
+        double ratioLatMinor = raster.getRasterHeight() / (desiredMinorSteps - 1);
+        double latMinorStep = ratioLatMinor * deltaLat;
+        double ratioLonMinor = raster.getRasterHeight() / (desiredMinorSteps - 1);
+        double lonMinorStep = ratioLonMinor * deltaLon;
+
+
+//        if (latMajorStep <= 1) {
+//            latMinorStep = latMajorStep;
+//        }
+//
+//        if (lonMajorStep <= 1) {
+//            lonMinorStep = lonMajorStep;
+//        }
 
         int geoBoundaryStep = getGeoBoundaryStep(geoCoding, raster);
         Debug.trace("Graticule.create: geoBoundaryStep=" + geoBoundaryStep);
@@ -370,7 +387,17 @@ public class Graticule {
                     tickPointsWest,
                     tickPointsEast);
         } else {
-            return null;
+            return new Graticule(null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
         }
     }
 
@@ -831,6 +858,9 @@ public class Graticule {
                 Coord coord1 = latitudeGridLinePoint.get(first);
                 Coord coord2 = latitudeGridLinePoint.get(second);
 
+                PixelPos pixelPos2 = new PixelPos((float) (coord1.pixelPos.getX() + 1), (float) coord1.pixelPos.getY());
+                coord2 = new Coord(coord1.geoPos, pixelPos2);
+
                 if (isCoordPairValid(coord1, coord2)) {
                     TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(), coord1, coord2);
                     textGlyphs.add(textGlyph);
@@ -872,6 +902,9 @@ public class Graticule {
                 Coord coord1 = latitudeGridLinePoint.get(last);
                 Coord coord2 = latitudeGridLinePoint.get(nextToLast);
 
+                PixelPos pixelPos2 = new PixelPos((float) (coord1.pixelPos.getX() - 1), (float) coord1.pixelPos.getY());
+                coord2 = new Coord(coord1.geoPos, pixelPos2);
+
                 if (isCoordPairValid(coord1, coord2)) {
                     TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(), coord1, coord2);
                     textGlyphs.add(textGlyph);
@@ -909,6 +942,9 @@ public class Graticule {
 
                 Coord coord1 = longitudeGridLinePoint.get(first);
                 Coord coord2 = longitudeGridLinePoint.get(second);
+
+                PixelPos pixelPos2 = new PixelPos((float) (coord1.pixelPos.getX()), (float) (coord1.pixelPos.getY() + 1));
+                coord2 = new Coord(coord1.geoPos, pixelPos2);
 
 
                 if (isCoordPairValid(coord1, coord2)) {
@@ -953,6 +989,9 @@ public class Graticule {
 
                 Coord coord1 = longitudeGridLinePoint.get(last);
                 Coord coord2 = longitudeGridLinePoint.get(nextToLast);
+
+                PixelPos pixelPos2 = new PixelPos((float) (coord1.pixelPos.getX()), (float) (coord1.pixelPos.getY() - 1));
+                coord2 = new Coord(coord1.geoPos, pixelPos2);
 
                 if (isCoordPairValid(coord1, coord2)) {
                     TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLonString(), coord1, coord2);

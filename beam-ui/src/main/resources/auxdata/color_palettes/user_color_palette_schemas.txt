@@ -1,0 +1,17 @@
+# entries taken from smigen_product_table.dat and used to populate the oceancolor_palette_schemas combobox in the SeaDAS Color Palettes GUI
+
+
+# Fields
+# 1. Product Description (Must begin with capital letter [A-Z])
+# 2. Product Name (short)
+# 3. Units (if any)
+# 4. Scaling (linear or logarithmic)
+# 5. Data Minimum
+# 6. Data Maximum
+# 7. Precision ("B", "I", "F")
+# 8. Palette Name (Assumes ".pal" extension)
+#
+
+
+My thingy:my_euphotic_thingy:m:linear:2.0:65.0:F:zphotic
+

@@ -83,6 +83,18 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         addPropertyDescriptor(vd23);
 
 
+        PropertyDescriptor vdTickMarkEnabled = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED, Boolean.class);
+        vdTickMarkEnabled.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_ENABLED);
+        vdTickMarkEnabled.setDisplayName("Include Tick Marks (with labels)");
+        vdTickMarkEnabled.setDefaultConverter();
+        addPropertyDescriptor(vdTickMarkEnabled);
+
+        PropertyDescriptor vdTickMarkInside = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, Boolean.class);
+        vdTickMarkInside.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_INSIDE);
+        vdTickMarkInside.setDisplayName("Put Tick Marks Inside");
+        vdTickMarkInside.setDefaultConverter();
+        addPropertyDescriptor(vdTickMarkInside);
+
 
 
         PropertyDescriptor vd31 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LON_ENABLED, Boolean.class);
@@ -154,12 +166,6 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
 
 
-        PropertyDescriptor vdTickMarkEnabled = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED, Boolean.class);
-        vdTickMarkEnabled.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_ENABLED);
-        vdTickMarkEnabled.setDisplayName("Show Tick Marks");
-        vdTickMarkEnabled.setDefaultConverter();
-        addPropertyDescriptor(vdTickMarkEnabled);
-
 
 
 
@@ -177,11 +183,6 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         addPropertyDescriptor(vd14);
 
 
-        PropertyDescriptor vdTickMarkInside = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, Boolean.class);
-        vdTickMarkInside.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_INSIDE);
-        vdTickMarkInside.setDisplayName("Put Tick Marks Inside");
-        vdTickMarkInside.setDefaultConverter();
-        addPropertyDescriptor(vdTickMarkInside);
 
 
 
@@ -208,6 +209,12 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd11.setDisplayName("Font Size");
         vd11.setDefaultConverter();
         addPropertyDescriptor(vd11);
+
+        PropertyDescriptor vdCornerFontSize = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_SIZE, Integer.class);
+        vdCornerFontSize.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_FONT_SIZE);
+        vdCornerFontSize.setDisplayName("Corner Font Size");
+        vdCornerFontSize.setDefaultConverter();
+        addPropertyDescriptor(vdCornerFontSize);
 
         PropertyDescriptor vd5 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, Double.class);
         vd5.setDefaultValue(GraticuleLayerType.DEFAULT_LINE_WIDTH);
@@ -258,9 +265,16 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
         PropertyDescriptor vd8 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, Color.class);
         vd8.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_FG_COLOR);
-        vd8.setDisplayName("Font Color");
+        vd8.setDisplayName("Font / Tick Mark Color");
         vd8.setDefaultConverter();
         addPropertyDescriptor(vd8);
+
+
+        PropertyDescriptor vdTextCornerFontColor = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_COLOR, Color.class);
+        vdTextCornerFontColor.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_CORNER_FONT_COLOR);
+        vdTextCornerFontColor.setDisplayName("Corner Font Color");
+        vdTextCornerFontColor.setDefaultConverter();
+        addPropertyDescriptor(vdTextCornerFontColor);
 
 
         PropertyDescriptor vd4 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR, Color.class);
@@ -330,6 +344,17 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 
         bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, textInsideEnabled,
                 GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, textInsideEnabled);
+
+
+//        boolean tickMarkEnabled = (Boolean) bindingContext.getPropertySet().getValue(
+//                GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED);
+//
+//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, tickMarkEnabled,
+//                GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, tickMarkEnabled);
+//
+//        bindingContext.bindEnabledState(GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH, tickMarkEnabled,
+//                GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH, tickMarkEnabled);
+
     }
 
 }

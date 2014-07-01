@@ -16,22 +16,29 @@
 
 package org.esa.beam.visat.toolviews.imageinfo;
 
+import com.bc.ceres.core.*;
 import com.bc.ceres.swing.TableLayout;
-import org.esa.beam.framework.datamodel.ColorPaletteDef;
-import org.esa.beam.framework.datamodel.ImageInfo;
-import org.esa.beam.framework.datamodel.ProductNodeEvent;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.datamodel.Stx;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.GridBagUtils;
+import org.esa.beam.framework.ui.ImageInfoEditorModel;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.util.math.Range;
+import org.esa.beam.visat.VisatApp;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
@@ -43,7 +50,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final JFormattedTextField minField;
     private final JFormattedTextField maxField;
     private final DiscreteCheckBox discreteCheckBox;
+    private ColorPaletteInfoComboBox colorPaletteInfoComboBox;
 
+    private final ImageInfoEditor2 imageInfoEditor;
 
     private enum RangeKey {FromPaletteSource, FromData, FromMinMaxFields, FromCurrentPalette;}
 
@@ -51,73 +60,185 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private boolean hidden = false;
 
     Continuous1BandBasicForm(final ColorManipulationForm parentForm) {
+
+        imageInfoEditor = new ImageInfoEditor2(parentForm);
+
         ColorPalettesManager.loadAvailableColorPalettes(parentForm.getIODir());
 
         this.parentForm = parentForm;
 
+
+        //   colorPaletteInfoComboBox = new ColorPaletteInfoComboBox(parentForm.getIODir().getParentFile());
+        colorPaletteInfoComboBox = new ColorPaletteInfoComboBox(parentForm.getIODir());
+        VisatApp.getApp().clearStatusBarMessage();
+
+
         JPanel basicPanel = GridBagUtils.createPanel();
         GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        JLabel spacer1 = new JLabel();
+        basicPanel.add(spacer1(spacer1), gbc);
+
 
 
         colorPaletteChooser = new ColorPaletteChooser();
         colorPaletteChooser.setPreferredSize(new Dimension(180, 40));
 
 
-        gbc.gridy = 0;
+//        gbc.gridy++;
+//        gbc.gridx = 0;
+//        gbc.weightx = 1.0;
+//        basicPanel.add(colorPaletteChooser, gbc);
+
+        JPanel colorPaletteJPanel = new JPanel(new GridBagLayout());
+        colorPaletteJPanel.setBorder(BorderFactory.createTitledBorder("Color Palette"));
+        final GridBagConstraints colorPaletteGbc = new GridBagConstraints();
+
+        colorPaletteGbc.fill = GridBagConstraints.HORIZONTAL;
+        colorPaletteGbc.anchor = GridBagConstraints.WEST;
+        colorPaletteGbc.gridy = 0;
+        colorPaletteGbc.gridx = 0;
+        colorPaletteGbc.weightx = 1.0;
+        colorPaletteJPanel.add(colorPaletteChooser, colorPaletteGbc);
+
+
+        gbc.gridy++;
         gbc.gridx = 0;
         gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        basicPanel.add(colorPaletteChooser, gbc);
+        basicPanel.add(colorPaletteJPanel, gbc);
 
 
         minField = getNumberTextField(0);
         maxField = getNumberTextField(1);
 
-//        JTextField tmpSizeTextField = new JTextField(("123456789012345678"));
-//        minField.setMinimumSize(tmpSizeTextField.getPreferredSize());
-//        minField.setMaximumSize(tmpSizeTextField.getPreferredSize());
-//        minField.setPreferredSize(tmpSizeTextField.getPreferredSize());
-//        maxField.setMinimumSize(tmpSizeTextField.getPreferredSize());
-//        maxField.setMaximumSize(tmpSizeTextField.getPreferredSize());
-//        maxField.setPreferredSize(tmpSizeTextField.getPreferredSize());
+        JTextField tmpSizeTextField = new JTextField(("12345678901234567890"));
+        minField.setMinimumSize(tmpSizeTextField.getPreferredSize());
+        minField.setMaximumSize(tmpSizeTextField.getPreferredSize());
+        minField.setPreferredSize(tmpSizeTextField.getPreferredSize());
+        maxField.setMinimumSize(tmpSizeTextField.getPreferredSize());
+        maxField.setMaximumSize(tmpSizeTextField.getPreferredSize());
+        maxField.setPreferredSize(tmpSizeTextField.getPreferredSize());
 
 
         JPanel minMaxTextfields = getMinMaxTextfields();
 
 
-        gbc.gridy = 1;
-        gbc.gridx = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        basicPanel.add(minMaxTextfields, gbc);
+//        gbc.gridy = 1;
+//        gbc.gridx = 0;
+//        gbc.anchor = GridBagConstraints.WEST;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        basicPanel.add(minMaxTextfields, gbc);
 
 
-        final JButton cpdRange = new JButton("Set Range from CPD File");
+        final JButton cpdRange = new JButton("Set from CPD File");
         cpdRange.setToolTipText("Set min and max value to be value in cpd file");
         cpdRange.setMaximumSize(cpdRange.getMinimumSize());
         cpdRange.setPreferredSize(cpdRange.getMinimumSize());
         cpdRange.setMinimumSize(cpdRange.getMinimumSize());
 
-        gbc.gridy = 2;
-        gbc.gridx = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.NONE;
-        basicPanel.add(cpdRange, gbc);
+//        gbc.gridy = 2;
+//        gbc.gridx = 0;
+//        gbc.anchor = GridBagConstraints.WEST;
+//        gbc.fill = GridBagConstraints.NONE;
+//        basicPanel.add(cpdRange, gbc);
 
-        final JButton bandRange = new JButton("Set Range from Band");
+        final JButton bandRange = new JButton("Set from Band Data");
         bandRange.setToolTipText("Set min and max value to corresponding data value in the band statistics");
         bandRange.setMaximumSize(bandRange.getMinimumSize());
         bandRange.setPreferredSize(bandRange.getMinimumSize());
         bandRange.setMinimumSize(bandRange.getMinimumSize());
 
+//
+//        gbc.gridy = 3;
+//        gbc.gridx = 0;
+//        gbc.anchor = GridBagConstraints.WEST;
+//        gbc.fill = GridBagConstraints.NONE;
+//        basicPanel.add(bandRange, gbc);
 
-        gbc.gridy = 3;
+
+        JPanel rangeJPanel = new JPanel(new GridBagLayout());
+        rangeJPanel.setBorder(BorderFactory.createTitledBorder("Range Adjustments"));
+        final GridBagConstraints rangeGbc = new GridBagConstraints();
+
+        rangeGbc.fill = GridBagConstraints.HORIZONTAL;
+        rangeGbc.anchor = GridBagConstraints.WEST;
+        rangeGbc.gridy = 0;
+        rangeGbc.gridx = 0;
+        rangeGbc.weightx = 1.0;
+        rangeJPanel.add(minMaxTextfields, rangeGbc);
+
+        rangeGbc.fill = GridBagConstraints.NONE;
+        rangeGbc.gridy = 1;
+        rangeGbc.gridx = 0;
+        rangeJPanel.add(bandRange, rangeGbc);
+
+        rangeGbc.fill = GridBagConstraints.NONE;
+        rangeGbc.gridy = 2;
+        rangeGbc.gridx = 0;
+        rangeJPanel.add(cpdRange, rangeGbc);
+
+
+        gbc.gridy++;
         gbc.gridx = 0;
+        gbc.weightx = 0;
+        JLabel spacer2 = new JLabel();
+        basicPanel.add(spacer2(spacer2), gbc);
+
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.NONE;
-        basicPanel.add(bandRange, gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        basicPanel.add(rangeJPanel, gbc);
+
+        gbc.gridy++;
+        gbc.gridx = 0;
+        basicPanel.add(spacer1(new JLabel()), gbc);
+
+
+        JPanel colorPaletteInfoComboBoxJPanel = new JPanel(new GridBagLayout());
+        colorPaletteInfoComboBoxJPanel.setBorder(BorderFactory.createTitledBorder("Preset Color Palette Schemes"));
+        colorPaletteInfoComboBoxJPanel.setToolTipText("Load a preset color scheme (sets the color-palette, min, max, and log fields)");
+        GridBagConstraints gbc2 = new GridBagConstraints();
+//        gbc.gridx = 0;
+//        gbc.gridy = 0;
+//        colorPaletteInfoComboBoxJPanel.add(getColorPaletteInfoComboBox().getjLabel(), gbc2);
+
+        gbc2.gridx = 0;
+        gbc2.gridy = 0;
+        gbc2.weightx = 1.0;
+        gbc2.anchor = GridBagConstraints.WEST;
+        gbc2.fill = GridBagConstraints.HORIZONTAL;
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getStandardJComboBox(), gbc2);
+
+        gbc2.gridx = 0;
+        gbc2.gridy = 1;
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getjComboBox(), gbc2);
+
+        gbc2.gridx = 0;
+        gbc2.gridy = 2;
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getUserJComboBox(), gbc2);
+
+
+//        gbc2.gridx = 0;
+//        gbc2.gridy = 1;
+//        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getjLabel2(), gbc2);
+
+
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        basicPanel.add(colorPaletteInfoComboBoxJPanel, gbc);
+
+
+
 
 
         contentPanel = GridBagUtils.createPanel();
@@ -128,8 +249,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(basicPanel,gbc);
-
+        contentPanel.add(basicPanel, gbc);
 
 
 
@@ -227,13 +347,79 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 ////        editorPanel.add(buttonPanel);
 
 
+//        maxField.getDocument().addDocumentListener(new DocumentListener() {
+//            @Override
+//            public void insertUpdate(DocumentEvent documentEvent) {
+//                //       colorPaletteInfoComboBox.reset();
+//                    shouldFireChooserEvent = true;
+//                    dontDoThis = true;
+//                    applyChanges(RangeKey.FromMinMaxFields);
+//                    shouldFireChooserEvent = false;
+//                    dontDoThis = false;
+//                //      VisatApp.getApp().clearStatusBarMessage();
+//            }
+//
+//            @Override
+//            public void removeUpdate(DocumentEvent documentEvent) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//
+//            @Override
+//            public void changedUpdate(DocumentEvent documentEvent) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//        });
+
+
         shouldFireChooserEvent = true;
 
         colorPaletteChooser.addActionListener(createListener(RangeKey.FromCurrentPalette));
-        minField.addActionListener(createListener(RangeKey.FromMinMaxFields));
-        maxField.addActionListener(createListener(RangeKey.FromMinMaxFields));
+        //     minField.addActionListener(createListener(RangeKey.FromMinMaxFields));
+        //      maxField.addActionListener(createListener(RangeKey.FromMinMaxFields));
         cpdRange.addActionListener(createListener(RangeKey.FromPaletteSource));
         bandRange.addActionListener(createListener(RangeKey.FromData));
+
+
+        colorPaletteChooser.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                VisatApp.getApp().clearStatusBarMessage();
+            }
+        });
+
+
+//        maxField.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                applyChanges(RangeKey.FromMinMaxFields);
+//                colorPaletteInfoComboBox.reset();
+//            }
+//        });
+
+        maxField.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                applyChanges(RangeKey.FromMinMaxFields);
+                VisatApp.getApp().clearStatusBarMessage();
+            }
+        });
+
+        minField.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                applyChanges(RangeKey.FromMinMaxFields);
+                VisatApp.getApp().clearStatusBarMessage();
+            }
+        });
+
+
+        bandRange.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VisatApp.getApp().clearStatusBarMessage();
+            }
+        });
+
 
 //        contentPanel = new JPanel(new BorderLayout());
 //        contentPanel.add(basicPanel, BorderLayout.NORTH);
@@ -247,6 +433,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final boolean shouldLog10Display = logDisplayButton.isSelected();
+                VisatApp.getApp().clearStatusBarMessage();
                 final ImageInfo imageInfo = parentForm.getImageInfo();
                 if (shouldLog10Display) {
                     final ColorPaletteDef cpd = imageInfo.getColorPaletteDef();
@@ -265,6 +452,81 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 }
             }
         });
+
+        colorPaletteInfoComboBox.getjComboBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getjComboBox());
+            }
+        });
+
+        colorPaletteInfoComboBox.getStandardJComboBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getStandardJComboBox());
+            }
+        });
+
+        colorPaletteInfoComboBox.getUserJComboBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getUserJComboBox());
+            }
+        });
+
+    }
+
+
+
+    private void handleColorPaletteInfoComboBoxSelection(JComboBox jComboBox) {
+        ColorPaletteInfo colorPaletteInfo = (ColorPaletteInfo) jComboBox.getSelectedItem();
+
+        if (colorPaletteInfo.getCpdFilename() != null) {
+
+            try {
+                if (colorPaletteInfoComboBox.isShouldFire()) {
+                    File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename());
+                    ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
+
+                    shouldFireChooserEvent = false;
+                    applyChanges(colorPaletteInfo.getMinValue(),
+                            colorPaletteInfo.getMaxValue(),
+                            colorPaletteDef,
+                            colorPaletteInfo.isLogScaled());
+
+                    colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
+                    shouldFireChooserEvent = true;
+
+                    String id = parentForm.getProductSceneView().getRaster().getDisplayName();
+                    VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
+                    colorPaletteInfoComboBox.reset();
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+
+    }
+
+
+
+    private JLabel spacer1(JLabel lineSpacer) {
+        lineSpacer.setText("SPACER");
+        Dimension lineSpaceDimension = lineSpacer.getPreferredSize();
+        lineSpacer.setPreferredSize(lineSpaceDimension);
+        lineSpacer.setMinimumSize(lineSpaceDimension);
+        lineSpacer.setText("");
+        return lineSpacer;
+    }
+
+    private JLabel spacer2(JLabel lineSpacer) {
+        lineSpacer.setText("SPACER");
+        Dimension lineSpaceDimension = lineSpacer.getPreferredSize();
+        lineSpacer.setPreferredSize(lineSpaceDimension);
+        lineSpacer.setMinimumSize(lineSpaceDimension);
+        lineSpacer.setText("");
+        return lineSpacer;
     }
 
     private JPanel getMinMaxTextfields() {
@@ -315,16 +577,20 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     @Override
     public void handleFormHidden(ProductSceneView productSceneView) {
         hidden = true;
+        if (imageInfoEditor.getModel() != null) {
+            imageInfoEditor.setModel(null);
+        }
     }
 
     @Override
     public void updateFormModel(ProductSceneView productSceneView) {
+        final ImageInfo imageInfo = productSceneView.getImageInfo();
+
         if (!hidden) {
             ColorPalettesManager.loadAvailableColorPalettes(parentForm.getIODir());
             colorPaletteChooser.reloadPalettes();
         }
 
-        final ImageInfo imageInfo = productSceneView.getImageInfo();
         final ColorPaletteDef cpd = imageInfo.getColorPaletteDef();
 
         final boolean logScaled = imageInfo.isLogScaled();
@@ -334,14 +600,23 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteChooser.setDiscreteDisplay(discrete);
         shouldFireChooserEvent = false;
         colorPaletteChooser.setSelectedColorPaletteDefinition(cpd);
-        shouldFireChooserEvent = true;
+
 
         discreteCheckBox.setDiscreteColorsMode(discrete);
         logDisplayButton.setSelected(logScaled);
         parentForm.revalidateToolViewPaneControl();
+
         minField.setValue(cpd.getMinDisplaySample());
         maxField.setValue(cpd.getMaxDisplaySample());
+
+//        colorPaletteInfoComboBox.setShouldFire(false);
+//        colorPaletteInfoComboBox.setSelectedByValues(cpd, cpd.getMinDisplaySample(), cpd.getMaxDisplaySample(), logScaled);
+//        colorPaletteInfoComboBox.setShouldFire(true);
+
+        shouldFireChooserEvent = true;
+
     }
+
 
     @Override
     public void resetFormModel(ProductSceneView productSceneView) {
@@ -383,7 +658,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     }
 
     private JFormattedTextField getNumberTextField(double value) {
-        final NumberFormatter formatter = new NumberFormatter(new DecimalFormat("0.0############"));
+        final NumberFormatter formatter = new NumberFormatter(new DecimalFormat("0.0###########"));
         formatter.setValueClass(Double.class); // to ensure that double values are returned
         final JFormattedTextField numberField = new JFormattedTextField(formatter);
         numberField.setValue(value);
@@ -432,4 +707,21 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             parentForm.applyChanges();
         }
     }
+
+
+    private void applyChanges(double min, double max, ColorPaletteDef selectedCPD, boolean isLogScaled) {
+        final ImageInfo currentInfo = parentForm.getImageInfo();
+        final ColorPaletteDef currentCPD = currentInfo.getColorPaletteDef();
+        final ColorPaletteDef deepCopy = selectedCPD.createDeepCopy();
+        deepCopy.setDiscrete(currentCPD.isDiscrete());
+        deepCopy.setAutoDistribute(true);
+
+        final boolean autoDistribute = true;
+        currentInfo.setLogScaled(isLogScaled);
+        currentInfo.setColorPaletteDef(selectedCPD, min, max, autoDistribute);
+        parentForm.applyChanges();
+    }
+
+
+
 }

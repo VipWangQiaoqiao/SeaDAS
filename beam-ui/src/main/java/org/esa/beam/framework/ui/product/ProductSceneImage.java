@@ -417,6 +417,11 @@ public class ProductSceneImage implements ProductLayerContext {
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR,
                                     configuration.getPropertyColor(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR,
                                                                    GraticuleLayerType.DEFAULT_TEXT_FG_COLOR));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_COLOR,
+                configuration.getPropertyColor(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_COLOR,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_FONT_COLOR));
+
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR,
                                     configuration.getPropertyColor(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR,
                                                                    GraticuleLayerType.DEFAULT_TEXT_BG_COLOR));
@@ -431,6 +436,10 @@ public class ProductSceneImage implements ProductLayerContext {
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
                 configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE,
                         GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_SIZE,
+                configuration.getPropertyInt(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_SIZE,
+                        GraticuleLayerType.DEFAULT_TEXT_CORNER_FONT_SIZE));
 
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_ITALIC,
                 configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_ITALIC,
