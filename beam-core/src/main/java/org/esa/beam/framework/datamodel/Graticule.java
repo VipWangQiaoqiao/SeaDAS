@@ -307,7 +307,17 @@ public class Graticule {
 
 
         // make minor steps approx 0.5% image
+
         int desiredMinorSteps = 200;
+
+      desiredMinorSteps = (int) Math.min((raster.getRasterHeight()/4.0), (raster.getRasterWidth()/4.0));
+
+        if (desiredMinorSteps > 200) {
+            desiredMinorSteps = 200;
+        } else if (desiredMinorSteps < 3) {
+            desiredMinorSteps = 3;
+        }
+
         double ratioLatMinor = raster.getRasterHeight() / (desiredMinorSteps - 1);
         double latMinorStep = ratioLatMinor * deltaLat;
         double ratioLonMinor = raster.getRasterHeight() / (desiredMinorSteps - 1);
@@ -377,7 +387,17 @@ public class Graticule {
                     tickPointsWest,
                     tickPointsEast);
         } else {
-            return null;
+            return new Graticule(null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
         }
     }
 
