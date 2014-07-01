@@ -15,28 +15,78 @@ import java.util.ArrayList;
 public class ColorPaletteInfoComboBox {
 
     private JComboBox jComboBox = null;
-    private JLabel jLabel = null;
-    private JLabel jLabel2 = new JLabel("");
+    private JComboBox standardJComboBox = null;
+    private JComboBox userJComboBox = null;
+
+
     ArrayList<ColorPaletteInfo> colorPaletteInfos = new ArrayList<ColorPaletteInfo>();
-    private File colorPaletteDir = null;
+    ArrayList<ColorPaletteInfo> standardColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
+    ArrayList<ColorPaletteInfo> userColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
+
     private ColorPaletteInfo defaultColorPaletteInfo = null;
+    private ColorPaletteInfo defaultStandardColorPaletteInfo = null;
+    private ColorPaletteInfo defaultUserColorPaletteInfo = null;
+
+
+    private File colorPaletteDir = null;
+
     private boolean shouldFire = true;
 
     public ColorPaletteInfoComboBox(File dirName) {
         colorPaletteDir = dirName;
-        initColorPaletteInfos(dirName);
+
+        initOtherSchemeComboBox();
+        initStandardSchemeComboBox();
+        initUserSchemeComboBox();
+
+        reset();
+    }
+
+
+    private void initOtherSchemeComboBox() {
+
+        File file = new File(colorPaletteDir, "other_color_palette_schemas.txt");
+        defaultColorPaletteInfo = new ColorPaletteInfo("Other Products    ", null, null, 0, 0, false, null);
+        colorPaletteInfos.add(defaultColorPaletteInfo);
+        initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, file);
 
         Object[] colorPaletteInfosArray = colorPaletteInfos.toArray();
 
         jComboBox = new JComboBox(colorPaletteInfosArray);
         getjComboBox().setEditable(false);
-
-
-        jLabel = new JLabel("");
-        getjLabel().setToolTipText("Set color ramp, min, max, and logScaled based on some pre-defined settings");
-
-        reset();
     }
+
+
+    private void initStandardSchemeComboBox() {
+
+        defaultStandardColorPaletteInfo = new ColorPaletteInfo("Standard Products    ", null, null, 0, 0, false, null);
+        standardColorPaletteInfos.add(defaultStandardColorPaletteInfo);
+
+        File file = new File(colorPaletteDir, "standard_color_palette_schemas.txt");
+        initColorPaletteInfos(colorPaletteDir, standardColorPaletteInfos, file);
+
+        Object[] colorPaletteInfosArray = standardColorPaletteInfos.toArray();
+
+        standardJComboBox = new JComboBox(colorPaletteInfosArray);
+        getStandardJComboBox().setEditable(false);
+    }
+
+
+    private void initUserSchemeComboBox() {
+
+        defaultUserColorPaletteInfo = new ColorPaletteInfo("User Schemes    ", null, null, 0, 0, false, null);
+        userColorPaletteInfos.add(defaultUserColorPaletteInfo);
+
+        File file = new File(colorPaletteDir, "user_color_palette_schemas.txt");
+        initColorPaletteInfos(colorPaletteDir, userColorPaletteInfos, file);
+
+        Object[] colorPaletteInfosArray = userColorPaletteInfos.toArray();
+
+        userJComboBox = new JComboBox(colorPaletteInfosArray);
+        getStandardJComboBox().setEditable(false);
+    }
+
+
 
 //    public boolean setSelectedByValues(ColorPaletteDef cpd, double min, double max, boolean isLogScaled) {
 //        System.out.println("hello");
@@ -80,12 +130,11 @@ public class ColorPaletteInfoComboBox {
 //    }
 
 
-    private void initColorPaletteInfos(File dirName) {
-        File file = new File(colorPaletteDir, "color_palette_schemas.txt");
+    private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file) {
+
         ArrayList<String> lines = readFileIntoArrayList(file);
 
-        defaultColorPaletteInfo = new ColorPaletteInfo("Stored Schemas    ", null, null, 0, 0, false, null);
-        colorPaletteInfos.add(defaultColorPaletteInfo);
+
 
         int i = 0;
         for (String line : lines) {
@@ -96,7 +145,7 @@ public class ColorPaletteInfoComboBox {
                 if (values != null && values.length == 8) {
                     String description = values[0].trim();
                     String name = values[1].trim();
-                    String cpdFileName = "OC_" + values[7].trim() + ".cpd";
+                    String cpdFileName = values[7].trim() + ".cpd";
                     String minValStr = values[4].trim();
                     String maxValStr = values[5].trim();
                     String isLogScaledStr = values[3].trim();
@@ -128,15 +177,12 @@ public class ColorPaletteInfoComboBox {
 
     public void reset() {
         jComboBox.setSelectedItem(defaultColorPaletteInfo);
-//        getjLabel2().setText("");
+        standardJComboBox.setSelectedItem(defaultStandardColorPaletteInfo);
+        userJComboBox.setSelectedItem(defaultUserColorPaletteInfo);
     }
 
     public JComboBox getjComboBox() {
         return jComboBox;
-    }
-
-    public JLabel getjLabel() {
-        return jLabel;
     }
 
 
@@ -162,14 +208,6 @@ public class ColorPaletteInfoComboBox {
         return fileContents;
     }
 
-    public JLabel getjLabel2() {
-        return jLabel2;
-    }
-
-    public void setjLabel2(String text) {
-        this.jLabel2.setText("Settings updated with schema: '" + text + "'");
-    }
-
     public boolean isShouldFire() {
         return shouldFire;
     }
@@ -177,4 +215,14 @@ public class ColorPaletteInfoComboBox {
     public void setShouldFire(boolean shouldFire) {
         this.shouldFire = shouldFire;
     }
+
+    public JComboBox getStandardJComboBox() {
+        return standardJComboBox;
+    }
+
+
+    public JComboBox getUserJComboBox() {
+        return userJComboBox;
+    }
+
 }

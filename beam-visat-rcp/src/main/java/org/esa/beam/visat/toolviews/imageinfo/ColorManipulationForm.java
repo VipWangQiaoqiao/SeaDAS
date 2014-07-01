@@ -742,6 +742,7 @@ class ColorManipulationForm {
             @Override
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
                 resourceInstaller.install(".*.cpd", progressMonitor);
+                resourceInstaller.install(".*.txt", progressMonitor);
                 defaultColorPalettesInstalled = true;
                 return Boolean.TRUE;
             }

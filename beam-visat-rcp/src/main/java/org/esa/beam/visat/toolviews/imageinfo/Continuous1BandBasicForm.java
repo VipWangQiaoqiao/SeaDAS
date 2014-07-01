@@ -79,10 +79,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
 
-        gbc.gridy++;
+        gbc.gridy = 0;
         gbc.gridx = 0;
         JLabel spacer1 = new JLabel();
         basicPanel.add(spacer1(spacer1), gbc);
+
+
 
         colorPaletteChooser = new ColorPaletteChooser();
         colorPaletteChooser.setPreferredSize(new Dimension(180, 40));
@@ -101,6 +103,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteGbc.anchor = GridBagConstraints.WEST;
         colorPaletteGbc.gridy = 0;
         colorPaletteGbc.gridx = 0;
+        colorPaletteGbc.weightx = 1.0;
         colorPaletteJPanel.add(colorPaletteChooser, colorPaletteGbc);
 
 
@@ -166,6 +169,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         rangeGbc.anchor = GridBagConstraints.WEST;
         rangeGbc.gridy = 0;
         rangeGbc.gridx = 0;
+        rangeGbc.weightx = 1.0;
         rangeJPanel.add(minMaxTextfields, rangeGbc);
 
         rangeGbc.fill = GridBagConstraints.NONE;
@@ -207,9 +211,19 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         gbc2.gridx = 0;
         gbc2.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc2.weightx = 1.0;
+        gbc2.anchor = GridBagConstraints.WEST;
+        gbc2.fill = GridBagConstraints.HORIZONTAL;
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getStandardJComboBox(), gbc2);
+
+        gbc2.gridx = 0;
+        gbc2.gridy = 1;
         colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getjComboBox(), gbc2);
+
+        gbc2.gridx = 0;
+        gbc2.gridy = 2;
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getUserJComboBox(), gbc2);
+
 
 //        gbc2.gridx = 0;
 //        gbc2.gridy = 1;
@@ -218,6 +232,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         gbc.gridy++;
         gbc.gridx = 0;
+        gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         basicPanel.add(colorPaletteInfoComboBoxJPanel, gbc);
@@ -441,35 +456,60 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteInfoComboBox.getjComboBox().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ColorPaletteInfo colorPaletteInfo = (ColorPaletteInfo) colorPaletteInfoComboBox.getjComboBox().getSelectedItem();
-
-                if (colorPaletteInfo.getCpdFilename() != null) {
-
-                    try {
-                        if (colorPaletteInfoComboBox.isShouldFire()) {
-                            File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename());
-                            ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
-
-                            shouldFireChooserEvent = false;
-                            applyChanges(colorPaletteInfo.getMinValue(),
-                                    colorPaletteInfo.getMaxValue(),
-                                    colorPaletteDef,
-                                    colorPaletteInfo.isLogScaled());
-
-                            colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
-                            shouldFireChooserEvent = true;
-
-                            String id = parentForm.getProductSceneView().getRaster().getDisplayName();
-                            VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
-                            colorPaletteInfoComboBox.reset();
-                        }
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
+                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getjComboBox());
             }
         });
+
+        colorPaletteInfoComboBox.getStandardJComboBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getStandardJComboBox());
+            }
+        });
+
+        colorPaletteInfoComboBox.getUserJComboBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getUserJComboBox());
+            }
+        });
+
     }
+
+
+
+    private void handleColorPaletteInfoComboBoxSelection(JComboBox jComboBox) {
+        ColorPaletteInfo colorPaletteInfo = (ColorPaletteInfo) jComboBox.getSelectedItem();
+
+        if (colorPaletteInfo.getCpdFilename() != null) {
+
+            try {
+                if (colorPaletteInfoComboBox.isShouldFire()) {
+                    File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename());
+                    ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
+
+                    shouldFireChooserEvent = false;
+                    applyChanges(colorPaletteInfo.getMinValue(),
+                            colorPaletteInfo.getMaxValue(),
+                            colorPaletteDef,
+                            colorPaletteInfo.isLogScaled());
+
+                    colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
+                    shouldFireChooserEvent = true;
+
+                    String id = parentForm.getProductSceneView().getRaster().getDisplayName();
+                    VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
+                    colorPaletteInfoComboBox.reset();
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+
+    }
+
+
 
     private JLabel spacer1(JLabel lineSpacer) {
         lineSpacer.setText("SPACER");
