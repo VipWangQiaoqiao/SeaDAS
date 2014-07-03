@@ -85,7 +85,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         basicPanel.add(spacer1(spacer1), gbc);
 
 
-
         colorPaletteChooser = new ColorPaletteChooser();
         colorPaletteChooser.setPreferredSize(new Dimension(180, 40));
 
@@ -238,9 +237,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         basicPanel.add(colorPaletteInfoComboBoxJPanel, gbc);
 
 
-
-
-
         contentPanel = GridBagUtils.createPanel();
 
         gbc.gridy = 0;
@@ -250,8 +246,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(basicPanel, gbc);
-
-
 
 
 //        final TableLayout layout = new TableLayout();
@@ -399,6 +393,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         maxField.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
+          //      System.out.println("DANNY 1");
                 applyChanges(RangeKey.FromMinMaxFields);
                 VisatApp.getApp().clearStatusBarMessage();
             }
@@ -409,6 +404,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             public void propertyChange(PropertyChangeEvent evt) {
                 applyChanges(RangeKey.FromMinMaxFields);
                 VisatApp.getApp().clearStatusBarMessage();
+          //      System.out.println("DANNY 2");
             }
         });
 
@@ -477,7 +473,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     }
 
 
-
     private void handleColorPaletteInfoComboBoxSelection(JComboBox jComboBox) {
         ColorPaletteInfo colorPaletteInfo = (ColorPaletteInfo) jComboBox.getSelectedItem();
 
@@ -488,14 +483,22 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename());
                     ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
 
+                    //todo get this value from combobox selector
+                    boolean isSourceLogScaled = false;
+
+                    boolean origShouldFireChooserEvent = shouldFireChooserEvent;
                     shouldFireChooserEvent = false;
+
+                    colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
                     applyChanges(colorPaletteInfo.getMinValue(),
                             colorPaletteInfo.getMaxValue(),
                             colorPaletteDef,
+                            isSourceLogScaled,
                             colorPaletteInfo.isLogScaled());
 
-                    colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
-                    shouldFireChooserEvent = true;
+
+                    shouldFireChooserEvent = origShouldFireChooserEvent;
+               //     System.out.println("DANNY 4");
 
                     String id = parentForm.getProductSceneView().getRaster().getDisplayName();
                     VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
@@ -508,7 +511,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
     }
-
 
 
     private JLabel spacer1(JLabel lineSpacer) {
@@ -598,6 +600,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         colorPaletteChooser.setLog10Display(logScaled);
         colorPaletteChooser.setDiscreteDisplay(discrete);
+        boolean origShouldFireChooserEvent = shouldFireChooserEvent;
         shouldFireChooserEvent = false;
         colorPaletteChooser.setSelectedColorPaletteDefinition(cpd);
 
@@ -613,6 +616,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //        colorPaletteInfoComboBox.setSelectedByValues(cpd, cpd.getMinDisplaySample(), cpd.getMaxDisplaySample(), logScaled);
 //        colorPaletteInfoComboBox.setShouldFire(true);
 
+        shouldFireChooserEvent = origShouldFireChooserEvent;
         shouldFireChooserEvent = true;
 
     }
@@ -653,6 +657,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 applyChanges(key);
+         //       System.out.println("DANNY 3");
             }
         };
     }
@@ -703,13 +708,16 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     cpd = deepCopy;
             }
             final boolean autoDistribute = true;
+       //     System.out.println("DANNY Apply Changes");
+            boolean isSourceLogScaled = currentInfo.isLogScaled();
+            boolean isTargetLogScaled = isSourceLogScaled;
             currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute);
             parentForm.applyChanges();
         }
     }
 
 
-    private void applyChanges(double min, double max, ColorPaletteDef selectedCPD, boolean isLogScaled) {
+    private void applyChanges(double min, double max, ColorPaletteDef selectedCPD, boolean isSourceLogScaled, boolean isTargetLogScaled) {
         final ImageInfo currentInfo = parentForm.getImageInfo();
         final ColorPaletteDef currentCPD = currentInfo.getColorPaletteDef();
         final ColorPaletteDef deepCopy = selectedCPD.createDeepCopy();
@@ -717,11 +725,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         deepCopy.setAutoDistribute(true);
 
         final boolean autoDistribute = true;
-        currentInfo.setLogScaled(isLogScaled);
-        currentInfo.setColorPaletteDef(selectedCPD, min, max, autoDistribute);
+        currentInfo.setLogScaled(isTargetLogScaled);
+        currentInfo.setColorPaletteDef(selectedCPD, min, max, autoDistribute, isTargetLogScaled);
         parentForm.applyChanges();
     }
-
 
 
 }
