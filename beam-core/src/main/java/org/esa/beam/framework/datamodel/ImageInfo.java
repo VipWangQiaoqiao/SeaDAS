@@ -275,6 +275,7 @@ public class ImageInfo implements Cloneable {
     public void setColorPaletteDef(ColorPaletteDef colorPaletteDef,
                                    double minSample,
                                    double maxSample, boolean autoDistribute) {
+        System.out.println("OTHER PART");
         transferPoints(colorPaletteDef, minSample, maxSample, autoDistribute, getColorPaletteDef());
     }
 
@@ -304,16 +305,72 @@ public class ImageInfo implements Cloneable {
 //                    }
 //                }
 //            } else {
-                for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
-                    targetCPD.getPointAt(i).setSample(a + b * sourceCPD.getPointAt(i).getSample());
-                    targetCPD.getPointAt(i).setColor(sourceCPD.getPointAt(i).getColor());
-                    targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
+            for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
+                targetCPD.getPointAt(i).setSample(a + b * sourceCPD.getPointAt(i).getSample());
+                targetCPD.getPointAt(i).setColor(sourceCPD.getPointAt(i).getColor());
+                targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
 //                }
             }
         } else {
             targetCPD.setPoints(sourceCPD.getPoints().clone());
         }
     }
+
+
+    public void setColorPaletteDef(ColorPaletteDef colorPaletteDef,
+                                   double minSample,
+                                   double maxSample, boolean autoDistribute, boolean isTargetLogScaled) {
+        System.out.println("GOOD PART");
+        transferPoints(colorPaletteDef, minSample, maxSample, autoDistribute, getColorPaletteDef(), isTargetLogScaled);
+    }
+
+
+    private static void transferPoints(ColorPaletteDef sourceCPD,
+                                       double minTargetValue,
+                                       double maxTargetValue,
+                                       boolean autoDistribute,
+                                       ColorPaletteDef targetCPD,
+                                       boolean isTargetLogScaled) {
+
+        System.out.println("isLogScaled=" + isTargetLogScaled);
+        if (autoDistribute || sourceCPD.isAutoDistribute()) {
+            alignNumPoints(sourceCPD, targetCPD);
+            double minSourceValue = sourceCPD.getMinDisplaySample();
+            double maxSourceValue = sourceCPD.getMaxDisplaySample();
+
+            for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
+                double currentSourceValue = sourceCPD.getPointAt(i).getSample();
+
+                if (minTargetValue != maxTargetValue && minSourceValue != maxSourceValue) {
+
+                    double linearWeight = (currentSourceValue - minSourceValue) / (maxSourceValue - minSourceValue);
+                    double currentLinearTargetValue = getLinearValue(linearWeight, minTargetValue, maxTargetValue);
+
+                    if (isTargetLogScaled) {
+                        double currentLogTargetValue = getLogarithmicValue(currentLinearTargetValue, minTargetValue, maxTargetValue);
+                        System.out.println("currentLogTargetValue=" + currentLogTargetValue);
+                        targetCPD.getPointAt(i).setSample(currentLogTargetValue);
+                    } else {
+                        System.out.println("currentLinearTargetValue=" + currentLinearTargetValue);
+                        targetCPD.getPointAt(i).setSample(currentLinearTargetValue);
+                    }
+
+
+                } else {
+                    // cant do much here so just set all to min value and let user fix either palette or bad entry
+                    targetCPD.getPointAt(i).setSample(minTargetValue);
+                }
+
+                Color currentSourceColor = sourceCPD.getPointAt(i).getColor();
+                targetCPD.getPointAt(i).setColor(currentSourceColor);
+                targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
+            }
+
+        } else {
+            targetCPD.setPoints(sourceCPD.getPoints().clone());
+        }
+    }
+
 
     private static double getLogarithmicValue(double linearWeight, double min, double max) {
 
@@ -323,6 +380,27 @@ public class ImageInfo implements Cloneable {
 
         return logValue;
     }
+
+    private static double getLinearValue(double linearWeight, double min, double max) {
+        double deltaNormalized = (max - min);
+
+        double linearValue = min + linearWeight * (deltaNormalized);
+
+        return linearValue;
+    }
+
+
+    private static double getLinearWeightFromLogValue(double logValue, double min, double max) {
+
+        double b = Math.log(max / min) / (max - min);
+        double a = min / (Math.exp(b * min));
+
+        double linearWeight = Math.log(logValue / a) / b;
+        linearWeight = linearWeight / (max - min);
+
+        return linearWeight;
+    }
+
 
     private static void alignNumPoints(ColorPaletteDef sourceCPD, ColorPaletteDef targetCPD) {
         int deltaNumPoints = targetCPD.getNumPoints() - sourceCPD.getNumPoints();

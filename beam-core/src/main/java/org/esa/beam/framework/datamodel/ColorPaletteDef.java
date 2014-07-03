@@ -261,6 +261,9 @@ public class ColorPaletteDef implements Cloneable  {
             }
             point.setColor(color);
             point.setSample(sample);
+            // todo DANNY added this
+            point.setLabel(file.getName());
+            System.out.println(point.label);
             points[i] = point;
             lastSample = sample;
         }
