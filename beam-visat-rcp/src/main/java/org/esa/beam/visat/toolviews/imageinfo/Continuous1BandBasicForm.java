@@ -393,7 +393,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         maxField.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                System.out.println("DANNY 1");
+          //      System.out.println("DANNY 1");
                 applyChanges(RangeKey.FromMinMaxFields);
                 VisatApp.getApp().clearStatusBarMessage();
             }
@@ -404,7 +404,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             public void propertyChange(PropertyChangeEvent evt) {
                 applyChanges(RangeKey.FromMinMaxFields);
                 VisatApp.getApp().clearStatusBarMessage();
-                System.out.println("DANNY 2");
+          //      System.out.println("DANNY 2");
             }
         });
 
@@ -498,7 +498,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
                     shouldFireChooserEvent = origShouldFireChooserEvent;
-                    System.out.println("DANNY 4");
+               //     System.out.println("DANNY 4");
 
                     String id = parentForm.getProductSceneView().getRaster().getDisplayName();
                     VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
@@ -657,7 +657,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 applyChanges(key);
-                System.out.println("DANNY 3");
+         //       System.out.println("DANNY 3");
             }
         };
     }
@@ -708,7 +708,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     cpd = deepCopy;
             }
             final boolean autoDistribute = true;
-            System.out.println("DANNY Apply Changes");
+       //     System.out.println("DANNY Apply Changes");
             boolean isSourceLogScaled = currentInfo.isLogScaled();
             boolean isTargetLogScaled = isSourceLogScaled;
             currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute);
