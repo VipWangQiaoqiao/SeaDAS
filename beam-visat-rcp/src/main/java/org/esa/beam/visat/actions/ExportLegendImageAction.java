@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2010 Brockmann Consult GmbH (info@brockmann-consult.de)
  *
@@ -40,11 +41,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class ExportLegendImageAction extends AbstractExportImageAction {
 
     private static final String HORIZONTAL_STR = "Horizontal";
     private static final String VERTICAL_STR = "Vertical";
+
+    private static final String DISTRIB_EVEN_STR = "Use Even Distribution";
+    private static final String DISTRIB_EXACT_STR = "Use Exact Palette Distribution";
+    private static final String DISTRIB_MANUAL_STR = "Use Manually Entered Points";
+
+    private static final String ORIENTATION_PARAM_STR = "legend.orientation";
+    private static final String DISTRIBUTION_TYPE_PARAM_STR = "legend.label.distribution.type";
+    private static final String NUM_TICKS_PARAM_STR = "legend.numberOfTicks";
 
     private ParamGroup legendParamGroup;
     private ImageLegend imageLegend;
@@ -100,6 +111,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setLabel("Show Auto Labels");
         paramGroup.addParameter(param);
 
+
+        param = new Parameter("legend.antialiasing", Boolean.TRUE);
+        param.getProperties().setLabel("Perform anti-aliasing");
+        paramGroup.addParameter(param);
+
+
+
         param = new Parameter("legend.headerText", "");
         param.getProperties().setLabel("Header text");
         param.getProperties().setNumCols(24);
@@ -120,21 +138,28 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         paramGroup.addParameter(param);
 
 
-        param = new Parameter("legend.orientation", HORIZONTAL_STR);
+        param = new Parameter(ORIENTATION_PARAM_STR, HORIZONTAL_STR);
         param.getProperties().setLabel("Orientation");
         param.getProperties().setValueSet(new String[]{HORIZONTAL_STR, VERTICAL_STR});
         param.getProperties().setValueSetBound(true);
         paramGroup.addParameter(param);
 
+        param = new Parameter(DISTRIBUTION_TYPE_PARAM_STR, DISTRIB_EVEN_STR);
+        param.getProperties().setLabel("Distribution Type");
+        param.getProperties().setValueSet(new String[]{DISTRIB_EVEN_STR, DISTRIB_EXACT_STR, DISTRIB_MANUAL_STR});
+        param.getProperties().setValueSetBound(true);
+        paramGroup.addParameter(param);
+
+
         param = new Parameter("legend.fontSize", 14);
-        param.getProperties().setLabel("Font size");
+        param.getProperties().setLabel("Label Font Size");
         param.getProperties().setMinValue(4);
         param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
 
-        param = new Parameter("legend.numberOfTicks", 8);
-        param.getProperties().setLabel("Number of Ticks");
+        param = new Parameter(NUM_TICKS_PARAM_STR, 8);
+        param.getProperties().setLabel("Number of Tick Marks");
         param.getProperties().setMinValue(0);
         param.getProperties().setMaxValue(40);
         paramGroup.addParameter(param);
@@ -146,11 +171,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         paramGroup.addParameter(param);
 
         param = new Parameter("legend.foregroundColor", Color.black);
-        param.getProperties().setLabel("Foreground colour");
+        param.getProperties().setLabel("Text Color");
         paramGroup.addParameter(param);
 
         param = new Parameter("legend.backgroundColor", Color.white);
-        param.getProperties().setLabel("Background colour");
+        param.getProperties().setLabel("Background Color");
         paramGroup.addParameter(param);
 
         param = new Parameter("legend.backgroundTransparency", 0.0f);
@@ -159,9 +184,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setMaxValue(1.0f);
         paramGroup.addParameter(param);
 
-        param = new Parameter("legend.antialiasing", Boolean.TRUE);
-        param.getProperties().setLabel("Perform anti-aliasing");
-        paramGroup.addParameter(param);
+
 
         return paramGroup;
     }
@@ -170,12 +193,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         String name = raster.getName();
         String unit = raster.getUnit() != null ? raster.getUnit() : "-";
         unit = unit.replace('*', ' ');
-        // DANNY
-        //   String headerText = name + "   [" + unit + "]";
+
         String headerText = name;
         legendParamGroup.getParameter("legend.headerText").setValue(headerText, null);
 
-        String headerUnitsText = "     (" + unit + ")";
+        String headerUnitsText = "(" + unit + ")";
         legendParamGroup.getParameter("legend.header.units.text").setValue(headerUnitsText, null);
     }
 
@@ -222,14 +244,18 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter("legend.fullCustomAddThesePoints").getValue();
         imageLegend.setFullCustomAddThesePoints((String) value);
 
-        value = legendParamGroup.getParameter("legend.orientation").getValue();
+        value = legendParamGroup.getParameter(ORIENTATION_PARAM_STR).getValue();
         imageLegend.setOrientation(HORIZONTAL_STR.equals(value) ? ImageLegend.HORIZONTAL : ImageLegend.VERTICAL);
+
+        value = legendParamGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR).getValue();
+        imageLegend.setDistributionType((String) value);
+
 
         value = legendParamGroup.getParameter("legend.fontSize").getValue();
         imageLegend.setFont(imageLegend.getFont().deriveFont(((Number) value).floatValue()));
 
 
-        value = legendParamGroup.getParameter("legend.numberOfTicks").getValue();
+        value = legendParamGroup.getParameter(NUM_TICKS_PARAM_STR).getValue();
         imageLegend.setNumberOfTicks((Integer) value);
 
 
@@ -269,6 +295,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter headerTextParam;
         private Parameter headerUnitsParam;
         private Parameter orientationParam;
+        private Parameter distributionTypeParam;
         private Parameter fontSizeParam;
         private Parameter numberOfTicksParam;
         private Parameter backgroundColorParam;
@@ -278,9 +305,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter decimalPlacesParam;
         private Parameter fullCustomAddThesePointsParam;
 
+        private JPanel evenDistribJPanel;
+        private JPanel fullCustomJPanel;
+
+
         public ImageLegendDialog(VisatApp visatApp, ParamGroup paramGroup, ImageLegend imageLegend,
                                  boolean transparencyEnabled) {
-            super(visatApp.getMainFrame(), visatApp.getAppName() + " - Colour Legend Properties", ID_OK_CANCEL, _HELP_ID);
+            super(visatApp.getMainFrame(), visatApp.getAppName() + " - Color Bar Parameters", ID_OK_CANCEL, _HELP_ID);
             this.visatApp = visatApp;
             imageInfo = imageLegend.getImageInfo();
             raster = imageLegend.getRaster();
@@ -300,12 +331,28 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             boolean headerTextEnabled = (Boolean) usingHeaderParam.getValue();
             headerTextParam.setUIEnabled(headerTextEnabled);
 
-            numberOfTicksParam.setUIEnabled((Boolean) evenDistributionParam.getValue());
-            decimalPlacesParam.setUIEnabled((Boolean) evenDistributionParam.getValue());
+//            numberOfTicksParam.setUIEnabled((Boolean) evenDistributionParam.getValue());
+//            decimalPlacesParam.setUIEnabled((Boolean) evenDistributionParam.getValue());
 
 
             backgroundTransparencyParam.setUIEnabled(transparencyEnabled);
+
+            if (DISTRIB_EVEN_STR.equals(distributionTypeParam.getValue())) {
+                numberOfTicksParam.setUIEnabled(true);
+                decimalPlacesParam.setUIEnabled(true);
+                fullCustomAddThesePointsParam.setUIEnabled(false);
+            } else if (DISTRIB_EXACT_STR.equals(distributionTypeParam.getValue())) {
+                numberOfTicksParam.setUIEnabled(false);
+                decimalPlacesParam.setUIEnabled(true);
+                fullCustomAddThesePointsParam.setUIEnabled(false);
+            } else if (DISTRIB_MANUAL_STR.equals(distributionTypeParam.getValue())) {
+                numberOfTicksParam.setUIEnabled(false);
+                decimalPlacesParam.setUIEnabled(false);
+                fullCustomAddThesePointsParam.setUIEnabled(true);
+            }
         }
+
+
 
         public ParamGroup getParamGroup() {
             return paramGroup;
@@ -341,21 +388,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         private void initUI() {
 
-            JLabel lineSpacer = new JLabel("SPACER");
-            Dimension lineSpaceDimension = lineSpacer.getPreferredSize();
-            lineSpacer.setPreferredSize(lineSpaceDimension);
-            lineSpacer.setMinimumSize(lineSpaceDimension);
-            lineSpacer.setText("");
-
-
-            JLabel lineSpacer2 = new JLabel(" ");
-            lineSpacer2.setMinimumSize(lineSpaceDimension);
-            lineSpacer2.setPreferredSize(lineSpaceDimension);
-            JLabel lineSpacer3 = new JLabel(" ");
-            lineSpacer3.setMinimumSize(lineSpaceDimension);
-            lineSpacer3.setPreferredSize(lineSpaceDimension);
-
-
             final JButton previewButton = new JButton("Preview...");
             previewButton.setMnemonic('v');
             previewButton.addActionListener(new ActionListener() {
@@ -369,11 +401,54 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
             gbc.anchor = GridBagConstraints.WEST;
             gbc.fill = GridBagConstraints.NONE;
-            gbc.insets.top = 0;
+
+            gbc.gridwidth = 1;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.insets.top = 10;
+            p.add(orientationParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            p.add(orientationParam.getEditor().getEditorComponent(), gbc);
 
 
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            evenDistribJPanel = getAutoDistributePanel("Tick Marks & Labels");
+            p.add(evenDistribJPanel, gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            p.add(getTitlePanel("Title"), gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            p.add(getFormatPanel("Formatting"), gbc);
+
+
+            gbc.gridwidth = 1;
+            gbc.gridy++;
+            gbc.insets.top = 10;
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.NORTHEAST;
+            p.add(previewButton, gbc);
+
+            p.setBorder(new EmptyBorder(7, 7, 7, 7));
+
+            setContent(p);
+        }
+
+
+        private JPanel getTitlePanel(String title) {
             JPanel jPanelTitle = new JPanel(new GridBagLayout());
-            jPanelTitle.setBorder(BorderFactory.createTitledBorder("Color Bar Title"));
+            jPanelTitle.setBorder(BorderFactory.createTitledBorder(title));
             final GridBagConstraints gbcTitle = new GridBagConstraints();
 
             gbcTitle.fill = GridBagConstraints.HORIZONTAL;
@@ -396,174 +471,112 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbcTitle.gridx = 1;
             jPanelTitle.add(headerUnitsParam.getEditor().getEditorComponent(), gbcTitle);
 
+            return jPanelTitle;
+        }
 
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            p.add(jPanelTitle, gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            p.add(lineSpacer, gbc);
-
-
+        private JPanel getAutoDistributePanel(String title) {
             JPanel jPanelAutoDistrib = new JPanel(new GridBagLayout());
-            jPanelAutoDistrib.setBorder(BorderFactory.createTitledBorder("Auto Distributed Points"));
+            jPanelAutoDistrib.setBorder(BorderFactory.createTitledBorder(title));
             final GridBagConstraints gbcAutoDistrib = new GridBagConstraints();
 
-            gbcAutoDistrib.fill = GridBagConstraints.HORIZONTAL;
+            gbcAutoDistrib.fill = GridBagConstraints.NONE;
             gbcAutoDistrib.anchor = GridBagConstraints.WEST;
 
             gbcAutoDistrib.gridx = 0;
             gbcAutoDistrib.gridy = 0;
-            jPanelAutoDistrib.add(evenDistributionParam.getEditor().getEditorComponent(), gbcAutoDistrib);
+            gbcAutoDistrib.weightx = 1.0;
+            gbcAutoDistrib.gridwidth = 2;
+            jPanelAutoDistrib.add(distributionTypeParam.getEditor().getEditorComponent(), gbcAutoDistrib);
 
+
+            gbcAutoDistrib.fill = GridBagConstraints.HORIZONTAL;
+
+            gbcAutoDistrib.gridwidth = 1;
             gbcAutoDistrib.gridx = 0;
             gbcAutoDistrib.gridy++;
+            gbcAutoDistrib.weightx = 1.0;
             jPanelAutoDistrib.add(numberOfTicksParam.getEditor().getLabelComponent(), gbcAutoDistrib);
             gbcAutoDistrib.gridx = 1;
             jPanelAutoDistrib.add(numberOfTicksParam.getEditor().getEditorComponent(), gbcAutoDistrib);
 
+
             gbcAutoDistrib.gridx = 0;
             gbcAutoDistrib.gridy++;
-            gbcAutoDistrib.insets.top = 3;
+            JLabel label = fullCustomAddThesePointsParam.getEditor().getLabelComponent();
+            label.setToolTipText("Add values comma delimited.  i.e.  5,7,9");
+            jPanelAutoDistrib.add(label, gbcAutoDistrib);
+            gbcAutoDistrib.gridx = 1;
+            jPanelAutoDistrib.add(fullCustomAddThesePointsParam.getEditor().getEditorComponent(), gbcAutoDistrib);
+
+            gbcAutoDistrib.gridx = 0;
+            gbcAutoDistrib.gridy++;
+            gbcAutoDistrib.weightx = 1.0;
             jPanelAutoDistrib.add(decimalPlacesParam.getEditor().getLabelComponent(), gbcAutoDistrib);
             gbcAutoDistrib.gridx = 1;
             jPanelAutoDistrib.add(decimalPlacesParam.getEditor().getEditorComponent(), gbcAutoDistrib);
 
 
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            p.add(jPanelAutoDistrib, gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            p.add(lineSpacer2, gbc);
-
-
-            JPanel jPanelFullCustom = new JPanel(new GridBagLayout());
-            jPanelFullCustom.setBorder(BorderFactory.createTitledBorder("Full Custom Points"));
-            final GridBagConstraints gbcFullCustom = new GridBagConstraints();
-
-            gbcFullCustom.fill = GridBagConstraints.HORIZONTAL;
-            gbcFullCustom.anchor = GridBagConstraints.WEST;
-
-            gbcFullCustom.gridx = 0;
-            gbcFullCustom.gridy = 0;
-            JLabel label = fullCustomAddThesePointsParam.getEditor().getLabelComponent();
-            label.setToolTipText("Add values comma delimited.  i.e.  5,7,9");
-            jPanelFullCustom.add(label, gbcFullCustom);
-            gbcFullCustom.gridx = 1;
-            gbcFullCustom.weightx = 1;
-            jPanelFullCustom.add(fullCustomAddThesePointsParam.getEditor().getEditorComponent(), gbcFullCustom);
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            p.add(jPanelFullCustom, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            p.add(lineSpacer3, gbc);
-
-
-//            gbc.gridx = 0;
-//            gbc.gridy++;
-//            gbc.insets.top = 3;
-//            p.add(numberOfTicksParam.getEditor().getLabelComponent(), gbc);
-//            gbc.gridx = 1;
-//            p.add(numberOfTicksParam.getEditor().getEditorComponent(), gbc);
-
-
-//            gbc.gridx = 0;
-//            gbc.gridy++;
-//            gbc.insets.top = 3;
-//            p.add(decimalPlacesParam.getEditor().getLabelComponent(), gbc);
-//            gbc.gridx = 1;
-//            p.add(decimalPlacesParam.getEditor().getEditorComponent(), gbc);
-
-//            gbc.gridwidth = 1;
-//            gbc.gridy++;
-//            gbc.gridx = 0;
-//            //    gbc.gridwidth = 1;
-//            Label label2 = new Label("Full Custom Points Baby");
-//            p.add(label2, gbc);
-//
-//            gbc.gridx = 0;
-//            gbc.gridy++;
-//            //    gbc.gridwidth = 1;
-//            p.add(fullCustomAddThesePointsParam.getEditor().getLabelComponent(), gbc);
-//            gbc.gridx = 1;
-//            p.add(fullCustomAddThesePointsParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.insets.top = 10;
-            p.add(orientationParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            p.add(orientationParam.getEditor().getEditorComponent(), gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.insets.top = 3;
-            p.add(fontSizeParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            p.add(fontSizeParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.insets.top = 10;
-            p.add(foregroundColorParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            p.add(foregroundColorParam.getEditor().getEditorComponent(), gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.insets.top = 3;
-            p.add(backgroundColorParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            p.add(backgroundColorParam.getEditor().getEditorComponent(), gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.insets.top = 3;
-            p.add(backgroundTransparencyParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            p.add(backgroundTransparencyParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.gridy++;
-
-            gbc.insets.top = 10;
-            gbc.gridx = 0;
-            gbc.anchor = GridBagConstraints.NORTHWEST;
-            p.add(antialiasingParam.getEditor().getEditorComponent(), gbc);
-
-            gbc.insets.top = 10;
-            gbc.gridx = 1;
-            gbc.anchor = GridBagConstraints.NORTHEAST;
-            p.add(previewButton, gbc);
-
-            p.setBorder(new EmptyBorder(7, 7, 7, 7));
-
-            setContent(p);
+            return jPanelAutoDistrib;
         }
 
+        private JPanel getFormatPanel(String title) {
+            JPanel jPanel = new JPanel(new GridBagLayout());
+            jPanel.setBorder(BorderFactory.createTitledBorder(title));
+            final GridBagConstraints gbc = new GridBagConstraints();
+
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.anchor = GridBagConstraints.WEST;
+
+
+
+            gbc.gridx = 0;
+            gbc.weightx = 1.0;
+            gbc.gridy = 0;
+            gbc.insets.top = 3;
+            jPanel.add(fontSizeParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(fontSizeParam.getEditor().getEditorComponent(), gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            jPanel.add(foregroundColorParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(foregroundColorParam.getEditor().getEditorComponent(), gbc);
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            jPanel.add(backgroundColorParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(backgroundColorParam.getEditor().getEditorComponent(), gbc);
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.insets.top = 3;
+            jPanel.add(backgroundTransparencyParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(backgroundTransparencyParam.getEditor().getEditorComponent(), gbc);
+
+
+
+
+            gbc.insets.top = 10;
+            gbc.gridx = 0;
+            gbc.gridy++;
+
+            gbc.anchor = GridBagConstraints.NORTHWEST;
+            jPanel.add(antialiasingParam.getEditor().getEditorComponent(), gbc);
+
+            return jPanel;
+        }
 
         private void initParams() {
             usingHeaderParam = paramGroup.getParameter("legend.usingHeader");
             headerTextParam = paramGroup.getParameter("legend.headerText");
-            orientationParam = paramGroup.getParameter("legend.orientation");
+            orientationParam = paramGroup.getParameter(ORIENTATION_PARAM_STR);
+            distributionTypeParam = paramGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR);
             fontSizeParam = paramGroup.getParameter("legend.fontSize");
-            numberOfTicksParam = paramGroup.getParameter("legend.numberOfTicks");
+            numberOfTicksParam = paramGroup.getParameter(NUM_TICKS_PARAM_STR);
             foregroundColorParam = paramGroup.getParameter("legend.foregroundColor");
             backgroundColorParam = paramGroup.getParameter("legend.backgroundColor");
             backgroundTransparencyParam = paramGroup.getParameter("legend.backgroundTransparency");
