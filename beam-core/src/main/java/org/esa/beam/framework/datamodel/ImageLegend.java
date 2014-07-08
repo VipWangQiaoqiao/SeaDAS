@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2010 Brockmann Consult GmbH (info@brockmann-consult.de)
  *
@@ -18,13 +17,12 @@ package org.esa.beam.framework.datamodel;
 
 import java.awt.*;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.util.StringUtils;
-import org.esa.beam.util.math.MathUtils;
 
 // @todo 2 nf/** - if orientation is vertical, sample values should increase from bottom to top
 // @todo 1 nf/** - make PALETTE_HEIGHT a fixed value, fill space into gaps instead
@@ -45,25 +43,36 @@ public class ImageLegend {
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
 
+
+    public static final String DISTRIB_EVEN_STR = "Use Even Distribution";
+    public static final String DISTRIB_EXACT_STR = "Use Palette Distribution";
+    public static final String DISTRIB_MANUAL_STR = "Use Manually Entered Points";
+
+
     private static final int GAP = 20;   // TITLE_TO_PALETTE_GAP
     //DANNY
     private static final int _LABEL_GAP = 10;      // LABEL_TO_PALETTE GAP
     private static final int _LABEL_TO_LABEL_GAP = 40;
 
+
     // private static final int _LABEL_GAP = 12;
     private static final int _SLIDER_WIDTH = 10;
     private static final int _SLIDER_HEIGHT = 14;
 
-    private static final int _MIN_PALETTE_WIDTH = 256;
-    private static final int _MIN_PALETTE_HEIGHT = 24;
-    private static final int _MIN_LEGEND_WIDTH = 320;
+    private static final int MIN_HORIZONTAL_COLORBAR_WIDTH = 550;
+    private static final int MIN_HORIZONTAL_COLORBAR_HEIGHT = 24;
+
+    private static final int MIN_VERTICAL_COLORBAR_WIDTH = 24;
+    private static final int MIN_VERTICAL_COLORBAR_HEIGHT = 550;
+
+    private static final int _MIN_LEGEND_WIDTH = 600;
     private static final int _MIN_LEGEND_HEIGHT = 48;
 
     // DANNY
-    private static final Font _DEFAULT_FONT = new Font("SansSerif", Font.TRUETYPE_FONT, 12);
+    private static final Font DEFAULT_LABEL_FONT = new Font("SansSerif", Font.TRUETYPE_FONT, 12);
     private static final Font _DEFAULT_TITLE_FONT = new Font("SansSerif", Font.BOLD, 18);
-    private static final Font _DEFAULT_TITLE_UNITS_FONT = new Font("SansSerif", Font.ITALIC, 18);
-    //   private static final Font _DEFAULT_FONT = new Font("Arial", Font.BOLD, 14);
+    private static final Font _DEFAULT_TITLE_UNITS_FONT = new Font("SansSerif", Font.ITALIC, 14);
+    //   private static final Font DEFAULT_LABEL_FONT = new Font("Arial", Font.BOLD, 14);
 
     // Independent attributes (Properties)
     private final ImageInfo imageInfo;
@@ -72,14 +81,14 @@ public class ImageLegend {
     private String headerText;
     private String headerUnitsText;
     private int orientation;
+    private String distributionType;
     private Font font;
     private int numberOfTicks;
     private Color foregroundColor;
     private Color backgroundColor;
     private boolean backgroundTransparencyEnabled;
     private float backgroundTransparency;
-    private boolean antialiasing;
-    private boolean evenDistribution;
+    private boolean antiAliasing;
     private int decimalPlaces;
     private String fullCustomAddThesePoints;
 
@@ -92,6 +101,7 @@ public class ImageLegend {
     private int palettePos1;
     private int palettePos2;
     private ArrayList<ColorBarInfo> colorBarInfos = new ArrayList<ColorBarInfo>();
+    private int tickWidth;
 
     public ImageLegend(ImageInfo imageInfo, RasterDataNode raster) {
         this.imageInfo = imageInfo;
@@ -100,14 +110,14 @@ public class ImageLegend {
         headerText = "";
 
         orientation = HORIZONTAL;
-        font = _DEFAULT_FONT;
-        antialiasing = false;
+        font = DEFAULT_LABEL_FONT;
         backgroundColor = Color.white;
         foregroundColor = Color.black;
         backgroundTransparency = 0.0f;
-        evenDistribution = true;
+        antiAliasing = true;
         decimalPlaces = 1;
         setFullCustomAddThesePoints("");
+        tickWidth = 1;
 
     }
 
@@ -152,6 +162,14 @@ public class ImageLegend {
         this.orientation = orientation;
     }
 
+    public String getDistributionType() {
+        return distributionType;
+    }
+
+    public void setDistributionType(String distributionType) {
+        this.distributionType = distributionType;
+    }
+
     public int getDecimalPlaces() {
         return decimalPlaces;
     }
@@ -169,13 +187,6 @@ public class ImageLegend {
         this.font = font;
     }
 
-    public boolean isEvenDistribution() {
-        return evenDistribution;
-    }
-
-    public void setEvenDistribution(boolean evenDistribution) {
-        this.evenDistribution = evenDistribution;
-    }
 
     public int getNumberOfTicks() {
         return numberOfTicks;
@@ -202,11 +213,11 @@ public class ImageLegend {
     }
 
     public boolean isAntialiasing() {
-        return antialiasing;
+        return antiAliasing;
     }
 
     public void setAntialiasing(boolean antialiasing) {
-        this.antialiasing = antialiasing;
+        this.antiAliasing = antialiasing;
     }
 
     public boolean isBackgroundTransparencyEnabled() {
@@ -240,7 +251,7 @@ public class ImageLegend {
         final Graphics2D g2d = bi.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-        if (antialiasing) {
+        if (isAntialiasing()) {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         } else {
@@ -259,7 +270,7 @@ public class ImageLegend {
         double value, weight;
         colorBarInfos.clear();
 
-        if (isEvenDistribution()) {
+        if (DISTRIB_EVEN_STR.equals(getDistributionType())) {
             if (getNumberOfTicks() >= 2) {
                 double normalizedDelta = (1.0 / (getNumberOfTicks() - 1.0));
 
@@ -278,7 +289,7 @@ public class ImageLegend {
                     }
                 }
             }
-        } else {
+        } else if (DISTRIB_EXACT_STR.equals(getDistributionType())) {
             final int numPointsInCpdFile = getNumGradationCurvePoints();
             int stepSize = 1;
             //    int stepSize = numPointsInCpdFile / getNumberOfTicks();
@@ -286,131 +297,151 @@ public class ImageLegend {
             for (int i = 0; i < numPointsInCpdFile; i = i + stepSize) {
 
                 ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
-                value = slider.getSample();
-
-                if (imageInfo.isLogScaled()) {
-                    weight = getLinearWeightFromLogValue(slider.getSample());
-                } else {
-                    weight = getLinearWeightFromLinearValue(slider.getSample());
-                }
-                if (isValidWeight(weight)) {
-                    ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
-                    colorBarInfos.add(colorBarInfo);
-                }
-            }
-        }
-
-
-        String addThese = getFullCustomAddThesePoints();
-
-        if (addThese != null) {
-        if (addThese.length() > 0) {
-            String[] formattedValues = addThese.split(",");
-
-            for (String formattedValue : formattedValues) {
-                value = Double.valueOf(formattedValue);
+                value = getRaster().scaleInverse(slider.getSample());
 
                 if (imageInfo.isLogScaled()) {
                     weight = getLinearWeightFromLogValue(value);
                 } else {
                     weight = getLinearWeightFromLinearValue(value);
                 }
-
                 if (isValidWeight(weight)) {
-                    ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, formattedValue);
+                    ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
                     colorBarInfos.add(colorBarInfo);
                 }
             }
-        }
+        } else if (DISTRIB_MANUAL_STR.equals(getDistributionType())) {
+            String addThese = getFullCustomAddThesePoints();
+
+            if (addThese != null && addThese.length() > 0) {
+                String[] formattedValues = addThese.split(",");
+
+                for (String formattedValue : formattedValues) {
+                    value = Double.valueOf(formattedValue);
+
+                    if (imageInfo.isLogScaled()) {
+                        weight = getLinearWeightFromLogValue(value);
+                    } else {
+                        weight = getLinearWeightFromLinearValue(value);
+                    }
+
+                    if (isValidWeight(weight)) {
+                        ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, formattedValue);
+                        colorBarInfos.add(colorBarInfo);
+                    }
+                }
+            }
         }
     }
 
     private boolean isValidWeight(double weight) {
-        return (weight >= 0 && weight <= 1) ? true : false;
+        return (weight >= -0.00001 && weight <= 1.00001) ? true : false;
     }
+
 
     private void initDrawing() {
-        final FontMetrics fontMetrics = createFontMetrics();
-        final int n = getNumGradationCurvePoints();
-        labels = new String[n];
-        labelWidths = new int[n];
-        int textHeight = fontMetrics.getHeight();
-        final double minValue = imageInfo.getColorPaletteDef().getMinDisplaySample();
-        final double maxValue = imageInfo.getColorPaletteDef().getMaxDisplaySample();
-        double roundFactor = MathUtils.computeRoundFactor(minValue, maxValue, 2);
-        for (int i = 0; i < n; i++) {
-            ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
-            labels[i] = String.valueOf(MathUtils.round(slider.getSample(), roundFactor));
-            labelWidths[i] = fontMetrics.stringWidth(labels[i]);
-        }
 
-        int headerTextVSpace = 0;
-        int headerTextWidth = 0;
-        if (hasHeaderText()) {
-            headerTextVSpace = textHeight + GAP;
-            headerTextWidth = fontMetrics.stringWidth(headerText);
-        }
+        final BufferedImage bufferedImage = createBufferedImage(100, 100);
+        final Graphics2D g2dTmp = bufferedImage.createGraphics();
 
-        int legendWidth = 0;
-        int legendHeight = 0;
-        int maxLabelWidth = 0;
+        g2dTmp.setFont(DEFAULT_LABEL_FONT);
 
-
-        //DANNY
-        int MAXPOINTS = 8;
-        int stepSize = n / MAXPOINTS;
-
-        for (int i = 0; i < n; i = i + stepSize) {
-            legendWidth += _LABEL_TO_LABEL_GAP + labelWidths[i];
-            legendHeight += 2 * textHeight;
-            maxLabelWidth = Math.max(labelWidths[i], maxLabelWidth);
-        }
-
-
-//        for (int i = 0; i < n; i++) {
-//            legendWidth += _LABEL_GAP + labelWidths[i];
-//            legendHeight += 2 * textHeight;
-//            maxLabelWidth = Math.max(labelWidths[i], maxLabelWidth);
-//        }
+        Dimension headerRequiredDimension = getHeaderTextRequiredDimension(g2dTmp);
 
         if (orientation == HORIZONTAL) {
-            legendWidth = Math.max(legendWidth, _MIN_PALETTE_HEIGHT);
-            legendWidth = GAP + Math.max(legendWidth, headerTextWidth) + GAP;
-            legendHeight = GAP + headerTextVSpace + _MIN_PALETTE_HEIGHT + _LABEL_GAP + textHeight + GAP;
-            legendWidth = Math.max(_MIN_LEGEND_WIDTH, adjust(legendWidth, 16));
-            legendHeight = Math.max(_MIN_LEGEND_HEIGHT, adjust(legendHeight, 16));
-        } else {
-            legendWidth = _MIN_PALETTE_HEIGHT + _LABEL_GAP + maxLabelWidth;
-            legendWidth = GAP + Math.max(legendWidth, headerTextWidth) + GAP;
-            legendHeight = GAP + headerTextVSpace + Math.max(legendHeight, _MIN_PALETTE_WIDTH) + _LABEL_GAP + textHeight + GAP;
-            legendWidth = Math.max(_MIN_LEGEND_HEIGHT, adjust(legendWidth, 16));
-            legendHeight = Math.max(_MIN_LEGEND_WIDTH, adjust(legendHeight, 16));
-        }
 
-        legendSize = new Dimension(legendWidth, legendHeight);
+            double discreteBooster = 0;
+
+            Dimension labelsRequiredDimension = getHorizontalLabelsRequiredDimension(g2dTmp);
 
 
-        final int headerTextSpace = headerText != null ? textHeight + GAP : 0;
-        final int labelTextSpace = _LABEL_GAP + textHeight;
-        if (orientation == HORIZONTAL) {
-            paletteRect = new Rectangle(GAP,
-                    GAP + headerTextSpace,
-                    legendSize.width - (GAP + GAP),
-                    legendSize.height - (GAP + headerTextSpace + labelTextSpace + GAP));
-            int paletteGap = Math.max(labelWidths[0], labelWidths[n - 1]) / 2;
+            double requiredWidth = Math.max(labelsRequiredDimension.getWidth(),
+                    headerRequiredDimension.getWidth());
+
+            requiredWidth = Math.max(requiredWidth, MIN_HORIZONTAL_COLORBAR_WIDTH);
+            requiredWidth = GAP + requiredWidth + GAP;
+
+            final int n = getNumGradationCurvePoints();
+            // todo isDiscrete goes here
+
+            if (n > 1 && imageInfo.getColorPaletteDef().isDiscrete()) {
+                discreteBooster = labelsRequiredDimension.getWidth() / (n - 1);
+                requiredWidth += discreteBooster;
+            }
+
+            int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight() + GAP);
+            int requiredLabelsHeight = (int) Math.ceil(_LABEL_GAP + labelsRequiredDimension.getHeight());
+
+
+            int requiredHeight = GAP
+                    + requiredHeaderHeight
+                    + MIN_HORIZONTAL_COLORBAR_HEIGHT
+                    + requiredLabelsHeight
+                    + GAP;
+
+
+            legendSize = new Dimension((int) requiredWidth, requiredHeight);
+
+            double firstLabelWidth = getSingleLabelRequiredDimension(g2dTmp, 0).getWidth();
+            int firstLabelOverhangWidth = (int) Math.ceil(firstLabelWidth / 2.0);
+
+            double lastLabelWidth = getSingleLabelRequiredDimension(g2dTmp, colorBarInfos.size() - 1).getWidth();
+            int lastLabelOverhangWidth = (int) Math.ceil(lastLabelWidth / 2.0);
+
+
+            paletteRect = new Rectangle(GAP + firstLabelOverhangWidth,
+                    requiredHeaderHeight,
+                    legendSize.width - GAP - GAP - firstLabelOverhangWidth - lastLabelOverhangWidth,
+                    MIN_HORIZONTAL_COLORBAR_HEIGHT);
+
+            //DANNY
+            int paletteGap = 0;
             palettePos1 = paletteRect.x + paletteGap;
-            palettePos2 = paletteRect.x + paletteRect.width - paletteGap;
+            palettePos2 = paletteRect.x + paletteRect.width - (int) discreteBooster;
+
+            // todo a piece of the old beam code, see what adjust does
+            //   Math.max(_MIN_LEGEND_WIDTH, adjust(legendWidth, 16));
+
         } else {
+
+            Dimension labelsRequiredDimension = getVerticalLabelsRequiredDimension(g2dTmp);
+
+            double requiredWidth = MIN_VERTICAL_COLORBAR_WIDTH + _LABEL_GAP + labelsRequiredDimension.getWidth();
+
+            requiredWidth = Math.max(requiredWidth, headerRequiredDimension.getWidth());
+            requiredWidth = GAP + requiredWidth + GAP;
+
+            int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight() + GAP);
+            int requiredLabelsHeight = (int) Math.ceil(labelsRequiredDimension.getHeight());
+
+
+            int requiredHeight = GAP
+                    + requiredHeaderHeight
+                    + requiredLabelsHeight
+                    + GAP;
+
+
+            legendSize = new Dimension((int) requiredWidth, requiredHeight);
+
+
+            double firstLabelHeight = getSingleLabelRequiredDimension(g2dTmp, 0).getHeight();
+            int labelOverhangHeight = (int) Math.ceil(firstLabelHeight / 2.0);
+
+
             paletteRect = new Rectangle(GAP,
-                    GAP + headerTextSpace,
-                    legendSize.width - (GAP + labelTextSpace + maxLabelWidth + GAP),
-                    legendSize.height - (GAP + headerTextSpace + GAP));
-            int paletteGap = Math.max(textHeight, _SLIDER_WIDTH) / 2;
+                    requiredHeaderHeight + labelOverhangHeight,
+                    MIN_VERTICAL_COLORBAR_WIDTH,
+                    legendSize.height - GAP - GAP - labelOverhangHeight - labelOverhangHeight);
+
+
+            int paletteGap = 0;
             palettePos1 = paletteRect.y + paletteGap;
             palettePos2 = paletteRect.y + paletteRect.height - paletteGap;
+
         }
+
         sliderShape = createSliderShape();
     }
+
 
     private boolean hasHeaderText() {
         return usingHeader && StringUtils.isNotNullAndNotEmpty(headerText);
@@ -432,39 +463,161 @@ public class ImageLegend {
         g2d.fillRect(0, 0, legendSize.width + 1, legendSize.height + 1);
     }
 
+
+    private Dimension getHeaderTextRequiredDimension(Graphics2D g2d) {
+
+        double width = 0;
+        double height = 0;
+
+        int UNITS_GAP_FACTOR = 3;
+
+        if (hasHeaderText()) {
+            Font originalFont = g2d.getFont();
+
+            g2d.setFont(_DEFAULT_TITLE_FONT);
+            Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
+            width += headerTextRectangle.getWidth();
+
+            Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
+            width += (UNITS_GAP_FACTOR * singleLetter.getWidth());
+
+            g2d.setFont(_DEFAULT_TITLE_UNITS_FONT);
+            Rectangle2D unitsTextRectangle = g2d.getFontMetrics().getStringBounds(getHeaderUnitsText(), g2d);
+            width += unitsTextRectangle.getWidth();
+
+            height = singleLetter.getHeight();
+
+            g2d.setFont(originalFont);
+        }
+
+        return new Dimension((int) Math.ceil(width), (int) Math.ceil(height));
+    }
+
+
+    private Dimension getHorizontalLabelsRequiredDimension(Graphics2D g2d) {
+
+        double width = 0;
+        double height = 0;
+
+        if (colorBarInfos.size() > 0) {
+
+            int INTER_LABEL_GAP_FACTOR = 4;
+
+            Font originalFont = g2d.getFont();
+            g2d.setFont(DEFAULT_LABEL_FONT);
+
+            double totalLabelsNoGapsWidth = 0;
+
+            for (ColorBarInfo colorBarInfo : colorBarInfos) {
+                Rectangle2D labelRectangle = g2d.getFontMetrics().getStringBounds(colorBarInfo.getFormattedValue(), g2d);
+                totalLabelsNoGapsWidth += labelRectangle.getWidth();
+            }
+
+            Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
+            double interLabelGap = (INTER_LABEL_GAP_FACTOR * singleLetter.getWidth());
+
+            double totalLabelGapsWidth = (colorBarInfos.size() - 1) * interLabelGap;
+
+            width = totalLabelsNoGapsWidth + totalLabelGapsWidth;
+
+            height = singleLetter.getHeight();
+
+            g2d.setFont(originalFont);
+        }
+
+        return new Dimension((int) Math.ceil(width), (int) Math.ceil(height));
+    }
+
+
+    private Dimension getVerticalLabelsRequiredDimension(Graphics2D g2d) {
+
+        double width = 0;
+        double height = 0;
+
+        if (colorBarInfos.size() > 0) {
+
+            int INTER_LABEL_GAP_FACTOR = 4;
+
+            Font originalFont = g2d.getFont();
+            g2d.setFont(DEFAULT_LABEL_FONT);
+
+            double totalLabelsNoGapHeight = 0;
+
+            for (ColorBarInfo colorBarInfo : colorBarInfos) {
+                Rectangle2D labelRectangle = g2d.getFontMetrics().getStringBounds(colorBarInfo.getFormattedValue(), g2d);
+                totalLabelsNoGapHeight += labelRectangle.getHeight();
+                width = Math.max(width, labelRectangle.getWidth());
+            }
+
+            Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
+            double interLabelGap = (INTER_LABEL_GAP_FACTOR * singleLetter.getHeight());
+
+            double totalLabelGapsHeight = (colorBarInfos.size() - 1) * interLabelGap;
+
+            height = totalLabelsNoGapHeight + totalLabelGapsHeight;
+
+            g2d.setFont(originalFont);
+        }
+
+        return new Dimension((int) Math.ceil(width), (int) Math.ceil(height));
+    }
+
+
+    private Dimension getSingleLabelRequiredDimension(Graphics2D g2d, int colorBarInfoIndex) {
+
+        double width = 0;
+        double height = 0;
+
+        if (colorBarInfos.size() > 0 && colorBarInfos.size() > colorBarInfoIndex) {
+            Font originalFont = g2d.getFont();
+            g2d.setFont(DEFAULT_LABEL_FONT);
+
+            ColorBarInfo colorBarInfo = colorBarInfos.get(colorBarInfoIndex);
+            Rectangle2D labelRectangle = g2d.getFontMetrics().getStringBounds(colorBarInfo.getFormattedValue(), g2d);
+            width = labelRectangle.getWidth();
+            height = labelRectangle.getHeight();
+
+
+            g2d.setFont(originalFont);
+        }
+
+        return new Dimension((int) Math.ceil(width), (int) Math.ceil(height));
+    }
+
+
     private void drawHeaderText(Graphics2D g2d) {
         if (hasHeaderText()) {
+            Font origFont = g2d.getFont();
+
             final FontMetrics fontMetrics = g2d.getFontMetrics();
             g2d.setPaint(foregroundColor);
             int x0 = GAP;
             int y0 = GAP + fontMetrics.getMaxAscent();
 
-            // DANNY
-
-            String headerStart = new String("  " + headerText + "    ");
-            int headerStartWidth = fontMetrics.stringWidth(headerStart);
-
             g2d.setFont(_DEFAULT_TITLE_FONT);
-            g2d.drawString(headerStart, x0, y0);
+            Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
+            g2d.drawString(headerText, x0, y0);
+
+            Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
+            int gap = (int) (2 * singleLetter.getWidth());
 
             g2d.setFont(_DEFAULT_TITLE_UNITS_FONT);
-            g2d.drawString(getHeaderUnitsText(), x0 + headerStartWidth, y0);
-            //      g2d.drawString("  "+headerText+ "   "+ headerUnitsText, x0, y0);
-            //   g2d.drawString("  "+headerText+ " ", x0, y0);
+            g2d.drawString(getHeaderUnitsText(), (int) (x0 + headerTextRectangle.getWidth() + gap), y0);
 
-            //     g2d.drawString(headerUnitsText, x0, y0);
-            g2d.setFont(_DEFAULT_FONT);
+            g2d.setFont(origFont);
         }
     }
 
     private void drawPalette(Graphics2D g2d) {
-   //     final Color[] palette = imageInfo.getColorPaletteDef().createColorPalette(getRaster());
+        //     final Color[] palette = imageInfo.getColorPaletteDef().createColorPalette(getRaster());
 // todo Danny, when merging with SeaDAS 7.1  use this line below (the commented one) not the old one above
-               final Color[] palette = ImageManager.createColorPalette(getRaster().getImageInfo());
+        final Color[] palette = ImageManager.createColorPalette(getRaster().getImageInfo());
 
 
         final int x1 = paletteRect.x;
+
         final int x2 = paletteRect.x + paletteRect.width;
+
         final int y1 = paletteRect.y;
         final int y2 = paletteRect.y + paletteRect.height;
         final int i1;
@@ -506,107 +659,13 @@ public class ImageLegend {
 
     private void drawLabels(Graphics2D g2d) {
 
-        // customPoints(g2d);
-
-        int numpoints = getNumberOfTicks();
-        int tickWidth = 2;
-
-//        if (isEvenDistribution()) {
-        drawLabelsUseEvenDistribution(g2d, numpoints, tickWidth);
-//        } else {
-//            drawLabelsUseExactCpdPoints(g2d, numpoints, tickWidth);
-//        }
-
-
-    }
-
-
-    private void drawLabelsUseExactCpdPoints(Graphics2D g2d, int numPointsDesired, int tickWidth) {
-
-        g2d.setStroke(new BasicStroke(tickWidth));
-
-
-        final FontMetrics fontMetrics = g2d.getFontMetrics();
-        final int numPointsInCpdFile = getNumGradationCurvePoints();
-        g2d.setStroke(new BasicStroke(1));
-        Color c1 = (foregroundColor != null ? foregroundColor : Color.black).brighter();
-        Color c2 = (backgroundColor != null ? backgroundColor : Color.white).darker();
-
-        //DANNY
-
-        if (numPointsDesired == 3) {
-            numPointsDesired = getNumGradationCurvePoints();
-        }
-
-        int stepSize = numPointsInCpdFile / numPointsDesired;
-
-        for (int i = 0; i < numPointsInCpdFile; i = i + stepSize) {
-
-            ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
-            double value = slider.getSample();
-            double normalizedSample = normalizeSample(slider.getSample());
-
-            double weight;
-            if (imageInfo.isLogScaled()) {
-                weight = getLinearWeightFromLogValue(slider.getSample());
-            } else {
-                weight = getLinearWeightFromLinearValue(slider.getSample());
-            }
-
-            //    double sliderPos = normalizedSample * (palettePos2 - palettePos1);
-            double sliderPos = weight * (palettePos2 - palettePos1);
-
-
-            double tx;
-            double ty;
-            if (orientation == HORIZONTAL) {
-                tx = palettePos1 + sliderPos;
-                ty = paletteRect.y + paletteRect.height;
-            } else {
-                tx = paletteRect.x + paletteRect.width;
-                ty = palettePos1 + sliderPos;
-            }
-            g2d.translate(tx, ty);
-
-            // DANNY
-            //   g2d.setPaint(slider.getColor());
-            Color sliderColor = new Color(0, 0, 0);
-            g2d.setPaint(sliderColor);
-
-            g2d.fill(sliderShape);
-
-            //     int gray = (slider.getColor().getRed() + slider.getColor().getGreen() + slider.getColor().getBlue()) / 3;
-            //    g2d.setColor(gray < 128 ? c2 : c1);
-            g2d.setColor(sliderColor);
-            g2d.draw(sliderShape);
-
-
-            float x0;
-            float y0;
-            if (orientation == HORIZONTAL) {
-                x0 = -0.5f * labelWidths[i];
-                y0 = _LABEL_GAP + fontMetrics.getMaxAscent();
-            } else {
-                x0 = _LABEL_GAP;
-                y0 = fontMetrics.getMaxAscent();
-            }
-            g2d.setPaint(foregroundColor);
-            g2d.drawString(labels[i], x0, y0);
-
-            g2d.translate(-tx, -ty);
-        }
-
-    }
-
-    private void drawLabelsUseEvenDistribution(Graphics2D g2d, int numPointsDesired, int tickMarkWidth) {
-
         Color origColor = g2d.getColor();
         Stroke origStroke = g2d.getStroke();
         Color origPaint = (Color) g2d.getPaint();
 
         Color tickMarkColor = new Color(0, 0, 0);
 
-        Stroke tickMarkStroke = new BasicStroke(tickMarkWidth);
+        Stroke tickMarkStroke = new BasicStroke(tickWidth);
         g2d.setStroke(tickMarkStroke);
 
         double translateX, translateY;
@@ -618,6 +677,16 @@ public class ImageLegend {
             if (orientation == HORIZONTAL) {
                 translateX = palettePos1 + tickMarkRelativePosition;
                 translateY = paletteRect.y + paletteRect.height;
+
+                // make sure end tickmarks are placed within palette
+                if (translateX <= palettePos1) {
+                    translateX = palettePos1;
+                }
+
+                if (translateX >= palettePos2) {
+                    translateX = palettePos2;
+                }
+
             } else {
                 translateX = paletteRect.x + paletteRect.width;
                 translateY = palettePos1 + tickMarkRelativePosition;
@@ -652,97 +721,11 @@ public class ImageLegend {
     }
 
 
-    private void drawLabelsUseEvenDistributionOld(Graphics2D g2d, int numPointsDesired, int tickMarkWidth) {
-
-        Color tickMarkColor = new Color(0, 0, 0);
-
-        Color origColor = g2d.getColor();
-        Stroke origStroke = g2d.getStroke();
-
-        Stroke tickMarkStroke = new BasicStroke(tickMarkWidth);
-        g2d.setStroke(tickMarkStroke);
-
-        double tx;
-        double ty;
-        double value;
-
-        double normalizedDelta = (1.0 / (numPointsDesired - 1.0));
-        for (int i = 0; i < numPointsDesired; i++) {
-            double weight = i * normalizedDelta;
-            double tickMarkPos = weight * (palettePos2 - palettePos1);
-            if (orientation == HORIZONTAL) {
-                tx = palettePos1 + tickMarkPos;
-                ty = paletteRect.y + paletteRect.height;
-            } else {
-                tx = paletteRect.x + paletteRect.width;
-                ty = palettePos1 + tickMarkPos;
-            }
-
-            g2d.translate(tx, ty);
-//            g2d.setPaint(sliderColor);
-//            g2d.fill(sliderShape);
-            g2d.setColor(tickMarkColor);
-            g2d.draw(sliderShape);
-
-            if (imageInfo.isLogScaled()) {
-                value = getLogarithmicValue(getLinearValue(weight));
-            } else {
-                value = getLinearValue(weight);
-            }
-
-
-            StringBuilder decimalFormatStringBuilder = new StringBuilder("0");
-            for (int j = 0; j < getDecimalPlaces(); j++) {
-                if (j == 0) {
-                    decimalFormatStringBuilder.append(".");
-                }
-                decimalFormatStringBuilder.append("0");
-
-            }
-            String decimalFormatLabel = new DecimalFormat(decimalFormatStringBuilder.toString()).format(value);
-
-            final FontMetrics fontMetrics = g2d.getFontMetrics();
-            int labelWidth = fontMetrics.stringWidth(decimalFormatLabel);
-
-
-            float x0;
-            float y0;
-            if (orientation == HORIZONTAL) {
-                x0 = -0.5f * labelWidth;
-                y0 = _LABEL_GAP + fontMetrics.getMaxAscent();
-            } else {
-                x0 = _LABEL_GAP;
-                y0 = fontMetrics.getMaxAscent();
-            }
-            g2d.setPaint(foregroundColor);
-
-            g2d.drawString(decimalFormatLabel.toString(), x0, y0);
-
-            g2d.translate(-tx, -ty);
-        }
-
-        g2d.setColor(origColor);
-        g2d.setStroke(origStroke);
-    }
-
-
-    private double getLinearValueFromLogValue(double logValue) {
-        final double min = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMinDisplaySample());
-        final double max = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMaxDisplaySample());
-
-
-        double weight = 0.0;      // todo
-
-        return weight;
-
-    }
-
-
     private double getLinearWeightFromLinearValue(double linearValue) {
         final double min = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMinDisplaySample());
         final double max = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMaxDisplaySample());
 
-        double linearWeight = linearValue / (max - min);
+        double linearWeight = (linearValue - min) / (max - min);
 
         return linearWeight;
     }
@@ -774,13 +757,13 @@ public class ImageLegend {
     }
 
 
-    private double getLogarithmicValue(double linearValue) {
+    private double getLogarithmicValue(double linearWeight) {
         final double min = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMinDisplaySample());
         final double max = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMaxDisplaySample());
 
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
-        double logValue = a * Math.exp(b * linearValue);
+        double logValue = a * Math.exp(b * linearWeight);
 
         return logValue;
     }

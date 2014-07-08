@@ -42,6 +42,7 @@ public class Graticule {
     private final PixelPos[] _tickPointsWest;
     private final PixelPos[] _tickPointsEast;
 
+
     public enum TextLocation {
         NORTH,
         SOUTH,
@@ -58,6 +59,8 @@ public class Graticule {
     public static int TOP_RIGHT_CORNER_INDEX = 1;
     public static int BOTTOM_RIGHT_CORNER_INDEX = 2;
     public static int BOTTOM_LEFT_CORNER_INDEX = 3;
+
+    public static int MAX_LINES_AUTO_MODE = 13;
 
 
     private Graticule(GeneralPath[] paths,
@@ -237,6 +240,7 @@ public class Graticule {
                                    double latMajorStep,
                                    double lonMajorStep) {
 
+
         if (desiredNumGridLines <= 1) {
             desiredNumGridLines = 2;
         }
@@ -245,11 +249,6 @@ public class Graticule {
         final GeoCoding geoCoding = raster.getGeoCoding();
         if (geoCoding == null || raster.getSceneRasterWidth() < 16 || raster.getSceneRasterHeight() < 16) {
             return null;
-        }
-
-        boolean autoMatchLatLon = false;
-        if (latMajorStep == 0 && lonMajorStep == 0) {
-            autoMatchLatLon = true;
         }
 
 
@@ -267,6 +266,8 @@ public class Graticule {
         if (deltaLon > 180) {
             deltaLon += 360;
         }
+
+        double numLatLines = 0;
         if (latMajorStep == 0) {
             int height = raster.getRasterHeight();
             double ratio = height / (desiredNumGridLines - 1);
@@ -275,12 +276,14 @@ public class Graticule {
 
             latMajorStep = getSensibleDegreeIncrement(tmpLatMajorStep);
 
+            numLatLines = height * deltaLat / latMajorStep + 1;
             // this is what BEAM had
             // it has some cool behaviour but is a bit rigid when adjusted desired gridline count
             //     latMajorStep = (float) compose(normalize(gridCellSize * 0.5 * (deltaLon + deltaLat), null));
         }
 
 
+        double numLonLines = 0;
         if (lonMajorStep == 0) {
             int width = raster.getRasterWidth();
             double ratio = width / (desiredNumGridLines - 1);
@@ -288,6 +291,16 @@ public class Graticule {
             double tmpLonMajorStep = ratio * deltaLon;
 
             lonMajorStep = getSensibleDegreeIncrement(tmpLonMajorStep);
+
+            numLatLines = width * deltaLat / lonMajorStep + 1;
+        }
+
+
+        boolean autoMatchLatLon = false;
+        if (latMajorStep == 0 && lonMajorStep == 0) {
+            if (numLatLines < MAX_LINES_AUTO_MODE && numLonLines < MAX_LINES_AUTO_MODE) {
+                autoMatchLatLon = true;
+            }
         }
 
 
@@ -310,7 +323,7 @@ public class Graticule {
 
         int desiredMinorSteps = 200;
 
-      desiredMinorSteps = (int) Math.min((raster.getRasterHeight()/4.0), (raster.getRasterWidth()/4.0));
+        desiredMinorSteps = (int) Math.min((raster.getRasterHeight() / 4.0), (raster.getRasterWidth() / 4.0));
 
         if (desiredMinorSteps > 200) {
             desiredMinorSteps = 200;
