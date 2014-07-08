@@ -55,7 +55,7 @@ public class ShowWorldMapOverlayAction extends AbstractShowOverlayAction {
                 }
                 worldMapLayer.setVisible(true);
             } else {
-                worldMapLayer.getParent().getChildren().remove(worldMapLayer);
+                view.updateCurrentLayer(worldMapLayer, false);
             }
         }
     }
