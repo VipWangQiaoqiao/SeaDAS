@@ -75,7 +75,7 @@ public class GraticuleLayerType extends LayerType {
 
 
 
-    public static final int DEFAULT_NUM_GRID_LINES = 5;
+    public static final int DEFAULT_NUM_GRID_LINES = 4;
     public static final double DEFAULT_RES_LAT = 0.0;
     public static final double DEFAULT_RES_LON = 0.0;
     public static final Color DEFAULT_LINE_COLOR = new Color(0,0,80);

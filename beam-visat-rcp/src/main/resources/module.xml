@@ -272,7 +272,7 @@
             <title>Layer Editor</title>
             <!--<mnemonic>E</mnemonic>-->
             <!--<accelerator>ctrl alt E</accelerator>-->
-            <description>Edit layer properties.</description>
+            <description>Edit layer properties (Grid Lines, No-Data, ...)</description>
             <smallIcon>/org/esa/beam/resources/images/icons/LayerEditor16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/LayerEditor24.png</largeIcon>
             <helpId>showLayerEditorWnd</helpId>
@@ -860,21 +860,8 @@
             <shortDescr>Export the current view as an image.</shortDescr>
             <description>Export the current view as an image.</description>
             <context>image</context>
-            <popuptext>Export View as Image...</popuptext>
+            <popuptext>Export Image...</popuptext>
             <helpId>exportImageFile</helpId>
-        </action>
-
-        <action>
-            <parent>exportOther</parent>
-            <id>exportKmzFile</id>
-            <class>org.esa.beam.visat.actions.ExportKmzFileAction</class>
-            <text>View (Google Earth KMZ)</text>
-            <!--<mnemonic>K</mnemonic>-->
-            <shortDescr>Export the current view as Google Earth KMZ file.</shortDescr>
-            <description>Export the current view as Google Earth KMZ file.</description>
-            <context>image</context>
-            <popuptext>Export View as Google Earth KMZ...</popuptext>
-            <helpId>exportKmzFile</helpId>
         </action>
 
         <action>
@@ -890,6 +877,8 @@
             <helpId>exportLegendImageFile</helpId>
         </action>
 
+
+
         <action>
             <parent>exportOther</parent>
             <id>exportColorPalette</id>
@@ -899,9 +888,24 @@
             <shortDescr>Export the color palette to plain text.</shortDescr>
             <description>Export the color palette of the current view to a plain text file.</description>
             <context>image</context>
-            <popuptext>Export Color Palette as File...</popuptext>
+            <popuptext>Export Color Palette Definition File...</popuptext>
             <helpId>exportColorPalette</helpId>
         </action>
+
+
+        <action>
+            <parent>exportOther</parent>
+            <id>exportKmzFile</id>
+            <class>org.esa.beam.visat.actions.ExportKmzFileAction</class>
+            <text>View (Google Earth KMZ)</text>
+            <!--<mnemonic>K</mnemonic>-->
+            <shortDescr>Export the current view as Google Earth KMZ file.</shortDescr>
+            <description>Export the current view as Google Earth KMZ file.</description>
+            <context>image</context>
+            <popuptext>Export Image as Google Earth KMZ...</popuptext>
+            <helpId>exportKmzFile</helpId>
+        </action>
+
 
         <action>
             <parent>exportOther</parent>
