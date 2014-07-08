@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.util.StringUtils;
+import org.esa.beam.util.math.MathUtils;
 
 // @todo 2 nf/** - if orientation is vertical, sample values should increase from bottom to top
 // @todo 1 nf/** - make PALETTE_HEIGHT a fixed value, fill space into gaps instead
@@ -298,7 +299,7 @@ public class ImageLegend {
             for (int i = 0; i < numPointsInCpdFile; i = i + stepSize) {
 
                 ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
-                value = getRaster().scaleInverse(slider.getSample());
+                value = slider.getSample();
 
                 if (imageInfo.isLogScaled()) {
                     weight = getLinearWeightFromLogValue(value);
@@ -318,7 +319,6 @@ public class ImageLegend {
 
                 for (String formattedValue : formattedValues) {
                     value = Double.valueOf(formattedValue);
-                    value = getRaster().scaleInverse(value);
 
                     if (imageInfo.isLogScaled()) {
                         weight = getLinearWeightFromLogValue(value);
@@ -734,8 +734,24 @@ public class ImageLegend {
 
 
     private double getLinearWeightFromLinearValue(double linearValue) {
-        final double min = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMinDisplaySample());
-        final double max = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMaxDisplaySample());
+
+//        final FontMetrics fontMetrics = createFontMetrics();
+//        final int n = getNumGradationCurvePoints();
+//        labels = new String[n];
+//        labelWidths = new int[n];
+//        int textHeight = fontMetrics.getHeight();
+//        final double minValue = imageInfo.getColorPaletteDef().getMinDisplaySample();
+//        final double maxValue = imageInfo.getColorPaletteDef().getMaxDisplaySample();
+//        double roundFactor = MathUtils.computeRoundFactor(minValue, maxValue, 2);
+//        for (int i = 0; i < n; i++) {
+//            ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
+//            labels[i] = String.valueOf(MathUtils.round(slider.getSample(), roundFactor));
+//            labelWidths[i] = fontMetrics.stringWidth(labels[i]);
+//        }
+
+
+        final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
+        final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
 
         double linearWeight = (linearValue - min) / (max - min);
 
@@ -744,8 +760,8 @@ public class ImageLegend {
 
 
     private double getLinearValue(double linearWeight) {
-        final double min = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMinDisplaySample());
-        final double max = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMaxDisplaySample());
+        final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
+        final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
 
         double deltaNormalized = (max - min);
 
@@ -756,8 +772,8 @@ public class ImageLegend {
 
 
     private double getLinearWeightFromLogValue(double logValue) {
-        final double min = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMinDisplaySample());
-        final double max = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMaxDisplaySample());
+        final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
+        final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
 
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
@@ -770,8 +786,8 @@ public class ImageLegend {
 
 
     private double getLogarithmicValue(double linearWeight) {
-        final double min = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMinDisplaySample());
-        final double max = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMaxDisplaySample());
+        final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
+        final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
 
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
