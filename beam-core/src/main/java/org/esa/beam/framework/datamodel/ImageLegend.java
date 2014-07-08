@@ -49,13 +49,14 @@ public class ImageLegend {
     public static final String DISTRIB_MANUAL_STR = "Use Manually Entered Points";
 
 
-    private static final int GAP = 20;   // TITLE_TO_PALETTE_GAP
+    private static final int BORDER_GAP = 20;   // TITLE_TO_PALETTE_GAP
     //DANNY
-    private static final int _LABEL_GAP = 10;      // LABEL_TO_PALETTE GAP
+    private static final int LABEL_GAP = 10;      // LABEL_TO_COLORBAR BORDER_GAP
+    private static final int HEADER_GAP = 10;      // HEADER_TO_COLORBAR BORDER_GAP
     private static final int _LABEL_TO_LABEL_GAP = 40;
 
 
-    // private static final int _LABEL_GAP = 12;
+    // private static final int LABEL_GAP = 12;
     private static final int _SLIDER_WIDTH = 10;
     private static final int _SLIDER_HEIGHT = 14;
 
@@ -179,11 +180,11 @@ public class ImageLegend {
     }
 
 
-    public Font getFont() {
+    public Font getLabelFont() {
         return font;
     }
 
-    public void setFont(Font font) {
+    public void setLabelFont(Font font) {
         this.font = font;
     }
 
@@ -317,6 +318,7 @@ public class ImageLegend {
 
                 for (String formattedValue : formattedValues) {
                     value = Double.valueOf(formattedValue);
+                    value = getRaster().scaleInverse(value);
 
                     if (imageInfo.isLogScaled()) {
                         weight = getLinearWeightFromLogValue(value);
@@ -333,8 +335,13 @@ public class ImageLegend {
         }
     }
 
+
     private boolean isValidWeight(double weight) {
-        return (weight >= -0.00001 && weight <= 1.00001) ? true : false;
+        // weight could be slightly above  1 or below 0 due to rounding issue so use a small buffer
+        // to make sure the end points are accepted
+        double buffer = .01;
+
+        return (weight >= (0 - buffer) && weight <= (1 + buffer)) ? true : false;
     }
 
 
@@ -343,7 +350,7 @@ public class ImageLegend {
         final BufferedImage bufferedImage = createBufferedImage(100, 100);
         final Graphics2D g2dTmp = bufferedImage.createGraphics();
 
-        g2dTmp.setFont(DEFAULT_LABEL_FONT);
+        g2dTmp.setFont(getLabelFont());
 
         Dimension headerRequiredDimension = getHeaderTextRequiredDimension(g2dTmp);
 
@@ -358,7 +365,7 @@ public class ImageLegend {
                     headerRequiredDimension.getWidth());
 
             requiredWidth = Math.max(requiredWidth, MIN_HORIZONTAL_COLORBAR_WIDTH);
-            requiredWidth = GAP + requiredWidth + GAP;
+            requiredWidth = BORDER_GAP + requiredWidth + BORDER_GAP;
 
             final int n = getNumGradationCurvePoints();
             // todo isDiscrete goes here
@@ -368,15 +375,17 @@ public class ImageLegend {
                 requiredWidth += discreteBooster;
             }
 
-            int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight() + GAP);
-            int requiredLabelsHeight = (int) Math.ceil(_LABEL_GAP + labelsRequiredDimension.getHeight());
+            int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight());
+            int requiredLabelsHeight = (int) Math.ceil(labelsRequiredDimension.getHeight());
 
 
-            int requiredHeight = GAP
+            int requiredHeight = BORDER_GAP
                     + requiredHeaderHeight
+                    + HEADER_GAP
                     + MIN_HORIZONTAL_COLORBAR_HEIGHT
+                    + LABEL_GAP
                     + requiredLabelsHeight
-                    + GAP;
+                    + BORDER_GAP;
 
 
             legendSize = new Dimension((int) requiredWidth, requiredHeight);
@@ -388,9 +397,9 @@ public class ImageLegend {
             int lastLabelOverhangWidth = (int) Math.ceil(lastLabelWidth / 2.0);
 
 
-            paletteRect = new Rectangle(GAP + firstLabelOverhangWidth,
-                    requiredHeaderHeight,
-                    legendSize.width - GAP - GAP - firstLabelOverhangWidth - lastLabelOverhangWidth,
+            paletteRect = new Rectangle(BORDER_GAP + firstLabelOverhangWidth,
+                    BORDER_GAP + requiredHeaderHeight + HEADER_GAP,
+                    legendSize.width - BORDER_GAP - BORDER_GAP - firstLabelOverhangWidth - lastLabelOverhangWidth,
                     MIN_HORIZONTAL_COLORBAR_HEIGHT);
 
             //DANNY
@@ -405,19 +414,20 @@ public class ImageLegend {
 
             Dimension labelsRequiredDimension = getVerticalLabelsRequiredDimension(g2dTmp);
 
-            double requiredWidth = MIN_VERTICAL_COLORBAR_WIDTH + _LABEL_GAP + labelsRequiredDimension.getWidth();
+            double requiredWidth = MIN_VERTICAL_COLORBAR_WIDTH + LABEL_GAP + labelsRequiredDimension.getWidth();
 
             requiredWidth = Math.max(requiredWidth, headerRequiredDimension.getWidth());
-            requiredWidth = GAP + requiredWidth + GAP;
+            requiredWidth = BORDER_GAP + requiredWidth + BORDER_GAP;
 
-            int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight() + GAP);
+            int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight());
             int requiredLabelsHeight = (int) Math.ceil(labelsRequiredDimension.getHeight());
 
 
-            int requiredHeight = GAP
+            int requiredHeight = BORDER_GAP
                     + requiredHeaderHeight
+                    + HEADER_GAP
                     + requiredLabelsHeight
-                    + GAP;
+                    + BORDER_GAP;
 
 
             legendSize = new Dimension((int) requiredWidth, requiredHeight);
@@ -427,10 +437,10 @@ public class ImageLegend {
             int labelOverhangHeight = (int) Math.ceil(firstLabelHeight / 2.0);
 
 
-            paletteRect = new Rectangle(GAP,
-                    requiredHeaderHeight + labelOverhangHeight,
+            paletteRect = new Rectangle(BORDER_GAP,
+                    requiredHeaderHeight + HEADER_GAP + labelOverhangHeight,
                     MIN_VERTICAL_COLORBAR_WIDTH,
-                    legendSize.height - GAP - GAP - labelOverhangHeight - labelOverhangHeight);
+                    legendSize.height - BORDER_GAP - BORDER_GAP - labelOverhangHeight - labelOverhangHeight);
 
 
             int paletteGap = 0;
@@ -469,9 +479,11 @@ public class ImageLegend {
         double width = 0;
         double height = 0;
 
+
         int UNITS_GAP_FACTOR = 3;
 
         if (hasHeaderText()) {
+
             Font originalFont = g2d.getFont();
 
             g2d.setFont(_DEFAULT_TITLE_FONT);
@@ -504,7 +516,7 @@ public class ImageLegend {
             int INTER_LABEL_GAP_FACTOR = 4;
 
             Font originalFont = g2d.getFont();
-            g2d.setFont(DEFAULT_LABEL_FONT);
+            g2d.setFont(getLabelFont());
 
             double totalLabelsNoGapsWidth = 0;
 
@@ -539,7 +551,7 @@ public class ImageLegend {
             int INTER_LABEL_GAP_FACTOR = 4;
 
             Font originalFont = g2d.getFont();
-            g2d.setFont(DEFAULT_LABEL_FONT);
+            g2d.setFont(getLabelFont());
 
             double totalLabelsNoGapHeight = 0;
 
@@ -570,7 +582,7 @@ public class ImageLegend {
 
         if (colorBarInfos.size() > 0 && colorBarInfos.size() > colorBarInfoIndex) {
             Font originalFont = g2d.getFont();
-            g2d.setFont(DEFAULT_LABEL_FONT);
+            g2d.setFont(getLabelFont());
 
             ColorBarInfo colorBarInfo = colorBarInfos.get(colorBarInfoIndex);
             Rectangle2D labelRectangle = g2d.getFontMetrics().getStringBounds(colorBarInfo.getFormattedValue(), g2d);
@@ -591,8 +603,8 @@ public class ImageLegend {
 
             final FontMetrics fontMetrics = g2d.getFontMetrics();
             g2d.setPaint(foregroundColor);
-            int x0 = GAP;
-            int y0 = GAP + fontMetrics.getMaxAscent();
+            int x0 = BORDER_GAP;
+            int y0 = BORDER_GAP; // + fontMetrics.getMaxAscent();
 
             g2d.setFont(_DEFAULT_TITLE_FONT);
             Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
@@ -703,9 +715,9 @@ public class ImageLegend {
             float x0, y0;
             if (orientation == HORIZONTAL) {
                 x0 = -0.5f * labelWidth;
-                y0 = _LABEL_GAP + fontMetrics.getMaxAscent();
+                y0 = LABEL_GAP + fontMetrics.getMaxAscent();
             } else {
-                x0 = _LABEL_GAP;
+                x0 = LABEL_GAP;
                 y0 = -0.5f * labelHeight + fontMetrics.getMaxAscent();
             }
 

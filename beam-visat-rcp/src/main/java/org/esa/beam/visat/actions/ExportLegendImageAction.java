@@ -152,8 +152,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param = new Parameter(DISTRIBUTION_TYPE_PARAM_STR, ImageLegend.DISTRIB_EVEN_STR);
         param.getProperties().setLabel("Mode");
         param.getProperties().setValueSet(new String[]{ImageLegend.DISTRIB_EVEN_STR,
-                ImageLegend.DISTRIB_EXACT_STR,
-                ImageLegend.DISTRIB_MANUAL_STR});
+                ImageLegend.DISTRIB_MANUAL_STR,
+                ImageLegend.DISTRIB_EXACT_STR
+                });
         param.getProperties().setValueSetBound(true);
         paramGroup.addParameter(param);
 
@@ -259,7 +260,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         value = legendParamGroup.getParameter(LABEL_FONT_SIZE_PARAM_STR).getValue();
-        imageLegend.setFont(imageLegend.getFont().deriveFont(((Number) value).floatValue()));
+        imageLegend.setLabelFont(imageLegend.getLabelFont().deriveFont(((Number) value).floatValue()));
 
 
         value = legendParamGroup.getParameter(NUM_TICKS_PARAM_STR).getValue();
