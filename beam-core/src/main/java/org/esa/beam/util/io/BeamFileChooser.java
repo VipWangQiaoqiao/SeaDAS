@@ -71,7 +71,7 @@ public class BeamFileChooser extends JFileChooser {
     @Override
     public Icon getIcon(File f) {
         final Icon icon = super.getIcon(f);
-        if (f.isDirectory() && isCompoundDocument(f)) {
+        if (f!=null && f.isDirectory() && isCompoundDocument(f)) {
             return new CompoundDocumentIcon(icon);
         }
         return icon;
