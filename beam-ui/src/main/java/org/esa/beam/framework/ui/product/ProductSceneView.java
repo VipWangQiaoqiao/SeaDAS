@@ -30,82 +30,31 @@ import com.bc.ceres.grender.Rendering;
 import com.bc.ceres.grender.Viewport;
 import com.bc.ceres.grender.ViewportAware;
 import com.bc.ceres.grender.support.DefaultViewport;
-import com.bc.ceres.swing.figure.Figure;
-import com.bc.ceres.swing.figure.FigureChangeListener;
-import com.bc.ceres.swing.figure.FigureCollection;
-import com.bc.ceres.swing.figure.FigureEditor;
-import com.bc.ceres.swing.figure.FigureEditorAware;
-import com.bc.ceres.swing.figure.FigureSelection;
-import com.bc.ceres.swing.figure.FigureStyle;
-import com.bc.ceres.swing.figure.Handle;
-import com.bc.ceres.swing.figure.ShapeFigure;
+import com.bc.ceres.swing.figure.*;
 import com.bc.ceres.swing.selection.AbstractSelectionChangeListener;
 import com.bc.ceres.swing.selection.Selection;
 import com.bc.ceres.swing.selection.SelectionChangeEvent;
 import com.bc.ceres.swing.selection.SelectionContext;
 import com.bc.ceres.swing.undo.UndoContext;
 import com.bc.ceres.swing.undo.support.DefaultUndoContext;
-import org.esa.beam.framework.datamodel.GeoCoding;
-import org.esa.beam.framework.datamodel.GeoPos;
-import org.esa.beam.framework.datamodel.ImageInfo;
-import org.esa.beam.framework.datamodel.PixelPos;
-import org.esa.beam.framework.datamodel.Placemark;
-import org.esa.beam.framework.datamodel.PlacemarkGroup;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductData;
-import org.esa.beam.framework.datamodel.ProductNode;
-import org.esa.beam.framework.datamodel.ProductNodeEvent;
-import org.esa.beam.framework.datamodel.ProductNodeListener;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.datamodel.VectorDataNode;
-import org.esa.beam.framework.datamodel.VirtualBand;
-import org.esa.beam.framework.ui.BasicView;
-import org.esa.beam.framework.ui.PixelInfoFactory;
-import org.esa.beam.framework.ui.PixelPositionListener;
-import org.esa.beam.framework.ui.PopupMenuHandler;
-import org.esa.beam.framework.ui.UIUtils;
+import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.ui.*;
 import org.esa.beam.framework.ui.command.CommandUIFactory;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
-import org.esa.beam.glayer.GraticuleLayer;
-import org.esa.beam.glayer.MaskCollectionLayer;
-import org.esa.beam.glayer.NoDataLayerType;
-import org.esa.beam.glayer.ProductLayerContext;
+import org.esa.beam.glayer.*;
 import org.esa.beam.glevel.MaskImageMultiLevelSource;
 import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.PropertyMapChangeListener;
 import org.esa.beam.util.SystemUtils;
 
-import javax.swing.AbstractButton;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.MouseInputListener;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
 import java.awt.image.RenderedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * The class <code>ProductSceneView</code> is a high-level image display component for color index/RGB images created
@@ -119,7 +68,7 @@ import java.util.Vector;
  */
 public class ProductSceneView extends BasicView
         implements FigureEditorAware, ProductNodeView, PropertyMapChangeListener, PixelInfoFactory, ProductLayerContext,
-                   ViewportAware {
+        ViewportAware {
 
     public static final String BASE_IMAGE_LAYER_ID = "org.esa.beam.layers.baseImage";
     public static final String NO_DATA_LAYER_ID = "org.esa.beam.layers.noData";
@@ -280,7 +229,7 @@ public class ProductSceneView extends BasicView
         figureEditor.addSelectionChangeListener(new PinSelectionChangeListener());
 
         this.scrollBarsShown = sceneImage.getConfiguration().getPropertyBool(PROPERTY_KEY_IMAGE_SCROLL_BARS_SHOWN,
-                                                                             false);
+                false);
         if (scrollBarsShown) {
             this.scrollPane = createScrollPane();
             add(scrollPane, BorderLayout.CENTER);
@@ -324,7 +273,7 @@ public class ProductSceneView extends BasicView
 
     private AdjustableViewScrollPane createScrollPane() {
         AbstractButton zoomAllButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/ZoomAll13.gif"),
-                                                                      false);
+                false);
         zoomAllButton.setFocusable(false);
         zoomAllButton.setFocusPainted(false);
         zoomAllButton.addActionListener(new ActionListener() {
@@ -349,7 +298,6 @@ public class ProductSceneView extends BasicView
      * Gets the current selection context, if any.
      *
      * @return The current selection context, or {@code null} if none exists.
-     *
      * @since BEAM 4.7
      */
     @Override
@@ -406,7 +354,6 @@ public class ProductSceneView extends BasicView
      *
      * @param pixelX the pixel X co-ordinate
      * @param pixelY the pixel Y co-ordinate
-     *
      * @return the info string at the given position
      */
     @Override
@@ -430,7 +377,6 @@ public class ProductSceneView extends BasicView
      * otherwise defer to the component's layout manager.
      *
      * @return the value of the <code>preferredSize</code> property
-     *
      * @see #setPreferredSize
      * @see javax.swing.plaf.ComponentUI
      */
@@ -547,7 +493,6 @@ public class ProductSceneView extends BasicView
      * Gets the product raster with the specified index.
      *
      * @param index the zero-based product raster index
-     *
      * @return the product raster with the given index
      */
     public RasterDataNode getRaster(int index) {
@@ -587,8 +532,30 @@ public class ProductSceneView extends BasicView
 
     public void setNoDataOverlayEnabled(boolean enabled) {
         if (isNoDataOverlayEnabled() != enabled) {
-            getNoDataLayer(true).setVisible(enabled);
+            Layer noDataLayer = getNoDataLayer(true);
+            //getNoDataLayer(true).setVisible(enabled);
+            noDataLayer.setVisible(enabled);
+            updateCurrentLayer(noDataLayer, enabled);
         }
+    }
+
+    public void updateCurrentLayer(Layer currentLayer, boolean enabled) {
+        if (enabled) {
+            setSelectedLayer(currentLayer);
+        } else {
+            List<Layer> layers = getRootLayer().getChildren();
+            layers.remove(currentLayer);
+            if (!layers.isEmpty()) {
+                for (Layer layer : layers) {
+                    String layerName = layer.getName();
+                    if (!(layer.getName().contains("Masks") || layer.getName().contains("Vector data")) && !(layer.getLayerType() instanceof RasterImageLayerType)) {
+                        setSelectedLayer(layer);
+                        return;
+                    }
+                }
+            }
+        }
+
     }
 
     public ImageLayer getBaseImageLayer() {
@@ -605,7 +572,7 @@ public class ProductSceneView extends BasicView
             Layer graticuleLayer = getGraticuleLayer(true);
             //getGraticuleLayer(true).setVisible(enabled);
             graticuleLayer.setVisible(enabled);
-            if (enabled) setSelectedLayer(graticuleLayer);
+            updateCurrentLayer(graticuleLayer, enabled);
         }
     }
 
@@ -618,7 +585,7 @@ public class ProductSceneView extends BasicView
         if (isPinOverlayEnabled() != enabled) {
             Layer layer = getPinLayer(true);
             layer.setVisible(enabled);
-            setSelectedLayer(layer);
+            updateCurrentLayer(layer, enabled);
         }
     }
 
@@ -631,7 +598,8 @@ public class ProductSceneView extends BasicView
         if (isGcpOverlayEnabled() != enabled) {
             Layer layer = getGcpLayer(true);
             layer.setVisible(enabled);
-            setSelectedLayer(layer);
+            //setSelectedLayer(layer);
+            updateCurrentLayer(layer, enabled);
         }
     }
 
@@ -648,15 +616,14 @@ public class ProductSceneView extends BasicView
 
     /**
      * @param vectorDataNodes The vector data nodes whose layer shall be made visible.
-     *
      * @since BEAM 4.10
      */
     public void setLayersVisible(VectorDataNode... vectorDataNodes) {
         for (VectorDataNode vectorDataNode : vectorDataNodes) {
             final LayerFilter nodeFilter = VectorDataLayerFilterFactory.createNodeFilter(vectorDataNode);
             Layer vectorDataLayer = LayerUtils.getChildLayer(getRootLayer(),
-                                                             LayerUtils.SEARCH_DEEP,
-                                                             nodeFilter);
+                    LayerUtils.SEARCH_DEEP,
+                    nodeFilter);
             if (vectorDataLayer != null) {
                 vectorDataLayer.setVisible(true);
             }
@@ -685,7 +652,7 @@ public class ProductSceneView extends BasicView
 
             if (layer == null) {
                 layer = LayerUtils.getChildLayer(getRootLayer(), LayerUtils.SearchMode.DEEP,
-                                                 VectorDataLayerFilterFactory.createGeometryFilter());
+                        VectorDataLayerFilterFactory.createGeometryFilter());
             }
             if (layer != null) {
                 final VectorDataLayer vectorDataLayer = (VectorDataLayer) layer;
@@ -797,16 +764,14 @@ public class ProductSceneView extends BasicView
 
     /**
      * @param vectorDataNode The vector data node, whose layer shall be selected.
-     *
      * @return The layer, or {@code null}.
-     *
      * @since BEAM 4.7
      */
     public VectorDataLayer selectVectorDataLayer(VectorDataNode vectorDataNode) {
         LayerFilter layerFilter = new VectorDataLayerFilter(vectorDataNode);
         VectorDataLayer layer = (VectorDataLayer) LayerUtils.getChildLayer(getRootLayer(),
-                                                                           LayerUtils.SEARCH_DEEP,
-                                                                           layerFilter);
+                LayerUtils.SEARCH_DEEP,
+                layerFilter);
         if (layer != null) {
             setSelectedLayer(layer);
         }
@@ -815,9 +780,7 @@ public class ProductSceneView extends BasicView
 
     /**
      * @param pin The pins to test.
-     *
      * @return {@code true}, if the pin is selected.
-     *
      * @since BEAM 4.7
      */
     public boolean isPinSelected(Placemark pin) {
@@ -826,9 +789,7 @@ public class ProductSceneView extends BasicView
 
     /**
      * @param gcp The ground control point to test.
-     *
      * @return {@code true}, if the ground control point is selected.
-     *
      * @since BEAM 4.7
      */
     public boolean isGcpSelected(Placemark gcp) {
@@ -837,7 +798,6 @@ public class ProductSceneView extends BasicView
 
     /**
      * @return The (first) selected pin.
-     *
      * @since BEAM 4.7
      */
     public Placemark getSelectedPin() {
@@ -846,7 +806,6 @@ public class ProductSceneView extends BasicView
 
     /**
      * @return The selected pins.
-     *
      * @since BEAM 4.7
      */
     public Placemark[] getSelectedPins() {
@@ -855,7 +814,6 @@ public class ProductSceneView extends BasicView
 
     /**
      * @return The selected ground control points.
-     *
      * @since BEAM 4.7
      */
     public Placemark[] getSelectedGcps() {
@@ -864,7 +822,6 @@ public class ProductSceneView extends BasicView
 
     /**
      * @param pins The selected pins.
-     *
      * @since BEAM 4.7
      */
     public void selectPins(Placemark[] pins) {
@@ -873,7 +830,6 @@ public class ProductSceneView extends BasicView
 
     /**
      * @param gpcs The selected ground control points.
-     *
      * @since BEAM 4.7
      */
     public void selectGcps(Placemark[] gpcs) {
@@ -882,7 +838,6 @@ public class ProductSceneView extends BasicView
 
     /**
      * @return The (first) selected feature figure.
-     *
      * @since BEAM 4.7
      */
     public SimpleFeatureFigure getSelectedFeatureFigure() {
@@ -897,7 +852,6 @@ public class ProductSceneView extends BasicView
 
     /**
      * @return The selected feature figures.
-     *
      * @since BEAM 4.7
      * @deprecated since BEAM 4.10, use {@link #getFeatureFigures(boolean)} instead
      */
@@ -911,17 +865,15 @@ public class ProductSceneView extends BasicView
      * Gets either the selected figures, or all the figures of the currently selected layer.
      *
      * @param selectedOnly If {@code true}, only selected figures are returned.
-     *
      * @return The feature figures or an empty array.
-     *
      * @since BEAM 4.10
      */
     public SimpleFeatureFigure[] getFeatureFigures(boolean selectedOnly) {
         ArrayList<SimpleFeatureFigure> selectedFigures = new ArrayList<SimpleFeatureFigure>();
         collectFeatureFigures(figureEditor.getFigureSelection(), selectedFigures);
         if (selectedFigures.isEmpty()
-            && !selectedOnly
-            && getSelectedLayer() instanceof VectorDataLayer) {
+                && !selectedOnly
+                && getSelectedLayer() instanceof VectorDataLayer) {
             VectorDataLayer vectorDataLayer = (VectorDataLayer) getSelectedLayer();
             collectFeatureFigures(vectorDataLayer.getFigureCollection(), selectedFigures);
         }
@@ -1149,8 +1101,8 @@ public class ProductSceneView extends BasicView
                 final Color color = (Color) noDataLayer.getConfiguration().getValue(
                         NoDataLayerType.PROPERTY_NAME_COLOR);
                 final MultiLevelSource multiLevelSource = MaskImageMultiLevelSource.create(getRaster().getProduct(),
-                                                                                           color, expression, true,
-                                                                                           getBaseImageLayer().getImageToModelTransform());
+                        color, expression, true,
+                        getBaseImageLayer().getImageToModelTransform());
                 noDataLayer.setMultiLevelSource(multiLevelSource);
             } else {
                 noDataLayer.setMultiLevelSource(MultiLevelSource.NULL);
@@ -1193,10 +1145,10 @@ public class ProductSceneView extends BasicView
          */
         public RGBChannel(final Product product, final String name, final String expression) {
             super(name,
-                  ProductData.TYPE_FLOAT32,
-                  product.getSceneRasterWidth(),
-                  product.getSceneRasterHeight(),
-                  expression);
+                    ProductData.TYPE_FLOAT32,
+                    product.getSceneRasterWidth(),
+                    product.getSceneRasterHeight(),
+                    expression);
             setOwner(product);
             setModified(false);
         }
@@ -1281,7 +1233,7 @@ public class ProductSceneView extends BasicView
     private boolean isPixelPosValid(int currentPixelX, int currentPixelY, int currentLevel) {
         return currentPixelX >= 0 && currentPixelX < baseImageLayer.getImage(
                 currentLevel).getWidth() && currentPixelY >= 0
-               && currentPixelY < baseImageLayer.getImage(currentLevel).getHeight();
+                && currentPixelY < baseImageLayer.getImage(currentLevel).getHeight();
     }
 
     private void firePixelPosChanged(MouseEvent e, int currentPixelX, int currentPixelY, int currentLevel) {
@@ -1332,7 +1284,7 @@ public class ProductSceneView extends BasicView
 
     private boolean isPixelBorderDisplayEnabled() {
         return pixelBorderShown &&
-               getLayerCanvas().getViewport().getZoomFactor() >= pixelBorderViewScale;
+                getLayerCanvas().getViewport().getZoomFactor() >= pixelBorderViewScale;
     }
 
     private void drawPixelBorder(int currentPixelX, int currentPixelY, int currentLevel, boolean showBorder) {
