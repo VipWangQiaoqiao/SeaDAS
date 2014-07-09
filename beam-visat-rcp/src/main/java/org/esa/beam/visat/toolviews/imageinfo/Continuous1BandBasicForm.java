@@ -32,6 +32,8 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +41,7 @@ import java.text.DecimalFormat;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
@@ -51,6 +54,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final JFormattedTextField maxField;
     private final DiscreteCheckBox discreteCheckBox;
     private ColorPaletteInfoComboBox colorPaletteInfoComboBox;
+
+
+    final Boolean[] minFieldActivated = {new Boolean(false)};
+    final Boolean[] maxFieldActivated = {new Boolean(false)};
 
     private final ImageInfoEditor2 imageInfoEditor;
 
@@ -218,8 +225,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         shouldFireChooserEvent = true;
 
         colorPaletteChooser.addActionListener(createListener(RangeKey.FromCurrentPalette));
-        minField.addActionListener(createListener(RangeKey.FromMinMaxFields));
-        maxField.addActionListener(createListener(RangeKey.FromMinMaxFields));
+        //    minField.addActionListener(createListener(RangeKey.FromMinMaxFields));
+        //    maxField.addActionListener(createListener(RangeKey.FromMinMaxFields));
         cpdRange.addActionListener(createListener(RangeKey.FromPaletteSource));
         bandRange.addActionListener(createListener(RangeKey.FromData));
 
@@ -232,6 +239,105 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         });
 
 
+//        minField.getDocument().addDocumentListener(new DocumentListener() {
+//            @Override
+//            public void insertUpdate(DocumentEvent documentEvent) {
+//                if (minDoThis[0]) {
+//                    minDoThis[0] = false;
+//                    shouldFireChooserEvent = true;
+//                    applyChanges(RangeKey.FromMinMaxFields);
+//                    shouldFireChooserEvent = false;
+//                    minDoThis[0] = true;
+//                }
+//            }
+//
+//            @Override
+//            public void removeUpdate(DocumentEvent documentEvent) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//
+//            @Override
+//            public void changedUpdate(DocumentEvent documentEvent) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//        });
+
+
+        maxField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
+                if (!maxFieldActivated[0]) {
+                    maxFieldActivated[0] = true;
+                    shouldFireChooserEvent = true;
+                    applyChanges(RangeKey.FromMinMaxFields);
+                    shouldFireChooserEvent = false;
+                    maxFieldActivated[0] = false;
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
+
+        minField.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+
+                double currentVal;
+                try {
+                    currentVal = Double.parseDouble(minField.getText());
+
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(minField, "Please enter valid number.");
+                    minField.requestFocusInWindow();
+                    return;
+                }
+                //     boolean valid = sampleName.equals("minSample") ? validateMinMax(currentVal, maxVal) : validateMinMax(minVal, currentVal);
+                //      if (valid) {
+                minField.setValue(currentVal);
+
+                    minFieldActivated[0] = true;
+                    shouldFireChooserEvent = true;
+                    applyChanges(RangeKey.FromMinMaxFields);
+                    shouldFireChooserEvent = false;
+                    minFieldActivated[0] = false;
+
+
+                //      }
+
+
+            }
+        });
+
+
 //        maxField.addActionListener(new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
@@ -240,21 +346,21 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //            }
 //        });
 
-        maxField.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                applyChanges(RangeKey.FromMinMaxFields);
-                VisatApp.getApp().clearStatusBarMessage();
-            }
-        });
-
-        minField.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                applyChanges(RangeKey.FromMinMaxFields);
-                VisatApp.getApp().clearStatusBarMessage();
-            }
-        });
+//        maxField.addPropertyChangeListener(new PropertyChangeListener() {
+//            @Override
+//            public void propertyChange(PropertyChangeEvent evt) {
+//                applyChanges(RangeKey.FromMinMaxFields);
+//                VisatApp.getApp().clearStatusBarMessage();
+//            }
+//        });
+//
+//        minField.addPropertyChangeListener(new PropertyChangeListener() {
+//            @Override
+//            public void propertyChange(PropertyChangeEvent evt) {
+//                applyChanges(RangeKey.FromMinMaxFields);
+//                VisatApp.getApp().clearStatusBarMessage();
+//            }
+//        });
 
 
         bandRange.addActionListener(new ActionListener() {
@@ -448,8 +554,13 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         logDisplayButton.setSelected(logScaled);
         parentForm.revalidateToolViewPaneControl();
 
-        minField.setValue(cpd.getMinDisplaySample());
-        maxField.setValue(cpd.getMaxDisplaySample());
+        if (!minFieldActivated[0]) {
+            minField.setValue(cpd.getMinDisplaySample());
+        }
+
+        if (!maxFieldActivated[0]) {
+            maxField.setValue(cpd.getMaxDisplaySample());
+        }
 
 //        colorPaletteInfoComboBox.setShouldFire(false);
 //        colorPaletteInfoComboBox.setSelectedByValues(cpd, cpd.getMinDisplaySample(), cpd.getMaxDisplaySample(), logScaled);
