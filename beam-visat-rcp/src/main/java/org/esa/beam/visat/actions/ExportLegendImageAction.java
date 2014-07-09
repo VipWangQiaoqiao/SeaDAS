@@ -1,19 +1,18 @@
-
 /*
- * Copyright (C) 2010 Brockmann Consult GmbH (info@brockmann-consult.de)
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation; either version 3 of the License, or (at your option)
- * any later version.
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, see http://www.gnu.org/licenses/
- */
+* Copyright (C) 2010 Brockmann Consult GmbH (info@brockmann-consult.de)
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the Free
+* Software Foundation; either version 3 of the License, or (at your option)
+* any later version.
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+* more details.
+*
+* You should have received a copy of the GNU General Public License along
+* with this program; if not, see http://www.gnu.org/licenses/
+*/
 package org.esa.beam.visat.actions;
 
 import org.esa.beam.framework.datamodel.ImageInfo;
@@ -54,12 +53,17 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String TITLE_PARAM_STR = "legend.headerText";
     private static final String TITLE_UNITS_PARAM_STR = "legend.header.units.text";
     private static final String MANUAL_POINTS_PARAM_STR = "legend.fullCustomAddThesePoints";
-    private static final String LABEL_FONT_SIZE_PARAM_STR = "legend.fontSize";
+    //    private static final String LABEL_FONT_SIZE_PARAM_STR = "legend.fontSize";
     private static final String DECIMAL_PLACES_PARAM_STR = "legend.decimalPlaces";
     private static final String FOREGROUND_COLOR_PARAM_STR = "legend.foregroundColor";
     private static final String BACKGROUND_COLOR_PARAM_STR = "legend.backgroundColor";
     private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
     private static final String ANTI_ALIASING_PARAM_STR = "legend.antiAliasing";
+
+    private static final String SCALING_FACTOR_PARAM_STR = "legend.scalingFactor";
+    private static final String TITLE_FONT_SIZE_PARAM_STR = "legend.titleFontSize";
+    private static final String TITLE_UNITS_FONT_SIZE_PARAM_STR = "legend.titleUnitsFontSize";
+    private static final String LABELS_FONT_SIZE_PARAM_STR = "legend.labelsFontSize";
 
 
     private ParamGroup legendParamGroup;
@@ -67,7 +71,26 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
     @Override
     public void actionPerformed(CommandEvent event) {
-        exportImage(getVisatApp(), getImageFileFilters(), event.getSelectableCommand());
+        ProductSceneView view = getVisatApp().getSelectedProductSceneView();
+        legendParamGroup = createLegendParamGroup();
+ //       legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
+        modifyHeaderText(legendParamGroup, view.getRaster());
+        final RasterDataNode raster = view.getRaster();
+        imageLegend = new ImageLegend(raster.getImageInfo(), raster);
+
+        // this will open a dialog before the file chooser
+        final ImageLegendDialog dialog = new ImageLegendDialog(getVisatApp(),
+                legendParamGroup,
+                imageLegend,
+                true);
+
+        dialog.show();
+
+
+        if (dialog.okWasClicked) {
+            exportImage(getVisatApp(), getImageFileFilters(), event.getSelectableCommand());
+        }
+
     }
 
     @Override
@@ -80,17 +103,29 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
     @Override
     protected void configureFileChooser(BeamFileChooser fileChooser, ProductSceneView view, String imageBaseName) {
-        legendParamGroup = createLegendParamGroup();
-        legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
-        modifyHeaderText(legendParamGroup, view.getRaster());
+//        legendParamGroup = createLegendParamGroup();
+//        legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
+//        modifyHeaderText(legendParamGroup, view.getRaster());
         fileChooser.setDialogTitle(getVisatApp().getAppName() + " - Export Color Bar Image"); /*I18N*/
-        fileChooser.setCurrentFilename(imageBaseName + "_legend");
-        final RasterDataNode raster = view.getRaster();
-        imageLegend = new ImageLegend(raster.getImageInfo(), raster);
-        fileChooser.setAccessory(createImageLegendAccessory(getVisatApp(),
-                fileChooser,
-                legendParamGroup,
-                imageLegend));
+        fileChooser.setCurrentFilename(imageBaseName + "_colorbar");
+//        final RasterDataNode raster = view.getRaster();
+//        imageLegend = new ImageLegend(raster.getImageInfo(), raster);
+
+        // this will open a dialog before the file chooser
+//        final ImageLegendDialog dialog = new ImageLegendDialog(getVisatApp(),
+//                legendParamGroup,
+//                imageLegend,
+//                true);
+//
+//        dialog.show();
+
+
+//        if (dialog.okWasClicked) {
+//            fileChooser.setAccessory(createImageLegendAccessory(getVisatApp(),
+//                    fileChooser,
+//                    legendParamGroup,
+//                    imageLegend));
+//        }
     }
 
     @Override
@@ -104,11 +139,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     protected boolean isEntireImageSelected() {
         return true;
     }
-
-
-
-
-
 
 
     private static ParamGroup createLegendParamGroup() {
@@ -128,6 +158,32 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setNumCols(24);
         param.getProperties().setNullValueAllowed(true);
         paramGroup.addParameter(param);
+
+
+        param = new Parameter(SCALING_FACTOR_PARAM_STR, ImageLegend.DEFAULT_SCALING_FACTOR);
+        param.getProperties().setLabel("ScalingFactor");
+        param.getProperties().setMinValue(.000001);
+        param.getProperties().setMaxValue(1000000);
+        paramGroup.addParameter(param);
+
+        param = new Parameter(TITLE_FONT_SIZE_PARAM_STR, ImageLegend.DEFAULT_TITLE_FONT_SIZE);
+        param.getProperties().setLabel("Title Font Size");
+        param.getProperties().setMinValue(4);
+        param.getProperties().setMaxValue(100);
+        paramGroup.addParameter(param);
+
+        param = new Parameter(TITLE_UNITS_FONT_SIZE_PARAM_STR, ImageLegend.DEFAULT_TITLE_UNITS_FONT_SIZE);
+        param.getProperties().setLabel("Title Units Font Size");
+        param.getProperties().setMinValue(4);
+        param.getProperties().setMaxValue(100);
+        paramGroup.addParameter(param);
+
+        param = new Parameter(LABELS_FONT_SIZE_PARAM_STR, ImageLegend.DEFAULT_LABELS_FONT_SIZE);
+        param.getProperties().setLabel("Labels Font Size");
+        param.getProperties().setMinValue(4);
+        param.getProperties().setMaxValue(100);
+        paramGroup.addParameter(param);
+
 
         // DANNY
         param = new Parameter(TITLE_UNITS_PARAM_STR, "");
@@ -154,15 +210,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setValueSet(new String[]{ImageLegend.DISTRIB_EVEN_STR,
                 ImageLegend.DISTRIB_MANUAL_STR,
                 ImageLegend.DISTRIB_EXACT_STR
-                });
+        });
         param.getProperties().setValueSetBound(true);
-        paramGroup.addParameter(param);
-
-
-        param = new Parameter(LABEL_FONT_SIZE_PARAM_STR, 14);
-        param.getProperties().setLabel("Label Font Size");
-        param.getProperties().setMinValue(4);
-        param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
 
@@ -191,7 +240,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setMinValue(0.0f);
         param.getProperties().setMaxValue(1.0f);
         paramGroup.addParameter(param);
-
 
 
         return paramGroup;
@@ -259,8 +307,17 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         imageLegend.setDistributionType((String) value);
 
 
-        value = legendParamGroup.getParameter(LABEL_FONT_SIZE_PARAM_STR).getValue();
-        imageLegend.setLabelFont(imageLegend.getLabelFont().deriveFont(((Number) value).floatValue()));
+        value = legendParamGroup.getParameter(SCALING_FACTOR_PARAM_STR).getValue();
+        imageLegend.setScalingFactor((Double) value);
+
+        value = legendParamGroup.getParameter(TITLE_FONT_SIZE_PARAM_STR).getValue();
+        imageLegend.setTitleFontSize((Integer) value);
+
+        value = legendParamGroup.getParameter(TITLE_UNITS_FONT_SIZE_PARAM_STR).getValue();
+        imageLegend.setTitleUnitsFontSize((Integer) value);
+
+        value = legendParamGroup.getParameter(LABELS_FONT_SIZE_PARAM_STR).getValue();
+        imageLegend.setLabelsFontSize((Integer) value);
 
 
         value = legendParamGroup.getParameter(NUM_TICKS_PARAM_STR).getValue();
@@ -302,7 +359,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter headerUnitsParam;
         private Parameter orientationParam;
         private Parameter distributionTypeParam;
-        private Parameter fontSizeParam;
         private Parameter numberOfTicksParam;
         private Parameter backgroundColorParam;
         private Parameter foregroundColorParam;
@@ -313,16 +369,29 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private JPanel evenDistribJPanel;
         private JPanel fullCustomJPanel;
 
+        private Parameter scalingFactorParam;
+        private Parameter titleFontSizeParam;
+        private Parameter titleUnitsFontSizeParam;
+        private Parameter labelsFontSizeParam;
+
+        private boolean okWasClicked = false;
+
 
         public ImageLegendDialog(VisatApp visatApp, ParamGroup paramGroup, ImageLegend imageLegend,
                                  boolean transparencyEnabled) {
             super(visatApp.getMainFrame(), visatApp.getAppName() + " - Color Bar Parameters", ID_OK_CANCEL, _HELP_ID);
             this.visatApp = visatApp;
+            okWasClicked = false;
+
             imageInfo = imageLegend.getImageInfo();
             raster = imageLegend.getRaster();
             this.transparencyEnabled = transparencyEnabled;
             this.paramGroup = paramGroup;
             initParams();
+            // rename the OK button
+            JButton button = (JButton) getButton(ID_OK);
+            button.setText("Continue");
+//
             initUI();
             updateUIState();
             this.paramGroup.addParamChangeListener(new ParamChangeListener() {
@@ -331,6 +400,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
                 }
             });
         }
+
 
         private void updateUIState() {
             boolean headerTextEnabled = (Boolean) usingHeaderParam.getValue();
@@ -357,7 +427,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
                 fullCustomAddThesePointsParam.setUIEnabled(true);
             }
         }
-
 
 
         public ParamGroup getParamGroup() {
@@ -387,14 +456,15 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         @Override
         protected void onOK() {
-            getParamGroup().getParameterValues(visatApp.getPreferences());
+ //           getParamGroup().getParameterValues(visatApp.getPreferences());
             super.onOK();
+            okWasClicked = true;
         }
 
 
         private void initUI() {
 
-            final JButton previewButton = new JButton("Preview...");
+            final JButton previewButton = new JButton("Preview Color Bar...");
             previewButton.setMnemonic('v');
             previewButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -406,7 +476,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             final JPanel jPanel = GridBagUtils.createPanel();
 
             gbc.anchor = GridBagConstraints.WEST;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.fill = GridBagConstraints.NONE;
 
             gbc.gridwidth = 1;
             gbc.gridx = 0;
@@ -439,11 +509,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             jPanel.add(getFormatsPanel("Formatting"), gbc);
 
 
-            gbc.gridwidth = 1;
+            gbc.gridwidth = 2;
             gbc.gridy++;
             gbc.insets.top = 10;
-            gbc.gridx = 1;
-            gbc.anchor = GridBagConstraints.NORTHEAST;
+            gbc.gridx = 0;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.fill = GridBagConstraints.NONE;
+
             jPanel.add(previewButton, gbc);
 
             jPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
@@ -530,6 +602,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridx = 1;
             jPanel.add(decimalPlacesParam.getEditor().getEditorComponent(), gbc);
 
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.weightx = 1.0;
+            jPanel.add(scalingFactorParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(scalingFactorParam.getEditor().getEditorComponent(), gbc);
+
 
             return jPanel;
         }
@@ -546,9 +625,23 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.weightx = 1.0;
             gbc.gridy = 0;
             gbc.insets.top = 3;
-            jPanel.add(fontSizeParam.getEditor().getLabelComponent(), gbc);
+
+            jPanel.add(titleFontSizeParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
-            jPanel.add(fontSizeParam.getEditor().getEditorComponent(), gbc);
+            jPanel.add(titleFontSizeParam.getEditor().getEditorComponent(), gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            jPanel.add(titleUnitsFontSizeParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(titleUnitsFontSizeParam.getEditor().getEditorComponent(), gbc);
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            jPanel.add(labelsFontSizeParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(labelsFontSizeParam.getEditor().getEditorComponent(), gbc);
 
 
             gbc.gridx = 0;
@@ -571,8 +664,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             jPanel.add(backgroundTransparencyParam.getEditor().getEditorComponent(), gbc);
 
 
-
-
             gbc.insets.top = 10;
 
             gbc.gridx = 0;
@@ -589,7 +680,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             headerTextParam = paramGroup.getParameter(TITLE_PARAM_STR);
             orientationParam = paramGroup.getParameter(ORIENTATION_PARAM_STR);
             distributionTypeParam = paramGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR);
-            fontSizeParam = paramGroup.getParameter(LABEL_FONT_SIZE_PARAM_STR);
+//            fontSizeParam = paramGroup.getParameter(LABEL_FONT_SIZE_PARAM_STR);
+            scalingFactorParam = paramGroup.getParameter(SCALING_FACTOR_PARAM_STR);
+            titleFontSizeParam = paramGroup.getParameter(TITLE_FONT_SIZE_PARAM_STR);
+            titleUnitsFontSizeParam = paramGroup.getParameter(TITLE_UNITS_FONT_SIZE_PARAM_STR);
+            labelsFontSizeParam = paramGroup.getParameter(LABELS_FONT_SIZE_PARAM_STR);
             numberOfTicksParam = paramGroup.getParameter(NUM_TICKS_PARAM_STR);
             foregroundColorParam = paramGroup.getParameter(FOREGROUND_COLOR_PARAM_STR);
             backgroundColorParam = paramGroup.getParameter(BACKGROUND_COLOR_PARAM_STR);
@@ -598,6 +693,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             decimalPlacesParam = paramGroup.getParameter(DECIMAL_PLACES_PARAM_STR);
             headerUnitsParam = paramGroup.getParameter(TITLE_UNITS_PARAM_STR);
             fullCustomAddThesePointsParam = paramGroup.getParameter(MANUAL_POINTS_PARAM_STR);
+
 
         }
 

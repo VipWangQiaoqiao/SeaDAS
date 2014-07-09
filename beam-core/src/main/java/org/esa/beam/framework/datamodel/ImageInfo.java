@@ -275,7 +275,6 @@ public class ImageInfo implements Cloneable {
     public void setColorPaletteDef(ColorPaletteDef colorPaletteDef,
                                    double minSample,
                                    double maxSample, boolean autoDistribute) {
-    //    System.out.println("OTHER PART");
         transferPoints(colorPaletteDef, minSample, maxSample, autoDistribute, getColorPaletteDef());
     }
 
@@ -320,7 +319,6 @@ public class ImageInfo implements Cloneable {
     public void setColorPaletteDef(ColorPaletteDef colorPaletteDef,
                                    double minSample,
                                    double maxSample, boolean autoDistribute, boolean isTargetLogScaled) {
-     //   System.out.println("GOOD PART");
         transferPoints(colorPaletteDef, minSample, maxSample, autoDistribute, getColorPaletteDef(), isTargetLogScaled);
     }
 
@@ -332,7 +330,6 @@ public class ImageInfo implements Cloneable {
                                        ColorPaletteDef targetCPD,
                                        boolean isTargetLogScaled) {
 
-     //   System.out.println("isLogScaled=" + isTargetLogScaled);
         if (autoDistribute || sourceCPD.isAutoDistribute()) {
             alignNumPoints(sourceCPD, targetCPD);
             double minSourceValue = sourceCPD.getMinDisplaySample();
@@ -348,10 +345,8 @@ public class ImageInfo implements Cloneable {
 
                     if (isTargetLogScaled) {
                         double currentLogTargetValue = getLogarithmicValue(currentLinearTargetValue, minTargetValue, maxTargetValue);
-                   //     System.out.println("currentLogTargetValue=" + currentLogTargetValue);
                         targetCPD.getPointAt(i).setSample(currentLogTargetValue);
                     } else {
-                 //       System.out.println("currentLinearTargetValue=" + currentLinearTargetValue);
                         targetCPD.getPointAt(i).setSample(currentLinearTargetValue);
                     }
 
