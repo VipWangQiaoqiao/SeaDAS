@@ -107,7 +107,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 //        legendParamGroup = createLegendParamGroup();
 //        legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
 //        modifyHeaderText(legendParamGroup, view.getRaster());
-        fileChooser.setDialogTitle(getVisatApp().getAppName() + " - Export Color Bar Image"); /*I18N*/
+        fileChooser.setDialogTitle(getVisatApp().getAppName() + " - Color Bar File"); /*I18N*/
         fileChooser.setCurrentFilename(imageBaseName + "_colorbar.png");
 //        final RasterDataNode raster = view.getRaster();
 //        imageLegend = new ImageLegend(raster.getImageInfo(), raster);
@@ -122,10 +122,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
 //        if (dialog.okWasClicked) {
-//            fileChooser.setAccessory(createImageLegendAccessory(getVisatApp(),
-//                    fileChooser,
-//                    legendParamGroup,
-//                    imageLegend));
+            fileChooser.setAccessory(createImageLegendAccessory(getVisatApp(),
+                    fileChooser,
+                    legendParamGroup,
+                    imageLegend));
 //        }
     }
 
@@ -268,7 +268,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
                                                          final JFileChooser fileChooser,
                                                          final ParamGroup legendParamGroup,
                                                          final ImageLegend imageLegend) {
-        final JButton button = new JButton("Edit Colorbar Parameters...");
+        final JButton button = new JButton("Edit Colorbar Settings ...");
         button.setMnemonic('P');
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -387,7 +387,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         public ImageLegendDialog(VisatApp visatApp, ParamGroup paramGroup, ImageLegend imageLegend,
                                  boolean transparencyEnabled) {
-            super(visatApp.getMainFrame(), visatApp.getAppName() + " - Color Bar Parameters", ID_OK_CANCEL, _HELP_ID);
+            super(visatApp.getMainFrame(), visatApp.getAppName() + " - Color Bar Settings", ID_OK_CANCEL, _HELP_ID);
             this.visatApp = visatApp;
             okWasClicked = false;
 
@@ -398,7 +398,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             initParams();
             // rename the OK button
             JButton button = (JButton) getButton(ID_OK);
-            button.setText("Continue");
+    //        button.setText("Continue");
 //
             initUI();
             updateUIState();
@@ -742,7 +742,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
             modifyManualPoints(paramGroup,imageLegend.getFullCustomAddThesePoints());
 
-            final ModalDialog dialog = new ModalDialog(getParent(), VisatApp.getApp().getAppName() + " - Colour Legend Preview", imageDisplay,
+            final ModalDialog dialog = new ModalDialog(getParent(), VisatApp.getApp().getAppName() + " - Color Bar Preview", imageDisplay,
                     ID_OK, null);
             dialog.getJDialog().setResizable(false);
             dialog.show();
