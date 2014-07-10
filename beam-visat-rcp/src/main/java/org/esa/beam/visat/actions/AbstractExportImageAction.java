@@ -70,17 +70,17 @@ public abstract class AbstractExportImageAction extends ExecCommand {
 
 
     private final static String[][] IMAGE_FORMAT_DESCRIPTIONS = {
-            BMP_FORMAT_DESCRIPTION,
             PNG_FORMAT_DESCRIPTION,
             JPEG_FORMAT_DESCRIPTION,
             TIFF_FORMAT_DESCRIPTION,
+            BMP_FORMAT_DESCRIPTION,
     };
 
     private final static String[][] SCENE_IMAGE_FORMAT_DESCRIPTIONS = {
-            BMP_FORMAT_DESCRIPTION,
             PNG_FORMAT_DESCRIPTION,
             JPEG_FORMAT_DESCRIPTION,
             TIFF_FORMAT_DESCRIPTION,
+            BMP_FORMAT_DESCRIPTION,
             GEOTIFF_FORMAT_DESCRIPTION,
     };
     private static final String[] TRANSPARENCY_IMAGE_FORMATS = new String[]{"TIFF", "PNG"};

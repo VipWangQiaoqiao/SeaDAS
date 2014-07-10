@@ -16,11 +16,8 @@
 
 package org.esa.beam.visat.toolviews.imageinfo;
 
-import com.bc.ceres.core.*;
-import com.bc.ceres.swing.TableLayout;
 import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.GridBagUtils;
-import org.esa.beam.framework.ui.ImageInfoEditorModel;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.util.math.Range;
 import org.esa.beam.visat.VisatApp;
@@ -32,16 +29,12 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 
 class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
@@ -239,29 +232,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         });
 
 
-//        minField.getDocument().addDocumentListener(new DocumentListener() {
-//            @Override
-//            public void insertUpdate(DocumentEvent documentEvent) {
-//                if (minDoThis[0]) {
-//                    minDoThis[0] = false;
-//                    shouldFireChooserEvent = true;
-//                    applyChanges(RangeKey.FromMinMaxFields);
-//                    shouldFireChooserEvent = false;
-//                    minDoThis[0] = true;
-//                }
-//            }
-//
-//            @Override
-//            public void removeUpdate(DocumentEvent documentEvent) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//            }
-//
-//            @Override
-//            public void changedUpdate(DocumentEvent documentEvent) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//            }
-//        });
-
 
         maxField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -286,81 +256,32 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         });
 
-
-        minField.addMouseListener(new MouseListener() {
+        minField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void mousePressed(MouseEvent mouseEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent mouseEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent mouseEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void mouseExited(MouseEvent mouseEvent) {
-
-                double currentVal;
-                try {
-                    currentVal = Double.parseDouble(minField.getText());
-
-                } catch (NumberFormatException nfe) {
-                    JOptionPane.showMessageDialog(minField, "Please enter valid number.");
-                    minField.requestFocusInWindow();
-                    return;
-                }
-                //     boolean valid = sampleName.equals("minSample") ? validateMinMax(currentVal, maxVal) : validateMinMax(minVal, currentVal);
-                //      if (valid) {
-                minField.setValue(currentVal);
-
+            public void insertUpdate(DocumentEvent documentEvent) {
+                if (!minFieldActivated[0]) {
                     minFieldActivated[0] = true;
                     shouldFireChooserEvent = true;
                     applyChanges(RangeKey.FromMinMaxFields);
                     shouldFireChooserEvent = false;
                     minFieldActivated[0] = false;
+                }
+            }
 
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
 
-                //      }
-
-
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
 
 
-//        maxField.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                applyChanges(RangeKey.FromMinMaxFields);
-//                colorPaletteInfoComboBox.reset();
-//            }
-//        });
 
-//        maxField.addPropertyChangeListener(new PropertyChangeListener() {
-//            @Override
-//            public void propertyChange(PropertyChangeEvent evt) {
-//                applyChanges(RangeKey.FromMinMaxFields);
-//                VisatApp.getApp().clearStatusBarMessage();
-//            }
-//        });
-//
-//        minField.addPropertyChangeListener(new PropertyChangeListener() {
-//            @Override
-//            public void propertyChange(PropertyChangeEvent evt) {
-//                applyChanges(RangeKey.FromMinMaxFields);
-//                VisatApp.getApp().clearStatusBarMessage();
-//            }
-//        });
+
 
 
         bandRange.addActionListener(new ActionListener() {
@@ -562,9 +483,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             maxField.setValue(cpd.getMaxDisplaySample());
         }
 
-//        colorPaletteInfoComboBox.setShouldFire(false);
-//        colorPaletteInfoComboBox.setSelectedByValues(cpd, cpd.getMinDisplaySample(), cpd.getMaxDisplaySample(), logScaled);
-//        colorPaletteInfoComboBox.setShouldFire(true);
 
         shouldFireChooserEvent = origShouldFireChooserEvent;
         shouldFireChooserEvent = true;

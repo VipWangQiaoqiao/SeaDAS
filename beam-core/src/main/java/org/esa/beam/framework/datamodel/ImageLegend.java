@@ -66,12 +66,10 @@ public class ImageLegend {
     private static final int _MIN_LEGEND_HEIGHT = 48;
 
 
-
     public static final double DEFAULT_SCALING_FACTOR = 1;
     public static final int DEFAULT_TITLE_FONT_SIZE = 18;
     public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 14;
     public static final int DEFAULT_LABELS_FONT_SIZE = 14;
-
 
 
     // Independent attributes (Properties)
@@ -95,7 +93,6 @@ public class ImageLegend {
     private int titleFontSize;
     private int titleUnitsFontSize;
     private int labelsFontSize;
-
 
 
     // Dependent, internal attributes
@@ -263,17 +260,19 @@ public class ImageLegend {
 
     private void createColorBarInfos() {
 
-        final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample() * getScalingFactor();
-        final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample() * getScalingFactor();
+        final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
+        final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
 
         double value, weight;
         colorBarInfos.clear();
 
         if (DISTRIB_EVEN_STR.equals(getDistributionType())) {
             if (getNumberOfTicks() >= 2) {
+                ArrayList<String> manualPointsArrayList = new ArrayList<>();
                 double normalizedDelta = (1.0 / (getNumberOfTicks() - 1.0));
 
                 for (int i = 0; i < getNumberOfTicks(); i++) {
+
                     weight = i * normalizedDelta;
                     double linearValue = getLinearValue(weight, min, max);
                     if (imageInfo.isLogScaled()) {
@@ -283,9 +282,17 @@ public class ImageLegend {
                     }
 
                     if (isValidWeight(weight)) {
-                        ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
-                        colorBarInfos.add(colorBarInfo);
+                        if (getScalingFactor() != 0) {
+                            value = value * getScalingFactor();
+                            ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
+                            colorBarInfos.add(colorBarInfo);
+                            manualPointsArrayList.add(colorBarInfo.getFormattedValue());
+                        }
                     }
+                }
+                if (manualPointsArrayList.size() > 0) {
+                    String manualPoints = StringUtils.join(manualPointsArrayList, ", ");
+                    setFullCustomAddThesePoints(manualPoints);
                 }
             }
         } else if (DISTRIB_EXACT_STR.equals(getDistributionType())) {
@@ -296,7 +303,7 @@ public class ImageLegend {
             for (int i = 0; i < numPointsInCpdFile; i = i + stepSize) {
 
                 ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
-                value = slider.getSample() * getScalingFactor();
+                value = slider.getSample();
 
                 if (imageInfo.isLogScaled()) {
                     weight = getLinearWeightFromLogValue(value, min, max);
@@ -304,8 +311,11 @@ public class ImageLegend {
                     weight = getLinearWeightFromLinearValue(value, min, max);
                 }
                 if (isValidWeight(weight)) {
-                    ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
-                    colorBarInfos.add(colorBarInfo);
+                    if (getScalingFactor() != 0) {
+                        value = value * getScalingFactor();
+                        ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
+                        colorBarInfos.add(colorBarInfo);
+                    }
                 }
             }
         } else if (DISTRIB_MANUAL_STR.equals(getDistributionType())) {
@@ -314,22 +324,31 @@ public class ImageLegend {
             if (addThese != null && addThese.length() > 0) {
                 String[] formattedValues = addThese.split(",");
 
+
                 for (String formattedValue : formattedValues) {
-                    value = Double.valueOf(formattedValue);
+                    if (formattedValue != null) {
+                        formattedValue.trim();
+                        if (formattedValue.length() > 0 && scalingFactor != 0) {
+                            value = Double.valueOf(formattedValue) / getScalingFactor();
 
-                    if (imageInfo.isLogScaled()) {
-                        weight = getLinearWeightFromLogValue(value, min, max);
-                    } else {
-                        weight = getLinearWeightFromLinearValue(value, min, max);
-                    }
+                            // value = Double.parseDouble(formattedValue)/scalingFactor;
 
-                    if (isValidWeight(weight)) {
-                        ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, formattedValue);
-                        colorBarInfos.add(colorBarInfo);
+                            if (imageInfo.isLogScaled()) {
+                                weight = getLinearWeightFromLogValue(value, min, max);
+                            } else {
+                                weight = getLinearWeightFromLinearValue(value, min, max);
+                            }
+
+                            if (isValidWeight(weight)) {
+                                ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, formattedValue);
+                                colorBarInfos.add(colorBarInfo);
+                            }
+                        }
                     }
                 }
             }
         }
+
     }
 
 
@@ -601,7 +620,7 @@ public class ImageLegend {
             final FontMetrics fontMetrics = g2d.getFontMetrics();
             g2d.setPaint(foregroundColor);
             int x0 = BORDER_GAP;
-            int y0 = (int) (BORDER_GAP + 0.7*getHeaderTextRequiredDimension(g2d).getHeight()); // + fontMetrics.getMaxAscent();
+            int y0 = (int) (BORDER_GAP + 0.7 * getHeaderTextRequiredDimension(g2d).getHeight()); // + fontMetrics.getMaxAscent();
 
             x0 = paletteRect.x;
             y0 = paletteRect.y - HEADER_GAP;
@@ -754,7 +773,6 @@ public class ImageLegend {
 //        }
 
 
-
     private double getLinearWeightFromLinearValue(double linearValue, double min, double max) {
         double linearWeight = (linearValue - min) / (max - min);
         return linearWeight;
@@ -853,8 +871,6 @@ public class ImageLegend {
     public void setFullCustomAddThesePoints(String fullCustomAddThesePoints) {
         this.fullCustomAddThesePoints = fullCustomAddThesePoints;
     }
-
-
 
 
     public Font getTitleFont() {

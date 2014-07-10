@@ -43,6 +43,7 @@ import java.awt.image.RenderedImage;
 
 public class ExportLegendImageAction extends AbstractExportImageAction {
 
+
     private static final String HORIZONTAL_STR = "Horizontal";
     private static final String VERTICAL_STR = "Vertical";
 
@@ -73,7 +74,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     public void actionPerformed(CommandEvent event) {
         ProductSceneView view = getVisatApp().getSelectedProductSceneView();
         legendParamGroup = createLegendParamGroup();
- //       legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
+        //       legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
         modifyHeaderText(legendParamGroup, view.getRaster());
         final RasterDataNode raster = view.getRaster();
         imageLegend = new ImageLegend(raster.getImageInfo(), raster);
@@ -161,7 +162,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         param = new Parameter(SCALING_FACTOR_PARAM_STR, ImageLegend.DEFAULT_SCALING_FACTOR);
-        param.getProperties().setLabel("ScalingFactor");
+        param.getProperties().setLabel("Scaling Factor*");
         param.getProperties().setMinValue(.000001);
         param.getProperties().setMaxValue(1000000);
         paramGroup.addParameter(param);
@@ -257,6 +258,12 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         legendParamGroup.getParameter(TITLE_UNITS_PARAM_STR).setValue(headerUnitsText, null);
     }
 
+    public static void modifyManualPoints(ParamGroup legendParamGroup, String value) {
+        legendParamGroup.getParameter(MANUAL_POINTS_PARAM_STR).setValue(value, null);
+
+    }
+
+
     private static JComponent createImageLegendAccessory(final VisatApp visatApp,
                                                          final JFileChooser fileChooser,
                                                          final ParamGroup legendParamGroup,
@@ -284,6 +291,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         return accessory;
     }
+
 
     private static void transferParamsToImageLegend(ParamGroup legendParamGroup, ImageLegend imageLegend) {
         Object value;
@@ -456,7 +464,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         @Override
         protected void onOK() {
- //           getParamGroup().getParameterValues(visatApp.getPreferences());
+            //           getParamGroup().getParameterValues(visatApp.getPreferences());
             super.onOK();
             okWasClicked = true;
         }
@@ -605,7 +613,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.weightx = 1.0;
-            jPanel.add(scalingFactorParam.getEditor().getLabelComponent(), gbc);
+            JLabel scalingFactorlabel = scalingFactorParam.getEditor().getLabelComponent();
+            scalingFactorlabel.setToolTipText("Multiplication factor to be applied to colorbar points (Note this will change units so user will need to adjust units accordingly)");
+
+            jPanel.add(scalingFactorlabel, gbc);
             gbc.gridx = 1;
             jPanel.add(scalingFactorParam.getEditor().getEditorComponent(), gbc);
 
@@ -698,6 +709,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         }
 
         private void showPreview() {
+
             final ImageLegend imageLegend = new ImageLegend(getImageInfo(), raster);
             getImageLegend(imageLegend);
             final BufferedImage image = imageLegend.createImage();
@@ -727,10 +739,15 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 //                    showPopup(e, image, imageDisplay);
                 }
             });
+
+            modifyManualPoints(paramGroup,imageLegend.getFullCustomAddThesePoints());
+
             final ModalDialog dialog = new ModalDialog(getParent(), VisatApp.getApp().getAppName() + " - Colour Legend Preview", imageDisplay,
                     ID_OK, null);
             dialog.getJDialog().setResizable(false);
             dialog.show();
+
+
         }
 
         private static void showPopup(final MouseEvent e, final BufferedImage image, final JComponent imageDisplay) {

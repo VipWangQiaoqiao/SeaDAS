@@ -13,17 +13,17 @@
 #
 
 
-Heated Layer Depth (Morel):Zhl_morel:m:linear:2.0:65.0:F:zphotic
-Euphotic Depth (Morel):Zeu_morel:m:linear:5.0:180.0:F:zphotic
-Secchi Depth (Lee GBR):Zsd_gbr:m:linear:2.0:50.0:F:zphotic
-Secchi Depth (Morel):Zsd_morel:m:linear:2.0:180.0:F:zphotic
-Euphotic Depth (Lee):Zeu_lee:m:linear:5.0:180.0:F:zphotic
-Photic Depth at 50% Light (Lee):Zp_50_lee:m:linear:5.0:180.0:F:zphotic
-Photic Depth at 10% Light (Lee):Zp_10_lee:m:linear:2.0:180.0:F:zphotic
+Heated Layer Depth (Morel):Zhl_morel:m:linear:2.0:65.0:F:oceancolor_zphotic
+Euphotic Depth (Morel):Zeu_morel:m:linear:5.0:180.0:F:oceancolor_zphotic
+Secchi Depth (Lee GBR):Zsd_gbr:m:linear:2.0:50.0:F:oceancolor_zphotic
+Secchi Depth (Morel):Zsd_morel:m:linear:2.0:180.0:F:oceancolor_zphotic
+Euphotic Depth (Lee):Zeu_lee:m:linear:5.0:180.0:F:oceancolor_zphotic
+Photic Depth at 50% Light (Lee):Zp_50_lee:m:linear:5.0:180.0:F:oceancolor_zphotic
+Photic Depth at 10% Light (Lee):Zp_10_lee:m:linear:2.0:180.0:F:oceancolor_zphotic
 
 
-Normalized Difference Vegetation Index:ndvi: :linear:-0.350000:0.920000:I:ndvi
-Enhanced Vegetation Index:evi: :linear:-0.350000:0.920000:I:ndvi
-Normalized Difference Vegetation Index:NDVI: :linear:-0.0500000:0.915200:I:ndvi
-Enhanced Vegetation Index:EVI: :linear:-0.0500000:0.915200:I:ndvi
+Normalized Difference Vegetation Index:ndvi: :linear:-0.350000:0.920000:I:oceancolor_ndvi
+Enhanced Vegetation Index:evi: :linear:-0.350000:0.920000:I:oceancolor_ndvi
+Normalized Difference Vegetation Index:NDVI: :linear:-0.0500000:0.915200:I:oceancolor_ndvi
+Enhanced Vegetation Index:EVI: :linear:-0.0500000:0.915200:I:oceancolor_ndvi
 

@@ -13,5 +13,5 @@
 #
 
 
-My thingy:my_euphotic_thingy:m:linear:2.0:65.0:F:zphotic
+My thingy:my_euphotic_thingy:m:linear:2.0:65.0:F:oceancolor_zphotic
 
