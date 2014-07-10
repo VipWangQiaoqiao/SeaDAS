@@ -159,7 +159,7 @@ public abstract class AbstractExportImageAction extends ExecCommand {
         final boolean entireImageSelected = isEntireImageSelected();
 
         final BeamFileFilter fileFilter = fileChooser.getBeamFileFilter();
-        String imageFormat = fileFilter != null ? fileFilter.getFormatName() : "TIFF";
+        String imageFormat = fileFilter != null ? fileFilter.getFormatName() : "PNG";
         if (imageFormat.equals(GEOTIFF_FORMAT_DESCRIPTION[0]) && !entireImageSelected) {
             final int status = visatApp.showQuestionDialog("GeoTIFF is not applicable to image clippings.\n" +
                                                            "Shall TIFF format be used instead?", null);

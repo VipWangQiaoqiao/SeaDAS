@@ -108,7 +108,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 //        legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
 //        modifyHeaderText(legendParamGroup, view.getRaster());
         fileChooser.setDialogTitle(getVisatApp().getAppName() + " - Export Color Bar Image"); /*I18N*/
-        fileChooser.setCurrentFilename(imageBaseName + "_colorbar");
+        fileChooser.setCurrentFilename(imageBaseName + "_colorbar.png");
 //        final RasterDataNode raster = view.getRaster();
 //        imageLegend = new ImageLegend(raster.getImageInfo(), raster);
 
