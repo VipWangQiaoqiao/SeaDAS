@@ -66,7 +66,7 @@ class MoreOptionsPane {
         }
 
         component = new JLabel(); // dummy
-        collapsed = true;
+        collapsed = false;
 
         headerButton = ToolButtonFactory.createButton(icons[0], false);
         headerButton.setName("MoreOptionsPane.headerButton");

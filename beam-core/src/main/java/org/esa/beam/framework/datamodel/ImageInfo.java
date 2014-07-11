@@ -318,8 +318,8 @@ public class ImageInfo implements Cloneable {
 
     public void setColorPaletteDef(ColorPaletteDef colorPaletteDef,
                                    double minSample,
-                                   double maxSample, boolean autoDistribute, boolean isTargetLogScaled) {
-        transferPoints(colorPaletteDef, minSample, maxSample, autoDistribute, getColorPaletteDef(), isTargetLogScaled);
+                                   double maxSample, boolean autoDistribute, boolean isSourceLogScaled, boolean isTargetLogScaled) {
+        transferPoints(colorPaletteDef, minSample, maxSample, autoDistribute, getColorPaletteDef(), isSourceLogScaled, isTargetLogScaled);
     }
 
 
@@ -328,6 +328,7 @@ public class ImageInfo implements Cloneable {
                                        double maxTargetValue,
                                        boolean autoDistribute,
                                        ColorPaletteDef targetCPD,
+                                       boolean isSourceLogScaled,
                                        boolean isTargetLogScaled) {
 
         if (autoDistribute || sourceCPD.isAutoDistribute()) {
@@ -336,11 +337,19 @@ public class ImageInfo implements Cloneable {
             double maxSourceValue = sourceCPD.getMaxDisplaySample();
 
             for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
-                double currentSourceValue = sourceCPD.getPointAt(i).getSample();
 
                 if (minTargetValue != maxTargetValue && minSourceValue != maxSourceValue) {
 
-                    double linearWeight = (currentSourceValue - minSourceValue) / (maxSourceValue - minSourceValue);
+                    double linearWeight;
+                    if (isSourceLogScaled) {
+                        double currentSourceLogValue = sourceCPD.getPointAt(i).getSample();
+                        linearWeight = getLinearWeightFromLogValue(currentSourceLogValue, minSourceValue, maxSourceValue);
+
+                    } else {
+                        double currentSourceValue = sourceCPD.getPointAt(i).getSample();
+                        linearWeight = (currentSourceValue - minSourceValue) / (maxSourceValue - minSourceValue);
+                    }
+
                     double currentLinearTargetValue = getLinearValue(linearWeight, minTargetValue, maxTargetValue);
 
                     if (isTargetLogScaled) {
@@ -391,7 +400,7 @@ public class ImageInfo implements Cloneable {
         double a = min / (Math.exp(b * min));
 
         double linearWeight = Math.log(logValue / a) / b;
-        linearWeight = linearWeight / (max - min);
+        linearWeight = (linearWeight-min) / (max - min);
 
         return linearWeight;
     }

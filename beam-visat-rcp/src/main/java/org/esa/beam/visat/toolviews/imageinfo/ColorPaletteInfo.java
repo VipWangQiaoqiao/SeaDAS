@@ -12,6 +12,7 @@ public class ColorPaletteInfo {
     private double minValue;
     private double maxValue;
     private boolean isLogScaled;
+    private boolean isSourceLogScaled = false;
     private ColorPaletteDef colorPaletteDef;
 
     public ColorPaletteInfo(String name, String description, String cpdFilename, double minValue, double maxValue,
@@ -89,5 +90,13 @@ public class ColorPaletteInfo {
 
     private void setColorPaletteDef(ColorPaletteDef colorPaletteDef) {
         this.colorPaletteDef = colorPaletteDef;
+    }
+
+    public boolean isSourceLogScaled() {
+        return isSourceLogScaled;
+    }
+
+    private void setSourceLogScaled(boolean sourceLogScaled) {
+        isSourceLogScaled = sourceLogScaled;
     }
 }
