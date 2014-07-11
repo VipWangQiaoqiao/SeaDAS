@@ -191,7 +191,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
                     imageInfoEditorSupport.zoomOutVButton,
                     imageInfoEditorSupport.zoomInHButton,
                     imageInfoEditorSupport.zoomOutHButton,
-                    logDisplayButton,
+          //          logDisplayButton,
                     evenDistButton,
                     imageInfoEditorSupport.showExtraInfoButton,
         };

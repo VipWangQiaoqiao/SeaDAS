@@ -8,11 +8,7 @@ import org.esa.beam.util.logging.BeamLogManager;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,12 +23,26 @@ class ColorPalettesManager {
         cpdRasterList = new HashMap<>();
         final ArrayList<ColorPaletteDef> newCpdList = new ArrayList<>();
         final ArrayList<String> newCpdNames = new ArrayList<>();
-        final File[] files = palettesDir.listFiles(new FilenameFilter() {
+        final File[] files_oceancolor = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".cpd");
+                return (name.toLowerCase().endsWith(".cpd") && name.toLowerCase().startsWith("oceancolor_"));
+
             }
         });
+
+        final File[] files_other = palettesDir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().startsWith("oceancolor_"));
+
+            }
+        });
+
+        Arrays.sort(files_oceancolor);
+        Arrays.sort(files_other);
+        File[] files = concat(files_oceancolor, files_other);
+
         for (File file : files) {
             try {
                 final ColorPaletteDef newCpd = ColorPaletteDef.loadColorPaletteDef(file);
@@ -62,6 +72,15 @@ class ColorPalettesManager {
         }
         cpdNames = newCpdNames;
         cpdList = newCpdList;
+    }
+
+    public static File[] concat(File[] A, File[] B) {
+        int aLen = A.length;
+        int bLen = B.length;
+        File[] C = new File[aLen + bLen];
+        System.arraycopy(A, 0, C, 0, aLen);
+        System.arraycopy(B, 0, C, aLen, bLen);
+        return C;
     }
 
     public static List<ColorPaletteDef> getColorPaletteDefList() {

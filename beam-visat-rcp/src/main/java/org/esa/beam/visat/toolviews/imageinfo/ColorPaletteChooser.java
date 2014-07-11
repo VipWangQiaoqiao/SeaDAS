@@ -87,7 +87,11 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
         final List<ColorPaletteDef> defList = ColorPalettesManager.getColorPaletteDefList();
         final Vector<ColorPaletteWrapper> paletteWrappers = new Vector<>();
         for (ColorPaletteDef colorPaletteDef : defList) {
-            final String nameFor = getNameForWithoutExtension(colorPaletteDef);
+
+            // todo Danny removed this so .cpd would show in name
+            // makes it a little more obvious that you are loading a file
+            //     final String nameFor = getNameForWithoutExtension(colorPaletteDef);
+            final String nameFor = ColorPalettesManager.getNameFor(colorPaletteDef);
             paletteWrappers.add(new ColorPaletteWrapper(nameFor, colorPaletteDef));
         }
         return paletteWrappers;
