@@ -43,12 +43,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final AbstractButton logDisplayButton;
     private final MoreOptionsForm moreOptionsForm;
     private final ColorPaletteChooser colorPaletteChooser;
-    private  JFormattedTextField minField;
-    private  JFormattedTextField maxField;
+    private JFormattedTextField minField;
+    private JFormattedTextField maxField;
     private final DiscreteCheckBox discreteCheckBox;
     private final JCheckBox loadWithCPDFileValuesCheckBox;
     private final ColorPaletteInfoComboBox colorPaletteInfoComboBox;
-    private  JButton bandRange;
+    private JButton bandRange;
 
 
     final Boolean[] minFieldActivated = {new Boolean(false)};
@@ -79,7 +79,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         loadWithCPDFileValuesCheckBox = new JCheckBox("Load with CPD file values", false);
         loadWithCPDFileValuesCheckBox.setToolTipText("When loading a new cpd file, use it's actual value and overwrite user min/max values");
-
 
 
         colorPaletteChooser = new ColorPaletteChooser();
@@ -131,13 +130,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         basicPanel.add(rangeJPanel, gbc);
 
 
-
-
-
-
-
-
-
         contentPanel = GridBagUtils.createPanel();
 
         gbc.gridy = 0;
@@ -152,7 +144,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         shouldFireChooserEvent = true;
 
         colorPaletteChooser.addActionListener(createListener(RangeKey.FromCurrentPalette));
-        //       minField.addActionListener(createListener(RangeKey.FromMinMaxFields));
+//        minField.addActionListener(createListener(RangeKey.FromMinMaxFields));
 //        maxField.addActionListener(createListener(RangeKey.FromMinMaxFields));
         //       cpdRange.addActionListener(createListener(RangeKey.FromPaletteSource));
         bandRange.addActionListener(createListener(RangeKey.FromData));
@@ -172,9 +164,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             public void insertUpdate(DocumentEvent documentEvent) {
                 if (!maxFieldActivated[0] && !basicSwitcherIsActive[0]) {
                     maxFieldActivated[0] = true;
-                    shouldFireChooserEvent = true;
+//                    boolean origShouldFireChooserEvent = shouldFireChooserEvent;
+//                    shouldFireChooserEvent = true;
                     applyChanges(RangeKey.FromMinMaxFields);
-                    shouldFireChooserEvent = false;
+//                    shouldFireChooserEvent = origShouldFireChooserEvent;
                     maxFieldActivated[0] = false;
                 }
             }
@@ -195,9 +188,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             public void insertUpdate(DocumentEvent documentEvent) {
                 if (!minFieldActivated[0] && !basicSwitcherIsActive[0]) {
                     minFieldActivated[0] = true;
-                    shouldFireChooserEvent = true;
+//                    boolean origShouldFireChooserEvent = shouldFireChooserEvent;
+//                    shouldFireChooserEvent = true;
                     applyChanges(RangeKey.FromMinMaxFields);
-                    shouldFireChooserEvent = false;
+//                    shouldFireChooserEvent = origShouldFireChooserEvent;
                     minFieldActivated[0] = false;
                 }
             }
@@ -231,35 +225,40 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         logDisplayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+//                boolean originalShouldFireChooserEvent = shouldFireChooserEvent;
+//                shouldFireChooserEvent = true;
                 if (listenToLogDisplayButtonEnabled[0]) {
                     listenToLogDisplayButtonEnabled[0] = false;
                     logDisplayButton.setSelected(!logDisplayButton.isSelected());
                     applyChanges(RangeKey.ToggleLog);
                     listenToLogDisplayButtonEnabled[0] = true;
                 }
+//                shouldFireChooserEvent = originalShouldFireChooserEvent;
             }
         });
 
 //        logDisplayButton.addActionListener(new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
-//                final boolean shouldLog10Display = logDisplayButton.isSelected();
-//                VisatApp.getApp().clearStatusBarMessage();
-//                final ImageInfo imageInfo = parentForm.getImageInfo();
-//                if (shouldLog10Display) {
-//                    final ColorPaletteDef cpd = imageInfo.getColorPaletteDef();
-//                    if (LogDisplay.checkApplicability(cpd)) {
+//                if (listenToLogDisplayButtonEnabled[0]) {
+//                    final boolean shouldLog10Display = logDisplayButton.isSelected();
+//                    VisatApp.getApp().clearStatusBarMessage();
+//                    final ImageInfo imageInfo = parentForm.getImageInfo();
+//                    if (shouldLog10Display) {
+//                        final ColorPaletteDef cpd = imageInfo.getColorPaletteDef();
+//                        if (LogDisplay.checkApplicability(cpd)) {
+//                            colorPaletteChooser.setLog10Display(shouldLog10Display);
+//                            imageInfo.setLogScaled(shouldLog10Display);
+//                            parentForm.applyChanges();
+//                        } else {
+//                            LogDisplay.showNotApplicableInfo(parentForm.getContentPanel());
+//                            logDisplayButton.setSelected(false);
+//                        }
+//                    } else {
 //                        colorPaletteChooser.setLog10Display(shouldLog10Display);
 //                        imageInfo.setLogScaled(shouldLog10Display);
 //                        parentForm.applyChanges();
-//                    } else {
-//                        LogDisplay.showNotApplicableInfo(parentForm.getContentPanel());
-//                        logDisplayButton.setSelected(false);
 //                    }
-//                } else {
-//                    colorPaletteChooser.setLog10Display(shouldLog10Display);
-//                    imageInfo.setLogScaled(shouldLog10Display);
-//                    parentForm.applyChanges();
 //                }
 //            }
 //        });
@@ -497,7 +496,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         colorPaletteChooser.setLog10Display(logScaled);
         colorPaletteChooser.setDiscreteDisplay(discrete);
-        boolean origShouldFireChooserEvent = shouldFireChooserEvent;
+
         shouldFireChooserEvent = false;
         colorPaletteChooser.setSelectedColorPaletteDefinition(cpd);
 
@@ -514,9 +513,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             maxField.setValue(cpd.getMaxDisplaySample());
         }
 
-
-        shouldFireChooserEvent = origShouldFireChooserEvent;
         shouldFireChooserEvent = true;
+
 
     }
 
@@ -622,16 +620,19 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     break;
                 default:
                     if (loadWithCPDFileValuesCheckBox.isSelected()) {
-                        isSourceLogScaled = false;
-                        isTargetLogScaled = false;
-                        currentInfo.setLogScaled(false);
+                        isSourceLogScaled = selectedCPD.isLogScaled();
+                        isTargetLogScaled = selectedCPD.isLogScaled();
+                     //   autoDistribute = selectedCPD.isAutoDistribute();
+                        autoDistribute = false;
+                        currentInfo.setLogScaled(isTargetLogScaled);
                         min = selectedCPD.getMinDisplaySample();
                         max = selectedCPD.getMaxDisplaySample();
                         cpd = deepCopy;
-                        autoDistribute = false;
+                        deepCopy.setLogScaled(isTargetLogScaled);
+                        deepCopy.setAutoDistribute(autoDistribute);
                         if (testMinMax(min, max, isTargetLogScaled)) {
                             listenToLogDisplayButtonEnabled[0] = false;
-                            logDisplayButton.setSelected(false);
+                            logDisplayButton.setSelected(isTargetLogScaled);
                             listenToLogDisplayButtonEnabled[0] = true;
                         }
                     } else {
@@ -649,9 +650,13 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
                 if (key == RangeKey.ToggleLog) {
                     currentInfo.setLogScaled(isTargetLogScaled);
+                    colorPaletteChooser.setLog10Display(isTargetLogScaled);
                 }
                 parentForm.applyChanges();
+
+
             }
+
         }
     }
 
@@ -660,12 +665,19 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         if (min == max) {
             checksOut = false;
+            VisatApp.getApp().setStatusBarMessage("WARNING: Min cannot equal Max");
+//            JOptionPane.showMessageDialog(minField, "Min cannot equal Max");
         }
 
         if (isLogScaled && min == 0) {
             checksOut = false;
+            VisatApp.getApp().setStatusBarMessage("WARNING: Min cannot be 0 in log scaling mode");
+//            JOptionPane.showMessageDialog(minField, "Min cannot be 0 in log scaling mode");
         }
 
+        if (checksOut) {
+            VisatApp.getApp().clearStatusBarMessage();
+        }
         return checksOut;
     }
 

@@ -2,6 +2,7 @@ package org.esa.beam.visat.toolviews.imageinfo;
 
 import org.esa.beam.framework.datamodel.ColorPaletteDef;
 import org.esa.beam.framework.datamodel.ImageInfo;
+import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.util.io.FileUtils;
 import org.esa.beam.util.math.Range;
@@ -13,14 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.List;
 import java.util.Vector;
 
@@ -124,10 +118,34 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
                         drawPalette((Graphics2D) g, cpd, g.getClipBounds().getSize());
                     }
                 };
+//
+//                final JPanel palettePanel = new JPanel(new BorderLayout(0, 2));
+//                palettePanel.add(nameComp, BorderLayout.NORTH);
+//                palettePanel.add(rampComp, BorderLayout.CENTER);
 
-                final JPanel palettePanel = new JPanel(new BorderLayout(0, 2));
-                palettePanel.add(nameComp, BorderLayout.NORTH);
-                palettePanel.add(rampComp, BorderLayout.CENTER);
+
+                JPanel palettePanel = GridBagUtils.createPanel();
+                GridBagConstraints gbc = new GridBagConstraints();
+
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.anchor = GridBagConstraints.WEST;
+
+
+                gbc.gridy = 0;
+                gbc.gridx = 0;
+                gbc.weightx = 1;
+                gbc.weighty = 1;
+                gbc.insets = new Insets(2,0,0,0);
+                palettePanel.add(nameComp, gbc);
+
+                gbc.gridy = 1;
+                gbc.gridx = 0;
+                gbc.weighty = .5;
+                gbc.insets = new Insets(0,0,4,0);
+                palettePanel.add(rampComp, gbc);
+
+
+
 
                 return palettePanel;
             }
@@ -143,12 +161,13 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
         cpdCopy.setNumColors(width);
         final ImageInfo imageInfo = new ImageInfo(cpdCopy);
         imageInfo.setLogScaled(log10Display);
+        imageInfo.setLogScaled(colorPaletteDef.isLogScaled());
 
         Color[] colorPalette = ImageManager.createColorPalette(imageInfo);
 
-        g2.setStroke(new BasicStroke(1.0f));
+        g2.setStroke(new BasicStroke(2.0f));
 
-        for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x=x+2) {
             g2.setColor(colorPalette[x]);
             g2.drawLine(x, 0, x, height);
         }

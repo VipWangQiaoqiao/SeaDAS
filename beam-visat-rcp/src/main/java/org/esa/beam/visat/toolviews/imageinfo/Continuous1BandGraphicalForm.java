@@ -26,6 +26,7 @@ import org.esa.beam.framework.datamodel.Stx;
 import org.esa.beam.framework.datamodel.StxFactory;
 import org.esa.beam.framework.ui.ImageInfoEditorModel;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.visat.VisatApp;
 
 import javax.swing.AbstractButton;
 import javax.swing.JPanel;
@@ -47,6 +48,8 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
     private final MoreOptionsForm moreOptionsForm;
     private final DiscreteCheckBox discreteCheckBox;
 
+    final Boolean[] listenToLogDisplayButtonEnabled = {true};
+
     Continuous1BandGraphicalForm(final ColorManipulationForm parentForm) {
         this.parentForm = parentForm;
 
@@ -59,26 +62,42 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
         moreOptionsForm.addRow(discreteCheckBox);
 
         logDisplayButton = LogDisplay.createButton();
+//        logDisplayButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                final boolean shouldLog10Display = logDisplayButton.isSelected();
+//                if (shouldLog10Display) {
+//                    final ImageInfo imageInfo = parentForm.getImageInfo();
+//                    final ColorPaletteDef cpd = imageInfo.getColorPaletteDef();
+//                    if (LogDisplay.checkApplicability(cpd)) {
+//                        setLogarithmicDisplay(parentForm.getProductSceneView().getRaster(), shouldLog10Display);
+//                        parentForm.applyChangesLogToggle();
+//                    } else {
+//                        LogDisplay.showNotApplicableInfo(parentForm.getContentPanel());
+//                        logDisplayButton.setSelected(false);
+//                    }
+//                } else {
+//                    setLogarithmicDisplay(parentForm.getProductSceneView().getRaster(), shouldLog10Display);
+//                    parentForm.applyChangesLogToggle();
+//                }
+//            }
+//        });
+
         logDisplayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                final boolean shouldLog10Display = logDisplayButton.isSelected();
-                if (shouldLog10Display) {
-                    final ImageInfo imageInfo = parentForm.getImageInfo();
-                    final ColorPaletteDef cpd = imageInfo.getColorPaletteDef();
-                    if (LogDisplay.checkApplicability(cpd)) {
-                        setLogarithmicDisplay(parentForm.getProductSceneView().getRaster(), shouldLog10Display);
-                        parentForm.applyChanges();
-                    } else {
-                        LogDisplay.showNotApplicableInfo(parentForm.getContentPanel());
-                        logDisplayButton.setSelected(false);
-                    }
-                } else {
-                    setLogarithmicDisplay(parentForm.getProductSceneView().getRaster(), shouldLog10Display);
-                    parentForm.applyChanges();
+//                boolean originalShouldFireChooserEvent = shouldFireChooserEvent;
+//                shouldFireChooserEvent = true;
+                if (listenToLogDisplayButtonEnabled[0]) {
+                    listenToLogDisplayButtonEnabled[0] = false;
+                    logDisplayButton.setSelected(!logDisplayButton.isSelected());
+                    applyChangesLogToggle();
+                    listenToLogDisplayButtonEnabled[0] = true;
                 }
+//                shouldFireChooserEvent = originalShouldFireChooserEvent;
             }
         });
+
 
         evenDistButton = ImageInfoEditorSupport.createButton("icons/EvenDistribution24.gif");
         evenDistButton.setName("evenDistButton");
@@ -124,7 +143,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
             newModel.setMaxHistogramViewSample(oldModel.getMaxHistogramViewSample());
         }
         if (newModel.getSliderSample(0) < newModel.getMinHistogramViewSample() ||
-            newModel.getSliderSample(newModel.getSliderCount() - 1) > newModel.getMaxHistogramViewSample()) {
+                newModel.getSliderSample(newModel.getSliderCount() - 1) > newModel.getMaxHistogramViewSample()) {
             imageInfoEditor.computeZoomInToSliderLimits();
         }
 
@@ -167,10 +186,10 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
         if (logarithmicDisplay) {
             final StxFactory stxFactory = new StxFactory();
             final Stx stx = stxFactory
-                        .withHistogramBinCount(raster.getStx().getHistogramBinCount())
-                        .withLogHistogram(logarithmicDisplay)
-                        .withResolutionLevel(raster.getSourceImage().getModel().getLevelCount() - 1)
-                        .create(raster, ProgressMonitor.NULL);
+                    .withHistogramBinCount(raster.getStx().getHistogramBinCount())
+                    .withLogHistogram(logarithmicDisplay)
+                    .withResolutionLevel(raster.getSourceImage().getModel().getLevelCount() - 1)
+                    .create(raster, ProgressMonitor.NULL);
             model.setDisplayProperties(raster.getName(), raster.getUnit(), stx, POW10_SCALING);
         } else {
             model.setDisplayProperties(raster.getName(), raster.getUnit(), raster.getStx(), Scaling.IDENTITY);
@@ -185,21 +204,21 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
     @Override
     public AbstractButton[] getToolButtons() {
         return new AbstractButton[]{
-                    imageInfoEditorSupport.autoStretch95Button,
-                    imageInfoEditorSupport.autoStretch100Button,
-                    imageInfoEditorSupport.zoomInVButton,
-                    imageInfoEditorSupport.zoomOutVButton,
-                    imageInfoEditorSupport.zoomInHButton,
-                    imageInfoEditorSupport.zoomOutHButton,
-          //          logDisplayButton,
-                    evenDistButton,
-                    imageInfoEditorSupport.showExtraInfoButton,
+                logDisplayButton,
+                imageInfoEditorSupport.autoStretch95Button,
+                imageInfoEditorSupport.autoStretch100Button,
+                imageInfoEditorSupport.zoomInVButton,
+                imageInfoEditorSupport.zoomOutVButton,
+                imageInfoEditorSupport.zoomInHButton,
+                imageInfoEditorSupport.zoomOutHButton,
+                evenDistButton,
+                imageInfoEditorSupport.showExtraInfoButton,
         };
     }
 
     static void setDisplayProperties(ImageInfoEditorModel model, RasterDataNode raster) {
         model.setDisplayProperties(raster.getName(), raster.getUnit(), raster.getStx(),
-                                   raster.isLog10Scaled() ? POW10_SCALING : Scaling.IDENTITY);
+                raster.isLog10Scaled() ? POW10_SCALING : Scaling.IDENTITY);
     }
 
 
@@ -230,4 +249,53 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
             return log10Scaling.scale(value);
         }
     }
+
+    private void applyChangesLogToggle() {
+
+
+        final ImageInfo currentInfo = parentForm.getImageInfo();
+        final ColorPaletteDef currentCPD = currentInfo.getColorPaletteDef();
+
+        final double min;
+        final double max;
+        final boolean isSourceLogScaled;
+        final boolean isTargetLogScaled;
+        final ColorPaletteDef cpd;
+        final boolean autoDistribute;
+
+        isSourceLogScaled = currentInfo.isLogScaled();
+        isTargetLogScaled = !currentInfo.isLogScaled();
+        min = currentCPD.getMinDisplaySample();
+        max = currentCPD.getMaxDisplaySample();
+        cpd = currentCPD;
+        autoDistribute = true;
+
+        if (testMinMax(min, max, isTargetLogScaled)) {
+            currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
+            currentInfo.setLogScaled(isTargetLogScaled);
+            parentForm.applyChanges();
+        }
+    }
+
+    private boolean testMinMax(double min, double max, boolean isLogScaled) {
+        boolean checksOut = true;
+
+        if (min == max) {
+            checksOut = false;
+            VisatApp.getApp().setStatusBarMessage("WARNING: Min cannot equal Max");
+//            JOptionPane.showMessageDialog(minField, "Min cannot equal Max");
+        }
+
+        if (isLogScaled && min == 0) {
+            checksOut = false;
+            VisatApp.getApp().setStatusBarMessage("WARNING: Min cannot be 0 in log scaling mode");
+//            JOptionPane.showMessageDialog(minField, "Min cannot be 0 in log scaling mode");
+        }
+
+        if (checksOut) {
+            VisatApp.getApp().clearStatusBarMessage();
+        }
+        return checksOut;
+    }
+
 }

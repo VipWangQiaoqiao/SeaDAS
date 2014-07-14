@@ -41,6 +41,7 @@ public class ColorPaletteDef implements Cloneable  {
     private final static String _PROPERTY_KEY_COLOR = "color";
     private final static String _PROPERTY_KEY_SAMPLE = "sample";
     private final static String _PROPERTY_KEY_AUTODISTRIBUTE = "autoDistribute";
+    private final static String _PROPERTY_KEY_IS_LOG_SCALED = "isLogScaled";
 
     /**
      * this curve's points
@@ -49,6 +50,7 @@ public class ColorPaletteDef implements Cloneable  {
     private int numColors;
     private boolean discrete;
     private boolean autoDistribute;
+    private boolean isLogScaled;
 
     public ColorPaletteDef(double minSample, double maxSample) {
         this(minSample, 0.5 * (maxSample + minSample), maxSample);
@@ -56,9 +58,9 @@ public class ColorPaletteDef implements Cloneable  {
 
     public ColorPaletteDef(double minSample, double centerSample, double maxSample) {
         this(new Point[]{
-                    new Point(minSample, Color.black),
-                    new Point(centerSample, Color.gray),
-                    new Point(maxSample, Color.white)
+                new Point(minSample, Color.black),
+                new Point(centerSample, Color.gray),
+                new Point(maxSample, Color.white)
         }, 256);
     }
 
@@ -174,9 +176,9 @@ public class ColorPaletteDef implements Cloneable  {
      */
     public static Color getCenterColor(Color c1, Color c2) {
         return new Color(0.5F * (c1.getRed() + c2.getRed()) / 255.0F,
-                         0.5F * (c1.getGreen() + c2.getGreen()) / 255.0F,
-                         0.5F * (c1.getBlue() + c2.getBlue()) / 255.0F,
-                         0.5F * (c1.getAlpha() + c2.getAlpha()) / 255.0F);
+                0.5F * (c1.getGreen() + c2.getGreen()) / 255.0F,
+                0.5F * (c1.getBlue() + c2.getBlue()) / 255.0F,
+                0.5F * (c1.getAlpha() + c2.getAlpha()) / 255.0F);
     }
 
 
@@ -222,6 +224,7 @@ public class ColorPaletteDef implements Cloneable  {
             def.numColors = numColors;
             def.discrete = discrete;
             def.autoDistribute = autoDistribute;
+            def.isLogScaled = isLogScaled;
             return def;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
@@ -248,7 +251,7 @@ public class ColorPaletteDef implements Cloneable  {
         final int numPoints = propertyMap.getPropertyInt(_PROPERTY_KEY_NUM_POINTS);
         if (numPoints < 2) {
             throw new IOException("The selected file contains less than\n" +
-                                  "two colour points.");
+                    "two colour points.");
         }
         final ColorPaletteDef.Point[] points = new ColorPaletteDef.Point[numPoints];
         double lastSample = 0;
@@ -263,12 +266,13 @@ public class ColorPaletteDef implements Cloneable  {
             point.setSample(sample);
             // todo DANNY added this
             point.setLabel(file.getName());
-        //    System.out.println(point.label);
+            //    System.out.println(point.label);
             points[i] = point;
             lastSample = sample;
         }
         ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
         paletteDef.setAutoDistribute(propertyMap.getPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, false));
+        paletteDef.setLogScaled(propertyMap.getPropertyBool(_PROPERTY_KEY_IS_LOG_SCALED, false));
         return paletteDef;
     }
 
@@ -286,6 +290,7 @@ public class ColorPaletteDef implements Cloneable  {
         final int numPoints = points.length;
         propertyMap.setPropertyInt(_PROPERTY_KEY_NUM_POINTS, numPoints);
         propertyMap.setPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, colorPaletteDef.isAutoDistribute());
+        propertyMap.setPropertyBool(_PROPERTY_KEY_IS_LOG_SCALED, colorPaletteDef.isLogScaled());
         for (int i = 0; i < numPoints; i++) {
             propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR + i, points[i].getColor());
             propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + i, points[i].getSample());
@@ -409,6 +414,10 @@ public class ColorPaletteDef implements Cloneable  {
         if (autoDistribute != that.autoDistribute) {
             return false;
         }
+
+        if (isLogScaled != that.isLogScaled) {
+            return false;
+        }
         if (discrete != that.discrete) {
             return false;
         }
@@ -428,7 +437,16 @@ public class ColorPaletteDef implements Cloneable  {
         result = 31 * result + numColors;
         result = 31 * result + (discrete ? 1 : 0);
         result = 31 * result + (autoDistribute ? 1 : 0);
+        result = 31 * result + (isLogScaled ? 1 : 0);
         return result;
+    }
+
+    public boolean isLogScaled() {
+        return isLogScaled;
+    }
+
+    public void setLogScaled(boolean logScaled) {
+        isLogScaled = logScaled;
     }
 
     public static class Point implements Cloneable {
