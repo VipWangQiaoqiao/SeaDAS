@@ -961,52 +961,52 @@ public class VisatPreferencesDialog extends ConfigDialog {
             };
 
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES, 128);
-            param.getProperties().setLabel("Average grid size in pixels"); /*I18N*/
-            param.getProperties().setMinValue(16);
-            param.getProperties().setMaxValue(512);
-            configParams.addParameter(param);
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES, 128);
+//            param.getProperties().setLabel("Average grid size in pixels"); /*I18N*/
+//            param.getProperties().setMinValue(16);
+//            param.getProperties().setMaxValue(512);
+//            configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_LAT, 1.0);
-            param.getProperties().setLabel("Latitude step (dec. degree)"); /*I18N*/
-            param.getProperties().setMinValue(0.01);
-            param.getProperties().setMaxValue(90.0);
-            configParams.addParameter(param);
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_LAT, 1.0);
+//            param.getProperties().setLabel("Latitude step (dec. degree)"); /*I18N*/
+//            param.getProperties().setMinValue(0.01);
+//            param.getProperties().setMaxValue(90.0);
+//            configParams.addParameter(param);
+//
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_LON, 1.0);
+//            param.getProperties().setLabel("Longitude step (dec. degree)"); /*I18N*/
+//            param.getProperties().setMinValue(0.01);
+//            param.getProperties().setMaxValue(180.0);
+//            configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_LON, 1.0);
-            param.getProperties().setLabel("Longitude step (dec. degree)"); /*I18N*/
-            param.getProperties().setMinValue(0.01);
-            param.getProperties().setMaxValue(180.0);
-            configParams.addParameter(param);
-
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR, new Color(204, 204, 255));
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR, GraticuleLayerType.DEFAULT_LINE_COLOR);
             param.getProperties().setLabel("Line colour"); /*I18N*/
             configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, 0);
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, GraticuleLayerType.DEFAULT_LINE_WIDTH);
             param.getProperties().setLabel("Line width"); /*I18N*/
             param.getProperties().setMinValue(0);
             configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY, 0.0);
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY, GraticuleLayerType.DEFAULT_LINE_TRANSPARENCY);
             param.getProperties().setLabel("Line transparency"); /*I18N*/
             param.getProperties().setMinValue(0.0);
             param.getProperties().setMaxValue(1.0);
             configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, Color.white);
-            param.getProperties().setLabel("Text foreground colour"); /*I18N*/
-            configParams.addParameter(param);
-
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, Color.black);
-            param.getProperties().setLabel("Text background colour"); /*I18N*/
-            configParams.addParameter(param);
-
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY, 0.7);
-            param.getProperties().setLabel("Text background transparency"); /*I18N*/
-            param.getProperties().setMinValue(0.0);
-            param.getProperties().setMaxValue(1.0);
-            configParams.addParameter(param);
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, Color.white);
+//            param.getProperties().setLabel("Text foreground colour"); /*I18N*/
+//            configParams.addParameter(param);
+//
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, Color.black);
+//            param.getProperties().setLabel("Text background colour"); /*I18N*/
+//            configParams.addParameter(param);
+//
+//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY, 0.7);
+//            param.getProperties().setLabel("Text background transparency"); /*I18N*/
+//            param.getProperties().setMinValue(0.0);
+//            param.getProperties().setMaxValue(1.0);
+//            configParams.addParameter(param);
 
 //            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, 12);
 //            param.getProperties().setLabel("Text font size"); /*I18N*/
@@ -1056,44 +1056,44 @@ public class VisatPreferencesDialog extends ConfigDialog {
 //            pageUI.add(param.getEditor().getEditorComponent(), gbc);
 //            gbc.gridy++;
 
-            final JLabel note1 = new JLabel(
-                    "Note: Deselect this option only very carefully. The latitude and longitude");
-            configureNoteLabel(note1);
-            pageUI.add(note1, gbc);
-            gbc.gridy++;
-
-            final JLabel note2 = new JLabel("steps you enter will be used for low and high resolution products.");
-            configureNoteLabel(note2);
-            pageUI.add(note2, gbc);
-            gbc.gridy++;
-
-            gbc.gridwidth = 1;
-            gbc.insets.top = 2 * _LINE_INSET_TOP;
-
-//            param = getConfigParam("graticule.res.pixels");
+//            final JLabel note1 = new JLabel(
+//                    "Note: Deselect this option only very carefully. The latitude and longitude");
+//            configureNoteLabel(note1);
+//            pageUI.add(note1, gbc);
+//            gbc.gridy++;
+//
+//            final JLabel note2 = new JLabel("steps you enter will be used for low and high resolution products.");
+//            configureNoteLabel(note2);
+//            pageUI.add(note2, gbc);
+//            gbc.gridy++;
+//
+//            gbc.gridwidth = 1;
+//            gbc.insets.top = 2 * _LINE_INSET_TOP;
+//
+////            param = getConfigParam("graticule.res.pixels");
+////            gbc.weightx = 0;
+////            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+////            gbc.weightx = 1;
+////            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+////            gbc.gridy++;
+//
+//            param = getConfigParam("graticule.res.lat");
 //            gbc.weightx = 0;
 //            pageUI.add(param.getEditor().getLabelComponent(), gbc);
 //            gbc.weightx = 1;
 //            pageUI.add(param.getEditor().getEditorComponent(), gbc);
 //            gbc.gridy++;
-
-            param = getConfigParam("graticule.res.lat");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-            gbc.insets.top = _LINE_INSET_TOP;
-
-            param = getConfigParam("graticule.res.lon");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-            gbc.insets.top = 3 * _LINE_INSET_TOP;
+//
+//            gbc.insets.top = _LINE_INSET_TOP;
+//
+//            param = getConfigParam("graticule.res.lon");
+//            gbc.weightx = 0;
+//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
+//
+//            gbc.insets.top = 3 * _LINE_INSET_TOP;
 
             param = getConfigParam("graticule.line.color");
             gbc.weightx = 0;
@@ -1166,26 +1166,26 @@ public class VisatPreferencesDialog extends ConfigDialog {
 //            gbc.gridy++;
 
 
-            param = getConfigParam("graticule.text.fg.color");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-            param = getConfigParam("graticule.text.bg.color");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-            param = getConfigParam("graticule.text.bg.transparency");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+//            param = getConfigParam("graticule.text.fg.color");
+//            gbc.weightx = 0;
+//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
+//
+//            param = getConfigParam("graticule.text.bg.color");
+//            gbc.weightx = 0;
+//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
+//
+//            param = getConfigParam("graticule.text.bg.transparency");
+//            gbc.weightx = 0;
+//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
+//            gbc.weightx = 1;
+//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
 
             return createPageUIContentPane(pageUI);
         }

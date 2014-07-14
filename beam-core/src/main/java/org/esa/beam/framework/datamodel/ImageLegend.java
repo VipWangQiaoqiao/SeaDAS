@@ -213,6 +213,14 @@ public class ImageLegend {
         this.antiAliasing = antialiasing;
     }
 
+    public void setTransparent(boolean isTransparent) {
+        if (isTransparent) {
+            setBackgroundTransparency(1.0f);
+        } else {
+            setBackgroundTransparency(0.0f);
+        }
+    }
+
     public boolean isBackgroundTransparencyEnabled() {
         return backgroundTransparencyEnabled;
     }
@@ -482,8 +490,11 @@ public class ImageLegend {
 
     private void fillBackground(Graphics2D g2d) {
         Color c = backgroundColor;
-        if (isAlphaUsed()) {
-            c = new Color(c.getRed(), c.getGreen(), c.getBlue(), getBackgroundAlpha());
+//        if (isAlphaUsed()) {
+//            c = new Color(c.getRed(), c.getGreen(), c.getBlue(), getBackgroundAlpha());
+//        }
+        if (getBackgroundTransparency() == 1.0) {
+            c = new Color(150,150,150);
         }
         g2d.setColor(c);
         g2d.fillRect(0, 0, legendSize.width + 1, legendSize.height + 1);

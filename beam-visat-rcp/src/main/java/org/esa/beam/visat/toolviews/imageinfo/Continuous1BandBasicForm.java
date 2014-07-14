@@ -83,6 +83,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         colorPaletteChooser = new ColorPaletteChooser();
         colorPaletteChooser.setPreferredSize(new Dimension(180, 40));
+        colorPaletteChooser.setMinimumSize(new Dimension(180, 40));
 
 
         JPanel colorPaletteJPanel = getColorPaletteFilePanel("Color Palette File");

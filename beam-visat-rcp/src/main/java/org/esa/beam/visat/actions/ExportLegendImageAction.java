@@ -58,8 +58,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String DECIMAL_PLACES_PARAM_STR = "legend.decimalPlaces";
     private static final String FOREGROUND_COLOR_PARAM_STR = "legend.foregroundColor";
     private static final String BACKGROUND_COLOR_PARAM_STR = "legend.backgroundColor";
-    private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
-    private static final String ANTI_ALIASING_PARAM_STR = "legend.antiAliasing";
+ //   private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
+    private static final String TRANSPARENT_PARAM_STR = "legend.transparent";
 
     private static final String SCALING_FACTOR_PARAM_STR = "legend.scalingFactor";
     private static final String TITLE_FONT_SIZE_PARAM_STR = "legend.titleFontSize";
@@ -149,8 +149,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setLabel("Show Title");
         paramGroup.addParameter(param);
 
-        param = new Parameter(ANTI_ALIASING_PARAM_STR, Boolean.TRUE);
-        param.getProperties().setLabel("Anti-Aliasing");
+        param = new Parameter(TRANSPARENT_PARAM_STR, Boolean.FALSE);
+        param.getProperties().setLabel("Transparent");
         paramGroup.addParameter(param);
 
 
@@ -234,12 +234,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         param = new Parameter(BACKGROUND_COLOR_PARAM_STR, Color.white);
         param.getProperties().setLabel("Background Color");
-        paramGroup.addParameter(param);
-
-        param = new Parameter(BACKGROUND_TRANSPARENCY_PARAM_STR, 0.0f);
-        param.getProperties().setLabel("Background transparency");
-        param.getProperties().setMinValue(0.0f);
-        param.getProperties().setMaxValue(1.0f);
         paramGroup.addParameter(param);
 
 
@@ -341,12 +335,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(FOREGROUND_COLOR_PARAM_STR).getValue();
         imageLegend.setForegroundColor((Color) value);
 
-        value = legendParamGroup.getParameter(BACKGROUND_TRANSPARENCY_PARAM_STR).getValue();
-        imageLegend.setBackgroundTransparency(((Number) value).floatValue());
-
-
-        value = legendParamGroup.getParameter(ANTI_ALIASING_PARAM_STR).getValue();
-        imageLegend.setAntialiasing((Boolean) value);
+        value = legendParamGroup.getParameter(TRANSPARENT_PARAM_STR).getValue();
+        imageLegend.setTransparent((Boolean) value);
     }
 
 
@@ -362,7 +352,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private ParamGroup paramGroup;
 
         private Parameter usingHeaderParam;
-        private Parameter antiAliasingParam;
+        private Parameter transparentParam;
         private Parameter headerTextParam;
         private Parameter headerUnitsParam;
         private Parameter orientationParam;
@@ -370,7 +360,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter numberOfTicksParam;
         private Parameter backgroundColorParam;
         private Parameter foregroundColorParam;
-        private Parameter backgroundTransparencyParam;
         private Parameter decimalPlacesParam;
         private Parameter fullCustomAddThesePointsParam;
 
@@ -415,11 +404,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             headerTextParam.setUIEnabled(headerTextEnabled);
             headerUnitsParam.setUIEnabled(headerTextEnabled);
 
-//            numberOfTicksParam.setUIEnabled((Boolean) antiAliasingParam.getValue());
-//            decimalPlacesParam.setUIEnabled((Boolean) antiAliasingParam.getValue());
-
-
-            backgroundTransparencyParam.setUIEnabled(transparencyEnabled);
 
             if (ImageLegend.DISTRIB_EVEN_STR.equals(distributionTypeParam.getValue())) {
                 numberOfTicksParam.setUIEnabled(true);
@@ -667,13 +651,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridx = 1;
             jPanel.add(backgroundColorParam.getEditor().getEditorComponent(), gbc);
 
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.insets.top = 3;
-            jPanel.add(backgroundTransparencyParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(backgroundTransparencyParam.getEditor().getEditorComponent(), gbc);
-
 
             gbc.insets.top = 10;
 
@@ -681,7 +658,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridy++;
 
             gbc.anchor = GridBagConstraints.NORTHWEST;
-            jPanel.add(antiAliasingParam.getEditor().getEditorComponent(), gbc);
+            jPanel.add(transparentParam.getEditor().getEditorComponent(), gbc);
 
             return jPanel;
         }
@@ -699,8 +676,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             numberOfTicksParam = paramGroup.getParameter(NUM_TICKS_PARAM_STR);
             foregroundColorParam = paramGroup.getParameter(FOREGROUND_COLOR_PARAM_STR);
             backgroundColorParam = paramGroup.getParameter(BACKGROUND_COLOR_PARAM_STR);
-            backgroundTransparencyParam = paramGroup.getParameter(BACKGROUND_TRANSPARENCY_PARAM_STR);
-            antiAliasingParam = paramGroup.getParameter(ANTI_ALIASING_PARAM_STR);
+            transparentParam = paramGroup.getParameter(TRANSPARENT_PARAM_STR);
             decimalPlacesParam = paramGroup.getParameter(DECIMAL_PLACES_PARAM_STR);
             headerUnitsParam = paramGroup.getParameter(TITLE_UNITS_PARAM_STR);
             fullCustomAddThesePointsParam = paramGroup.getParameter(MANUAL_POINTS_PARAM_STR);
