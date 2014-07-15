@@ -71,6 +71,9 @@ public class ImageLegend {
     public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 14;
     public static final int DEFAULT_LABELS_FONT_SIZE = 14;
 
+    public static final double  HORIZONTAL_INTER_LABEL_GAP_FACTOR = 3;
+    public static final double  VERTICAL_INTER_LABEL_GAP_FACTOR = 0.75;
+
 
     // Independent attributes (Properties)
     private final ImageInfo imageInfo;
@@ -307,6 +310,7 @@ public class ImageLegend {
             final int numPointsInCpdFile = getNumGradationCurvePoints();
             int stepSize = 1;
             //    int stepSize = numPointsInCpdFile / getNumberOfTicks();
+            ArrayList<String> manualPointsArrayList = new ArrayList<>();
 
             for (int i = 0; i < numPointsInCpdFile; i = i + stepSize) {
 
@@ -323,8 +327,13 @@ public class ImageLegend {
                         value = value * getScalingFactor();
                         ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
                         colorBarInfos.add(colorBarInfo);
+                        manualPointsArrayList.add(colorBarInfo.getFormattedValue());
                     }
                 }
+            }
+            if (manualPointsArrayList.size() > 0) {
+                String manualPoints = StringUtils.join(manualPointsArrayList, ", ");
+                setFullCustomAddThesePoints(manualPoints);
             }
         } else if (DISTRIB_MANUAL_STR.equals(getDistributionType())) {
             String addThese = getFullCustomAddThesePoints();
@@ -436,22 +445,32 @@ public class ImageLegend {
 
         } else {
 
+
             Dimension labelsRequiredDimension = getVerticalLabelsRequiredDimension(g2dTmp);
 
-            double requiredWidth = MIN_VERTICAL_COLORBAR_WIDTH + LABEL_GAP + labelsRequiredDimension.getWidth();
+            double requiredWidth = BORDER_GAP
+                    + MIN_VERTICAL_COLORBAR_WIDTH
+                    + LABEL_GAP
+                    + labelsRequiredDimension.getWidth()
+                    + HEADER_GAP
+                    + headerRequiredDimension.getHeight()
+                    + BORDER_GAP;
 
-            requiredWidth = Math.max(requiredWidth, headerRequiredDimension.getWidth());
-            requiredWidth = BORDER_GAP + requiredWidth + BORDER_GAP;
+//            requiredWidth = Math.max(requiredWidth, headerRequiredDimension.getWidth());
+//            requiredWidth = BORDER_GAP + requiredWidth + BORDER_GAP;
 
-            int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight());
+       //     int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight());
             int requiredLabelsHeight = (int) Math.ceil(labelsRequiredDimension.getHeight());
 
 
-            int requiredHeight = BORDER_GAP
-                    + requiredHeaderHeight
-                    + HEADER_GAP
-                    + requiredLabelsHeight
-                    + BORDER_GAP;
+//            int requiredHeight = BORDER_GAP
+//                    //      + requiredHeaderHeight
+//                    //      + HEADER_GAP
+//                    + requiredLabelsHeight;
+
+
+         int   requiredHeight = (int) Math.max(requiredLabelsHeight, headerRequiredDimension.getWidth());
+            requiredHeight = BORDER_GAP + requiredHeight + BORDER_GAP;
 
 
             legendSize = new Dimension((int) requiredWidth, requiredHeight);
@@ -462,7 +481,8 @@ public class ImageLegend {
 
 
             paletteRect = new Rectangle(BORDER_GAP,
-                    requiredHeaderHeight + HEADER_GAP + labelOverhangHeight,
+                    //     requiredHeaderHeight + HEADER_GAP + labelOverhangHeight,
+                    BORDER_GAP + labelOverhangHeight,
                     MIN_VERTICAL_COLORBAR_WIDTH,
                     legendSize.height - BORDER_GAP - BORDER_GAP - labelOverhangHeight - labelOverhangHeight);
 
@@ -494,7 +514,7 @@ public class ImageLegend {
 //            c = new Color(c.getRed(), c.getGreen(), c.getBlue(), getBackgroundAlpha());
 //        }
         if (getBackgroundTransparency() == 1.0) {
-            c = new Color(150,150,150);
+            c = new Color(150, 150, 150);
         }
         g2d.setColor(c);
         g2d.fillRect(0, 0, legendSize.width + 1, legendSize.height + 1);
@@ -540,7 +560,6 @@ public class ImageLegend {
 
         if (colorBarInfos.size() > 0) {
 
-            int INTER_LABEL_GAP_FACTOR = 4;
 
             Font originalFont = g2d.getFont();
             g2d.setFont(getLabelsFont());
@@ -553,7 +572,7 @@ public class ImageLegend {
             }
 
             Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
-            double interLabelGap = (INTER_LABEL_GAP_FACTOR * singleLetter.getWidth());
+            double interLabelGap = (HORIZONTAL_INTER_LABEL_GAP_FACTOR * singleLetter.getWidth());
 
             double totalLabelGapsWidth = (colorBarInfos.size() - 1) * interLabelGap;
 
@@ -575,8 +594,6 @@ public class ImageLegend {
 
         if (colorBarInfos.size() > 0) {
 
-            int INTER_LABEL_GAP_FACTOR = 4;
-
             Font originalFont = g2d.getFont();
             g2d.setFont(getLabelsFont());
 
@@ -589,7 +606,7 @@ public class ImageLegend {
             }
 
             Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
-            double interLabelGap = (INTER_LABEL_GAP_FACTOR * singleLetter.getHeight());
+            double interLabelGap = (VERTICAL_INTER_LABEL_GAP_FACTOR * singleLetter.getHeight());
 
             double totalLabelGapsHeight = (colorBarInfos.size() - 1) * interLabelGap;
 
@@ -637,14 +654,55 @@ public class ImageLegend {
             y0 = paletteRect.y - HEADER_GAP;
 
             g2d.setFont(getTitleFont());
-            Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
-            g2d.drawString(headerText, x0, y0);
 
-            Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
-            int gap = (int) (2 * singleLetter.getWidth());
 
-            g2d.setFont(getTitleUnitsFont());
-            g2d.drawString(getHeaderUnitsText(), (int) (x0 + headerTextRectangle.getWidth() + gap), y0);
+            if (orientation == HORIZONTAL) {
+                Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
+                g2d.drawString(headerText, x0, y0);
+
+                Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
+                int gap = (int) (2 * singleLetter.getWidth());
+
+                g2d.setFont(getTitleUnitsFont());
+
+                g2d.drawString(getHeaderUnitsText(), (int) (x0 + headerTextRectangle.getWidth() + gap), y0);
+            } else {
+                Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
+
+                Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
+                int gap = (int) (2 * singleLetter.getWidth());
+
+                int labelOverhangHeight = (int) Math.ceil(singleLetter.getHeight() / 2.0);
+                double translateX = x0
+                        + paletteRect.width
+                        + LABEL_GAP
+                        + getVerticalLabelsRequiredDimension(g2d).width
+                        + HEADER_GAP
+                        + singleLetter.getHeight();
+
+                double translateY = y0 + paletteRect.height + labelOverhangHeight;
+
+                double rotate = -Math.PI / 2.0;
+                g2d.translate(translateX, translateY);
+                g2d.rotate(rotate);
+
+
+                g2d.drawString(headerText, 0, 0);
+
+                g2d.rotate(-rotate);
+
+                double translateY2 = -headerTextRectangle.getWidth() - gap;
+                g2d.translate(0, translateY2);
+                g2d.rotate(rotate);
+
+                g2d.setFont(getTitleUnitsFont());
+                g2d.drawString(getHeaderUnitsText(), 0, 0);
+
+                g2d.rotate(-rotate);
+                g2d.translate(0, -translateY2);
+                g2d.translate(-translateX, -translateY);
+            }
+
 
             g2d.setFont(origFont);
         }

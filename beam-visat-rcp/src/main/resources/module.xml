@@ -1820,8 +1820,8 @@
             <id>createSubsetFromView</id>
             <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
             <text>Crop...</text>
-            <shortDescr>Creates a file spatial subset from the selected view</shortDescr>
-            <description>Creates a file spatial subset from the selected view by preselecting the subset area from view
+            <shortDescr>Crop a file spatially (default boundaries are the current view)</shortDescr>
+            <description>Crop a file spatially (default boundaries are the current view)
             </description>
             <context>image</context>
             <helpId>subsetFromView</helpId>
