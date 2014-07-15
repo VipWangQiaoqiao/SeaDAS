@@ -1,29 +1,15 @@
-# entries taken from smigen_product_table.dat and used to populate the oceancolor_palette_schemas combobox in the SeaDAS Color Palettes GUI
 
-
-# Fields
-# 1. Product Description (Must begin with capital letter [A-Z])
-# 2. Product Name (short)
-# 3. Units (if any)
-# 4. Scaling (linear or logarithmic)
-# 5. Data Minimum
-# 6. Data Maximum
-# 7. Precision ("B", "I", "F")
-# 8. Palette Name (Assumes ".pal" extension)
-#
-
-
-Heated Layer Depth (Morel):Zhl_morel:m:linear:2.0:65.0:F:oceancolor_zphotic
-Euphotic Depth (Morel):Zeu_morel:m:linear:5.0:180.0:F:oceancolor_zphotic
-Secchi Depth (Lee GBR):Zsd_gbr:m:linear:2.0:50.0:F:oceancolor_zphotic
-Secchi Depth (Morel):Zsd_morel:m:linear:2.0:180.0:F:oceancolor_zphotic
-Euphotic Depth (Lee):Zeu_lee:m:linear:5.0:180.0:F:oceancolor_zphotic
-Photic Depth at 50% Light (Lee):Zp_50_lee:m:linear:5.0:180.0:F:oceancolor_zphotic
-Photic Depth at 10% Light (Lee):Zp_10_lee:m:linear:2.0:180.0:F:oceancolor_zphotic
-
-
-Normalized Difference Vegetation Index:ndvi: :linear:-0.350000:0.920000:I:oceancolor_ndvi
-Enhanced Vegetation Index:evi: :linear:-0.350000:0.920000:I:oceancolor_ndvi
-Normalized Difference Vegetation Index:NDVI: :linear:-0.0500000:0.915200:I:oceancolor_ndvi
-Enhanced Vegetation Index:EVI: :linear:-0.0500000:0.915200:I:oceancolor_ndvi
+#FIELD_NAME                    MIN         MAX         LOG_SCALE  CPD_FILENAME              DESCRIPTION
+ Zhl_morel                    :2.0        :65.0       :false     :oceancolor_zphotic.cpd   :Heated Layer Depth (Morel)
+ Zeu_morel                    :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :Euphotic Depth (Morel)
+ Zsd_gbr                      :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Secchi Depth (Lee GBR)
+ Zsd_morel                    :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Secchi Depth (Morel)
+ Zeu_lee                      :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :Euphotic Depth (Lee)
+ elev                         :-12000.0   :15000.0    :false     :oceancolor_standard.cpd  :Elevation
+ Zp_10_lee                    :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Photic Depth at 10% Light (Lee)
+ Zp_50_lee                    :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :Photic Depth at 50% Light (Lee)
+ ndvi                         :-0.350000  :0.920000   :false     :oceancolor_ndvi.cpd      :Normalized Difference Vegetation Index
+ evi                          :-0.350000  :0.920000   :false     :oceancolor_ndvi.cpd      :Enhanced Vegetation Index
+ NDVI                         :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd      :Normalized Difference Vegetation Index
+ EVI                          :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd      :Enhanced Vegetation Index
 

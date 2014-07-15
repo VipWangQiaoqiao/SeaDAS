@@ -1,68 +1,17 @@
-# entries taken from smigen_product_table.dat and used to populate the oceancolor_palette_schemas combobox in the SeaDAS Color Palettes GUI
 
 
-# Fields
-# 1. Product Description (Must begin with capital letter [A-Z])
-# 2. Product Name (short)
-# 3. Units (if any)
-# 4. Scaling (linear or logarithmic)
-# 5. Data Minimum
-# 6. Data Maximum
-# 7. Precision ("B", "I", "F")
-# 8. Palette Name (Assumes ".pal" extension)
-#
-
-Angstrom coefficient:angstrom: :linear:-0.150000:2.2:F:oceancolor_standard
-Aerosol optical thickness at 869 nm:aot_869: :linear:0.00000:0.25:F:oceancolor_standard
-Chlorophyll a concentration:chlor_a:mg m^-3:logarithmic:0.01000000:20.0:F:oceancolor_standard
-CDOM Index:cdom_index: :linear:0:7:F:oceancolor_standard
-Diffuse attenuation coefficient at 490 nm:Kd_490:m^-1:logarithmic:0.01000000:6.0:F:oceancolor_standard
-Fluorescence Line Height (normalized):nflh:mW cm^-2 um^-1 sr^-1:linear:0.0:0.05:F:oceancolor_standard
-Instantaneous Photosynthetically Available Radiation:ipar:Einstein m^-2 sec:linear:0.0:0.0025:F:oceancolor_standard
-Particulate Inorganic Carbon:pic:mol m^-3:logarithmic:5.0e-05:0.05:F:oceancolor_standard
-Particulate Organic Carbon:poc:mg m^-3:logarithmic:10:1000:F:oceancolor_standard
-Photosynthetically Available Radiation:par:Einstein m^-2 Day:linear:0.00000:76.2000:F:oceancolor_standard
-
-Remote sensing reflectance at 410 nm:Rrs_410:sr^-1:linear:0.00000:0.02500:F:oceancolor_standard
-Remote sensing reflectance at 412 nm:Rrs_412:sr^-1:linear:0.00000:0.02500:F:oceancolor_standard
-Remote sensing reflectance at 413 nm:Rrs_413:sr^-1:linear:0.00000:0.02500:F:oceancolor_standard
-Remote sensing reflectance at 415 nm:Rrs_415:sr^-1:linear:0.00000:0.02500:F:oceancolor_standard
-Remote sensing reflectance at 442 nm:Rrs_442:sr^-1:linear:0.00000:0.02000:F:oceancolor_standard
-Remote sensing reflectance at 443 nm:Rrs_443:sr^-1:linear:0.00000:0.02000:F:oceancolor_standard
-Remote sensing reflectance at 469 nm:Rrs_469:sr^-1:linear:0.00000:0.01500:F:oceancolor_standard
-Remote sensing reflectance at 486 nm:Rrs_486:sr^-1:linear:0.00000:0.01500:F:oceancolor_standard
-Remote sensing reflectance at 488 nm:Rrs_488:sr^-1:linear:0.00000:0.01500:F:oceancolor_standard
-Remote sensing reflectance at 490 nm:Rrs_490:sr^-1:linear:0.00000:0.01500:F:oceancolor_standard
-Remote sensing reflectance at 491 nm:Rrs_491:sr^-1:linear:0.00000:0.01500:F:oceancolor_standard
-Remote sensing reflectance at 510 nm:Rrs_510:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 512 nm:Rrs_512:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 516 nm:Rrs_516:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 520 nm:Rrs_520:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 531 nm:Rrs_531:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 547 nm:Rrs_547:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 550 nm:Rrs_550:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 551 nm:Rrs_551:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 555 nm:Rrs_555:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 557 nm:Rrs_557:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 560 nm:Rrs_560:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 565 nm:Rrs_565:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 620 nm:Rrs_620:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 645 nm:Rrs_645:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 665 nm:Rrs_665:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 667 nm:Rrs_667:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 670 nm:Rrs_670:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 671 nm:Rrs_671:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 678 nm:Rrs_678:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 681 nm:Rrs_681:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 709 nm:Rrs_709:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 748 nm:Rrs_748:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 765 nm:Rrs_765:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 865 nm:Rrs_865:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-Remote sensing reflectance at 869 nm:Rrs_869:sr^-1:linear:0.00000:0.01000:F:oceancolor_standard
-
-Sea Surface Temperature Reference:sstref:deg-C:linear:-2.00000:45.0000:I:oceancolor_sst
-Sea Surface Temperature:sst:deg-C:linear:-2.00000:45.0000:I:oceancolor_sst
-Sea Surface Temperature (4 micron):sst4:deg-C:linear:-2.00000:45.0000:I:oceancolor_sst
-Sea Surface Temperature (VIIRSN):BulkSST:deg-K:linear:271.15:318.15:I:oceancolor_sst
-
-
+#FIELD_NAME                    MIN         MAX         LOG_SCALE  CPD_FILENAME              DESCRIPTION
+ angstrom                     :-0.150000  :2.2        :false     :oceancolor_standard.cpd  :Angstrom coefficient
+ aot_869                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :Aerosol optical thickness at 869 nm
+ chlor_a                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :Chlorophyll a concentration
+ cdom_index                   :0          :7          :false     :oceancolor_standard.cpd  :CDOM Index
+ Kd_490                       :0.01000000 :6.0        :true      :oceancolor_standard.cpd  :Diffuse attenuation coefficient at 490 nm
+ nflh                         :0.0        :0.05       :false     :oceancolor_standard.cpd  :Fluorescence Line Height (normalized)
+ ipar                         :0.0        :0.0025     :false     :oceancolor_standard.cpd  :Instantaneous Photosynthetically Available Radiation
+ pic                          :5.0e-05    :0.05       :true      :oceancolor_standard.cpd  :Particulate Inorganic Carbon
+ poc                          :10         :1000       :true      :oceancolor_standard.cpd  :Particulate Organic Carbon
+ par                          :0.00000    :76.2000    :false     :oceancolor_standard.cpd  :Photosynthetically Available Radiation
+ Rrs_[410-415]                :0.00000    :0.02500    :false     :oceancolor_standard.cpd  :Remote sensing reflectance at [410-415] nm
+ Rrs_[442-443]                :0.00000    :0.02000    :false     :oceancolor_standard.cpd  :Remote sensing reflectance at [442-443] nm
+ Rrs_[469-869]                :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :Remote sensing reflectance at [469-869] nm
+ sst                          :-2.00000   :45.0000    :false     :oceancolor_sst.cpd       :Sea Surface Temperature

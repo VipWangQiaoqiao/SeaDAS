@@ -3,6 +3,8 @@ package org.esa.beam.visat.toolviews.imageinfo;
 import org.esa.beam.framework.datamodel.ColorPaletteDef;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -14,16 +16,16 @@ import java.util.ArrayList;
  */
 public class ColorPaletteInfoComboBox {
 
-    private JComboBox jComboBox = null;
+    private JComboBox otherJCComboBox = null;
     private JComboBox standardJComboBox = null;
     private JComboBox userJComboBox = null;
 
 
-    ArrayList<ColorPaletteInfo> colorPaletteInfos = new ArrayList<ColorPaletteInfo>();
+    ArrayList<ColorPaletteInfo> otherColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
     ArrayList<ColorPaletteInfo> standardColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
     ArrayList<ColorPaletteInfo> userColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
 
-    private ColorPaletteInfo defaultColorPaletteInfo = null;
+    private ColorPaletteInfo defaultOtherColorPaletteInfo = null;
     private ColorPaletteInfo defaultStandardColorPaletteInfo = null;
     private ColorPaletteInfo defaultUserColorPaletteInfo = null;
 
@@ -46,14 +48,26 @@ public class ColorPaletteInfoComboBox {
     private void initOtherSchemeComboBox() {
 
         File file = new File(colorPaletteDir, "other_color_palette_schemas.txt");
-        defaultColorPaletteInfo = new ColorPaletteInfo("Other Products    ", null, null, 0, 0, false, null);
-        colorPaletteInfos.add(defaultColorPaletteInfo);
-        initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, file);
+        defaultOtherColorPaletteInfo = new ColorPaletteInfo("Other Products    ", null, null, 0, 0, false, null);
+        otherColorPaletteInfos.add(defaultOtherColorPaletteInfo);
+        initColorPaletteInfos(colorPaletteDir, otherColorPaletteInfos, file);
 
-        Object[] colorPaletteInfosArray = colorPaletteInfos.toArray();
+        Object[] colorPaletteInfosArray = otherColorPaletteInfos.toArray();
 
-        jComboBox = new JComboBox(colorPaletteInfosArray);
-        getjComboBox().setEditable(false);
+        final String[] toolTipsArray = new String[otherColorPaletteInfos.size()];
+
+        int j = 0;
+        for (ColorPaletteInfo colorPaletteInfo : otherColorPaletteInfos) {
+            toolTipsArray[j] = colorPaletteInfo.getDescription();
+            j++;
+        }
+
+        final MyComboBoxRenderer myComboBoxRenderer = new MyComboBoxRenderer();
+        myComboBoxRenderer.setTooltipList(toolTipsArray);
+
+        otherJCComboBox = new JComboBox(colorPaletteInfosArray);
+        otherJCComboBox.setRenderer(myComboBoxRenderer);
+        otherJCComboBox.setEditable(false);
     }
 
 
@@ -67,8 +81,22 @@ public class ColorPaletteInfoComboBox {
 
         Object[] colorPaletteInfosArray = standardColorPaletteInfos.toArray();
 
+
+        final String[] toolTipsArray = new String[standardColorPaletteInfos.size()];
+
+        int j = 0;
+        for (ColorPaletteInfo colorPaletteInfo : standardColorPaletteInfos) {
+            toolTipsArray[j] = colorPaletteInfo.getDescription();
+            j++;
+        }
+
+        final MyComboBoxRenderer myComboBoxRenderer = new MyComboBoxRenderer();
+        myComboBoxRenderer.setTooltipList(toolTipsArray);
+
         standardJComboBox = new JComboBox(colorPaletteInfosArray);
-        getStandardJComboBox().setEditable(false);
+        standardJComboBox.setRenderer(myComboBoxRenderer);
+        standardJComboBox.setEditable(false);
+
     }
 
 
@@ -82,58 +110,27 @@ public class ColorPaletteInfoComboBox {
 
         Object[] colorPaletteInfosArray = userColorPaletteInfos.toArray();
 
+        final String[] toolTipsArray = new String[userColorPaletteInfos.size()];
+
+        int j = 0;
+        for (ColorPaletteInfo colorPaletteInfo : userColorPaletteInfos) {
+            toolTipsArray[j] = colorPaletteInfo.getDescription();
+            j++;
+        }
+
+        final MyComboBoxRenderer myComboBoxRenderer = new MyComboBoxRenderer();
+        myComboBoxRenderer.setTooltipList(toolTipsArray);
+
         userJComboBox = new JComboBox(colorPaletteInfosArray);
-        getStandardJComboBox().setEditable(false);
+        userJComboBox.setRenderer(myComboBoxRenderer);
+        userJComboBox.setEditable(false);
+        userJComboBox.setToolTipText("To modify see file: ~/.seadas/beam-ui/auxdata/color-palettes/user_color_palette_schemas.txt");
     }
-
-
-
-//    public boolean setSelectedByValues(ColorPaletteDef cpd, double min, double max, boolean isLogScaled) {
-//        System.out.println("hello");
-//
-//
-//        double rndMin = Math.round((min * 100000000)) / 100000000;
-//        double rndMax = Math.round((max * 100000000)) / 100000000;
-//        System.out.println("min=" + rndMin);
-//        System.out.println("max=" + rndMax);
-//        if (isLogScaled) {
-//            System.out.println("isLogScaled=true");
-//        } else {
-//            System.out.println("isLogScaled=false");
-//        }
-//        for (ColorPaletteInfo colorPaletteInfo : colorPaletteInfos) {
-//            if (colorPaletteInfo.getColorPaletteDef() != null) {
-//                System.out.println("we are a go");
-//                if (
-//
-//                    //colorPaletteInfo.getColorPaletteDef() == cpd &&
-//                        colorPaletteInfo.getMinValue() == rndMin &&
-//                                colorPaletteInfo.getMaxValue() == rndMax
-//                                // &&
-//                       //         colorPaletteInfo.isLogScaled() == isLogScaled
-//                        ) {
-//                    System.out.println("we are a go");
-//                    System.out.println(colorPaletteInfo.getName());
-//                    setShouldFire(false);
-//                    jComboBox.setSelectedItem(colorPaletteInfo);
-//                    setShouldFire(true);
-//                    return true;
-//                }
-//            }
-//        }
-//
-//        setShouldFire(false);
-//        jComboBox.setSelectedItem(defaultColorPaletteInfo);
-//        setShouldFire(true);
-//        System.out.println("we are NOT a go");
-//        return false;
-//    }
 
 
     private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file) {
 
         ArrayList<String> lines = readFileIntoArrayList(file);
-
 
 
         int i = 0;
@@ -142,18 +139,25 @@ public class ColorPaletteInfoComboBox {
             if (!line.startsWith("#")) {
                 String[] values = line.split(":");
 
-                if (values != null && values.length == 8) {
-                    String description = values[0].trim();
-                    String name = values[1].trim();
-                    String cpdFileName = values[7].trim() + ".cpd";
-                    String minValStr = values[4].trim();
-                    String maxValStr = values[5].trim();
+                if (values != null && (values.length == 5 || values.length == 6)) {
+
+                    String name = values[0].trim();
+                    String minValStr = values[1].trim();
+                    String maxValStr = values[2].trim();
                     String isLogScaledStr = values[3].trim();
+                    String cpdFileName = values[4].trim();
+
+                    String description;
+                    if (values.length == 6) {
+                        description = values[5].trim();
+                    } else {
+                        description = "";
+                    }
 
                     Double minVal = Double.valueOf(minValStr);
                     Double maxVal = Double.valueOf(maxValStr);
                     boolean isLogScaled = false;
-                    if ("logarithmic".equals(isLogScaledStr)) {
+                    if (isLogScaledStr != null && isLogScaledStr.toLowerCase().equals("true")) {
                         isLogScaled = true;
                     }
 
@@ -176,13 +180,13 @@ public class ColorPaletteInfoComboBox {
     }
 
     public void reset() {
-        jComboBox.setSelectedItem(defaultColorPaletteInfo);
+        otherJCComboBox.setSelectedItem(defaultOtherColorPaletteInfo);
         standardJComboBox.setSelectedItem(defaultStandardColorPaletteInfo);
         userJComboBox.setSelectedItem(defaultUserColorPaletteInfo);
     }
 
-    public JComboBox getjComboBox() {
-        return jComboBox;
+    public JComboBox getOtherJCComboBox() {
+        return otherJCComboBox;
     }
 
 
@@ -223,6 +227,37 @@ public class ColorPaletteInfoComboBox {
 
     public JComboBox getUserJComboBox() {
         return userJComboBox;
+    }
+
+
+    class MyComboBoxRenderer extends BasicComboBoxRenderer {
+
+        private String[] tooltips;
+
+        public Component getListCellRendererComponent(JList list, Object value,
+                                                      int index, boolean isSelected, boolean cellHasFocus) {
+
+            if (isSelected) {
+                if (-1 < index && index < tooltips.length) {
+                    list.setToolTipText(tooltips[index]);
+                }
+
+                setBackground(Color.blue);
+                setForeground(Color.white);
+            } else {
+                setBackground(Color.white);
+                setForeground(Color.black);
+            }
+
+            setFont(list.getFont());
+            setText((value == null) ? "" : value.toString());
+
+            return this;
+        }
+
+        public void setTooltipList(String[] tooltipList) {
+            this.tooltips = tooltipList;
+        }
     }
 
 }

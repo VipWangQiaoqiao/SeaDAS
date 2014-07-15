@@ -1,0 +1,44 @@
+# made to imitate Scarla's palette
+#SeaDAS Color Palette Definition File
+#Tue Dec  3 22:01:37 2013
+color0=128,0,0
+color1=255,0,0
+color2=255,187,0
+color3=255,255,0
+color4=153,170,68
+color5=34,139,34
+color6=150,251,150
+color7=170,251,170
+color8=190,251,190
+color9=210,251,210
+color10=230,251,230
+color11=255,255,255
+color12=230,255,255
+color13=218,255,255
+color14=204,255,255
+color15=0,255,255
+color16=0,0,255
+color17=25,25,112
+color18=255,0,255
+color19=75,0,130
+numPoints=20
+sample0=-15
+sample1=-10
+sample2=-9
+sample3=-8
+sample4=-7
+sample5=-6
+sample6=-5
+sample7=-4
+sample8=-3
+sample9=-2
+sample10=-1
+sample11=0
+sample12=1
+sample13=2
+sample14=3
+sample15=4
+sample16=5
+sample17=7.5
+sample18=9
+sample19=10.5
