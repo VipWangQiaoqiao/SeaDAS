@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.util.StringUtils;
 
+import javax.swing.*;
+
 // @todo 2 nf/** - if orientation is vertical, sample values should increase from bottom to top
 // @todo 1 nf/** - make PALETTE_HEIGHT a fixed value, fill space into gaps instead
 // @todo 2 nf/** - draw header text vertically for vertical orientations
@@ -71,9 +73,11 @@ public class ImageLegend {
     public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 14;
     public static final int DEFAULT_LABELS_FONT_SIZE = 14;
 
-    public static final double  HORIZONTAL_INTER_LABEL_GAP_FACTOR = 3;
-    public static final double  VERTICAL_INTER_LABEL_GAP_FACTOR = 0.75;
+    public static final double HORIZONTAL_INTER_LABEL_GAP_FACTOR = 3;
+    public static final double VERTICAL_INTER_LABEL_GAP_FACTOR = 0.75;
 
+    public static final double WEIGHT_TOLERANCE = 0.01;
+    public static final double INVALID_WEIGHT = -1.0;
 
     // Independent attributes (Properties)
     private final ImageInfo imageInfo;
@@ -101,7 +105,7 @@ public class ImageLegend {
     // Dependent, internal attributes
     private Rectangle paletteRect;
     private Dimension legendSize;
-    private Shape sliderShape;
+    private Shape tickMarkShape;
     private String[] labels;
     private int[] labelWidths;
     private int palettePos1;
@@ -118,7 +122,7 @@ public class ImageLegend {
         orientation = HORIZONTAL;
         backgroundColor = Color.white;
         foregroundColor = Color.black;
-        backgroundTransparency = 0.0f;
+        backgroundTransparency = 1.0f;
         antiAliasing = true;
         decimalPlaces = 1;
         setFullCustomAddThesePoints("");
@@ -292,7 +296,8 @@ public class ImageLegend {
                         value = linearValue;
                     }
 
-                    if (isValidWeight(weight)) {
+                    weight = getValidWeight(weight);
+                    if (weight != INVALID_WEIGHT) {
                         if (getScalingFactor() != 0) {
                             value = value * getScalingFactor();
                             ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
@@ -322,7 +327,8 @@ public class ImageLegend {
                 } else {
                     weight = getLinearWeightFromLinearValue(value, min, max);
                 }
-                if (isValidWeight(weight)) {
+                weight = getValidWeight(weight);
+                if (weight != INVALID_WEIGHT) {
                     if (getScalingFactor() != 0) {
                         value = value * getScalingFactor();
                         ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
@@ -356,7 +362,8 @@ public class ImageLegend {
                                 weight = getLinearWeightFromLinearValue(value, min, max);
                             }
 
-                            if (isValidWeight(weight)) {
+                            weight = getValidWeight(weight);
+                            if (weight != INVALID_WEIGHT) {
                                 ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, formattedValue);
                                 colorBarInfos.add(colorBarInfo);
                             }
@@ -368,13 +375,26 @@ public class ImageLegend {
 
     }
 
+    private double getValidWeight(double weight) {
+        // due to rounding issues we want to make sure the weight isn't just below 0 or just above 1
+        // this would cause the tick mark to possibly be placed a very tiny amount outside of the colorbar if not corrected here
 
-    private boolean isValidWeight(double weight) {
-        // weight could be slightly above  1 or below 0 due to rounding issue so use a small buffer
-        // to make sure the end points are accepted
-        double buffer = .01;
+        boolean valid = (weight >= (0 - WEIGHT_TOLERANCE) && weight <= (1 + WEIGHT_TOLERANCE))
+                ? true : false;
 
-        return (weight >= (0 - buffer) && weight <= (1 + buffer)) ? true : false;
+        if (valid) {
+            if (weight > 1) {
+                weight = 1;
+            }
+            if (weight < 0) {
+                weight = 0;
+            }
+
+            return weight;
+        } else {
+            return INVALID_WEIGHT;
+        }
+
     }
 
 
@@ -435,7 +455,7 @@ public class ImageLegend {
                     legendSize.width - BORDER_GAP - BORDER_GAP - firstLabelOverhangWidth - lastLabelOverhangWidth,
                     MIN_HORIZONTAL_COLORBAR_HEIGHT);
 
-            //DANNY
+
             int paletteGap = 0;
             palettePos1 = paletteRect.x + paletteGap;
             palettePos2 = paletteRect.x + paletteRect.width - (int) discreteBooster;
@@ -456,20 +476,11 @@ public class ImageLegend {
                     + headerRequiredDimension.getHeight()
                     + BORDER_GAP;
 
-//            requiredWidth = Math.max(requiredWidth, headerRequiredDimension.getWidth());
-//            requiredWidth = BORDER_GAP + requiredWidth + BORDER_GAP;
 
-       //     int requiredHeaderHeight = (int) Math.ceil(headerRequiredDimension.getHeight());
             int requiredLabelsHeight = (int) Math.ceil(labelsRequiredDimension.getHeight());
 
-
-//            int requiredHeight = BORDER_GAP
-//                    //      + requiredHeaderHeight
-//                    //      + HEADER_GAP
-//                    + requiredLabelsHeight;
-
-
-         int   requiredHeight = (int) Math.max(requiredLabelsHeight, headerRequiredDimension.getWidth());
+            int requiredHeight = (int) Math.max(requiredLabelsHeight, headerRequiredDimension.getWidth());
+            requiredHeight = Math.max(requiredHeight, MIN_VERTICAL_COLORBAR_HEIGHT);
             requiredHeight = BORDER_GAP + requiredHeight + BORDER_GAP;
 
 
@@ -481,7 +492,6 @@ public class ImageLegend {
 
 
             paletteRect = new Rectangle(BORDER_GAP,
-                    //     requiredHeaderHeight + HEADER_GAP + labelOverhangHeight,
                     BORDER_GAP + labelOverhangHeight,
                     MIN_VERTICAL_COLORBAR_WIDTH,
                     legendSize.height - BORDER_GAP - BORDER_GAP - labelOverhangHeight - labelOverhangHeight);
@@ -493,7 +503,7 @@ public class ImageLegend {
 
         }
 
-        sliderShape = createSliderShape();
+        tickMarkShape = createTickMarkShape();
     }
 
 
@@ -509,14 +519,14 @@ public class ImageLegend {
     }
 
     private void fillBackground(Graphics2D g2d) {
-        Color c = backgroundColor;
+        Color color = backgroundColor;
 //        if (isAlphaUsed()) {
 //            c = new Color(c.getRed(), c.getGreen(), c.getBlue(), getBackgroundAlpha());
 //        }
         if (getBackgroundTransparency() == 1.0) {
-            c = new Color(150, 150, 150);
+             color = UIManager.getColor("Panel.background");
         }
-        g2d.setColor(c);
+        g2d.setColor(color);
         g2d.fillRect(0, 0, legendSize.width + 1, legendSize.height + 1);
     }
 
@@ -647,14 +657,11 @@ public class ImageLegend {
 
             final FontMetrics fontMetrics = g2d.getFontMetrics();
             g2d.setPaint(foregroundColor);
-            int x0 = BORDER_GAP;
-            int y0 = (int) (BORDER_GAP + 0.7 * getHeaderTextRequiredDimension(g2d).getHeight()); // + fontMetrics.getMaxAscent();
 
-            x0 = paletteRect.x;
-            y0 = paletteRect.y - HEADER_GAP;
+            int x0 = paletteRect.x;
+            int y0 = paletteRect.y - HEADER_GAP;
 
             g2d.setFont(getTitleFont());
-
 
             if (orientation == HORIZONTAL) {
                 Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
@@ -709,13 +716,10 @@ public class ImageLegend {
     }
 
     private void drawPalette(Graphics2D g2d) {
-        //     final Color[] palette = imageInfo.getColorPaletteDef().createColorPalette(getRaster());
-// todo Danny, when merging with SeaDAS 7.1  use this line below (the commented one) not the old one above
+
         final Color[] palette = ImageManager.createColorPalette(getRaster().getImageInfo());
 
-
         final int x1 = paletteRect.x;
-
         final int x2 = paletteRect.x + paletteRect.width;
 
         final int y1 = paletteRect.y;
@@ -797,7 +801,7 @@ public class ImageLegend {
             g2d.translate(translateX, translateY);
 
             g2d.setPaint(foregroundColor);
-            g2d.draw(sliderShape);
+            g2d.draw(tickMarkShape);
 
             final FontMetrics fontMetrics = g2d.getFontMetrics();
             int labelWidth = fontMetrics.stringWidth(formattedValue);
@@ -826,20 +830,6 @@ public class ImageLegend {
         g2d.setStroke(originalStroke);
         g2d.setPaint(originalPaint);
     }
-
-//        final FontMetrics fontMetrics = createFontMetrics();
-//        final int n = getNumGradationCurvePoints();
-//        labels = new String[n];
-//        labelWidths = new int[n];
-//        int textHeight = fontMetrics.getHeight();
-//        final double minValue = imageInfo.getColorPaletteDef().getMinDisplaySample();
-//        final double maxValue = imageInfo.getColorPaletteDef().getMaxDisplaySample();
-//        double roundFactor = MathUtils.computeRoundFactor(minValue, maxValue, 2);
-//        for (int i = 0; i < n; i++) {
-//            ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
-//            labels[i] = String.valueOf(MathUtils.round(slider.getSample(), roundFactor));
-//            labelWidths[i] = fontMetrics.stringWidth(labels[i]);
-//        }
 
 
     private double getLinearWeightFromLinearValue(double linearValue, double min, double max) {
@@ -874,12 +864,6 @@ public class ImageLegend {
     }
 
 
-    //      double scale = (Math.log(max) - Math.log(min) / (max - min));
-
-    //  double value =  Math.exp(Math.log(min) + (scale * (getLinearValue(weight) - min)));
-    //    value = min + (((Math.log(weight)-Math.log(min))/scale)+min);
-
-
     private double normalizeSample(double sample) {
         final double minDisplaySample = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMinDisplaySample());
         final double maxDisplaySample = getRaster().scaleInverse(getImageInfo().getColorPaletteDef().getMaxDisplaySample());
@@ -891,7 +875,7 @@ public class ImageLegend {
         return (sample - minDisplaySample) / delta;
     }
 
-    private Shape createSliderShape() {
+    private Shape createTickMarkShape() {
         GeneralPath path = new GeneralPath();
         if (orientation == HORIZONTAL) {
             path.moveTo(0.0F, 0.7F * TICK_MARK_LENGTH);

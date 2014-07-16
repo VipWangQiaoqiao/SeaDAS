@@ -149,7 +149,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setLabel("Show Title");
         paramGroup.addParameter(param);
 
-        param = new Parameter(TRANSPARENT_PARAM_STR, Boolean.FALSE);
+        param = new Parameter(TRANSPARENT_PARAM_STR, Boolean.TRUE);
         param.getProperties().setLabel("Transparent");
         paramGroup.addParameter(param);
 
