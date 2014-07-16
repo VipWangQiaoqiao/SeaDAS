@@ -14,18 +14,31 @@ public class ColorPaletteInfo {
     private boolean isLogScaled;
     private boolean isSourceLogScaled = false;
     private ColorPaletteDef colorPaletteDef;
+    private boolean enabled;
 
     public ColorPaletteInfo(String name, String description, String cpdFilename, double minValue, double maxValue,
-                            boolean isLogScaled, ColorPaletteDef colorPaletteDef) {
+                            boolean isLogScaled, ColorPaletteDef colorPaletteDef, boolean enabled) {
         this.setName(name);
         this.setDescription(description);
         this.setCpdFilename(cpdFilename);
         this.setMinValue(minValue);
         this.setMaxValue(maxValue);
         this.setLogScaled(isLogScaled);
+        this.setEnabled(enabled);
         this.colorPaletteDef = colorPaletteDef;
     }
 
+    public ColorPaletteInfo(String name, String description) {
+        // create a disabled colorPaletteInfo
+        this.setName(name);
+        this.setDescription(description);
+//        this.setCpdFilename(cpdFilename);
+//        this.setMinValue(minValue);
+//        this.setMaxValue(maxValue);
+//        this.setLogScaled(isLogScaled);
+        this.setEnabled(false);
+ //       this.colorPaletteDef = colorPaletteDef;
+    }
 
     public String getCpdFilename() {
         return cpdFilename;
@@ -98,5 +111,13 @@ public class ColorPaletteInfo {
 
     private void setSourceLogScaled(boolean sourceLogScaled) {
         isSourceLogScaled = sourceLogScaled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    private void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

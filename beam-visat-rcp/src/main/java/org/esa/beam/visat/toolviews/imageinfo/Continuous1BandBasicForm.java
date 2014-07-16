@@ -433,7 +433,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private void handleColorPaletteInfoComboBoxSelection(JComboBox jComboBox) {
         ColorPaletteInfo colorPaletteInfo = (ColorPaletteInfo) jComboBox.getSelectedItem();
 
-        if (colorPaletteInfo.getCpdFilename() != null) {
+        if (colorPaletteInfo.getCpdFilename() != null && colorPaletteInfo.isEnabled()) {
 
             try {
                 if (colorPaletteInfoComboBox.isShouldFire()) {
@@ -457,12 +457,16 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     String id = parentForm.getProductSceneView().getRaster().getDisplayName();
                  //   VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
                     VisatApp.getApp().setStatusBarMessage("'" + colorPaletteInfo.getName() + "' color scheme loaded");
-                    colorPaletteInfoComboBox.reset();
+
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
+
+        colorPaletteInfoComboBox.reset();
+
+
     }
 
 
