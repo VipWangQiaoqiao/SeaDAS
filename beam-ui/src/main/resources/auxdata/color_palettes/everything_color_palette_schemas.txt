@@ -1,4 +1,4 @@
-#FIELD_NAME          MIN         MAX         LOG_SCALE  CPD_FILENAME              DESCRIPTION
+#FIELD_NAME                    MIN         MAX         LOG_SCALE  CPD_FILENAME              DESCRIPTION
  solz                         :0.00000    :90.0000    :false     :oceancolor_standard.cpd  :Solar Zenith Angle
  chisqr_giop                  :0.00000    :5.0000     :false     :oceancolor_standard.cpd  :Chi-square per degree of freedom
  chlor_a                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :Chlorophyll a concentration

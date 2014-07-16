@@ -29,6 +29,8 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
@@ -310,6 +312,64 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         });
 
+        colorPaletteInfoComboBox.getEverythingJComboBox().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getEverythingJComboBox());
+            }
+        });
+
+
+//todo  when you lose focus on a combobox and haven't picked something then the font goes white ARGHH!!
+        // lose focus listener doesn't appear to help
+
+//        colorPaletteInfoComboBox.getStandardJComboBox().addFocusListener(new FocusListener() {
+//            @Override
+//            public void focusGained(FocusEvent e) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//
+//            @Override
+//            public void focusLost(FocusEvent e) {
+//                colorPaletteInfoComboBox.reset();
+//            }
+//        });
+//
+//        colorPaletteInfoComboBox.getUserJComboBox().addFocusListener(new FocusListener() {
+//            @Override
+//            public void focusGained(FocusEvent e) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//
+//            @Override
+//            public void focusLost(FocusEvent e) {
+//                colorPaletteInfoComboBox.reset();
+//            }
+//        });
+//
+//        colorPaletteInfoComboBox.getOtherJCComboBox().addFocusListener(new FocusListener() {
+//            @Override
+//            public void focusGained(FocusEvent e) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//
+//            @Override
+//            public void focusLost(FocusEvent e) {
+//                colorPaletteInfoComboBox.reset();
+//            }
+//        });
+//
+//        colorPaletteInfoComboBox.getEverythingJComboBox().addFocusListener(new FocusListener() {
+//            @Override
+//            public void focusGained(FocusEvent e) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//
+//            @Override
+//            public void focusLost(FocusEvent e) {
+//                colorPaletteInfoComboBox.reset();
+//            }
+//        });
     }
 
     private void handleMaxTextfield() {
@@ -354,6 +414,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         gbc2.gridx = 0;
         gbc2.gridy = 2;
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getEverythingJComboBox(), gbc2);
+
+        gbc2.gridx = 0;
+        gbc2.gridy = 3;
         colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getUserJComboBox(), gbc2);
         return colorPaletteInfoComboBoxJPanel;
     }
@@ -455,7 +519,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     shouldFireChooserEvent = origShouldFireChooserEvent;
 
                     String id = parentForm.getProductSceneView().getRaster().getDisplayName();
-                 //   VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
+                    //   VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
                     VisatApp.getApp().setStatusBarMessage("'" + colorPaletteInfo.getName() + "' color scheme loaded");
 
                 }
