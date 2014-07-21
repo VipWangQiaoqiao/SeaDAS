@@ -226,6 +226,7 @@ public class ImageLegend {
         } else {
             setBackgroundTransparency(0.0f);
         }
+        setBackgroundTransparencyEnabled(true);
     }
 
     public boolean isBackgroundTransparencyEnabled() {
@@ -520,12 +521,12 @@ public class ImageLegend {
 
     private void fillBackground(Graphics2D g2d) {
         Color color = backgroundColor;
-//        if (isAlphaUsed()) {
-//            c = new Color(c.getRed(), c.getGreen(), c.getBlue(), getBackgroundAlpha());
-//        }
-        if (getBackgroundTransparency() == 1.0) {
-             color = UIManager.getColor("Panel.background");
+        if (isAlphaUsed()) {
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), getBackgroundAlpha());
         }
+//        if (getBackgroundTransparency() == 1.0) {
+//             color = UIManager.getColor("Panel.background");
+//        }
         g2d.setColor(color);
         g2d.fillRect(0, 0, legendSize.width + 1, legendSize.height + 1);
     }
