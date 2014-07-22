@@ -90,6 +90,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         if (dialog.okWasClicked) {
             exportImage(getVisatApp(), getImageFileFilters(), event.getSelectableCommand());
+        }   else if (dialog.getButtonID()==ModalDialog.ID_APPLY) {
+             ShowColorBarOverlayAction showColorBarOverlayAction = new ShowColorBarOverlayAction();
+            RenderedImage colorBarImage = createImage("PNG", view);
+            showColorBarOverlayAction.setColorBarImage(colorBarImage);
+            showColorBarOverlayAction.actionPerformed(event);
         }
 
     }
@@ -376,7 +381,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         public ImageLegendDialog(VisatApp visatApp, ParamGroup paramGroup, ImageLegend imageLegend,
                                  boolean transparencyEnabled) {
-            super(visatApp.getMainFrame(), visatApp.getAppName() + " - Color Bar Settings", ID_OK_CANCEL, _HELP_ID);
+            super(visatApp.getMainFrame(), visatApp.getAppName() + " - Color Bar Settings", ID_OK_APPLY_CANCEL, _HELP_ID);
             this.visatApp = visatApp;
             okWasClicked = false;
 
@@ -386,8 +391,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             this.paramGroup = paramGroup;
             initParams();
             // rename the OK button
-            JButton button = (JButton) getButton(ID_OK);
-    //        button.setText("Continue");
+            JButton okButton = (JButton) getButton(ID_OK);
+            okButton.setText("Save to File");
+            JButton applyButton = (JButton) getButton(ID_APPLY);
+            applyButton.setText("Attach to Image");
 //
             initUI();
             updateUIState();
@@ -453,6 +460,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             okWasClicked = true;
         }
 
+        @Override
+        protected void onApply(){
+            hide();
+        }
 
         private void initUI() {
 
