@@ -507,6 +507,10 @@ public class ImageLegend {
         return usingHeader && StringUtils.isNotNullAndNotEmpty(headerText);
     }
 
+    private boolean hasUnitsText() {
+        return StringUtils.isNotNullAndNotEmpty(headerUnitsText);
+    }
+
     private void draw(Graphics2D g2d) {
         fillBackground(g2d);
         drawHeaderText(g2d);
@@ -538,17 +542,24 @@ public class ImageLegend {
         if (hasHeaderText()) {
 
             Font originalFont = g2d.getFont();
-
-            g2d.setFont(getTitleFont());
-            Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
-            width += headerTextRectangle.getWidth();
-
             Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
-            width += (UNITS_GAP_FACTOR * singleLetter.getWidth());
 
-            g2d.setFont(getTitleUnitsFont());
-            Rectangle2D unitsTextRectangle = g2d.getFontMetrics().getStringBounds(getHeaderUnitsText(), g2d);
-            width += unitsTextRectangle.getWidth();
+            if (hasHeaderText()) {
+                g2d.setFont(getTitleFont());
+                Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
+                width += headerTextRectangle.getWidth();
+
+
+                if (hasUnitsText()) {
+                    width += (UNITS_GAP_FACTOR * singleLetter.getWidth());
+                }
+            }
+
+            if (hasUnitsText()) {
+                g2d.setFont(getTitleUnitsFont());
+                Rectangle2D unitsTextRectangle = g2d.getFontMetrics().getStringBounds(getHeaderUnitsText(), g2d);
+                width += unitsTextRectangle.getWidth();
+            }
 
             height = singleLetter.getHeight();
 
@@ -666,9 +677,11 @@ public class ImageLegend {
                 Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
                 int gap = (int) (2 * singleLetter.getWidth());
 
-                g2d.setFont(getTitleUnitsFont());
+                if (hasUnitsText()) {
+                    g2d.setFont(getTitleUnitsFont());
 
-                g2d.drawString(getHeaderUnitsText(), (int) (x0 + headerTextRectangle.getWidth() + gap), y0);
+                    g2d.drawString(getHeaderUnitsText(), (int) (x0 + headerTextRectangle.getWidth() + gap), y0);
+                }
             } else {
                 Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
 
@@ -698,8 +711,10 @@ public class ImageLegend {
                 g2d.translate(0, translateY2);
                 g2d.rotate(rotate);
 
-                g2d.setFont(getTitleUnitsFont());
-                g2d.drawString(getHeaderUnitsText(), 0, 0);
+                if (hasUnitsText()) {
+                    g2d.setFont(getTitleUnitsFont());
+                    g2d.drawString(getHeaderUnitsText(), 0, 0);
+                }
 
                 g2d.rotate(-rotate);
                 g2d.translate(0, -translateY2);

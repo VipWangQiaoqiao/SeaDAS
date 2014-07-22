@@ -394,7 +394,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             JButton okButton = (JButton) getButton(ID_OK);
             okButton.setText("Save to File");
             JButton applyButton = (JButton) getButton(ID_APPLY);
-            applyButton.setText("Attach to Image");
+//            applyButton.setText("Attach to Image");
+            applyButton.setText("Create Layer");
 //
             initUI();
             updateUIState();
