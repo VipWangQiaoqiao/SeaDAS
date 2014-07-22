@@ -291,12 +291,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //            }
 //        });
 
-        colorPaletteInfoComboBox.getOtherJCComboBox().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getOtherJCComboBox());
-            }
-        });
+
 
         colorPaletteInfoComboBox.getStandardJComboBox().addActionListener(new ActionListener() {
             @Override
@@ -312,12 +307,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         });
 
-        colorPaletteInfoComboBox.getEverythingJComboBox().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getEverythingJComboBox());
-            }
-        });
+
 
 
 //todo  when you lose focus on a combobox and haven't picked something then the font goes white ARGHH!!
@@ -406,22 +396,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc2.weightx = 1.0;
         gbc2.anchor = GridBagConstraints.WEST;
         gbc2.fill = GridBagConstraints.HORIZONTAL;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getEverythingJComboBox(), gbc2);
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getStandardJComboBox(), gbc2);
 
 
         gbc2.gridx = 0;
         gbc2.gridy = 1;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getStandardJComboBox(), gbc2);
-
-
-//        gbc2.gridx = 0;
-//        gbc2.gridy = 1;
-//        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getOtherJCComboBox(), gbc2);
-
-        gbc2.gridx = 0;
-        gbc2.gridy = 2;
         colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getUserJComboBox(), gbc2);
-
 
         return colorPaletteInfoComboBoxJPanel;
     }
