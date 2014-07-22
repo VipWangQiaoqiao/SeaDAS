@@ -16,6 +16,9 @@
 package org.esa.beam.visat.toolviews.imageinfo;
 
 import com.bc.ceres.core.ProgressMonitor;
+import com.bc.ceres.glayer.Layer;
+import com.bc.ceres.glayer.LayerFilter;
+import com.bc.ceres.glayer.support.LayerUtils;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.BeamUiActivator;
 import org.esa.beam.framework.datamodel.Band;
@@ -37,6 +40,7 @@ import org.esa.beam.framework.ui.application.PageComponentDescriptor;
 import org.esa.beam.framework.ui.product.BandChooser;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
+import org.esa.beam.glayer.ColorBarLayerType;
 import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.ResourceInstaller;
@@ -506,6 +510,15 @@ class ColorManipulationForm {
                 productSceneView.setImageInfo(imageInfo);
             } finally {
                 getToolViewPaneControl().setCursor(Cursor.getDefaultCursor());
+                //added to remove the old color bar layer from the image when a new color scheme is applied
+                Layer colorBarLayer =  LayerUtils.getChildLayer(productSceneView.getRootLayer(), LayerUtils.SearchMode.DEEP, new LayerFilter() {
+                                                    public boolean accept(Layer layer) {
+                                                        return layer.getLayerType() instanceof ColorBarLayerType;
+                                                    }
+                                                });
+                if ( colorBarLayer != null) {
+                  productSceneView.getRootLayer().getChildren().remove(colorBarLayer);
+                }
             }
         }
         setApplyEnabled(false);
