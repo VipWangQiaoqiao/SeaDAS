@@ -864,18 +864,19 @@
             <helpId>exportImageFile</helpId>
         </action>
 
-        <action>
-            <parent>exportOther</parent>
-            <id>exportLegendImageFile</id>
-            <class>org.esa.beam.visat.actions.ExportLegendImageAction</class>
-            <text>Color Bar</text>
-            <!--<mnemonic>C</mnemonic>-->
-            <shortDescr>Export the colorbar.</shortDescr>
-            <description>Export the colorbar.</description>
-            <context>image</context>
-            <popuptext>Export Colorbar...</popuptext>
-            <helpId>exportLegendImageFile</helpId>
-        </action>
+        <!--<action>-->
+            <!--<parent>exportOther</parent>-->
+            <!--<id>exportLegendImageFile</id>-->
+            <!--<class>org.esa.beam.visat.actions.ExportLegendImageAction</class>-->
+            <!--<text>Color Bar</text>-->
+            <!--&lt;!&ndash;<mnemonic>C</mnemonic>&ndash;&gt;-->
+            <!--<shortDescr>View and/or Export the colorbar.</shortDescr>-->
+            <!--<description>View and/or Export the colorbar.</description>-->
+            <!--<context>image</context>-->
+            <!--<popuptext>View/Export Colorbar...</popuptext>-->
+            <!--<helpId>exportLegendImageFile</helpId>-->
+        <!--</action>-->
+
 
 
 
@@ -1079,20 +1080,35 @@
 
 
 
+
         <action>
             <parent>view</parent>
-            <id>showNoDataOverlay</id>
-            <class>org.esa.beam.visat.actions.ShowNoDataOverlayAction</class>
-            <text>No-Data Layer</text>
-            <toggle>true</toggle>
-            <shortDescr>Show no-data layer</shortDescr>
-            <description>Show no-data overlay for the selected image</description>
+            <id>exportLegendImageFile</id>
+            <class>org.esa.beam.visat.actions.ExportLegendImageAction</class>
+            <text>Color Bar Layer</text>
+            <!--<mnemonic>C</mnemonic>-->
+            <shortDescr>View and/or Export the colorbar.</shortDescr>
+            <description>View and/or Export the colorbar.</description>
             <context>image</context>
             <placeAfter>openViewsMenu</placeAfter>
-            <!--<smallIcon>icons/NoDataOverlay16.gif</smallIcon>-->
-            <largeIcon>icons/NoDataOverlay24.png</largeIcon>
-            <!--<largeIcon>icons/NoDataOverlay24.gif</largeIcon>-->
-            <helpId>noDataOverlay</helpId>
+            <largeIcon>icons/Colorbar24.png</largeIcon>
+            <popuptext>View/Export Colorbar...</popuptext>
+            <helpId>exportLegendImageFile</helpId>
+        </action>
+
+        <action>
+            <id>showGcpOverlay</id>
+            <class>org.esa.beam.visat.actions.ShowGcpOverlayAction</class>
+            <parent>view</parent>
+            <text>GCP Layer</text>
+            <toggle>true</toggle>
+            <shortDescr>Show GCP overlay</shortDescr>
+            <description>Show GCP overlay for the selected image</description>
+            <!--<smallIcon>icons/GcpOverlay16.gif</smallIcon>-->
+            <largeIcon>icons/GcpOverlay24.gif</largeIcon>
+            <context>image</context>
+            <placeAfter>exportLegendImageFile</placeAfter>
+            <helpId>showGcpOverlay</helpId>
         </action>
 
         <action>
@@ -1108,9 +1124,10 @@
             <!--<smallIcon>icons/ShapeOverlay16.gif</smallIcon>-->
             <largeIcon>icons/ShapeOverlay24.png</largeIcon>
             <!--<largeIcon>icons/ShapeOverlay24.gif</largeIcon>-->
-            <placeAfter>openViewsMenu</placeAfter>
+            <placeAfter>showGcpOverlay</placeAfter>
             <helpId>showShapeOverlay</helpId>
         </action>
+
 
         <action>
             <parent>view</parent>
@@ -1125,9 +1142,31 @@
             <!--<smallIcon>icons/GraticuleOverlay16.gif</smallIcon>-->
             <largeIcon>icons/GraticuleOverlay24.png</largeIcon>
             <!--<largeIcon>icons/GraticuleOverlay24.gif</largeIcon>-->
-            <placeAfter>openViewsMenu</placeAfter>
+            <placeAfter>showShapeOverlay</placeAfter>
             <helpId>showGraticuleOverlay</helpId>
         </action>
+
+
+        <action>
+            <parent>view</parent>
+            <id>showNoDataOverlay</id>
+            <class>org.esa.beam.visat.actions.ShowNoDataOverlayAction</class>
+            <text>No-Data Layer</text>
+            <toggle>true</toggle>
+            <shortDescr>Show no-data layer</shortDescr>
+            <description>Show no-data overlay for the selected image</description>
+            <context>image</context>
+            <placeAfter>showGraticuleOverlay</placeAfter>
+            <!--<smallIcon>icons/NoDataOverlay16.gif</smallIcon>-->
+            <largeIcon>icons/NoDataOverlay24.png</largeIcon>
+            <!--<largeIcon>icons/NoDataOverlay24.gif</largeIcon>-->
+            <helpId>noDataOverlay</helpId>
+        </action>
+
+
+
+
+
 
         <action>
             <id>showPinOverlay</id>
@@ -1142,24 +1181,11 @@
             <largeIcon>icons/PinManager24.png</largeIcon>
             <!--<largeIcon>icons/PinManager24.gif</largeIcon>-->
             <context>image</context>
-            <placeAfter>openViewsMenu</placeAfter>
+            <placeAfter>showNoDataOverlay</placeAfter>
             <helpId>showPinOverlay</helpId>
         </action>
 
-        <action>
-            <id>showGcpOverlay</id>
-            <class>org.esa.beam.visat.actions.ShowGcpOverlayAction</class>
-            <parent>view</parent>
-            <text>GCP Layer</text>
-            <toggle>true</toggle>
-            <shortDescr>Show GCP overlay</shortDescr>
-            <description>Show GCP overlay for the selected image</description>
-            <!--<smallIcon>icons/GcpOverlay16.gif</smallIcon>-->
-            <largeIcon>icons/GcpOverlay24.gif</largeIcon>
-            <context>image</context>
-            <placeAfter>openViewsMenu</placeAfter>
-            <helpId>showGcpOverlay</helpId>
-        </action>
+
 
         <action>
             <id>showWorldMapOverlay</id>
