@@ -64,9 +64,6 @@ public class ImageLegend {
     private static final int MIN_VERTICAL_COLORBAR_WIDTH = 24;
     private static final int MIN_VERTICAL_COLORBAR_HEIGHT = 550;
 
-    private static final int _MIN_LEGEND_WIDTH = 600;
-    private static final int _MIN_LEGEND_HEIGHT = 48;
-
 
     public static final double DEFAULT_SCALING_FACTOR = 1;
     public static final int DEFAULT_TITLE_FONT_SIZE = 18;
@@ -106,8 +103,6 @@ public class ImageLegend {
     private Rectangle paletteRect;
     private Dimension legendSize;
     private Shape tickMarkShape;
-    private String[] labels;
-    private int[] labelWidths;
     private int palettePos1;
     private int palettePos2;
     private ArrayList<ColorBarInfo> colorBarInfos = new ArrayList<ColorBarInfo>();
