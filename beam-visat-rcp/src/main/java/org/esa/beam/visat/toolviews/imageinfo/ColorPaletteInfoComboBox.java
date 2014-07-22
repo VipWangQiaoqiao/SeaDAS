@@ -37,10 +37,10 @@ public class ColorPaletteInfoComboBox {
     private final String OTHER_SCHEMA_FILENAME = "other_color_palette_schemas.txt";
     private final String EVERYTHING_SCHEMA_FILENAME = "everything_color_palette_schemas.txt";
 
-    private final String USER_SCHEMA_COMBO_BOX_NAME = "Users Schemes";
-    private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "Standard Products";
+    private final String USER_SCHEMA_COMBO_BOX_NAME = "User Custom";
+    private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "Common OceanColor";
     private final String OTHER_SCHEMA_COMBO_BOX_NAME = "Other Products";
-    private final String EVERYTHING_SCHEMA_COMBO_BOX_NAME = "Everything";
+    private final String EVERYTHING_SCHEMA_COMBO_BOX_NAME = "All OceanColor";
 
     private File colorPaletteDir = null;
 

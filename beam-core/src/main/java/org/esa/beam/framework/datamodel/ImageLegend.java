@@ -226,7 +226,7 @@ public class ImageLegend {
         } else {
             setBackgroundTransparency(0.0f);
         }
-        setBackgroundTransparencyEnabled(true);
+        setBackgroundTransparencyEnabled(isTransparent);
     }
 
     public boolean isBackgroundTransparencyEnabled() {

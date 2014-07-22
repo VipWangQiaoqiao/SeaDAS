@@ -15,3 +15,16 @@
  Rrs_[442-443]                :0.00000    :0.02000    :false     :oceancolor_standard.cpd  :Remote sensing reflectance at [442-443] nm
  Rrs_[469-869]                :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :Remote sensing reflectance at [469-869] nm
  sst                          :-2.00000   :45.0000    :false     :oceancolor_sst.cpd       :Sea Surface Temperature
+
+  Zhl_morel                    :2.0        :65.0       :false     :oceancolor_zphotic.cpd   :Heated Layer Depth (Morel)
+  Zeu_morel                    :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :Euphotic Depth (Morel)
+  Zsd_gbr                      :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Secchi Depth (Lee GBR)
+  Zsd_morel                    :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Secchi Depth (Morel)
+  Zeu_lee                      :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :Euphotic Depth (Lee)
+  elev                         :-12000.0   :15000.0    :false     :oceancolor_standard.cpd  :Elevation
+  Zp_10_lee                    :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Photic Depth at 10% Light (Lee)
+  Zp_50_lee                    :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :Photic Depth at 50% Light (Lee)
+  ndvi                         :-0.350000  :0.920000   :false     :oceancolor_ndvi.cpd      :Normalized Difference Vegetation Index
+  evi                          :-0.350000  :0.920000   :false     :oceancolor_ndvi.cpd      :Enhanced Vegetation Index
+  NDVI                         :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd      :Normalized Difference Vegetation Index
+  EVI                          :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd      :Enhanced Vegetation Index

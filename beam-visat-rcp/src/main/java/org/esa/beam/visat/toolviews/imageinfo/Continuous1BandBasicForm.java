@@ -406,19 +406,23 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc2.weightx = 1.0;
         gbc2.anchor = GridBagConstraints.WEST;
         gbc2.fill = GridBagConstraints.HORIZONTAL;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getStandardJComboBox(), gbc2);
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getEverythingJComboBox(), gbc2);
+
 
         gbc2.gridx = 0;
         gbc2.gridy = 1;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getOtherJCComboBox(), gbc2);
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getStandardJComboBox(), gbc2);
+
+
+//        gbc2.gridx = 0;
+//        gbc2.gridy = 1;
+//        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getOtherJCComboBox(), gbc2);
 
         gbc2.gridx = 0;
         gbc2.gridy = 2;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getEverythingJComboBox(), gbc2);
-
-        gbc2.gridx = 0;
-        gbc2.gridy = 3;
         colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getUserJComboBox(), gbc2);
+
+
         return colorPaletteInfoComboBoxJPanel;
     }
 
