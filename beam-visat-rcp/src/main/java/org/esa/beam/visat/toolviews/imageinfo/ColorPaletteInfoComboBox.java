@@ -31,8 +31,8 @@ public class ColorPaletteInfoComboBox {
     private final String STANDARD_SCHEMA_FILENAME = "standard_color_palette_schemas.txt";
 
 
-    private final String USER_SCHEMA_COMBO_BOX_NAME = "User Palettes";
-    private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "Common Palettes";
+    private final String USER_SCHEMA_COMBO_BOX_NAME = "User";
+    private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "Standard";
 
 
     private File colorPaletteDir = null;
@@ -86,6 +86,7 @@ public class ColorPaletteInfoComboBox {
         standardJComboBox = new JComboBox(colorPaletteInfosArray);
         standardJComboBox.setRenderer(myComboBoxRenderer);
         standardJComboBox.setEditable(false);
+        standardJComboBox.setMaximumRowCount(20);
         standardJComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + STANDARD_SCHEMA_FILENAME);
 
 
@@ -125,6 +126,7 @@ public class ColorPaletteInfoComboBox {
         userJComboBox = new JComboBox(colorPaletteInfosArray);
         userJComboBox.setRenderer(myComboBoxRenderer);
         userJComboBox.setEditable(false);
+        userJComboBox.setMaximumRowCount(20);
         userJComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + USER_SCHEMA_FILENAME);
 
 

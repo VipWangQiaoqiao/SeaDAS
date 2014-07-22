@@ -79,7 +79,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteInfoComboBox = new ColorPaletteInfoComboBox(parentForm.getIODir());
         VisatApp.getApp().clearStatusBarMessage();
 
-        loadWithCPDFileValuesCheckBox = new JCheckBox("Load with CPD file values", false);
+        loadWithCPDFileValuesCheckBox = new JCheckBox("Load with exact file values", false);
         loadWithCPDFileValuesCheckBox.setToolTipText("When loading a new cpd file, use it's actual value and overwrite user min/max values");
 
 
@@ -88,7 +88,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteChooser.setMinimumSize(new Dimension(180, 40));
 
 
-        JPanel colorPaletteJPanel = getColorPaletteFilePanel("Color Palette File");
+        JPanel colorPaletteJPanel = getColorPaletteFilePanel("Color Palette Definition Files");
         JPanel rangeJPanel = getRangePanel("Range Adjustments");
         JPanel colorPaletteInfoComboBoxJPanel = getSchemaPanel("Preset Color Palette Schemes");
 
