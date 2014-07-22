@@ -22,10 +22,9 @@ public class ColorPaletteInfoComboBox {
     ArrayList<ColorPaletteInfo> standardColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
     ArrayList<ColorPaletteInfo> userColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
 
-    private ColorPaletteInfo defaultOtherColorPaletteInfo = null;
     private ColorPaletteInfo defaultStandardColorPaletteInfo = null;
     private ColorPaletteInfo defaultUserColorPaletteInfo = null;
-    private ColorPaletteInfo defaultEverythingUserColorPaletteInfo = null;
+
 
     private final String USER_SCHEMA_FILENAME = "user_color_palette_schemas.txt";
     private final String STANDARD_SCHEMA_FILENAME = "standard_color_palette_schemas.txt";
