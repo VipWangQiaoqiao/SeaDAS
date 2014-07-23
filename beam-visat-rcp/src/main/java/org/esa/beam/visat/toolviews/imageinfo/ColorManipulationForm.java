@@ -121,8 +121,8 @@ class ColorManipulationForm {
         titlePrefix = getToolViewDescriptor().getTitle();
 
 //todo Danny put this here for use with the default color loading
-//        ColorPaletteSchemes colorPaletteInfoComboBox = new ColorPaletteSchemes(getIODir(), false);
-//        ArrayList<ColorPaletteInfo> defaultColorPaletteInfos = colorPaletteInfoComboBox.getDefaultsColorPaletteInfos();
+//        ColorPaletteSchemes defaultColorPaletteSchemes = new ColorPaletteSchemes(getIODir(), false);
+//        ArrayList<ColorPaletteInfo> defaultColorPaletteInfos = defaultColorPaletteSchemes.getDefaultsColorPaletteInfos();
     }
 
     public ProductSceneView getProductSceneView() {
