@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by danielknowles on 6/28/14.
  */
-public class ColorPaletteInfoComboBox {
+public class ColorPaletteSchemes {
 
     private JComboBox standardJComboBox = null;
     private JComboBox userJComboBox = null;
@@ -39,11 +39,11 @@ public class ColorPaletteInfoComboBox {
 
     private boolean shouldFire = true;
 
-    public ColorPaletteInfoComboBox(File dirName) {
+    public ColorPaletteSchemes(File dirName) {
         this(dirName, true);
     }
 
-    public ColorPaletteInfoComboBox(File dirName, boolean userInterfaceMode) {
+    public ColorPaletteSchemes(File dirName, boolean userInterfaceMode) {
         if (dirName != null && dirName.exists()) {
             colorPaletteDir = dirName;
 

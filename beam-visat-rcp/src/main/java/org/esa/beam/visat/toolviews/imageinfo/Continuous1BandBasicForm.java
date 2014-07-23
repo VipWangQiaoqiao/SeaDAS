@@ -29,8 +29,6 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +47,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private JFormattedTextField maxField;
     private final DiscreteCheckBox discreteCheckBox;
     private final JCheckBox loadWithCPDFileValuesCheckBox;
-    private final ColorPaletteInfoComboBox colorPaletteInfoComboBox;
+    private final ColorPaletteSchemes colorPaletteSchemes;
     private JButton bandRange;
 
 
@@ -76,7 +74,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         this.basicSwitcherIsActive = basicSwitcherIsActive;
 
 
-        colorPaletteInfoComboBox = new ColorPaletteInfoComboBox(parentForm.getIODir());
+        colorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir());
         VisatApp.getApp().clearStatusBarMessage();
 
         loadWithCPDFileValuesCheckBox = new JCheckBox("Load with exact file values", false);
@@ -293,17 +291,17 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
 
-        colorPaletteInfoComboBox.getStandardJComboBox().addActionListener(new ActionListener() {
+        colorPaletteSchemes.getStandardJComboBox().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getStandardJComboBox());
+                handleColorPaletteInfoComboBoxSelection(colorPaletteSchemes.getStandardJComboBox());
             }
         });
 
-        colorPaletteInfoComboBox.getUserJComboBox().addActionListener(new ActionListener() {
+        colorPaletteSchemes.getUserJComboBox().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleColorPaletteInfoComboBoxSelection(colorPaletteInfoComboBox.getUserJComboBox());
+                handleColorPaletteInfoComboBoxSelection(colorPaletteSchemes.getUserJComboBox());
             }
         });
 
@@ -313,7 +311,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //todo  when you lose focus on a combobox and haven't picked something then the font goes white ARGHH!!
         // lose focus listener doesn't appear to help
 
-//        colorPaletteInfoComboBox.getStandardJComboBox().addFocusListener(new FocusListener() {
+//        colorPaletteSchemes.getStandardJComboBox().addFocusListener(new FocusListener() {
 //            @Override
 //            public void focusGained(FocusEvent e) {
 //                //To change body of implemented methods use File | Settings | File Templates.
@@ -321,11 +319,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //
 //            @Override
 //            public void focusLost(FocusEvent e) {
-//                colorPaletteInfoComboBox.reset();
+//                colorPaletteSchemes.reset();
 //            }
 //        });
 //
-//        colorPaletteInfoComboBox.getUserJComboBox().addFocusListener(new FocusListener() {
+//        colorPaletteSchemes.getUserJComboBox().addFocusListener(new FocusListener() {
 //            @Override
 //            public void focusGained(FocusEvent e) {
 //                //To change body of implemented methods use File | Settings | File Templates.
@@ -333,11 +331,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //
 //            @Override
 //            public void focusLost(FocusEvent e) {
-//                colorPaletteInfoComboBox.reset();
+//                colorPaletteSchemes.reset();
 //            }
 //        });
 //
-//        colorPaletteInfoComboBox.getOtherJCComboBox().addFocusListener(new FocusListener() {
+//        colorPaletteSchemes.getOtherJCComboBox().addFocusListener(new FocusListener() {
 //            @Override
 //            public void focusGained(FocusEvent e) {
 //                //To change body of implemented methods use File | Settings | File Templates.
@@ -345,11 +343,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //
 //            @Override
 //            public void focusLost(FocusEvent e) {
-//                colorPaletteInfoComboBox.reset();
+//                colorPaletteSchemes.reset();
 //            }
 //        });
 //
-//        colorPaletteInfoComboBox.getEverythingJComboBox().addFocusListener(new FocusListener() {
+//        colorPaletteSchemes.getEverythingJComboBox().addFocusListener(new FocusListener() {
 //            @Override
 //            public void focusGained(FocusEvent e) {
 //                //To change body of implemented methods use File | Settings | File Templates.
@@ -357,7 +355,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //
 //            @Override
 //            public void focusLost(FocusEvent e) {
-//                colorPaletteInfoComboBox.reset();
+//                colorPaletteSchemes.reset();
 //            }
 //        });
     }
@@ -396,12 +394,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc2.weightx = 1.0;
         gbc2.anchor = GridBagConstraints.WEST;
         gbc2.fill = GridBagConstraints.HORIZONTAL;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getStandardJComboBox(), gbc2);
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteSchemes.getStandardJComboBox(), gbc2);
 
 
         gbc2.gridx = 0;
         gbc2.gridy = 1;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteInfoComboBox.getUserJComboBox(), gbc2);
+        colorPaletteInfoComboBoxJPanel.add(colorPaletteSchemes.getUserJComboBox(), gbc2);
 
         return colorPaletteInfoComboBoxJPanel;
     }
@@ -484,7 +482,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         if (colorPaletteInfo.getCpdFilename() != null && colorPaletteInfo.isEnabled()) {
 
             try {
-                if (colorPaletteInfoComboBox.isShouldFire()) {
+                if (colorPaletteSchemes.isShouldFire()) {
                     File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename());
                     ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
 
@@ -512,7 +510,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         }
 
-        colorPaletteInfoComboBox.reset();
+        colorPaletteSchemes.reset();
 
 
     }
