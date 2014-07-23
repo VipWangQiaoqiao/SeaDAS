@@ -18,25 +18,25 @@ public class ColorPaletteInfoComboBox {
 
     private JComboBox standardJComboBox = null;
     private JComboBox userJComboBox = null;
-    private JComboBox everythingJComboBox = null;
+    private JComboBox defaultsJComboBox = null;
 
     ArrayList<ColorPaletteInfo> standardColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
     ArrayList<ColorPaletteInfo> userColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
-    ArrayList<ColorPaletteInfo> everythingColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
+    private ArrayList<ColorPaletteInfo> defaultsColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
 
     private ColorPaletteInfo defaultStandardColorPaletteInfo = null;
     private ColorPaletteInfo defaultUserColorPaletteInfo = null;
-    private ColorPaletteInfo defaultEverythingColorPaletteInfo = null;
+    private ColorPaletteInfo defaultDefaultsColorPaletteInfo = null;
 
 
     private final String USER_SCHEMA_FILENAME = "user_color_palette_schemas.txt";
     private final String STANDARD_SCHEMA_FILENAME = "standard_color_palette_schemas.txt";
-    private final String EVERYTHING_SCHEMA_FILENAME = "everything_color_palette_schemas.txt";
+    private final String DEFAULTS_SCHEMA_FILENAME = "defaults_color_palette_schemas.txt";
 
 
     private final String USER_SCHEMA_COMBO_BOX_NAME = "User";
     private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "Standard";
-    private final String EVERYTHING_SCHEMA_COMBO_BOX_NAME = "Everything";
+    private final String DEFAULTS_SCHEMA_COMBO_BOX_NAME = "Defaults";
 
 
     private File colorPaletteDir = null;
@@ -44,16 +44,28 @@ public class ColorPaletteInfoComboBox {
     private boolean shouldFire = true;
 
     public ColorPaletteInfoComboBox(File dirName) {
+        this(dirName, true);
+//        colorPaletteDir = dirName;
+//
+//        initStandardSchemeComboBox();
+//        initUserSchemeComboBox();
+//        initDefaultsSchemeComboBox();
+//
+//        reset();
+    }
+
+    public ColorPaletteInfoComboBox(File dirName, boolean userInterfaceMode) {
         colorPaletteDir = dirName;
 
-        initStandardSchemeComboBox();
-        initUserSchemeComboBox();
-        initEverythingSchemeComboBox();
+        if (userInterfaceMode) {
+            initStandardSchemeComboBox();
+            initUserSchemeComboBox();
+        } else {
+            initDefaultsSchemeComboBox();
+        }
 
         reset();
     }
-
-
 
 
     private void initStandardSchemeComboBox() {
@@ -138,31 +150,30 @@ public class ColorPaletteInfoComboBox {
     }
 
 
+    private void initDefaultsSchemeComboBox() {
 
-    private void initEverythingSchemeComboBox() {
+        defaultDefaultsColorPaletteInfo = new ColorPaletteInfo(DEFAULTS_SCHEMA_COMBO_BOX_NAME, null, null, 0, 0, false, null, true);
+        defaultsColorPaletteInfos.add(defaultDefaultsColorPaletteInfo);
 
-        defaultEverythingColorPaletteInfo = new ColorPaletteInfo(EVERYTHING_SCHEMA_COMBO_BOX_NAME, null, null, 0, 0, false, null, true);
-        everythingColorPaletteInfos.add(defaultEverythingColorPaletteInfo);
+        File file = new File(colorPaletteDir, DEFAULTS_SCHEMA_FILENAME);
+        initColorPaletteInfos(colorPaletteDir, defaultsColorPaletteInfos, file);
 
-        File file = new File(colorPaletteDir, EVERYTHING_SCHEMA_FILENAME);
-        initColorPaletteInfos(colorPaletteDir, everythingColorPaletteInfos, file);
-
-        Object[] colorPaletteInfosArray = everythingColorPaletteInfos.toArray();
+        Object[] colorPaletteInfosArray = defaultsColorPaletteInfos.toArray();
 
 
-        final String[] toolTipsArray = new String[everythingColorPaletteInfos.size()];
+        final String[] toolTipsArray = new String[defaultsColorPaletteInfos.size()];
 
         int i = 0;
-        for (ColorPaletteInfo colorPaletteInfo : everythingColorPaletteInfos) {
+        for (ColorPaletteInfo colorPaletteInfo : defaultsColorPaletteInfos) {
             toolTipsArray[i] = colorPaletteInfo.getDescription();
             i++;
         }
 
 
-        final Boolean[] enabledArray = new Boolean[everythingColorPaletteInfos.size()];
+        final Boolean[] enabledArray = new Boolean[defaultsColorPaletteInfos.size()];
 
         i = 0;
-        for (ColorPaletteInfo colorPaletteInfo : everythingColorPaletteInfos) {
+        for (ColorPaletteInfo colorPaletteInfo : defaultsColorPaletteInfos) {
             enabledArray[i] = colorPaletteInfo.isEnabled();
             i++;
         }
@@ -171,17 +182,14 @@ public class ColorPaletteInfoComboBox {
         myComboBoxRenderer.setTooltipList(toolTipsArray);
         myComboBoxRenderer.setEnabledList(enabledArray);
 
-        everythingJComboBox = new JComboBox(colorPaletteInfosArray);
-        everythingJComboBox.setRenderer(myComboBoxRenderer);
-        everythingJComboBox.setEditable(false);
-        everythingJComboBox.setMaximumRowCount(20);
-        everythingJComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + EVERYTHING_SCHEMA_FILENAME);
+        defaultsJComboBox = new JComboBox(colorPaletteInfosArray);
+        defaultsJComboBox.setRenderer(myComboBoxRenderer);
+        defaultsJComboBox.setEditable(false);
+        defaultsJComboBox.setMaximumRowCount(20);
+        defaultsJComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + DEFAULTS_SCHEMA_FILENAME);
 
 
     }
-
-
-
 
 
     private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file) {
@@ -261,11 +269,16 @@ public class ColorPaletteInfoComboBox {
 
 
     public void reset() {
-        standardJComboBox.setSelectedItem(defaultStandardColorPaletteInfo);
-        userJComboBox.setSelectedItem(defaultUserColorPaletteInfo);
-        everythingJComboBox.setSelectedItem(defaultEverythingColorPaletteInfo);
+        if (standardJComboBox != null) {
+            standardJComboBox.setSelectedItem(defaultStandardColorPaletteInfo);
+        }
+        if (userJComboBox != null) {
+            userJComboBox.setSelectedItem(defaultUserColorPaletteInfo);
+        }
+        if (defaultsJComboBox != null) {
+            defaultsJComboBox.setSelectedItem(defaultDefaultsColorPaletteInfo);
+        }
     }
-
 
 
     public ArrayList<String> readFileIntoArrayList(File file) {
@@ -299,8 +312,6 @@ public class ColorPaletteInfoComboBox {
     }
 
 
-
-
     public JComboBox getStandardJComboBox() {
         return standardJComboBox;
     }
@@ -310,8 +321,12 @@ public class ColorPaletteInfoComboBox {
         return userJComboBox;
     }
 
-    public JComboBox getEverythingJComboBox() {
-        return everythingJComboBox;
+    public JComboBox getDefaultsJComboBox() {
+        return defaultsJComboBox;
+    }
+
+    public ArrayList<ColorPaletteInfo> getDefaultsColorPaletteInfos() {
+        return defaultsColorPaletteInfos;
     }
 
 
@@ -332,7 +347,7 @@ public class ColorPaletteInfoComboBox {
             if (isSelected) {
                 setBackground(Color.blue);
 
-                if (index >= 0  && index < tooltips.length) {
+                if (index >= 0 && index < tooltips.length) {
                     list.setToolTipText(tooltips[index]);
                 }
 
@@ -365,8 +380,6 @@ public class ColorPaletteInfoComboBox {
 
             setFont(list.getFont());
             setText((value == null) ? "" : value.toString());
-
-
 
 
             return this;
