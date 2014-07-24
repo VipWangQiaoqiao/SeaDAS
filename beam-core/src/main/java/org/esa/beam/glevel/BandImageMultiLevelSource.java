@@ -117,22 +117,24 @@ public class BandImageMultiLevelSource extends AbstractMultiLevelSource {
     public RenderedImage createImage(int level) {
         if (imageInfo.getColorPaletteDef().getNumPoints() <= 3) {
             ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(getSystemAuxdataDir(), false);
-            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
-            for (ColorPaletteInfo cpdInfo : defaultSchemes) {
-                if (cpdInfo.getName().trim().contains(rasterDataNodes[0].getName().trim())) {
-                    ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
-                    imageInfo.setColorPaletteDef(colorPaletteDef,
-                                                 cpdInfo.getMinValue(),
-                                                 cpdInfo.getMaxValue(),
-                                                 true, //colorPaletteDef.isAutoDistribute(),
-                                                 cpdInfo.isSourceLogScaled(),
-                                                 cpdInfo.isLogScaled());
-                    imageInfo.setLogScaled(cpdInfo.isLogScaled());
-                    break;
+            if (colorPaletteSchemes != null) {
+                ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
+                for (ColorPaletteInfo cpdInfo : defaultSchemes) {
+                    if (cpdInfo.getName().trim().contains(rasterDataNodes[0].getName().trim())) {
+                        ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
+                        imageInfo.setColorPaletteDef(colorPaletteDef,
+                                cpdInfo.getMinValue(),
+                                cpdInfo.getMaxValue(),
+                                true, //colorPaletteDef.isAutoDistribute(),
+                                cpdInfo.isSourceLogScaled(),
+                                cpdInfo.isLogScaled());
+                        imageInfo.setLogScaled(cpdInfo.isLogScaled());
+                        break;
+                    }
                 }
             }
         }
-      return ImageManager.getInstance().createColoredBandImage(rasterDataNodes, imageInfo, level);
+        return ImageManager.getInstance().createColoredBandImage(rasterDataNodes, imageInfo, level);
     }
 
     private File getSystemAuxdataDir() {
