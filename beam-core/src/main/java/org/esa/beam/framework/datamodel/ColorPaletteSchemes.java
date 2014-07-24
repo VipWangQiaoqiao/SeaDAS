@@ -1,6 +1,4 @@
-package org.esa.beam.visat.toolviews.imageinfo;
-
-import org.esa.beam.framework.datamodel.ColorPaletteDef;
+package org.esa.beam.framework.datamodel;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;

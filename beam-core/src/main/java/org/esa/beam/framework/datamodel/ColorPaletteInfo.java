@@ -1,6 +1,4 @@
-package org.esa.beam.visat.toolviews.imageinfo;
-
-import org.esa.beam.framework.datamodel.ColorPaletteDef;
+package org.esa.beam.framework.datamodel;
 
 /**
  * Created by danielknowles on 6/28/14.
