@@ -21,13 +21,15 @@ import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.glevel.MultiLevelModel;
 import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelModel;
-import org.esa.beam.framework.datamodel.ImageInfo;
-import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.jai.ImageManager;
+import org.esa.beam.util.SystemUtils;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.RenderedImage;
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * A multi-level source (= level-image source for image pyramids) for visual RGB images derived from
@@ -72,8 +74,8 @@ public class BandImageMultiLevelSource extends AbstractMultiLevelSource {
     public static BandImageMultiLevelSource create(RasterDataNode[] rasterDataNodes,
                                                    AffineTransform i2mTransform, ProgressMonitor pm) {
         return create(rasterDataNodes, i2mTransform,
-                      DefaultMultiLevelModel.getLevelCount(rasterDataNodes[0].getSceneRasterWidth(),
-                                                           rasterDataNodes[0].getSceneRasterHeight()), pm);
+                DefaultMultiLevelModel.getLevelCount(rasterDataNodes[0].getSceneRasterWidth(),
+                        rasterDataNodes[0].getSceneRasterHeight()), pm);
     }
 
     /**
@@ -113,6 +115,27 @@ public class BandImageMultiLevelSource extends AbstractMultiLevelSource {
 
     @Override
     public RenderedImage createImage(int level) {
-        return ImageManager.getInstance().createColoredBandImage(rasterDataNodes, imageInfo, level);
+        if (imageInfo.getColorPaletteDef().getNumPoints() <= 3) {
+            ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(getSystemAuxdataDir(), false);
+            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
+            for (ColorPaletteInfo cpdInfo : defaultSchemes) {
+                if (cpdInfo.getName().trim().contains(rasterDataNodes[0].getName().trim())) {
+                    ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
+                    imageInfo.setColorPaletteDef(colorPaletteDef,
+                                                 cpdInfo.getMinValue(),
+                                                 cpdInfo.getMaxValue(),
+                                                 true, //colorPaletteDef.isAutoDistribute(),
+                                                 cpdInfo.isSourceLogScaled(),
+                                                 cpdInfo.isLogScaled());
+                    imageInfo.setLogScaled(cpdInfo.isLogScaled());
+                    break;
+                }
+            }
+        }
+      return ImageManager.getInstance().createColoredBandImage(rasterDataNodes, imageInfo, level);
+    }
+
+    private File getSystemAuxdataDir() {
+        return new File(SystemUtils.getApplicationDataDir(), "beam-ui/auxdata/color-palettes");
     }
 }
