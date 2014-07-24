@@ -336,6 +336,9 @@ public class ImageInfo implements Cloneable {
             double minSourceValue = sourceCPD.getMinDisplaySample();
             double maxSourceValue = sourceCPD.getMaxDisplaySample();
 
+            // The target CPD log status needs to be set here to be effective
+            targetCPD.setLogScaled(isTargetLogScaled);
+
             for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
 
                 if (minTargetValue != maxTargetValue && minSourceValue != maxSourceValue) {
@@ -373,8 +376,7 @@ public class ImageInfo implements Cloneable {
         } else {
             targetCPD.setPoints(sourceCPD.getPoints().clone());
         }
-// tod DANNY may want to add this
-        targetCPD.setLogScaled(isTargetLogScaled);
+
     }
 
 
