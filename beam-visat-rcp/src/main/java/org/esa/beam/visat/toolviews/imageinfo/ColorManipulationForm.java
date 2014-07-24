@@ -34,6 +34,7 @@ import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.datamodel.Stx;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.GridBagUtils;
+import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.framework.ui.SuppressibleOptionPane;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.application.PageComponentDescriptor;
@@ -58,12 +59,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -521,6 +517,8 @@ class ColorManipulationForm {
                                                     }
                                                 });
                 if ( colorBarLayer != null) {
+                    VisatApp.getApp().showMessageDialog("Removing current color bar layer", "You've changed the color schema. Current color bar layer will be " +
+                            "removed from the image.", ModalDialog.ID_OK, null);
                   productSceneView.getRootLayer().getChildren().remove(colorBarLayer);
                 }
             }
