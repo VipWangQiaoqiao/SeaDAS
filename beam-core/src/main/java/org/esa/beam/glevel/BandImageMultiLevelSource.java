@@ -120,7 +120,8 @@ public class BandImageMultiLevelSource extends AbstractMultiLevelSource {
             if (colorPaletteSchemes != null) {
                 ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
                 for (ColorPaletteInfo cpdInfo : defaultSchemes) {
-                    if (cpdInfo.getName().trim().contains(rasterDataNodes[0].getName().trim())) {
+
+                    if (cpdInfo.getName() != null & cpdInfo.getName().trim().equals(rasterDataNodes[0].getName().trim())) {
                         ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
                         imageInfo.setColorPaletteDef(colorPaletteDef,
                                 cpdInfo.getMinValue(),

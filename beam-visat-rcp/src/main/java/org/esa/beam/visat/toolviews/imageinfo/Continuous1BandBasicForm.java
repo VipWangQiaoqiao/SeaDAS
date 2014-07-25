@@ -502,7 +502,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
                     String id = parentForm.getProductSceneView().getRaster().getDisplayName();
                     //   VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
-                    VisatApp.getApp().setStatusBarMessage("'" + colorPaletteInfo.getName() + "' color scheme loaded");
+                    String colorPaletteName = (colorPaletteInfo.getName() != null) ? colorPaletteInfo.getName() : "";
+                    VisatApp.getApp().setStatusBarMessage("'" + colorPaletteName + "' color scheme loaded");
 
                 }
             } catch (IOException e1) {
