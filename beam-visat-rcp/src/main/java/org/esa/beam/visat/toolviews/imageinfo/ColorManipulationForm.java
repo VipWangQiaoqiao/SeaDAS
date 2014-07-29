@@ -21,17 +21,7 @@ import com.bc.ceres.glayer.LayerFilter;
 import com.bc.ceres.glayer.support.LayerUtils;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.BeamUiActivator;
-import org.esa.beam.framework.datamodel.Band;
-import org.esa.beam.framework.datamodel.ColorPaletteDef;
-import org.esa.beam.framework.datamodel.ImageInfo;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductManager;
-import org.esa.beam.framework.datamodel.ProductNode;
-import org.esa.beam.framework.datamodel.ProductNodeEvent;
-import org.esa.beam.framework.datamodel.ProductNodeListener;
-import org.esa.beam.framework.datamodel.ProductNodeListenerAdapter;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.datamodel.Stx;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.ModalDialog;
@@ -115,10 +105,6 @@ class ColorManipulationForm {
         productNodeListener = new ColorManipulationPNL();
         sceneViewChangeListener = new SceneViewImageInfoChangeListener();
         titlePrefix = getToolViewDescriptor().getTitle();
-
-//todo Danny put this here for use with the default color loading
-//        ColorPaletteSchemes defaultColorPaletteSchemes = new ColorPaletteSchemes(getIODir(), false);
-//        ArrayList<ColorPaletteInfo> defaultColorPaletteInfos = defaultColorPaletteSchemes.getDefaultsColorPaletteInfos();
     }
 
     public ProductSceneView getProductSceneView() {
@@ -171,6 +157,25 @@ class ColorManipulationForm {
         }
 
         if (this.productSceneView != null) {
+                    if (this.productSceneView.getImageInfo().getColorPaletteDef().getNumPoints() <= 3) {
+                        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(getSystemAuxdataDir(), false);
+                        if (colorPaletteSchemes != null) {
+                            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
+                            for (ColorPaletteInfo cpdInfo : defaultSchemes) {
+                                if (this.productSceneView.getBaseImageLayer().getName().trim().contains(cpdInfo.getName().trim())) {
+                                    ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
+                                    this.productSceneView.getImageInfo().setColorPaletteDef(colorPaletteDef,
+                                            cpdInfo.getMinValue(),
+                                            cpdInfo.getMaxValue(),
+                                            true, //colorPaletteDef.isAutoDistribute(),
+                                            cpdInfo.isSourceLogScaled(),
+                                            cpdInfo.isLogScaled());
+                                    this.productSceneView.getImageInfo().setLogScaled(cpdInfo.isLogScaled());
+                                    break;
+                                }
+                            }
+                        }
+                    }
             setImageInfoCopy(this.productSceneView.getImageInfo());
         }
 
@@ -180,6 +185,7 @@ class ColorManipulationForm {
         updateToolButtons();
 
         setApplyEnabled(false);
+
     }
 
     private void installChildForm(ProductSceneView productSceneViewOld) {
