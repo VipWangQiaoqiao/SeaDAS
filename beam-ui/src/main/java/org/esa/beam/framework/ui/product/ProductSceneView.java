@@ -68,7 +68,7 @@ import java.util.List;
  */
 public class ProductSceneView extends BasicView
         implements FigureEditorAware, ProductNodeView, PropertyMapChangeListener, PixelInfoFactory, ProductLayerContext,
-        ViewportAware {
+                   ViewportAware {
 
     public static final String BASE_IMAGE_LAYER_ID = "org.esa.beam.layers.baseImage";
     public static final String NO_DATA_LAYER_ID = "org.esa.beam.layers.noData";
@@ -229,7 +229,7 @@ public class ProductSceneView extends BasicView
         figureEditor.addSelectionChangeListener(new PinSelectionChangeListener());
 
         this.scrollBarsShown = sceneImage.getConfiguration().getPropertyBool(PROPERTY_KEY_IMAGE_SCROLL_BARS_SHOWN,
-                false);
+                                                                             false);
         if (scrollBarsShown) {
             this.scrollPane = createScrollPane();
             add(scrollPane, BorderLayout.CENTER);
@@ -273,7 +273,7 @@ public class ProductSceneView extends BasicView
 
     private AdjustableViewScrollPane createScrollPane() {
         AbstractButton zoomAllButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/ZoomAll13.gif"),
-                false);
+                                                                      false);
         zoomAllButton.setFocusable(false);
         zoomAllButton.setFocusPainted(false);
         zoomAllButton.addActionListener(new ActionListener() {
@@ -622,8 +622,8 @@ public class ProductSceneView extends BasicView
         for (VectorDataNode vectorDataNode : vectorDataNodes) {
             final LayerFilter nodeFilter = VectorDataLayerFilterFactory.createNodeFilter(vectorDataNode);
             Layer vectorDataLayer = LayerUtils.getChildLayer(getRootLayer(),
-                    LayerUtils.SEARCH_DEEP,
-                    nodeFilter);
+                                                             LayerUtils.SEARCH_DEEP,
+                                                             nodeFilter);
             if (vectorDataLayer != null) {
                 vectorDataLayer.setVisible(true);
             }
@@ -652,7 +652,7 @@ public class ProductSceneView extends BasicView
 
             if (layer == null) {
                 layer = LayerUtils.getChildLayer(getRootLayer(), LayerUtils.SearchMode.DEEP,
-                        VectorDataLayerFilterFactory.createGeometryFilter());
+                                                 VectorDataLayerFilterFactory.createGeometryFilter());
             }
             if (layer != null) {
                 final VectorDataLayer vectorDataLayer = (VectorDataLayer) layer;
@@ -770,8 +770,8 @@ public class ProductSceneView extends BasicView
     public VectorDataLayer selectVectorDataLayer(VectorDataNode vectorDataNode) {
         LayerFilter layerFilter = new VectorDataLayerFilter(vectorDataNode);
         VectorDataLayer layer = (VectorDataLayer) LayerUtils.getChildLayer(getRootLayer(),
-                LayerUtils.SEARCH_DEEP,
-                layerFilter);
+                                                                           LayerUtils.SEARCH_DEEP,
+                                                                           layerFilter);
         if (layer != null) {
             setSelectedLayer(layer);
         }
@@ -872,8 +872,8 @@ public class ProductSceneView extends BasicView
         ArrayList<SimpleFeatureFigure> selectedFigures = new ArrayList<SimpleFeatureFigure>();
         collectFeatureFigures(figureEditor.getFigureSelection(), selectedFigures);
         if (selectedFigures.isEmpty()
-                && !selectedOnly
-                && getSelectedLayer() instanceof VectorDataLayer) {
+            && !selectedOnly
+            && getSelectedLayer() instanceof VectorDataLayer) {
             VectorDataLayer vectorDataLayer = (VectorDataLayer) getSelectedLayer();
             collectFeatureFigures(vectorDataLayer.getFigureCollection(), selectedFigures);
         }
@@ -1101,8 +1101,8 @@ public class ProductSceneView extends BasicView
                 final Color color = (Color) noDataLayer.getConfiguration().getValue(
                         NoDataLayerType.PROPERTY_NAME_COLOR);
                 final MultiLevelSource multiLevelSource = MaskImageMultiLevelSource.create(getRaster().getProduct(),
-                        color, expression, true,
-                        getBaseImageLayer().getImageToModelTransform());
+                                                                                           color, expression, true,
+                                                                                           getBaseImageLayer().getImageToModelTransform());
                 noDataLayer.setMultiLevelSource(multiLevelSource);
             } else {
                 noDataLayer.setMultiLevelSource(MultiLevelSource.NULL);
@@ -1145,10 +1145,10 @@ public class ProductSceneView extends BasicView
          */
         public RGBChannel(final Product product, final String name, final String expression) {
             super(name,
-                    ProductData.TYPE_FLOAT32,
-                    product.getSceneRasterWidth(),
-                    product.getSceneRasterHeight(),
-                    expression);
+                  ProductData.TYPE_FLOAT32,
+                  product.getSceneRasterWidth(),
+                  product.getSceneRasterHeight(),
+                  expression);
             setOwner(product);
             setModified(false);
         }
@@ -1233,7 +1233,7 @@ public class ProductSceneView extends BasicView
     private boolean isPixelPosValid(int currentPixelX, int currentPixelY, int currentLevel) {
         return currentPixelX >= 0 && currentPixelX < baseImageLayer.getImage(
                 currentLevel).getWidth() && currentPixelY >= 0
-                && currentPixelY < baseImageLayer.getImage(currentLevel).getHeight();
+               && currentPixelY < baseImageLayer.getImage(currentLevel).getHeight();
     }
 
     private void firePixelPosChanged(MouseEvent e, int currentPixelX, int currentPixelY, int currentLevel) {
@@ -1284,7 +1284,7 @@ public class ProductSceneView extends BasicView
 
     private boolean isPixelBorderDisplayEnabled() {
         return pixelBorderShown &&
-                getLayerCanvas().getViewport().getZoomFactor() >= pixelBorderViewScale;
+               getLayerCanvas().getViewport().getZoomFactor() >= pixelBorderViewScale;
     }
 
     private void drawPixelBorder(int currentPixelX, int currentPixelY, int currentLevel, boolean showBorder) {
