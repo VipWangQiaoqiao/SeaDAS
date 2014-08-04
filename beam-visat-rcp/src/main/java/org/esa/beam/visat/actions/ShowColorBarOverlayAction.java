@@ -155,7 +155,7 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         double scaleY = (colorBarImageHeight > colorBarImageWidth) ? (double) rasterHeight / colorBarImageHeight : 0.6;
         if (scaleX > 1) {
             scaleY = scaleY + 1;
-        }   else if (scaleY > 1) {
+        }   else if (scaleY > 1) {    //this statement must have the "else" clause, otherwise the scaleX will be problematic.
             scaleX = scaleX + 1;
         }
         int y_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? rasterHeight - colorBarImageHeight / 4 : 0;
