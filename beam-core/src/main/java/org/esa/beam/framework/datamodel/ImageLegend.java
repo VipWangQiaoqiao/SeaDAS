@@ -15,16 +15,24 @@
  */
 package org.esa.beam.framework.datamodel;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
+import org.esa.beam.jai.ImageManager;
+import org.esa.beam.util.StringUtils;
+import org.geotools.data.collection.ListFeatureCollection;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import org.esa.beam.jai.ImageManager;
-import org.esa.beam.util.StringUtils;
-
-import javax.swing.*;
+import static org.esa.beam.framework.datamodel.PlainFeatureFactory.createPlainFeatureType;
 
 // @todo 2 nf/** - if orientation is vertical, sample values should increase from bottom to top
 // @todo 1 nf/** - make PALETTE_HEIGHT a fixed value, fill space into gaps instead
@@ -108,6 +116,10 @@ public class ImageLegend {
     private ArrayList<ColorBarInfo> colorBarInfos = new ArrayList<ColorBarInfo>();
     private int tickWidth;
 
+
+    private FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection;
+    SimpleFeatureType featureType; // = createPlainFeatureType("Color_Bar", LineString.class, DefaultGeographicCRS.WGS84);
+
     public ImageLegend(ImageInfo imageInfo, RasterDataNode raster) {
         this.imageInfo = imageInfo;
         this.raster = raster;
@@ -122,7 +134,9 @@ public class ImageLegend {
         decimalPlaces = 1;
         setFullCustomAddThesePoints("");
         tickWidth = 1;
-
+        Product product = raster.getProduct();
+        featureType = createPlainFeatureType("Color_Bar", LineString.class, DefaultGeographicCRS.WGS84);
+        featureCollection = new ListFeatureCollection(featureType);
     }
 
     public ImageInfo getImageInfo() {
@@ -729,6 +743,7 @@ public class ImageLegend {
     private void drawPalette(Graphics2D g2d) {
 
         final Color[] palette = ImageManager.createColorPalette(getRaster().getImageInfo());
+        Coordinate[] coordinates = new Coordinate[2];
 
         final int x1 = paletteRect.x;
         final int x2 = paletteRect.x + paletteRect.width;
@@ -762,9 +777,16 @@ public class ImageLegend {
             g2d.setColor(palette[palIndex]);
             if (orientation == HORIZONTAL) {
                 g2d.drawLine(i, y1, i, y2);
+                coordinates[0] = new Coordinate(i,y1);
+                coordinates[1] = new Coordinate(i,y2);
+
             } else {
                 g2d.drawLine(x1, i, x2, i);
+                coordinates[0] = new Coordinate(x1,i);
+                coordinates[1] = new Coordinate(x2,i);
             }
+            LineString line = new GeometryFactory().createLineString(coordinates);
+            featureCollection.add(createSimpleFeature((LineString)line.clone(), palette[palIndex], i));
         }
         g2d.setStroke(new BasicStroke(1));
         g2d.setColor(foregroundColor);
@@ -981,5 +1003,20 @@ public class ImageLegend {
 
     public void setScalingFactor(double scalingFactor) {
         this.scalingFactor = scalingFactor;
+    }
+
+    private SimpleFeature createSimpleFeature(LineString lineString, Color lineColor, int id){
+        final String DEFAULT_STYLE_FORMAT = "fill:%s; fill-opacity:0.5; stroke:%s; stroke-opacity:1.0; stroke-width:1.0; symbol:cross";
+        String hex = String.format("#%02x%02x%02x", lineColor.getRed(), lineColor.getGreen(), lineColor.getBlue());
+        String style_css = String.format(DEFAULT_STYLE_FORMAT, hex, hex);
+        return PlainFeatureFactory.createPlainFeature(featureType, "color_bar" + id, lineString, style_css);
+    }
+
+    public FeatureCollection<SimpleFeatureType, SimpleFeature> getFeatureCollection() {
+        return featureCollection;
+    }
+
+    public void setFeatureCollection(FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection) {
+        this.featureCollection = featureCollection;
     }
 }
