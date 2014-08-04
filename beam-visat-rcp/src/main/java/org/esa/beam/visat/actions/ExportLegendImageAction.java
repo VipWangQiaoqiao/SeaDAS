@@ -94,7 +94,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
              ShowColorBarOverlayAction showColorBarOverlayAction = new ShowColorBarOverlayAction();
             RenderedImage colorBarImage = createImage("PNG", view);
             showColorBarOverlayAction.setColorBarImage(colorBarImage);
+            showColorBarOverlayAction.setFeatureCollection(imageLegend.getFeatureCollection());
             showColorBarOverlayAction.actionPerformed(event);
+            //showColorBarOverlayAction.createColorBarVectorNode();
         }
 
     }
