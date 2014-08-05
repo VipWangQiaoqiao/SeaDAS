@@ -18,33 +18,16 @@ package org.esa.beam.visat.toolviews.stat;
 
 import com.jidesoft.grid.CellSpan;
 import com.jidesoft.grid.SpanTableModel;
-import org.esa.beam.framework.datamodel.BasicPixelGeoCoding;
-import org.esa.beam.framework.datamodel.CombinedFXYGeoCoding;
-import org.esa.beam.framework.datamodel.CrsGeoCoding;
-import org.esa.beam.framework.datamodel.FXYGeoCoding;
-import org.esa.beam.framework.datamodel.GcpGeoCoding;
-import org.esa.beam.framework.datamodel.GeoCoding;
-import org.esa.beam.framework.datamodel.GeoPos;
-import org.esa.beam.framework.datamodel.MapGeoCoding;
-import org.esa.beam.framework.datamodel.PixelPos;
-import org.esa.beam.framework.datamodel.Placemark;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductNodeEvent;
-import org.esa.beam.framework.datamodel.ProductNodeGroup;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.datamodel.TiePointGeoCoding;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.dataop.maptransf.MapInfo;
 import org.esa.beam.framework.param.Parameter;
 import org.esa.beam.framework.ui.application.ToolView;
-import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.math.FXYSum;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
-import java.awt.BorderLayout;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -422,7 +405,9 @@ class GeoCodingTablePanel extends TablePagePanel {
         addRow("Name of longitude band", gc.getLonBand().getName());
 
         addRow("Search radius", gc.getSearchRadius() + " pixels");
-        addRow("Valid pixel mask", gc.getValidMask());
+        if (gc.getValidMask() != null) {
+            addRow("Valid pixel mask", gc.getValidMask());
+        }
         addRow("Crossing 180 degree meridian", String.valueOf(gc.isCrossingMeridianAt180()));
 
         addEmptyRow();
