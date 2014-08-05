@@ -137,7 +137,7 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         ProductSceneView sceneView = visatApp.getSelectedProductSceneView();
         RasterDataNode raster = sceneView.getSceneImage().getRasters()[0];
         AffineTransform transform = raster.getSourceImage().getModel().getImageToModelTransform(0);
-        transform.concatenate(createTransform(raster, image));
+        //transform.concatenate(createTransform(raster, image));
         return transform;
         //return createTransform(raster, image);
     }
