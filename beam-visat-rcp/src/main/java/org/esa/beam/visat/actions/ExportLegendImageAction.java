@@ -58,7 +58,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String DECIMAL_PLACES_PARAM_STR = "legend.decimalPlaces";
     private static final String FOREGROUND_COLOR_PARAM_STR = "legend.foregroundColor";
     private static final String BACKGROUND_COLOR_PARAM_STR = "legend.backgroundColor";
- //   private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
+    //   private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
     private static final String TRANSPARENT_PARAM_STR = "legend.transparent";
 
     private static final String SCALING_FACTOR_PARAM_STR = "legend.scalingFactor";
@@ -66,13 +66,21 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String TITLE_UNITS_FONT_SIZE_PARAM_STR = "legend.titleUnitsFontSize";
     private static final String LABELS_FONT_SIZE_PARAM_STR = "legend.labelsFontSize";
 
+    private static final String COLOR_BAR_LENGTH_PARAM_STR = "legend.colorBarLength";
+    private static final String COLOR_BAR_THICKNESS_PARAM_STR = "legend.colorBarThickness";
+    private static final String LAYER_SCALING_PARAM_STR = "legend.layerScalingThickness";
+
 
     private ParamGroup legendParamGroup;
     private ImageLegend imageLegend;
+    private static int imageHeight;
+    private static int imageWidth;
 
     @Override
     public void actionPerformed(CommandEvent event) {
         ProductSceneView view = getVisatApp().getSelectedProductSceneView();
+        imageHeight = view.getRaster().getRasterHeight();
+        imageWidth = view.getRaster().getRasterWidth();
         legendParamGroup = createLegendParamGroup();
         //       legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
         modifyHeaderText(legendParamGroup, view.getRaster());
@@ -90,11 +98,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         if (dialog.okWasClicked) {
             exportImage(getVisatApp(), getImageFileFilters(), event.getSelectableCommand());
-        }   else if (dialog.getButtonID()==ModalDialog.ID_APPLY) {
-             ShowColorBarOverlayAction showColorBarOverlayAction = new ShowColorBarOverlayAction();
+        } else if (dialog.getButtonID() == ModalDialog.ID_APPLY) {
+            ShowColorBarOverlayAction showColorBarOverlayAction = new ShowColorBarOverlayAction();
             RenderedImage colorBarImage = createImage("PNG", view);
             showColorBarOverlayAction.setColorBarImage(colorBarImage);
-            showColorBarOverlayAction.setFeatureCollection(imageLegend.getFeatureCollection());
+            //showColorBarOverlayAction.setFeatureCollection(imageLegend.getFeatureCollection());
             showColorBarOverlayAction.actionPerformed(event);
             //showColorBarOverlayAction.createColorBarVectorNode();
         }
@@ -129,10 +137,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
 //        if (dialog.okWasClicked) {
-            fileChooser.setAccessory(createImageLegendAccessory(getVisatApp(),
-                    fileChooser,
-                    legendParamGroup,
-                    imageLegend));
+        fileChooser.setAccessory(createImageLegendAccessory(getVisatApp(),
+                fileChooser,
+                legendParamGroup,
+                imageLegend));
 //        }
     }
 
@@ -140,7 +148,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     protected RenderedImage createImage(String imageFormat, ProductSceneView view) {
         transferParamsToImageLegend(legendParamGroup, imageLegend);
         imageLegend.setBackgroundTransparencyEnabled(isTransparencySupportedByFormat(imageFormat));
-        return imageLegend.createImage();
+        return imageLegend.createLayerImage(new Dimension(imageWidth, imageHeight));
+
+        // todo DANNY
     }
 
     @Override
@@ -192,6 +202,24 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
+        param = new Parameter(COLOR_BAR_LENGTH_PARAM_STR, ImageLegend.DEFAULT_COLOR_BAR_LENGTH);
+        param.getProperties().setLabel("Color Bar Length (pixels)");
+        param.getProperties().setMinValue(300);
+        param.getProperties().setMaxValue(5000);
+        paramGroup.addParameter(param);
+
+        param = new Parameter(COLOR_BAR_THICKNESS_PARAM_STR, ImageLegend.DEFAULT_COLOR_BAR_THICKNESS);
+        param.getProperties().setLabel("Color Bar Thickness (pixels)");
+        param.getProperties().setMinValue(5);
+        param.getProperties().setMaxValue(500);
+        paramGroup.addParameter(param);
+
+
+        param = new Parameter(LAYER_SCALING_PARAM_STR, ImageLegend.DEFAULT_LAYER_SCALING);
+        param.getProperties().setLabel("Layer Scaling (%)");
+        param.getProperties().setMinValue(5);
+        param.getProperties().setMaxValue(150);
+        paramGroup.addParameter(param);
 
         // DANNY
         param = new Parameter(TITLE_UNITS_PARAM_STR, "");
@@ -328,6 +356,14 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(LABELS_FONT_SIZE_PARAM_STR).getValue();
         imageLegend.setLabelsFontSize((Integer) value);
 
+        value = legendParamGroup.getParameter(COLOR_BAR_LENGTH_PARAM_STR).getValue();
+        imageLegend.setColorBarLength((Integer) value);
+
+        value = legendParamGroup.getParameter(COLOR_BAR_THICKNESS_PARAM_STR).getValue();
+        imageLegend.setColorBarThickness((Integer) value);
+
+        value = legendParamGroup.getParameter(LAYER_SCALING_PARAM_STR).getValue();
+        imageLegend.setLayerScaling((Double) value);
 
         value = legendParamGroup.getParameter(NUM_TICKS_PARAM_STR).getValue();
         imageLegend.setNumberOfTicks((Integer) value);
@@ -377,6 +413,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter titleFontSizeParam;
         private Parameter titleUnitsFontSizeParam;
         private Parameter labelsFontSizeParam;
+        private Parameter colorBarLengthParam;
+        private Parameter colorBarThicknessParam;
+        private Parameter layerScalingParam;
 
         private boolean okWasClicked = false;
 
@@ -464,11 +503,12 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         }
 
         @Override
-        protected void onApply(){
+        protected void onApply() {
             hide();
         }
 
         private void initUI() {
+
 
             final JButton previewButton = new JButton("Preview Color Bar...");
             previewButton.setMnemonic('v');
@@ -630,11 +670,49 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.anchor = GridBagConstraints.WEST;
 
-            gbc.gridx = 0;
+
             gbc.weightx = 1.0;
-            gbc.gridy = 0;
+
             gbc.insets.top = 3;
 
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            JLabel colorBarLengthJlabel = colorBarLengthParam.getEditor().getLabelComponent();
+            colorBarLengthJlabel.setToolTipText("This is a minimum length, an accumulation of tickmarks and font sizes could increase the actual length");
+
+            jPanel.add(colorBarLengthJlabel, gbc);
+            gbc.gridx = 1;
+            jPanel.add(colorBarLengthParam.getEditor().getEditorComponent(), gbc);
+
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 2;
+            gbc.insets.bottom = 10;
+            JLabel dimensionsJLabel = new JLabel("   * NOTE: Image Scene Dimensions (" + imageWidth + " x " + imageHeight + ")");
+            dimensionsJLabel.setToolTipText("Dimensions (width x height).  Useful if creating a colorBar layer");
+            dimensionsJLabel.setForeground(Color.BLUE);
+            jPanel.add(dimensionsJLabel, gbc);
+            gbc.gridwidth = 1;
+            gbc.insets.bottom = 0;
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            jPanel.add(layerScalingParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(layerScalingParam.getEditor().getEditorComponent(), gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            jPanel.add(colorBarThicknessParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(colorBarThicknessParam.getEditor().getEditorComponent(), gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
             jPanel.add(titleFontSizeParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
             jPanel.add(titleFontSizeParam.getEditor().getEditorComponent(), gbc);
@@ -653,11 +731,17 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             jPanel.add(labelsFontSizeParam.getEditor().getEditorComponent(), gbc);
 
 
+
+
+
+
             gbc.gridx = 0;
             gbc.gridy++;
             jPanel.add(foregroundColorParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
             jPanel.add(foregroundColorParam.getEditor().getEditorComponent(), gbc);
+
+
 
             gbc.gridx = 0;
             gbc.gridy++;
@@ -687,6 +771,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             titleFontSizeParam = paramGroup.getParameter(TITLE_FONT_SIZE_PARAM_STR);
             titleUnitsFontSizeParam = paramGroup.getParameter(TITLE_UNITS_FONT_SIZE_PARAM_STR);
             labelsFontSizeParam = paramGroup.getParameter(LABELS_FONT_SIZE_PARAM_STR);
+            colorBarLengthParam = paramGroup.getParameter(COLOR_BAR_LENGTH_PARAM_STR);
+            colorBarThicknessParam = paramGroup.getParameter(COLOR_BAR_THICKNESS_PARAM_STR);
+            layerScalingParam = paramGroup.getParameter(LAYER_SCALING_PARAM_STR);
             numberOfTicksParam = paramGroup.getParameter(NUM_TICKS_PARAM_STR);
             foregroundColorParam = paramGroup.getParameter(FOREGROUND_COLOR_PARAM_STR);
             backgroundColorParam = paramGroup.getParameter(BACKGROUND_COLOR_PARAM_STR);
@@ -730,7 +817,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
                 }
             });
 
-            modifyManualPoints(paramGroup,imageLegend.getFullCustomAddThesePoints());
+            modifyManualPoints(paramGroup, imageLegend.getFullCustomAddThesePoints());
 
             final ModalDialog dialog = new ModalDialog(getParent(), VisatApp.getApp().getAppName() + " - Color Bar Preview", imageDisplay,
                     ID_OK, null);
