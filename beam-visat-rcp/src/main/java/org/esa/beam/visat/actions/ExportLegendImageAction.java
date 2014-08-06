@@ -75,6 +75,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private ImageLegend imageLegend;
     private static int imageHeight;
     private static int imageWidth;
+    boolean colorBarLayer;
 
     @Override
     public void actionPerformed(CommandEvent event) {
@@ -97,8 +98,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         if (dialog.okWasClicked) {
+            colorBarLayer = false;
             exportImage(getVisatApp(), getImageFileFilters(), event.getSelectableCommand());
         } else if (dialog.getButtonID() == ModalDialog.ID_APPLY) {
+            colorBarLayer = true;
             ShowColorBarOverlayAction showColorBarOverlayAction = new ShowColorBarOverlayAction();
             RenderedImage colorBarImage = createImage("PNG", view);
             showColorBarOverlayAction.setColorBarImage(colorBarImage);
@@ -148,7 +151,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     protected RenderedImage createImage(String imageFormat, ProductSceneView view) {
         transferParamsToImageLegend(legendParamGroup, imageLegend);
         imageLegend.setBackgroundTransparencyEnabled(isTransparencySupportedByFormat(imageFormat));
-        return imageLegend.createLayerImage(new Dimension(imageWidth, imageHeight));
+        return imageLegend.createImage(new Dimension(imageWidth, imageHeight), colorBarLayer);
 
         // todo DANNY
     }
