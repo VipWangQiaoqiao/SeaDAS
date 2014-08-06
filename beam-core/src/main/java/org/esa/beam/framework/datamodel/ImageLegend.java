@@ -15,14 +15,14 @@
  */
 package org.esa.beam.framework.datamodel;
 
+import org.esa.beam.jai.ImageManager;
+import org.esa.beam.util.StringUtils;
+
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
-import org.esa.beam.jai.ImageManager;
-import org.esa.beam.util.StringUtils;
 
 // @todo 2 nf/** - if orientation is vertical, sample values should increase from bottom to top
 // @todo 1 nf/** - make PALETTE_HEIGHT a fixed value, fill space into gaps instead
@@ -252,8 +252,12 @@ public class ImageLegend {
         return isAlphaUsed() ? Math.round(255f * (1f - backgroundTransparency)) : 255;
     }
 
-    public BufferedImage createLayerImage(Dimension imageLayerDimension) {
+    boolean colorBarLayer = false;
 
+    public BufferedImage createImage(Dimension imageLayerDimension, boolean colorBarLayer) {
+        this.colorBarLayer = colorBarLayer;
+
+        if (colorBarLayer){
         double layerScalingFactor = getLayerScaling() / 100.0;
 
         // do this in order to get the legendSize prior to applying layerScalingFactor
@@ -276,7 +280,9 @@ public class ImageLegend {
         setTitleUnitsFontSize((int) Math.round(layerScalingFactor * getTitleUnitsFontSize()));
         setColorBarLength((int) Math.round(layerScalingFactor * getColorBarLength()));
         setColorBarThickness((int) Math.round(layerScalingFactor * getColorBarThickness()));
-
+        } else {
+                    // todo DANNY
+        }
 
         return createImage();
     }
