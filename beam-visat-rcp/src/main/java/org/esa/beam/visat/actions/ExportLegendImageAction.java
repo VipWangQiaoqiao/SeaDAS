@@ -69,6 +69,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String COLOR_BAR_LENGTH_PARAM_STR = "legend.colorBarLength";
     private static final String COLOR_BAR_THICKNESS_PARAM_STR = "legend.colorBarThickness";
     private static final String LAYER_SCALING_PARAM_STR = "legend.layerScalingThickness";
+    private static final String CENTER_ON_LAYER_PARAM_STR = "legend.centerOnLayer";
 
 
     private ParamGroup legendParamGroup;
@@ -219,9 +220,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         param = new Parameter(LAYER_SCALING_PARAM_STR, ImageLegend.DEFAULT_LAYER_SCALING);
-        param.getProperties().setLabel("Layer Scaling (%)");
+        param.getProperties().setLabel("Scaling (percent of layer image size)");
         param.getProperties().setMinValue(5);
         param.getProperties().setMaxValue(150);
+        paramGroup.addParameter(param);
+
+        param = new Parameter(CENTER_ON_LAYER_PARAM_STR, ImageLegend.DEFAULT_CENTER_ON_LAYER);
+        param.getProperties().setLabel("Center on layer");
         paramGroup.addParameter(param);
 
         // DANNY
@@ -368,6 +373,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(LAYER_SCALING_PARAM_STR).getValue();
         imageLegend.setLayerScaling((Double) value);
 
+        value = legendParamGroup.getParameter(CENTER_ON_LAYER_PARAM_STR).getValue();
+        imageLegend.setCenterOnLayer((Boolean) value);
+
         value = legendParamGroup.getParameter(NUM_TICKS_PARAM_STR).getValue();
         imageLegend.setNumberOfTicks((Integer) value);
 
@@ -419,6 +427,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter colorBarLengthParam;
         private Parameter colorBarThicknessParam;
         private Parameter layerScalingParam;
+        private Parameter centerOnLayerParam;
 
         private boolean okWasClicked = false;
 
@@ -459,6 +468,15 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
             if (ImageLegend.DISTRIB_EVEN_STR.equals(distributionTypeParam.getValue())) {
                 numberOfTicksParam.setUIEnabled(true);
+
+
+
+                // todo perhaps here is where adjusting num ticks could affect the font sizes?
+//                if ((Integer) (paramGroup.getParameter(NUM_TICKS_PARAM_STR).getValue()) > 8) {
+//                } else {
+//                    paramGroup.getParameter(LABELS_FONT_SIZE_PARAM_STR).setValue(newValue, null);
+//                }
+
                 decimalPlacesParam.setUIEnabled(true);
                 fullCustomAddThesePointsParam.setUIEnabled(false);
             } else if (ImageLegend.DISTRIB_EXACT_STR.equals(distributionTypeParam.getValue())) {
@@ -556,6 +574,12 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridwidth = 2;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             jPanel.add(getFormatsPanel("Formatting"), gbc);
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            jPanel.add(getScalingPanel("Layer Scaling & Placement"), gbc);
 
 
             gbc.gridwidth = 2;
@@ -665,6 +689,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             return jPanel;
         }
 
+
         private JPanel getFormatsPanel(String title) {
             JPanel jPanel = new JPanel(new GridBagLayout());
             jPanel.setBorder(BorderFactory.createTitledBorder(title));
@@ -688,23 +713,16 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             jPanel.add(colorBarLengthParam.getEditor().getEditorComponent(), gbc);
 
 
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.gridwidth = 2;
-            gbc.insets.bottom = 10;
-            JLabel dimensionsJLabel = new JLabel("   * NOTE: Image Scene Dimensions (" + imageWidth + " x " + imageHeight + ")");
-            dimensionsJLabel.setToolTipText("Dimensions (width x height).  Useful if creating a colorBar layer");
-            dimensionsJLabel.setForeground(Color.BLUE);
-            jPanel.add(dimensionsJLabel, gbc);
-            gbc.gridwidth = 1;
-            gbc.insets.bottom = 0;
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            jPanel.add(layerScalingParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(layerScalingParam.getEditor().getEditorComponent(), gbc);
+//            gbc.gridx = 0;
+//            gbc.gridy++;
+//            gbc.gridwidth = 2;
+//            gbc.insets.bottom = 10;
+//            JLabel dimensionsJLabel = new JLabel("   * NOTE: Image Scene Dimensions (" + imageWidth + " x " + imageHeight + ")");
+//            dimensionsJLabel.setToolTipText("Dimensions (width x height).  Useful if creating a colorBar layer");
+//            dimensionsJLabel.setForeground(Color.BLUE);
+//            jPanel.add(dimensionsJLabel, gbc);
+//            gbc.gridwidth = 1;
+//            gbc.insets.bottom = 0;
 
 
             gbc.gridx = 0;
@@ -734,16 +752,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             jPanel.add(labelsFontSizeParam.getEditor().getEditorComponent(), gbc);
 
 
-
-
-
-
             gbc.gridx = 0;
             gbc.gridy++;
             jPanel.add(foregroundColorParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
             jPanel.add(foregroundColorParam.getEditor().getEditorComponent(), gbc);
-
 
 
             gbc.gridx = 0;
@@ -764,6 +777,36 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             return jPanel;
         }
 
+
+        private JPanel getScalingPanel(String title) {
+            JPanel jPanel = new JPanel(new GridBagLayout());
+            jPanel.setBorder(BorderFactory.createTitledBorder(title));
+            final GridBagConstraints gbc = new GridBagConstraints();
+
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.anchor = GridBagConstraints.WEST;
+
+
+            gbc.weightx = 1.0;
+            gbc.insets.top = 3;
+
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            jPanel.add(layerScalingParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(layerScalingParam.getEditor().getEditorComponent(), gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 2;
+            jPanel.add(centerOnLayerParam.getEditor().getEditorComponent(), gbc);
+
+
+            return jPanel;
+        }
+
+
         private void initParams() {
             usingHeaderParam = paramGroup.getParameter(SHOW_TITLE_PARAM_STR);
             headerTextParam = paramGroup.getParameter(TITLE_PARAM_STR);
@@ -777,6 +820,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             colorBarLengthParam = paramGroup.getParameter(COLOR_BAR_LENGTH_PARAM_STR);
             colorBarThicknessParam = paramGroup.getParameter(COLOR_BAR_THICKNESS_PARAM_STR);
             layerScalingParam = paramGroup.getParameter(LAYER_SCALING_PARAM_STR);
+            centerOnLayerParam = paramGroup.getParameter(CENTER_ON_LAYER_PARAM_STR);
             numberOfTicksParam = paramGroup.getParameter(NUM_TICKS_PARAM_STR);
             foregroundColorParam = paramGroup.getParameter(FOREGROUND_COLOR_PARAM_STR);
             backgroundColorParam = paramGroup.getParameter(BACKGROUND_COLOR_PARAM_STR);
@@ -792,7 +836,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
             final ImageLegend imageLegend = new ImageLegend(getImageInfo(), raster);
             getImageLegend(imageLegend);
-            final BufferedImage image = imageLegend.createImage();
+            final BufferedImage image = imageLegend.createPreviewImage();
             final JLabel imageDisplay = new JLabel(new ImageIcon(image));
             imageDisplay.setOpaque(true);
             imageDisplay.addMouseListener(new MouseAdapter() {
