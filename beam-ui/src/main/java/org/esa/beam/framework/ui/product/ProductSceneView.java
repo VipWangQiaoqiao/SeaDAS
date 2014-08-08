@@ -178,9 +178,10 @@ public class ProductSceneView extends BasicView
     private AdjustableViewScrollPane scrollPane;
     private UndoContext undoContext;
     private VectorDataFigureEditor figureEditor;
-    private ParamGroup colorBarParamGroup = null;
+    private ColorBarParamInfo colorBarParamInfo = null;
 
     public ProductSceneView(ProductSceneImage sceneImage) {
+        colorBarParamInfo = new ColorBarParamInfo();
         Assert.notNull(sceneImage, "sceneImage");
 
         setOpaque(true);
@@ -1132,12 +1133,12 @@ public class ProductSceneView extends BasicView
 
 
 
-    public ParamGroup getColorBarParamGroup() {
-        return colorBarParamGroup;
+    public ColorBarParamInfo getColorBarParamInfo() {
+        return colorBarParamInfo;
     }
 
-    public void setColorBarParamGroup(ParamGroup colorBarParamGroup) {
-        this.colorBarParamGroup = colorBarParamGroup;
+    public void resetColorBarParamInfo() {
+        this.colorBarParamInfo = new ColorBarParamInfo();
     }
 
 

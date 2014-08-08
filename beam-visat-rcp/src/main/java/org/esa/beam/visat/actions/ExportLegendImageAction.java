@@ -25,6 +25,7 @@ import org.esa.beam.framework.param.Parameter;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.framework.ui.command.CommandEvent;
+import org.esa.beam.framework.ui.product.ColorBarParamInfo;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.util.io.BeamFileChooser;
@@ -42,10 +43,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 
 public class ExportLegendImageAction extends AbstractExportImageAction {
-
-
-    private static final String HORIZONTAL_STR = "Horizontal";
-    private static final String VERTICAL_STR = "Vertical";
 
     private static final String ORIENTATION_PARAM_STR = "legend.orientation";
     private static final String DISTRIBUTION_TYPE_PARAM_STR = "legend.label.distribution.type";
@@ -84,14 +81,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         imageHeight = view.getRaster().getRasterHeight();
         imageWidth = view.getRaster().getRasterWidth();
-        // todo DANNY colorBarParamGroup needs to be a copy so values only get overwritten when creating a new layer.
-        if (view.getColorBarParamGroup() != null) {
-            colorBarParamGroup = view.getColorBarParamGroup();
-        } else {
-            colorBarParamGroup = createColorBarParamGroup(view);
+
+        colorBarParamGroup = createColorBarParamGroup(view);
+        if (!view.getColorBarParamInfo().isTitleModified()) {
             modifyHeaderText(colorBarParamGroup, view.getRaster());
+            view.getColorBarParamInfo().setTitleModified(true);
         }
-        //       colorBarParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
+
 
         final RasterDataNode raster = view.getRaster();
         imageLegend = new ImageLegend(raster.getImageInfo(), raster);
@@ -160,8 +156,34 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         transferParamsToImageLegend(colorBarParamGroup, imageLegend);
         // todo DANNY
         if (colorBarLayer) {
-            // if think colorBarParamGroup needs to be a copy or clone
-            view.setColorBarParamGroup(colorBarParamGroup);
+            view.getColorBarParamInfo().setLabelsFontSize(imageLegend.getLabelsFontSize());
+            view.getColorBarParamInfo().setBackgroundTransparencyEnabled(new Boolean(imageLegend.isBackgroundTransparencyEnabled()));
+            view.getColorBarParamInfo().setShowTitle(new Boolean(imageLegend.isShowTitle()));
+            view.getColorBarParamInfo().setTitle(imageLegend.getHeaderText());
+            view.getColorBarParamInfo().setTitleUnits(imageLegend.getHeaderUnitsText());
+            view.getColorBarParamInfo().setTitleFontSize(imageLegend.getTitleFontSize());
+            view.getColorBarParamInfo().setTitleUnitsFontSize(imageLegend.getTitleUnitsFontSize());
+            view.getColorBarParamInfo().setScalingFactor(imageLegend.getScalingFactor());
+            view.getColorBarParamInfo().setColorBarLength(imageLegend.getColorBarLength());
+            view.getColorBarParamInfo().setColorBarThickness(imageLegend.getColorBarThickness());
+            view.getColorBarParamInfo().setLayerScaling(imageLegend.getLayerScaling());
+            view.getColorBarParamInfo().setCenterOnLayer(new Boolean(imageLegend.isCenterOnLayer()));
+            view.getColorBarParamInfo().setManualPoints(imageLegend.getFullCustomAddThesePoints());
+            view.getColorBarParamInfo().setDistributionType(imageLegend.getDistributionType());
+            view.getColorBarParamInfo().setNumTickMarks(imageLegend.getNumberOfTicks());
+            view.getColorBarParamInfo().setDecimalPlaces(imageLegend.getDecimalPlaces());
+            view.getColorBarParamInfo().setForegroundColor(imageLegend.getForegroundColor());
+            view.getColorBarParamInfo().setBackgroundColor(imageLegend.getBackgroundColor());
+
+            int orientation = imageLegend.getOrientation();
+            if (orientation == ImageLegend.VERTICAL) {
+                view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.VERTICAL_STR);
+            } else {
+                view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR);
+            }
+
+
+
         }
 
         imageLegend.setBackgroundTransparencyEnabled(isTransparencySupportedByFormat(imageFormat));
@@ -176,92 +198,90 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
     private static ParamGroup createColorBarParamGroup(ProductSceneView view) {
+
         ParamGroup paramGroup = new ParamGroup();
 
-        Parameter param = new Parameter(SHOW_TITLE_PARAM_STR, Boolean.TRUE);
+        Parameter param = new Parameter(SHOW_TITLE_PARAM_STR, view.getColorBarParamInfo().getShowTitle());
         param.getProperties().setLabel("Show Title");
         paramGroup.addParameter(param);
 
-        param = new Parameter(TRANSPARENT_PARAM_STR, Boolean.TRUE);
+        param = new Parameter(TRANSPARENT_PARAM_STR, view.getColorBarParamInfo().getBackgroundTransparencyEnabled());
         param.getProperties().setLabel("Transparent");
         paramGroup.addParameter(param);
 
-
-        param = new Parameter(TITLE_PARAM_STR, "");
+        param = new Parameter(TITLE_PARAM_STR, view.getColorBarParamInfo().getTitle());
         param.getProperties().setLabel("Title");
         param.getProperties().setNumCols(24);
         param.getProperties().setNullValueAllowed(true);
         paramGroup.addParameter(param);
 
-
-        param = new Parameter(SCALING_FACTOR_PARAM_STR, ImageLegend.DEFAULT_SCALING_FACTOR);
-        param.getProperties().setLabel("Scaling Factor*");
-        param.getProperties().setMinValue(.000001);
-        param.getProperties().setMaxValue(1000000);
+        param = new Parameter(TITLE_UNITS_PARAM_STR, view.getColorBarParamInfo().getTitleUnits());
+        param.getProperties().setLabel("Title Units");
+        param.getProperties().setNumCols(24);
+        param.getProperties().setNullValueAllowed(true);
         paramGroup.addParameter(param);
 
-        param = new Parameter(TITLE_FONT_SIZE_PARAM_STR, ImageLegend.DEFAULT_TITLE_FONT_SIZE);
+        param = new Parameter(TITLE_FONT_SIZE_PARAM_STR, view.getColorBarParamInfo().getTitleFontSize());
         param.getProperties().setLabel("Title Font Size");
         param.getProperties().setMinValue(4);
         param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
-        param = new Parameter(TITLE_UNITS_FONT_SIZE_PARAM_STR, ImageLegend.DEFAULT_TITLE_UNITS_FONT_SIZE);
+        param = new Parameter(TITLE_UNITS_FONT_SIZE_PARAM_STR, view.getColorBarParamInfo().getTitleUnitsFontSize());
         param.getProperties().setLabel("Title Units Font Size");
         param.getProperties().setMinValue(4);
         param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
-        param = new Parameter(LABELS_FONT_SIZE_PARAM_STR, ImageLegend.DEFAULT_LABELS_FONT_SIZE);
+        param = new Parameter(LABELS_FONT_SIZE_PARAM_STR, view.getColorBarParamInfo().getLabelsFontSize());
         param.getProperties().setLabel("Labels Font Size");
         param.getProperties().setMinValue(4);
         param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
-        param = new Parameter(COLOR_BAR_LENGTH_PARAM_STR, ImageLegend.DEFAULT_COLOR_BAR_LENGTH);
+        param = new Parameter(SCALING_FACTOR_PARAM_STR, view.getColorBarParamInfo().getScalingFactor());
+        param.getProperties().setLabel("Scaling Factor*");
+        param.getProperties().setMinValue(.000001);
+        param.getProperties().setMaxValue(1000000);
+        paramGroup.addParameter(param);
+
+        param = new Parameter(COLOR_BAR_LENGTH_PARAM_STR, view.getColorBarParamInfo().getColorBarLength());
         param.getProperties().setLabel("Color Bar Length (pixels)");
         param.getProperties().setMinValue(300);
         param.getProperties().setMaxValue(5000);
         paramGroup.addParameter(param);
 
-        param = new Parameter(COLOR_BAR_THICKNESS_PARAM_STR, ImageLegend.DEFAULT_COLOR_BAR_THICKNESS);
+        param = new Parameter(COLOR_BAR_THICKNESS_PARAM_STR, view.getColorBarParamInfo().getColorBarThickness());
         param.getProperties().setLabel("Color Bar Thickness (pixels)");
         param.getProperties().setMinValue(5);
         param.getProperties().setMaxValue(500);
         paramGroup.addParameter(param);
 
 
-        param = new Parameter(LAYER_SCALING_PARAM_STR, ImageLegend.DEFAULT_LAYER_SCALING);
+        param = new Parameter(LAYER_SCALING_PARAM_STR, view.getColorBarParamInfo().getLayerScaling());
         param.getProperties().setLabel("Scaling (percent of layer image size)");
         param.getProperties().setMinValue(5);
         param.getProperties().setMaxValue(150);
         paramGroup.addParameter(param);
 
-        param = new Parameter(CENTER_ON_LAYER_PARAM_STR, ImageLegend.DEFAULT_CENTER_ON_LAYER);
+        param = new Parameter(CENTER_ON_LAYER_PARAM_STR, view.getColorBarParamInfo().getCenterOnLayer());
         param.getProperties().setLabel("Center on layer");
         paramGroup.addParameter(param);
 
-        // DANNY
-        param = new Parameter(TITLE_UNITS_PARAM_STR, "");
-        param.getProperties().setLabel("Title Units");
-        param.getProperties().setNumCols(24);
-        param.getProperties().setNullValueAllowed(true);
-        paramGroup.addParameter(param);
-
-        param = new Parameter(MANUAL_POINTS_PARAM_STR, "");
+        param = new Parameter(MANUAL_POINTS_PARAM_STR, view.getColorBarParamInfo().getManualPoints());
         param.getProperties().setLabel("Manually Entered Points");
         param.getProperties().setNumCols(24);
         param.getProperties().setNullValueAllowed(true);
         paramGroup.addParameter(param);
 
-
-        param = new Parameter(ORIENTATION_PARAM_STR, HORIZONTAL_STR);
+        param = new Parameter(ORIENTATION_PARAM_STR, view.getColorBarParamInfo().getOrientation());
         param.getProperties().setLabel("Orientation");
-        param.getProperties().setValueSet(new String[]{HORIZONTAL_STR, VERTICAL_STR});
+        param.getProperties().setValueSet(new String[]{ColorBarParamInfo.HORIZONTAL_STR, ColorBarParamInfo.VERTICAL_STR});
         param.getProperties().setValueSetBound(true);
         paramGroup.addParameter(param);
 
-        param = new Parameter(DISTRIBUTION_TYPE_PARAM_STR, ImageLegend.DISTRIB_EVEN_STR);
+
+        param = new Parameter(DISTRIBUTION_TYPE_PARAM_STR, view.getColorBarParamInfo().getDistributionType());
         param.getProperties().setLabel("Mode");
         param.getProperties().setValueSet(new String[]{ImageLegend.DISTRIB_EVEN_STR,
                 ImageLegend.DISTRIB_MANUAL_STR,
@@ -270,24 +290,23 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setValueSetBound(true);
         paramGroup.addParameter(param);
 
-
-        param = new Parameter(NUM_TICKS_PARAM_STR, 8);
+        param = new Parameter(NUM_TICKS_PARAM_STR, view.getColorBarParamInfo().getNumTickMarks());
         param.getProperties().setLabel("Number of Tick Marks");
         param.getProperties().setMinValue(0);
         param.getProperties().setMaxValue(40);
         paramGroup.addParameter(param);
 
-        param = new Parameter(DECIMAL_PLACES_PARAM_STR, 2);
+        param = new Parameter(DECIMAL_PLACES_PARAM_STR, view.getColorBarParamInfo().getDecimalPlaces());
         param.getProperties().setLabel("Decimal Places");
         param.getProperties().setMinValue(0);
         param.getProperties().setMaxValue(5);
         paramGroup.addParameter(param);
 
-        param = new Parameter(FOREGROUND_COLOR_PARAM_STR, Color.black);
+        param = new Parameter(FOREGROUND_COLOR_PARAM_STR, view.getColorBarParamInfo().getForegroundColor());
         param.getProperties().setLabel("Text Color");
         paramGroup.addParameter(param);
 
-        param = new Parameter(BACKGROUND_COLOR_PARAM_STR, Color.white);
+        param = new Parameter(BACKGROUND_COLOR_PARAM_STR, view.getColorBarParamInfo().getBackgroundColor());
         param.getProperties().setLabel("Background Color");
         paramGroup.addParameter(param);
 
@@ -346,7 +365,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         Object value;
 
         value = legendParamGroup.getParameter(SHOW_TITLE_PARAM_STR).getValue();
-        imageLegend.setUsingHeader((Boolean) value);
+        imageLegend.setShowTitle((Boolean) value);
 
         value = legendParamGroup.getParameter(TITLE_PARAM_STR).getValue();
         imageLegend.setHeaderText((String) value);
@@ -358,7 +377,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         imageLegend.setFullCustomAddThesePoints((String) value);
 
         value = legendParamGroup.getParameter(ORIENTATION_PARAM_STR).getValue();
-        imageLegend.setOrientation(HORIZONTAL_STR.equals(value) ? ImageLegend.HORIZONTAL : ImageLegend.VERTICAL);
+        imageLegend.setOrientation(ColorBarParamInfo.HORIZONTAL_STR.equals(value) ? ImageLegend.HORIZONTAL : ImageLegend.VERTICAL);
 
         value = legendParamGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR).getValue();
         imageLegend.setDistributionType((String) value);

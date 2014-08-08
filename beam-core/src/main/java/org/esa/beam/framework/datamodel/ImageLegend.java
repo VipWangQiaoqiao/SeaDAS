@@ -45,7 +45,7 @@ public class ImageLegend {
 
     public static final int NULL_INT = -999;
 
-    public static final String DISTRIB_EVEN_STR = "Use Even Distribution";
+    public static final String DISTRIB_EVEN_STR =  "Use Even Distribution";
     public static final String DISTRIB_EXACT_STR = "Use Palette Distribution";
     public static final String DISTRIB_MANUAL_STR = "Use Manually Entered Points";
 
@@ -70,7 +70,7 @@ public class ImageLegend {
     // Independent attributes (Properties)
     private final ImageInfo imageInfo;
     private final RasterDataNode raster;
-    private boolean usingHeader;
+    private boolean showTitle;
     private String headerText;
     private String headerUnitsText;
     private int orientation;
@@ -112,7 +112,7 @@ public class ImageLegend {
     public ImageLegend(ImageInfo imageInfo, RasterDataNode raster) {
         this.imageInfo = imageInfo;
         this.raster = raster;
-        usingHeader = true;
+        showTitle = true;
         headerText = "";
 
         orientation = HORIZONTAL;
@@ -135,12 +135,12 @@ public class ImageLegend {
     }
 
 
-    public boolean isUsingHeader() {
-        return usingHeader;
+    public boolean isShowTitle() {
+        return showTitle;
     }
 
-    public void setUsingHeader(boolean usingHeader) {
-        this.usingHeader = usingHeader;
+    public void setShowTitle(boolean usingHeader) {
+        this.showTitle = usingHeader;
     }
 
     public String getHeaderText() {
@@ -591,7 +591,7 @@ public class ImageLegend {
 
 
     private boolean hasHeaderText() {
-        return usingHeader && StringUtils.isNotNullAndNotEmpty(headerText);
+        return showTitle && StringUtils.isNotNullAndNotEmpty(headerText);
     }
 
     private boolean hasUnitsText() {
