@@ -84,6 +84,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         imageHeight = view.getRaster().getRasterHeight();
         imageWidth = view.getRaster().getRasterWidth();
+        // todo DANNY colorBarParamGroup needs to be a copy so values only get overwritten when creating a new layer.
         if (view.getColorBarParamGroup() != null) {
             colorBarParamGroup = view.getColorBarParamGroup();
         } else {
@@ -158,7 +159,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     protected RenderedImage createImage(String imageFormat, ProductSceneView view) {
         transferParamsToImageLegend(colorBarParamGroup, imageLegend);
         // todo DANNY
-        view.setColorBarParamGroup(colorBarParamGroup);
+        if (colorBarLayer) {
+            // if think colorBarParamGroup needs to be a copy or clone
+            view.setColorBarParamGroup(colorBarParamGroup);
+        }
 
         imageLegend.setBackgroundTransparencyEnabled(isTransparencySupportedByFormat(imageFormat));
         return imageLegend.createImage(new Dimension(imageWidth, imageHeight), colorBarLayer);
