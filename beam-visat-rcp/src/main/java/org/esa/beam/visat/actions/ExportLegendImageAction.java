@@ -72,7 +72,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String CENTER_ON_LAYER_PARAM_STR = "legend.centerOnLayer";
 
 
-    private ParamGroup legendParamGroup;
+    private ParamGroup colorBarParamGroup;
     private ImageLegend imageLegend;
     private static int imageHeight;
     private static int imageWidth;
@@ -81,17 +81,23 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     @Override
     public void actionPerformed(CommandEvent event) {
         ProductSceneView view = getVisatApp().getSelectedProductSceneView();
+
         imageHeight = view.getRaster().getRasterHeight();
         imageWidth = view.getRaster().getRasterWidth();
-        legendParamGroup = createLegendParamGroup();
-        //       legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
-        modifyHeaderText(legendParamGroup, view.getRaster());
+        if (view.getColorBarParamGroup() != null) {
+            colorBarParamGroup = view.getColorBarParamGroup();
+        } else {
+            colorBarParamGroup = createColorBarParamGroup(view);
+            modifyHeaderText(colorBarParamGroup, view.getRaster());
+        }
+        //       colorBarParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
+
         final RasterDataNode raster = view.getRaster();
         imageLegend = new ImageLegend(raster.getImageInfo(), raster);
 
         // this will open a dialog before the file chooser
         final ImageLegendDialog dialog = new ImageLegendDialog(getVisatApp(),
-                legendParamGroup,
+                colorBarParamGroup,
                 imageLegend,
                 true);
 
@@ -123,9 +129,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
     @Override
     protected void configureFileChooser(BeamFileChooser fileChooser, ProductSceneView view, String imageBaseName) {
-//        legendParamGroup = createLegendParamGroup();
-//        legendParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
-//        modifyHeaderText(legendParamGroup, view.getRaster());
+//        colorBarParamGroup = createColorBarParamGroup();
+//        colorBarParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
+//        modifyHeaderText(colorBarParamGroup, view.getRaster());
         fileChooser.setDialogTitle(getVisatApp().getAppName() + " - Color Bar File"); /*I18N*/
         fileChooser.setCurrentFilename(imageBaseName + "_colorbar.png");
 //        final RasterDataNode raster = view.getRaster();
@@ -133,7 +139,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         // this will open a dialog before the file chooser
 //        final ImageLegendDialog dialog = new ImageLegendDialog(getVisatApp(),
-//                legendParamGroup,
+//                colorBarParamGroup,
 //                imageLegend,
 //                true);
 //
@@ -143,19 +149,21 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 //        if (dialog.okWasClicked) {
         fileChooser.setAccessory(createImageLegendAccessory(getVisatApp(),
                 fileChooser,
-                legendParamGroup,
+                colorBarParamGroup,
                 imageLegend));
 //        }
     }
 
     @Override
     protected RenderedImage createImage(String imageFormat, ProductSceneView view) {
-        transferParamsToImageLegend(legendParamGroup, imageLegend);
+        transferParamsToImageLegend(colorBarParamGroup, imageLegend);
+        // todo DANNY
+        view.setColorBarParamGroup(colorBarParamGroup);
+
         imageLegend.setBackgroundTransparencyEnabled(isTransparencySupportedByFormat(imageFormat));
         return imageLegend.createImage(new Dimension(imageWidth, imageHeight), colorBarLayer);
-
-        // todo DANNY
     }
+
 
     @Override
     protected boolean isEntireImageSelected() {
@@ -163,7 +171,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     }
 
 
-    private static ParamGroup createLegendParamGroup() {
+    private static ParamGroup createColorBarParamGroup(ProductSceneView view) {
         ParamGroup paramGroup = new ParamGroup();
 
         Parameter param = new Parameter(SHOW_TITLE_PARAM_STR, Boolean.TRUE);
@@ -311,7 +319,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             public void actionPerformed(ActionEvent e) {
                 final BeamFileFilter fileFilter = (BeamFileFilter) fileChooser.getFileFilter();
 //                final ImageLegendDialog dialog = new ImageLegendDialog(visatApp,
-//                                                                       legendParamGroup,
+//                                                                       colorBarParamGroup,
 //                                                                       imageLegend,
 //                                                                       isTransparencySupportedByFormat(
 //                                                                               fileFilter.getFormatName()));
@@ -468,7 +476,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
             if (ImageLegend.DISTRIB_EVEN_STR.equals(distributionTypeParam.getValue())) {
                 numberOfTicksParam.setUIEnabled(true);
-
 
 
                 // todo perhaps here is where adjusting num ticks could affect the font sizes?
