@@ -158,8 +158,8 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         }   else if (scaleY > 1) { //this statement must have the "else" clause, otherwise the scaleX will be problematic.
             scaleX = scaleX + 1;
         }
-        int y_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? rasterHeight - colorBarImageHeight / 4 : 0;
-        int x_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? 0 : rasterWidth - colorBarImageWidth / 10;
+        int y_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? rasterHeight - colorBarImageHeight / 4 : (rasterHeight - colorBarImageHeight)/2;
+        int x_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? (rasterWidth - colorBarImageWidth)/2 : rasterWidth - colorBarImageWidth / 10;
         //double[] flatmatrix = {scaleX, 0.0, 0.0, scaleY, x_axis_translation, y_axis_translation};
         double[] flatmatrix = {1, 0.0, 0.0, 1, x_axis_translation, y_axis_translation};
         AffineTransform i2mTransform = new AffineTransform(flatmatrix);
