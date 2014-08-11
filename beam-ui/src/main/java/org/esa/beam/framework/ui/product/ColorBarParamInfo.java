@@ -17,22 +17,22 @@ public class ColorBarParamInfo {
     public static final String VERTICAL_STR = "Vertical";
 
 
-    public static final int DEFAULT_LABELS_FONT_SIZE = 28;
+    public static final int DEFAULT_LABELS_FONT_SIZE = 60;
     public static final Boolean DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED = Boolean.TRUE;
     public static final Boolean DEFAULT_SHOW_TITLE_ENABLED = Boolean.TRUE;
     public static final String DEFAULT_TITLE = "";
     public static final String DEFAULT_TITLE_UNITS = "";
-    public static final int DEFAULT_TITLE_FONT_SIZE = 36;
-    public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 28;
+    public static final int DEFAULT_TITLE_FONT_SIZE = 70;
+    public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 50;
     public static final double DEFAULT_SCALING_FACTOR = 1.0;
     public static final int DEFAULT_COLOR_BAR_LENGTH = 1200;
-    public static final int DEFAULT_COLOR_BAR_THICKNESS = 48;
-    public static final double DEFAULT_LAYER_SCALING = 75;
+    public static final int DEFAULT_COLOR_BAR_THICKNESS = 70;
+    public static final double DEFAULT_LAYER_SCALING = 90;
     public static final Boolean DEFAULT_CENTER_ON_LAYER = Boolean.TRUE;
     public static final String DEFAULT_MANUAL_POINTS = "";
     public static final String DEFAULT_ORIENTATION = HORIZONTAL_STR;
     public static final String DEFAULT_DISTRIBUTION_TYPE = ImageLegend.DISTRIB_EVEN_STR;
-    public static final int DEFAULT_NUM_TICK_MARKS = 8;
+    public static final int DEFAULT_NUM_TICK_MARKS = 5;
     public static final int DEFAULT_DECIMAL_PLACES = 2;
     public static final Color DEFAULT_FOREGROUND_COLOR = Color.black;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;

@@ -827,10 +827,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             jPanel.add(layerScalingParam.getEditor().getEditorComponent(), gbc);
 
 
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.gridwidth = 2;
-            jPanel.add(centerOnLayerParam.getEditor().getEditorComponent(), gbc);
+//            gbc.gridx = 0;
+//            gbc.gridy++;
+//            gbc.gridwidth = 2;
+//            jPanel.add(centerOnLayerParam.getEditor().getEditorComponent(), gbc);
 
 
             return jPanel;

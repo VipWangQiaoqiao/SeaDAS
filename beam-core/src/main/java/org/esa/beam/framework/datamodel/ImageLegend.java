@@ -63,6 +63,8 @@ public class ImageLegend {
 
     public static final double HORIZONTAL_INTER_LABEL_GAP_FACTOR = 3;
     public static final double VERTICAL_INTER_LABEL_GAP_FACTOR = 0.75;
+    public static final int DEFAULT_TICKMARK_WIDTH = 3;
+
 
     public static final double WEIGHT_TOLERANCE = 0.01;
     public static final double INVALID_WEIGHT = -1.0;
@@ -108,6 +110,7 @@ public class ImageLegend {
     private int palettePosEnd;
     private ArrayList<ColorBarInfo> colorBarInfos = new ArrayList<ColorBarInfo>();
     private int tickWidth;
+    private int borderLineWidth;
 
     public ImageLegend(ImageInfo imageInfo, RasterDataNode raster) {
         this.imageInfo = imageInfo;
@@ -120,9 +123,10 @@ public class ImageLegend {
         foregroundColor = Color.black;
         backgroundTransparency = 1.0f;
         antiAliasing = true;
-        decimalPlaces = 1;
+        decimalPlaces = 2;
         setFullCustomAddThesePoints("");
-        tickWidth = 1;
+        tickWidth = DEFAULT_TICKMARK_WIDTH;
+
 
     }
 
@@ -586,6 +590,7 @@ public class ImageLegend {
 
         }
 
+
         tickMarkShape = createTickMarkShape();
     }
 
@@ -817,7 +822,9 @@ public class ImageLegend {
 
         final Color[] palette = ImageManager.createColorPalette(getRaster().getImageInfo());
 
+        Stroke originalStroke = g2d.getStroke();
         g2d.setStroke(new BasicStroke(1));
+
 
         if (orientation == HORIZONTAL) {
             int xStart = paletteRect.x;
@@ -871,9 +878,11 @@ public class ImageLegend {
         }
 
 
-        g2d.setStroke(new BasicStroke(1));
+
         g2d.setColor(foregroundColor);
+        g2d.setStroke(new BasicStroke(1));
         g2d.draw(paletteRect);
+        g2d.setStroke(originalStroke);
     }
 
 
@@ -892,6 +901,16 @@ public class ImageLegend {
         g2d.setStroke(tickMarkStroke);
 
         double translateX, translateY;
+
+        int tickMarkOverHang;
+        if (Math.floor((tickWidth)/2) == (tickWidth)/2) {
+            // even
+            tickMarkOverHang = (int) Math.floor((tickWidth)/2);
+        } else {
+            // odd
+            tickMarkOverHang = (int) Math.floor((tickWidth-1)/2);
+        }
+
         for (ColorBarInfo colorBarInfo : colorBarInfos) {
             String formattedValue = colorBarInfo.getFormattedValue();
             double weight = colorBarInfo.getLocationWeight();
@@ -902,29 +921,29 @@ public class ImageLegend {
                 translateY = paletteRect.y + paletteRect.height;
 
                 // make sure end tickmarks are placed within palette
-                if (translateX <= palettePosStart) {
-                    translateX = palettePosStart;
+                // tickmark hardcoded at 3 width will have 1 tickMarkOverHang
+                if (translateX <= (palettePosStart+tickMarkOverHang)) {
+                    translateX = (palettePosStart+tickMarkOverHang);
                 }
 
-                if (translateX >= palettePosEnd) {
-                    translateX = palettePosEnd;
+                if (translateX >= (palettePosEnd-tickMarkOverHang)) {
+                    translateX = (palettePosEnd-tickMarkOverHang);
                 }
 
             } else {
                 translateX = paletteRect.x + paletteRect.width;
                 translateY = palettePosStart + tickMarkRelativePosition;
 
-                if (translateY >= palettePosStart) {
-                    translateY = palettePosStart;
+                if (translateY >= (palettePosStart-tickMarkOverHang)) {
+                    translateY = (palettePosStart-tickMarkOverHang);
                 }
 
-                if (translateY <= palettePosEnd) {
-                    translateY = palettePosEnd;
+                if (translateY <= (palettePosEnd+tickMarkOverHang)) {
+                    translateY = (palettePosEnd+tickMarkOverHang);
                 }
 
             }
             g2d.translate(translateX, translateY);
-
             g2d.setPaint(foregroundColor);
             g2d.draw(tickMarkShape);
 
@@ -942,11 +961,7 @@ public class ImageLegend {
             }
 
             g2d.setColor(tickMarkColor);
-
-
             g2d.drawString(formattedValue, x0, y0);
-
-
             g2d.translate(-translateX, -translateY);
         }
 
@@ -1125,7 +1140,7 @@ public class ImageLegend {
         if (tickMarkLength != NULL_INT) {
             return tickMarkLength;
         } else {
-            return getLabelsFontSize();
+            return (int) Math.round(0.8 * getLabelGap());
         }
     }
 
@@ -1137,7 +1152,7 @@ public class ImageLegend {
         if (borderGap != NULL_INT) {
             return borderGap;
         } else {
-            return getLabelsFontSize();
+            return (int) Math.round(0.5 * getLabelsFontSize());
         }
     }
 
@@ -1149,7 +1164,7 @@ public class ImageLegend {
         if (labelGap != NULL_INT) {
             return labelGap;
         } else {
-            return getLabelsFontSize();
+            return (int) Math.round(0.3 * getLabelsFontSize());
         }
     }
 
@@ -1161,7 +1176,7 @@ public class ImageLegend {
         if (headerGap != NULL_INT) {
             return headerGap;
         } else {
-            return getLabelsFontSize();
+            return (int) Math.round(0.5 * getTitleFontSize());
         }
     }
 
