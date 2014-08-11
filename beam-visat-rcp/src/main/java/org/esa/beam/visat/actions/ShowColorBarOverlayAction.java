@@ -137,7 +137,7 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         ProductSceneView sceneView = visatApp.getSelectedProductSceneView();
         RasterDataNode raster = sceneView.getSceneImage().getRasters()[0];
         AffineTransform transform = raster.getSourceImage().getModel().getImageToModelTransform(0);
-        //transform.concatenate(createTransform(raster, image));
+        transform.concatenate(createTransform(raster, image));
         return transform;
         //return createTransform(raster, image);
     }
@@ -160,7 +160,8 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         }
         int y_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? rasterHeight - colorBarImageHeight / 4 : 0;
         int x_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? 0 : rasterWidth - colorBarImageWidth / 10;
-        double[] flatmatrix = {scaleX, 0.0, 0.0, scaleY, x_axis_translation, y_axis_translation};
+        //double[] flatmatrix = {scaleX, 0.0, 0.0, scaleY, x_axis_translation, y_axis_translation};
+        double[] flatmatrix = {1, 0.0, 0.0, 1, x_axis_translation, y_axis_translation};
         AffineTransform i2mTransform = new AffineTransform(flatmatrix);
         return i2mTransform;
     }
