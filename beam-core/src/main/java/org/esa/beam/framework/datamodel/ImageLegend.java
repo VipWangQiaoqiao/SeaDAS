@@ -58,7 +58,7 @@ public class ImageLegend {
     public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 28;
     public static final int DEFAULT_LABELS_FONT_SIZE = 28;
     public static final int DEFAULT_PREVIEW_LENGTH_PIXELS = 750;
-    public static final int DEFAULT_FILE_LENGTH_PIXELS = 1500;
+    public static final int DEFAULT_FILE_LENGTH_PIXELS = DEFAULT_COLOR_BAR_LENGTH; // we could set this differently in the future if we wish to scale to a different size for the file export mode
     public static final boolean DEFAULT_CENTER_ON_LAYER = Boolean.TRUE;
 
     public static final double HORIZONTAL_INTER_LABEL_GAP_FACTOR = 3;
