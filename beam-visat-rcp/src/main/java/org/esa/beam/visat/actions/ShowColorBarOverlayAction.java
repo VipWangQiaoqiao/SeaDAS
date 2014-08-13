@@ -17,7 +17,6 @@ import org.esa.beam.visat.VisatApp;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.geometry.jts.GeometryCoordinateSequenceTransformer;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -77,13 +76,14 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         String vectorName = "Color Bar";
 
         final CoordinateReferenceSystem mapCRS = product.getGeoCoding().getMapCRS();
-        if (mapCRS.equals(DefaultGeographicCRS.WGS84)) {
-            try {
-                transformFeatureCollection(featureCollection, product.getGeoCoding().getImageCRS(), mapCRS);
-            } catch (TransformException e) {
-                VisatApp.getApp().showErrorDialog("transformation failed!");
-            }
-        }
+//        if (!mapCRS.equals(DefaultGeographicCRS.WGS84)) {
+//            try {
+//                transformFeatureCollection(featureCollection, product.getGeoCoding().getImageCRS(), mapCRS);
+//            } catch (TransformException e) {
+//                VisatApp.getApp().showErrorDialog("transformation failed!");
+//            }
+//        }
+        featureCollection = FeatureUtils.transformPixelPosToGeoPos(featureCollection, product.getGeoCoding());
         final PlacemarkDescriptor placemarkDescriptor = PlacemarkDescriptorRegistry.getInstance().getPlacemarkDescriptor(featureCollection.getSchema());
         placemarkDescriptor.setUserDataOf(featureCollection.getSchema());
         VectorDataNode vectorDataNode = new VectorDataNode(vectorName, featureCollection, placemarkDescriptor);
@@ -158,10 +158,17 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         }   else if (scaleY > 1) { //this statement must have the "else" clause, otherwise the scaleX will be problematic.
             scaleX = scaleX + 1;
         }
+<<<<<<< Updated upstream
         int y_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? rasterHeight : (rasterHeight - colorBarImageHeight)/2;
         int x_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? (rasterWidth - colorBarImageWidth)/2 : rasterWidth ;
         //double[] flatmatrix = {scaleX, 0.0, 0.0, scaleY, x_axis_translation, y_axis_translation};
         double[] flatmatrix = {1, 0.0, 0.0, 1, x_axis_translation, y_axis_translation};
+=======
+        int y_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? rasterHeight - colorBarImageHeight / 4 : 0;
+        int x_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? 0 : rasterWidth - colorBarImageWidth / 10;
+        double[] flatmatrix = {scaleX, 0.0, 0.0, scaleY, x_axis_translation, y_axis_translation};
+        //double[] flatmatrix = {1, 0.0, 0.0, 1, x_axis_translation, y_axis_translation};
+>>>>>>> Stashed changes
         AffineTransform i2mTransform = new AffineTransform(flatmatrix);
         return i2mTransform;
     }

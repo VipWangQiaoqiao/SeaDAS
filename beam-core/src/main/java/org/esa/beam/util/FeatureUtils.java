@@ -301,7 +301,7 @@ public class FeatureUtils {
         return gf.createPolygon(gf.createLinearRing(coordinates), null);
     }
 
-    private static FeatureCollection<SimpleFeatureType, SimpleFeature> transformPixelPosToGeoPos(FeatureCollection<SimpleFeatureType, SimpleFeature> fc, GeoCoding geoCoding) {
+    public static FeatureCollection<SimpleFeatureType, SimpleFeature> transformPixelPosToGeoPos(FeatureCollection<SimpleFeatureType, SimpleFeature> fc, GeoCoding geoCoding) {
         Iterator<SimpleFeature> iterator = fc.iterator();
         FeatureCollection<SimpleFeatureType, SimpleFeature> transformedFc = new DefaultFeatureCollection(fc.getID(), fc.getSchema());
         while (iterator.hasNext()) {
