@@ -855,7 +855,7 @@
             <parent>exportOther</parent>
             <id>exportImageFile</id>
             <class>org.esa.beam.visat.actions.ExportImageAction</class>
-            <text>View</text>
+            <text>Image</text>
             <!--<mnemonic>I</mnemonic>-->
             <shortDescr>Export the current view as an image.</shortDescr>
             <description>Export the current view as an image.</description>
@@ -898,7 +898,7 @@
             <parent>exportOther</parent>
             <id>exportKmzFile</id>
             <class>org.esa.beam.visat.actions.ExportKmzFileAction</class>
-            <text>View (Google Earth KMZ)</text>
+            <text>Image (Google Earth KMZ)</text>
             <!--<mnemonic>K</mnemonic>-->
             <shortDescr>Export the current view as Google Earth KMZ file.</shortDescr>
             <description>Export the current view as Google Earth KMZ file.</description>
