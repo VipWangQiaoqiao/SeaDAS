@@ -162,7 +162,11 @@ class ColorManipulationForm {
                         if (colorPaletteSchemes != null) {
                             ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
                             for (ColorPaletteInfo cpdInfo : defaultSchemes) {
-                                if (this.productSceneView.getBaseImageLayer().getName().trim().contains(cpdInfo.getName().trim())) {
+                                String bandName = this.productSceneView.getBaseImageLayer().getName().trim();
+                                bandName = bandName.substring(bandName.indexOf(" ")).trim();
+                                String cpdName = cpdInfo.getName().trim();
+                                if (bandName.equals(cpdName)) {
+                                //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
                                     ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
                                     this.productSceneView.getImageInfo().setColorPaletteDef(colorPaletteDef,
                                             cpdInfo.getMinValue(),
