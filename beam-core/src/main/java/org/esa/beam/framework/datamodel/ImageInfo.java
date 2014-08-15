@@ -45,6 +45,16 @@ public class ImageInfo implements Cloneable {
     @Deprecated
     public static final String HISTOGRAM_MATCHING_NORMALIZE = "normalize";
 
+    private String colorPaletteSchemeName = null;
+
+    public String getColorPaletteSchemeName() {
+        return colorPaletteSchemeName;
+    }
+
+    public void setColorPaletteSchemeName(String colorPaletteSchemeName) {
+        this.colorPaletteSchemeName = colorPaletteSchemeName;
+    }
+
     /**
      * Enumerates the possible histogram matching modes.
      */
