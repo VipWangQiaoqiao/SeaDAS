@@ -175,6 +175,7 @@ class ColorManipulationForm {
                                             cpdInfo.isSourceLogScaled(),
                                             cpdInfo.isLogScaled());
                                     this.productSceneView.getImageInfo().setLogScaled(cpdInfo.isLogScaled());
+                                    this.productSceneView.setColorPaletteInfo(cpdInfo);
                                     break;
                                 }
                             }
