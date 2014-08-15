@@ -499,7 +499,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     shouldFireChooserEvent = false;
 
                     colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
-                    parentForm.getProductSceneView().setColorPaletteInfo(colorPaletteInfo);
+                //    parentForm.getProductSceneView().setColorPaletteInfo(colorPaletteInfo);
+                    parentForm.getProductSceneView().setColorPaletteSchemeName(colorPaletteInfo.getName());
 
                     applyChanges(colorPaletteInfo.getMinValue(),
                             colorPaletteInfo.getMaxValue(),
@@ -624,12 +625,20 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             maxField.setValue(cpd.getMaxDisplaySample());
         }
 
-        ColorPaletteInfo colorPaletteInfo = parentForm.getProductSceneView().getColorPaletteInfo();
-        if (colorPaletteInfo != null && colorPaletteInfo.getName() != null) {
-            colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getColorPaletteInfo().getName());
+//        ColorPaletteInfo colorPaletteInfo = parentForm.getProductSceneView().getColorPaletteInfo();
+//        if (colorPaletteInfo != null && colorPaletteInfo.getName() != null) {
+//            colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getColorPaletteInfo().getName());
+//        } else {
+//            colorScheme.setText("");
+//        }
+
+        String colorPaletteSchemeName = parentForm.getProductSceneView().getColorPaletteSchemeName();
+        if (colorPaletteSchemeName != null) {
+            colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getColorPaletteSchemeName());
         } else {
             colorScheme.setText("");
         }
+
 
         shouldFireChooserEvent = true;
 
@@ -688,7 +697,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
     private void applyChanges(RangeKey key) {
         if (shouldFireChooserEvent) {
-            parentForm.getProductSceneView().setColorPaletteInfo(null);
+            parentForm.getProductSceneView().setColorPaletteSchemeName(null);
             
             final ColorPaletteDef selectedCPD = colorPaletteChooser.getSelectedColorPaletteDefinition();
             final ImageInfo currentInfo = parentForm.getImageInfo();

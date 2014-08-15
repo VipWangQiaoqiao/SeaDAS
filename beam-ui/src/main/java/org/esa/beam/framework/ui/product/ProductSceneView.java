@@ -180,6 +180,7 @@ public class ProductSceneView extends BasicView
     private VectorDataFigureEditor figureEditor;
     private ColorBarParamInfo colorBarParamInfo = null;
     private ColorPaletteInfo colorPaletteInfo = null;
+    private String colorPaletteSchemeName = null;
 
     public ProductSceneView(ProductSceneImage sceneImage) {
         colorBarParamInfo = new ColorBarParamInfo();
@@ -1148,6 +1149,14 @@ public class ProductSceneView extends BasicView
 
     public void setColorPaletteInfo(ColorPaletteInfo colorPaletteInfo) {
         this.colorPaletteInfo = colorPaletteInfo;
+    }
+
+    public String getColorPaletteSchemeName() {
+        return colorPaletteSchemeName;
+    }
+
+    public void setColorPaletteSchemeName(String colorPaletteSchemeName) {
+        this.colorPaletteSchemeName = colorPaletteSchemeName;
     }
 
 
