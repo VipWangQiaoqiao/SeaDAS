@@ -29,8 +29,8 @@ public class ColorPaletteSchemes {
     private final String DEFAULTS_SCHEMA_FILENAME = "defaults_color_palette_schemas.txt";
 
 
-    private final String USER_SCHEMA_COMBO_BOX_NAME = "User";
-    private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "Standard";
+    private final String USER_SCHEMA_COMBO_BOX_NAME = "Select from User Schemes";
+    private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "Select from Standard Schemes";
 
 
     private File colorPaletteDir = null;

@@ -179,6 +179,7 @@ public class ProductSceneView extends BasicView
     private UndoContext undoContext;
     private VectorDataFigureEditor figureEditor;
     private ColorBarParamInfo colorBarParamInfo = null;
+    private ColorPaletteInfo colorPaletteInfo = null;
 
     public ProductSceneView(ProductSceneImage sceneImage) {
         colorBarParamInfo = new ColorBarParamInfo();
@@ -1139,6 +1140,14 @@ public class ProductSceneView extends BasicView
 
     public void resetColorBarParamInfo() {
         this.colorBarParamInfo = new ColorBarParamInfo();
+    }
+
+    public ColorPaletteInfo getColorPaletteInfo() {
+        return colorPaletteInfo;
+    }
+
+    public void setColorPaletteInfo(ColorPaletteInfo colorPaletteInfo) {
+        this.colorPaletteInfo = colorPaletteInfo;
     }
 
 

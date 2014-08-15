@@ -18,6 +18,7 @@ package org.esa.beam.visat.toolviews.imageinfo;
 
 import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.GridBagUtils;
+import org.esa.beam.framework.ui.product.ColorBarParamInfo;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.util.math.Range;
 import org.esa.beam.visat.VisatApp;
@@ -49,6 +50,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final JCheckBox loadWithCPDFileValuesCheckBox;
     private final ColorPaletteSchemes colorPaletteSchemes;
     private JButton bandRange;
+    private JLabel colorScheme;
 
 
     final Boolean[] minFieldActivated = {new Boolean(false)};
@@ -72,6 +74,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         this.parentForm = parentForm;
         this.basicSwitcherIsActive = basicSwitcherIsActive;
+
+        colorScheme = new JLabel("");
+        colorScheme.setToolTipText("");
 
 
         colorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir());
@@ -290,7 +295,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //        });
 
 
-
         colorPaletteSchemes.getStandardJComboBox().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -304,8 +308,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 handleColorPaletteInfoComboBoxSelection(colorPaletteSchemes.getUserJComboBox());
             }
         });
-
-
 
 
 //todo  when you lose focus on a combobox and haven't picked something then the font goes white ARGHH!!
@@ -383,25 +385,31 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     }
 
     private JPanel getSchemaPanel(String title) {
-        JPanel colorPaletteInfoComboBoxJPanel = new JPanel(new GridBagLayout());
-        colorPaletteInfoComboBoxJPanel.setBorder(BorderFactory.createTitledBorder(title));
-        colorPaletteInfoComboBoxJPanel.setToolTipText("Load a preset color scheme (sets the color-palette, min, max, and log fields)");
-        GridBagConstraints gbc2 = new GridBagConstraints();
+        JPanel jPanel = new JPanel(new GridBagLayout());
+        jPanel.setBorder(BorderFactory.createTitledBorder(title));
+        jPanel.setToolTipText("Load a preset color scheme (sets the color-palette, min, max, and log fields)");
+        GridBagConstraints gbc = new GridBagConstraints();
 
 
-        gbc2.gridx = 0;
-        gbc2.gridy = 0;
-        gbc2.weightx = 1.0;
-        gbc2.anchor = GridBagConstraints.WEST;
-        gbc2.fill = GridBagConstraints.HORIZONTAL;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteSchemes.getStandardJComboBox(), gbc2);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0,0,3,0);
 
 
-        gbc2.gridx = 0;
-        gbc2.gridy = 1;
-        colorPaletteInfoComboBoxJPanel.add(colorPaletteSchemes.getUserJComboBox(), gbc2);
+        jPanel.add(colorScheme, gbc);
 
-        return colorPaletteInfoComboBoxJPanel;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0,0,0,0);
+        jPanel.add(colorPaletteSchemes.getStandardJComboBox(), gbc);
+
+        gbc.gridy = 2;
+        jPanel.add(colorPaletteSchemes.getUserJComboBox(), gbc);
+
+        return jPanel;
     }
 
     private JPanel getRangePanel(String title) {
@@ -491,11 +499,14 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     shouldFireChooserEvent = false;
 
                     colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
+                    parentForm.getProductSceneView().setColorPaletteInfo(colorPaletteInfo);
+
                     applyChanges(colorPaletteInfo.getMinValue(),
                             colorPaletteInfo.getMaxValue(),
                             colorPaletteDef,
                             colorPaletteInfo.isSourceLogScaled(),
                             colorPaletteInfo.isLogScaled());
+
 
 
                     shouldFireChooserEvent = origShouldFireChooserEvent;
@@ -613,8 +624,14 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             maxField.setValue(cpd.getMaxDisplaySample());
         }
 
-        shouldFireChooserEvent = true;
+        ColorPaletteInfo colorPaletteInfo = parentForm.getProductSceneView().getColorPaletteInfo();
+        if (colorPaletteInfo != null && colorPaletteInfo.getName() != null) {
+            colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getColorPaletteInfo().getName());
+        } else {
+            colorScheme.setText("");
+        }
 
+        shouldFireChooserEvent = true;
 
     }
 
@@ -671,6 +688,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
     private void applyChanges(RangeKey key) {
         if (shouldFireChooserEvent) {
+            parentForm.getProductSceneView().setColorPaletteInfo(null);
+            
             final ColorPaletteDef selectedCPD = colorPaletteChooser.getSelectedColorPaletteDefinition();
             final ImageInfo currentInfo = parentForm.getImageInfo();
             final ColorPaletteDef currentCPD = currentInfo.getColorPaletteDef();
@@ -683,6 +702,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             final boolean isTargetLogScaled;
             final ColorPaletteDef cpd;
             final boolean autoDistribute;
+
             switch (key) {
                 case FromPaletteSource:
                     final Range rangeFromFile = colorPaletteChooser.getRangeFromFile();
@@ -744,7 +764,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                         autoDistribute = true;
                     }
 
+
             }
+
 
             if (testMinMax(min, max, isTargetLogScaled)) {
                 currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
