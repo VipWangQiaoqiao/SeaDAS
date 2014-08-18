@@ -239,6 +239,9 @@ public final class DimapProductConstants {
     public static final String TAG_STX_LIN_MAX = "STX_LIN_MAX";
     public static final String TAG_HISTOGRAM = "HISTOGRAM";
     public static final String TAG_NUM_COLORS = "NUM_COLORS";
+    public static final String TAG_LOG_SCALED = "LOG_SCALED";
+    public static final String TAG_DISCRETE = "DISCRETE";
+    public static final String TAG_COLOR_SCHEME_NAME = "COLOR_SCHEME_NAME";
     public static final String TAG_COLOR_PALETTE_POINT = "Color_Palette_Point";
     public static final String TAG_SAMPLE = "SAMPLE";
     public static final String TAG_LABEL = "LABEL";
