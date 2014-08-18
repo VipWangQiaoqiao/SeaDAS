@@ -74,7 +74,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         this.basicSwitcherIsActive = basicSwitcherIsActive;
 
         colorScheme = new JLabel("");
-        colorScheme.setToolTipText("");
+        colorScheme.setToolTipText("Last loaded scheme.  Astericks suffix (*) denotes that user may have modified parameters");
 
 
         colorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir());
@@ -631,7 +631,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //        }
 
         String colorPaletteSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName();
-        if (colorPaletteSchemeName != null) {
+        if (colorPaletteSchemeName != null && colorPaletteSchemeName.length() > 0) {
             //colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getColorPaletteSchemeName());
             colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName());
         } else {
@@ -696,7 +696,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
     private void applyChanges(RangeKey key) {
         if (shouldFireChooserEvent) {
-            parentForm.getProductSceneView().getImageInfo().setColorPaletteSchemeName(null);
+
             
             final ColorPaletteDef selectedCPD = colorPaletteChooser.getSelectedColorPaletteDefinition();
             final ImageInfo currentInfo = parentForm.getImageInfo();
@@ -713,6 +713,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
             switch (key) {
                 case FromPaletteSource:
+                    modifyColorPaletteSchemeName();
                     final Range rangeFromFile = colorPaletteChooser.getRangeFromFile();
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = currentInfo.isLogScaled();
@@ -722,6 +723,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     autoDistribute = true;
                     break;
                 case FromData:
+                    modifyColorPaletteSchemeName();
                     final Stx stx = parentForm.getStx(parentForm.getProductSceneView().getRaster());
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = currentInfo.isLogScaled();
@@ -731,6 +733,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     autoDistribute = true;
                     break;
                 case FromMinMaxFields:
+                    modifyColorPaletteSchemeName();
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = currentInfo.isLogScaled();
                     min = new Double(minField.getValue().toString());//(double) minField.getValue();
@@ -739,6 +742,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     autoDistribute = true;
                     break;
                 case ToggleLog:
+                    modifyColorPaletteSchemeName();
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = !currentInfo.isLogScaled();
                     min = currentCPD.getMinDisplaySample();
@@ -747,6 +751,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     autoDistribute = true;
                     break;
                 default:
+                    currentInfo.setColorPaletteSchemeName(null);
                     if (loadWithCPDFileValuesCheckBox.isSelected()) {
                         isSourceLogScaled = selectedCPD.isLogScaled();
                         isTargetLogScaled = selectedCPD.isLogScaled();
@@ -778,7 +783,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
             if (testMinMax(min, max, isTargetLogScaled)) {
                 currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
-                currentInfo.setColorPaletteSchemeName(null);
+
                 if (key == RangeKey.ToggleLog) {
                     currentInfo.setLogScaled(isTargetLogScaled);
                     colorPaletteChooser.setLog10Display(isTargetLogScaled);
@@ -790,6 +795,14 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         }
     }
+
+
+    private void modifyColorPaletteSchemeName() {
+        if (!parentForm.getImageInfo().getColorPaletteSchemeName().endsWith("*") && parentForm.getImageInfo().getColorPaletteSchemeName().length() > 0) {
+            parentForm.getImageInfo().setColorPaletteSchemeName(parentForm.getImageInfo().getColorPaletteSchemeName()+"*");
+        }
+    }
+
 
     private boolean testMinMax(double min, double max, boolean isLogScaled) {
         boolean checksOut = true;
