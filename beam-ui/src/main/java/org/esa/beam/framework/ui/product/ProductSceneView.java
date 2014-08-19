@@ -575,9 +575,12 @@ public class ProductSceneView extends BasicView
     public void setGraticuleOverlayEnabled(boolean enabled) {
         if (isGraticuleOverlayEnabled() != enabled) {
             Layer graticuleLayer = getGraticuleLayer(true);
-            //getGraticuleLayer(true).setVisible(enabled);
+        //    getGraticuleLayer(true).setVisible(enabled);
             graticuleLayer.setVisible(enabled);
-            updateCurrentLayer(graticuleLayer, enabled);
+            // todo Danny just added this to keep grid lines layer from being removed
+            if (enabled) {
+                updateCurrentLayer(graticuleLayer, enabled);
+            }
         }
     }
 
@@ -1132,7 +1135,6 @@ public class ProductSceneView extends BasicView
     public int getFirstImageLayerIndex() {
         return sceneImage.getFirstImageLayerIndex();
     }
-
 
 
     public ColorBarParamInfo getColorBarParamInfo() {
