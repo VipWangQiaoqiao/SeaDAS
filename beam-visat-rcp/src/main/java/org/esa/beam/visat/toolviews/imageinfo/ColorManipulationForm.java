@@ -157,31 +157,11 @@ class ColorManipulationForm {
         }
 
         if (this.productSceneView != null) {
-                    if (this.productSceneView.getImageInfo().getColorPaletteDef().getNumPoints() <= 3) {
-                        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(getSystemAuxdataDir(), false);
-                        if (colorPaletteSchemes != null) {
-                            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
-                            for (ColorPaletteInfo cpdInfo : defaultSchemes) {
-                                String bandName = this.productSceneView.getBaseImageLayer().getName().trim();
-                                bandName = bandName.substring(bandName.indexOf(" ")).trim();
-                                String cpdName = cpdInfo.getName().trim();
-                                if (bandName.equals(cpdName)) {
-                                //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
-                                    ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
-                                    this.productSceneView.getImageInfo().setColorPaletteDef(colorPaletteDef,
-                                            cpdInfo.getMinValue(),
-                                            cpdInfo.getMaxValue(),
-                                            true, //colorPaletteDef.isAutoDistribute(),
-                                            cpdInfo.isSourceLogScaled(),
-                                            cpdInfo.isLogScaled());
-                                    this.productSceneView.getImageInfo().setLogScaled(cpdInfo.isLogScaled());
-                              //      this.productSceneView.setColorPaletteInfo(cpdInfo);
-                                    this.productSceneView.getImageInfo().setColorPaletteSchemeName(cpdInfo.getName());
-                                    break;
-                                }
-                            }
-                        }
-                    }
+            // todo This if statement seems to hardcoded
+            // it's purpose is to determine if color palette has been made already
+            if (this.productSceneView.getImageInfo().getColorPaletteDef().getNumPoints() <= 3) {
+                this.productSceneView.setToDefaultColorScheme(getSystemAuxdataDir());
+            }
             setImageInfoCopy(this.productSceneView.getImageInfo());
         }
 
@@ -289,12 +269,12 @@ class ColorManipulationForm {
 
     private boolean isContinuous1BandImage() {
         return (productSceneView.getRaster() instanceof Band)
-               && ((Band) productSceneView.getRaster()).getIndexCoding() == null;
+                && ((Band) productSceneView.getRaster()).getIndexCoding() == null;
     }
 
     private boolean isDiscrete1BandImage() {
         return (productSceneView.getRaster() instanceof Band)
-               && ((Band) productSceneView.getRaster()).getIndexCoding() != null;
+                && ((Band) productSceneView.getRaster()).getIndexCoding() != null;
     }
 
     private PageComponentDescriptor getToolViewDescriptor() {
@@ -449,8 +429,6 @@ class ColorManipulationForm {
         toolButtonsPanel.add(exportButton, gbc);
 
 
-
-
         gbc.gridy = 2;
         gbc.gridx = 0;
         toolButtonsPanel.add(multiApplyButton, gbc);
@@ -466,9 +444,9 @@ class ColorManipulationForm {
         for (int i = 0; i < additionalButtons.length; i++) {
             AbstractButton button = additionalButtons[i];
             toolButtonsPanel.add(button, gbc);
-  //          if (i % 2 == 1) {
-                gbc.gridy++;
-  //          }
+            //          if (i % 2 == 1) {
+            gbc.gridy++;
+            //          }
         }
 
         gbc.gridy++;
@@ -502,10 +480,10 @@ class ColorManipulationForm {
 
     public void showMessageDialog(String propertyName, String message, String title) {
         suppressibleOptionPane.showMessageDialog(propertyName,
-                                                 getToolViewPaneControl(),
-                                                 message,
-                                                 getToolViewDescriptor().getTitle() + title,
-                                                 JOptionPane.INFORMATION_MESSAGE);
+                getToolViewPaneControl(),
+                message,
+                getToolViewDescriptor().getTitle() + title,
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 
@@ -523,15 +501,15 @@ class ColorManipulationForm {
             } finally {
                 getToolViewPaneControl().setCursor(Cursor.getDefaultCursor());
                 //added to remove the old color bar layer from the image when a new color scheme is applied
-                Layer colorBarLayer =  LayerUtils.getChildLayer(productSceneView.getRootLayer(), LayerUtils.SearchMode.DEEP, new LayerFilter() {
-                                                    public boolean accept(Layer layer) {
-                                                        return layer.getLayerType() instanceof ColorBarLayerType;
-                                                    }
-                                                });
-                if ( colorBarLayer != null) {
+                Layer colorBarLayer = LayerUtils.getChildLayer(productSceneView.getRootLayer(), LayerUtils.SearchMode.DEEP, new LayerFilter() {
+                    public boolean accept(Layer layer) {
+                        return layer.getLayerType() instanceof ColorBarLayerType;
+                    }
+                });
+                if (colorBarLayer != null) {
                     VisatApp.getApp().showMessageDialog("Removing current color bar layer", "You've changed the color schema. Current color bar layer will be " +
                             "removed from the image.", ModalDialog.ID_OK, null);
-                  productSceneView.getRootLayer().getChildren().remove(colorBarLayer);
+                    productSceneView.getRootLayer().getChildren().remove(colorBarLayer);
                 }
             }
         }
@@ -543,11 +521,21 @@ class ColorManipulationForm {
     }
 
     private void resetToDefaults() {
-        if (productSceneView != null) {
-            setImageInfoCopy(createDefaultImageInfo());
+//        if (productSceneView != null) {
+//            setImageInfoCopy(createDefaultImageInfo());
+//            childForm.resetFormModel(getProductSceneView());
+//        }
+
+        if (this.productSceneView != null) {
+            this.productSceneView.setToDefaultColorScheme(getSystemAuxdataDir());
+            setImageInfoCopy(this.productSceneView.getImageInfo());
             childForm.resetFormModel(getProductSceneView());
         }
     }
+
+
+
+
 
     private void applyMultipleColorPaletteDef() {
         if (productSceneView == null) {
@@ -582,17 +570,17 @@ class ColorManipulationForm {
 
         if (availableBands.length == 0) {
             JOptionPane.showMessageDialog(getToolViewPaneControl(),
-                                          "No other bands available.", /*I18N*/
-                                          getToolViewDescriptor().getTitle(),
-                                          JOptionPane.WARNING_MESSAGE);
+                    "No other bands available.", /*I18N*/
+                    getToolViewDescriptor().getTitle(),
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         final BandChooser bandChooser = new BandChooser(toolView.getPaneWindow(),
-                                                        "Apply to other bands", /*I18N*/
-                                                        getToolViewDescriptor().getHelpId(),
-                                                        availableBands,
-                                                        bandsToBeModified, false);
+                "Apply to other bands", /*I18N*/
+                getToolViewDescriptor().getHelpId(),
+                availableBands,
+                bandsToBeModified, false);
         final List<Band> modifiedRasterList = new ArrayList<>(availableBands.length);
         if (bandChooser.show() == BandChooser.ID_OK) {
             bandsToBeModified = bandChooser.getSelectedBands();
@@ -619,7 +607,7 @@ class ColorManipulationForm {
         if (ioDir == null) {
             if (preferences != null) {
                 ioDir = new File(
-                            preferences.getPropertyString(PREFERENCES_KEY_IO_DIR, getSystemAuxdataDir().getPath()));
+                        preferences.getPropertyString(PREFERENCES_KEY_IO_DIR, getSystemAuxdataDir().getPath()));
             } else {
                 ioDir = getSystemAuxdataDir();
             }
@@ -680,9 +668,9 @@ class ColorManipulationForm {
                 return;
             }
             targetImageInfo.setColorPaletteDef(colorPaletteDef,
-                                               stx.getMinimum(),
-                                               stx.getMaximum(),
-                                               autoDistribute);
+                    stx.getMinimum(),
+                    stx.getMaximum(),
+                    autoDistribute);
         }
     }
 
@@ -691,10 +679,10 @@ class ColorManipulationForm {
             return Boolean.TRUE;
         }
         int answer = JOptionPane.showConfirmDialog(getToolViewPaneControl(),
-                                                   "Automatically distribute points of\n" +
-                                                   "colour palette between min/max?",
-                                                   "Import Colour Palette",
-                                                   JOptionPane.YES_NO_CANCEL_OPTION
+                "Automatically distribute points of\n" +
+                        "colour palette between min/max?",
+                "Import Colour Palette",
+                JOptionPane.YES_NO_CANCEL_OPTION
         );
         if (answer == JOptionPane.YES_OPTION) {
             return Boolean.TRUE;
@@ -752,9 +740,9 @@ class ColorManipulationForm {
                 visatApp.showErrorDialog(message);
             } else {
                 JOptionPane.showMessageDialog(getToolViewPaneControl(),
-                                              message,
-                                              "Error",
-                                              JOptionPane.ERROR_MESSAGE);
+                        message,
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -763,9 +751,9 @@ class ColorManipulationForm {
         final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
         final File auxdataDir = getSystemAuxdataDir();
         final ResourceInstaller resourceInstaller = new ResourceInstaller(codeSourceUrl, "auxdata/color_palettes/",
-                                                                          auxdataDir);
+                auxdataDir);
         ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(toolView.getPaneControl(),
-                                                                                "Installing Auxdata...") {
+                "Installing Auxdata...") {
             @Override
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
                 resourceInstaller.install(".*.cpd", progressMonitor);
@@ -807,9 +795,9 @@ class ColorManipulationForm {
             return ProductUtils.createImageInfo(productSceneView.getRasters(), false, ProgressMonitor.NULL);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(getContentPanel(),
-                                          "Failed to create default image settings:\n" + e.getMessage(),
-                                          "I/O Error",
-                                          JOptionPane.ERROR_MESSAGE);
+                    "Failed to create default image settings:\n" + e.getMessage(),
+                    "I/O Error",
+                    JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }

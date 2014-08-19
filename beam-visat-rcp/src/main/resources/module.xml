@@ -864,19 +864,21 @@
             <helpId>exportImageFile</helpId>
         </action>
 
-        <!--<action>-->
-            <!--<parent>exportOther</parent>-->
-            <!--<id>exportLegendImageFile</id>-->
-            <!--<class>org.esa.beam.visat.actions.ExportLegendImageAction</class>-->
-            <!--<text>Color Bar</text>-->
-            <!--&lt;!&ndash;<mnemonic>C</mnemonic>&ndash;&gt;-->
-            <!--<shortDescr>View and/or Export the colorbar.</shortDescr>-->
-            <!--<description>View and/or Export the colorbar.</description>-->
-            <!--<context>image</context>-->
-            <!--<popuptext>View/Export Colorbar...</popuptext>-->
-            <!--<helpId>exportLegendImageFile</helpId>-->
-        <!--</action>-->
 
+
+        <action>
+            <parent>exportOther</parent>
+            <id>exportLegendImageFile</id>
+            <class>org.esa.beam.visat.actions.ExportLegendImageAction</class>
+            <text>Color Bar</text>
+            <!--<mnemonic>C</mnemonic>-->
+            <shortDescr>View and/or Export the colorbar.</shortDescr>
+            <description>View and/or Export the colorbar.</description>
+            <context>image</context>
+            <largeIcon>icons/ColorbarHorizontal24.png</largeIcon>
+            <popuptext>Export Colorbar...</popuptext>
+            <helpId>exportLegendImageFile</helpId>
+        </action>
 
 
 
@@ -1081,20 +1083,6 @@
 
 
 
-        <action>
-            <parent>view</parent>
-            <id>exportLegendImageFile</id>
-            <class>org.esa.beam.visat.actions.ExportLegendImageAction</class>
-            <text>Color Bar Layer</text>
-            <!--<mnemonic>C</mnemonic>-->
-            <shortDescr>View and/or Export the colorbar.</shortDescr>
-            <description>View and/or Export the colorbar.</description>
-            <context>image</context>
-            <placeAfter>openViewsMenu</placeAfter>
-            <largeIcon>icons/ColorbarHorizontal24.png</largeIcon>
-            <popuptext>View/Export Colorbar...</popuptext>
-            <helpId>exportLegendImageFile</helpId>
-        </action>
 
         <action>
             <id>showGcpOverlay</id>
@@ -1107,7 +1095,7 @@
             <!--<smallIcon>icons/GcpOverlay16.gif</smallIcon>-->
             <largeIcon>icons/GcpOverlay24.gif</largeIcon>
             <context>image</context>
-            <placeAfter>exportLegendImageFile</placeAfter>
+            <placeAfter>openViewsMenu</placeAfter>
             <helpId>showGcpOverlay</helpId>
         </action>
 

@@ -54,6 +54,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.RenderedImage;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 
@@ -476,6 +477,33 @@ public class ProductSceneView extends BasicView
     public ImageInfo getImageInfo() {
         return getSceneImage().getImageInfo();
     }
+
+    public void setToDefaultColorScheme(File auxDir) {
+        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, false);
+        if (colorPaletteSchemes != null) {
+            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
+            for (ColorPaletteInfo cpdInfo : defaultSchemes) {
+                String bandName = getBaseImageLayer().getName().trim();
+                bandName = bandName.substring(bandName.indexOf(" ")).trim();
+                String cpdName = cpdInfo.getName().trim();
+                if (bandName.equals(cpdName)) {
+                    //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
+                    ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
+                    getImageInfo().setColorPaletteDef(colorPaletteDef,
+                            cpdInfo.getMinValue(),
+                            cpdInfo.getMaxValue(),
+                            true, //colorPaletteDef.isAutoDistribute(),
+                            cpdInfo.isSourceLogScaled(),
+                            cpdInfo.isLogScaled());
+                    getImageInfo().setLogScaled(cpdInfo.isLogScaled());
+                    //      this.productSceneView.setColorPaletteInfo(cpdInfo);
+                    getImageInfo().setColorPaletteSchemeName(cpdInfo.getName());
+                    break;
+                }
+            }
+        }
+    }
+
 
     public void setImageInfo(ImageInfo imageInfo) {
         final ImageInfo oldImageInfo = getImageInfo();
