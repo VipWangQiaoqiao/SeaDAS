@@ -49,6 +49,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final ColorPaletteSchemes colorPaletteSchemes;
     private JButton bandRange;
     private JLabel colorScheme;
+    private JLabel colorPalette;
 
 
     final Boolean[] minFieldActivated = {new Boolean(false)};
@@ -75,6 +76,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         colorScheme = new JLabel("");
         colorScheme.setToolTipText("Last loaded scheme.  Astericks suffix (*) denotes that user may have modified parameters");
+        colorPalette = new JLabel("");
 
 
         colorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir());
@@ -87,6 +89,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteChooser = new ColorPaletteChooser();
         colorPaletteChooser.setPreferredSize(new Dimension(180, 40));
         colorPaletteChooser.setMinimumSize(new Dimension(180, 60));
+        colorPaletteChooser.setMaximumRowCount(20);
 
 
         JPanel colorPaletteJPanel = getColorPaletteFilePanel("Palettes");
@@ -474,10 +477,19 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.weightx = 1.0;
+  //      gbc.insets = new Insets(0,0,3,0);
+
+        jPanel.add(colorPalette, gbc);
+
+   //     gbc.insets = new Insets(0,0,0,0);
+        gbc.gridy++;
         jPanel.add(colorPaletteChooser, gbc);
 
         gbc.gridy++;
         jPanel.add(loadWithCPDFileValuesCheckBox, gbc);
+
+
+
         return jPanel;
     }
 
@@ -636,6 +648,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             colorScheme.setText("Current: " + parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName());
         } else {
             colorScheme.setText("");
+        }
+
+        if (colorPaletteChooser.getSelectedName() != null) {
+            colorPalette.setText("Current: " + colorPaletteChooser.getSelectedName());
+        }                                                             else {
+            colorPalette.setText("");
         }
 
 

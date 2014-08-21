@@ -25,13 +25,15 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
     private final String UNNAMED = "unnamed";
     private boolean discreteDisplay;
     private boolean log10Display;
+    private String[] toolTipsArray;
+    private String selectedName = "";
 
     public ColorPaletteChooser() {
         super(getPalettes());
-
-        ListCellRenderer<ColorPaletteWrapper> renderer = createPaletteRenderer();
+        toolTipsArray = getToolTips();
+        ListCellRenderer<ColorPaletteWrapper> renderer = createPaletteRenderer(toolTipsArray);
         setRenderer(renderer);
-        final String[] toolTipsArray = getToolTips();
+
 
         setEditable(false);
     }
@@ -73,18 +75,29 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
         final String suffix = userPalette.getFirstPoint().getLabel();
         final String name;
         if (suffix != null && suffix.trim().length() > 0) {
-            name = DERIVED_FROM + " " + suffix.trim();
+          //  name = DERIVED_FROM + " " + suffix.trim();
+            name = suffix.trim();
         } else {
             name = UNNAMED;
         }
         final ColorPaletteWrapper item = new ColorPaletteWrapper(name, userPalette);
         insertItemAt(item, 0);
         setSelectedIndex(0);
+        if (toolTipsArray != null && toolTipsArray.length > 0) {
+            toolTipsArray[0] = name;
+        }
+
+        setSelectedName(name);
     }
 
-    private static Vector<ColorPaletteWrapper> getPalettes() {
+    public void addAstericksToSelected() {
+        if (toolTipsArray != null && toolTipsArray.length > 0 && !toolTipsArray[0].endsWith("*")) {
+            toolTipsArray[0] =  toolTipsArray[0] + " *";
+        }
+    }
 
-        ArrayList<String> toolTipsArrayList = new ArrayList<String>();
+
+    private static Vector<ColorPaletteWrapper> getPalettes() {
 
         final List<ColorPaletteDef> defList = ColorPalettesManager.getColorPaletteDefList();
         final Vector<ColorPaletteWrapper> paletteWrappers = new Vector<>();
@@ -95,17 +108,6 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
             //     final String nameFor = getNameForWithoutExtension(colorPaletteDef);
             final String nameFor = ColorPalettesManager.getNameFor(colorPaletteDef);
             paletteWrappers.add(new ColorPaletteWrapper(nameFor, colorPaletteDef));
-            toolTipsArrayList.add(nameFor);
-        }
-
-
-
-        final String[] toolTipsArray = new String[toolTipsArrayList.size()];
-
-        int j = 0;
-        for (String toolTip : toolTipsArrayList) {
-            toolTipsArray[j] = toolTip;
-            j++;
         }
 
         return paletteWrappers;
@@ -126,9 +128,10 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
 
 
-        final String[] toolTipsArray = new String[toolTipsArrayList.size()];
+        final String[] toolTipsArray = new String[toolTipsArrayList.size()+1];
 
-        int j = 0;
+        toolTipsArray[0] = "Selected Color Bar";
+        int j = 1;
         for (String toolTip : toolTipsArrayList) {
             toolTipsArray[j] = toolTip;
             j++;
@@ -147,7 +150,7 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
         }
     }
 
-    private ListCellRenderer<ColorPaletteWrapper> createPaletteRenderer() {
+    private ListCellRenderer<ColorPaletteWrapper> createPaletteRenderer(final String[] toolTipsArray) {
 
 
         return new ListCellRenderer<ColorPaletteWrapper>() {
@@ -166,7 +169,16 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
                 };
 
 
-                setToolTipText(value.name);
+                if (isSelected) {
+                    if (-1 < index && toolTipsArray != null && index < toolTipsArray.length) {
+                        if (index == 0) {
+                            list.setToolTipText("Current: " + toolTipsArray[index]);
+                        }   else {
+                            list.setToolTipText(toolTipsArray[index]);
+                        }
+                    }
+                }
+
 
                 JPanel palettePanel = GridBagUtils.createPanel();
                 GridBagConstraints gbc = new GridBagConstraints();
@@ -253,6 +265,14 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
             }
         }
         return null;
+    }
+
+    public String getSelectedName() {
+        return selectedName;
+    }
+
+    public void setSelectedName(String selectedName) {
+        this.selectedName = selectedName;
     }
 
     public static final class ColorPaletteWrapper {
