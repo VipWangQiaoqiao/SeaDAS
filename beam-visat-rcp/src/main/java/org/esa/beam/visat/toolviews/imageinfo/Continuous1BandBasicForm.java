@@ -89,9 +89,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteChooser.setMinimumSize(new Dimension(180, 60));
 
 
-        JPanel colorPaletteJPanel = getColorPaletteFilePanel("Color Palette Definition Files");
+        JPanel colorPaletteJPanel = getColorPaletteFilePanel("Palettes");
         JPanel rangeJPanel = getRangePanel("Range Adjustments");
-        JPanel colorPaletteInfoComboBoxJPanel = getSchemaPanel("Preset Color Palette Schemes");
+        JPanel colorPaletteInfoComboBoxJPanel = getSchemaPanel("Schemes");
 
 
         JPanel basicPanel = GridBagUtils.createPanel();
@@ -633,7 +633,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         String colorPaletteSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName();
         if (colorPaletteSchemeName != null && colorPaletteSchemeName.length() > 0) {
             //colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getColorPaletteSchemeName());
-            colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName());
+            colorScheme.setText("Current: " + parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName());
         } else {
             colorScheme.setText("");
         }

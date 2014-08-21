@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -27,7 +28,11 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
     public ColorPaletteChooser() {
         super(getPalettes());
-        setRenderer(createPaletteRenderer());
+
+        ListCellRenderer<ColorPaletteWrapper> renderer = createPaletteRenderer();
+        setRenderer(renderer);
+        final String[] toolTipsArray = getToolTips();
+
         setEditable(false);
     }
 
@@ -78,6 +83,9 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
     }
 
     private static Vector<ColorPaletteWrapper> getPalettes() {
+
+        ArrayList<String> toolTipsArrayList = new ArrayList<String>();
+
         final List<ColorPaletteDef> defList = ColorPalettesManager.getColorPaletteDefList();
         final Vector<ColorPaletteWrapper> paletteWrappers = new Vector<>();
         for (ColorPaletteDef colorPaletteDef : defList) {
@@ -87,9 +95,48 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
             //     final String nameFor = getNameForWithoutExtension(colorPaletteDef);
             final String nameFor = ColorPalettesManager.getNameFor(colorPaletteDef);
             paletteWrappers.add(new ColorPaletteWrapper(nameFor, colorPaletteDef));
+            toolTipsArrayList.add(nameFor);
         }
+
+
+
+        final String[] toolTipsArray = new String[toolTipsArrayList.size()];
+
+        int j = 0;
+        for (String toolTip : toolTipsArrayList) {
+            toolTipsArray[j] = toolTip;
+            j++;
+        }
+
         return paletteWrappers;
     }
+
+    private static String[] getToolTips() {
+
+        ArrayList<String> toolTipsArrayList = new ArrayList<String>();
+
+        final List<ColorPaletteDef> defList = ColorPalettesManager.getColorPaletteDefList();
+
+        for (ColorPaletteDef colorPaletteDef : defList) {
+
+            final String nameFor = ColorPalettesManager.getNameFor(colorPaletteDef);
+
+            toolTipsArrayList.add(nameFor);
+        }
+
+
+
+        final String[] toolTipsArray = new String[toolTipsArrayList.size()];
+
+        int j = 0;
+        for (String toolTip : toolTipsArrayList) {
+            toolTipsArray[j] = toolTip;
+            j++;
+        }
+
+        return toolTipsArray;
+    }
+
 
     private static String getNameForWithoutExtension(ColorPaletteDef colorPaletteDef) {
         final String nameFor = ColorPalettesManager.getNameFor(colorPaletteDef);
@@ -101,28 +148,25 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
     }
 
     private ListCellRenderer<ColorPaletteWrapper> createPaletteRenderer() {
-        return new ListCellRenderer<ColorPaletteWrapper>() {
-            @Override
-            public Component getListCellRendererComponent(JList<? extends ColorPaletteWrapper> list, ColorPaletteWrapper value, int index, boolean isSelected, boolean cellHasFocus) {
-                final Font font = getFont();
-                final Font smaller = font.deriveFont(font.getSize() * 0.85f);
 
-                final JLabel nameComp = new JLabel(value.name);
-                nameComp.setFont(smaller);
+
+        return new ListCellRenderer<ColorPaletteWrapper>() {
+
+
+            @Override
+            public Component getListCellRendererComponent(JList<? extends ColorPaletteWrapper> list, ColorPaletteWrapper value, int index, final boolean isSelected, boolean cellHasFocus) {
 
                 final ColorPaletteDef cpd = value.cpd;
                 final JLabel rampComp = new JLabel(" ") {
                     @Override
                     public void paint(Graphics g) {
                         super.paint(g);
-                        drawPalette((Graphics2D) g, cpd, g.getClipBounds().getSize());
+                        drawPalette((Graphics2D) g, cpd, g.getClipBounds().getSize(), isSelected);
                     }
                 };
-//
-//                final JPanel palettePanel = new JPanel(new BorderLayout(0, 2));
-//                palettePanel.add(nameComp, BorderLayout.NORTH);
-//                palettePanel.add(rampComp, BorderLayout.CENTER);
 
+
+                setToolTipText(value.name);
 
                 JPanel palettePanel = GridBagUtils.createPanel();
                 GridBagConstraints gbc = new GridBagConstraints();
@@ -130,29 +174,21 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 gbc.anchor = GridBagConstraints.WEST;
 
-
                 gbc.gridy = 0;
                 gbc.gridx = 0;
                 gbc.weightx = 1;
                 gbc.weighty = 1;
-                gbc.insets = new Insets(2,0,0,0);
-                palettePanel.add(nameComp, gbc);
-
-                gbc.gridy = 1;
-                gbc.gridx = 0;
-                gbc.weighty = .5;
-                gbc.insets = new Insets(0,0,4,0);
+                gbc.insets = new Insets(0, 0, 0, 0);
                 palettePanel.add(rampComp, gbc);
-
-
-
 
                 return palettePanel;
             }
+
         };
+
     }
 
-    private void drawPalette(Graphics2D g2, ColorPaletteDef colorPaletteDef, Dimension paletteDim) {
+    private void drawPalette(Graphics2D g2, ColorPaletteDef colorPaletteDef, Dimension paletteDim, boolean isSelected) {
         final int width = paletteDim.width;
         final int height = paletteDim.height;
 
@@ -167,9 +203,16 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
         g2.setStroke(new BasicStroke(2.0f));
 
-        for (int x = 0; x < width; x=x+2) {
+        for (int x = 0; x < width; x = x + 2) {
             g2.setColor(colorPalette[x]);
-            g2.drawLine(x, 0, x, height);
+            g2.drawLine(x, 2, x, height - 2);
+            if (isSelected) {
+                g2.setColor(Color.blue);
+            } else {
+                g2.setColor(Color.white);
+            }
+            g2.drawLine(x, 0, x, 1);
+            g2.drawLine(x, height - 1, x, height);
         }
     }
 
