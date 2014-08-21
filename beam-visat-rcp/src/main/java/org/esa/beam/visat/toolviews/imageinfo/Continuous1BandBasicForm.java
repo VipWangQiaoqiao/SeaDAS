@@ -816,7 +816,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
     private void modifyColorPaletteSchemeName() {
-        if (!parentForm.getImageInfo().getColorPaletteSchemeName().endsWith("*") && parentForm.getImageInfo().getColorPaletteSchemeName().length() > 0) {
+        if (parentForm.getImageInfo().getColorPaletteSchemeName() != null && !parentForm.getImageInfo().getColorPaletteSchemeName().endsWith("*") && parentForm.getImageInfo().getColorPaletteSchemeName().length() > 0) {
             parentForm.getImageInfo().setColorPaletteSchemeName(parentForm.getImageInfo().getColorPaletteSchemeName()+"*");
         }
     }
