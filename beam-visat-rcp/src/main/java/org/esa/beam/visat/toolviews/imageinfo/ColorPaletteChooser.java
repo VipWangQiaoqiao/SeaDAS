@@ -21,7 +21,7 @@ import java.util.Vector;
 
 class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrapper> {
 
-    private final String DERIVED_FROM = "derived from";
+    private final String DERIVED_FROM = "Current: ";
     private final String UNNAMED = "unnamed";
     private boolean discreteDisplay;
     private boolean log10Display;
@@ -75,8 +75,8 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
         final String suffix = userPalette.getFirstPoint().getLabel();
         final String name;
         if (suffix != null && suffix.trim().length() > 0) {
-          //  name = DERIVED_FROM + " " + suffix.trim();
-            name = suffix.trim();
+            name = DERIVED_FROM + " " + suffix.trim();
+          //  name = suffix.trim();
         } else {
             name = UNNAMED;
         }
@@ -170,12 +170,15 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
 
                 if (isSelected) {
+
+//                    if (index == 0) {
+//                        list.setFocusable(false);
+//                    } else {
+//                        list.setFocusable(true);
+//                    }
+
                     if (-1 < index && toolTipsArray != null && index < toolTipsArray.length) {
-                        if (index == 0) {
-                            list.setToolTipText("Current: " + toolTipsArray[index]);
-                        }   else {
                             list.setToolTipText(toolTipsArray[index]);
-                        }
                     }
                 }
 

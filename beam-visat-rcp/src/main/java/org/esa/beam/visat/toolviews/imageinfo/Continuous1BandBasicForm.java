@@ -88,7 +88,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         colorPaletteChooser = new ColorPaletteChooser();
         colorPaletteChooser.setPreferredSize(new Dimension(180, 40));
-        colorPaletteChooser.setMinimumSize(new Dimension(180, 60));
+        colorPaletteChooser.setMinimumSize(new Dimension(180, 40));
         colorPaletteChooser.setMaximumRowCount(20);
 
 
@@ -303,10 +303,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         });
 
-        colorPaletteSchemes.getUserJComboBox().addActionListener(new ActionListener() {
+        colorPaletteSchemes.getDefaultsJComboBox().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleColorPaletteInfoComboBoxSelection(colorPaletteSchemes.getUserJComboBox());
+                handleColorPaletteInfoComboBoxSelection(colorPaletteSchemes.getDefaultsJComboBox());
             }
         });
 
@@ -408,7 +408,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         jPanel.add(colorPaletteSchemes.getStandardJComboBox(), gbc);
 
         gbc.gridy = 2;
-        jPanel.add(colorPaletteSchemes.getUserJComboBox(), gbc);
+        jPanel.add(colorPaletteSchemes.getDefaultsJComboBox(), gbc);
 
         return jPanel;
     }
@@ -476,13 +476,14 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridy = 0;
         gbc.gridx = 0;
-        gbc.weightx = 1.0;
+
   //      gbc.insets = new Insets(0,0,3,0);
 
         jPanel.add(colorPalette, gbc);
 
    //     gbc.insets = new Insets(0,0,0,0);
         gbc.gridy++;
+        gbc.weightx = 1.0;
         jPanel.add(colorPaletteChooser, gbc);
 
         gbc.gridy++;
@@ -651,7 +652,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         }
 
         if (colorPaletteChooser.getSelectedName() != null) {
-            colorPalette.setText("Current: " + colorPaletteChooser.getSelectedName());
+            colorPalette.setText(colorPaletteChooser.getSelectedName());
         }                                                             else {
             colorPalette.setText("");
         }
@@ -696,7 +697,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                applyChanges(key);
+                if (colorPaletteChooser.getSelectedIndex() != 0) {
+                    applyChanges(key);
+                }
             }
         };
     }
