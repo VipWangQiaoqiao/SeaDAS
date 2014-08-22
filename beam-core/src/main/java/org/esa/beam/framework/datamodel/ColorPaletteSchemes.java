@@ -15,22 +15,25 @@ import java.util.ArrayList;
 public class ColorPaletteSchemes {
 
     private JComboBox standardJComboBox = null;
-    private JComboBox userJComboBox = null;
+//    private JComboBox userJComboBox = null;
+    private JComboBox defaultsJComboBox = null;
 
     ArrayList<ColorPaletteInfo> standardColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
-    ArrayList<ColorPaletteInfo> userColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
+//    ArrayList<ColorPaletteInfo> userColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
     private ArrayList<ColorPaletteInfo> defaultsColorPaletteInfos = new ArrayList<ColorPaletteInfo>();
 
     private ColorPaletteInfo defaultStandardColorPaletteInfo = null;
-    private ColorPaletteInfo defaultUserColorPaletteInfo = null;
+//    private ColorPaletteInfo defaultUserColorPaletteInfo = null;
+    private ColorPaletteInfo defaultDefaultsColorPaletteInfo = null;
 
-    private final String USER_SCHEMA_FILENAME = "user_color_palette_schemas.txt";
+//    private final String USER_SCHEMA_FILENAME = "user_color_palette_schemas.txt";
     private final String STANDARD_SCHEMA_FILENAME = "standard_color_palette_schemas.txt";
     private final String DEFAULTS_SCHEMA_FILENAME = "defaults_color_palette_schemas.txt";
 
 
-    private final String USER_SCHEMA_COMBO_BOX_NAME = "User";
-    private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "Standard";
+ //   private final String USER_SCHEMA_COMBO_BOX_NAME = "User";
+    private final String STANDARD_SCHEMA_COMBO_BOX_NAME = "General Schemes";
+    private final String DEFAULTS_SCHEMA_COMBO_BOX_NAME = "Default Schemes";
 
 
     private File colorPaletteDir = null;
@@ -47,7 +50,7 @@ public class ColorPaletteSchemes {
 
             if (userInterfaceMode) {
                 initStandardSchemeComboBox();
-                initUserSchemeComboBox();
+                initDefaultsSchemeComboBox();
             } else {
                 // this mode is used for setting the default color scheme for an image when first opened
                 // it doesn't need comboBoxes, only the defaultsColorPaletteInfos is needed
@@ -102,28 +105,28 @@ public class ColorPaletteSchemes {
     }
 
 
-    private void initUserSchemeComboBox() {
+    private void initDefaultsSchemeComboBox() {
 
-        defaultUserColorPaletteInfo = new ColorPaletteInfo(USER_SCHEMA_COMBO_BOX_NAME, null, null, 0, 0, false, null, true);
-        userColorPaletteInfos.add(defaultUserColorPaletteInfo);
+        defaultDefaultsColorPaletteInfo = new ColorPaletteInfo(DEFAULTS_SCHEMA_COMBO_BOX_NAME, null, null, 0, 0, false, null, true);
+        defaultsColorPaletteInfos.add(defaultDefaultsColorPaletteInfo);
 
-        File file = new File(colorPaletteDir, USER_SCHEMA_FILENAME);
-        initColorPaletteInfos(colorPaletteDir, userColorPaletteInfos, file);
+        File file = new File(colorPaletteDir, DEFAULTS_SCHEMA_FILENAME);
+        initColorPaletteInfos(colorPaletteDir, defaultsColorPaletteInfos, file);
 
-        Object[] colorPaletteInfosArray = userColorPaletteInfos.toArray();
+        Object[] colorPaletteInfosArray = defaultsColorPaletteInfos.toArray();
 
-        final String[] toolTipsArray = new String[userColorPaletteInfos.size()];
+        final String[] toolTipsArray = new String[defaultsColorPaletteInfos.size()];
 
         int i = 0;
-        for (ColorPaletteInfo colorPaletteInfo : userColorPaletteInfos) {
+        for (ColorPaletteInfo colorPaletteInfo : defaultsColorPaletteInfos) {
             toolTipsArray[i] = colorPaletteInfo.getDescription();
             i++;
         }
 
-        final Boolean[] enabledArray = new Boolean[userColorPaletteInfos.size()];
+        final Boolean[] enabledArray = new Boolean[defaultsColorPaletteInfos.size()];
 
         i = 0;
-        for (ColorPaletteInfo colorPaletteInfo : userColorPaletteInfos) {
+        for (ColorPaletteInfo colorPaletteInfo : defaultsColorPaletteInfos) {
             enabledArray[i] = colorPaletteInfo.isEnabled();
             i++;
         }
@@ -132,14 +135,18 @@ public class ColorPaletteSchemes {
         myComboBoxRenderer.setTooltipList(toolTipsArray);
         myComboBoxRenderer.setEnabledList(enabledArray);
 
-        userJComboBox = new JComboBox(colorPaletteInfosArray);
-        userJComboBox.setRenderer(myComboBoxRenderer);
-        userJComboBox.setEditable(false);
-        userJComboBox.setMaximumRowCount(20);
-        userJComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + USER_SCHEMA_FILENAME);
+        defaultsJComboBox = new JComboBox(colorPaletteInfosArray);
+        defaultsJComboBox.setRenderer(myComboBoxRenderer);
+        defaultsJComboBox.setEditable(false);
+        defaultsJComboBox.setMaximumRowCount(20);
+        defaultsJComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + DEFAULTS_SCHEMA_FILENAME);
 
 
     }
+
+
+
+
 
 
     private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file) {
@@ -222,12 +229,9 @@ public class ColorPaletteSchemes {
         if (standardJComboBox != null) {
             standardJComboBox.setSelectedItem(defaultStandardColorPaletteInfo);
         }
-        if (userJComboBox != null) {
-            userJComboBox.setSelectedItem(defaultUserColorPaletteInfo);
+        if (defaultsJComboBox != null) {
+            defaultsJComboBox.setSelectedItem(defaultDefaultsColorPaletteInfo);
         }
-//        if (defaultsJComboBox != null) {
-//            defaultsJComboBox.setSelectedItem(defaultDefaultsColorPaletteInfo);
-//        }
     }
 
 
@@ -267,13 +271,13 @@ public class ColorPaletteSchemes {
     }
 
 
-    public JComboBox getUserJComboBox() {
-        return userJComboBox;
-    }
+ //   public JComboBox getUserJComboBox() {
+ //       return userJComboBox;
+ //   }
 
-//    public JComboBox getDefaultsJComboBox() {
-//        return defaultsJComboBox;
-//    }
+    public JComboBox getDefaultsJComboBox() {
+        return defaultsJComboBox;
+    }
 
     public ArrayList<ColorPaletteInfo> getDefaultsColorPaletteInfos() {
         return defaultsColorPaletteInfos;

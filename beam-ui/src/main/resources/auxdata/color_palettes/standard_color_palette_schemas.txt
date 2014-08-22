@@ -10,7 +10,7 @@
  Rrs at [430-455] nm          :0.00000    :0.02000    :false     :oceancolor_standard.cpd  :Remote sensing reflectance at [430-455] nm
  Rrs at [   >455] nm          :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :Remote sensing reflectance at [greater than 455] nm
  SST                          :-2.00000   :45.0000    :false     :oceancolor_sst.cpd       :Sea Surface Temperature
- ------ other --------------  :       0   :0          :false     :null                     :
+ ---------- other ----------  :       0   :0          :false     :null                     :
  a                            :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Total absorption
  adg                          :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Absorption due to gelbstof and detritus
  aph                          :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Absorption due to phytoplankton
@@ -35,4 +35,7 @@
  Zeu                          :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :Euphotic Depth
  Zhl                          :2.0        :65.0       :false     :oceancolor_zphotic.cpd   :Heated Layer Depth
  Zsd                          :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Secchi Depth
+----------- user -----------  :       0   :0          :false     :null                     :
+  Zsd (Tutorial Example)           :-50.0      :50.0       :false     :oceancolor_zphotic.cpd   :Tutorial Example Secchi Depth
+  Zsd Anomalies (Tutorial Example) :-15.0      :10.5       :false     :anomalies.cpd            :Tutorial Example Secchi Depth Anomalies
 
