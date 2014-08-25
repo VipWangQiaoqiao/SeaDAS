@@ -38,7 +38,6 @@ import com.bc.ceres.swing.selection.SelectionContext;
 import com.bc.ceres.swing.undo.UndoContext;
 import com.bc.ceres.swing.undo.support.DefaultUndoContext;
 import org.esa.beam.framework.datamodel.*;
-import org.esa.beam.framework.param.ParamGroup;
 import org.esa.beam.framework.ui.*;
 import org.esa.beam.framework.ui.command.CommandUIFactory;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
@@ -478,6 +477,33 @@ public class ProductSceneView extends BasicView
         return getSceneImage().getImageInfo();
     }
 
+//    public void setToDefaultColorScheme(File auxDir) {
+//        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false);
+//        if (colorPaletteSchemes != null) {
+//            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getColorPaletteInfos();
+//            for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
+//                String bandName = getBaseImageLayer().getName().trim();
+//                bandName = bandName.substring(bandName.indexOf(" ")).trim();
+//                String cpdName = colorPaletteInfo.getName().trim();
+//                if (bandName.equals(cpdName)) {
+//                    //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
+//                    ColorPaletteDef colorPaletteDef = colorPaletteInfo.getColorPaletteDef();
+//                    getImageInfo().setColorPaletteDef(colorPaletteDef,
+//                            colorPaletteInfo.getMinValue(),
+//                            colorPaletteInfo.getMaxValue(),
+//                            true, //colorPaletteDef.isAutoDistribute(),
+//                            colorPaletteInfo.isSourceLogScaled(),
+//                            colorPaletteInfo.isLogScaled());
+//                    getImageInfo().setLogScaled(colorPaletteInfo.isLogScaled());
+//                    //      this.productSceneView.setColorPaletteInfo(cpdInfo);
+//                    getImageInfo().setColorPaletteSchemeName(colorPaletteInfo.getName());
+//                    getImageInfo().setColorPaletteSchemeDefaultList(true);
+//                    getImageInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
+//                    break;
+//                }
+//            }
+//        }
+//    }
     public void setToDefaultColorScheme(File auxDir) {
         ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, false);
         if (colorPaletteSchemes != null) {
@@ -516,7 +542,7 @@ public class ProductSceneView extends BasicView
      * Gets the number of raster datasets.
      *
      * @return the number of raster datasets, always <code>1</code> for single banded palette images or <code>3</code>
-     *         for RGB images
+     * for RGB images
      */
     public int getNumRasters() {
         return getSceneImage().getRasters().length;
@@ -603,7 +629,7 @@ public class ProductSceneView extends BasicView
     public void setGraticuleOverlayEnabled(boolean enabled) {
         if (isGraticuleOverlayEnabled() != enabled) {
             Layer graticuleLayer = getGraticuleLayer(true);
-        //    getGraticuleLayer(true).setVisible(enabled);
+            //    getGraticuleLayer(true).setVisible(enabled);
             graticuleLayer.setVisible(enabled);
             // todo Danny just added this to keep grid lines layer from being removed
             if (enabled) {
@@ -622,6 +648,14 @@ public class ProductSceneView extends BasicView
             Layer layer = getPinLayer(true);
             layer.setVisible(enabled);
             updateCurrentLayer(layer, enabled);
+        }
+    }
+
+    public void setVectorLayersVisible(boolean visible) {
+        // assumes that pins/gcp/and geometries are all siblings
+        Layer layer = getPinLayer(true);
+        if (layer != null) {
+            layer.getParent().setVisible(true);
         }
     }
 
@@ -810,6 +844,8 @@ public class ProductSceneView extends BasicView
                 layerFilter);
         if (layer != null) {
             setSelectedLayer(layer);
+            layer.setVisible(true);
+            layer.getParent().setVisible(true);
         }
         return layer;
     }

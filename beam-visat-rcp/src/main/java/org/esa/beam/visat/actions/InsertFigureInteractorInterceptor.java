@@ -46,6 +46,8 @@ public class InsertFigureInteractorInterceptor extends AbstractInteractorInterce
             return null;
         }
 
+        productSceneView.setVectorLayersVisible(true);
+
         final LayerFilter geometryFilter = VectorDataLayerFilterFactory.createGeometryFilter();
 
         Layer layer = productSceneView.getSelectedLayer();
