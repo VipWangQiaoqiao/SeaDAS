@@ -1215,6 +1215,8 @@ public class DimapProductHelpers {
             imageInfo.getColorPaletteDef().setLogScaled(isLogScaled(bandStatisticsElem));
             imageInfo.getColorPaletteDef().setDiscrete(isDiscrete(bandStatisticsElem));
             imageInfo.setColorPaletteSchemeName(getColorPaletteSchemeName(bandStatisticsElem));
+            imageInfo.setCpdFileName(getCpdFileName(bandStatisticsElem));
+            imageInfo.setColorPaletteSchemeDefaultList(isColorPaletteSchemeDefaultList(bandStatisticsElem));
 
             final Element noDataElem = bandStatisticsElem.getChild(DimapProductConstants.TAG_NO_DATA_COLOR);
             if (noDataElem != null) {
@@ -1318,6 +1320,36 @@ public class DimapProductHelpers {
             }
 
             return colorPaletteSchemeName;
+        }
+
+
+        private static String getCpdFileName(Element bandStatisticsElem) {
+            String cpdFileName = null;
+            try {
+                cpdFileName = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_FILE_NAME);
+
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return cpdFileName;
+        }
+
+
+        private static boolean isColorPaletteSchemeDefaultList(Element bandStatisticsElem) {
+            boolean colorSchemeDefaultList = false;
+            try {
+                String discreteString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_COLOR_SCHEME_DEFAULT_LIST);
+                if (discreteString != null) {
+                    if (discreteString.toLowerCase().equals("true") || discreteString.toLowerCase().equals("1")) {
+                        colorSchemeDefaultList = true;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return colorSchemeDefaultList;
         }
 
 

@@ -282,6 +282,8 @@ public final class DimapHeaderWriter extends XmlWriter {
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_LOG_SCALED, paletteDefinition.isLogScaled());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_DISCRETE, paletteDefinition.isDiscrete());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_COLOR_SCHEME_NAME, band.getImageInfo().getColorPaletteSchemeName());
+                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_FILE_NAME, band.getImageInfo().getCpdFileName());
+                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_COLOR_SCHEME_DEFAULT_LIST, band.getImageInfo().isColorPaletteSchemeDefaultList());
                     final Iterator iterator = paletteDefinition.getIterator();
                     while (iterator.hasNext()) {
                         final ColorPaletteDef.Point point = (ColorPaletteDef.Point) iterator.next();

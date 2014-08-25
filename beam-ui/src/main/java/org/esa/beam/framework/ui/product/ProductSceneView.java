@@ -477,53 +477,28 @@ public class ProductSceneView extends BasicView
         return getSceneImage().getImageInfo();
     }
 
-//    public void setToDefaultColorScheme(File auxDir) {
-//        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false);
-//        if (colorPaletteSchemes != null) {
-//            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getColorPaletteInfos();
-//            for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
-//                String bandName = getBaseImageLayer().getName().trim();
-//                bandName = bandName.substring(bandName.indexOf(" ")).trim();
-//                String cpdName = colorPaletteInfo.getName().trim();
-//                if (bandName.equals(cpdName)) {
-//                    //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
-//                    ColorPaletteDef colorPaletteDef = colorPaletteInfo.getColorPaletteDef();
-//                    getImageInfo().setColorPaletteDef(colorPaletteDef,
-//                            colorPaletteInfo.getMinValue(),
-//                            colorPaletteInfo.getMaxValue(),
-//                            true, //colorPaletteDef.isAutoDistribute(),
-//                            colorPaletteInfo.isSourceLogScaled(),
-//                            colorPaletteInfo.isLogScaled());
-//                    getImageInfo().setLogScaled(colorPaletteInfo.isLogScaled());
-//                    //      this.productSceneView.setColorPaletteInfo(cpdInfo);
-//                    getImageInfo().setColorPaletteSchemeName(colorPaletteInfo.getName());
-//                    getImageInfo().setColorPaletteSchemeDefaultList(true);
-//                    getImageInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
-//                    break;
-//                }
-//            }
-//        }
-//    }
     public void setToDefaultColorScheme(File auxDir) {
-        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, false);
+        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false);
         if (colorPaletteSchemes != null) {
-            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getDefaultsColorPaletteInfos();
-            for (ColorPaletteInfo cpdInfo : defaultSchemes) {
+            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getColorPaletteInfos();
+            for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
                 String bandName = getBaseImageLayer().getName().trim();
                 bandName = bandName.substring(bandName.indexOf(" ")).trim();
-                String cpdName = cpdInfo.getName().trim();
+                String cpdName = colorPaletteInfo.getName().trim();
                 if (bandName.equals(cpdName)) {
                     //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
-                    ColorPaletteDef colorPaletteDef = cpdInfo.getColorPaletteDef();
+                    ColorPaletteDef colorPaletteDef = colorPaletteInfo.getColorPaletteDef();
                     getImageInfo().setColorPaletteDef(colorPaletteDef,
-                            cpdInfo.getMinValue(),
-                            cpdInfo.getMaxValue(),
+                            colorPaletteInfo.getMinValue(),
+                            colorPaletteInfo.getMaxValue(),
                             true, //colorPaletteDef.isAutoDistribute(),
-                            cpdInfo.isSourceLogScaled(),
-                            cpdInfo.isLogScaled());
-                    getImageInfo().setLogScaled(cpdInfo.isLogScaled());
+                            colorPaletteInfo.isSourceLogScaled(),
+                            colorPaletteInfo.isLogScaled());
+                    getImageInfo().setLogScaled(colorPaletteInfo.isLogScaled());
                     //      this.productSceneView.setColorPaletteInfo(cpdInfo);
-                    getImageInfo().setColorPaletteSchemeName(cpdInfo.getName());
+                    getImageInfo().setColorPaletteSchemeName(colorPaletteInfo.getName());
+                    getImageInfo().setColorPaletteSchemeDefaultList(true);
+                    getImageInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
                     break;
                 }
             }

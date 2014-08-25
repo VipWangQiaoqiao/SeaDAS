@@ -46,6 +46,10 @@ public class ImageInfo implements Cloneable {
     public static final String HISTOGRAM_MATCHING_NORMALIZE = "normalize";
 
     private String colorPaletteSchemeName = null;
+    private boolean colorPaletteSchemeDefaultList = true;
+    private String cpdFileName = null;
+
+    private static final String ALTERED_STRING = "* (altered)";
 
     public String getColorPaletteSchemeName() {
         return colorPaletteSchemeName;
@@ -53,6 +57,29 @@ public class ImageInfo implements Cloneable {
 
     public void setColorPaletteSchemeName(String colorPaletteSchemeName) {
         this.colorPaletteSchemeName = colorPaletteSchemeName;
+    }
+
+    public boolean isColorPaletteSchemeDefaultList() {
+        return colorPaletteSchemeDefaultList;
+    }
+
+    public void setColorPaletteSchemeDefaultList(boolean colorPaletteSchemeDefaultList) {
+        this.colorPaletteSchemeDefaultList = colorPaletteSchemeDefaultList;
+    }
+
+    public String getCpdFileName() {
+        return cpdFileName;
+    }
+
+    public void setCpdFileName(String cpdFileName) {
+        this.cpdFileName = cpdFileName;
+    }
+
+    public void setCpdFileNameAsAltered() {
+        if (getCpdFileName() != null && !getCpdFileName().endsWith(ALTERED_STRING)) {
+            setCpdFileName(getCpdFileName() + ALTERED_STRING);
+        }
+
     }
 
     /**
@@ -102,7 +129,7 @@ public class ImageInfo implements Cloneable {
      * Gets the color palette definition as used for images created from single bands.
      *
      * @return The color palette definition. Can be {@code null}.
-     *         In this case {@link #getRgbChannelDef()} is non-null.
+     * In this case {@link #getRgbChannelDef()} is non-null.
      */
     public ColorPaletteDef getColorPaletteDef() {
         return colorPaletteDef;
@@ -112,7 +139,7 @@ public class ImageInfo implements Cloneable {
      * Gets the RGB(A) channel definition as used for images created from 3 tp 4 bands.
      *
      * @return The RGB(A) channel definition.
-     *         Can be {@code null}. In this case {@link #getColorPaletteDef()} is non-null.
+     * Can be {@code null}. In this case {@link #getColorPaletteDef()} is non-null.
      */
     public RGBChannelDef getRgbChannelDef() {
         return rgbChannelDef;
@@ -414,7 +441,7 @@ public class ImageInfo implements Cloneable {
         double a = min / (Math.exp(b * min));
 
         double linearWeight = Math.log(logValue / a) / b;
-        linearWeight = (linearWeight-min) / (max - min);
+        linearWeight = (linearWeight - min) / (max - min);
 
         return linearWeight;
     }

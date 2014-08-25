@@ -182,6 +182,9 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
                     }
                 }
 
+                setToolTipText("Note that the color palette definition data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
+
+
 
                 JPanel palettePanel = GridBagUtils.createPanel();
                 GridBagConstraints gbc = new GridBagConstraints();

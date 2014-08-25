@@ -143,10 +143,10 @@ class ImageInfoEditor2 extends ImageInfoEditor {
 
     void askUser() {
         final int i = JOptionPane.showConfirmDialog(this,
-                                                    "Compute accurate statistics?\n" +
-                                                            "Note that this action may take some time.",
-                                                    "Question",
-                                                    JOptionPane.YES_NO_OPTION);
+                "Compute accurate statistics?\n" +
+                        "Note that this action may take some time.",
+                "Question",
+                JOptionPane.YES_NO_OPTION);
         if (i == JOptionPane.YES_OPTION) {
             SwingWorker sw = new StxComputer();
             sw.execute();
@@ -155,8 +155,17 @@ class ImageInfoEditor2 extends ImageInfoEditor {
 
     @Override
     protected void applyChanges() {
+
+        modifyColorPaletteSchemeName();
+        parentForm.getImageInfo().setCpdFileNameAsAltered();
         parentForm.applyChanges();
     }
+
+    private void modifyColorPaletteSchemeName() {
+        parentForm.getImageInfo().setColorPaletteSchemeName(null);
+    }
+
+
 
     private class ModelChangeHandler implements PropertyChangeListener, ChangeListener {
 

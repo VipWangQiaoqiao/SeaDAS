@@ -19,7 +19,7 @@
  bbp                          :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :Particle backscatter
  bbw                          :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :Backscattering coefficient of seawater
  elevation                    :-12000.0   :15000.0    :false     :oceancolor_standard.cpd  :Elevation
- elevation_bathymetry         :-11000.0   : -500.0    :false     :bathymetry_etop01.cpd    :Bathymetry (Colormap used in the ETOPO1 global relief map)
+ elevation_bathymetry         :-11000.0   : 0.0       :false     :bathymetry_etop01.cpd    :Bathymetry (Colormap used in the ETOPO1 global relief map)
  elevation_topography         :       0   :8500.0     :false     :topography_etop01.cpd    :Topography (Colormap used in the ETOPO1 global relief map)
  epsilon                      :0.850000   :1.23100    :false     :oceancolor_standard.cpd  :Epsilon of aerosol correction
  Fluorescence                 :0.0        :0.05       :false     :oceancolor_standard.cpd  :Fluorescence Line Height (normalized)

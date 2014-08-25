@@ -44,12 +44,15 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final ColorPaletteChooser colorPaletteChooser;
     private JFormattedTextField minField;
     private JFormattedTextField maxField;
+    private String currentMinFieldValue = "";
+    private String currentMaxFieldValue = "";
     private final DiscreteCheckBox discreteCheckBox;
     private final JCheckBox loadWithCPDFileValuesCheckBox;
-    private final ColorPaletteSchemes colorPaletteSchemes;
+    private final ColorPaletteSchemes defaultColorPaletteSchemes;
+    private final ColorPaletteSchemes standardColorPaletteSchemes;
     private JButton bandRange;
     private JLabel colorScheme;
-    private JLabel colorPalette;
+    private JLabel cpdFileNameLabel;
 
 
     final Boolean[] minFieldActivated = {new Boolean(false)};
@@ -76,10 +79,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         colorScheme = new JLabel("");
         colorScheme.setToolTipText("Last loaded scheme.  Astericks suffix (*) denotes that user may have modified parameters");
-        colorPalette = new JLabel("");
+        cpdFileNameLabel = new JLabel("");
+        //     cpdFileNameLabel.setToolTipText("Currently loaded cpd file name.  Note that the cpd data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
 
 
-        colorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir());
+        defaultColorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir(), ColorPaletteSchemes.Id.DEFAULTS, true);
+        standardColorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir(), ColorPaletteSchemes.Id.STANDARD, true);
         VisatApp.getApp().clearStatusBarMessage();
 
         loadWithCPDFileValuesCheckBox = new JCheckBox("Load with exact file values", false);
@@ -92,9 +97,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteChooser.setMaximumRowCount(20);
 
 
-        JPanel colorPaletteJPanel = getColorPaletteFilePanel("Palettes");
+        JPanel colorPaletteJPanel = getColorPaletteFilePanel("Color Palettes");
         JPanel rangeJPanel = getRangePanel("Range Adjustments");
-        JPanel colorPaletteInfoComboBoxJPanel = getSchemaPanel("Schemes");
+        JPanel colorPaletteInfoComboBoxJPanel = getSchemaPanel("Color Schemes");
 
 
         JPanel basicPanel = GridBagUtils.createPanel();
@@ -150,11 +155,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         shouldFireChooserEvent = true;
 
-        colorPaletteChooser.addActionListener(createListener(RangeKey.FromCurrentPalette));
-//        minField.addActionListener(createListener(RangeKey.FromMinMaxFields));
-//        maxField.addActionListener(createListener(RangeKey.FromMinMaxFields));
-        //       cpdRange.addActionListener(createListener(RangeKey.FromPaletteSource));
-        bandRange.addActionListener(createListener(RangeKey.FromData));
+        colorPaletteChooser.addActionListener(createPaletteListener(RangeKey.FromCurrentPalette));
+
+        bandRange.addActionListener(createBandListener(RangeKey.FromData));
 
 
         colorPaletteChooser.addPropertyChangeListener(new PropertyChangeListener() {
@@ -164,45 +167,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         });
 
-//
-//        maxField.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                handleMaxTextfield();
-//            }
-//        });
-//
-//        maxField.addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//            //    handleMinTextfield();
-//            }
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                handleMaxTextfield();
-//            }
-//        });
-//
-//
-//        minField.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                handleMinTextfield();
-//            }
-//        });
-//
-//        minField.addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//            //    handleMaxTextfield();
-//            }
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                handleMinTextfield();
-//            }
-//        });
 
         maxField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -213,12 +177,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
             @Override
             public void removeUpdate(DocumentEvent documentEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public void changedUpdate(DocumentEvent documentEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
 
@@ -230,22 +192,20 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
             @Override
             public void removeUpdate(DocumentEvent documentEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public void changedUpdate(DocumentEvent documentEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
 
 
-        bandRange.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VisatApp.getApp().clearStatusBarMessage();
-            }
-        });
+//        bandRange.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                VisatApp.getApp().clearStatusBarMessage();
+//            }
+//        });
 
 
         moreOptionsForm = new MoreOptionsForm(parentForm, true);
@@ -257,158 +217,119 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         logDisplayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                boolean originalShouldFireChooserEvent = shouldFireChooserEvent;
-//                shouldFireChooserEvent = true;
+
                 if (listenToLogDisplayButtonEnabled[0]) {
                     listenToLogDisplayButtonEnabled[0] = false;
                     logDisplayButton.setSelected(!logDisplayButton.isSelected());
                     applyChanges(RangeKey.ToggleLog);
                     listenToLogDisplayButtonEnabled[0] = true;
                 }
-//                shouldFireChooserEvent = originalShouldFireChooserEvent;
             }
         });
 
-//        logDisplayButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (listenToLogDisplayButtonEnabled[0]) {
-//                    final boolean shouldLog10Display = logDisplayButton.isSelected();
-//                    VisatApp.getApp().clearStatusBarMessage();
-//                    final ImageInfo imageInfo = parentForm.getImageInfo();
-//                    if (shouldLog10Display) {
-//                        final ColorPaletteDef cpd = imageInfo.getColorPaletteDef();
-//                        if (LogDisplay.checkApplicability(cpd)) {
-//                            colorPaletteChooser.setLog10Display(shouldLog10Display);
-//                            imageInfo.setLogScaled(shouldLog10Display);
-//                            parentForm.applyChanges();
-//                        } else {
-//                            LogDisplay.showNotApplicableInfo(parentForm.getContentPanel());
-//                            logDisplayButton.setSelected(false);
-//                        }
-//                    } else {
-//                        colorPaletteChooser.setLog10Display(shouldLog10Display);
-//                        imageInfo.setLogScaled(shouldLog10Display);
-//                        parentForm.applyChanges();
-//                    }
-//                }
-//            }
-//        });
 
-
-        colorPaletteSchemes.getStandardJComboBox().addActionListener(new ActionListener() {
+        standardColorPaletteSchemes.getjComboBox().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleColorPaletteInfoComboBoxSelection(colorPaletteSchemes.getStandardJComboBox());
+                if (standardColorPaletteSchemes.getjComboBox().getSelectedIndex() != 0) {
+                    if (standardColorPaletteSchemes.isjComboBoxShouldFire()) {
+                        standardColorPaletteSchemes.setjComboBoxShouldFire(false);
+
+                        handleColorPaletteInfoComboBoxSelection(standardColorPaletteSchemes.getjComboBox(), false);
+
+                        boolean originalDefaultShouldFire = defaultColorPaletteSchemes.isjComboBoxShouldFire();
+                        defaultColorPaletteSchemes.setjComboBoxShouldFire(false);
+                        defaultColorPaletteSchemes.reset();
+                        defaultColorPaletteSchemes.setjComboBoxShouldFire(originalDefaultShouldFire);
+
+                        standardColorPaletteSchemes.setjComboBoxShouldFire(true);
+                    }
+                }
             }
         });
 
-        colorPaletteSchemes.getDefaultsJComboBox().addActionListener(new ActionListener() {
+        defaultColorPaletteSchemes.getjComboBox().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleColorPaletteInfoComboBoxSelection(colorPaletteSchemes.getDefaultsJComboBox());
+                if (defaultColorPaletteSchemes.getjComboBox().getSelectedIndex() != 0) {
+                    if (defaultColorPaletteSchemes.isjComboBoxShouldFire()) {
+                        defaultColorPaletteSchemes.setjComboBoxShouldFire(false);
+
+                        handleColorPaletteInfoComboBoxSelection(defaultColorPaletteSchemes.getjComboBox(), true);
+
+                        boolean originalStandardShouldFire = standardColorPaletteSchemes.isjComboBoxShouldFire();
+                        standardColorPaletteSchemes.setjComboBoxShouldFire(false);
+                        standardColorPaletteSchemes.reset();
+                        standardColorPaletteSchemes.setjComboBoxShouldFire(originalStandardShouldFire);
+
+                        defaultColorPaletteSchemes.setjComboBoxShouldFire(true);
+                    }
+                }
             }
         });
 
 
-//todo  when you lose focus on a combobox and haven't picked something then the font goes white ARGHH!!
-        // lose focus listener doesn't appear to help
-
-//        colorPaletteSchemes.getStandardJComboBox().addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//            }
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                colorPaletteSchemes.reset();
-//            }
-//        });
-//
-//        colorPaletteSchemes.getUserJComboBox().addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//            }
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                colorPaletteSchemes.reset();
-//            }
-//        });
-//
-//        colorPaletteSchemes.getOtherJCComboBox().addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//            }
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                colorPaletteSchemes.reset();
-//            }
-//        });
-//
-//        colorPaletteSchemes.getEverythingJComboBox().addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//            }
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                colorPaletteSchemes.reset();
-//            }
-//        });
     }
 
     private void handleMaxTextfield() {
-        if (!maxFieldActivated[0] && !basicSwitcherIsActive[0]) {
-            maxFieldActivated[0] = true;
-//                    boolean origShouldFireChooserEvent = shouldFireChooserEvent;
-//                    shouldFireChooserEvent = true;
-            applyChanges(RangeKey.FromMinMaxFields);
-//                    shouldFireChooserEvent = origShouldFireChooserEvent;
-            maxFieldActivated[0] = false;
+
+        if (!currentMaxFieldValue.equals(maxField.getValue().toString())) {
+            if (!maxFieldActivated[0] && !basicSwitcherIsActive[0]) {
+                maxFieldActivated[0] = true;
+                applyChanges(RangeKey.FromMinMaxFields);
+                maxFieldActivated[0] = false;
+            }
         }
     }
 
     private void handleMinTextfield() {
-        if (!minFieldActivated[0] && !basicSwitcherIsActive[0]) {
-            minFieldActivated[0] = true;
-//                    boolean origShouldFireChooserEvent = shouldFireChooserEvent;
-//                    shouldFireChooserEvent = true;
-            applyChanges(RangeKey.FromMinMaxFields);
-//                    shouldFireChooserEvent = origShouldFireChooserEvent;
-            minFieldActivated[0] = false;
+
+        if (!currentMinFieldValue.equals(minField.getValue().toString())) {
+            if (!minFieldActivated[0] && !basicSwitcherIsActive[0]) {
+                minFieldActivated[0] = true;
+                applyChanges(RangeKey.FromMinMaxFields);
+                minFieldActivated[0] = false;
+            }
         }
     }
 
     private JPanel getSchemaPanel(String title) {
         JPanel jPanel = new JPanel(new GridBagLayout());
         jPanel.setBorder(BorderFactory.createTitledBorder(title));
-        jPanel.setToolTipText("Load a preset color scheme (sets the color-palette, min, max, and log fields)");
+        //   jPanel.setToolTipText("Load a preset color scheme (sets the color-palette, min, max, and log fields)");
         GridBagConstraints gbc = new GridBagConstraints();
 
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+        //   gbc.insets = new Insets(0, 0, 3, 0);
+
+
+        //    jPanel.add(colorScheme, gbc);
+        //    gbc.gridy++;
+        gbc.insets = new Insets(0, 0, 0, 0);
+
+        gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(0,0,3,0);
-
-
-        jPanel.add(colorScheme, gbc);
-
         gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.insets = new Insets(0,0,0,0);
-        jPanel.add(colorPaletteSchemes.getStandardJComboBox(), gbc);
+        gbc.weightx = 1.0;
+        jPanel.add(new JLabel("Common"), gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0;
+        gbc.gridx = 1;
+        jPanel.add(standardColorPaletteSchemes.getjComboBox(), gbc);
 
-        gbc.gridy = 2;
-        jPanel.add(colorPaletteSchemes.getDefaultsJComboBox(), gbc);
+
+        gbc.gridy++;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.weightx = 1.0;
+        jPanel.add(new JLabel("Default"), gbc);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0;
+        gbc.gridx = 1;
+        jPanel.add(defaultColorPaletteSchemes.getjComboBox(), gbc);
 
         return jPanel;
     }
@@ -434,13 +355,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         JPanel minMaxTextfields = getMinMaxTextfields();
 
 
-//        final JButton cpdRange = new JButton("Set from CPD File");
-//        cpdRange.setToolTipText("Set min and max value to be value in cpd file");
-//        cpdRange.setMaximumSize(cpdRange.getMinimumSize());
-//        cpdRange.setPreferredSize(cpdRange.getMinimumSize());
-//        cpdRange.setMinimumSize(cpdRange.getMinimumSize());
-
-
         bandRange = new JButton("Set from Band Data");
         bandRange.setToolTipText("Set min and max value to corresponding data value in the band statistics");
         bandRange.setMaximumSize(bandRange.getMinimumSize());
@@ -460,10 +374,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         rangeGbc.gridx = 0;
         rangeJPanel.add(bandRange, rangeGbc);
 
-//        rangeGbc.fill = GridBagConstraints.NONE;
-//        rangeGbc.gridy++;
-//        rangeGbc.gridx = 0;
-//        rangeJPanel.add(cpdRange, rangeGbc);
         return rangeJPanel;
     }
 
@@ -472,69 +382,65 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         jPanel.setBorder(BorderFactory.createTitledBorder(title));
         final GridBagConstraints gbc = new GridBagConstraints();
 
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
+
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridy = 0;
         gbc.gridx = 0;
+        gbc.weightx = 1.0;
 
-  //      gbc.insets = new Insets(0,0,3,0);
+        jPanel.add(cpdFileNameLabel, gbc);
 
-        jPanel.add(colorPalette, gbc);
-
-   //     gbc.insets = new Insets(0,0,0,0);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.gridy++;
         gbc.weightx = 1.0;
+        gbc.insets = new Insets(-3, 0, 0, 0);
         jPanel.add(colorPaletteChooser, gbc);
 
         gbc.gridy++;
         jPanel.add(loadWithCPDFileValuesCheckBox, gbc);
 
-
-
         return jPanel;
     }
 
 
-    private void handleColorPaletteInfoComboBoxSelection(JComboBox jComboBox) {
+    private void handleColorPaletteInfoComboBoxSelection(JComboBox jComboBox, boolean isDefaultList) {
         ColorPaletteInfo colorPaletteInfo = (ColorPaletteInfo) jComboBox.getSelectedItem();
 
         if (colorPaletteInfo.getCpdFilename() != null && colorPaletteInfo.isEnabled()) {
 
             try {
-                if (colorPaletteSchemes.isShouldFire()) {
-                    File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename());
-                    ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
+
+                File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename());
+                ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
 
 
-                    boolean origShouldFireChooserEvent = shouldFireChooserEvent;
-                    shouldFireChooserEvent = false;
+                boolean origShouldFireChooserEvent = shouldFireChooserEvent;
+                shouldFireChooserEvent = false;
 
-                    colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
-                //    parentForm.getProductSceneView().setColorPaletteInfo(colorPaletteInfo);
-                    parentForm.getProductSceneView().getImageInfo().setColorPaletteSchemeName(colorPaletteInfo.getName());
+                colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
 
-                    applyChanges(colorPaletteInfo.getMinValue(),
-                            colorPaletteInfo.getMaxValue(),
-                            colorPaletteDef,
-                            colorPaletteInfo.isSourceLogScaled(),
-                            colorPaletteInfo.isLogScaled(), colorPaletteInfo.getName());
+                parentForm.getImageInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
+
+                applyChanges(colorPaletteInfo.getMinValue(),
+                        colorPaletteInfo.getMaxValue(),
+                        colorPaletteDef,
+                        colorPaletteInfo.isSourceLogScaled(),
+                        colorPaletteInfo.isLogScaled(), colorPaletteInfo.getName(), isDefaultList);
 
 
+                shouldFireChooserEvent = origShouldFireChooserEvent;
 
-                    shouldFireChooserEvent = origShouldFireChooserEvent;
+                String id = parentForm.getProductSceneView().getRaster().getDisplayName();
+                //   VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
+                String colorPaletteName = (colorPaletteInfo.getName() != null) ? colorPaletteInfo.getName() : "";
+                //     VisatApp.getApp().setStatusBarMessage("'" + colorPaletteName + "' color scheme loaded");
 
-                    String id = parentForm.getProductSceneView().getRaster().getDisplayName();
-                    //   VisatApp.getApp().setStatusBarMessage("Loaded '" + colorPaletteInfo.getName() + "' color schema settings into '" + id);
-                    String colorPaletteName = (colorPaletteInfo.getName() != null) ? colorPaletteInfo.getName() : "";
-                    VisatApp.getApp().setStatusBarMessage("'" + colorPaletteName + "' color scheme loaded");
 
-                }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
-
-        colorPaletteSchemes.reset();
 
 
     }
@@ -630,32 +536,66 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         if (!minFieldActivated[0]) {
             minField.setValue(cpd.getMinDisplaySample());
+            currentMinFieldValue = minField.getValue().toString();
         }
 
         if (!maxFieldActivated[0]) {
             maxField.setValue(cpd.getMaxDisplaySample());
+            currentMaxFieldValue = maxField.getValue().toString();
         }
 
-//        ColorPaletteInfo colorPaletteInfo = parentForm.getProductSceneView().getColorPaletteInfo();
-//        if (colorPaletteInfo != null && colorPaletteInfo.getName() != null) {
-//            colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getColorPaletteInfo().getName());
-//        } else {
-//            colorScheme.setText("");
-//        }
+
+        boolean originalDefaultShouldFire = defaultColorPaletteSchemes.isjComboBoxShouldFire();
+        boolean originalStandardShouldFire = standardColorPaletteSchemes.isjComboBoxShouldFire();
+
+        defaultColorPaletteSchemes.setjComboBoxShouldFire(false);
+        standardColorPaletteSchemes.setjComboBoxShouldFire(false);
+
+        defaultColorPaletteSchemes.reset();
+        standardColorPaletteSchemes.reset();
 
         String colorPaletteSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName();
         if (colorPaletteSchemeName != null && colorPaletteSchemeName.length() > 0) {
-            //colorScheme.setText("Currently Loaded Scheme: " + parentForm.getProductSceneView().getColorPaletteSchemeName());
-            colorScheme.setText("Current: " + parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName());
+
+            String whichComboBox;
+            ColorPaletteInfo savedColorPaletteInfo = null;
+            if (parentForm.getProductSceneView().getImageInfo().isColorPaletteSchemeDefaultList()) {
+                whichComboBox = "Default";
+
+                savedColorPaletteInfo = defaultColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
+
+            } else {
+                whichComboBox = "Standard";
+
+                savedColorPaletteInfo = standardColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
+            }
+
+            // todo Would be good to test here to see if saved scheme actually matches loaded values
+//            if (savedColorPaletteInfo != null) {
+//               double min = savedColorPaletteInfo.getMinValue();
+//               double max = savedColorPaletteInfo.getMaxValue();
+//               String cdp = savedColorPaletteInfo.getCpdFilename();
+//                boolean log = savedColorPaletteInfo.isLogScaled();
+//            }
+
+
+            colorScheme.setText("Current: " + whichComboBox + " " + parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName());
         } else {
             colorScheme.setText("");
         }
 
-        if (colorPaletteChooser.getSelectedName() != null) {
-            colorPalette.setText(colorPaletteChooser.getSelectedName());
-        }                                                             else {
-            colorPalette.setText("");
+
+        if (parentForm.getImageInfo().getCpdFileName() != null) {
+            cpdFileNameLabel.setText(parentForm.getImageInfo().getCpdFileName());
+            //       cpdFileNameLabel.setVisible(true);
+        } else {
+            cpdFileNameLabel.setText("Original File Unknown");
+            //      cpdFileNameLabel.setVisible(false);
         }
+
+
+        defaultColorPaletteSchemes.setjComboBoxShouldFire(originalDefaultShouldFire);
+        standardColorPaletteSchemes.setjComboBoxShouldFire(originalStandardShouldFire);
 
 
         shouldFireChooserEvent = true;
@@ -693,7 +633,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         };
     }
 
-    private ActionListener createListener(final RangeKey key) {
+    private ActionListener createPaletteListener(final RangeKey key) {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -703,6 +643,18 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         };
     }
+
+    private ActionListener createBandListener(final RangeKey key) {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                applyChanges(key);
+
+            }
+        };
+    }
+
 
     private JFormattedTextField getNumberTextField(double value) {
         final NumberFormatter formatter = new NumberFormatter(new DecimalFormat("0.0###########"));
@@ -718,7 +670,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private void applyChanges(RangeKey key) {
         if (shouldFireChooserEvent) {
 
-            
+
             final ColorPaletteDef selectedCPD = colorPaletteChooser.getSelectedColorPaletteDefinition();
             final ImageInfo currentInfo = parentForm.getImageInfo();
             final ColorPaletteDef currentCPD = currentInfo.getColorPaletteDef();
@@ -757,8 +709,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     modifyColorPaletteSchemeName();
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = currentInfo.isLogScaled();
-                    min = new Double(minField.getValue().toString());//(double) minField.getValue();
-                    max = new Double(maxField.getValue().toString());//(double) maxField.getValue();
+                    //    min = new Double(minField.getValue().toString());//(double) minField.getValue();
+                    //   max = new Double(maxField.getValue().toString());//(double) maxField.getValue();
+                    min = Double.parseDouble(minField.getValue().toString());
+                    max = Double.parseDouble(maxField.getValue().toString());
                     cpd = currentCPD;
                     autoDistribute = true;
                     break;
@@ -773,10 +727,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     break;
                 default:
                     currentInfo.setColorPaletteSchemeName(null);
+                    String cpdFileName = ColorPalettesManager.getNameFor(selectedCPD);
+                    currentInfo.setCpdFileName(cpdFileName);
+
                     if (loadWithCPDFileValuesCheckBox.isSelected()) {
                         isSourceLogScaled = selectedCPD.isLogScaled();
                         isTargetLogScaled = selectedCPD.isLogScaled();
-                        //   autoDistribute = selectedCPD.isAutoDistribute();
                         autoDistribute = false;
                         currentInfo.setLogScaled(isTargetLogScaled);
                         min = selectedCPD.getMinDisplaySample();
@@ -809,6 +765,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     currentInfo.setLogScaled(isTargetLogScaled);
                     colorPaletteChooser.setLog10Display(isTargetLogScaled);
                 }
+                currentMinFieldValue = Double.toString(min);
+                currentMaxFieldValue = Double.toString(max);
                 parentForm.applyChanges();
 
 
@@ -819,9 +777,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
     private void modifyColorPaletteSchemeName() {
-        if (parentForm.getImageInfo().getColorPaletteSchemeName() != null && !parentForm.getImageInfo().getColorPaletteSchemeName().endsWith("*") && parentForm.getImageInfo().getColorPaletteSchemeName().length() > 0) {
-            parentForm.getImageInfo().setColorPaletteSchemeName(parentForm.getImageInfo().getColorPaletteSchemeName()+"*");
-        }
+        parentForm.getImageInfo().setColorPaletteSchemeName(null);
+
+        // todo I was going to add an astericks to indicate altered but not sure so holding off here
+//        if (parentForm.getImageInfo().getColorPaletteSchemeName() != null && !parentForm.getImageInfo().getColorPaletteSchemeName().endsWith("*") && parentForm.getImageInfo().getColorPaletteSchemeName().length() > 0) {
+//            parentForm.getImageInfo().setColorPaletteSchemeName(parentForm.getImageInfo().getColorPaletteSchemeName() + "*");
+//        }
     }
 
 
@@ -831,13 +792,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         if (min == max) {
             checksOut = false;
             VisatApp.getApp().setStatusBarMessage("WARNING: Min cannot equal Max");
-//            JOptionPane.showMessageDialog(minField, "Min cannot equal Max");
         }
 
         if (isLogScaled && min == 0) {
             checksOut = false;
             VisatApp.getApp().setStatusBarMessage("WARNING: Min cannot be 0 in log scaling mode");
-//            JOptionPane.showMessageDialog(minField, "Min cannot be 0 in log scaling mode");
         }
 
         if (checksOut) {
@@ -846,7 +805,15 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         return checksOut;
     }
 
-    private void applyChanges(double min, double max, ColorPaletteDef selectedCPD, boolean isSourceLogScaled, boolean isTargetLogScaled, String colorSchemaName) {
+    private void applyChanges(double min,
+                              double max,
+                              ColorPaletteDef selectedCPD,
+                              boolean isSourceLogScaled,
+                              boolean isTargetLogScaled,
+                              String colorSchemaName,
+                              boolean isDefaultList) {
+
+
         final ImageInfo currentInfo = parentForm.getImageInfo();
         final ColorPaletteDef currentCPD = currentInfo.getColorPaletteDef();
         final ColorPaletteDef deepCopy = selectedCPD.createDeepCopy();
@@ -857,6 +824,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         currentInfo.setLogScaled(isTargetLogScaled);
         currentInfo.setColorPaletteDef(selectedCPD, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
         currentInfo.setColorPaletteSchemeName(colorSchemaName);
+        currentInfo.setColorPaletteSchemeDefaultList(isDefaultList);
+
+        currentMinFieldValue = Double.toString(min);
+        currentMaxFieldValue = Double.toString(max);
+
         parentForm.applyChanges();
     }
 

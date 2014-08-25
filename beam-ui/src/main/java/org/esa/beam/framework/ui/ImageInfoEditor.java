@@ -88,13 +88,13 @@ public abstract class ImageInfoEditor extends JPanel {
     public static final int PREF_HISTO_HEIGHT = 196; //128;
     public static final Dimension PREF_COMPONENT_SIZE
             = new Dimension(PREF_HISTO_WIDTH + 2 * HOR_BORDER_SIZE,
-                            PREF_HISTO_HEIGHT + PALETTE_HEIGHT + SLIDER_HEIGHT / 2
-                            + 2 * HOR_BORDER_SIZE + FONT_SIZE);
+            PREF_HISTO_HEIGHT + PALETTE_HEIGHT + SLIDER_HEIGHT / 2
+                    + 2 * HOR_BORDER_SIZE + FONT_SIZE);
     public static final BasicStroke STROKE_1 = new BasicStroke(1.0f);
     public static final BasicStroke STROKE_2 = new BasicStroke(2.0f);
     public static final BasicStroke DASHED_STROKE = new BasicStroke(0.75F, BasicStroke.CAP_SQUARE,
-                                                                    BasicStroke.JOIN_MITER, 1.0F, new float[]{5.0F},
-                                                                    0.0F);
+            BasicStroke.JOIN_MITER, 1.0F, new float[]{5.0F},
+            0.0F);
 
     private ImageInfoEditorModel model;
 
@@ -172,8 +172,8 @@ public abstract class ImageInfoEditor extends JPanel {
 
     public void compute95Percent() {
         final Histogram histogram = new Histogram(getModel().getHistogramBins(),
-                                                  scaleInverse(getModel().getMinSample()),
-                                                  scaleInverse(getModel().getMaxSample()));
+                scaleInverse(getModel().getMinSample()),
+                scaleInverse(getModel().getMaxSample()));
         final Range autoStretchRange = histogram.findRangeFor95Percent();
         computeFactors();
         setFirstSliderSample(scale(autoStretchRange.getMin()));
@@ -287,7 +287,7 @@ public abstract class ImageInfoEditor extends JPanel {
             return false;
         }
         return model.getMinSample() <= model.getMaxSample()
-               && model.getSampleScaling() != null && model.getSampleStx() != null;
+                && model.getSampleScaling() != null && model.getSampleStx() != null;
     }
 
     public void computeZoomOutVertical() {
@@ -304,8 +304,8 @@ public abstract class ImageInfoEditor extends JPanel {
         int totWidth = getWidth();
         int totHeight = getHeight();
         g2d.drawString(NO_DISPLAY_INFO_TEXT,
-                       (totWidth - fontMetrics.stringWidth(NO_DISPLAY_INFO_TEXT)) / 2,
-                       (totHeight + fontMetrics.getHeight()) / 2);
+                (totWidth - fontMetrics.stringWidth(NO_DISPLAY_INFO_TEXT)) / 2,
+                (totHeight + fontMetrics.getHeight()) / 2);
     }
 
     private void drawPalette(Graphics2D g2d) {
@@ -581,7 +581,8 @@ public abstract class ImageInfoEditor extends JPanel {
         return getModel().getSliderColor(index);
     }
 
-    private void setSliderColor(int index, Color c) {
+    private void setSliderColor(int index, Color c) { // todo DANNY
+
         getModel().setSliderColor(index, c);
         applyChanges();
     }
@@ -724,8 +725,8 @@ public abstract class ImageInfoEditor extends JPanel {
 
     private void editSliderColor(MouseEvent evt, final int sliderIndex) {
         final ColorChooserPanel panel = new ColorChooserPanel(ColorChooserPanel.PALETTE_COLOR_40,
-                                                              true,     // allow more colors
-                                                              true);    // allow default color
+                true,     // allow more colors
+                true);    // allow default color
         final Color selectedColor = getSliderColor(sliderIndex);
         if (selectedColor.equals(ImageInfo.NO_COLOR)) {
             panel.setSelectedColor(null);
@@ -837,7 +838,8 @@ public abstract class ImageInfoEditor extends JPanel {
         }
 
         @Override
-        public void mouseReleased(MouseEvent evt) {
+        public void mouseReleased(MouseEvent evt) {  // todo DANNY
+
             if (isDragging()) {
                 doDragSlider(evt, false);
                 setDragging(false);
@@ -959,7 +961,7 @@ public abstract class ImageInfoEditor extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     final Color newColor = ColorPaletteDef.getCenterColor(getSliderColor(sliderIndex - 1),
-                                                                          getSliderColor(sliderIndex + 1));
+                            getSliderColor(sliderIndex + 1));
                     setSliderColor(sliderIndex, newColor);
                     hidePopup();
                     applyChanges();
