@@ -420,7 +420,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
                 colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
 
-                parentForm.getImageInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
+                parentForm.getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
 
                 applyChanges(colorPaletteInfo.getMinValue(),
                         colorPaletteInfo.getMaxValue(),
@@ -554,12 +554,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         defaultColorPaletteSchemes.reset();
         standardColorPaletteSchemes.reset();
 
-        String colorPaletteSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName();
+        String colorPaletteSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().getColorPaletteSchemeName();
         if (colorPaletteSchemeName != null && colorPaletteSchemeName.length() > 0) {
 
             String whichComboBox;
             ColorPaletteInfo savedColorPaletteInfo = null;
-            if (parentForm.getProductSceneView().getImageInfo().isColorPaletteSchemeDefaultList()) {
+            if (parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().isColorPaletteSchemeDefaultList()) {
                 whichComboBox = "Default";
 
                 savedColorPaletteInfo = defaultColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
@@ -579,14 +579,14 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //            }
 
 
-            colorScheme.setText("Current: " + whichComboBox + " " + parentForm.getProductSceneView().getImageInfo().getColorPaletteSchemeName());
+            colorScheme.setText("Current: " + whichComboBox + " " + parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().getColorPaletteSchemeName());
         } else {
             colorScheme.setText("");
         }
 
 
-        if (parentForm.getImageInfo().getCpdFileName() != null) {
-            cpdFileNameLabel.setText(parentForm.getImageInfo().getCpdFileName());
+        if (parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName() != null) {
+            cpdFileNameLabel.setText(parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName());
             //       cpdFileNameLabel.setVisible(true);
         } else {
             cpdFileNameLabel.setText("Original File Unknown");
@@ -726,9 +726,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     autoDistribute = true;
                     break;
                 default:
-                    currentInfo.setColorPaletteSchemeName(null);
+                    currentInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
                     String cpdFileName = ColorPalettesManager.getNameFor(selectedCPD);
-                    currentInfo.setCpdFileName(cpdFileName);
+                    currentInfo.getColorPaletteSourcesInfo().setCpdFileName(cpdFileName);
 
                     if (loadWithCPDFileValuesCheckBox.isSelected()) {
                         isSourceLogScaled = selectedCPD.isLogScaled();
@@ -777,7 +777,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
     private void modifyColorPaletteSchemeName() {
-        parentForm.getImageInfo().setColorPaletteSchemeName(null);
+        parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
 
         // todo I was going to add an astericks to indicate altered but not sure so holding off here
 //        if (parentForm.getImageInfo().getColorPaletteSchemeName() != null && !parentForm.getImageInfo().getColorPaletteSchemeName().endsWith("*") && parentForm.getImageInfo().getColorPaletteSchemeName().length() > 0) {
@@ -823,8 +823,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         final boolean autoDistribute = true;
         currentInfo.setLogScaled(isTargetLogScaled);
         currentInfo.setColorPaletteDef(selectedCPD, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
-        currentInfo.setColorPaletteSchemeName(colorSchemaName);
-        currentInfo.setColorPaletteSchemeDefaultList(isDefaultList);
+        currentInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeName(colorSchemaName);
+        currentInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(isDefaultList);
 
         currentMinFieldValue = Double.toString(min);
         currentMaxFieldValue = Double.toString(max);

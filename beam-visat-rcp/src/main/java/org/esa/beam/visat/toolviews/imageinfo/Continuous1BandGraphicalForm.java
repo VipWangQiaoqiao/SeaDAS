@@ -115,7 +115,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
     }
 
     private void modifyColorPaletteSchemeName() {
-        parentForm.getImageInfo().setColorPaletteSchemeName(null);
+        parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
     }
 
     @Override

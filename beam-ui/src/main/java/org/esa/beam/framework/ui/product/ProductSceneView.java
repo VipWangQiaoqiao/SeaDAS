@@ -496,9 +496,9 @@ public class ProductSceneView extends BasicView
                             colorPaletteInfo.isLogScaled());
                     getImageInfo().setLogScaled(colorPaletteInfo.isLogScaled());
                     //      this.productSceneView.setColorPaletteInfo(cpdInfo);
-                    getImageInfo().setColorPaletteSchemeName(colorPaletteInfo.getName());
-                    getImageInfo().setColorPaletteSchemeDefaultList(true);
-                    getImageInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
+                    getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(colorPaletteInfo.getName());
+                    getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
+                    getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
                     break;
                 }
             }

@@ -45,42 +45,10 @@ public class ImageInfo implements Cloneable {
     @Deprecated
     public static final String HISTOGRAM_MATCHING_NORMALIZE = "normalize";
 
-    private String colorPaletteSchemeName = null;
-    private boolean colorPaletteSchemeDefaultList = true;
-    private String cpdFileName = null;
 
-    private static final String ALTERED_STRING = "* (altered)";
+    private ColorPaletteSourcesInfo colorPaletteSourcesInfo = new ColorPaletteSourcesInfo();
 
-    public String getColorPaletteSchemeName() {
-        return colorPaletteSchemeName;
-    }
 
-    public void setColorPaletteSchemeName(String colorPaletteSchemeName) {
-        this.colorPaletteSchemeName = colorPaletteSchemeName;
-    }
-
-    public boolean isColorPaletteSchemeDefaultList() {
-        return colorPaletteSchemeDefaultList;
-    }
-
-    public void setColorPaletteSchemeDefaultList(boolean colorPaletteSchemeDefaultList) {
-        this.colorPaletteSchemeDefaultList = colorPaletteSchemeDefaultList;
-    }
-
-    public String getCpdFileName() {
-        return cpdFileName;
-    }
-
-    public void setCpdFileName(String cpdFileName) {
-        this.cpdFileName = cpdFileName;
-    }
-
-    public void setCpdFileNameAsAltered() {
-        if (getCpdFileName() != null && !getCpdFileName().endsWith(ALTERED_STRING)) {
-            setCpdFileName(getCpdFileName() + ALTERED_STRING);
-        }
-
-    }
 
     /**
      * Enumerates the possible histogram matching modes.
@@ -124,6 +92,13 @@ public class ImageInfo implements Cloneable {
         this.noDataColor = NO_COLOR;
         this.histogramMatching = HistogramMatching.None;
     }
+
+
+    //    This class stores original selection criteria such as cpdFileName and colorScheme
+    public ColorPaletteSourcesInfo getColorPaletteSourcesInfo() {
+        return colorPaletteSourcesInfo;
+    }
+
 
     /**
      * Gets the color palette definition as used for images created from single bands.

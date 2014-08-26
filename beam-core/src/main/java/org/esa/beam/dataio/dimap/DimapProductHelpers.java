@@ -1214,9 +1214,9 @@ public class DimapProductHelpers {
             imageInfo.setLogScaled(isLogScaled(bandStatisticsElem));
             imageInfo.getColorPaletteDef().setLogScaled(isLogScaled(bandStatisticsElem));
             imageInfo.getColorPaletteDef().setDiscrete(isDiscrete(bandStatisticsElem));
-            imageInfo.setColorPaletteSchemeName(getColorPaletteSchemeName(bandStatisticsElem));
-            imageInfo.setCpdFileName(getCpdFileName(bandStatisticsElem));
-            imageInfo.setColorPaletteSchemeDefaultList(isColorPaletteSchemeDefaultList(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeName(getColorPaletteSchemeName(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setCpdFileName(getCpdFileName(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(isColorPaletteSchemeDefaultList(bandStatisticsElem));
 
             final Element noDataElem = bandStatisticsElem.getChild(DimapProductConstants.TAG_NO_DATA_COLOR);
             if (noDataElem != null) {
