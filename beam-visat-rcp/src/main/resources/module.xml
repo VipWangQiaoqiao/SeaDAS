@@ -254,9 +254,8 @@
             <tabTitle>Color Manager</tabTitle>
             <!--<mnemonic>C</mnemonic>-->
             <!--<accelerator>ctrl alt C</accelerator>-->
-            <!--<description>Add or alter the color palette of an image</description>-->
-            <!--Removed description because it shows up all over the tool window as the tool tip which is quite annoying-->
-            <description></description>
+            <description>Set the color palette of band image</description>
+
 
             <smallIcon>/org/esa/beam/resources/images/icons/ContrastStretch16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/ContrastStretch24.png</largeIcon>

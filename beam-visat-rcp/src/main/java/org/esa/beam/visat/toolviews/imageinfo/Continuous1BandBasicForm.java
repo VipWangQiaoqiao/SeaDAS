@@ -92,8 +92,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
         colorPaletteChooser = new ColorPaletteChooser();
-        colorPaletteChooser.setPreferredSize(new Dimension(180, 40));
-        colorPaletteChooser.setMinimumSize(new Dimension(180, 40));
+        colorPaletteChooser.setPreferredSize(new Dimension(180, 30));
+   //     colorPaletteChooser.setMinimumSize(new Dimension(180, 40));
         colorPaletteChooser.setMaximumRowCount(20);
 
 
@@ -394,7 +394,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridy++;
         gbc.weightx = 1.0;
-        gbc.insets = new Insets(-3, 0, 0, 0);
+        gbc.insets = new Insets(0, 0, 0, 0);
         jPanel.add(colorPaletteChooser, gbc);
 
         gbc.gridy++;
