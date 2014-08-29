@@ -328,6 +328,7 @@ class ColorManipulationForm {
             }
         });
         importButton.setEnabled(true);
+        importButton.setVisible(false);
 
         exportButton = createButton("/com/bc/ceres/swing/actions/icons_16x16/document-save.png");
         exportButton.setName("ExportButton");
@@ -422,20 +423,17 @@ class ColorManipulationForm {
 
         gbc.gridy = 0;
         gbc.gridx = 0;
+        toolButtonsPanel.add(resetButton, gbc);
+
+        gbc.gridy++;
         toolButtonsPanel.add(importButton, gbc);
 
-        gbc.gridy = 1;
-        gbc.gridx = 0;
+        gbc.gridy++;
         toolButtonsPanel.add(exportButton, gbc);
 
-
-        gbc.gridy = 2;
-        gbc.gridx = 0;
+        gbc.gridy++;
         toolButtonsPanel.add(multiApplyButton, gbc);
 
-        gbc.gridy = 3;
-        gbc.gridx = 0;
-        toolButtonsPanel.add(resetButton, gbc);
 
 
         gbc.gridy++;
