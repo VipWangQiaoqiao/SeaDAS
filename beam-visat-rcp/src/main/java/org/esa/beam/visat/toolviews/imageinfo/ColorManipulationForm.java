@@ -646,9 +646,14 @@ class ColorManipulationForm {
                     final ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(file);
                     colorPaletteDef.getFirstPoint().setLabel(file.getName());
                     applyColorPaletteDef(colorPaletteDef, getProductSceneView().getRaster(), targetImageInfo);
+                    // todo this needs to read cpd file setting for logScaled but right now safest to set at false because
+                    // a nonlogscaled cpd may contain min=0
+                    getImageInfo().setLogScaled(false);
                     setImageInfoCopy(targetImageInfo);
                     childForm.updateFormModel(getProductSceneView());
                     setApplyEnabled(true);
+                    getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(file.getName());
+                    getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
                 } catch (IOException e) {
                     showErrorDialog("Failed to import colour palette:\n" + e.getMessage());
                 }

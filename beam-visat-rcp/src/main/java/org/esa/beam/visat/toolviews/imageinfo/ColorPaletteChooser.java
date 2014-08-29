@@ -56,13 +56,17 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
     public void setSelectedColorPaletteDefinition(ColorPaletteDef cpd) {
         removeUserDefinedPalette();
-        final ComboBoxModel<ColorPaletteWrapper> model = getModel();
-        for (int i = 0; i < model.getSize(); i++) {
-            if (model.getElementAt(i).cpd.equals(cpd)) {
-                setSelectedIndex(i);
-                return;
-            }
-        }
+
+        // DANNY removed this because it caused a tooltip bug since the list size changes if the following is invoked
+        // by adding/removed the userDefinedPalette at index 0
+//        final ComboBoxModel<ColorPaletteWrapper> model = getModel();
+//        for (int i = 0; i < model.getSize(); i++) {
+//            if (model.getElementAt(i).cpd.equals(cpd)) {
+//                setSelectedIndex(i);
+//                return;
+//            }
+//        }
+
         setUserDefinedPalette(cpd);
     }
 
@@ -171,11 +175,6 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
                 if (isSelected) {
 
-//                    if (index == 0) {
-//                        list.setFocusable(false);
-//                    } else {
-//                        list.setFocusable(true);
-//                    }
 
                     if (-1 < index && toolTipsArray != null && index < toolTipsArray.length) {
                             list.setToolTipText(toolTipsArray[index]);
