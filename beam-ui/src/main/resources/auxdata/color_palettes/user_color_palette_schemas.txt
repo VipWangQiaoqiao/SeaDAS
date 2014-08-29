@@ -1,5 +1,0 @@
-
-#FIELD_NAME                    MIN         MAX         LOG_SCALE  CPD_FILENAME              DESCRIPTION
- Zsd (Tutorial Example)           :-50.0      :50.0       :false     :oceancolor_zphotic.cpd   :Tutorial Example Secchi Depth
- Zsd Anomalies (Tutorial Example) :-15.0      :10.5       :false     :anomalies.cpd            :Tutorial Example Secchi Depth Anomalies
-
