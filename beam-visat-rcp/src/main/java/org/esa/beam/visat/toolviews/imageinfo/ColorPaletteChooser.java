@@ -7,13 +7,7 @@ import org.esa.beam.jai.ImageManager;
 import org.esa.beam.util.io.FileUtils;
 import org.esa.beam.util.math.Range;
 
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -161,14 +155,14 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
 
             @Override
-            public Component getListCellRendererComponent(JList<? extends ColorPaletteWrapper> list, ColorPaletteWrapper value, int index, final boolean isSelected, boolean cellHasFocus) {
+            public Component getListCellRendererComponent(JList<? extends ColorPaletteWrapper> list, ColorPaletteWrapper value, final int index, final boolean isSelected, boolean cellHasFocus) {
 
                 final ColorPaletteDef cpd = value.cpd;
                 final JLabel rampComp = new JLabel(" ") {
                     @Override
                     public void paint(Graphics g) {
                         super.paint(g);
-                        drawPalette((Graphics2D) g, cpd, g.getClipBounds().getSize(), isSelected);
+                        drawPalette((Graphics2D) g, cpd, g.getClipBounds().getSize(), isSelected, index);
                     }
                 };
 
@@ -205,7 +199,7 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
     }
 
-    private void drawPalette(Graphics2D g2, ColorPaletteDef colorPaletteDef, Dimension paletteDim, boolean isSelected) {
+    private void drawPalette(Graphics2D g2, ColorPaletteDef colorPaletteDef, Dimension paletteDim, boolean isSelected, int index) {
         final int width = paletteDim.width;
         final int height = paletteDim.height;
 
@@ -220,17 +214,46 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
         g2.setStroke(new BasicStroke(2.0f));
 
+//        for (int x = 0; x < width; x = x + 2) {
+//            g2.setColor(colorPalette[x]);
+//            g2.drawLine(x, 3, x, height - 3);
+//            if (isSelected) {
+//                g2.setColor(Color.blue);
+//            } else {
+//                g2.setColor(Color.white);
+//            }
+//            g2.drawLine(x, 0, x, 2);
+//            g2.drawLine(x, height - 2, x, height);
+//        }
+
+
         for (int x = 0; x < width; x = x + 2) {
-            g2.setColor(colorPalette[x]);
-            g2.drawLine(x, 2, x, height - 2);
-            if (isSelected) {
-                g2.setColor(Color.blue);
+
+            if (index == 0) {
+                g2.setColor(UIManager.getColor("Panel.background"));
+                g2.drawLine(x, 0, x, height);
+            } else if (isSelected) {
+                if (x == 0 || x >= width - 1) {
+                    g2.setColor(Color.blue);
+                    g2.drawLine(x, 0, x, height);
+                } else {
+                    int edgeThickness = 2;
+                    g2.setColor(colorPalette[x]);
+                    g2.drawLine(x, (edgeThickness + 1), x, height - (edgeThickness + 1));
+                    g2.setColor(Color.blue);
+                    g2.drawLine(x, 0, x, edgeThickness);
+                    g2.drawLine(x, height - edgeThickness, x, height);
+                }
             } else {
+                g2.setColor(colorPalette[x]);
+                g2.drawLine(x, 1, x, height);
                 g2.setColor(Color.white);
+                g2.drawLine(x, 0, x, 1);
             }
-            g2.drawLine(x, 0, x, 1);
-            g2.drawLine(x, height - 1, x, height);
+
         }
+
+
     }
 
     public void setLog10Display(boolean log10Display) {
