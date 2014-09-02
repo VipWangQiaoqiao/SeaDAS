@@ -50,7 +50,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final JCheckBox loadWithCPDFileValuesCheckBox;
     private final ColorPaletteSchemes defaultColorPaletteSchemes;
     private final ColorPaletteSchemes standardColorPaletteSchemes;
-    private JButton bandRange;
+    private JButton bandDataButton;
     private JLabel colorSchemeJLabel;
     private JLabel cpdFileNameJLabel;
 
@@ -157,7 +157,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         colorPaletteChooser.addActionListener(createPaletteListener());
 
-        bandRange.addActionListener(createBandListener(RangeKey.FromData));
+        bandDataButton.addActionListener(createBandListener(RangeKey.FromData));
 
 
         colorPaletteChooser.addPropertyChangeListener(new PropertyChangeListener() {
@@ -200,7 +200,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         });
 
 
-//        bandRange.addActionListener(new ActionListener() {
+//        bandDataButton.addActionListener(new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
 //                VisatApp.getApp().clearStatusBarMessage();
@@ -236,11 +236,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                         standardColorPaletteSchemes.setjComboBoxShouldFire(false);
 
                         handleColorPaletteInfoComboBoxSelection(standardColorPaletteSchemes.getjComboBox(), false);
+                        standardColorPaletteSchemes.reset();
 
-                        boolean originalDefaultShouldFire = defaultColorPaletteSchemes.isjComboBoxShouldFire();
-                        defaultColorPaletteSchemes.setjComboBoxShouldFire(false);
-                        defaultColorPaletteSchemes.reset();
-                        defaultColorPaletteSchemes.setjComboBoxShouldFire(originalDefaultShouldFire);
+//                        boolean originalDefaultShouldFire = defaultColorPaletteSchemes.isjComboBoxShouldFire();
+//                        defaultColorPaletteSchemes.setjComboBoxShouldFire(false);
+//                        defaultColorPaletteSchemes.reset();
+//                        defaultColorPaletteSchemes.setjComboBoxShouldFire(originalDefaultShouldFire);
 
                         standardColorPaletteSchemes.setjComboBoxShouldFire(true);
                     }
@@ -248,25 +249,25 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         });
 
-        defaultColorPaletteSchemes.getjComboBox().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (defaultColorPaletteSchemes.getjComboBox().getSelectedIndex() != 0) {
-                    if (defaultColorPaletteSchemes.isjComboBoxShouldFire()) {
-                        defaultColorPaletteSchemes.setjComboBoxShouldFire(false);
-
-                        handleColorPaletteInfoComboBoxSelection(defaultColorPaletteSchemes.getjComboBox(), true);
-
-                        boolean originalStandardShouldFire = standardColorPaletteSchemes.isjComboBoxShouldFire();
-                        standardColorPaletteSchemes.setjComboBoxShouldFire(false);
-                        standardColorPaletteSchemes.reset();
-                        standardColorPaletteSchemes.setjComboBoxShouldFire(originalStandardShouldFire);
-
-                        defaultColorPaletteSchemes.setjComboBoxShouldFire(true);
-                    }
-                }
-            }
-        });
+//        defaultColorPaletteSchemes.getjComboBox().addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (defaultColorPaletteSchemes.getjComboBox().getSelectedIndex() != 0) {
+//                    if (defaultColorPaletteSchemes.isjComboBoxShouldFire()) {
+//                        defaultColorPaletteSchemes.setjComboBoxShouldFire(false);
+//
+//                        handleColorPaletteInfoComboBoxSelection(defaultColorPaletteSchemes.getjComboBox(), true);
+//
+//                        boolean originalStandardShouldFire = standardColorPaletteSchemes.isjComboBoxShouldFire();
+//                        standardColorPaletteSchemes.setjComboBoxShouldFire(false);
+//                        standardColorPaletteSchemes.reset();
+//                        standardColorPaletteSchemes.setjComboBoxShouldFire(originalStandardShouldFire);
+//
+//                        defaultColorPaletteSchemes.setjComboBoxShouldFire(true);
+//                    }
+//                }
+//            }
+//        });
 
 
     }
@@ -294,6 +295,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     }
 
     private JPanel getSchemaPanel(String title) {
+
+
+
         JPanel jPanel = new JPanel(new GridBagLayout());
         jPanel.setBorder(BorderFactory.createTitledBorder(title));
         //   jPanel.setToolTipText("Load a preset color scheme (sets the color-palette, min, max, and log fields)");
@@ -301,17 +305,23 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
         gbc.weightx = 1.0;
-        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.insets = new Insets(0, 5, 0, 0);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.WEST;
         jPanel.add(colorSchemeJLabel, gbc);
 
         gbc.gridy++;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 0, 0);
 
         jPanel.add(standardColorPaletteSchemes.getjComboBox(), gbc);
+
+
+
+
+
 //
 //        jPanel.add(new JLabel("Default"), gbc);
 //        gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -343,11 +353,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         JPanel minMaxTextfields = getMinMaxTextfields();
 
 
-        bandRange = new JButton("Set from Band Data");
-        bandRange.setToolTipText("Set min and max value to corresponding data value in the band statistics");
-        bandRange.setMaximumSize(bandRange.getMinimumSize());
-        bandRange.setPreferredSize(bandRange.getMinimumSize());
-        bandRange.setMinimumSize(bandRange.getMinimumSize());
+        bandDataButton = new JButton("Set from Band Data");
+        bandDataButton.setToolTipText("Set min and max value to corresponding data value in the band statistics");
+        bandDataButton.setMaximumSize(bandDataButton.getMinimumSize());
+        bandDataButton.setPreferredSize(bandDataButton.getMinimumSize());
+        bandDataButton.setMinimumSize(bandDataButton.getMinimumSize());
 
 
         rangeGbc.fill = GridBagConstraints.HORIZONTAL;
@@ -360,7 +370,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         rangeGbc.fill = GridBagConstraints.NONE;
         rangeGbc.gridy = 1;
         rangeGbc.gridx = 0;
-        rangeJPanel.add(bandRange, rangeGbc);
+        rangeJPanel.add(bandDataButton, rangeGbc);
 
         return rangeJPanel;
     }
@@ -371,7 +381,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         final GridBagConstraints gbc = new GridBagConstraints();
 
 
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 5, 0, 0);
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.weightx = 1.0;
@@ -379,7 +390,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         jPanel.add(cpdFileNameJLabel, gbc);
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
         gbc.gridy++;
         gbc.weightx = 1.0;
         gbc.insets = new Insets(0, 0, 0, 0);
@@ -552,10 +562,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             if (parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().isColorPaletteSchemeDefaultList()) {
 
                 savedColorPaletteInfo = defaultColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
-                colorSchemeJLabel.setText("Current: '" + currentSchemeName + "' default");
+                colorSchemeJLabel.setText("Current: '" + currentSchemeName + "' default*");
 
             } else {
-                colorSchemeJLabel.setText("Current: " + currentSchemeName);
+                colorSchemeJLabel.setText("Current: " + currentSchemeName + "*");
 
                 savedColorPaletteInfo = standardColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
             }
@@ -570,17 +580,17 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
         } else {
-            colorSchemeJLabel.setText("Current: none");
+            colorSchemeJLabel.setText("Current: none*");
         }
 
         // todo this is extra, without this then comboBox will retain selection
         standardColorPaletteSchemes.reset();
 
         if (parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName() != null) {
-            cpdFileNameJLabel.setText(parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName());
+            cpdFileNameJLabel.setText("Current: " + parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName()+"*");
             //       cpdFileNameJLabel.setVisible(true);
         } else {
-            cpdFileNameJLabel.setText("Original File Unknown");
+            cpdFileNameJLabel.setText("Current: '" + "none*");
             //      cpdFileNameJLabel.setVisible(false);
         }
 

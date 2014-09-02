@@ -237,7 +237,7 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
                     g2.setColor(Color.blue);
                     g2.drawLine(x, 0, x, height);
                 } else {
-                    int edgeThickness = 2;
+                    int edgeThickness = 1;
                     g2.setColor(colorPalette[x]);
                     g2.drawLine(x, (edgeThickness + 1), x, height - (edgeThickness + 1));
                     g2.setColor(Color.blue);
@@ -247,7 +247,7 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
             } else {
                 g2.setColor(colorPalette[x]);
                 g2.drawLine(x, 1, x, height);
-                g2.setColor(Color.white);
+                g2.setColor(UIManager.getColor("Panel.background"));
                 g2.drawLine(x, 0, x, 1);
             }
 
