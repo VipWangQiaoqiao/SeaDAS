@@ -9,7 +9,7 @@ public class ColorPaletteSourcesInfo {
     private boolean colorPaletteSchemeDefaultList = true;
     private String cpdFileName = null;
 
-    private static final String ALTERED_STRING = "* (altered)";
+    private static final String ALTERED_STRING = "(Altered) ";
 
     ColorPaletteSourcesInfo() {
 
@@ -40,10 +40,10 @@ public class ColorPaletteSourcesInfo {
     }
 
     public void setCpdFileNameAsAltered() {
-        setCpdFileName(null);
-//        if (getCpdFileName() != null && !getCpdFileName().endsWith(ALTERED_STRING)) {
-//            setCpdFileName(getCpdFileName() + ALTERED_STRING);
-//        }
+
+        if (getCpdFileName() != null && !getCpdFileName().endsWith(ALTERED_STRING)) {
+            setCpdFileName(ALTERED_STRING + getCpdFileName());
+        }
 
     }
 }

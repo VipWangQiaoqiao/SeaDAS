@@ -41,7 +41,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final JPanel contentPanel;
     private final AbstractButton logDisplayButton;
     private final MoreOptionsForm moreOptionsForm;
-    private final ColorPaletteChooser colorPaletteChooser;
+    private  ColorPaletteChooser colorPaletteChooser;
     private JFormattedTextField minField;
     private JFormattedTextField maxField;
     private String currentMinFieldValue = "";
@@ -273,6 +273,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
     }
 
+    public void resetColorChooser() {
+        colorPaletteChooser = new ColorPaletteChooser();
+    }
     private void handleMaxTextfield() {
 
         if (!currentMaxFieldValue.equals(maxField.getText().toString())) {
@@ -532,6 +535,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         discreteCheckBox.setDiscreteColorsMode(discrete);
         logDisplayButton.setSelected(logScaled);
+
         parentForm.revalidateToolViewPaneControl();
 
         if (!minFieldActivated[0]) {
@@ -763,7 +767,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                             listenToLogDisplayButtonEnabled[0] = true;
                         }
                     } else {
-                        isSourceLogScaled = false;
+                        isSourceLogScaled = selectedCPD.isLogScaled();
                         isTargetLogScaled = currentInfo.isLogScaled();
                         min = currentCPD.getMinDisplaySample();
                         max = currentCPD.getMaxDisplaySample();
