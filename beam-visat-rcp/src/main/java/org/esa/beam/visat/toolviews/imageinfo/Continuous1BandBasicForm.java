@@ -78,8 +78,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         this.basicSwitcherIsActive = basicSwitcherIsActive;
 
         colorSchemeJLabel = new JLabel("");
-        colorSchemeJLabel.setToolTipText("Last loaded scheme.  Astericks suffix (*) denotes that user may have modified parameters");
+        colorSchemeJLabel.setToolTipText("The color data is stored the band.  Astericks suffix (*) denotes that any subsequent alterations to schemes file will not show up in image unless cpd file is reloaded ");
         cpdFileNameJLabel = new JLabel("");
+        cpdFileNameJLabel.setToolTipText("The color data is stored the band.  Astericks suffix (*) denotes that any subsequent alterations to the cpd file will not show up in image unless cpd file is reloaded ");
         //     cpdFileNameJLabel.setToolTipText("Currently loaded cpd file name.  Note that the cpd data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
 
 
@@ -562,10 +563,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             if (parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().isColorPaletteSchemeDefaultList()) {
 
                 savedColorPaletteInfo = defaultColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
-                colorSchemeJLabel.setText("Current: '" + currentSchemeName + "' default*");
+                colorSchemeJLabel.setText("'" + currentSchemeName + "' default*");
 
             } else {
-                colorSchemeJLabel.setText("Current: " + currentSchemeName + "*");
+                colorSchemeJLabel.setText(currentSchemeName + "*");
 
                 savedColorPaletteInfo = standardColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
             }
@@ -580,17 +581,19 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
         } else {
-            colorSchemeJLabel.setText("Current: none*");
+            colorSchemeJLabel.setText("none*");
+//            colorSchemeJLabel.setText("");
         }
 
         // todo this is extra, without this then comboBox will retain selection
         standardColorPaletteSchemes.reset();
 
         if (parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName() != null) {
-            cpdFileNameJLabel.setText("Current: " + parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName()+"*");
+            cpdFileNameJLabel.setText(parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName()+"*");
             //       cpdFileNameJLabel.setVisible(true);
         } else {
-            cpdFileNameJLabel.setText("Current: '" + "none*");
+            cpdFileNameJLabel.setText("none*");
+//            cpdFileNameJLabel.setText("");
             //      cpdFileNameJLabel.setVisible(false);
         }
 

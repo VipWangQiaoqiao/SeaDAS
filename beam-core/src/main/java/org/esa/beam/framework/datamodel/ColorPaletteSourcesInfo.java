@@ -40,9 +40,10 @@ public class ColorPaletteSourcesInfo {
     }
 
     public void setCpdFileNameAsAltered() {
-        if (getCpdFileName() != null && !getCpdFileName().endsWith(ALTERED_STRING)) {
-            setCpdFileName(getCpdFileName() + ALTERED_STRING);
-        }
+        setCpdFileName(null);
+//        if (getCpdFileName() != null && !getCpdFileName().endsWith(ALTERED_STRING)) {
+//            setCpdFileName(getCpdFileName() + ALTERED_STRING);
+//        }
 
     }
 }
