@@ -166,8 +166,7 @@ class Continuous1BandTabularForm implements ColorManipulationChildForm {
 
         @Override
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-            modifyColorPaletteSchemeName();
-            parentForm.getImageInfo().getColorPaletteSourcesInfo().setCpdFileNameAsAltered();
+            parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredCpd(true);
             final ColorPaletteDef.Point point = getImageInfo().getColorPaletteDef().getPointAt(rowIndex);
             if (columnIndex == 0) {
                 final Color color = (Color) aValue;
@@ -184,8 +183,5 @@ class Continuous1BandTabularForm implements ColorManipulationChildForm {
             return columnIndex == 0 || columnIndex == 1;
         }
 
-        private void modifyColorPaletteSchemeName() {
-            parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
-        }
     }
 }

@@ -1216,6 +1216,8 @@ public class DimapProductHelpers {
             imageInfo.getColorPaletteDef().setDiscrete(isDiscrete(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeName(getColorPaletteSchemeName(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setCpdFileName(getCpdFileName(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setAlteredColorScheme(isAlteredColorScheme(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setAlteredCpd(isAlteredCpd(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(isColorPaletteSchemeDefaultList(bandStatisticsElem));
 
             final Element noDataElem = bandStatisticsElem.getChild(DimapProductConstants.TAG_NO_DATA_COLOR);
@@ -1308,6 +1310,40 @@ public class DimapProductHelpers {
 
             return discrete;
         }
+
+        private static boolean isAlteredColorScheme(Element bandStatisticsElem) {
+            boolean altered = false;
+            try {
+                String alteredString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_ALTERED_COLOR_SCHEME);
+                if (alteredString != null) {
+                    if (alteredString.toLowerCase().equals("true") || alteredString.toLowerCase().equals("1")) {
+                        altered = true;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return altered;
+        }
+
+
+        private static boolean isAlteredCpd(Element bandStatisticsElem) {
+            boolean altered = false;
+            try {
+                String alteredString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_ALTERED_CPD);
+                if (alteredString != null) {
+                    if (alteredString.toLowerCase().equals("true") || alteredString.toLowerCase().equals("1")) {
+                        altered = true;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return altered;
+        }
+
 
 
         private static String getColorPaletteSchemeName(Element bandStatisticsElem) {

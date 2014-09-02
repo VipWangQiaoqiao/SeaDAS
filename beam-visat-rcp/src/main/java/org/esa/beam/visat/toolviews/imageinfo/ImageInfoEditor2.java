@@ -156,14 +156,10 @@ class ImageInfoEditor2 extends ImageInfoEditor {
     @Override
     protected void applyChanges() {
 
-        modifyColorPaletteSchemeName();
-        parentForm.getImageInfo().getColorPaletteSourcesInfo().setCpdFileNameAsAltered();
+        parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredCpd(true);
         parentForm.applyChanges();
     }
 
-    private void modifyColorPaletteSchemeName() {
-        parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
-    }
 
 
 

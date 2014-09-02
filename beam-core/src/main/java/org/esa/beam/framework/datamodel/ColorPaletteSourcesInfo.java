@@ -6,8 +6,14 @@ package org.esa.beam.framework.datamodel;
 public class ColorPaletteSourcesInfo {
 
     private String colorPaletteSchemeName = null;
-    private boolean colorPaletteSchemeDefaultList = true;
+    private boolean alteredColorScheme = false;
+
     private String cpdFileName = null;
+    private boolean alteredCpd = false;
+
+    private boolean colorPaletteSchemeDefaultList = true;
+
+
 
     private static final String ALTERED_STRING = "(Altered) ";
 
@@ -21,6 +27,7 @@ public class ColorPaletteSourcesInfo {
 
     public void setColorPaletteSchemeName(String colorPaletteSchemeName) {
         this.colorPaletteSchemeName = colorPaletteSchemeName;
+        setAlteredColorScheme(false);
     }
 
     public boolean isColorPaletteSchemeDefaultList() {
@@ -37,13 +44,50 @@ public class ColorPaletteSourcesInfo {
 
     public void setCpdFileName(String cpdFileName) {
         this.cpdFileName = cpdFileName;
+        setAlteredCpd(false);
     }
 
-    public void setCpdFileNameAsAltered() {
 
-        if (getCpdFileName() != null && !getCpdFileName().endsWith(ALTERED_STRING)) {
-            setCpdFileName(ALTERED_STRING + getCpdFileName());
+    public String getDescriptiveCpdFileName() {
+        if (getCpdFileName() == null) {
+            return null;
         }
 
+        String alteredString = (isAlteredCpd()) ? ALTERED_STRING : "";
+        return alteredString + getCpdFileName();
+    }
+
+
+    public String getDescriptiveColorSchemeName() {
+        if (getColorPaletteSchemeName() == null) {
+            return null;
+        }
+
+        String alteredString = (isAlteredColorScheme()) ? ALTERED_STRING : "";
+        if (isColorPaletteSchemeDefaultList()) {
+            return alteredString + "'" + getColorPaletteSchemeName() + "' Default";
+        } else {
+            return alteredString + getColorPaletteSchemeName();
+        }
+    }
+
+
+    public boolean isAlteredCpd() {
+        return alteredCpd;
+    }
+
+    public void setAlteredCpd(boolean alteredCpd) {
+        this.alteredCpd = alteredCpd;
+        if (alteredCpd && getColorPaletteSchemeName() != null) {
+            setAlteredColorScheme(alteredCpd);
+        }
+    }
+
+    public boolean isAlteredColorScheme() {
+        return alteredColorScheme;
+    }
+
+    public void setAlteredColorScheme(boolean alteredColorScheme) {
+        this.alteredColorScheme = alteredColorScheme;
     }
 }
