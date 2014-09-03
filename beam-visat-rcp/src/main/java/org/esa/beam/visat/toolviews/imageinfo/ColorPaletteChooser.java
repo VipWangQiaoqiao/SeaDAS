@@ -25,13 +25,17 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
     public ColorPaletteChooser() {
         super(getPalettes());
         toolTipsArray = getToolTips();
-        ListCellRenderer<ColorPaletteWrapper> renderer = createPaletteRenderer(toolTipsArray);
+        ListCellRenderer<ColorPaletteWrapper> renderer = createPaletteRenderer();
         setRenderer(renderer);
 
 
         setEditable(false);
     }
 
+    public void resetRenderer() {
+        ListCellRenderer<ColorPaletteWrapper> renderer = createPaletteRenderer();
+        setRenderer(renderer);
+    }
     public void removeUserDefinedPalette() {
         final String name = getItemAt(0).name;
         if (UNNAMED.equals(name) || name.startsWith(DERIVED_FROM)) {
@@ -171,11 +175,64 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
 
                     if (-1 < index && toolTipsArray != null && index < toolTipsArray.length) {
-                            list.setToolTipText(toolTipsArray[index]);
+                        //    list.setToolTipText(toolTipsArray[index]);
+                            list.setToolTipText(ColorPalettesManager.getNameFor(cpd));
                     }
                 }
 
             //    setToolTipText("Note that the color palette definition data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
+
+
+
+                JPanel palettePanel = GridBagUtils.createPanel();
+                GridBagConstraints gbc = new GridBagConstraints();
+
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.anchor = GridBagConstraints.WEST;
+
+                gbc.gridy = 0;
+                gbc.gridx = 0;
+                gbc.weightx = 1;
+                gbc.weighty = 1;
+                gbc.insets = new Insets(0, 0, 0, 0);
+                palettePanel.add(rampComp, gbc);
+
+                return palettePanel;
+            }
+
+        };
+
+    }
+
+    private ListCellRenderer<ColorPaletteWrapper> createPaletteRenderer() {
+
+
+        return new ListCellRenderer<ColorPaletteWrapper>() {
+
+
+            @Override
+            public Component getListCellRendererComponent(JList<? extends ColorPaletteWrapper> list, ColorPaletteWrapper value, final int index, final boolean isSelected, boolean cellHasFocus) {
+
+                final ColorPaletteDef cpd = value.cpd;
+                final JLabel rampComp = new JLabel(" ") {
+                    @Override
+                    public void paint(Graphics g) {
+                        super.paint(g);
+                        drawPalette((Graphics2D) g, cpd, g.getClipBounds().getSize(), isSelected, index);
+                    }
+                };
+
+
+                if (isSelected) {
+
+                    if (cpd != null) {
+                        list.setToolTipText(ColorPalettesManager.getNameFor(cpd));
+                    } else {
+                        list.setToolTipText("");
+                    }
+                }
+
+                //    setToolTipText("Note that the color palette definition data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
 
 
 

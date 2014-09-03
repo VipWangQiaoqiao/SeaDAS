@@ -341,6 +341,7 @@ class ColorManipulationForm {
             }
         });
         exportButton.setEnabled(true);
+        exportButton.setVisible(false);
 
         helpButton = createButton("icons/Help22.png");
         helpButton.setToolTipText("Help."); /*I18N*/
@@ -700,7 +701,7 @@ class ColorManipulationForm {
         return targetRaster instanceof Band && ((Band) targetRaster).getIndexCoding() != null;
     }
 
-    private void exportColorPaletteDef() {
+    protected void exportColorPaletteDef() {
         final ImageInfo imageInfo = getImageInfo();
         if (imageInfo == null) {
             // Normaly this code is unreacable because, the export Button should be
@@ -725,6 +726,8 @@ class ColorManipulationForm {
                 try {
                     final ColorPaletteDef colorPaletteDef = imageInfo.getColorPaletteDef();
                     ColorPaletteDef.storeColorPaletteDef(colorPaletteDef, file);
+                    imageInfo.getColorPaletteSourcesInfo().setCpdFileName(file.getName());
+                    imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
                 } catch (IOException e) {
                     showErrorDialog("Failed to export colour palette:\n" + e.getMessage());  /*I18N*/
                 }

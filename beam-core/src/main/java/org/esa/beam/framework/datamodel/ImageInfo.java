@@ -387,6 +387,7 @@ public class ImageInfo implements Cloneable {
 
         } else {
             targetCPD.setPoints(sourceCPD.getPoints().clone());
+            targetCPD.setLogScaled(isTargetLogScaled);
         }
 
     }

@@ -59,7 +59,7 @@ public class ColorPaletteSchemes {
                 break;
             case DEFAULTS:
                 schemesFile = new File(this.colorPaletteDir, DEFAULTS_SCHEMA_FILENAME);
-                setjComboBoxFirstEntryName(DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
+      //          setjComboBoxFirstEntryName(DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
                 break;
 
         }

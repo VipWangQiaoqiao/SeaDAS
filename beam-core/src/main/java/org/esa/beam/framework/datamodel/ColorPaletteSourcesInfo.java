@@ -65,7 +65,7 @@ public class ColorPaletteSourcesInfo {
 
         String alteredString = (isAlteredColorScheme()) ? ALTERED_STRING : "";
         if (isColorPaletteSchemeDefaultList()) {
-            return alteredString + "'" + getColorPaletteSchemeName() + "' Default";
+            return alteredString + "Default '" + getColorPaletteSchemeName() + "'";
         } else {
             return alteredString + getColorPaletteSchemeName();
         }
