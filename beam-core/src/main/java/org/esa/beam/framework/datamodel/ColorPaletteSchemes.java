@@ -34,7 +34,7 @@ public class ColorPaletteSchemes {
 //    private final String STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "General Schemes";
 //    private final String DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "Default Schemes";
 
-    private final String STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "Scheme";
+    private final String STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "Standard Schemes";
     private final String DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "................................";
 
 
