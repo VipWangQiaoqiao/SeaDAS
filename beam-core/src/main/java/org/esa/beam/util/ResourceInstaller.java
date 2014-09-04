@@ -56,23 +56,37 @@ public class ResourceInstaller {
      * @param pm            progress monitor for indicating progress
      */
     public void install(String patternString, ProgressMonitor pm) throws IOException {
+        install(patternString, pm, false);
+//        try {
+//            pm.beginTask("Installing resource data: ", 2);
+//            scanner.scan(SubProgressMonitor.create(pm, 1));
+//            URL[] resources = scanner.getResourcesByPattern(patternString);
+//            copyResources(resources, SubProgressMonitor.create(pm, 1));
+//        } finally {
+//            pm.done();
+//        }
+    }
+
+    public void install(String patternString, ProgressMonitor pm, boolean overWrite) throws IOException {
         try {
             pm.beginTask("Installing resource data: ", 2);
             scanner.scan(SubProgressMonitor.create(pm, 1));
             URL[] resources = scanner.getResourcesByPattern(patternString);
-            copyResources(resources, SubProgressMonitor.create(pm, 1));
+            copyResources(resources, SubProgressMonitor.create(pm, 1), overWrite);
         } finally {
             pm.done();
         }
     }
 
-    private void copyResources(URL[] resources, ProgressMonitor pm) throws IOException {
+    private void copyResources(URL[] resources, ProgressMonitor pm, boolean overWrite) throws IOException {
         pm.beginTask("Copying resource data...", resources.length);
         for (URL resource : resources) {
             String relFilePath = scanner.getRelativePath(resource);
 
             File targetFile = new File(targetDir, relFilePath);
-            if (!targetFile.exists() && !resource.toExternalForm().endsWith("/")) {
+
+            if (((targetFile.exists() && overWrite) || !targetFile.exists())
+                    && !resource.toExternalForm().endsWith("/")) {
                 InputStream is = null;
                 FileOutputStream fos = null;
                 try {
