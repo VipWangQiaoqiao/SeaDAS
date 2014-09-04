@@ -82,9 +82,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         this.basicSwitcherIsActive = basicSwitcherIsActive;
 
         colorSchemeJLabel = new JLabel("");
-        colorSchemeJLabel.setToolTipText("The color data is stored the band.  Astericks suffix (*) denotes that any subsequent alterations to schemes file will not show up in image unless cpd file is reloaded ");
+        colorSchemeJLabel.setToolTipText("The color data is stored in the band.  Astericks suffix (*) denotes that some parameters have been altered");
         cpdFileNameJLabel = new JLabel("");
-        cpdFileNameJLabel.setToolTipText("The color data is stored the band.  Astericks suffix (*) denotes that any subsequent alterations to the cpd file will not show up in image unless cpd file is reloaded ");
+        cpdFileNameJLabel.setToolTipText("The color data is stored in the band.  Astericks suffix (*) denotes that some parameters have been altered ");
         //     cpdFileNameJLabel.setToolTipText("Currently loaded cpd file name.  Note that the cpd data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
 
 
@@ -557,10 +557,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             String currentSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().getDescriptiveColorSchemeName();
             if (parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().isColorPaletteSchemeDefaultList()) {
 
-                colorSchemeJLabel.setText( currentSchemeName + "*");
+             //   colorSchemeJLabel.setText( currentSchemeName + "*");
+                colorSchemeJLabel.setText( currentSchemeName);
 
             } else {
-                colorSchemeJLabel.setText(currentSchemeName + "*");
+             //   colorSchemeJLabel.setText(currentSchemeName + "*");
+                colorSchemeJLabel.setText(currentSchemeName);
 
                 savedColorPaletteInfo = standardColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
             }
@@ -575,16 +577,17 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
         } else {
-            colorSchemeJLabel.setText("none*");
+            colorSchemeJLabel.setText("none");
         }
 
         // todo this is extra, without this then comboBox will retain selection
         standardColorPaletteSchemes.reset();
 
         if (parentForm.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName() != null) {
-            cpdFileNameJLabel.setText(parentForm.getImageInfo().getColorPaletteSourcesInfo().getDescriptiveCpdFileName()+"*");
+//            cpdFileNameJLabel.setText(parentForm.getImageInfo().getColorPaletteSourcesInfo().getDescriptiveCpdFileName()+"*");
+            cpdFileNameJLabel.setText(parentForm.getImageInfo().getColorPaletteSourcesInfo().getDescriptiveCpdFileName());
         } else {
-            cpdFileNameJLabel.setText("none*");
+            cpdFileNameJLabel.setText("none");
         }
 
 

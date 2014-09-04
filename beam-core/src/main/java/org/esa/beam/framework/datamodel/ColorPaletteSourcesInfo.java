@@ -53,8 +53,11 @@ public class ColorPaletteSourcesInfo {
             return null;
         }
 
-        String alteredString = (isAlteredCpd()) ? ALTERED_STRING : "";
-        return alteredString + getCpdFileName();
+//        String alteredString = (isAlteredCpd()) ? ALTERED_STRING : "";
+
+     //   return alteredString + getCpdFileName();
+        String alteredString = (isAlteredCpd()) ? "*" : "";
+        return getCpdFileName() + alteredString;
     }
 
 
@@ -63,11 +66,18 @@ public class ColorPaletteSourcesInfo {
             return null;
         }
 
-        String alteredString = (isAlteredColorScheme()) ? ALTERED_STRING : "";
+//        String alteredString = (isAlteredColorScheme()) ? ALTERED_STRING : "";
+//        if (isColorPaletteSchemeDefaultList()) {
+//            return alteredString + "Default '" + getColorPaletteSchemeName() + "'";
+//        } else {
+//            return alteredString + getColorPaletteSchemeName();
+//        }
+
+        String alteredString = (isAlteredColorScheme()) ? "*" : "";
         if (isColorPaletteSchemeDefaultList()) {
-            return alteredString + "Default '" + getColorPaletteSchemeName() + "'";
+            return "Default '" + getColorPaletteSchemeName() + "'" + alteredString;
         } else {
-            return alteredString + getColorPaletteSchemeName();
+            return getColorPaletteSchemeName() + alteredString;
         }
     }
 
