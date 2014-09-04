@@ -506,6 +506,9 @@ public class ProductSceneView extends BasicView
             }
         }
 
+        if (!defaultSet) {
+            getImageInfo().getColorPaletteSourcesInfo().setCpdFileName("default gray-scale");
+        }
 
     }
 
@@ -521,7 +524,7 @@ public class ProductSceneView extends BasicView
      * Gets the number of raster datasets.
      *
      * @return the number of raster datasets, always <code>1</code> for single banded palette images or <code>3</code>
-     * for RGB images
+     *         for RGB images
      */
     public int getNumRasters() {
         return getSceneImage().getRasters().length;

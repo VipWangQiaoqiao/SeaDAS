@@ -587,7 +587,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //            cpdFileNameJLabel.setText(parentForm.getImageInfo().getColorPaletteSourcesInfo().getDescriptiveCpdFileName()+"*");
             cpdFileNameJLabel.setText(parentForm.getImageInfo().getColorPaletteSourcesInfo().getDescriptiveCpdFileName());
         } else {
-            cpdFileNameJLabel.setText("none");
+            cpdFileNameJLabel.setText("unknown");
         }
 
 
