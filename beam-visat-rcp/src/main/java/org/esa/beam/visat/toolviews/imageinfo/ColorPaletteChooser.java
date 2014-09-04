@@ -19,16 +19,12 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
     private final String UNNAMED = "unnamed";
     private boolean discreteDisplay;
     private boolean log10Display;
-    private String[] toolTipsArray;
     private String selectedName = "";
 
     public ColorPaletteChooser() {
         super(getPalettes());
-        toolTipsArray = getToolTips();
         ListCellRenderer<ColorPaletteWrapper> renderer = createPaletteRenderer();
         setRenderer(renderer);
-
-
         setEditable(false);
     }
 
@@ -78,25 +74,15 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
         final String name;
         if (suffix != null && suffix.trim().length() > 0) {
             name = DERIVED_FROM + " " + suffix.trim();
-          //  name = suffix.trim();
         } else {
             name = UNNAMED;
         }
         final ColorPaletteWrapper item = new ColorPaletteWrapper(name, userPalette);
         insertItemAt(item, 0);
         setSelectedIndex(0);
-        if (toolTipsArray != null && toolTipsArray.length > 0) {
-            toolTipsArray[0] = name;
-        }
-
         setSelectedName(name);
     }
 
-    public void addAstericksToSelected() {
-        if (toolTipsArray != null && toolTipsArray.length > 0 && !toolTipsArray[0].endsWith("*")) {
-            toolTipsArray[0] =  toolTipsArray[0] + " *";
-        }
-    }
 
 
     private static Vector<ColorPaletteWrapper> getPalettes() {
@@ -115,32 +101,7 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
         return paletteWrappers;
     }
 
-    private static String[] getToolTips() {
 
-        ArrayList<String> toolTipsArrayList = new ArrayList<String>();
-
-        final List<ColorPaletteDef> defList = ColorPalettesManager.getColorPaletteDefList();
-
-        for (ColorPaletteDef colorPaletteDef : defList) {
-
-            final String nameFor = ColorPalettesManager.getNameFor(colorPaletteDef);
-
-            toolTipsArrayList.add(nameFor);
-        }
-
-
-
-        final String[] toolTipsArray = new String[toolTipsArrayList.size()+1];
-
-        toolTipsArray[0] = "Selected Color Bar";
-        int j = 1;
-        for (String toolTip : toolTipsArrayList) {
-            toolTipsArray[j] = toolTip;
-            j++;
-        }
-
-        return toolTipsArray;
-    }
 
 
     private static String getNameForWithoutExtension(ColorPaletteDef colorPaletteDef) {
@@ -152,57 +113,6 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
         }
     }
 
-    private ListCellRenderer<ColorPaletteWrapper> createPaletteRenderer(final String[] toolTipsArray) {
-
-
-        return new ListCellRenderer<ColorPaletteWrapper>() {
-
-
-            @Override
-            public Component getListCellRendererComponent(JList<? extends ColorPaletteWrapper> list, ColorPaletteWrapper value, final int index, final boolean isSelected, boolean cellHasFocus) {
-
-                final ColorPaletteDef cpd = value.cpd;
-                final JLabel rampComp = new JLabel(" ") {
-                    @Override
-                    public void paint(Graphics g) {
-                        super.paint(g);
-                        drawPalette((Graphics2D) g, cpd, g.getClipBounds().getSize(), isSelected, index);
-                    }
-                };
-
-
-                if (isSelected) {
-
-
-                    if (-1 < index && toolTipsArray != null && index < toolTipsArray.length) {
-                        //    list.setToolTipText(toolTipsArray[index]);
-                            list.setToolTipText(ColorPalettesManager.getNameFor(cpd));
-                    }
-                }
-
-            //    setToolTipText("Note that the color palette definition data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
-
-
-
-                JPanel palettePanel = GridBagUtils.createPanel();
-                GridBagConstraints gbc = new GridBagConstraints();
-
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                gbc.anchor = GridBagConstraints.WEST;
-
-                gbc.gridy = 0;
-                gbc.gridx = 0;
-                gbc.weightx = 1;
-                gbc.weighty = 1;
-                gbc.insets = new Insets(0, 0, 0, 0);
-                palettePanel.add(rampComp, gbc);
-
-                return palettePanel;
-            }
-
-        };
-
-    }
 
     private ListCellRenderer<ColorPaletteWrapper> createPaletteRenderer() {
 
@@ -271,19 +181,6 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
         g2.setStroke(new BasicStroke(2.0f));
 
-//        for (int x = 0; x < width; x = x + 2) {
-//            g2.setColor(colorPalette[x]);
-//            g2.drawLine(x, 3, x, height - 3);
-//            if (isSelected) {
-//                g2.setColor(Color.blue);
-//            } else {
-//                g2.setColor(Color.white);
-//            }
-//            g2.drawLine(x, 0, x, 2);
-//            g2.drawLine(x, height - 2, x, height);
-//        }
-
-
         for (int x = 0; x < width; x = x + 2) {
 
             if (index == 0) {
@@ -307,10 +204,7 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
                 g2.setColor(UIManager.getColor("Panel.background"));
                 g2.drawLine(x, 0, x, 1);
             }
-
         }
-
-
     }
 
     public void setLog10Display(boolean log10Display) {
