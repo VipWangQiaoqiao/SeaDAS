@@ -1,4 +1,5 @@
 #SeaDAS Color Palette Definition File
+# DO NOT EDIT! - this file is automatically reinstalled each time SeaDAS is run, so any edits to this file will be lost
 ##derived from A20023052002334.L3m_MO_KDLEE_Zeu_lee_9km using ./norm_smi2cpd.pl
 color0=109,56,1
 color1=139,101,10

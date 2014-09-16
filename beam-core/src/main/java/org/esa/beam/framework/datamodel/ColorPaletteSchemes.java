@@ -28,8 +28,8 @@ public class ColorPaletteSchemes {
         DEFAULTS
     }
 
-    private final String STANDARD_SCHEMA_FILENAME = "standard_color_palette_schemas.txt";
-    private final String DEFAULTS_SCHEMA_FILENAME = "defaults_color_palette_schemas.txt";
+    private final String STANDARD_SCHEMA_FILENAME = "standard_color_palette_schemes.txt";
+    private final String DEFAULTS_SCHEMA_FILENAME = "defaults_color_palette_schemes.txt";
 
 //    private final String STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "General Schemes";
 //    private final String DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "Default Schemes";
