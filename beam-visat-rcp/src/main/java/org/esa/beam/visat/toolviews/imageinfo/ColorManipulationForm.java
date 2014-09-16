@@ -160,7 +160,7 @@ class ColorManipulationForm {
             // todo This if statement seems to hardcoded
             // it's purpose is to determine if color palette has been made already
             if (this.productSceneView.getImageInfo().getColorPaletteDef().getNumPoints() <= 3) {
-                this.productSceneView.setToDefaultColorScheme(getSystemAuxdataDir());
+                this.productSceneView.setToDefaultColorScheme(getSystemAuxdataDir(), createDefaultImageInfo());
             }
             setImageInfoCopy(this.productSceneView.getImageInfo());
         }
@@ -526,7 +526,7 @@ class ColorManipulationForm {
 //        }
 
         if (this.productSceneView != null) {
-            this.productSceneView.setToDefaultColorScheme(getSystemAuxdataDir());
+            this.productSceneView.setToDefaultColorScheme(getSystemAuxdataDir(), createDefaultImageInfo());
             setImageInfoCopy(this.productSceneView.getImageInfo());
             childForm.resetFormModel(getProductSceneView());
         }

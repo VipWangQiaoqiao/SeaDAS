@@ -477,7 +477,7 @@ public class ProductSceneView extends BasicView
         return getSceneImage().getImageInfo();
     }
 
-    public void setToDefaultColorScheme(File auxDir) {
+    public void setToDefaultColorScheme(File auxDir, ImageInfo defaultImageInfo) {
         ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false);
         boolean defaultSet = false;
         if (colorPaletteSchemes != null) {
@@ -507,7 +507,10 @@ public class ProductSceneView extends BasicView
         }
 
         if (!defaultSet) {
+            setImageInfo(defaultImageInfo);
             getImageInfo().getColorPaletteSourcesInfo().setCpdFileName("default gray-scale");
+            getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
+            getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName("none");
         }
 
     }
