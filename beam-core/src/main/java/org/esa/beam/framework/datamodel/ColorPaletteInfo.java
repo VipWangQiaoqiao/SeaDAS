@@ -24,6 +24,11 @@ public class ColorPaletteInfo {
         this.setLogScaled(isLogScaled);
         this.setEnabled(enabled);
         this.colorPaletteDef = colorPaletteDef;
+        if (colorPaletteDef != null) {
+            this.setSourceLogScaled(colorPaletteDef.isLogScaled());
+        } else {
+            this.setSourceLogScaled(false);
+        }
     }
 
     public ColorPaletteInfo(String name, String description) {

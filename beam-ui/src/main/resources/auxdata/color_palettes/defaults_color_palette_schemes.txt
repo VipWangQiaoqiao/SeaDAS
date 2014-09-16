@@ -1,4 +1,3 @@
-# note that currently schemes assume that the cpd file is linear scaling, is cpd is log scaled the scheme won't work correctly.
 #FIELD_NAME          MIN         MAX         LOG_SCALE  CPD_FILENAME              DESCRIPTION
  adg_408_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Absorption due to gelbstof and detritus at 408 nm
  adg_408_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Absorption due to gelbstof and detritus at 408 nm
