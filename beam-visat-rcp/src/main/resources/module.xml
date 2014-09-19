@@ -232,7 +232,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</id>
             <class>org.esa.beam.visat.toolviews.worldmap.WorldMapToolView</class>
-            <title>World Map</title>
+            <title>World Map Location</title>
             <tabTitle>World Map Location</tabTitle>
             <!--<mnemonic>W</mnemonic>-->
             <!--<accelerator>ctrl alt W</accelerator>-->
@@ -274,7 +274,7 @@
             <title>Layer Editor</title>
             <!--<mnemonic>E</mnemonic>-->
             <!--<accelerator>ctrl alt E</accelerator>-->
-            <description>Edit layer properties (Grid Lines, No-Data, ...)</description>
+            <description>Edit layer properties (Gridlines, No-Data, ...)</description>
             <smallIcon>/org/esa/beam/resources/images/icons/LayerEditor16.png</smallIcon>
             <largeIcon>/org/esa/beam/resources/images/icons/LayerEditor24.png</largeIcon>
             <helpId>showLayerEditorWnd</helpId>
@@ -338,8 +338,8 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</class>
-            <title>Pin Manager</title>
-            <tabTitle>Pin Manager</tabTitle>
+            <title>Pins Manager</title>
+            <tabTitle>Pins Manager</tabTitle>
             <!--<mnemonic>a</mnemonic>-->
             <!--<accelerator>ctrl alt A</accelerator>-->
             <description>Manage placement of pins.</description>
@@ -355,7 +355,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</class>
-            <title>Ground Control Points</title>
+            <title>Gcp Manager</title>
             <!--<mnemonic>c</mnemonic>-->
             <!--<accelerator>ctrl alt G</accelerator>-->
             <description>Manage ground control points.</description>
@@ -1068,18 +1068,19 @@
             <sortChildren>true</sortChildren>
             <helpId>toolBars</helpId>
             <placeAfter>saveAsUserLayout</placeAfter>
+            <separatorBefore>true</separatorBefore>
         </action>
 
 
-        <action>
-            <id>openViewsMenu</id>
-            <parent>view</parent>
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Windows</text>
-            <sortChildren>true</sortChildren>
-            <placeAfter>toolBars</placeAfter>
-            <separatorAfter>true</separatorAfter>
-        </action>
+        <!--<action>-->
+            <!--<id>openViewsMenu</id>-->
+            <!--<parent>view</parent>-->
+            <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
+            <!--<text>Windows</text>-->
+            <!--<sortChildren>true</sortChildren>-->
+            <!--<placeAfter>toolBars</placeAfter>-->
+            <!--<separatorAfter>true</separatorAfter>-->
+        <!--</action>-->
 
 
 
@@ -1089,27 +1090,26 @@
         <action>
             <id>showGcpOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGcpOverlayAction</class>
-            <parent>view</parent>
-            <text>GCP Layer</text>
+            <parent>layers</parent>
+            <text>Gcp</text>
             <toggle>true</toggle>
-            <shortDescr>Show GCP overlay</shortDescr>
-            <description>Show GCP overlay for the selected image</description>
+            <shortDescr>Show GCP layer</shortDescr>
+            <description>Show GCP layer for the selected image</description>
             <!--<smallIcon>icons/GcpOverlay16.gif</smallIcon>-->
             <largeIcon>icons/GcpOverlay24.gif</largeIcon>
             <context>image</context>
-            <placeAfter>openViewsMenu</placeAfter>
             <helpId>showGcpOverlay</helpId>
         </action>
 
         <action>
-            <parent>view</parent>
+            <parent>layers</parent>
             <id>showShapeOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGeometryOverlayAction</class>
-            <text>Geometry Layer(s)</text>
+            <text>Geometry</text>
             <toggle>true</toggle>
             <!--<mnemonic>O</mnemonic>-->
-            <shortDescr>Show/hide geometry overlay</shortDescr>
-            <description>Show/hide geometry overlay for the selected image</description>
+            <shortDescr>Show/hide geometry layer</shortDescr>
+            <description>Show/hide geometry layer for the selected image</description>
             <context>image</context>
             <!--<smallIcon>icons/ShapeOverlay16.gif</smallIcon>-->
             <largeIcon>icons/ShapeOverlay24.png</largeIcon>
@@ -1120,14 +1120,14 @@
 
 
         <action>
-            <parent>view</parent>
+            <parent>layers</parent>
             <id>showGraticuleOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGraticuleOverlayAction</class>
-            <text>Map Grid Layer</text>
+            <text>Map Gridlines</text>
             <toggle>true</toggle>
             <!--<mnemonic>G</mnemonic>-->
-            <shortDescr>Show/hide graticule layer</shortDescr>
-            <description>Show/hide graticule overlay for the selected image</description>
+            <shortDescr>Show/hide map gridlines layer</shortDescr>
+            <description>Show/hide map gridlines layer for the selected image</description>
             <context>image</context>
             <!--<smallIcon>icons/GraticuleOverlay16.gif</smallIcon>-->
             <largeIcon>icons/GraticuleOverlay24.png</largeIcon>
@@ -1138,13 +1138,13 @@
 
 
         <action>
-            <parent>view</parent>
+            <parent>layers</parent>
             <id>showNoDataOverlay</id>
             <class>org.esa.beam.visat.actions.ShowNoDataOverlayAction</class>
-            <text>No-Data Layer</text>
+            <text>No-Data</text>
             <toggle>true</toggle>
             <shortDescr>Show no-data layer</shortDescr>
-            <description>Show no-data overlay for the selected image</description>
+            <description>Show no-data layer for the selected image</description>
             <context>image</context>
             <placeAfter>showGraticuleOverlay</placeAfter>
             <!--<smallIcon>icons/NoDataOverlay16.gif</smallIcon>-->
@@ -1161,11 +1161,11 @@
         <action>
             <id>showPinOverlay</id>
             <class>org.esa.beam.visat.actions.ShowPinOverlayAction</class>
-            <parent>view</parent>
-            <text>Pin Layer</text>
+            <parent>layers</parent>
+            <text>Pins</text>
             <toggle>true</toggle>
-            <shortDescr>Show pin overlay</shortDescr>
-            <description>Show pin overlay for the selected image</description>
+            <shortDescr>Show pin layer</shortDescr>
+            <description>Show pin layer for the selected image</description>
             <!--<smallIcon>icons/PinOverlay16.gif</smallIcon>-->
             <!--<largeIcon>icons/PinOverlay24.gif</largeIcon>-->
             <largeIcon>icons/PinManager24.png</largeIcon>
@@ -1180,16 +1180,17 @@
         <action>
             <id>showWorldMapOverlay</id>
             <class>org.esa.beam.visat.actions.ShowWorldMapOverlayAction</class>
-            <parent>view</parent>
-            <text>World Map Layer</text>
+            <parent>layers</parent>
+            <text>World Map</text>
             <toggle>true</toggle>
             <shortDescr>Show World Map layer</shortDescr>
-            <description>Show World Map overlay for the selected image</description>
+            <description>Show World Map layer for the selected image</description>
             <!--<smallIcon>icons/WorldMapOverlay16.png</smallIcon>-->
             <largeIcon>icons/WorldMap24.png</largeIcon>
             <!--<largeIcon>icons/WorldMapOverlay24.png</largeIcon>-->
             <context>image</context>
-            <placeAfter>openViewsMenu</placeAfter>
+            <!--<placeAfter>openViewsMenu</placeAfter>-->
+            <separatorAfter>true</separatorAfter>
             <helpId>showWorldMapOverlay</helpId>
         </action>
 
@@ -1261,11 +1262,11 @@
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>seadasProcToolBar</context>
             <parent>toolBars</parent>
-            <text> Proc</text>
+            <text> Processing</text>
             <selected>true</selected>
             <toggle>true</toggle>
-            <shortDescr>Toggle visibility of the Proc tool bar.</shortDescr>
-            <description>Toggle visibility of the Proc tool bar.</description>
+            <shortDescr>Toggle visibility of the Processing tool bar.</shortDescr>
+            <description>Toggle visibility of the Processing tool bar.</description>
         </action>
 
 
@@ -1274,7 +1275,7 @@
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>seadasStandardLayersToolBar</context>
             <parent>toolBars</parent>
-            <text> Layers (Standard)</text>
+            <text> Layers</text>
             <selected>true</selected>
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the Layers (Standard) tool bar.</shortDescr>
@@ -1298,7 +1299,7 @@
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>seadasDeluxeToolsToolBar</context>
             <parent>toolBars</parent>
-            <text> Deluxe Tools</text>
+            <text> Masks</text>
             <selected>true</selected>
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the Deluxe Tools tool bar.</shortDescr>
@@ -1545,11 +1546,9 @@
         <!-- View : ToolBars sub-menu -->
 
 
-        <!-- start of -->
-        <!-- View : openViewsMenu sub-menu -->
 
         <action>
-            <parent>openViewsMenu</parent>
+            <parent>view</parent>
             <id>showImageView</id>
             <class>org.esa.beam.visat.actions.ShowImageViewAction</class>
             <text>Image</text>
@@ -1560,26 +1559,13 @@
             <context>band,tiePointGrid</context>
             <!--<smallIcon>icons/ImageView16.gif</smallIcon>-->
             <largeIcon>icons/ImageView24.gif</largeIcon>
+            <placeBefore>toolBars</placeBefore>
+            <placeAfter>saveAsUserLayout</placeAfter>
             <helpId>imageView</helpId>
         </action>
 
         <action>
-            <parent>openViewsMenu</parent>
-            <id>showImageViewRGB</id>
-            <class>org.esa.beam.visat.actions.ShowImageViewRGBAction</class>
-            <text>RGB Image...</text>
-            <!--<mnemonic>R</mnemonic>-->
-            <accellerator>control alt G</accellerator>
-            <shortDescr>Open RGB image view.</shortDescr>
-            <description>Open an RGB image view for the selected product.</description>
-            <context>product</context>
-            <!--<smallIcon>icons/ImageView16.gif</smallIcon>-->
-            <largeIcon>icons/ImageView24.gif</largeIcon>
-            <helpId>rgbImageProfile</helpId>
-        </action>
-
-        <action>
-            <parent>openViewsMenu</parent>
+            <parent>view</parent>
             <id>showMetadataView</id>
             <class>org.esa.beam.visat.actions.ShowMetadataViewAction</class>
             <text>Metadata</text>
@@ -1588,12 +1574,18 @@
             <shortDescr>Open metadata view.</shortDescr>
             <description>Open a metadata view for the selected metadata node.</description>
             <context>metadataNode</context>
+            <placeAfter>showImageView</placeAfter>
+            <placeBefore>toolBars</placeBefore>
             <!--<smallIcon>icons/ImageView16.gif</smallIcon>-->
             <largeIcon>icons/ImageView24.gif</largeIcon>
         </action>
 
+
+
+
+
         <action>
-            <parent>openViewsMenu</parent>
+            <parent>view</parent>
             <id>showPlacemarkView</id>
             <class>org.esa.beam.visat.actions.ShowPlacemarkViewAction</class>
             <text>Placemark</text>
@@ -1602,36 +1594,58 @@
             <shortDescr>Open placemark view.</shortDescr>
             <description>Open a placemark view for the selected metadata node.</description>
             <context>vectorDataNode</context>
+            <placeAfter>showMetadataView</placeAfter>
+            <placeBefore>toolBars</placeBefore>
             <!--<smallIcon>icons/RsVectorData16.gif</smallIcon>-->
             <!--<largeIcon>icons/ImageView24.gif</largeIcon>-->
         </action>
 
-        <!-- end of -->
-        <!-- View : openViewsMenu sub-menu -->
+
+        <action>
+            <parent>view</parent>
+            <id>showImageViewRGB</id>
+            <class>org.esa.beam.visat.actions.ShowImageViewRGBAction</class>
+            <text>RGB Image...</text>
+            <!--<mnemonic>R</mnemonic>-->
+            <accellerator>control alt G</accellerator>
+            <shortDescr>Open RGB image view.</shortDescr>
+            <description>Open a RGB image view for the selected product.</description>
+            <context>product</context>
+            <!--<smallIcon>icons/ImageView16.gif</smallIcon>-->
+            <largeIcon>icons/ImageView24.gif</largeIcon>
+            <placeBefore>toolBars</placeBefore>
+            <placeAfter>showPlacemarkView</placeAfter>
+            <helpId>rgbImageProfile</helpId>
+        </action>
+
+
+
 
 
         <!-- start of -->
         <!-- Tools menu -->
 
-        <action>
-            <id>showToolViews</id>
-            <parent>tools</parent>
-            <placeAtContextTop>top</placeAtContextTop>
-            <separatorBefore>true</separatorBefore>
+        <!--<action>-->
+            <!--<id>showToolViews</id>-->
+            <!--<parent>tools</parent>-->
+            <!--<placeAtContextTop>top</placeAtContextTop>-->
+            <!--<separatorBefore>true</separatorBefore>-->
 
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Tool Windows</text>
-            <sortChildren>true</sortChildren>
-        </action>
+            <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
+            <!--<text>Tool Windows</text>-->
+            <!--<sortChildren>true</sortChildren>-->
+        <!--</action>-->
 
 
         <action>
             <id>vectorsFolder</id>
             <parent>layers</parent>
-            <placeAfter>showToolViews</placeAfter>
+            <!--<placeAfter>showWorldMapOverlay</placeAfter>-->
+            <separatorAfter>true</separatorAfter>
             <sortChildren>true</sortChildren>
 
-            <text>Vector Managers</text>
+            <placeAfter>showWorldMapOverlay</placeAfter>
+            <text>Geometry Tools</text>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
         </action>
 
@@ -1939,13 +1953,13 @@
             <id>helpTopics</id>
             <parent>help</parent>
             <class>org.esa.beam.visat.actions.HelpTopicsAction</class>
-            <text>Help Topics</text>
+            <text>Help</text>
             <!--<mnemonic>T</mnemonic>-->
             <!--<accelerator>F1</accelerator>-->
             <separatorBefore>false</separatorBefore>
             <shortDescr>SeaDAS help</shortDescr>
             <description>Opens the SeaDAS help browser.</description>
-            <!--<smallIcon>icons/Help16.png</smallIcon>-->
+            <smallIcon>icons/Help16.png</smallIcon>
             <largeIcon>icons/Help22.png</largeIcon>
             <helpId>visat</helpId>
         </action>

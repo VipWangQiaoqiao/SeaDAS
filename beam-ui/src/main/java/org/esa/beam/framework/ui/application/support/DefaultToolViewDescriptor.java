@@ -462,7 +462,7 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
             }
         });
 
-      //todo  Danny was here
+        //todo  Danny was here
         if (commandId.contains("ScatterPlotToolView") ||
                 commandId.contains("HistogramPlotToolView") ||
                 commandId.contains("ProfilePlotToolView") ||
@@ -480,15 +480,29 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
             command.setParent("timeSeriesFolder");
         } else if (commandId.contains("PinManagerToolView") ||
                 commandId.contains("GcpManagerToolView")) {
-            command.setParent("vectorsFolder");
-            command.setPlaceAfter("convertComputedBand2Band");
-        } else if (commandId.contains("LayerEditorToolView") ||
-                commandId.contains("MaskManagerToolView") ||
-                commandId.contains("LayerManagerToolView")) {
             command.setParent("layers");
-            command.setPlaceAfter("convertComputedBand2Band");
+            command.setPlaceAfter("showWorldMapOverlay");
+        } else if (commandId.contains("LayerEditorToolView") ||
+
+                commandId.contains("LayerManagerToolView")
+
+                ) {
+            command.setParent("layers");
+            command.setPlaceAfter("showWorldMapOverlay");
+        } else if (commandId.contains("ColorManipulationToolView") ||
+                commandId.contains("MaskManagerToolView") ||
+                commandId.contains("WorldMapToolView") ||
+                commandId.contains("NavigationToolView")) {
+            command.setParent("tools");
+//            command.setPlaceAfter("convertComputedBand2Band");
+            command.setPlaceLast(true);
+
+        } else if (commandId.contains("ProductsToolView")) {
+            command.setParent("file");
+            command.setPlaceAfter("exportRasterData");
         } else {
-            command.setParent("showToolViews");
+            command.setParent("tools");
+//            command.setParent("showToolViews");
         }
 
 
