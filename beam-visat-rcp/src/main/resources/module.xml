@@ -1069,6 +1069,7 @@
             <helpId>toolBars</helpId>
             <placeAfter>saveAsUserLayout</placeAfter>
             <separatorBefore>true</separatorBefore>
+            <separatorAfter>true</separatorAfter>
         </action>
 
 

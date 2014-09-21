@@ -152,7 +152,7 @@ public class BasicApp {
 
     private CommandManager commandManager;
     private CommandUIFactory commandUIFactory;
-    private CommandMenuInserter commandMenuInserter;
+    protected CommandMenuInserter commandMenuInserter;
     private MainFrame mainFrame; // <JIDE/>
     private CommandBar mainToolBar;  // <JIDE/>
     private com.jidesoft.status.StatusBar statusBar; // <JIDE/>
@@ -900,7 +900,7 @@ public class BasicApp {
         }
     }
 
-    protected final void insertCommandMenuItem(Command command) {
+    protected void insertCommandMenuItem(Command command) {
         JMenu menu = null;
         String parent = command.getParent();
         if (parent != null) {

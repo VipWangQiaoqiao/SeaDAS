@@ -2221,51 +2221,65 @@ public class VisatApp extends BasicApp implements AppContext {
 //    private RedoAction redoAction;
 //    private UndoContext undoContext;
 
+    //DANNY comment this out and directly overrode it with SeadasApp
+//    @Override
+//    protected void insertCommandMenuItems() {
+//        super.insertCommandMenuItems();
+//
+//        JMenu menu = findMenu("edit");
+//
+///*      // TODO: Not included in BEAM 4.7
+//        // enable source code when undo/redo shall be supported
+//        undoContext = new DefaultUndoContext(this);
+//        undoAction = new UndoAction(undoContext) {
+//            @Override
+//            public void execute() {
+//                super.execute();
+//                redoAction.updateState();
+//            }
+//        };
+//        redoAction = new RedoAction(undoContext) {
+//            @Override
+//            public void execute() {
+//                super.execute();
+//                undoAction.updateState();
+//            }
+//        };
+//*/
+//
+//        SelectionManager selectionManager = getApplicationPage().getSelectionManager();
+//        Action cutAction = new CutAction(selectionManager);
+//        Action copyAction = new CopyAction(selectionManager);
+//        Action pasteAction = new PasteAction(selectionManager);
+//        Action selectAllAction = new SelectAllAction(selectionManager);
+//        Action deleteAction = new DeleteAction(selectionManager);
+//
+////  TODO: Not included in BEAM 4.7
+////  enable source code when undo/redo shall be supported
+////        menu.insert(undoAction, 0);
+////        menu.insert(redoAction, 1);
+//        menu.insertSeparator(0);
+//        menu.insert(cutAction, 1);
+//        menu.insert(copyAction, 2);
+//        menu.insert(pasteAction, 3);
+//        menu.insertSeparator(4);
+//        menu.insert(selectAllAction, 5);
+//        menu.insertSeparator(6);
+//        menu.insert(deleteAction, 7);
+//        menu.insertSeparator(8);
+//    }
+
+
     @Override
     protected void insertCommandMenuItems() {
         super.insertCommandMenuItems();
+    }
 
-        JMenu menu = findMenu("edit");
 
-/*      // TODO: Not included in BEAM 4.7
-        // enable source code when undo/redo shall be supported
-        undoContext = new DefaultUndoContext(this);
-        undoAction = new UndoAction(undoContext) {
-            @Override
-            public void execute() {
-                super.execute();
-                redoAction.updateState();
-            }
-        };
-        redoAction = new RedoAction(undoContext) {
-            @Override
-            public void execute() {
-                super.execute();
-                undoAction.updateState();
-            }
-        };
-*/
-
-        SelectionManager selectionManager = getApplicationPage().getSelectionManager();
-        Action cutAction = new CutAction(selectionManager);
-        Action copyAction = new CopyAction(selectionManager);
-        Action pasteAction = new PasteAction(selectionManager);
-        Action selectAllAction = new SelectAllAction(selectionManager);
-        Action deleteAction = new DeleteAction(selectionManager);
-
-//  TODO: Not included in BEAM 4.7
-//  enable source code when undo/redo shall be supported
-//        menu.insert(undoAction, 0);
-//        menu.insert(redoAction, 1);
-        menu.insertSeparator(0);
-        menu.insert(cutAction, 1);
-        menu.insert(copyAction, 2);
-        menu.insert(pasteAction, 3);
-        menu.insertSeparator(4);
-        menu.insert(selectAllAction, 5);
-        menu.insertSeparator(6);
-        menu.insert(deleteAction, 7);
-        menu.insertSeparator(8);
+    //Danny overrode this so SeadasApp can use it
+    @Override
+    protected void insertCommandMenuItem(Command command) {
+        super.insertCommandMenuItem(command);
     }
 
 

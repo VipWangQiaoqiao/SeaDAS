@@ -489,14 +489,19 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
                 ) {
             command.setParent("layers");
             command.setPlaceAfter("showWorldMapOverlay");
-        } else if (commandId.contains("ColorManipulationToolView") ||
-                commandId.contains("MaskManagerToolView") ||
-                commandId.contains("WorldMapToolView") ||
-                commandId.contains("NavigationToolView")) {
+        } else if (commandId.contains("ColorManipulationToolView")
+                ) {
             command.setParent("tools");
-//            command.setPlaceAfter("convertComputedBand2Band");
             command.setPlaceLast(true);
 
+        } else if (commandId.contains("WorldMapToolView") ||
+                commandId.contains("NavigationToolView")) {
+            command.setParent("view");
+            command.setPlaceAfter("toolBars");
+
+        } else if (commandId.contains("MaskManagerToolView")) {
+            command.setParent("masks");
+            command.setSeparatorBefore(true);
         } else if (commandId.contains("ProductsToolView")) {
             command.setParent("file");
             command.setPlaceAfter("exportRasterData");
