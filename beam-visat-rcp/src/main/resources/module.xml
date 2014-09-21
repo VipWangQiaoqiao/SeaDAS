@@ -214,7 +214,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.nav.NavigationToolView</id>
             <class>org.esa.beam.visat.toolviews.nav.NavigationToolView</class>
-            <title>Navigation</title>
+            <title>Navigation Controls</title>
             <tabTitle>Navigation Controls</tabTitle>
             <!--<mnemonic>N</mnemonic>-->
             <!--<accelerator>ctrl alt N</accelerator>-->
@@ -250,7 +250,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</id>
             <class>org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView</class>
-            <title>Color Palette Manager</title>
+            <title>Color Manager</title>
             <tabTitle>Color Manager</tabTitle>
             <!--<mnemonic>C</mnemonic>-->
             <!--<accelerator>ctrl alt C</accelerator>-->
@@ -338,8 +338,8 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.pin.PinManagerToolView</class>
-            <title>Pins Manager</title>
-            <tabTitle>Pins Manager</tabTitle>
+            <title>Pin Manager</title>
+            <tabTitle>Pin Manager</tabTitle>
             <!--<mnemonic>a</mnemonic>-->
             <!--<accelerator>ctrl alt A</accelerator>-->
             <description>Manage placement of pins.</description>
@@ -355,7 +355,7 @@
         <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</class>
-            <title>Gcp Manager</title>
+            <title>GCP Manager</title>
             <!--<mnemonic>c</mnemonic>-->
             <!--<accelerator>ctrl alt G</accelerator>-->
             <description>Manage ground control points.</description>
@@ -1092,7 +1092,7 @@
             <id>showGcpOverlay</id>
             <class>org.esa.beam.visat.actions.ShowGcpOverlayAction</class>
             <parent>layers</parent>
-            <text>Gcp</text>
+            <text>GCP</text>
             <toggle>true</toggle>
             <shortDescr>Show GCP layer</shortDescr>
             <description>Show GCP layer for the selected image</description>
@@ -1163,7 +1163,7 @@
             <id>showPinOverlay</id>
             <class>org.esa.beam.visat.actions.ShowPinOverlayAction</class>
             <parent>layers</parent>
-            <text>Pins</text>
+            <text>Pin</text>
             <toggle>true</toggle>
             <shortDescr>Show pin layer</shortDescr>
             <description>Show pin layer for the selected image</description>
@@ -1415,7 +1415,7 @@
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>seadasPinsToolBar</context>
             <parent>toolBars</parent>
-            <text> Pins</text>
+            <text>Pin</text>
             <selected>true</selected>
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the Pins tool bar.</shortDescr>
@@ -1933,7 +1933,7 @@
             <sortChildren>true</sortChildren>
 
             <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Time Series...</text>
+            <text>Time Series</text>
         </action>
 
 

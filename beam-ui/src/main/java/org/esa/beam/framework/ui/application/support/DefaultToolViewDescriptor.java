@@ -482,13 +482,19 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
                 commandId.contains("GcpManagerToolView")) {
             command.setParent("layers");
             command.setPlaceAfter("showWorldMapOverlay");
-        } else if (commandId.contains("LayerEditorToolView") ||
-
-                commandId.contains("LayerManagerToolView")
-
-                ) {
+        } else if (commandId.contains("LayerManagerToolView")) {
             command.setParent("layers");
-            command.setPlaceAfter("showWorldMapOverlay");
+            command.setPlaceAfter("vectorsFolder");
+
+        } else if (commandId.contains("LayerEditorToolView")) {
+            command.setParent("layers");
+            command.setPlaceAfter("vectorsFolder");
+            command.setSeparatorAfter(true);
+
+        } else if (commandId.contains("MaskManagerToolView")) {
+            command.setParent("layers");
+            command.setPlaceAfter("vectorsFolder");
+
         } else if (commandId.contains("ColorManipulationToolView")
                 ) {
             command.setParent("tools");
@@ -499,9 +505,9 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
             command.setParent("view");
             command.setPlaceAfter("toolBars");
 
-        } else if (commandId.contains("MaskManagerToolView")) {
-            command.setParent("masks");
-            command.setSeparatorBefore(true);
+//        } else if (commandId.contains("MaskManagerToolView")) {
+//            command.setParent("masks");
+//            command.setSeparatorBefore(true);
         } else if (commandId.contains("ProductsToolView")) {
             command.setParent("file");
             command.setPlaceAfter("exportRasterData");

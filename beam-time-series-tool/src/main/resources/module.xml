@@ -131,7 +131,7 @@
             <parent>exportOther</parent>
             <id>exportTimeBasedKmz</id>
             <class>org.esa.beam.timeseries.export.kmz.ExportTimeBasedKmz</class>
-            <text>Time Series...</text>
+            <text>Time Series</text>
             <!--<mnemonic>K</mnemonic>-->
             <shortDescr>Export Time Series as KMZ.</shortDescr>
         </action>
