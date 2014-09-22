@@ -1169,7 +1169,7 @@
             <description>Show pin layer for the selected image</description>
             <!--<smallIcon>icons/PinOverlay16.gif</smallIcon>-->
             <!--<largeIcon>icons/PinOverlay24.gif</largeIcon>-->
-            <largeIcon>icons/PinManager24.png</largeIcon>
+            <largeIcon>icons/PinManager24.gif</largeIcon>
             <!--<largeIcon>icons/PinManager24.gif</largeIcon>-->
             <context>image</context>
             <placeAfter>showNoDataOverlay</placeAfter>
