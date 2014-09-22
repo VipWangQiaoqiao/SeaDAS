@@ -1097,7 +1097,7 @@
             <shortDescr>Show GCP layer</shortDescr>
             <description>Show GCP layer for the selected image</description>
             <!--<smallIcon>icons/GcpOverlay16.gif</smallIcon>-->
-            <largeIcon>icons/GcpOverlay24.gif</largeIcon>
+            <largeIcon>icons/GcpLayer24.png</largeIcon>
             <context>image</context>
             <helpId>showGcpOverlay</helpId>
         </action>
@@ -1169,7 +1169,7 @@
             <description>Show pin layer for the selected image</description>
             <!--<smallIcon>icons/PinOverlay16.gif</smallIcon>-->
             <!--<largeIcon>icons/PinOverlay24.gif</largeIcon>-->
-            <largeIcon>icons/PinManager24.gif</largeIcon>
+            <largeIcon>icons/PinLayer24.png</largeIcon>
             <!--<largeIcon>icons/PinManager24.gif</largeIcon>-->
             <context>image</context>
             <placeAfter>showNoDataOverlay</placeAfter>
@@ -1399,11 +1399,11 @@
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>seadasGeometriesToolBar</context>
             <parent>toolBars</parent>
-            <text> Geometries</text>
+            <text> Geometry</text>
             <selected>true</selected>
             <toggle>true</toggle>
-            <shortDescr>Toggle visibility of the Geometries tool bar.</shortDescr>
-            <description>Toggle visibility of the Geometries tool bar.</description>
+            <shortDescr>Toggle visibility of the Geometry tool bar.</shortDescr>
+            <description>Toggle visibility of the Geometry tool bar.</description>
         </action>
 
 
@@ -1415,7 +1415,7 @@
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>seadasPinsToolBar</context>
             <parent>toolBars</parent>
-            <text>Pin</text>
+            <text> Pin</text>
             <selected>true</selected>
             <toggle>true</toggle>
             <shortDescr>Toggle visibility of the Pins tool bar.</shortDescr>
