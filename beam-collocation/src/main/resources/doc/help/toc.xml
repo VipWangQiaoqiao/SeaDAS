@@ -5,13 +5,12 @@
 <toc version="2.0" categoryclosedimage="folder" categoryopenimage="folder" topicimage="doc">
 
     <tocitem text="SeaDAS">
-        <tocitem text="Tools">
-            <tocitem text="Product Generation Tools">
+        <tocitem text="Processing: File">
 
-                <tocitem text="Collocation" target="collocation">
 
-                </tocitem>
-    </tocitem>
+            <tocitem text="Collocate" target="collocation">
+
+            </tocitem>
         </tocitem>
     </tocitem>
 </toc>
