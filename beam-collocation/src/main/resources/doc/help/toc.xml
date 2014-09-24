@@ -4,10 +4,14 @@
 
 <toc version="2.0" categoryclosedimage="folder" categoryopenimage="folder" topicimage="doc">
 
-    <tocitem text="Data Processors">
-        <tocitem text="Geometric Operations">
-            <tocitem text="Collocation Tool" target="collocation">
-            </tocitem>
+    <tocitem text="SeaDAS">
+        <tocitem text="Tools">
+            <tocitem text="Product Generation Tools">
+
+                <tocitem text="Collocation" target="collocation">
+
+                </tocitem>
+    </tocitem>
         </tocitem>
     </tocitem>
 </toc>

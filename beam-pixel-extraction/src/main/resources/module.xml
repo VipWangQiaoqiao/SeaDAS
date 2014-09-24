@@ -60,7 +60,7 @@
             <id>pixelExtraction</id>
             <placeAfter>computeMaskArea</placeAfter>
             <placeBefore>createDemRelatedBands</placeBefore>
-            <text>Extract Pixel Values...</text>
+            <text>Pixel Extraction...</text>
             <class>org.esa.beam.pixex.visat.PixelExtractionAction</class>
             <helpId>pixelExtraction</helpId>
             <shortDescr>Extract pixel values given a list of geographical points from one or more data products.</shortDescr>
