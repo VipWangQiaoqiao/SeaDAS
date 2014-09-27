@@ -91,7 +91,7 @@ public class GraticuleLayerType extends LayerType {
     public static final int DEFAULT_TEXT_CORNER_FONT_SIZE = 9;
     public static final boolean DEFAULT_TEXT_FONT_ITALIC = false;
     public static final boolean DEFAULT_TEXT_INSIDE = false;
-    public static final int DEFAULT_TEXT_ROTATION_NORTH_SOUTH = 30;
+    public static final int DEFAULT_TEXT_ROTATION_NORTH_SOUTH = 45;
     public static final int DEFAULT_TEXT_ROTATION_WEST_EAST = 0;
     public static final boolean DEFAULT_TEXT_ENABLED_NORTH = true;
     public static final boolean DEFAULT_TEXT_ENABLED_SOUTH = true;
