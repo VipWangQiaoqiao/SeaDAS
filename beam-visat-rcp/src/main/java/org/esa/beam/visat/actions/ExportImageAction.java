@@ -41,6 +41,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Action for exporting scene views as images.
@@ -53,6 +55,8 @@ public class ExportImageAction extends AbstractExportImageAction {
 
     private JRadioButton buttonFullScene;
     private SizeComponent sizeComponent;
+    private JLabel dataDimensionsJLabel = new JLabel("0000 x 0000");
+    ;
 
     @Override
     public void actionPerformed(CommandEvent event) {
@@ -76,21 +80,35 @@ public class ExportImageAction extends AbstractExportImageAction {
             fileChooser.setCurrentFilename(imageBaseName + "_" + view.getRaster().getName());
         }
         final JPanel regionPanel = new JPanel(new GridLayout(2, 1));
-        regionPanel.setBorder(BorderFactory.createTitledBorder("Image Region")); /*I18N*/
-        buttonFullScene = new JRadioButton("Full scene", false);
-        final JRadioButton buttonVisibleRegion = new JRadioButton("Visible region", true); /*I18N*/
+        regionPanel.setBorder(BorderFactory.createTitledBorder("Source Boundaries")); /*I18N*/
+        buttonFullScene = new JRadioButton("Data", false);
+        final JRadioButton buttonVisibleRegion = new JRadioButton("1234567890123", true); /*I18N*/
+        buttonVisibleRegion.setMinimumSize(buttonVisibleRegion.getPreferredSize());
+        buttonVisibleRegion.setPreferredSize(buttonVisibleRegion.getPreferredSize());
+        buttonVisibleRegion.setText("View Window");
         ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(buttonVisibleRegion);
+
         buttonGroup.add(buttonFullScene);
-        regionPanel.add(buttonVisibleRegion);
+        buttonGroup.add(buttonVisibleRegion);
+
         regionPanel.add(buttonFullScene);
+        regionPanel.add(buttonVisibleRegion);
+
         sizeComponent = new SizeComponent(view);
         JComponent sizePanel = sizeComponent.createComponent();
-        sizePanel.setBorder(BorderFactory.createTitledBorder("Image Dimension")); /*I18N*/
+        sizePanel.setBorder(BorderFactory.createTitledBorder("Image Size")); /*I18N*/
+
+        final JPanel infoPanel = new JPanel(new GridLayout(1, 1));
+        infoPanel.setBorder(BorderFactory.createTitledBorder("Source Data Size")); /*I18N*/
+        dataDimensionsJLabel.setToolTipText("Size in pixels of the source data (width x height");
+        infoPanel.add(dataDimensionsJLabel);
+
+
         final JPanel accessory = new JPanel();
         accessory.setLayout(new BoxLayout(accessory, BoxLayout.Y_AXIS));
         accessory.add(regionPanel);
         accessory.add(sizePanel);
+        accessory.add(infoPanel);
         fileChooser.setAccessory(accessory);
 
         buttonFullScene.addActionListener(new ActionListener() {
@@ -200,6 +218,10 @@ public class ExportImageAction extends AbstractExportImageAction {
         private static final String PROPERTY_NAME_HEIGHT = "height";
         private static final String PROPERTY_NAME_WIDTH = "width";
 
+        boolean widthListenerEnabled = false;
+        boolean heightListenerEnabled = false;
+        Double heightWidthRatio = 1.0;
+
         private final PropertyContainer propertyContainer;
         private final ProductSceneView view;
 
@@ -207,8 +229,44 @@ public class ExportImageAction extends AbstractExportImageAction {
             this.view = view;
             propertyContainer = new PropertyContainer();
             initValueContainer();
+            initDataDimensions();
             updateDimensions();
         }
+
+
+        public void initDataDimensions() {
+            final Rectangle2D bounds;
+
+            final ImageLayer imageLayer = view.getBaseImageLayer();
+            final Rectangle2D modelBounds = imageLayer.getModelBounds();
+            Rectangle2D imageBounds = imageLayer.getModelToImageTransform().createTransformedShape(modelBounds).getBounds2D();
+
+            final double mScale = modelBounds.getWidth() / modelBounds.getHeight();
+            final double iScale = imageBounds.getHeight() / imageBounds.getWidth();
+            double scaleFactorX = mScale * iScale;
+            bounds = new Rectangle2D.Double(0, 0, scaleFactorX * imageBounds.getWidth(), 1 * imageBounds.getHeight());
+
+            int w = toInteger(bounds.getWidth());
+            int h = toInteger(bounds.getHeight());
+
+            final long freeMemory = getFreeMemory();
+            final long expectedMemory = getExpectedMemory(w, h);
+            if (freeMemory < expectedMemory) {
+                final int answer = showQuestionDialog();
+                if (answer != JOptionPane.YES_OPTION) {
+                    final double scale = Math.sqrt((double) freeMemory / (double) expectedMemory);
+                    final double scaledW = w * scale;
+                    final double scaledH = h * scale;
+
+                    w = toInteger(scaledW);
+                    h = toInteger(scaledH);
+                }
+
+            }
+
+            dataDimensionsJLabel.setText(Integer.toString(w) + " x " + Integer.toString(h));
+        }
+
 
         public void updateDimensions() {
             final Rectangle2D bounds;
@@ -243,8 +301,14 @@ public class ExportImageAction extends AbstractExportImageAction {
 
             }
 
+            widthListenerEnabled = false;
+            heightListenerEnabled = false;
             setWidth(w);
             setHeight(h);
+            heightWidthRatio = (double) h / (double) w;
+
+            widthListenerEnabled = true;
+            heightListenerEnabled = true;
         }
 
         private int toInteger(double value) {
@@ -269,6 +333,30 @@ public class ExportImageAction extends AbstractExportImageAction {
             final PropertyDescriptor heightDescriptor = new PropertyDescriptor(PROPERTY_NAME_HEIGHT, Integer.class);
             heightDescriptor.setConverter(new IntegerConverter());
             propertyContainer.addProperty(new Property(heightDescriptor, new DefaultPropertyAccessor()));
+
+            propertyContainer.addPropertyChangeListener(PROPERTY_NAME_WIDTH, new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    boolean originalHeightListenerEnable = heightListenerEnabled;
+                    heightListenerEnabled = false;
+                    if (widthListenerEnabled) {
+                        Double newHeight = (double) getWidth() * heightWidthRatio;
+                        setHeight((int) Math.round(newHeight));
+                    }
+                    heightListenerEnabled = originalHeightListenerEnable;
+                }
+            });
+
+            propertyContainer.addPropertyChangeListener(PROPERTY_NAME_HEIGHT, new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    boolean originalWidthListenerEnabled = widthListenerEnabled;
+                    widthListenerEnabled = false;
+                    if (heightListenerEnabled) {
+                        Double newWidth = (double) getHeight() / heightWidthRatio;
+                        setWidth((int) Math.round(newWidth));
+                    }
+                    widthListenerEnabled = originalWidthListenerEnabled;
+                }
+            });
         }
 
         private int showQuestionDialog() {
