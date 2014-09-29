@@ -17,16 +17,16 @@ public class ColorBarParamInfo {
     public static final String VERTICAL_STR = "Vertical";
 
 
-    public static final int DEFAULT_LABELS_FONT_SIZE = 60;
+    public static final int DEFAULT_LABELS_FONT_SIZE = 45;
     public static final Boolean DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED = Boolean.TRUE;
     public static final Boolean DEFAULT_SHOW_TITLE_ENABLED = Boolean.TRUE;
     public static final String DEFAULT_TITLE = "";
     public static final String DEFAULT_TITLE_UNITS = "";
-    public static final int DEFAULT_TITLE_FONT_SIZE = 70;
-    public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 50;
+    public static final int DEFAULT_TITLE_FONT_SIZE = 50;
+    public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 45;
     public static final double DEFAULT_SCALING_FACTOR = 1.0;
     public static final int  DEFAULT_COLOR_BAR_LENGTH = ImageLegend.DEFAULT_COLOR_BAR_LENGTH;
-    public static final int DEFAULT_COLOR_BAR_THICKNESS = 70;
+    public static final int DEFAULT_COLOR_BAR_THICKNESS = 60;
     public static final double DEFAULT_LAYER_SCALING = 90;
     public static final Boolean DEFAULT_CENTER_ON_LAYER = Boolean.TRUE;
     public static final String DEFAULT_MANUAL_POINTS = "";
@@ -62,8 +62,7 @@ public class ColorBarParamInfo {
     private Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
 
-
-    private boolean titleModified = false;
+    private boolean paramsInitialized = false;
 
 
 
@@ -79,12 +78,12 @@ public class ColorBarParamInfo {
         this.labelsFontSize = labelsFontSize;
     }
 
-    public boolean isTitleModified() {
-        return titleModified;
+    public boolean isParamsInitialized() {
+        return paramsInitialized;
     }
 
-    public void setTitleModified(boolean titleModified) {
-        this.titleModified = titleModified;
+    public void setParamsInitialized(boolean titleModified) {
+        this.paramsInitialized = titleModified;
     }
 
     public Boolean getBackgroundTransparencyEnabled() {

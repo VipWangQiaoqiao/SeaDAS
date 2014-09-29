@@ -73,19 +73,22 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private ImageLegend imageLegend;
     private static int imageHeight;
     private static int imageWidth;
-    boolean colorBarLayer;
+    boolean colorBarLayer = false;
 
     @Override
     public void actionPerformed(CommandEvent event) {
         ProductSceneView view = getVisatApp().getSelectedProductSceneView();
 
+
         imageHeight = view.getRaster().getRasterHeight();
         imageWidth = view.getRaster().getRasterWidth();
 
         colorBarParamGroup = createColorBarParamGroup(view);
-        if (!view.getColorBarParamInfo().isTitleModified()) {
-            modifyHeaderText(colorBarParamGroup, view.getRaster());
-            view.getColorBarParamInfo().setTitleModified(true);
+        if (!view.getColorBarParamInfo().isParamsInitialized()) {
+            // originally the title contains a title and units
+            // we only need to split this apart initially
+            // once the color bar is created, the settings get stored and reloaded and this step is skipped
+            splitTitleAndUnits(colorBarParamGroup, view.getRaster());
         }
 
 
@@ -128,7 +131,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     protected void configureFileChooser(BeamFileChooser fileChooser, ProductSceneView view, String imageBaseName) {
 //        colorBarParamGroup = createColorBarParamGroup();
 //        colorBarParamGroup.setParameterValues(getVisatApp().getPreferences(), null);
-//        modifyHeaderText(colorBarParamGroup, view.getRaster());
+//        splitTitleAndUnits(colorBarParamGroup, view.getRaster());
         fileChooser.setDialogTitle(getVisatApp().getAppName() + " - Color Bar File"); /*I18N*/
         fileChooser.setCurrentFilename(imageBaseName + "_colorbar.png");
 //        final RasterDataNode raster = view.getRaster();
@@ -155,7 +158,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     protected RenderedImage createImage(String imageFormat, ProductSceneView view) {
         transferParamsToImageLegend(colorBarParamGroup, imageLegend);
         // todo DANNY
-        if (colorBarLayer) {
+        //  if (colorBarLayer) {
             view.getColorBarParamInfo().setLabelsFontSize(imageLegend.getLabelsFontSize());
             view.getColorBarParamInfo().setBackgroundTransparencyEnabled(new Boolean(imageLegend.isBackgroundTransparencyEnabled()));
             view.getColorBarParamInfo().setShowTitle(new Boolean(imageLegend.isShowTitle()));
@@ -174,6 +177,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             view.getColorBarParamInfo().setDecimalPlaces(imageLegend.getDecimalPlaces());
             view.getColorBarParamInfo().setForegroundColor(imageLegend.getForegroundColor());
             view.getColorBarParamInfo().setBackgroundColor(imageLegend.getBackgroundColor());
+        view.getColorBarParamInfo().setParamsInitialized(true);
 
             int orientation = imageLegend.getOrientation();
             if (orientation == ImageLegend.VERTICAL) {
@@ -183,8 +187,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             }
 
 
-
-        }
+        //   }
 
         imageLegend.setBackgroundTransparencyEnabled(isTransparencySupportedByFormat(imageFormat));
         return imageLegend.createImage(new Dimension(imageWidth, imageHeight), colorBarLayer);
@@ -314,7 +317,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         return paramGroup;
     }
 
-    private static void modifyHeaderText(ParamGroup legendParamGroup, RasterDataNode raster) {
+    private static void splitTitleAndUnits(ParamGroup legendParamGroup, RasterDataNode raster) {
         String name = raster.getName();
         String unit = raster.getUnit() != null ? raster.getUnit() : "-";
         unit = unit.replace('*', ' ');
