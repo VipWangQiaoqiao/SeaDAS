@@ -1721,7 +1721,7 @@
             <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
             <!--<smallIcon>icons/dannys_band_maths16.png</smallIcon>-->
             <largeIcon>icons/dannys_band_maths24.png</largeIcon>
-            <helpId>mosaicAction</helpId>
+            <helpId>bandArithmetic</helpId>
         </action>
 
 
