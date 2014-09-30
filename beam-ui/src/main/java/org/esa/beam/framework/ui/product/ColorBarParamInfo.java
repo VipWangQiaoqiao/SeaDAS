@@ -23,7 +23,7 @@ public class ColorBarParamInfo {
     public static final String DEFAULT_TITLE = "";
     public static final String DEFAULT_TITLE_UNITS = "";
     public static final int DEFAULT_TITLE_FONT_SIZE = 50;
-    public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 45;
+    public static final int DEFAULT_TITLE_UNITS_FONT_SIZE = 35;
     public static final double DEFAULT_SCALING_FACTOR = 1.0;
     public static final int  DEFAULT_COLOR_BAR_LENGTH = ImageLegend.DEFAULT_COLOR_BAR_LENGTH;
     public static final int DEFAULT_COLOR_BAR_THICKNESS = 60;
