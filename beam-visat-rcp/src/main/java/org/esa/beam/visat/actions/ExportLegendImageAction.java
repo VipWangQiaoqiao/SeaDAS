@@ -219,43 +219,43 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         paramGroup.addParameter(param);
 
         param = new Parameter(TITLE_UNITS_PARAM_STR, view.getColorBarParamInfo().getTitleUnits());
-        param.getProperties().setLabel("Title Units");
+        param.getProperties().setLabel("Units");
         param.getProperties().setNumCols(24);
         param.getProperties().setNullValueAllowed(true);
         paramGroup.addParameter(param);
 
         param = new Parameter(TITLE_FONT_SIZE_PARAM_STR, view.getColorBarParamInfo().getTitleFontSize());
-        param.getProperties().setLabel("Title Font Size");
+        param.getProperties().setLabel("Title Size");
         param.getProperties().setMinValue(4);
         param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
         param = new Parameter(TITLE_UNITS_FONT_SIZE_PARAM_STR, view.getColorBarParamInfo().getTitleUnitsFontSize());
-        param.getProperties().setLabel("Title Units Font Size");
+        param.getProperties().setLabel("Units Size");
         param.getProperties().setMinValue(4);
         param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
         param = new Parameter(LABELS_FONT_SIZE_PARAM_STR, view.getColorBarParamInfo().getLabelsFontSize());
-        param.getProperties().setLabel("Labels Font Size");
+        param.getProperties().setLabel("Labels Size");
         param.getProperties().setMinValue(4);
         param.getProperties().setMaxValue(100);
         paramGroup.addParameter(param);
 
         param = new Parameter(SCALING_FACTOR_PARAM_STR, view.getColorBarParamInfo().getScalingFactor());
-        param.getProperties().setLabel("Scaling Factor*");
+        param.getProperties().setLabel("Data Scaling Factor*");
         param.getProperties().setMinValue(.000001);
         param.getProperties().setMaxValue(1000000);
         paramGroup.addParameter(param);
 
         param = new Parameter(COLOR_BAR_LENGTH_PARAM_STR, view.getColorBarParamInfo().getColorBarLength());
-        param.getProperties().setLabel("Color Bar Length (pixels)");
+        param.getProperties().setLabel("Color Bar Length");
         param.getProperties().setMinValue(300);
         param.getProperties().setMaxValue(5000);
         paramGroup.addParameter(param);
 
         param = new Parameter(COLOR_BAR_THICKNESS_PARAM_STR, view.getColorBarParamInfo().getColorBarThickness());
-        param.getProperties().setLabel("Color Bar Thickness (pixels)");
+        param.getProperties().setLabel("Color Bar Thickness");
         param.getProperties().setMinValue(5);
         param.getProperties().setMaxValue(500);
         paramGroup.addParameter(param);
@@ -294,7 +294,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         paramGroup.addParameter(param);
 
         param = new Parameter(NUM_TICKS_PARAM_STR, view.getColorBarParamInfo().getNumTickMarks());
-        param.getProperties().setLabel("Number of Tick Marks");
+        param.getProperties().setLabel("Tick Mark Count");
         param.getProperties().setMinValue(0);
         param.getProperties().setMaxValue(40);
         paramGroup.addParameter(param);
@@ -564,7 +564,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private void initUI() {
 
 
-            final JButton previewButton = new JButton("Preview Color Bar...");
+            final JButton previewButton = new JButton("Preview...");
             previewButton.setMnemonic('v');
             previewButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -591,7 +591,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridy++;
             gbc.gridwidth = 2;
             gbc.fill = GridBagConstraints.HORIZONTAL;
-            evenDistribJPanel = getDistributionPanel("Tick Marks & Labels");
+            evenDistribJPanel = getDistributionPanel("Data Label Distribution & Numeric Formatting");
             jPanel.add(evenDistribJPanel, gbc);
 
 
@@ -612,7 +612,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridy++;
             gbc.gridwidth = 2;
             gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(getScalingPanel("Layer Scaling & Placement"), gbc);
+            jPanel.add(getScalingPanel("Layer Scaling"), gbc);
 
 
             gbc.gridwidth = 2;
@@ -728,11 +728,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             jPanel.setBorder(BorderFactory.createTitledBorder(title));
             final GridBagConstraints gbc = new GridBagConstraints();
 
-            gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.anchor = GridBagConstraints.WEST;
 
 
-            gbc.weightx = 1.0;
+            gbc.gridwidth = 1;
 
             gbc.insets.top = 3;
 
@@ -740,9 +739,12 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridy = 0;
             JLabel colorBarLengthJlabel = colorBarLengthParam.getEditor().getLabelComponent();
             colorBarLengthJlabel.setToolTipText("This is a minimum length, an accumulation of tickmarks and font sizes could increase the actual length");
-
+            gbc.fill = GridBagConstraints.NONE;
+            gbc.weightx = 0.5;
             jPanel.add(colorBarLengthJlabel, gbc);
             gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             jPanel.add(colorBarLengthParam.getEditor().getEditorComponent(), gbc);
 
 
@@ -760,42 +762,66 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
             gbc.gridx = 0;
             gbc.gridy++;
+            gbc.weightx = 0.5;
+            gbc.fill = GridBagConstraints.NONE;
             jPanel.add(colorBarThicknessParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             jPanel.add(colorBarThicknessParam.getEditor().getEditorComponent(), gbc);
 
 
             gbc.gridx = 0;
             gbc.gridy++;
+            gbc.weightx = 0.5;
+            gbc.fill = GridBagConstraints.NONE;
             jPanel.add(titleFontSizeParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             jPanel.add(titleFontSizeParam.getEditor().getEditorComponent(), gbc);
 
 
             gbc.gridx = 0;
             gbc.gridy++;
+            gbc.weightx = 0.5;
+            gbc.fill = GridBagConstraints.NONE;
             jPanel.add(titleUnitsFontSizeParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             jPanel.add(titleUnitsFontSizeParam.getEditor().getEditorComponent(), gbc);
 
             gbc.gridx = 0;
             gbc.gridy++;
+            gbc.weightx = 0.5;
+            gbc.fill = GridBagConstraints.NONE;
             jPanel.add(labelsFontSizeParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             jPanel.add(labelsFontSizeParam.getEditor().getEditorComponent(), gbc);
 
 
             gbc.gridx = 0;
             gbc.gridy++;
+            gbc.weightx = 0.5;
+            gbc.fill = GridBagConstraints.NONE;
             jPanel.add(foregroundColorParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             jPanel.add(foregroundColorParam.getEditor().getEditorComponent(), gbc);
 
 
             gbc.gridx = 0;
             gbc.gridy++;
+            gbc.weightx = 0.5;
+            gbc.fill = GridBagConstraints.NONE;
             jPanel.add(backgroundColorParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             jPanel.add(backgroundColorParam.getEditor().getEditorComponent(), gbc);
 
 
@@ -804,6 +830,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridx = 0;
             gbc.gridy++;
 
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.NONE;
             gbc.anchor = GridBagConstraints.NORTHWEST;
             jPanel.add(transparentParam.getEditor().getEditorComponent(), gbc);
 
