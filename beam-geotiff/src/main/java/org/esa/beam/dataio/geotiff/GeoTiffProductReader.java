@@ -447,12 +447,16 @@ public class GeoTiffProductReader extends AbstractProductReader {
 
     private boolean isGlobal(Product product, TiffFileInfo info) {
         boolean isGlobal = false;
-        double[] pixelScales = info.getField(GeoTIFFTagSet.TAG_MODEL_PIXEL_SCALE).getAsDoubles();
+        final TIFFField pixelScaleField = info.getField(GeoTIFFTagSet.TAG_MODEL_PIXEL_SCALE);
+        if (pixelScaleField != null) {
+            double[] pixelScales = pixelScaleField.getAsDoubles();
 
-        if (isPixelScaleValid(pixelScales)) {
-            final double widthInDegree = pixelScales[0] * product.getSceneRasterWidth();
-            isGlobal = Math.ceil(widthInDegree) >= 360;
+            if (isPixelScaleValid(pixelScales)) {
+                final double widthInDegree = pixelScales[0] * product.getSceneRasterWidth();
+                isGlobal = Math.ceil(widthInDegree) >= 360;
+            }
         }
+
         return isGlobal;
     }
 
@@ -468,7 +472,7 @@ public class GeoTiffProductReader extends AbstractProductReader {
         final GeoTiffMetadata2CRSAdapter geoTiff2CRSAdapter = new GeoTiffMetadata2CRSAdapter(null);
         // todo reactivate the following line if geotools has fixed the problem. (see BEAM-1510)
         // final MathTransform toModel = GeoTiffMetadata2CRSAdapter.getRasterToModel(metadataDecoder, false);
-        final MathTransform toModel = getRasterToModel(metadataDecoder, false);
+        final MathTransform toModel = getRasterToModel(metadataDecoder);
         CoordinateReferenceSystem crs;
         try {
             crs = geoTiff2CRSAdapter.createCoordinateSystem(metadataDecoder);
@@ -485,15 +489,15 @@ public class GeoTiffProductReader extends AbstractProductReader {
     }
 
     /*
-     * Copied from geotools GeoTiffMetadata2CRSAdapter because the given tie-point offset is
-     * probably not correctly interpreted in geotools. The tie-point should be placed at the pixel corner
-     * but is placed in the pixel center.
-     * See Beam Issue: http://www.brockmann-consult.de/beam-jira/browse/BEAM-1510
-     * todo remove this method if geotools has fixed the problem
+     * Copied from GeoTools GeoTiffMetadata2CRSAdapter because the given tie-point offset is
+     * not correctly interpreted in GeoTools. The tie-point should be placed at the pixel center
+     * if RasterPixelIsPoint is set as value for GTRasterTypeGeoKey.
+     * See links:
+     * http://www.remotesensing.org/geotiff/faq.html#PixelIsPoint
+     * http://lists.osgeo.org/pipermail/gdal-dev/2007-November/015040.html
+     * http://trac.osgeo.org/gdal/wiki/rfc33_gtiff_pixelispoint
      */
-    private static MathTransform getRasterToModel(
-            final GeoTiffIIOMetadataDecoder metadata,
-            final boolean forceToCellCenter) throws GeoTiffException {
+    private static MathTransform getRasterToModel(final GeoTiffIIOMetadataDecoder metadata) throws GeoTiffException {
         //
         // Load initials
         //
@@ -521,17 +525,8 @@ public class GeoTiffProductReader extends AbstractProductReader {
             final double scaleRaster2ModelLongitude = pixScales.getScaleX();
             final double scaleRaster2ModelLatitude = -pixScales.getScaleY();
             // "raster" space
-            final double tiePointColumn = tiePoints[0].getValueAt(0);
-            // bc-comment: original geotools code
-            // final double tiePointColumn = tiePoints[0].getValueAt(0)
-            //       + ((forceToCellCenter || rasterType == GeoTiffConstants.RasterPixelIsArea) ? - 0.5: 0);
-
-            // coordinates
-            // (indicies)
-            final double tiePointRow = tiePoints[0].getValueAt(1);
-            // bc-comment: original geotools code
-            // final double tiePointRow = tiePoints[0].getValueAt(1)
-            //       + ((forceToCellCenter || rasterType == GeoTiffConstants.RasterPixelIsArea) ? - 0.5: 0);
+            final double tiePointColumn = tiePoints[0].getValueAt(0) + (rasterType == GeoTiffConstants.RasterPixelIsPoint ? 0.5 : 0);
+            final double tiePointRow = tiePoints[0].getValueAt(1) + (rasterType == GeoTiffConstants.RasterPixelIsPoint ? 0.5 : 0);
 
             // compute an "offset and scale" matrix
             gm.setElement(0, 0, scaleRaster2ModelLongitude);
@@ -539,39 +534,29 @@ public class GeoTiffProductReader extends AbstractProductReader {
             gm.setElement(0, 1, 0);
             gm.setElement(1, 0, 0);
 
-            gm.setElement(0, 2, tiePoints[0].getValueAt(3)
-                                - (scaleRaster2ModelLongitude * tiePointColumn));
-            gm.setElement(1, 2, tiePoints[0].getValueAt(4)
-                                - (scaleRaster2ModelLatitude * tiePointRow));
+            gm.setElement(0, 2, tiePoints[0].getValueAt(3) - (scaleRaster2ModelLongitude * tiePointColumn));
+            gm.setElement(1, 2, tiePoints[0].getValueAt(4) - (scaleRaster2ModelLatitude * tiePointRow));
 
             // make it a LinearTransform
             xform = ProjectiveTransform.create(gm);
 
         } else if (hasModelTransformation) {
-            if (rasterType == GeoTiffConstants.RasterPixelIsArea) {
-                final AffineTransform tempTransform = new AffineTransform(
-                        metadata.getModelTransformation());
-                if (forceToCellCenter) {
-                    tempTransform.concatenate(AffineTransform.getTranslateInstance(0.5, 0.5));
-                }
+            if (rasterType == GeoTiffConstants.RasterPixelIsPoint) {
+                final AffineTransform tempTransform = new AffineTransform(metadata.getModelTransformation());
+                tempTransform.concatenate(AffineTransform.getTranslateInstance(0.5, 0.5));
                 xform = ProjectiveTransform.create(tempTransform);
-
             } else {
-                assert rasterType == GeoTiffConstants.RasterPixelIsPoint;
-                xform = ProjectiveTransform.create(metadata
-                                                           .getModelTransformation());
-
+                assert rasterType == GeoTiffConstants.RasterPixelIsArea;
+                xform = ProjectiveTransform.create(metadata.getModelTransformation());
             }
         } else {
-            throw new GeoTiffException(metadata,
-                                       "Unknown Raster to Model configuration.", null);
+            throw new GeoTiffException(metadata, "Unknown Raster to Model configuration.", null);
         }
 
         return xform;
     }
 
-    private static int getGeoKeyAsInt(final int key,
-                                      final GeoTiffIIOMetadataDecoder metadata) {
+    private static int getGeoKeyAsInt(final int key, final GeoTiffIIOMetadataDecoder metadata) {
 
         try {
             return Integer.parseInt(metadata.getGeoKey(key));

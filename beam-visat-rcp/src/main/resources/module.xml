@@ -17,7 +17,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>beam-visat-rcp</symbolicName>
-    <version>5.0</version>
+    <version>5.0.3</version>
     <name>VISAT Rich Client Platform</name>
 
     <description>
@@ -27,6 +27,16 @@
 
     <changelog>
         <![CDATA[
+          <b>Changes in 5.0.3</b><br/>
+          [BEAM-1714] Computation of frequencies for index coded bands fails<br/>
+          <b>Changes in 5.0.2</b><br/>
+          [BEAM-1712] Range Finder tool show wrong results<br/>
+          [BEAM-1711] Export of spectra does not work<br/>
+          [BEAM-1710] Range Finder does not work reliably for Landsat products<br/>
+          <b>Changes in 5.0.1</b><br/>
+          Fixed NPE with missing histogram matching in Colour Manipulation tool window<br/>
+          Harmonisation with NEST: Convert computed band: only clone image info, if it exists<br/>
+          Harmonisation with NEST: Allow JIDE license to be overridden<br/>
           <b>Changes in 5.0</b><br/>
           [BEAM-1509]  Mosaic tool does not initiate the download of the selected DEM <br/>
           [BEAM-1642] Create geometry from WKT<br/>
@@ -55,7 +65,7 @@
     </changelog>
 
     <vendor>Brockmann Consult GmbH</vendor>
-    <contactAddress>Max Planck Str.2, 21502 Geesthacht (Germany)</contactAddress>
+    <contactAddress>Max-Planck-Str. 2, 21502 Geesthacht (Germany)</contactAddress>
     <copyright>(C) 2014 by Brockmann Consult GmbH</copyright>
     <url>http://envisat.esa.int/beam</url>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
@@ -501,7 +511,7 @@
 
 
         <!-- start of -->
-        <!-- File menu -->
+        <!-- File Menu          -->
 
 
 
@@ -604,13 +614,13 @@
 
         <action>
         <id>openSession</id>
-        <parent>file</parent>
+            <parent>file</parent>
         <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
         <text>Session Open...</text>
         <!--<accelerator>shift control O</accelerator>-->
         <shortDescr>Open a SeaDAS session.</shortDescr>
         <longDescr>Open a SeaDAS session.</longDescr>
-        <placeAfter>close</placeAfter>
+            <placeAfter>close</placeAfter>
         <helpId>openSession</helpId>
         </action>
 
@@ -1360,7 +1370,7 @@
             <text> Analysis</text>
             <selected>true</selected>
             <toggle>true</toggle>
-            <shortDescr>Toggle visibility of the Analysis tool bar.</shortDescr>
+            <shortDescr>Toggle visibility of the analysis tool bar.</shortDescr>
             <description>Toggle visibility of the Analysis tool bar.</description>
         </action>
 
@@ -1715,7 +1725,7 @@
 
             <text>Math Band...</text>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
-            <shortDescr>Create a new band  using an arbitrary mathematical expression</shortDescr>
+            <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
             <context>image,band,tiePointGrid</context>
             <!--<smallIcon>icons/BAritmethic16.gif</smallIcon>-->
             <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
@@ -1845,7 +1855,7 @@
 
         <!-- end of -->
         <!-- Tools : Pixel Geo-Coding sub-menu -->
- <!-- Processing ########################################################################################## -->
+        <!-- Processing ########################################################################################## -->
 
         <action>
             <id>createSubsetFromView</id>

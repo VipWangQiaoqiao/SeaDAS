@@ -11,6 +11,11 @@ if len(sys.argv) != 2:
 
 file = sys.argv[1]
 
+
+# Uncomment if you receive errors of type com.sun.media.jai.util.ServiceConfigurationError, see
+# http://www.brockmann-consult.de/beam-jira/browse/BEAM-1699
+#beampy.SystemUtils.init3rdPartyLibs(None)  # Initialise BEAM's third party Java libraries JAI and GeoTools.
+
 print("Reading...")
 product = ProductIO.readProduct(file)
 width = product.getSceneRasterWidth()
@@ -54,7 +59,7 @@ print("Done.")
 
 
 """
-   Please note: the next version of beampy/jpy will be more pythonic in the sense that implicite data type
+   Please note: the next major version of beampy/jpy will be more pythonic in the sense that implicit data type
    conversions are performed. The 'parameters' from above variable could then be given as a Python dict object:
 
     parameters = {

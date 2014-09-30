@@ -16,21 +16,14 @@
 
 package org.esa.beam.dataio.netcdf.nc;
 
-import com.bc.ceres.core.Assert;
-import edu.ucar.ral.nujan.netcdf.NhDimension;
-import edu.ucar.ral.nujan.netcdf.NhException;
-import edu.ucar.ral.nujan.netcdf.NhFileWriter;
-import edu.ucar.ral.nujan.netcdf.NhGroup;
-import edu.ucar.ral.nujan.netcdf.NhVariable;
-import org.esa.beam.util.Debug;
-import org.esa.beam.util.StringUtils;
+import edu.ucar.ral.nujan.netcdf.*;
+import org.esa.beam.dataio.netcdf.util.VariableNameHelper;
 import ucar.ma2.DataType;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * A wrapper around the netCDF 4 {@link edu.ucar.ral.nujan.netcdf.NhFileWriter}.
@@ -53,7 +46,7 @@ public class N4FileWriteable implements NFileWriteable {
 
     private N4FileWriteable(NhFileWriter nhFileWriter) {
         this.nhFileWriter = nhFileWriter;
-        this.variables = new HashMap<String, NVariable>();
+        this.variables = new HashMap<>();
     }
 
     @Override
@@ -105,9 +98,15 @@ public class N4FileWriteable implements NFileWriteable {
         return addVariable(name, dataType, false, tileSize, dims);
     }
 
+
     @Override
-    public NVariable addVariable(String name, DataType dataType, boolean unsigned, Dimension tileSize, String dimensions) throws
-                                                                                                                          IOException {
+    public NVariable addVariable(String name, DataType dataType, boolean unsigned, Dimension tileSize, String dims) throws IOException {
+        return addVariable(name, dataType, unsigned, tileSize, dims, DEFAULT_COMPRESSION);
+    }
+
+    @Override
+    public NVariable addVariable(String name, DataType dataType, boolean unsigned, Dimension tileSize, String dimensions, int compressionLevel) throws
+            IOException {
         NhGroup rootGroup = nhFileWriter.getRootGroup();
         int nhType = N4DataType.convert(dataType, unsigned);
         String[] dims = dimensions.split(" ");
@@ -141,7 +140,7 @@ public class N4FileWriteable implements NFileWriteable {
         Object fillValue = null; // TODO
         try {
             NhVariable variable = rootGroup.addVariable(name, nhType, nhDims, chunkLens, fillValue,
-                                                        DEFAULT_COMPRESSION);
+                    compressionLevel);
             NVariable nVariable = new N4Variable(variable, tileSize);
             variables.put(name, nVariable);
             return nVariable;
@@ -157,14 +156,12 @@ public class N4FileWriteable implements NFileWriteable {
 
     @Override
     public boolean isNameValid(String name) {
-        Assert.argument(StringUtils.isNotNullAndNotEmpty(name), "name");
-        // copied from nujan sources edu.ucar.ral.nujan.netcdf.NhGroup.checkName()
-        return Pattern.matches("^[_a-zA-Z][-_: a-zA-Z0-9]*$", name);
+        return VariableNameHelper.isVariableNameValid(name);
     }
 
     @Override
     public String makeNameValid(String name) {
-        return convertToValidName(name);
+        return VariableNameHelper.convertToValidName(name);
     }
 
     @Override
@@ -185,23 +182,4 @@ public class N4FileWriteable implements NFileWriteable {
         }
     }
 
-    static String convertToValidName(String name) {
-        Assert.argument(StringUtils.isNotNullAndNotEmpty(name), "name");
-        String firstCharExpr = "[_a-zA-Z]";
-        char replacementChar = '_';
-        StringBuilder sb = new StringBuilder(name);
-        if (!Pattern.matches(firstCharExpr, name.substring(0, 1))) {
-            sb.setCharAt(0, replacementChar);
-        }
-        char[] chars = name.toCharArray();
-        String subsequentCharExpr = "[-_: a-zA-Z0-9]";
-        for (int i = 1; i < chars.length; i++) {
-            char aChar = chars[i];
-            if (!Pattern.matches(subsequentCharExpr, String.valueOf(aChar))) {
-                aChar = '_';
-            }
-            sb.setCharAt(i, aChar);
-        }
-        return sb.toString();
-    }
 }

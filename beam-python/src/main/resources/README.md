@@ -10,23 +10,38 @@ It is worth mentioning that the `beam-python` module works with the standard *CP
 Python extension modules such as `numpy` and `scipy` can be used. Before you read further you may have a look at the
 example code in
 
-1. `beampy-examples` for using the BEAM Java API from Python, and
-2. `beampy-operator-example` for extending BEAM by an operator plugin.
+1. `beampy-examples/*.py` for using the BEAM Java API from Python, and
+2. `beampy-examples/beampy-ndvi-operator` for extending BEAM by an (NDVI) operator plugin.
 
 The link from Python to the BEAM Java API is established via a Python module named *beampy*. The beampy module
 depends on a *bi-directional* Java-Python bridge *jpy* that enables calls from Python into a Java virtual machine
 and, at the same time, the other way round. This bridge is implemented by the [jpy Project](https://github.com/bcdev/jpy)
 and is independent from the beampy module.
 
-Before you can start using the BEAM API or developing BEAM operator plugins with Python you need
-to install jpy and beampy. Unfortunately this has to be done manually, so be prepared to invest at least half an hour
-for setting up things correctly.
+beampy has been tested with Python 2.7, 3.3 and 3.4 with Java 7 and 8 JDKs. 
+
+Since `beam-python` version 5.0.5, BEAM configures itself for a given Python executable. If not already done
+by the installer, set the configuration property `beam.pythonExecutable` in file `${beam-home}/config/beam.config`
+to your desired Python executable.
+
+
+////////////////////////////// To following text is outdated - MUST UPDATE SOON ////////////////////////////// 
+
+
+Before you can start using the BEAM API or developing BEAM operator plugins with Python you need configure 
+BEAM for the desired Python version. 
+
+If there is no matching binary distribution, you will have to build `jpy` on your own and then copy your binary 
+distribution to the `${beam-home}/modules/${beam-python}/lib` directory.
+
+Unfortunately this has to be done manually, so be 
+prepared to invest at least half an hour for setting up things correctly.
 
 Installation
 ------------
 
 The first step is to properly install `jpy` as described in the [jpy documentation](http://jpy.readthedocs.org/en/latest/install.html).
-After successful installation of `jpy`, you will need to install `beampy` as follows:
+(Be sure use `jpy` version 0.7.3 or higher.) After successful installation of `jpy`, you will need to install `beampy` as follows:
 
 On Darwin / Linux type:
 
@@ -67,7 +82,7 @@ If the import is successful (no errors are raised) you can exit the Python inter
 They all require an EO data product file as input named `MER_RR__1P.N1`, which is an Envisat MERIS L1b product.
 You can download an Envisat MERIS L1b test file from the
 [BEAM home page](http://www.brockmann-consult.de/cms/web/beam/meris-products)
-and rename it to `MER_RR__1P.N1` in order to run the tests.
+and rename it to `MER_RR__1P.N1` in order to run the tests. The tests expect [numpy](http://www.numpy.org/) to be installed. 
 
     python beampy_mem_test.py
     python beampy_perf_test.py
@@ -90,6 +105,46 @@ Given here is an example of its content (Windows):
     max_mem: 8G
     debug: True
 
+
+Running beampy in an Apache webserver
+-------------------------------------
+
+Using the [mod_wsgi](https://code.google.com/p/modwsgi/)-module within an [Apache HTTP Server](http://httpd.apache.org/) environment allows to use `beampy` within web applications. However, there are a number of common pitfalls, which are listed in the sections below.
+
+### Cannot open shared object
+
+When doing `import jpy`, you might get an error similar to `ImportError: libjvm.so: cannot open shared object file: No such file or directory`. However, the file exists, and you don't get this error when you use the console. The problem is solved by performing the following steps:
+
+* `locate libjvm.so`
+* Output is, say, `/path/to/libjvm.so`
+* Add `/path/to` to the `/etc/ld.so.conf` file
+* Run `sudo ldconfig`
+* Restart Apache
+* 
+(copied from [stackoverflow](http://stackoverflow.com/a/4527546/2043113))
+
+### Environment variables not set
+
+No matter if you have set all required environment variables in your shell, you might nonetheless receive the following error when doing `import beampy`: `RuntimeError: environment variable "BEAM_HOME" must be set to a valid BEAM installation directory`.
+The reason for this is that the environment needs to be preserved for the Apache. A possible solution is to set the environment within the startup routine of the web application, such as
+
+    os.environ['JAVA_HOME'] = settings.JAVA_HOME
+    os.environ['JDK_HOME'] = settings.JDK_HOME
+    os.environ['PATH'] = settings.PATH_extension + ':' + os.getenv('PATH', '')
+    os.environ['LD_LIBRARY_PATH'] = settings.LD_LIBRARY_PATH_extension + ':' + os.getenv('LD_LIBRARY_PATH', '')
+    os.environ['BEAM_HOME'] = settings.BEAM_HOME
+
+, where `settings` contains the respective values.
+
+### JAI 
+
+When using JAI classes, you might get the following error: `RuntimeError: java.lang.NoClassDefFoundError: Could not initialize class javax.media.jai.JAI`. This can be resolved by calling
+
+    SystemUtils = jpy.get_type('org.esa.beam.util.SystemUtils')
+    SystemUtils.init3rdPartyLibs(None)
+
+in the startup routine of the web application.
+
 Examples
 --------
 
@@ -100,6 +155,7 @@ The examples for the API usage are simple tools that compute an output product f
 You can download an Envisat MERIS test files used as input from the
 [BEAM home page](http://www.brockmann-consult.de/cms/web/beam/meris-products)
 and rename it to `MER_RR__1P.N1` and `MER_RR__2P.N1` in order to run the example code.
+All examples expect [numpy](http://www.numpy.org/) to be installed. 
 
 Computing a Fluorescence Line Height (FLH) product from water-leaving reflectances:
 
@@ -124,8 +180,38 @@ As the BEAM API can be used from Python in a similar way as from Java, all of th
 Please check:
 
 * [BEAM API Documentation](http://www.brockmann-consult.de/beam/doc/apidocs/index.html)
-* [BEAM Programming Tutorial](http://www.brockmann-consult.de/beam-wiki/display/BEAM/BEAM+4+Programming+Tutorial)
 
+beampy imports the most frequently used Java API classes by default
+ 
+* `org.esa.beam.framework.dataio.ProductIO`
+* `org.esa.beam.framework.datamodel.Product`
+* `org.esa.beam.framework.datamodel.RasterDataNode`
+* `org.esa.beam.framework.datamodel.AbstractBand`
+* `org.esa.beam.framework.datamodel.Band`
+* `org.esa.beam.framework.datamodel.VirtualBand`
+* `org.esa.beam.framework.datamodel.GeoCoding`
+* `org.esa.beam.framework.datamodel.PixelPos`
+* `org.esa.beam.framework.datamodel.PixelPos`
+* `org.esa.beam.util.ProductUtils`
+* `org.esa.beam.framework.gpf.GPF`
+* `org.esa.beam.framework.gpf.Operator`
+* `org.esa.beam.framework.gpf.Tile`
+
+To import other Java API classes, get the fully qualified type name from the API reference and import it using jpy. 
+For example:
+
+    jpy = beampy.jpy
+    Color = jpy.get_type('java.awt.Color')
+    ColorPoint = jpy.get_type('org.esa.beam.framework.datamodel.ColorPaletteDef$Point')
+    ColorPaletteDef = jpy.get_type('org.esa.beam.framework.datamodel.ColorPaletteDef')
+    ImageInfo = jpy.get_type('org.esa.beam.framework.datamodel.ImageInfo')
+    ImageManager = jpy.get_type('org.esa.beam.jai.ImageManager')
+    JAI = jpy.get_type('javax.media.jai.JAI')
+    
+Due to the 1:1 translation of Java to Python, a lot of code in the Java programming tutorial applies to 
+Python as well:
+
+* [BEAM Programming Tutorial](http://www.brockmann-consult.de/beam-wiki/display/BEAM/BEAM+4+Programming+Tutorial)
 
 ### BEAM Operator Plugin
 

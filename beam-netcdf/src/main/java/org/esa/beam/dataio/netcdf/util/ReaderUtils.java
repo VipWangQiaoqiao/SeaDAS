@@ -20,6 +20,7 @@ import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import ucar.ma2.Array;
 import ucar.nc2.Attribute;
+import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 import ucar.nc2.iosp.netcdf3.N3iosp;
 
@@ -73,11 +74,6 @@ public class ReaderUtils {
         return result;
     }
 
-    public static String getVariableName(RasterDataNode rasterDataNode) {
-        String name = N3iosp.makeValidNetcdfObjectName(rasterDataNode.getName());
-        return name.replace( '.', '_' );
-    }
-
     public static String getRasterName(Variable variable) {
         Attribute attribute = variable.findAttribute(Constants.ORIG_NAME_ATT_NAME);
         if (attribute != null) {
@@ -85,6 +81,31 @@ public class ReaderUtils {
         } else {
             return variable.getFullName();
         }
+    }
+
+    public static String getVariableName(RasterDataNode rasterDataNode) {
+        String name = N3iosp.makeValidNetcdfObjectName(rasterDataNode.getName());
+        name = name.replace( '.', '_' );
+        if (!VariableNameHelper.isVariableNameValid(name)) {
+            name = VariableNameHelper.convertToValidName(name);
+        }
+        return name;
+    }
+
+    public static String getVariableName(NetcdfFile netcdfFile, RasterDataNode rasterDataNode) {
+        String variableName = getVariableName(rasterDataNode);
+        Variable variable = netcdfFile.getRootGroup().findVariable(variableName);
+        if (variable != null) {
+            return variable.getFullName();
+        } else {
+            for (Variable var : netcdfFile.getRootGroup().getVariables()) {
+                Attribute originalName = var.findAttribute(Constants.ORIG_NAME_ATT_NAME);
+                if (originalName != null && originalName.getStringValue().equals(variableName)) {
+                    return var.getFullName();
+                }
+            }
+        }
+        throw new IllegalStateException("NetCDF file '" + netcdfFile.getLocation() + "' contains no variable that can be mapped to raster '" + rasterDataNode.getName() + "'.");
     }
 }
 

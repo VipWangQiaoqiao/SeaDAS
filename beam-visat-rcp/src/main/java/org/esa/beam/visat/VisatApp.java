@@ -256,7 +256,7 @@ public class VisatApp extends BasicApp implements AppContext {
     /**
      * default value for preference save product annotations (ADS) or not
      */
-    public static final boolean DEFAULT_VALUE_SAVE_PRODUCT_ANNOTATIONS = false;
+    public static boolean DEFAULT_VALUE_SAVE_PRODUCT_ANNOTATIONS = false;
     /**
      * default value for preference incremental mode at save
      */
@@ -282,7 +282,7 @@ public class VisatApp extends BasicApp implements AppContext {
      * The one and only visat instance
      */
     private static VisatApp instance;
-    private static final String SHOW_TOOLVIEW_CMD_POSTFIX = ".showCmd";
+    protected static final String SHOW_TOOLVIEW_CMD_POSTFIX = ".showCmd";
 
     /**
      * VISAT's plug-in manager
@@ -370,7 +370,7 @@ public class VisatApp extends BasicApp implements AppContext {
             getMainFrame().getDockingManager().setHideFloatingFramesOnSwitchOutOfApplication(true);
             getMainFrame().getDockingManager().setHideFloatingFramesWhenDeactivate(false);
 
-            desktopPane = new TabbedDesktopPane();
+            desktopPane = createDesktop();
 
             applicationPage = new VisatApplicationPage(getMainFrame(),
                                                        getCommandManager(),
@@ -397,7 +397,14 @@ public class VisatApp extends BasicApp implements AppContext {
         }
     }
 
-    protected void loadCommands() {
+	/**
+		Allow desktop pane to be overridden
+	*/
+    protected TabbedDesktopPane createDesktop() {
+        return new TabbedDesktopPane();
+    }
+
+    private void loadCommands() {
         CommandManager commandManager = getCommandManager();
         List<Command> commands = VisatActivator.getInstance().getCommands();
         Map<String, Command> commandMap = new HashMap<>(commands.size() * 2 + 1);
@@ -1615,7 +1622,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return saveOk;
     }
 
-    private boolean writeProductImpl(final Product product, final File file, final String formatName,
+    public boolean writeProductImpl(final Product product, final File file, final String formatName,
                                      final boolean incremental) {
         Debug.assertNotNull(product);
 
@@ -1777,8 +1784,9 @@ public class VisatApp extends BasicApp implements AppContext {
         }
     }
 
-    private void configureJaiTileCache() {
-        final int tileCacheCapacity = getPreferences().getPropertyInt(PROPERTY_KEY_JAI_TILE_CACHE_CAPACITY, 512);
+    protected void configureJaiTileCache() {
+        final int tileCacheCapacity = getPreferences().getPropertyInt(PROPERTY_KEY_JAI_TILE_CACHE_CAPACITY,
+                Integer.parseInt(System.getProperty("jai.tileCache.memoryCapacity", "512")));
         JAIUtils.setDefaultTileCacheCapacity(tileCacheCapacity);
     }
 
@@ -1903,6 +1911,11 @@ public class VisatApp extends BasicApp implements AppContext {
             return;
         }
         final RasterDataNode raster = sceneView.getRaster();
+
+        super.setStatusBarMessage(raster.getDisplayName() + " - " + getCSName(raster));
+    }
+
+    protected String getCSName(final RasterDataNode raster) {
         final String csName;
         final GeoCoding geoCoding = raster.getGeoCoding();
         if (geoCoding instanceof MapGeoCoding || geoCoding instanceof CrsGeoCoding) {
@@ -1910,7 +1923,7 @@ public class VisatApp extends BasicApp implements AppContext {
         } else {
             csName = "Satellite coordinates";
         }
-        super.setStatusBarMessage(raster.getDisplayName() + " - " + csName);
+        return csName;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2122,6 +2135,7 @@ public class VisatApp extends BasicApp implements AppContext {
         gc.setPreferredWidth(100);
         gc.setUpdateInterval(1000);
         gc.setGcIcon(UIUtils.loadImageIcon("icons/GC18.gif"));
+        gc.setToolTipText("Java Memory Heap");
         statusBar.add(gc, JideBoxLayout.FLEXIBLE);
 
         final ResizeStatusBarItem resize = new ResizeStatusBarItem();
@@ -2277,10 +2291,10 @@ public class VisatApp extends BasicApp implements AppContext {
 
 
     //Danny overrode this so SeadasApp can use it
-    @Override
+            @Override
     protected void insertCommandMenuItem(Command command) {
         super.insertCommandMenuItem(command);
-    }
+            }
 
 
     /**

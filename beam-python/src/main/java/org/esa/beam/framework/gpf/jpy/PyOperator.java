@@ -3,13 +3,11 @@ package org.esa.beam.framework.gpf.jpy;
 
 import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.framework.datamodel.Band;
-import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.gpf.Operator;
 import org.esa.beam.framework.gpf.OperatorException;
 import org.esa.beam.framework.gpf.Tile;
 import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 import org.esa.beam.framework.gpf.annotations.Parameter;
-import org.esa.beam.framework.gpf.annotations.SourceProduct;
 import org.jpy.PyLib;
 import org.jpy.PyModule;
 import org.jpy.PyObject;
@@ -25,7 +23,7 @@ import java.util.Map;
  */
 @OperatorMetadata(alias = "PyOp",
                   description = "Uses Python code to process data products",
-                  version = "0.5",
+                  version = "0.8",
                   authors = "N. Fomferra",
                   internal = true)
 public class PyOperator extends Operator {
@@ -70,6 +68,7 @@ public class PyOperator extends Operator {
         this.pythonClassName = pythonClassName;
     }
 
+
     @Override
     public void initialize() throws OperatorException {
         if (pythonModuleName == null || pythonModuleName.isEmpty()) {
@@ -79,36 +78,37 @@ public class PyOperator extends Operator {
             throw new OperatorException("Missing value for parameter 'pythonClassName'");
         }
 
-        //PyLib.Diag.setFlags(PyLib.Diag.F_JVM);
+        PyBridge.establish();
 
-        PyLib.startPython();
+        synchronized (PyLib.class) {
+            PyBridge.extendSysPath(pythonModulePath);
 
-        if (pythonModulePath != null && !pythonModulePath.isEmpty()) {
-            PyModule pySysModule = PyModule.importModule("sys");
-            PyObject pyPathList = pySysModule.getAttribute("path");
-            pyPathList.callMethod("append", pythonModulePath);
+            String code = String.format("if '%s' in globals(): del %s", pythonModuleName, pythonModuleName);
+            PyLib.execScript(code);
+
+            pyModule = PyModule.importModule(pythonModuleName);
+            PyObject pythonProcessorImpl = pyModule.call(pythonClassName);
+            pythonProcessor = pythonProcessorImpl.createProxy(PythonProcessor.class);
+            pythonProcessor.initialize(this);
         }
-
-        PyLib.execScript(String.format("if '%s' in globals(): del %s", pythonModuleName, pythonModuleName));
-
-        pyModule = PyModule.importModule(pythonModuleName);
-        PyObject pythonProcessorImpl = pyModule.call(pythonClassName);
-        pythonProcessor = pythonProcessorImpl.createProxy(PythonProcessor.class);
-        pythonProcessor.initialize(this);
     }
 
     @Override
     public void computeTileStack(Map<Band, Tile> targetTiles, Rectangle targetRectangle, ProgressMonitor pm) throws OperatorException {
-        //System.out.println("computeTileStack: thread = " + Thread.currentThread());
-        //PyLib.Diag.setFlags(PyLib.Diag.F_EXEC);
-        pythonProcessor.compute(this, targetTiles, targetRectangle);
-        //PyLib.Diag.setFlags(PyLib.Diag.F_OFF);
+        synchronized (PyLib.class) {
+            //System.out.println("computeTileStack: thread = " + Thread.currentThread());
+            //PyLib.Diag.setFlags(PyLib.Diag.F_EXEC);
+            pythonProcessor.compute(this, targetTiles, targetRectangle);
+            //PyLib.Diag.setFlags(PyLib.Diag.F_OFF);
+        }
     }
 
     @Override
     public void dispose() {
-        //System.out.println("dispose: thread = " + Thread.currentThread());
-        pythonProcessor.dispose(this);
+        synchronized (PyLib.class) {
+            //System.out.println("dispose: thread = " + Thread.currentThread());
+            pythonProcessor.dispose(this);
+        }
     }
 
     /**

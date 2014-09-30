@@ -82,7 +82,7 @@ public class ImageLegend {
     private Color backgroundColor;
     private boolean backgroundTransparencyEnabled;
     private float backgroundTransparency;
-    private boolean antiAliasing;
+    private boolean antialiasing;
     private int decimalPlaces;
     private String fullCustomAddThesePoints;
 
@@ -122,7 +122,7 @@ public class ImageLegend {
         backgroundColor = Color.white;
         foregroundColor = Color.black;
         backgroundTransparency = 1.0f;
-        antiAliasing = true;
+        antialiasing = true;
         decimalPlaces = 2;
         setFullCustomAddThesePoints("");
         tickWidth = DEFAULT_TICKMARK_WIDTH;
@@ -213,11 +213,11 @@ public class ImageLegend {
     }
 
     public boolean isAntialiasing() {
-        return antiAliasing;
+        return antialiasing;
     }
 
     public void setAntialiasing(boolean antialiasing) {
-        this.antiAliasing = antialiasing;
+        this.antialiasing = antialiasing;
     }
 
     public void setTransparent(boolean isTransparent) {
@@ -385,14 +385,14 @@ public class ImageLegend {
 
             for (int i = 0; i < numPointsInCpdFile; i = i + stepSize) {
 
-                ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
+            ColorPaletteDef.Point slider = getGradationCurvePointAt(i);
                 value = slider.getSample();
 
                 if (imageInfo.isLogScaled()) {
                     weight = getLinearWeightFromLogValue(value, min, max);
                 } else {
                     weight = getLinearWeightFromLinearValue(value, min, max);
-                }
+        }
                 weight = getValidWeight(weight);
                 if (weight != INVALID_WEIGHT) {
                     if (getScalingFactor() != 0) {
@@ -424,13 +424,13 @@ public class ImageLegend {
                                 weight = getLinearWeightFromLogValue(value, min, max);
                             } else {
                                 weight = getLinearWeightFromLinearValue(value, min, max);
-                            }
+        }
 
                             weight = getValidWeight(weight);
                             if (weight != INVALID_WEIGHT) {
                                 ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, formattedValue);
                                 colorBarInfos.add(colorBarInfo);
-                            }
+        }
                         }
                     }
                 }
@@ -561,7 +561,7 @@ public class ImageLegend {
             if (n > 1 && imageInfo.getColorPaletteDef().isDiscrete()) {
                 discreteBooster = labelsRequiredDimension.getHeight() / (n - 1);
                 requiredWidth += discreteBooster;
-            }
+        }
 
             requiredHeight = getColorBarLength();
 
@@ -588,7 +588,7 @@ public class ImageLegend {
             palettePosStart = paletteRect.y + paletteRect.height;
             palettePosEnd = paletteRect.y + (int) discreteBooster;
 
-        }
+    }
 
 
         tickMarkShape = createTickMarkShape();
@@ -764,7 +764,7 @@ public class ImageLegend {
 
             if (orientation == HORIZONTAL) {
                 Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
-                g2d.drawString(headerText, x0, y0);
+            g2d.drawString(headerText, x0, y0);
 
                 Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("A", g2d);
                 int gap = (int) (2 * singleLetter.getWidth());
@@ -773,7 +773,7 @@ public class ImageLegend {
                     g2d.setFont(getTitleUnitsFont());
 
                     g2d.drawString(getHeaderUnitsText(), (int) (x0 + headerTextRectangle.getWidth() + gap), y0);
-                }
+        }
             } else {
                 Rectangle2D headerTextRectangle = g2d.getFontMetrics().getStringBounds(headerText, g2d);
 
@@ -806,7 +806,7 @@ public class ImageLegend {
                 if (hasUnitsText()) {
                     g2d.setFont(getTitleUnitsFont());
                     g2d.drawString(getHeaderUnitsText(), 0, 0);
-                }
+    }
 
                 g2d.rotate(-rotate);
                 g2d.translate(0, -translateY2);
@@ -837,9 +837,9 @@ public class ImageLegend {
                 int palIndex;
                 if (divisor == 0) {
                     palIndex = x < palettePosStart ? 0 : palette.length - 1;
-                } else {
+        } else {
                     palIndex = Math.round((palette.length * (x - palettePosStart)) / divisor);
-                }
+        }
                 if (palIndex < 0) {
                     palIndex = 0;
                 }
@@ -859,20 +859,20 @@ public class ImageLegend {
             for (int y = yStart; y > yEnd; y--) {
                 int divisor = Math.abs(palettePosEnd - palettePosStart);
 
-                int palIndex;
-                if (divisor == 0) {
+            int palIndex;
+            if (divisor == 0) {
                     palIndex = y < palettePosStart ? 0 : palette.length - 1;
-                } else {
+            } else {
                     palIndex = Math.round((palette.length * (palettePosStart - y)) / divisor);
-                }
-                if (palIndex < 0) {
-                    palIndex = 0;
-                }
-                if (palIndex > palette.length - 1) {
-                    palIndex = palette.length - 1;
-                }
+            }
+            if (palIndex < 0) {
+                palIndex = 0;
+            }
+            if (palIndex > palette.length - 1) {
+                palIndex = palette.length - 1;
+            }
 
-                g2d.setColor(palette[palIndex]);
+            g2d.setColor(palette[palIndex]);
                 g2d.drawLine(x1, y, x2, y);
             }
         }
@@ -936,7 +936,7 @@ public class ImageLegend {
 
                 if (translateY >= (palettePosStart-tickMarkOverHang)) {
                     translateY = (palettePosStart-tickMarkOverHang);
-                }
+            }
 
                 if (translateY <= (palettePosEnd+tickMarkOverHang)) {
                     translateY = (palettePosEnd+tickMarkOverHang);
@@ -1053,13 +1053,13 @@ public class ImageLegend {
 
     private BufferedImage createBufferedImage(final int width, final int height) {
         return new BufferedImage(width, height,
-                isAlphaUsed() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+                                 isAlphaUsed() ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
     }
 
 
     public String getFullCustomAddThesePoints() {
         return fullCustomAddThesePoints;
-    }
+}
 
     public void setFullCustomAddThesePoints(String fullCustomAddThesePoints) {
         this.fullCustomAddThesePoints = fullCustomAddThesePoints;
