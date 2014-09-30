@@ -877,7 +877,7 @@
             <shortDescr>View and/or Export the colorbar.</shortDescr>
             <description>View and/or Export the colorbar.</description>
             <context>image</context>
-            <largeIcon>icons/ColorbarHorizontal24.png</largeIcon>
+            <largeIcon>icons/ColorbarVertical24.png</largeIcon>
             <popuptext>Export Colorbar...</popuptext>
             <helpId>exportLegendImageFile</helpId>
         </action>
