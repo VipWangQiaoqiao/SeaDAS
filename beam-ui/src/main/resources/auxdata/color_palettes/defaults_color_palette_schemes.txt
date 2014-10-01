@@ -1241,7 +1241,7 @@
  Zsd_gbr                      :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Secchi Depth (Lee GBR)
  Zsd_morel                    :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Secchi Depth (Morel)
  ---------- other ----------  :       0   :0          :false     :null                     :
- elevation                    :-12000.0   :15000.0    :false     :oceancolor_standard.cpd  :Elevation
+ elevation                    :-12000.0   :15000.0    :false     :gray_scale.cpd  :Elevation
  elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd :Bathymetry (Colormap used in the ETOPO1 global relief map)
  elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd :Topography (Colormap used in the ETOPO1 global relief map)
 
