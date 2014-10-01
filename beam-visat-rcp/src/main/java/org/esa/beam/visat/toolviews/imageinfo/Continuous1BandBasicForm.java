@@ -44,7 +44,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final JPanel contentPanel;
     private final AbstractButton logDisplayButton;
     private final MoreOptionsForm moreOptionsForm;
-    private  ColorPaletteChooser colorPaletteChooser;
+    private ColorPaletteChooser colorPaletteChooser;
     private JFormattedTextField minField;
     private JFormattedTextField maxField;
     private String currentMinFieldValue = "";
@@ -56,7 +56,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private JButton exportButton;
     private JLabel colorSchemeJLabel;
     private JLabel cpdFileNameJLabel;
-    private  TitledSeparator headerSeparator;
+    private TitledSeparator headerSeparator;
 
 
     final Boolean[] minFieldActivated = {new Boolean(false)};
@@ -104,14 +104,13 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         exportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-               parentForm.exportColorPaletteDef();
+                parentForm.exportColorPaletteDef();
                 parentForm.applyChanges();
                 colorPaletteChooser.resetRenderer();
                 parentForm.applyChanges();
             }
         });
         exportButton.setEnabled(true);
-
 
 
         JPanel colorPaletteJPanel = getColorPaletteFilePanel("Cpd File");
@@ -262,8 +261,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         });
 
 
-
-
     }
 
 
@@ -290,7 +287,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     }
 
     private JPanel getSchemaPanel(String title) {
-
 
 
         JPanel jPanel = new JPanel(new GridBagLayout());
@@ -390,7 +386,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
         gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(4,0,0,0);
+        gbc.insets = new Insets(4, 0, 0, 0);
         exportButton.setMinimumSize(exportButton.getMinimumSize());
         exportButton.setMaximumSize(exportButton.getMinimumSize());
         exportButton.setPreferredSize(exportButton.getMinimumSize());
@@ -557,11 +553,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             String currentSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().getDescriptiveColorSchemeName();
             if (parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().isColorPaletteSchemeDefaultList()) {
 
-             //   colorSchemeJLabel.setText( currentSchemeName + "*");
-                colorSchemeJLabel.setText( currentSchemeName);
+                //   colorSchemeJLabel.setText( currentSchemeName + "*");
+                colorSchemeJLabel.setText(currentSchemeName);
 
             } else {
-             //   colorSchemeJLabel.setText(currentSchemeName + "*");
+                //   colorSchemeJLabel.setText(currentSchemeName + "*");
                 colorSchemeJLabel.setText(currentSchemeName);
 
                 savedColorPaletteInfo = standardColorPaletteSchemes.setSchemeName(colorPaletteSchemeName);
@@ -595,7 +591,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
         shouldFireChooserEvent = true;
-
 
 
     }
@@ -637,7 +632,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             public void actionPerformed(ActionEvent e) {
                 if (colorPaletteChooser.getSelectedIndex() != 0) {
                     applyChanges(RangeKey.FromPaletteSource);
-                //    applyChanges(RangeKey.Dummy);
+                    //    applyChanges(RangeKey.Dummy);
                 }
 
             }
@@ -670,6 +665,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private void applyChanges(RangeKey key) {
         if (shouldFireChooserEvent) {
 
+            boolean checksOut = true;
 
             final ColorPaletteDef selectedCPD = colorPaletteChooser.getSelectedColorPaletteDefinition();
             final ImageInfo currentInfo = parentForm.getImageInfo();
@@ -683,6 +679,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             final boolean isTargetLogScaled;
             final ColorPaletteDef cpd;
             final boolean autoDistribute;
+
 
             switch (key) {
 //                case Dummy:
@@ -719,8 +716,15 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     isTargetLogScaled = currentInfo.isLogScaled();
                     //    min = new Double(minField.getValue().toString());//(double) minField.getValue();
                     //   max = new Double(maxField.getValue().toString());//(double) maxField.getValue();
-                    min = Double.parseDouble(minField.getText().toString());
-                    max = Double.parseDouble(maxField.getText().toString());
+
+                    if (testMinMax(minField.getText().toString(), maxField.getText().toString())) {
+                        min = Double.parseDouble(minField.getText().toString());
+                        max = Double.parseDouble(maxField.getText().toString());
+                    } else {
+                        checksOut = false;
+                        min = 0; //bogus unused values set just so it is initialized to make idea happy
+                        max = 0; //bogus unused values set just so it is initialized to make idea happy
+                    }
                     cpd = currentCPD;
                     autoDistribute = true;
                     break;
@@ -728,9 +732,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredColorScheme(true);
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = !currentInfo.isLogScaled();
+
+
                     min = currentCPD.getMinDisplaySample();
                     max = currentCPD.getMaxDisplaySample();
                     cpd = currentCPD;
+
                     autoDistribute = true;
                     break;
                 default:
@@ -772,7 +779,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
 
 
-            if (testMinMax(min, max, isTargetLogScaled)) {
+            if (checksOut &&  testMinMax(min, max, isTargetLogScaled)) {
                 currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
 
                 if (key == RangeKey.ToggleLog) {
@@ -790,19 +797,59 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     }
 
 
+    private boolean isNumber(String string) {
+        try {
+            double d = Double.parseDouble(string);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean testMinMax(String min, String max) {
+        boolean checksOut = true;
+
+        if (!isNumber(min)) {
+            checksOut = false;
+            VisatApp.getApp().setStatusBarMessage("WARNING NOT UPDATING IMAGE BECAUSE: Min Textfield is not a number");
+        }
+
+        if (!isNumber(max)) {
+            checksOut = false;
+            VisatApp.getApp().setStatusBarMessage("WARNING NOT UPDATING IMAGE BECAUSE: Max Textfield is not a number");
+        }
+
+        if (checksOut) {
+            VisatApp.getApp().clearStatusBarMessage();
+        }
+
+        return checksOut;
+    }
 
 
     private boolean testMinMax(double min, double max, boolean isLogScaled) {
         boolean checksOut = true;
 
+
         if (min == max) {
             checksOut = false;
-            VisatApp.getApp().setStatusBarMessage("WARNING: Min cannot equal Max");
+            VisatApp.getApp().setStatusBarMessage("WARNING NOT UPDATING IMAGE BECAUSE: Min cannot equal Max");
         }
 
-        if (isLogScaled && min == 0) {
+        if (min > max) {
             checksOut = false;
-            VisatApp.getApp().setStatusBarMessage("WARNING: Min cannot be 0 in log scaling mode");
+            VisatApp.getApp().setStatusBarMessage("WARNING NOT UPDATING IMAGE BECAUSE: Min cannot be greater than Max");
+        }
+
+        if ((isLogScaled) && min == 0) {
+            checksOut = false;
+            VisatApp.getApp().setStatusBarMessage("WARNING NOT UPDATING IMAGE BECAUSE: Min cannot be zero in log scaling mode");
+        }
+
+        if ((isLogScaled) && min < 0) {
+            checksOut = false;
+            VisatApp.getApp().setStatusBarMessage("WARNING NOT UPDATING IMAGE BECAUSE: Min cannot be negative in log scaling mode");
         }
 
         if (checksOut) {
