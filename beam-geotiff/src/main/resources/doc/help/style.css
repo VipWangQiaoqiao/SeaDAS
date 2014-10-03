@@ -7,6 +7,8 @@ body {
     margin: 6pt;
 }
 
+
+
 p {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     margin: 6pt;
@@ -69,6 +71,9 @@ h3 {
     margin-left: 6pt;
 }
 
+
+
+
 h4 {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 15;
@@ -111,17 +116,113 @@ table {
     margin: 0;
 }
 
-invisibletable {
+.sectionTitle {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 18;
+    font-weight: bold;
+    margin-top: 6pt;
+    margin-right: 6pt;
+    margin-bottom: 6pt;
+    margin-left: 6pt;
+    color: #2B3856;
+    font-style: italic;
+    text-align: center;
+}
+
+.notes {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11;
+    margin-top: 6pt;
+    margin-right: 6pt;
+    margin-bottom: 6pt;
+    margin-left: 6pt;
+    font-style: italic;
+}
+.subSectionTitle {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16;
+    font-weight: bold;
+    margin-top: 20pt;
+    margin-right: 0pt;
+    margin-bottom: 6pt;
+    margin-left: 6pt;
+    color: #005000;
+    font-style: italic;
+}
+
+.subSectionDetails {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11;
+    margin-left: 6pt;
+    margin-top : 0pt;
+    margin-bottom: 14pt;
+    margin-right: 0pt;
+    font-style: normal;
+}
+
+
+.groupTitle {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14;
+    margin: 0pt;
+    margin-left: 6;
+    font-style: normal;
+}
+.groupDetails {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12;
+    margin-left: 24pt;
+    margin-top : 0pt;
+    margin-bottom: 0pt;
+    margin-right: 0pt;
+    font-style: normal;
+}
+
+.groupLocation {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12;
+    margin-left: 42pt;
+    margin-top : 0pt;
+    margin-bottom: 12pt;
+    margin-right: 0pt;
+    font-style: italic;
+}
+
+
+
+
+.invisibleLink {
+    /*text-decoration:none;*/
+}
+
+.invisibletable {
     border-width: 0;
     border-style: solid;
     border-color: #FFFFFF;
     border-collapse: collapse;
-    padding: 1px;
+    padding: 0px;
     margin: 0;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12px;
+    font-size: 12;
     font-style: normal;
+    text-valign: top;
+    vertical-align: top;
 }
+
+.invisibletable2 {
+    border-width: 0;
+    border-style: solid;
+    border-color: #FFFFFF;
+    border-collapse: collapse;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12;
+    padding: 4px;
+    margin: 4;
+    font-style: normal;
+    text-valign: top;
+    vertical-align: top;
+}
+
 
 th {
     font-size: 12;
@@ -160,7 +261,7 @@ table.header {
     margin: 0;
 }
 
-.header {
+.headerOld {
     font-size: 17;
     height: 29;
     color: #ffffff;
@@ -169,6 +270,20 @@ table.header {
     border-width: 0;
     padding: 0;
     white-space: nowrap;
+}
+
+
+
+.header {
+    font-size: 17;
+    height: 29;
+    color: #ffff99;
+    vertical-align: middle;
+    background-color: #2B3856;
+    border-width: 0;
+    padding: 0;
+    white-space: nowrap;
+    text-align: right;
 }
 
 hr {

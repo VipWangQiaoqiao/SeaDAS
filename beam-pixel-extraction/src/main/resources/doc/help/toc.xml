@@ -20,12 +20,12 @@
 
 <toc version="2.0" categoryclosedimage="folder" categoryopenimage="folder" topicimage="doc">
 
-    <tocitem text="SeaDAS">
-        <tocitem text="File I/O &amp; Sessions">
-        <tocitem text="Export Tools">
-                <tocitem text="Pixel Extraction" target="pixelExtraction"/>
-            </tocitem>
-        </tocitem>
-    </tocitem>
+    <!--<tocitem text="SeaDAS">-->
+    <!--<tocitem text="File I/O &amp; Sessions">-->
+    <!--<tocitem text="Export Tools">-->
+    <!--<tocitem text="Pixel Extraction" target="pixelExtraction"/>-->
+    <!--</tocitem>-->
+    <!--</tocitem>-->
+    <!--</tocitem>-->
 
 </toc>
