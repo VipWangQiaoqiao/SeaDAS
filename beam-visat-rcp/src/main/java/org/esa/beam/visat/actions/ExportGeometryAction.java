@@ -43,15 +43,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class ExportGeometryAction extends ExecCommand {
@@ -206,7 +201,14 @@ public class ExportGeometryAction extends ExecCommand {
             modelCrs = DefaultGeographicCRS.WGS84;
         }
         if (!CRS.equalsIgnoreMetadata(crs, modelCrs)) { // we have to reproject the features
-            featureCollection = new ReprojectingFeatureCollection(featureCollection, crs, modelCrs);
+            //this is added to fix vector node import and export problem with smi and seadas generated hdf files -- aynur
+            if (!vectorNode.getProduct().getGeoCoding().getMapCRS().equals(DefaultGeographicCRS.WGS84)
+                    || (vectorNode.getProduct().getGeoCoding() instanceof CrsGeoCoding))
+            {
+                featureCollection = new ReprojectingFeatureCollection(featureCollection, vectorNode.getProduct().getGeoCoding().getMapCRS(), crs);
+            }  else {
+                featureCollection = new ReprojectingFeatureCollection(featureCollection, crs, modelCrs);
+            }
         }
         Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<>();
         final FeatureIterator<SimpleFeature> featureIterator = featureCollection.features();
