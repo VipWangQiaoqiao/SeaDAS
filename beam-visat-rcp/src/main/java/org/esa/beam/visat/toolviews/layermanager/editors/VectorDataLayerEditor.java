@@ -56,6 +56,7 @@ public class VectorDataLayerEditor extends AbstractLayerConfigurationEditor {
     private static final String STROKE_COLOR_NAME = DefaultFigureStyle.STROKE_COLOR.getName();
     private static final String STROKE_OPACITY_NAME = DefaultFigureStyle.STROKE_OPACITY.getName();
     private static final String STROKE_WIDTH_NAME = DefaultFigureStyle.STROKE_WIDTH.getName();
+    private static final String STROKE_DASHARRAY_NAME = DefaultFigureStyle.STROKE_DASHARRAY.getName();
     private static final String SYMBOL_NAME_NAME = DefaultFigureStyle.SYMBOL_NAME.getName();
     private static final SimpleFeatureFigure[] NO_SIMPLE_FEATURE_FIGURES = new SimpleFeatureFigure[0];
     private static final ValueSet SYMBOL_VALUE_SET = new ValueSet(new String[]{
@@ -100,6 +101,10 @@ public class VectorDataLayerEditor extends AbstractLayerConfigurationEditor {
         final PropertyDescriptor strokeWidth = new PropertyDescriptor(DefaultFigureStyle.STROKE_WIDTH);
         strokeWidth.setDefaultValue(getCommonStylePropertyValue(figures, STROKE_WIDTH_NAME));
         addPropertyDescriptor(strokeWidth);
+
+        final PropertyDescriptor strokeDasharray = new PropertyDescriptor(DefaultFigureStyle.STROKE_DASHARRAY);
+        strokeDasharray.setDefaultValue(getCommonStylePropertyValue(figures, STROKE_DASHARRAY_NAME));
+        addPropertyDescriptor(strokeDasharray);
 
         final PropertyDescriptor symbolName = new PropertyDescriptor(DefaultFigureStyle.SYMBOL_NAME);
         symbolName.setDefaultValue(getCommonStylePropertyValue(figures, SYMBOL_NAME_NAME));
@@ -155,6 +160,7 @@ public class VectorDataLayerEditor extends AbstractLayerConfigurationEditor {
         updateProperty(bindingContext, STROKE_COLOR_NAME, getCommonStylePropertyValue(selectedFigures, STROKE_COLOR_NAME));
         updateProperty(bindingContext, STROKE_OPACITY_NAME, getCommonStylePropertyValue(selectedFigures, STROKE_OPACITY_NAME));
         updateProperty(bindingContext, STROKE_WIDTH_NAME, getCommonStylePropertyValue(selectedFigures, STROKE_WIDTH_NAME));
+        updateProperty(bindingContext, STROKE_DASHARRAY_NAME, getCommonStylePropertyValue(selectedFigures, STROKE_DASHARRAY_NAME));
         final Object styleProperty = getCommonStylePropertyValue(selectedFigures, SYMBOL_NAME_NAME);
         if (styleProperty != null) {
             updateProperty(bindingContext, SYMBOL_NAME_NAME, styleProperty);
