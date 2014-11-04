@@ -38,7 +38,6 @@
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-geotiff</artifactId>
-            <version>${beam.versionRange}</version>
         </dependency>
         <dependency>
             <groupId>org.xeustechnologies</groupId>
