@@ -26,7 +26,7 @@
 
     <artifactId>beam-envi-reader</artifactId>
     <name>ENVI Product Reader</name>
-    <version>5.0</version>
+    <version>5.0.1</version>
 
     <dependencies>
         <dependency>

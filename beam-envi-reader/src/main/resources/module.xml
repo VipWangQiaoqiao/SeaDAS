@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>beam-envi-reader</symbolicName>
-    <version>5.0</version>
+    <version>5.0.1</version>
     <name>ENVI Product Reader</name>
     <funding>ESA</funding>
 
@@ -52,6 +52,14 @@
             <text>HICO (ENVI format)</text>
             <useAllFileFilter>false</useAllFileFilter>
             <shortDescr>Import a HICO data product.</shortDescr>
+        </action>
+        <action>
+            <id>importAvirisProduct</id>
+            <class>org.esa.beam.visat.actions.ProductImportAction</class>
+            <formatName>AVIRIS</formatName>
+            <text>AVIRIS (ENVI format)</text>
+            <useAllFileFilter>false</useAllFileFilter>
+            <shortDescr>Import an AVIRIS data product.</shortDescr>
         </action>
     </extension>
 
