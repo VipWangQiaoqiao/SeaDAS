@@ -2,6 +2,7 @@ package org.esa.beam.dataio.aviris;
 
 import com.bc.ceres.core.ProgressMonitor;
 import org.esa.beam.dataio.envi.EnviProductReaderPlugIn;
+import org.esa.beam.dataio.aviris.AvirisFilename;
 import org.esa.beam.framework.dataio.AbstractProductReader;
 import org.esa.beam.framework.dataio.ProductIOException;
 import org.esa.beam.framework.dataio.ProductReader;
@@ -12,6 +13,9 @@ import org.esa.beam.util.ProductUtils;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.EnumMap;
 
 class AvirisProductReader extends AbstractProductReader {
@@ -99,7 +103,7 @@ class AvirisProductReader extends AbstractProductReader {
         handleRadianceProduct(product);
 //        handleNdviProduct(product);
         handleGeomProduct(product);
-        handleOrtProduct(product);
+        handleObsOrtProduct(product);
         return product;
     }
 
@@ -148,28 +152,105 @@ class AvirisProductReader extends AbstractProductReader {
 //                float[] latData = latitudeBand.readPixels(0, 0, rasterWidth, rasterHeight, (float[]) null);
 //                TiePointGrid tpLat = new TiePointGrid("latitude", rasterWidth, rasterHeight, 0.5f, 0.5f, 1f, 1f, latData);
 //                product.addTiePointGrid(tpLat);
-//
+
 //                float[] lonData = longitudeBand.readPixels(0, 0, rasterWidth, rasterHeight, (float[]) null);
 //                TiePointGrid tpLon = new TiePointGrid("longitude", rasterWidth, rasterHeight, 0.5f, 0.5f, 1f, 1f, lonData);
 //                product.addTiePointGrid(tpLon);
-                product.setGeoCoding(new PixelGeoCoding2(latitudeBand, longitudeBand,null));
 //                product.setGeoCoding(new TiePointGeoCoding(tpLat, tpLon));
+                product.setGeoCoding(new PixelGeoCoding(latitudeBand, longitudeBand,null,4));
             }
         }
     }
 
-    private void handleOrtProduct(Product product) {
+    private void handleObsOrtProduct(Product product) throws IOException {
         Product avirisProductPart = avirisProductParts.get(FileType.ORT);
+        if (avirisProductPart == null) {
+            avirisProductPart = avirisProductParts.get(FileType.OBS);
+        }
         if (avirisProductPart != null) {
             copyMetadata(avirisProductPart, product, FileType.ORT.toString());
             String[] bandNames = avirisProductPart.getBandNames();
             for (String bandName : bandNames) {
                 String newBandname = bandName.replace(" ", "_");
                 ProductUtils.copyBand(bandName, avirisProductPart, newBandname, product, true);
+                if (bandName.equals("UTC time")) {
+                    Band utcTime = avirisProductPart.getBand(bandName);
+                    if (utcTime != null) {
+                        int rasterWidth = utcTime.getSceneRasterWidth();
+                        int rasterHeight = utcTime.getSceneRasterHeight();
+                        float[] timeData = utcTime.readPixels(0, 0, rasterWidth, rasterHeight, (float[]) null);
+                        float[] minmaxTime = minMaxTime(timeData);
+                        final DateFormat dateFormat = ProductData.UTC.createDateFormat("yyMMdd HH:mm:ss");
+                        AvirisFilename avirisFilename = AvirisFilename.create(product.getFileLocation().getName());
+                        try {
+                            String startTime = decimalHour2HHMMSS(minmaxTime[0]);
+                            String endTime = decimalHour2HHMMSS(minmaxTime[1]);
+                            Date startDate = dateFormat.parse(avirisFilename.getFlightDate() + " " + startTime);
+                            Date endDate = dateFormat.parse(avirisFilename.getFlightDate() + " " + endTime);
+
+                            product.setStartTime(ProductData.UTC.create(startDate, 0));
+                            product.setEndTime(ProductData.UTC.create(endDate, 0));
+                        } catch (ParseException ignored) {
+                        }
+                    }
+                }
             }
         }
     }
+    private String decimalHour2HHMMSS(double decimalHour){
+        String HHMMSS = null;
+        double hour = Math.floor(decimalHour);
+        double minute = Math.floor((decimalHour - hour)*60.);
+        double second = Math.floor((decimalHour - hour)*3600.) - minute*60;
+        HHMMSS = String.format("%2d:%2d:%2d", (int)hour, (int)minute, (int)second);
 
+        return(HHMMSS);
+    }
+    private float[] minMaxTime (float[] timeArray){
+        float[] minMax = new float[2];
+        for(int i = 0; i < timeArray.length; i++) {
+            if (timeArray[i] > 0){
+                minMax[0] = timeArray[i];
+                break;
+            }
+        }
+        for(int i = timeArray.length-1; i >0 ; i--) {
+            if (timeArray[i] > 0){
+                minMax[1] = timeArray[i];
+                break;
+            }  
+        }
+        return(minMax);
+    }
+//    private void handleObsProduct(Product product) throws IOException {
+//        Product avirisProductPart = avirisProductParts.get(FileType.OBS);
+//        if (avirisProductPart != null) {
+//            copyMetadata(avirisProductPart, product, FileType.OBS.toString());
+//            String[] bandNames = avirisProductPart.getBandNames();
+//            for (String bandName : bandNames) {
+//                String newBandname = bandName.replace(" ", "_");
+//                ProductUtils.copyBand(bandName, avirisProductPart, newBandname, product, true);
+//                if (bandName.equals("UTC_time")) {
+//                    Band utcTime = avirisProductPart.getBand(bandName);
+//                    if (utcTime != null) {
+//                        int rasterWidth = utcTime.getSceneRasterWidth();
+//                        int rasterHeight = utcTime.getSceneRasterHeight();
+//                        float[] timeData = utcTime.readPixels(0, 0, rasterWidth, rasterHeight, (float[]) null);
+//                        final DateFormat dateFormat = ProductData.UTC.createDateFormat("yymmdd HH.HHH");
+//                        AvirisFilename avirisFilename = AvirisFilename.create(product.getName());
+//                        try {
+//                            Date startDate = dateFormat.parse(avirisFilename.getFlightDate() + " " + timeData[0]);
+//                            Date endDate = dateFormat.parse(avirisFilename.getFlightDate() + " " + timeData[rasterHeight * rasterWidth]);
+//
+//                            product.setStartTime(ProductData.UTC.create(startDate, 0));
+//                            product.setEndTime(ProductData.UTC.create(endDate, 0));
+//                        } catch (ParseException ignored) {
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     private void copyMetadata(Product partProduct, Product targetProduct, String name) {
         MetadataElement header = partProduct.getMetadataRoot().getElement("Header");
         header.setName(name);
