@@ -23,6 +23,7 @@ import org.esa.beam.framework.datamodel.ProductData;
 
 import java.awt.Rectangle;
 import java.io.IOException;
+import org.esa.beam.util.SystemUtils;
 
 
 /**
@@ -37,7 +38,7 @@ public class BandOpImage extends RasterDataNodeOpImage {
 
     public BandOpImage(Band band, ResolutionLevel level) {
         super(band, level);
-        if (Boolean.getBoolean("beam.imageManager.disableSourceTileCaching")) {
+        if (Boolean.getBoolean(SystemUtils.getApplicationContextId() +".imageManager.disableSourceTileCaching")) {
             setTileCache(null);
         }
     }
