@@ -51,6 +51,7 @@ import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.Vector;
+import org.esa.beam.util.SystemUtils;
 
 
 /**
@@ -99,11 +100,11 @@ public class PixelGeoCoding extends AbstractGeoCoding implements BasicPixelGeoCo
     /**
      * @since BEAM 4.9
      */
-    private static final String SYSPROP_PIXEL_GEO_CODING_USE_TILING = "beam.pixelGeoCoding.useTiling";
+    private static final String SYSPROP_PIXEL_GEO_CODING_USE_TILING = SystemUtils.getApplicationContextId() + ".pixelGeoCoding.useTiling";
     /**
      * @since BEAM 4.9
      */
-    private static final String SYSPROP_PIXEL_GEO_CODING_FRACTION_ACCURACY = "beam.pixelGeoCoding.fractionAccuracy";
+    private static final String SYSPROP_PIXEL_GEO_CODING_FRACTION_ACCURACY = SystemUtils.getApplicationContextId() + ".pixelGeoCoding.fractionAccuracy";
 
     private static final int MAX_SEARCH_CYCLES = 10;
 
