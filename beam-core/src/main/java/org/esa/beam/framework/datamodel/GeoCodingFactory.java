@@ -26,10 +26,11 @@ import javax.media.jai.operator.ScaleDescriptor;
 import java.awt.Rectangle;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import org.esa.beam.util.SystemUtils;
 
 public class GeoCodingFactory {
 
-    public static final String USE_ALTERNATE_PIXEL_GEO_CODING_PROPERTY = "beam.useAlternatePixelGeoCoding";
+    public static final String USE_ALTERNATE_PIXEL_GEO_CODING_PROPERTY = SystemUtils.getApplicationContextId() + ".useAlternatePixelGeoCoding";
 
     public static BasicPixelGeoCoding createPixelGeoCoding(final Band latBand,
                                                            final Band lonBand,

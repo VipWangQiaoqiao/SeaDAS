@@ -39,7 +39,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 
-class EnviProductReader extends AbstractProductReader {
+public class EnviProductReader extends AbstractProductReader {
 
     private ImageInputStream imageInputStream;
     private ZipFile productZip;
@@ -411,7 +411,7 @@ class EnviProductReader extends AbstractProductReader {
      *
      * @throws IOException on disk IO failures
      */
-    private BufferedReader getHeaderReader(File inputFile) throws IOException {
+    public BufferedReader getHeaderReader(File inputFile) throws IOException {
         if (EnviProductReaderPlugIn.isCompressedFile(inputFile)) {
             ZipFile zipFile;
             ZipEntry zipEntry;

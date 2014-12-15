@@ -1,6 +1,6 @@
 package org.esa.beam.dataio.envi;
 
-class EnviProjectionInfo {
+public class EnviProjectionInfo {
 
     public void setProjectionNumber(int projectionNumber) {
         this.projectionNumber = projectionNumber;

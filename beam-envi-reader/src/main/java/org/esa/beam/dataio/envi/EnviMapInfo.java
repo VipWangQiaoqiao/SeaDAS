@@ -1,7 +1,7 @@
 package org.esa.beam.dataio.envi;
 
 
-class EnviMapInfo {
+public class EnviMapInfo {
 
     public void setProjectionName(String projectionName) {
         this.projectionName = projectionName;
