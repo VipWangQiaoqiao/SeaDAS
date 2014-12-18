@@ -134,14 +134,27 @@ class AvirisProductReader extends AbstractProductReader {
         if (avirisProductPart != null) {            
             copyMetadata(avirisProductPart, product, FileType.RAD.toString());
             String[] bandNames = avirisProductPart.getBandNames();
+            String[] wavelengths = header.getWavelengths();
+            String[] bandWidths = header.getFWHM();
+            int i =0;
+            // AVIRIS "gain" file shows band idx 1-110 have a gain of 300.,
+            // 111-160 have a gain of 600., 161 and above have a gain of 1200.
+            Double[] gainFactors = {300.0,600.0,1200.0};  
             for (String bandName : bandNames) {
-                String[] bandNameSplit = bandName.split("_");
-                String newBandname = "radiance_" + bandNameSplit[1];
+//                String[] bandNameSplit = bandName.split("_");
+                String newBandname = "Lt_" + wavelengths[i];//bandNameSplit[1];
                 Band band = ProductUtils.copyBand(bandName, avirisProductPart, newBandname, product, true);
-                band.setScalingFactor(1.0 / 50.0);
-                band.setSpectralBandwidth(5.7f);
+                if (i < 110){
+                    band.setScalingFactor(1.0 / gainFactors[0]);
+                } else if (i < 160){
+                    band.setScalingFactor(1.0 / gainFactors[1]);
+                } else {
+                    band.setScalingFactor(1.0 / gainFactors[2]);
+                }
+                band.setSpectralBandwidth(Float.parseFloat(bandWidths[i]));
+                i++;
             }
-            product.setAutoGrouping("radiance");
+            product.setAutoGrouping("Lt");
             product.setFileLocation(avirisProductPart.getFileLocation());
         }
     }
