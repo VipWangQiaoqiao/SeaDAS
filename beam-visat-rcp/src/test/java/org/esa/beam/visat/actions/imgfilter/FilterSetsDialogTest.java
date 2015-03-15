@@ -30,6 +30,7 @@ public class FilterSetsDialogTest {
         predefFilterSet.addFilter("Detect Lines", StandardFilters.LINE_DETECTION_FILTERS);
         predefFilterSet.addFilter("Detect Gradients (Emboss)", StandardFilters.GRADIENT_DETECTION_FILTERS);
         predefFilterSet.addFilter("Smooth and Blurr", StandardFilters.SMOOTHING_FILTERS);
+        predefFilterSet.addFilter("Straylight", StandardFilters.STRAYLIGHT_FILTERS);
         predefFilterSet.addFilter("Sharpen", StandardFilters.SHARPENING_FILTERS);
         predefFilterSet.addFilter("Enhance Discontinuities", StandardFilters.LAPLACIAN_FILTERS);
         predefFilterSet.addFilter("Non-Linear Filters", StandardFilters.NON_LINEAR_FILTERS);
