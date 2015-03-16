@@ -156,20 +156,20 @@ public class StandardFilters {
                     +1, +1, +1, +1, +1,
             }, 25.0),
 
-            new Filter("Circular Low-Pass 3x3 (1/r)", "lp3_r", 3, 3, new double[]{
+            new Filter("Low-Pass 1-Pixel Radius (1/r)", "lp_1px_1", 3, 3, new double[]{
                     +0.707, +1, +0.707,
                     +1, 1, +1,
                     +0.707, +1, +0.707,
             }, 7.8279999),
 
-            new Filter("Circular Low-Pass 3x3 (1/r2)", "lp3_r2", 3, 3, new double[]{
+            new Filter("Low-Pass 1-Pixel Radius (1/r2)", "lp_1px_2", 3, 3, new double[]{
                     +0.5, +1, +0.5,
                     +1, 1, +1,
                     +0.5, +1, +0.5,
             }, 7.0),
 
 
-            new Filter("Circular Low-Pass 3x3 peak, 5x5 base (1/r)", "lp5_r", 5, 5, new double[]{
+            new Filter("Low-Pass 2-Pixel Radius (1/r)", "lp_2px_1", 5, 5, new double[]{
 
                     0, 0.447, 0.5, 0.447, 0,
                     0.447, 0.707, 1, 0.707, 0.447,
@@ -178,7 +178,7 @@ public class StandardFilters {
                     0, 0.447, 0.5, 0.447, 0,
             }, 13.4039999),
 
-            new Filter("Circular Low-Pass 3x3 peak, 5x5 base (1/r2)", "lp5_r2", 5, 5, new double[]{
+            new Filter("Low-Pass 2-Pixel Radius (1/r2)", "lp_2px_2", 5, 5, new double[]{
                     0, 0.2, 0.25, 0.2, 0,
                     0.2, 0.5, 1, 0.5, 0.2,
                     0.25, 1, 1, 1, 0.25,
@@ -187,7 +187,7 @@ public class StandardFilters {
 
             }, 9.6),
 
-            new Filter("Circular Low-Pass 3x3 peak, 7x7 base (1/r)", "lp7_r", 7, 7, new double[]{
+            new Filter("Low-Pass 3-Pixel Radius (1/r)", "lp_3px_1", 7, 7, new double[]{
                     0, 0, 0.316, 0.333, 0.316, 0, 0,
                     0, 0.354, 0.447, 0.5, 0.447, 0.354, 0,
                     0.316, 0.447, 0.707, 1, 0.707, 0.447, 0.316,
@@ -198,7 +198,7 @@ public class StandardFilters {
             }, 18.679999),
 
 
-            new Filter("Circular Low-Pass 3x3 peak, 7x7 base (1/r2)", "lp7_r2", 7, 7, new double[]{
+            new Filter("Low-Pass 3-Pixel Radius (1/r2)", "lp_3px_2", 7, 7, new double[]{
                     0, 0, 0.1, 0.111, 0.1, 0, 0,
                     0, 0.125, 0.2, 0.25, 0.2, 0.125, 0,
                     0.1, 0.2, 0.5, 1, 0.5, 0.2, 0.1,
