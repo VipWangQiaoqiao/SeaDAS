@@ -83,6 +83,7 @@ class ColorManipulationForm {
     private BeamFileFilter beamFileFilter;
     private final ProductNodeListener productNodeListener;
     private boolean defaultColorPalettesInstalled;
+    private boolean defaultRgbProfilesInstalled;
     private JPanel contentPanel;
     private final ColorManipulationToolView toolView;
     private ColorManipulationChildForm childForm;
@@ -117,6 +118,10 @@ class ColorManipulationForm {
         }
         if (!defaultColorPalettesInstalled) {
             installDefaultColorPalettes();
+        }
+
+        if (!defaultRgbProfilesInstalled) {
+            installDefaultRgbProfiles();
         }
         return contentPanel;
     }
@@ -793,9 +798,56 @@ class ColorManipulationForm {
         swingWorker.executeWithBlocking();
     }
 
+
+
     private File getSystemAuxdataDir() {
         return new File(SystemUtils.getApplicationDataDir(), "beam-ui/auxdata/color-palettes");
     }
+
+    private File getRGBAuxdataDir() {
+        return new File(SystemUtils.getApplicationDataDir(), "beam-core/auxdata/rgb_profiles");
+    }
+
+
+    private void installDefaultRgbProfiles() {
+        final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
+        final File auxdataDir = getRGBAuxdataDir();
+        final ResourceInstaller resourceInstaller = new ResourceInstaller(codeSourceUrl, "auxdata/rgb_profiles/",
+                auxdataDir);
+        ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(toolView.getPaneControl(),
+                "Installing RGB Auxdata...") {
+            @Override
+            protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
+                resourceInstaller.install(".*.rgb", progressMonitor, true);
+                defaultRgbProfilesInstalled = true;
+                return Boolean.TRUE;
+            }
+
+            /**
+             * Executed on the <i>Event Dispatch Thread</i> after the {@code doInBackground}
+             * method is finished. The default
+             * implementation does nothing. Subclasses may override this method to
+             * perform completion actions on the <i>Event Dispatch Thread</i>. Note
+             * that you can query status inside the implementation of this method to
+             * determine the result of this task or whether this task has been cancelled.
+             *
+             * @see #doInBackground
+             * @see #isCancelled()
+             * @see #get
+             */
+            @Override
+            protected void done() {
+                try {
+                    get();
+                } catch (Exception e) {
+                    visatApp.getLogger().log(Level.SEVERE, "Could not install RGB auxdata", e);
+                }
+            }
+        };
+        swingWorker.executeWithBlocking();
+    }
+
+
 
     private ImageInfo createDefaultImageInfo() {
         try {

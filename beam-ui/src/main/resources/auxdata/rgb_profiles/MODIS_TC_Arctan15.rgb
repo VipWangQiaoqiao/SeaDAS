@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Mon Mar 09 15:20:13 EDT 2015
+name=MODIS_TC_Arctan15
+blue=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ?30.01070381 + 46.6366 * atan(15*(rhos_469-.05)) \: NaN
+green=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ?30.01070381 + 46.6366 * atan(15*(rhos_555-.05)) \:NaN
+red=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ? 30.01070381 + 46.6366 * atan(15*(rhos_645-.05)) \: NaN
