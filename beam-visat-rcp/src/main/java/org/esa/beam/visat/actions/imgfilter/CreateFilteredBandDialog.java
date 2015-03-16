@@ -29,14 +29,13 @@ public class CreateFilteredBandDialog extends ModalDialog implements FilterSetFo
 
     public CreateFilteredBandDialog(Product product, String sourceBandName, String helpId) {
         super(VisatApp.getApp().getMainFrame(),
-              TITLE,
-              ModalDialog.ID_OK_CANCEL_HELP,
-              helpId);
+                TITLE,
+                ModalDialog.ID_OK_CANCEL_HELP,
+                helpId);
         this.product = product;
 
         FilterSet systemFilterSet = new FilterSet("System", false);
         systemFilterSet.addFilter("Smooth and Blurr", StandardFilters.SMOOTHING_FILTERS);
-        systemFilterSet.addFilter("Straylight", StandardFilters.STRAYLIGHT_FILTERS);
         systemFilterSet.addFilter("Detect Lines", StandardFilters.LINE_DETECTION_FILTERS);
         systemFilterSet.addFilter("Detect Gradients (Emboss)", StandardFilters.GRADIENT_DETECTION_FILTERS);
         systemFilterSet.addFilter("Sharpen", StandardFilters.SHARPENING_FILTERS);
@@ -61,9 +60,9 @@ public class CreateFilteredBandDialog extends ModalDialog implements FilterSetFo
         filterSets.addAll(userFilterSets);
 
         filterSetsForm = new FilterSetsForm(sourceBandName,
-                                            this,
-                                            filterSetStore, new FilterWindow(getJDialog()),
-                                            filterSets.toArray(new FilterSet[filterSets.size()]));
+                this,
+                filterSetStore, new FilterWindow(getJDialog()),
+                filterSets.toArray(new FilterSet[filterSets.size()]));
 
         setContent(filterSetsForm);
     }
@@ -94,10 +93,10 @@ public class CreateFilteredBandDialog extends ModalDialog implements FilterSetFo
             message = "Please enter a name for the new filtered band."; /*I18N*/
         } else if (!ProductNode.isValidNodeName(targetBandName)) {
             message = MessageFormat.format("The band name ''{0}'' appears not to be valid.\n" +
-                                                   "Please choose a different band name.", targetBandName); /*I18N*/
+                    "Please choose a different band name.", targetBandName); /*I18N*/
         } else if (product.containsBand(targetBandName)) {
             message = MessageFormat.format("The selected product already contains a band named ''{0}''.\n" +
-                                                   "Please choose a different band name.", targetBandName); /*I18N*/
+                    "Please choose a different band name.", targetBandName); /*I18N*/
         } else if (filterSetsForm.getSelectedFilter() == null) {
             message = "Please select an image filter.";    /*I18N*/
         }
