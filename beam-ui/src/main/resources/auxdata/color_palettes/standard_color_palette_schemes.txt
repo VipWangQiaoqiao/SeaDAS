@@ -16,12 +16,13 @@
  adg                          :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Absorption due to gelbstof and detritus
  aph                          :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Absorption due to phytoplankton
  aw                           :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Absorption coefficient of seawater
+ bathymetry                   :10.0        :11000      :true      :bathymetry.cpd           :Bathymetry
  bb                           :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :Total backscatter
  bbp                          :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :Particle backscatter
  bbw                          :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :Backscattering coefficient of seawater
  elevation                    :-12000.0   :15000.0    :false     :oceancolor_standard.cpd  :Elevation
- elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd :Bathymetry (Colormap used in the ETOPO1 global relief map)
- elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd :Topography (Colormap used in the ETOPO1 global relief map)
+# elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd :Bathymetry (Colormap used in the ETOPO1 global relief map)
+# elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd :Topography (Colormap used in the ETOPO1 global relief map)
  epsilon                      :0.850000   :1.23100    :false     :oceancolor_standard.cpd  :Epsilon of aerosol correction
  Fluorescence                 :0.0        :0.05       :false     :oceancolor_standard.cpd  :Fluorescence Line Height (normalized)
  Kd                           :0.01000000 :6.0        :true      :oceancolor_standard.cpd  :Diffuse attenuation coefficient
@@ -33,6 +34,7 @@
  nLw 526-600 nm               :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :Normalized water-leaving radiance at [526-600] nm
  nLw > 600 nm                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :Normalized water-leaving radiance at [greater than 600] nm
  SSS                          :30.53      :39.47      :false     :oceancolor_sss.cpd       :Sea Surface Salinity (trimmed to better fit linear scaling)
+ topography                   :       0   :8500.0     :false     :elevation_topography.cpd :Topography (Colormap used in the ETOPO1 global relief map)
  Zeu                          :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :Euphotic Depth
  Zhl                          :2.0        :65.0       :false     :oceancolor_zphotic.cpd   :Heated Layer Depth
  Zsd                          :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :Secchi Depth

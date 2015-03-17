@@ -1244,4 +1244,5 @@
  elevation                    :-12000.0   :15000.0    :false     :gray_scale.cpd  :Elevation
  elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd :Bathymetry (Colormap used in the ETOPO1 global relief map)
  elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd :Topography (Colormap used in the ETOPO1 global relief map)
-
+ topography_sealevel          :       0   :8500.0     :false     :elevation_topography.cpd :Topography (Colormap used in the ETOPO1 global relief map)
+ bathymetry_sealevel          :10.0        : 11000.0   :true      :bathymetry.cpd           :Bathymetry
