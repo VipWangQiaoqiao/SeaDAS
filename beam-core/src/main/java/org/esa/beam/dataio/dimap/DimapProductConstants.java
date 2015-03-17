@@ -244,6 +244,7 @@ public final class DimapProductConstants {
     public static final String TAG_COLOR_SCHEME_NAME = "COLOR_SCHEME_NAME";
     public static final String TAG_ALTERED_COLOR_SCHEME = "ALTERED_COLOR_SCHEME";
     public static final String TAG_ALTERED_CPD = "ALTERED_CPD";
+    public static final String TAG_PALETTE_INITIALIZED = "PALETTE_INITIALIZED";
     public static final String TAG_CPD_FILE_NAME = "CPD_FILE_NAME";
     public static final String TAG_COLOR_SCHEME_DEFAULT_LIST = "COLOR_SCHEME_DEFAULT_LIST";
     public static final String TAG_COLOR_PALETTE_POINT = "Color_Palette_Point";

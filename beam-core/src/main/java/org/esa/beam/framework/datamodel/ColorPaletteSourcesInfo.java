@@ -13,6 +13,8 @@ public class ColorPaletteSourcesInfo {
 
     private boolean colorPaletteSchemeDefaultList = true;
 
+    private boolean paletteInitialized = false;
+
 
 
     private static final String ALTERED_STRING = "(Altered) ";
@@ -99,5 +101,13 @@ public class ColorPaletteSourcesInfo {
 
     public void setAlteredColorScheme(boolean alteredColorScheme) {
         this.alteredColorScheme = alteredColorScheme;
+    }
+
+    public boolean isPaletteInitialized() {
+        return paletteInitialized;
+    }
+
+    public void setPaletteInitialized(boolean paletteInitialized) {
+        this.paletteInitialized = paletteInitialized;
     }
 }

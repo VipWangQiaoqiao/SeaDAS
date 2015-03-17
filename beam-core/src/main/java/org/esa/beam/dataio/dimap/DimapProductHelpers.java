@@ -1221,6 +1221,7 @@ public class DimapProductHelpers {
             imageInfo.getColorPaletteSourcesInfo().setCpdFileName(getCpdFileName(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setAlteredColorScheme(isAlteredColorScheme(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setAlteredCpd(isAlteredCpd(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setPaletteInitialized(isPaletteInitialized(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(isColorPaletteSchemeDefaultList(bandStatisticsElem));
 
             final Element noDataElem = bandStatisticsElem.getChild(DimapProductConstants.TAG_NO_DATA_COLOR);
@@ -1347,6 +1348,21 @@ public class DimapProductHelpers {
             return altered;
         }
 
+        private static boolean isPaletteInitialized(Element bandStatisticsElem) {
+            boolean paletteInitialized = false;
+            try {
+                String paletteInitializedString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_PALETTE_INITIALIZED);
+                if (paletteInitializedString != null) {
+                    if (paletteInitializedString.toLowerCase().equals("true") || paletteInitializedString.toLowerCase().equals("1")) {
+                        paletteInitialized = true;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return paletteInitialized;
+        }
 
 
         private static String getColorPaletteSchemeName(Element bandStatisticsElem) {
