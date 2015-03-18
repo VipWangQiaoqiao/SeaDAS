@@ -142,22 +142,22 @@ public class ProductUtils {
                     // perhaps the rgb_profile is where it should ideally go
                     // essentially it's a palette scheme
                     //
-                    String name = raster.getName();
-                    Double min = 0.0;
-                    Double max = 0.0;
-                    if (name != null && (name.equals("virtual_red") || name.equals("virtual_green") || name.equals("virtual_blue"))) {
-                        min = 0.0;
-                        max = 100.0;
-                    } else {
-                        min = imageInfo.getColorPaletteDef().getMinDisplaySample();
-                        max = imageInfo.getColorPaletteDef().getMaxDisplaySample();
-                    }
-                    rgbChannelDef.setMinDisplaySample(i, min);
-                    rgbChannelDef.setMaxDisplaySample(i, max);
+//                    String name = raster.getName();
+//                    Double min = 0.0;
+//                    Double max = 0.0;
+//                    if (name != null && (name.equals("virtual_red") || name.equals("virtual_green") || name.equals("virtual_blue"))) {
+//                        min = 0.0;
+//                        max = 100.0;
+//                    } else {
+//                        min = imageInfo.getColorPaletteDef().getMinDisplaySample();
+//                        max = imageInfo.getColorPaletteDef().getMaxDisplaySample();
+//                    }
+//                    rgbChannelDef.setMinDisplaySample(i, min);
+//                    rgbChannelDef.setMaxDisplaySample(i, max);
                     // Danny added the previous code, this is the BEAM code which makes the default based on the statistics
                     //
-//                    rgbChannelDef.setMinDisplaySample(i, imageInfo.getColorPaletteDef().getMinDisplaySample());
-//                    rgbChannelDef.setMaxDisplaySample(i, imageInfo.getColorPaletteDef().getMaxDisplaySample());
+                    rgbChannelDef.setMinDisplaySample(i, imageInfo.getColorPaletteDef().getMinDisplaySample());
+                    rgbChannelDef.setMaxDisplaySample(i, imageInfo.getColorPaletteDef().getMaxDisplaySample());
                 }
                 return new ImageInfo(rgbChannelDef);
             } finally {
