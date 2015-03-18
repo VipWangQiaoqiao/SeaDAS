@@ -1,15 +1,4 @@
-#ETOPO1 global relief map Color Palette Definition File
-# DO NOT EDIT! - this file is automatically reinstalled each time SeaDAS is run, so any edits to this file will be lost
-#http://svn.idldev.com/vis/trunk/src/color/cpt-city/ngdc/ETOPO1.cpt
-# Colormap used in the ETOPO1 global relief map:
-# http://ngdc.noaa.gov/mgg/global/global.html
-#
-# Above sea level is a modified version of GMT_globe.cpt, 
-# Designed by Lester M. Anderson (CASP, UK) lester.anderson@casp.cam.ac.uk,
-# Modified by Jesse Varner and Elliot Lim (NOAA/NGDC) with a smaller band of white for the highest elevations.
-# The ocean colors are adapted from GMT_haxby.cpt, popularized by Bill Haxby, LDEO
-# COLOR_MODEL = RGB
-#Thu Mar 14 12:26:42 EDT 2013
+
 color20=0,43,75
 color19=0,53,95
 color18=0,63,115
