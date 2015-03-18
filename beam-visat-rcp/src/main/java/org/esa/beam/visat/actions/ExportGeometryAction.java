@@ -18,13 +18,17 @@ package org.esa.beam.visat.actions;
 
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
 import org.esa.beam.framework.datamodel.CrsGeoCoding;
+import org.esa.beam.framework.datamodel.GeoCoding;
 import org.esa.beam.framework.datamodel.ProductNode;
 import org.esa.beam.framework.datamodel.VectorDataNode;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.command.CommandEvent;
 import org.esa.beam.framework.ui.command.ExecCommand;
 import org.esa.beam.jai.ImageManager;
+import org.esa.beam.util.FeatureUtils;
 import org.esa.beam.util.io.BeamFileFilter;
 import org.esa.beam.visat.VisatApp;
 import org.geotools.data.DataStore;
@@ -36,12 +40,14 @@ import org.geotools.data.store.ReprojectingFeatureCollection;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.geometry.jts.GeometryCoordinateSequenceTransformer;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.TransformException;
 
 import javax.swing.*;
 import java.io.File;
@@ -210,7 +216,21 @@ public class ExportGeometryAction extends ExecCommand {
                 featureCollection = new ReprojectingFeatureCollection(featureCollection, crs, modelCrs);
             }
         }
-        Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<>();
+
+        //Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<>();
+
+        Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<Class<?>, List<SimpleFeature>>();
+
+        GeoCoding geoCoding = vectorNode.getProduct().getGeoCoding();
+        final CoordinateReferenceSystem mapCRS = geoCoding.getMapCRS();
+        if (!mapCRS.equals(DefaultGeographicCRS.WGS84) || (geoCoding instanceof CrsGeoCoding)) {
+             try {
+                 transformFeatureCollection(featureCollection, mapCRS, geoCoding.getImageCRS());
+             } catch (TransformException e) {
+                 VisatApp.getApp().showErrorDialog("transformation failed!");
+             }
+         }
+
         final FeatureIterator<SimpleFeature> featureIterator = featureCollection.features();
         while (featureIterator.hasNext()) {
             SimpleFeature feature = featureIterator.next();
@@ -225,6 +245,18 @@ public class ExportGeometryAction extends ExecCommand {
             featureList.add(feature);
         }
         return featureListMap;
+    }
+
+    private static void transformFeatureCollection(FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection, CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws TransformException {
+        final GeometryCoordinateSequenceTransformer transform = FeatureUtils.getTransform(sourceCRS, targetCRS);
+        final FeatureIterator<SimpleFeature> features = featureCollection.features();
+        final GeometryFactory geometryFactory = new GeometryFactory();
+        while (features.hasNext()) {
+            final SimpleFeature simpleFeature = features.next();
+            final LineString sourceLine = (LineString) simpleFeature.getDefaultGeometry();
+            final LineString targetLine = transform.transformLineString(sourceLine, geometryFactory);
+            simpleFeature.setDefaultGeometry(targetLine);
+        }
     }
 
     private static SimpleFeatureType changeGeometryType(SimpleFeatureType original, Class<?> geometryType) {
