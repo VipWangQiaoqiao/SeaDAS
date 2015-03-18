@@ -136,8 +136,28 @@ public class ProductUtils {
                     ImageInfo imageInfo = assignMissingImageInfos ? raster.getImageInfo(
                             subPm) : raster.createDefaultImageInfo(null, subPm);
                     rgbChannelDef.setSourceName(i, raster.getName());
-                    rgbChannelDef.setMinDisplaySample(i, imageInfo.getColorPaletteDef().getMinDisplaySample());
-                    rgbChannelDef.setMaxDisplaySample(i, imageInfo.getColorPaletteDef().getMaxDisplaySample());
+
+                    // Danny added this to make the default range consistent.
+                    // ideally it should be ties to the band
+                    // perhaps the rgb_profile is where it should ideally go
+                    // essentially it's a palette scheme
+                    //
+                    String name = raster.getName();
+                    Double min = 0.0;
+                    Double max = 0.0;
+                    if (name != null && (name.equals("virtual_red") || name.equals("virtual_green") || name.equals("virtual_blue"))) {
+                        min = 0.0;
+                        max = 100.0;
+                    } else {
+                        min = imageInfo.getColorPaletteDef().getMinDisplaySample();
+                        max = imageInfo.getColorPaletteDef().getMaxDisplaySample();
+                    }
+                    rgbChannelDef.setMinDisplaySample(i, min);
+                    rgbChannelDef.setMaxDisplaySample(i, max);
+                    // Danny added the previous code, this is the BEAM code which makes the default based on the statistics
+                    //
+//                    rgbChannelDef.setMinDisplaySample(i, imageInfo.getColorPaletteDef().getMinDisplaySample());
+//                    rgbChannelDef.setMaxDisplaySample(i, imageInfo.getColorPaletteDef().getMaxDisplaySample());
                 }
                 return new ImageInfo(rgbChannelDef);
             } finally {

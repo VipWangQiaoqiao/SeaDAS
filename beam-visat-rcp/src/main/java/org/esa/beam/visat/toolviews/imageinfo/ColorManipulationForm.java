@@ -162,10 +162,26 @@ class ColorManipulationForm {
         }
 
         if (this.productSceneView != null) {
-            if(!getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().isPaletteInitialized()) {
+            boolean paletteInitialized = false;
+
+            if (getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().isPaletteInitialized()) {
+                paletteInitialized = true;
+            } else {
+                ColorPaletteDef colorPaletteDef = this.productSceneView.getImageInfo().getColorPaletteDef();
+
+                if (colorPaletteDef != null && colorPaletteDef.getNumPoints() > 3)
+                    paletteInitialized = true;
+            }
+
+            if (!paletteInitialized) {
+
                 this.productSceneView.setToDefaultColorScheme(getSystemAuxdataDir(), createDefaultImageInfo());
                 getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().setPaletteInitialized(true);
             }
+
+
+            boolean profile = this.productSceneView.isProfile();
+
             setImageInfoCopy(this.productSceneView.getImageInfo());
         }
 
