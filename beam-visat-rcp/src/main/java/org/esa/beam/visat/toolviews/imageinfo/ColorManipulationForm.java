@@ -180,7 +180,7 @@ class ColorManipulationForm {
             }
 
 
-            boolean profile = this.productSceneView.isProfile();
+           // boolean profile = this.productSceneView.isProfile();
 
             setImageInfoCopy(this.productSceneView.getImageInfo());
         }
