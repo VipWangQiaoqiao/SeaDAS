@@ -36,6 +36,7 @@ public class CreateFilteredBandDialog extends ModalDialog implements FilterSetFo
 
         FilterSet systemFilterSet = new FilterSet("System", false);
         systemFilterSet.addFilter("Smooth and Blurr", StandardFilters.SMOOTHING_FILTERS);
+        systemFilterSet.addFilter("Straylight", StandardFilters.STRAYLIGHT_FILTERS);
         systemFilterSet.addFilter("Detect Lines", StandardFilters.LINE_DETECTION_FILTERS);
         systemFilterSet.addFilter("Detect Gradients (Emboss)", StandardFilters.GRADIENT_DETECTION_FILTERS);
         systemFilterSet.addFilter("Sharpen", StandardFilters.SHARPENING_FILTERS);
