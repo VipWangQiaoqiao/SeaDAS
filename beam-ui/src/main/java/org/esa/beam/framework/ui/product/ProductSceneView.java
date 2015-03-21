@@ -481,6 +481,34 @@ public class ProductSceneView extends BasicView
         ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false);
         boolean defaultSet = false;
         if (colorPaletteSchemes != null) {
+
+            // todo Danny added this can be used later in setting min/max from RGB profile
+//            RasterDataNode[] rasters = getRasters();
+//
+//            Assert.notNull(rasters, "rasters");
+//            Assert.argument(rasters.length == 1 || rasters.length == 3, "rasters.length == 1 || rasters.length == 3");
+//            if (rasters.length == 1) {
+//
+//            } else {
+//                try {
+//                    final RGBChannelDef rgbChannelDef = new RGBChannelDef();
+//                    for (int i = 0; i < rasters.length; i++) {
+//                        RasterDataNode raster = rasters[i];
+//                        String name = raster.getName();
+//
+//                        rgbChannelDef.setSourceName(i, raster.getName());
+//
+//                        rgbChannelDef.setMinDisplaySample(i, 0);
+////                    rgbChannelDef.setMinDisplaySample(i, imageInfo.getColorPaletteDef().getMinDisplaySample());
+//                        rgbChannelDef.setMaxDisplaySample(i, 100);
+////                    rgbChannelDef.setMaxDisplaySample(i, imageInfo.getColorPaletteDef().getMaxDisplaySample());
+//                    }
+//
+//                } finally {
+//                }
+//            }
+
+
             ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getColorPaletteInfos();
             for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
                 String bandName = getBaseImageLayer().getName().trim();
