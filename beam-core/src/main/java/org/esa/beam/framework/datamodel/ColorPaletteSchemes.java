@@ -121,7 +121,7 @@ public class ColorPaletteSchemes {
         jComboBox.setEditable(false);
         jComboBox.setMaximumRowCount(20);
         if (schemesFile != null) {
-            jComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + schemesFile.getName());
+            jComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + userSchemesFile.getName());
         }
 
 

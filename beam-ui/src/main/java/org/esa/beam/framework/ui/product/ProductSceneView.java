@@ -480,9 +480,85 @@ public class ProductSceneView extends BasicView
     public void setToDefaultColorScheme(File auxDir, ImageInfo defaultImageInfo) {
         ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false);
         boolean defaultSet = false;
+
         if (colorPaletteSchemes != null) {
 
-            // todo Danny added this can be used later in setting min/max from RGB profile
+            String bandName = getBaseImageLayer().getName().trim();
+            bandName = bandName.substring(bandName.indexOf(" ")).trim();
+
+            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getColorPaletteInfos();
+            ColorPaletteInfo matchingColorPaletteInfo = null;
+
+            for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
+                String cpdName = colorPaletteInfo.getName().trim();
+                if (bandName.equals(cpdName)) {
+                    matchingColorPaletteInfo = colorPaletteInfo;
+                    break;
+                }
+            }
+
+
+            // try wildcards
+            String WILDCARD = "*";
+            if (matchingColorPaletteInfo == null) {
+                for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
+                    String cpdName = colorPaletteInfo.getName().trim();
+
+                    if (cpdName.contains(WILDCARD)) {
+                        if (!cpdName.startsWith(WILDCARD) && cpdName.endsWith(WILDCARD)) {
+                            String basename = new String(cpdName.substring(0, cpdName.length() - 1));
+                            if (bandName.startsWith(basename)) {
+                                matchingColorPaletteInfo = colorPaletteInfo;
+                                break;
+                            }
+                        }
+
+                        if (cpdName.startsWith(WILDCARD) && !cpdName.endsWith(WILDCARD) && matchingColorPaletteInfo == null) {
+                            String basename = new String(cpdName.substring(1, cpdName.length()));
+                            if (bandName.endsWith(basename)) {
+                                matchingColorPaletteInfo = colorPaletteInfo;
+                                break;
+                            }
+                        }
+
+                        if (cpdName.startsWith(WILDCARD) && cpdName.endsWith(WILDCARD) && matchingColorPaletteInfo == null) {
+                            String basename = new String(cpdName.substring(1, cpdName.length() - 1));
+                            if (bandName.contains(basename)) {
+                                matchingColorPaletteInfo = colorPaletteInfo;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (matchingColorPaletteInfo != null) {
+                //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
+                ColorPaletteDef colorPaletteDef = matchingColorPaletteInfo.getColorPaletteDef();
+                getImageInfo().setColorPaletteDef(colorPaletteDef,
+                        matchingColorPaletteInfo.getMinValue(),
+                        matchingColorPaletteInfo.getMaxValue(),
+                        true, //colorPaletteDef.isAutoDistribute(),
+                        matchingColorPaletteInfo.isSourceLogScaled(),
+                        matchingColorPaletteInfo.isLogScaled());
+                getImageInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
+                //      this.productSceneView.setColorPaletteInfo(cpdInfo);
+                getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(matchingColorPaletteInfo.getName());
+                getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
+                getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename());
+
+                defaultSet = true;
+            }
+        }
+
+        if (!defaultSet) {
+            setImageInfo(defaultImageInfo);
+            getImageInfo().getColorPaletteSourcesInfo().setCpdFileName("default gray-scale");
+            getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
+            getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName("none");
+        }
+
+        // todo Danny added this can be used later in setting min/max from RGB profile
 //            RasterDataNode[] rasters = getRasters();
 //
 //            Assert.notNull(rasters, "rasters");
@@ -507,39 +583,6 @@ public class ProductSceneView extends BasicView
 //                } finally {
 //                }
 //            }
-
-
-            ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getColorPaletteInfos();
-            for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
-                String bandName = getBaseImageLayer().getName().trim();
-                bandName = bandName.substring(bandName.indexOf(" ")).trim();
-                String cpdName = colorPaletteInfo.getName().trim();
-                if (bandName.equals(cpdName)) {
-                    //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
-                    ColorPaletteDef colorPaletteDef = colorPaletteInfo.getColorPaletteDef();
-                    getImageInfo().setColorPaletteDef(colorPaletteDef,
-                            colorPaletteInfo.getMinValue(),
-                            colorPaletteInfo.getMaxValue(),
-                            true, //colorPaletteDef.isAutoDistribute(),
-                            colorPaletteInfo.isSourceLogScaled(),
-                            colorPaletteInfo.isLogScaled());
-                    getImageInfo().setLogScaled(colorPaletteInfo.isLogScaled());
-                    //      this.productSceneView.setColorPaletteInfo(cpdInfo);
-                    getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(colorPaletteInfo.getName());
-                    getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
-                    getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
-                    defaultSet = true;
-                    break;
-                }
-            }
-        }
-
-        if (!defaultSet) {
-            setImageInfo(defaultImageInfo);
-            getImageInfo().getColorPaletteSourcesInfo().setCpdFileName("default gray-scale");
-            getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
-            getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName("none");
-        }
 
     }
 
