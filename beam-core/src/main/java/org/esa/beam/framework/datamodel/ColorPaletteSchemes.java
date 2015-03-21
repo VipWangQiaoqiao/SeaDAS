@@ -29,7 +29,9 @@ public class ColorPaletteSchemes {
     }
 
     private final String STANDARD_SCHEMA_FILENAME = "standard_color_palette_schemes.txt";
+    private final String USER_STANDARD_SCHEMA_FILENAME = "user_standard_color_palette_schemes.txt";
     private final String DEFAULTS_SCHEMA_FILENAME = "defaults_color_palette_schemes.txt";
+    private final String USER_DEFAULTS_SCHEMA_FILENAME = "user_defaults_color_palette_schemes.txt";
 
 //    private final String STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "General Schemes";
 //    private final String DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "Default Schemes";
@@ -46,6 +48,7 @@ public class ColorPaletteSchemes {
 
     private File colorPaletteDir = null;
     private File schemesFile = null;
+    private File userSchemesFile = null;
     private String jComboBoxFirstEntryName = null;
 
 
@@ -55,11 +58,13 @@ public class ColorPaletteSchemes {
         switch (id) {
             case STANDARD:
                 schemesFile = new File(this.colorPaletteDir, STANDARD_SCHEMA_FILENAME);
+                userSchemesFile = new File(this.colorPaletteDir, USER_STANDARD_SCHEMA_FILENAME);
                 setjComboBoxFirstEntryName(STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
                 break;
             case DEFAULTS:
                 schemesFile = new File(this.colorPaletteDir, DEFAULTS_SCHEMA_FILENAME);
-      //          setjComboBoxFirstEntryName(DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
+                userSchemesFile = new File(this.colorPaletteDir, USER_DEFAULTS_SCHEMA_FILENAME);
+                //          setjComboBoxFirstEntryName(DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
                 break;
 
         }
@@ -72,7 +77,11 @@ public class ColorPaletteSchemes {
             } else {
                 // this mode is used for setting the default color scheme for an image when first opened
                 // it doesn't need comboBoxes, only the colorPaletteInfos is needed
-                initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile);
+                initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, false);
+                if (userSchemesFile.exists()) {
+                    initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, true);
+                }
+
             }
 
             reset();
@@ -85,7 +94,10 @@ public class ColorPaletteSchemes {
         jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null, null, 0, 0, false, null, true);
         colorPaletteInfos.add(jComboBoxFirstEntryColorPaletteInfo);
 
-        initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile);
+        initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, false);
+        if (userSchemesFile.exists()) {
+            initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, false);
+        }
 
         Object[] colorPaletteInfosArray = colorPaletteInfos.toArray();
 
@@ -121,7 +133,7 @@ public class ColorPaletteSchemes {
     }
 
 
-    private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file) {
+    private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file, boolean userOverRideMode) {
 
         ArrayList<String> lines = readFileIntoArrayList(file);
 
@@ -140,42 +152,63 @@ public class ColorPaletteSchemes {
                     String isLogScaledStr = values[3].trim();
                     String cpdFileName = values[4].trim();
 
-                    String description;
-                    if (values.length == 6) {
-                        description = values[5].trim();
-                    } else {
-                        description = "";
-                    }
+                    if (name != null && name.length() > 0 &&
+                            minValStr != null && minValStr.length() > 0 &&
+                            maxValStr != null && maxValStr.length() > 0 &&
+                            isLogScaledStr != null && isLogScaledStr.length() > 0 &&
+                            cpdFileName != null && cpdFileName.length() > 0) {
+                        String description;
+                        if (values.length == 6) {
+                            description = values[5].trim();
+                        } else {
+                            description = "";
+                        }
 
-                    Double minVal = Double.valueOf(minValStr);
-                    Double maxVal = Double.valueOf(maxValStr);
-                    boolean isLogScaled = false;
-                    if (isLogScaledStr != null && isLogScaledStr.toLowerCase().equals("true")) {
-                        isLogScaled = true;
-                    }
+                        Double minVal = Double.valueOf(minValStr);
+                        Double maxVal = Double.valueOf(maxValStr);
+                        boolean isLogScaled = false;
+                        if (isLogScaledStr != null && isLogScaledStr.toLowerCase().equals("true")) {
+                            isLogScaled = true;
+                        }
 
-                    ColorPaletteInfo colorPaletteInfo;
+                        ColorPaletteInfo colorPaletteInfo;
 
-                    if (testMinMax(minVal, maxVal, isLogScaled)) {
+                        if (testMinMax(minVal, maxVal, isLogScaled)) {
 
-                        File cpdFile = new File(dirName, cpdFileName);
-                        if (cpdFile.exists()) {
-                            ColorPaletteDef colorPaletteDef;
-                            try {
-                                colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
-                                colorPaletteInfo = new ColorPaletteInfo(name, description, cpdFileName, minVal, maxVal, isLogScaled, colorPaletteDef, true);
+                            File cpdFile = new File(dirName, cpdFileName);
+                            if (cpdFile.exists()) {
+                                ColorPaletteDef colorPaletteDef;
+                                try {
+                                    colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
+                                    colorPaletteInfo = new ColorPaletteInfo(name, description, cpdFileName, minVal, maxVal, isLogScaled, colorPaletteDef, true);
 
-                            } catch (IOException e) {
+                                } catch (IOException e) {
+                                    colorPaletteInfo = new ColorPaletteInfo(name, description);
+                                }
+                            } else {
                                 colorPaletteInfo = new ColorPaletteInfo(name, description);
                             }
                         } else {
                             colorPaletteInfo = new ColorPaletteInfo(name, description);
                         }
-                    } else {
-                        colorPaletteInfo = new ColorPaletteInfo(name, description);
-                    }
 
-                    colorPaletteInfos.add(colorPaletteInfo);
+                        if (colorPaletteInfo != null) {
+                            if (userOverRideMode) {
+                                // look for previous name which user may be overriding and delete it in the colorPaletteInfo object
+                                ColorPaletteInfo colorPaletteInfoToDelete = null;
+                                for (ColorPaletteInfo storedColorPaletteInfo : colorPaletteInfos) {
+                                    if (storedColorPaletteInfo.getName().equals(name)) {
+                                        colorPaletteInfoToDelete = storedColorPaletteInfo;
+                                        break;
+                                    }
+                                }
+                                if (colorPaletteInfoToDelete != null) {
+                                    colorPaletteInfos.remove(colorPaletteInfoToDelete);
+                                }
+                            }
+                            colorPaletteInfos.add(colorPaletteInfo);
+                        }
+                    }
                 }
             }
         }
