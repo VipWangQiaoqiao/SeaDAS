@@ -180,7 +180,7 @@ class ColorManipulationForm {
             }
 
 
-           // boolean profile = this.productSceneView.isProfile();
+            // boolean profile = this.productSceneView.isProfile();
 
             setImageInfoCopy(this.productSceneView.getImageInfo());
         }
@@ -456,7 +456,6 @@ class ColorManipulationForm {
         toolButtonsPanel.add(multiApplyButton, gbc);
 
 
-
         gbc.gridy++;
         gbc.gridx = 0;
         AbstractButton[] additionalButtons = childForm.getToolButtons();
@@ -551,9 +550,6 @@ class ColorManipulationForm {
             childForm.resetFormModel(getProductSceneView());
         }
     }
-
-
-
 
 
     private void applyMultipleColorPaletteDef() {
@@ -784,22 +780,18 @@ class ColorManipulationForm {
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
                 resourceInstaller.install(".*.cpd", progressMonitor, true);
 
-                String CPD_DEFAULTS_FILENAME = "cpd_defaults.txt";
-                String CPD_SCHEMES_FILENAME = "cpd_schemes.txt";
-                String USER_CPD_DEFAULTS_FILENAME = "user_cpd_defaults.txt";
-                String USER_CPD_SCHEMES_FILENAME = "user_cpd_schemes.txt";
 
-                resourceInstaller.install(CPD_DEFAULTS_FILENAME, progressMonitor);
-                resourceInstaller.install(CPD_SCHEMES_FILENAME, progressMonitor);
+                resourceInstaller.install(ColorPaletteSchemes.CPD_DEFAULTS_FILENAME, progressMonitor);
+                resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor);
 
 
-                File userCpdDefaultsFile = new File(auxdataDir, USER_CPD_DEFAULTS_FILENAME);
+                File userCpdDefaultsFile = new File(auxdataDir, ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME);
                 if (!userCpdDefaultsFile.exists()) {
                     resourceInstaller.install(userCpdDefaultsFile.getName(), progressMonitor);
                 }
 
 
-                File userCpdSchemesFile = new File(auxdataDir, USER_CPD_SCHEMES_FILENAME);
+                File userCpdSchemesFile = new File(auxdataDir, ColorPaletteSchemes.USER_CPD_SCHEMES_FILENAME);
                 if (!userCpdSchemesFile.exists()) {
                     resourceInstaller.install(userCpdSchemesFile.getName(), progressMonitor);
                 }
@@ -831,7 +823,6 @@ class ColorManipulationForm {
         };
         swingWorker.executeWithBlocking();
     }
-
 
 
     private File getSystemAuxdataDir() {
@@ -880,7 +871,6 @@ class ColorManipulationForm {
         };
         swingWorker.executeWithBlocking();
     }
-
 
 
     private ImageInfo createDefaultImageInfo() {

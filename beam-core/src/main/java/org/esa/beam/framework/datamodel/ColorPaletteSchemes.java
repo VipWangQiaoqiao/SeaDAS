@@ -13,7 +13,10 @@ import java.util.ArrayList;
  * Created by danielknowles on 6/28/14.
  */
 public class ColorPaletteSchemes {
-
+    public static final String CPD_DEFAULTS_FILENAME = "cpd_defaults.txt";
+    public static final String CPD_SCHEMES_FILENAME = "cpd_schemes.txt";
+    public static final String USER_CPD_DEFAULTS_FILENAME = "user_cpd_defaults.txt";
+    public static final String USER_CPD_SCHEMES_FILENAME = "user_cpd_schemes.txt";
 
     public boolean isjComboBoxShouldFire() {
         return jComboBoxShouldFire;
@@ -28,16 +31,8 @@ public class ColorPaletteSchemes {
         DEFAULTS
     }
 
-    private final String STANDARD_SCHEMA_FILENAME = "cpd_schemes.txt";
-    private final String USER_STANDARD_SCHEMA_FILENAME = "user_cpd_schemes.txt";
-    private final String DEFAULTS_SCHEMA_FILENAME = "cpd_defaults.txt";
-    private final String USER_DEFAULTS_SCHEMA_FILENAME = "user_cpd_defaults.txt";
-
-//    private final String STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "General Schemes";
-//    private final String DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "Default Schemes";
 
     private final String STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "Standard Schemes";
-    private final String DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "................................";
 
 
     private JComboBox jComboBox = null;
@@ -57,13 +52,13 @@ public class ColorPaletteSchemes {
 
         switch (id) {
             case STANDARD:
-                schemesFile = new File(this.colorPaletteDir, STANDARD_SCHEMA_FILENAME);
-                userSchemesFile = new File(this.colorPaletteDir, USER_STANDARD_SCHEMA_FILENAME);
+                schemesFile = new File(this.colorPaletteDir, CPD_SCHEMES_FILENAME);
+                userSchemesFile = new File(this.colorPaletteDir, USER_CPD_SCHEMES_FILENAME);
                 setjComboBoxFirstEntryName(STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
                 break;
             case DEFAULTS:
-                schemesFile = new File(this.colorPaletteDir, DEFAULTS_SCHEMA_FILENAME);
-                userSchemesFile = new File(this.colorPaletteDir, USER_DEFAULTS_SCHEMA_FILENAME);
+                schemesFile = new File(this.colorPaletteDir, CPD_DEFAULTS_FILENAME);
+                userSchemesFile = new File(this.colorPaletteDir, USER_CPD_DEFAULTS_FILENAME);
                 //          setjComboBoxFirstEntryName(DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
                 break;
 
