@@ -1,5 +1,17 @@
+# Supported Wildcard formats
+# Wildcard=*
+# FIELD_NAME entry examples
+# string*           - matches if bandname starts with 'string'
+# *string           - matches if bandname ends with 'string'
+# *string*          - matches if bandname contains 'string'
+# string1*string2   - matches if bandname starts with 'string1' and ends with 'string2'
+#
+# Exact-match entries in this file will override exact-match entries contained in the cpd_defaults.txt file
+# Note: wildcard entries do not override exact-match entries
+
 #FIELD_NAME                    MIN         MAX         LOG_SCALE  CPD_FILENAME              DESCRIPTION
  myname                        :0.0       :100.0       :false     :oceancolor_standard.cpd  :mydescription
  chlor_a*                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :Chlorophyll a concentration
  *chlor_a                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :Chlorophyll a concentration
  *bathymetry*                  :10.0       : 11000.0   :true      :bathymetry.cpd           :Bathymetry
+ aph_*_giop                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :Absorption due to phytoplankton at any wavelength

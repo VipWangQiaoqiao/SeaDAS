@@ -499,7 +499,7 @@ public class ProductSceneView extends BasicView
 
 
             // try wildcards
-            String WILDCARD = "*";
+            final String WILDCARD = new String("*");
             if (matchingColorPaletteInfo == null) {
                 for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
                     String cpdName = colorPaletteInfo.getName().trim();
@@ -524,6 +524,16 @@ public class ProductSceneView extends BasicView
                         if (cpdName.startsWith(WILDCARD) && cpdName.endsWith(WILDCARD) && matchingColorPaletteInfo == null) {
                             String basename = new String(cpdName.substring(1, cpdName.length() - 1));
                             if (bandName.contains(basename)) {
+                                matchingColorPaletteInfo = colorPaletteInfo;
+                                break;
+                            }
+                        }
+
+
+                        String basename = new String(cpdName);
+                        String basenameSplit[] = basename.split("\\" + WILDCARD);
+                        if (basenameSplit.length == 2 && basenameSplit[0].length() > 0 && basenameSplit[1].length() > 0) {
+                            if (bandName.startsWith(basenameSplit[0]) && bandName.endsWith(basenameSplit[1])) {
                                 matchingColorPaletteInfo = colorPaletteInfo;
                                 break;
                             }
@@ -598,7 +608,7 @@ public class ProductSceneView extends BasicView
      * Gets the number of raster datasets.
      *
      * @return the number of raster datasets, always <code>1</code> for single banded palette images or <code>3</code>
-     *         for RGB images
+     * for RGB images
      */
     public int getNumRasters() {
         return getSceneImage().getRasters().length;
