@@ -783,13 +783,25 @@ class ColorManipulationForm {
             @Override
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
                 resourceInstaller.install(".*.cpd", progressMonitor, true);
-                resourceInstaller.install("standard_color_palette_schemes.txt", progressMonitor);
-                resourceInstaller.install("defaults_color_palette_schemes.txt", progressMonitor);
 
-                String USER_CPD_DEFAULTS_FILENAME = "user_cpd_defaults";
+                String CPD_DEFAULTS_FILENAME = "cpd_defaults.txt";
+                String CPD_SCHEMES_FILENAME = "cpd_schemes.txt";
+                String USER_CPD_DEFAULTS_FILENAME = "user_cpd_defaults.txt";
+                String USER_CPD_SCHEMES_FILENAME = "user_cpd_schemes.txt";
+
+                resourceInstaller.install(CPD_DEFAULTS_FILENAME, progressMonitor);
+                resourceInstaller.install(CPD_SCHEMES_FILENAME, progressMonitor);
+
+
                 File userCpdDefaultsFile = new File(auxdataDir, USER_CPD_DEFAULTS_FILENAME);
                 if (!userCpdDefaultsFile.exists()) {
                     resourceInstaller.install(userCpdDefaultsFile.getName(), progressMonitor);
+                }
+
+
+                File userCpdSchemesFile = new File(auxdataDir, USER_CPD_SCHEMES_FILENAME);
+                if (!userCpdSchemesFile.exists()) {
+                    resourceInstaller.install(userCpdSchemesFile.getName(), progressMonitor);
                 }
 
                 defaultColorPalettesInstalled = true;
