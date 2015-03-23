@@ -13,9 +13,10 @@ public class ColorPaletteInfo {
     private boolean isSourceLogScaled = false;
     private ColorPaletteDef colorPaletteDef;
     private boolean enabled;
+    private boolean isOverRide;
 
     public ColorPaletteInfo(String name, String description, String cpdFilename, double minValue, double maxValue,
-                            boolean isLogScaled, ColorPaletteDef colorPaletteDef, boolean enabled) {
+                            boolean isLogScaled, ColorPaletteDef colorPaletteDef, boolean isOverRide, boolean enabled) {
         this.setName(name);
         this.setDescription(description);
         this.setCpdFilename(cpdFilename);
@@ -23,6 +24,7 @@ public class ColorPaletteInfo {
         this.setMaxValue(maxValue);
         this.setLogScaled(isLogScaled);
         this.setEnabled(enabled);
+        this.setOverRide(isOverRide);
         this.colorPaletteDef = colorPaletteDef;
         if (colorPaletteDef != null) {
             this.setSourceLogScaled(colorPaletteDef.isLogScaled());
@@ -122,5 +124,13 @@ public class ColorPaletteInfo {
 
     private void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isOverRide() {
+        return isOverRide;
+    }
+
+    public void setOverRide(boolean overRide) {
+        isOverRide = overRide;
     }
 }

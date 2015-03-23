@@ -489,58 +489,46 @@ public class ProductSceneView extends BasicView
             ArrayList<ColorPaletteInfo> defaultSchemes = colorPaletteSchemes.getColorPaletteInfos();
             ColorPaletteInfo matchingColorPaletteInfo = null;
 
+            final String WILDCARD = new String("*");
+
             for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
                 String cpdName = colorPaletteInfo.getName().trim();
-                if (bandName.equals(cpdName)) {
-                    matchingColorPaletteInfo = colorPaletteInfo;
-                    break;
-                }
-            }
 
-
-            // try wildcards
-            final String WILDCARD = new String("*");
-            if (matchingColorPaletteInfo == null) {
-                for (ColorPaletteInfo colorPaletteInfo : defaultSchemes) {
-                    String cpdName = colorPaletteInfo.getName().trim();
-
-                    if (cpdName.contains(WILDCARD)) {
+                if (matchingColorPaletteInfo == null || (matchingColorPaletteInfo != null && colorPaletteInfo.isOverRide())) {
+                    if (bandName.equals(cpdName)) {
+                        matchingColorPaletteInfo = colorPaletteInfo;
+                    } else if (cpdName.contains(WILDCARD)) {
                         if (!cpdName.startsWith(WILDCARD) && cpdName.endsWith(WILDCARD)) {
                             String basename = new String(cpdName.substring(0, cpdName.length() - 1));
                             if (bandName.startsWith(basename)) {
                                 matchingColorPaletteInfo = colorPaletteInfo;
-                                break;
                             }
-                        }
-
-                        if (cpdName.startsWith(WILDCARD) && !cpdName.endsWith(WILDCARD) && matchingColorPaletteInfo == null) {
+                        } else if (cpdName.startsWith(WILDCARD) && !cpdName.endsWith(WILDCARD)) {
                             String basename = new String(cpdName.substring(1, cpdName.length()));
                             if (bandName.endsWith(basename)) {
                                 matchingColorPaletteInfo = colorPaletteInfo;
-                                break;
                             }
-                        }
-
-                        if (cpdName.startsWith(WILDCARD) && cpdName.endsWith(WILDCARD) && matchingColorPaletteInfo == null) {
+                        } else if (cpdName.startsWith(WILDCARD) && cpdName.endsWith(WILDCARD)) {
                             String basename = new String(cpdName.substring(1, cpdName.length() - 1));
                             if (bandName.contains(basename)) {
                                 matchingColorPaletteInfo = colorPaletteInfo;
-                                break;
                             }
-                        }
-
-
-                        String basename = new String(cpdName);
-                        String basenameSplit[] = basename.split("\\" + WILDCARD);
-                        if (basenameSplit.length == 2 && basenameSplit[0].length() > 0 && basenameSplit[1].length() > 0) {
-                            if (bandName.startsWith(basenameSplit[0]) && bandName.endsWith(basenameSplit[1])) {
-                                matchingColorPaletteInfo = colorPaletteInfo;
-                                break;
+                        } else {
+                            String basename = new String(cpdName);
+                            String basenameSplit[] = basename.split("\\" + WILDCARD);
+                            if (basenameSplit.length == 2 && basenameSplit[0].length() > 0 && basenameSplit[1].length() > 0) {
+                                if (bandName.startsWith(basenameSplit[0]) && bandName.endsWith(basenameSplit[1])) {
+                                    matchingColorPaletteInfo = colorPaletteInfo;
+                                }
                             }
                         }
                     }
                 }
+
             }
+
+
+
 
             if (matchingColorPaletteInfo != null) {
                 //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
@@ -608,7 +596,7 @@ public class ProductSceneView extends BasicView
      * Gets the number of raster datasets.
      *
      * @return the number of raster datasets, always <code>1</code> for single banded palette images or <code>3</code>
-     * for RGB images
+     *         for RGB images
      */
     public int getNumRasters() {
         return getSceneImage().getRasters().length;

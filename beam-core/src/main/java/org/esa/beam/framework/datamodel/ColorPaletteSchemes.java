@@ -74,7 +74,7 @@ public class ColorPaletteSchemes {
                 // it doesn't need comboBoxes, only the colorPaletteInfos is needed
                 initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, false);
                 if (userSchemesFile.exists()) {
-                    initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, true);
+                    initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, false);
                 }
 
             }
@@ -86,12 +86,12 @@ public class ColorPaletteSchemes {
 
     private void initComboBox() {
 
-        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null, null, 0, 0, false, null, true);
+        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null, null, 0, 0, false, null, true, true);
         colorPaletteInfos.add(jComboBoxFirstEntryColorPaletteInfo);
 
-        initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, false);
+        initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, true);
         if (userSchemesFile.exists()) {
-            initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, false);
+            initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, true);
         }
 
         Object[] colorPaletteInfosArray = colorPaletteInfos.toArray();
@@ -128,7 +128,7 @@ public class ColorPaletteSchemes {
     }
 
 
-    private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file, boolean userOverRideMode) {
+    private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file, boolean schemeSelectorMode) {
 
         ArrayList<String> lines = readFileIntoArrayList(file);
 
@@ -139,43 +139,56 @@ public class ColorPaletteSchemes {
             if (!line.startsWith("#")) {
                 String[] values = line.split(":");
 
-                if (values != null && (values.length == 5 || values.length == 6)) {
+                if (values != null && (values.length == 6 || values.length == 7)) {
 
                     String name = values[0].trim();
                     String minValStr = values[1].trim();
                     String maxValStr = values[2].trim();
-                    String isLogScaledStr = values[3].trim();
+                    String logScaledStr = values[3].trim();
                     String cpdFileName = values[4].trim();
+
 
                     if (name != null && name.length() > 0 &&
                             minValStr != null && minValStr.length() > 0 &&
                             maxValStr != null && maxValStr.length() > 0 &&
-                            isLogScaledStr != null && isLogScaledStr.length() > 0 &&
+                            logScaledStr != null && logScaledStr.length() > 0 &&
                             cpdFileName != null && cpdFileName.length() > 0) {
                         String description;
-                        if (values.length == 6) {
-                            description = values[5].trim();
+                        if (values.length >= 7) {
+                            description = values[6].trim();
                         } else {
                             description = "";
                         }
 
+                        String overRideStr;
+                        if (values.length >= 6) {
+                         overRideStr = values[5].trim();
+                        } else {
+                            overRideStr = "false";
+                        }
+
                         Double minVal = Double.valueOf(minValStr);
                         Double maxVal = Double.valueOf(maxValStr);
-                        boolean isLogScaled = false;
-                        if (isLogScaledStr != null && isLogScaledStr.toLowerCase().equals("true")) {
-                            isLogScaled = true;
+                        boolean logScaled = false;
+                        if (logScaledStr != null && logScaledStr.toLowerCase().equals("true")) {
+                            logScaled = true;
+                        }
+
+                        boolean overRide = false;
+                        if (overRideStr != null && overRideStr.toLowerCase().equals("true")) {
+                            overRide = true;
                         }
 
                         ColorPaletteInfo colorPaletteInfo;
 
-                        if (testMinMax(minVal, maxVal, isLogScaled)) {
+                        if (testMinMax(minVal, maxVal, logScaled)) {
 
                             File cpdFile = new File(dirName, cpdFileName);
                             if (cpdFile.exists()) {
                                 ColorPaletteDef colorPaletteDef;
                                 try {
                                     colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
-                                    colorPaletteInfo = new ColorPaletteInfo(name, description, cpdFileName, minVal, maxVal, isLogScaled, colorPaletteDef, true);
+                                    colorPaletteInfo = new ColorPaletteInfo(name, description, cpdFileName, minVal, maxVal, logScaled, colorPaletteDef, overRide, true);
 
                                 } catch (IOException e) {
                                     colorPaletteInfo = new ColorPaletteInfo(name, description);
@@ -188,7 +201,7 @@ public class ColorPaletteSchemes {
                         }
 
                         if (colorPaletteInfo != null) {
-                            if (userOverRideMode) {
+                            if (schemeSelectorMode && overRide) {
                                 // look for previous name which user may be overriding and delete it in the colorPaletteInfo object
                                 ColorPaletteInfo colorPaletteInfoToDelete = null;
                                 for (ColorPaletteInfo storedColorPaletteInfo : colorPaletteInfos) {
