@@ -11,32 +11,32 @@
  PIC                          :5.0e-05    :0.05       :true      :oceancolor_standard.cpd  :true  :Particulate Inorganic Carbon
  POC                          :10         :1000       :true      :oceancolor_standard.cpd  :true  :Particulate Organic Carbon
  Rrs < 430 nm                 :0.00000    :0.02500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [less than 430 nm]
- Rrs 430-455 nm               :0.00000    :0.02000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [430-455] nm
- Rrs 456-500 nm               :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [456 - 500] nm
- Rrs > 500 nm                 :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [greater than 500] nm
+ Rrs 430-459 nm               :0.00000    :0.02000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [430-459] nm
+ Rrs 460-499 nm               :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [460 - 499] nm
+ Rrs >= 500 nm                 :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [greater than or equal to 500] nm
  SST                          :-2.00000   :45.0000    :false     :oceancolor_sst.cpd  :true       :Sea Surface Temperature
  ---------- other ----------  :       0   :0          :false     :null                     :true   :
  a                            :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption
  adg                          :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus
  aph                          :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton
  aw                           :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater
- bathymetry                   :10.0        :11000      :true      :bathymetry.cpd  :true           :Bathymetry
+ bathymetry                   :10.0        :11000      :true     :bathymetry.cpd  :true           :Bathymetry
  bb                           :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter
  bbp                          :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter
  bbw                          :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater
  elevation                    :-12000.0   :15000.0    :false     :oceancolor_standard.cpd  :true  :Elevation
-# elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd  :true :Bathymetry (Colormap used in the ETOPO1 global relief map)
-# elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
+#elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd  :true :Bathymetry (Colormap used in the ETOPO1 global relief map)
+#elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
  epsilon                      :0.850000   :1.23100    :false     :oceancolor_standard.cpd  :true  :Epsilon of aerosol correction
  Fluorescence                 :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Line Height (normalized)
  Kd                           :0.01000000 :6.0        :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation coefficient
  NDVI                         :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd  :true      :Normalized Difference Vegetation Index
  Quantum Yield                :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Quantum Yield
  nLw < 430 nm                 :0.00000    :5.08000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [less than 430] nm
- nLw 430-480 nm               :0.00000    :3.81000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [430-480] nm
- nLw 481-525 nm               :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [481-525] nm
- nLw 526-600 nm               :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [526-600] nm
- nLw > 600 nm                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [greater than 600] nm
+ nLw 430-479 nm               :0.00000    :3.81000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [430-479] nm
+ nLw 480-529 nm               :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [480-529] nm
+ nLw 530-599 nm               :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [530-599] nm
+ nLw >= 600 nm                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [greater than 600] nm
  SSS                          :30.53      :39.47      :false     :oceancolor_sss.cpd  :true       :Sea Surface Salinity (trimmed to better fit linear scaling)
  topography                   :       0   :8500.0     :false     :elevation_topography.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
  Zeu                          :5.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Euphotic Depth

@@ -11,8 +11,11 @@
 
 #FIELD_NAME                    MIN         MAX          LOG_SCALE  CPD_FILENAME            OVERRIDE  DESCRIPTION
 # myname                       :0.0        :100.0      :true     :oceancolor_standard.cpd  :true    :mydescription
- chlor_a*                      :0.01000000 :20.0       :true     :oceancolor_standard.cpd  :false   :Chlorophyll a concentration
- *chlor_a                      :0.01000000 :20.0       :true     :oceancolor_standard.cpd  :false   :Chlorophyll a concentration
- *bathymetry*                  :10.0       :11000.0    :true     :bathymetry.cpd           :false   :Bathymetry
- aph_*_giop                    :1.0000e-03 :1.0000e+00 :true     :oceancolor_standard.cpd  :false   :Absorption due to phytoplankton at any wavelength
+
+
+
+#FIELD NAME      SCHEME         OVERRIDE
+ chlor_a*       :chlor_a        :false
+ *chlor_a       :chlor_a        :false
+
 

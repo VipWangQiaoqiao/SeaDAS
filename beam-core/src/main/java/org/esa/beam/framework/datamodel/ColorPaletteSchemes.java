@@ -139,46 +139,92 @@ public class ColorPaletteSchemes {
             if (!line.startsWith("#")) {
                 String[] values = line.split(":");
 
-                if (values != null && (values.length == 6 || values.length == 7)) {
+                if (values != null) {
+                    boolean validEntry = false;
+                    boolean fieldsInitialized = false;
 
-                    String name = values[0].trim();
-                    String minValStr = values[1].trim();
-                    String maxValStr = values[2].trim();
-                    String logScaledStr = values[3].trim();
-                    String cpdFileName = values[4].trim();
+                    String name = null;
+                    Double minVal = null;
+                    Double maxVal = null;
+                    boolean logScaled = false;
+                    String cpdFileName = null;
+                    boolean overRide = false;
+                    String description = null;
 
 
-                    if (name != null && name.length() > 0 &&
-                            minValStr != null && minValStr.length() > 0 &&
-                            maxValStr != null && maxValStr.length() > 0 &&
-                            logScaledStr != null && logScaledStr.length() > 0 &&
-                            cpdFileName != null && cpdFileName.length() > 0) {
-                        String description;
-                        if (values.length >= 7) {
-                            description = values[6].trim();
-                        } else {
-                            description = "";
-                        }
+                    if (values.length == 3) {
+                        name = values[0].trim();
+                        String desiredScheme = values[1].trim();
+                        String overRideStr = values[2].trim();
 
-                        String overRideStr;
-                        if (values.length >= 6) {
-                         overRideStr = values[5].trim();
-                        } else {
-                            overRideStr = "false";
-                        }
-
-                        Double minVal = Double.valueOf(minValStr);
-                        Double maxVal = Double.valueOf(maxValStr);
-                        boolean logScaled = false;
-                        if (logScaledStr != null && logScaledStr.toLowerCase().equals("true")) {
-                            logScaled = true;
-                        }
-
-                        boolean overRide = false;
                         if (overRideStr != null && overRideStr.toLowerCase().equals("true")) {
                             overRide = true;
                         }
 
+                        if (name != null && name.length() > 0 && desiredScheme != null && desiredScheme.length() > 0) {
+
+                            for (ColorPaletteInfo storedColorPaletteInfo : colorPaletteInfos) {
+                                if (storedColorPaletteInfo.getName().equals(desiredScheme)) {
+                                    if (!fieldsInitialized ||
+                                            (fieldsInitialized && overRide)) {
+                                        description = storedColorPaletteInfo.getDescription();
+                                        cpdFileName = storedColorPaletteInfo.getCpdFilename();
+                                        minVal = storedColorPaletteInfo.getMinValue();
+                                        maxVal = storedColorPaletteInfo.getMaxValue();
+                                        logScaled = storedColorPaletteInfo.isLogScaled();
+                                        fieldsInitialized = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    if (values.length == 6 || values.length == 7) {
+
+                        name = values[0].trim();
+                        String minValStr = values[1].trim();
+                        String maxValStr = values[2].trim();
+                        String logScaledStr = values[3].trim();
+                        cpdFileName = values[4].trim();
+
+
+                        if (name != null && name.length() > 0 &&
+                                minValStr != null && minValStr.length() > 0 &&
+                                maxValStr != null && maxValStr.length() > 0 &&
+                                logScaledStr != null && logScaledStr.length() > 0 &&
+                                cpdFileName != null && cpdFileName.length() > 0) {
+
+                            String overRideStr = null;
+                            if (values.length >= 6) {
+                                overRideStr = values[5].trim();
+                            } else {
+                                overRideStr = "false";
+                            }
+
+                            if (values.length >= 7) {
+                                description = values[6].trim();
+                            } else {
+                                description = "";
+                            }
+
+                            minVal = Double.valueOf(minValStr);
+                            maxVal = Double.valueOf(maxValStr);
+                            logScaled = false;
+                            if (logScaledStr != null && logScaledStr.toLowerCase().equals("true")) {
+                                logScaled = true;
+                            }
+
+                            overRide = false;
+                            if (overRideStr != null && overRideStr.toLowerCase().equals("true")) {
+                                overRide = true;
+                            }
+
+                            fieldsInitialized = true;
+                        }
+                    }
+
+                    if (fieldsInitialized) {
                         ColorPaletteInfo colorPaletteInfo;
 
                         if (testMinMax(minVal, maxVal, logScaled)) {
@@ -217,6 +263,8 @@ public class ColorPaletteSchemes {
                             colorPaletteInfos.add(colorPaletteInfo);
                         }
                     }
+
+
                 }
             }
         }

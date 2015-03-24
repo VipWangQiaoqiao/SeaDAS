@@ -1,5 +1,4 @@
 #  These user defined schemes get appended to the selectable schemes in SeaDAS
 #FIELD_NAME                    MIN         MAX         LOG_SCALE  CPD_FILENAME           OVERRIDE    DESCRIPTION
 ----------- user -----------  :       0   :0          :false     :null                    : true    :
-  Zsd (Tutorial Example)      :0.0        :50.0       :false     :oceancolor_zphotic.cpd  :true     :Tutorial Example Secchi Depth
-#   SST                       :-45.00000  :45.0000    :false     :oceancolor_sst.cpd      :true     :Sea Surface Temperature
+#  Zsd (Tutorial Example)      :0.0        :50.0       :false     :oceancolor_zphotic.cpd  :true     :Tutorial Example Secchi Depth

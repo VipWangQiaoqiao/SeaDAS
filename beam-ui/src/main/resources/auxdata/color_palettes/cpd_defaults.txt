@@ -3,1251 +3,158 @@
 # ANY EDITS TO THIS FILE WILL BE LOST
 # To add or override entries you can edit the user_cpd_defaults.txt file
 #
-#FIELD_NAME          MIN         MAX         LOG_SCALE  CPD_FILENAME                      OVERRIDE   DESCRIPTION
- adg_408_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 408 nm
- adg_408_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 408 nm
- adg_408_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 408 nm
- adg_408_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 408 nm
- adg_412_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 412 nm
- adg_412_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 412 nm
- adg_412_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 412 nm
- adg_412_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 412 nm
- adg_414_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 414 nm
- adg_414_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 414 nm
- adg_414_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 414 nm
- adg_414_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 414 nm
- adg_415_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 415 nm
- adg_415_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 415 nm
- adg_415_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 415 nm
- adg_415_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 415 nm
- adg_442_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 442 nm
- adg_442_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 442 nm
- adg_442_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 442 nm
- adg_442_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 442 nm
- adg_443_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 443 nm
- adg_443_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 443 nm
- adg_443_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 443 nm
- adg_443_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 443 nm
- adg_445_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 445 nm
- adg_445_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 445 nm
- adg_445_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 445 nm
- adg_445_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 445 nm
- adg_469_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 469 nm
- adg_469_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 469 nm
- adg_469_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 469 nm
- adg_469_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 469 nm
- adg_485_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 485 nm
- adg_485_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 485 nm
- adg_485_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 485 nm
- adg_485_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 485 nm
- adg_486_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 486 nm
- adg_486_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 486 nm
- adg_486_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 486 nm
- adg_486_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 486 nm
- adg_488_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 488 nm
- adg_488_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 488 nm
- adg_488_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 488 nm
- adg_488_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 488 nm
- adg_490_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 490 nm
- adg_490_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 490 nm
- adg_490_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 490 nm
- adg_490_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 490 nm
- adg_491_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 491 nm
- adg_491_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 491 nm
- adg_491_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 491 nm
- adg_491_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 491 nm
- adg_510_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 510 nm
- adg_510_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 510 nm
- adg_510_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 510 nm
- adg_510_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 510 nm
- adg_511_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 511 nm
- adg_511_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 511 nm
- adg_511_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 511 nm
- adg_511_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 511 nm
- adg_512_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 512 nm
- adg_512_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 512 nm
- adg_512_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 512 nm
- adg_512_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 512 nm
- adg_516_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 516 nm
- adg_516_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 516 nm
- adg_516_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 516 nm
- adg_516_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 516 nm
- adg_520_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 520 nm
- adg_520_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 520 nm
- adg_520_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 520 nm
- adg_520_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 520 nm
- adg_531_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 531 nm
- adg_531_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 531 nm
- adg_531_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 531 nm
- adg_531_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 531 nm
- adg_547_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 547 nm
- adg_547_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 547 nm
- adg_547_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 547 nm
- adg_547_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 547 nm
- adg_550_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 550 nm
- adg_550_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 550 nm
- adg_550_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 550 nm
- adg_550_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 550 nm
- adg_551_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 551 nm
- adg_551_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 551 nm
- adg_551_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 551 nm
- adg_551_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 551 nm
- adg_555_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 555 nm
- adg_555_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 555 nm
- adg_555_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 555 nm
- adg_555_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 555 nm
- adg_556_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 556 nm
- adg_556_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 556 nm
- adg_556_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 556 nm
- adg_556_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 556 nm
- adg_557_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 557 nm
- adg_557_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 557 nm
- adg_557_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 557 nm
- adg_557_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 557 nm
- adg_570_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 570 nm
- adg_570_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 570 nm
- adg_570_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 570 nm
- adg_570_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 570 nm
- adg_620_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 620 nm
- adg_620_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 620 nm
- adg_620_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 620 nm
- adg_620_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 620 nm
- adg_645_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 645 nm
- adg_645_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 645 nm
- adg_645_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 645 nm
- adg_645_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 645 nm
- adg_665_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 665 nm
- adg_665_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 665 nm
- adg_665_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 665 nm
- adg_665_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 665 nm
- adg_667_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 667 nm
- adg_667_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 667 nm
- adg_667_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 667 nm
- adg_667_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 667 nm
- adg_669_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 669 nm
- adg_669_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 669 nm
- adg_669_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 669 nm
- adg_669_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 669 nm
- adg_670_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 670 nm
- adg_670_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 670 nm
- adg_670_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 670 nm
- adg_670_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 670 nm
- adg_671_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 671 nm
- adg_671_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 671 nm
- adg_671_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 671 nm
- adg_671_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 671 nm
- adg_678_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 678 nm
- adg_678_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 678 nm
- adg_678_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 678 nm
- adg_678_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 678 nm
- adg_681_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 681 nm
- adg_681_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 681 nm
- adg_681_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 681 nm
- adg_681_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 681 nm
- adg_709_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 709 nm
- adg_709_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 709 nm
- adg_709_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 709 nm
- adg_709_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus at 709 nm
- adg_s_giop                   :0.0000e+00 :2.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for gelbstof and detrital absorption
- adg_s_gsm                    :0.0000e+00 :2.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for gelbstof and detrital absorption
- adg_s_las                    :0.0000e+00 :2.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for gelbstof and detrital absorption
- adg_s_qaa                    :0.0000e+00 :2.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for gelbstof and detrital absorption
- adg_unc_408_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 408 nm
- adg_unc_412_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 412 nm
- adg_unc_414_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 414 nm
- adg_unc_415_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 415 nm
- adg_unc_442_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 442 nm
- adg_unc_443_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 443 nm
- adg_unc_445_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 445 nm
- adg_unc_469_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 469 nm
- adg_unc_485_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 485 nm
- adg_unc_486_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 486 nm
- adg_unc_488_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 488 nm
- adg_unc_490_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 490 nm
- adg_unc_491_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 491 nm
- adg_unc_510_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 510 nm
- adg_unc_511_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 511 nm
- adg_unc_512_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 512 nm
- adg_unc_516_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 516 nm
- adg_unc_520_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 520 nm
- adg_unc_531_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 531 nm
- adg_unc_547_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 547 nm
- adg_unc_550_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 550 nm
- adg_unc_551_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 551 nm
- adg_unc_555_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 555 nm
- adg_unc_556_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 556 nm
- adg_unc_557_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 557 nm
- adg_unc_570_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 570 nm
- adg_unc_620_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 620 nm
- adg_unc_645_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 645 nm
- adg_unc_665_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 665 nm
- adg_unc_667_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 667 nm
- adg_unc_669_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 669 nm
- adg_unc_670_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 670 nm
- adg_unc_671_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 671 nm
- adg_unc_678_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 678 nm
- adg_unc_681_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 681 nm
- adg_unc_709_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on abs due to gelbstof and detritus at 709 nm
- anc_SSS                      :0          :70         :false     :oceancolor_sss.cpd  :true       :Sea Surface Salinity Reference
+
+
+
+#FIELD_NAME                    MIN         MAX         LOG_SCALE  CPD_FILENAME                      OVERRIDE   DESCRIPTION
+ absorption                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to gelbstof and detritus
+ adg_s                        :0.0000e+00 :2.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for gelbstof and detrital absorption
+ anc_SSS                      :0          :70         :false     :oceancolor_sss.cpd       :true       :Sea Surface Salinity Reference
  angstrom                     :-0.150000  :2.2        :false     :oceancolor_standard.cpd  :true  :Angstrom coefficient
- angstrom_510                 :-0.150000  :2.2        :false     :oceancolor_standard.cpd  :true  :Angstrom coefficient, 510 to 865 nm
- angstrom_516                 :-0.150000  :2.2        :false     :oceancolor_standard.cpd  :true  :Angstrom coefficient, 516 to 862 nm
- angstrom_520                 :-0.150000  :2.2        :false     :oceancolor_standard.cpd  :true  :Angstrom coefficient, 520 to 865 nm
- angstrom_531                 :-0.150000  :2.2        :false     :oceancolor_standard.cpd  :true  :Angstrom coefficient, 531 to 869 nm
- aot_670                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 670 nm
- aot_862                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 862 nm
- aot_865                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 865 nm
- aot_866                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 866 nm
- aot_869                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 869 nm
- aph_408_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 408 nm
- aph_408_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 408 nm
- aph_408_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 408 nm
- aph_408_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 408 nm
- aph_412_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 412 nm
- aph_412_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 412 nm
- aph_412_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 412 nm
- aph_412_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 412 nm
- aph_414_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 414 nm
- aph_414_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 414 nm
- aph_414_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 414 nm
- aph_414_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 414 nm
- aph_415_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 415 nm
- aph_415_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 415 nm
- aph_415_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 415 nm
- aph_415_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 415 nm
- aph_442_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 442 nm
- aph_442_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 442 nm
- aph_442_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 442 nm
- aph_442_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 442 nm
- aph_443_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 443 nm
- aph_443_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 443 nm
- aph_443_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 443 nm
- aph_443_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 443 nm
- aph_445_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 445 nm
- aph_445_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 445 nm
- aph_445_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 445 nm
- aph_445_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 445 nm
- aph_469_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 469 nm
- aph_469_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 469 nm
- aph_469_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 469 nm
- aph_469_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 469 nm
- aph_485_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 485 nm
- aph_485_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 485 nm
- aph_485_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 485 nm
- aph_485_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 485 nm
- aph_486_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 486 nm
- aph_486_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 486 nm
- aph_486_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 486 nm
- aph_486_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 486 nm
- aph_488_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 488 nm
- aph_488_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 488 nm
- aph_488_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 488 nm
- aph_488_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 488 nm
- aph_490_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 490 nm
- aph_490_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 490 nm
- aph_490_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 490 nm
- aph_490_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 490 nm
- aph_491_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 491 nm
- aph_491_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 491 nm
- aph_491_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 491 nm
- aph_491_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 491 nm
- aph_510_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 510 nm
- aph_510_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 510 nm
- aph_510_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 510 nm
- aph_510_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 510 nm
- aph_511_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 511 nm
- aph_511_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 511 nm
- aph_511_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 511 nm
- aph_511_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 511 nm
- aph_512_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 512 nm
- aph_512_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 512 nm
- aph_512_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 512 nm
- aph_512_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 512 nm
- aph_516_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 516 nm
- aph_516_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 516 nm
- aph_516_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 516 nm
- aph_516_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 516 nm
- aph_520_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 520 nm
- aph_520_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 520 nm
- aph_520_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 520 nm
- aph_520_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 520 nm
- aph_531_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 531 nm
- aph_531_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 531 nm
- aph_531_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 531 nm
- aph_531_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 531 nm
- aph_547_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 547 nm
- aph_547_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 547 nm
- aph_547_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 547 nm
- aph_547_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 547 nm
- aph_550_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 550 nm
- aph_550_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 550 nm
- aph_550_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 550 nm
- aph_550_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 550 nm
- aph_551_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 551 nm
- aph_551_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 551 nm
- aph_551_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 551 nm
- aph_551_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 551 nm
- aph_555_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 555 nm
- aph_555_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 555 nm
- aph_555_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 555 nm
- aph_555_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 555 nm
- aph_556_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 556 nm
- aph_556_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 556 nm
- aph_556_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 556 nm
- aph_556_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 556 nm
- aph_557_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 557 nm
- aph_557_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 557 nm
- aph_557_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 557 nm
- aph_557_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 557 nm
- aph_570_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 570 nm
- aph_570_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 570 nm
- aph_570_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 570 nm
- aph_570_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 570 nm
- aph_620_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 620 nm
- aph_620_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 620 nm
- aph_620_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 620 nm
- aph_620_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 620 nm
- aph_645_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 645 nm
- aph_645_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 645 nm
- aph_645_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 645 nm
- aph_645_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 645 nm
- aph_665_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 665 nm
- aph_665_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 665 nm
- aph_665_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 665 nm
- aph_665_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 665 nm
- aph_667_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 667 nm
- aph_667_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 667 nm
- aph_667_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 667 nm
- aph_667_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 667 nm
- aph_669_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 669 nm
- aph_669_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 669 nm
- aph_669_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 669 nm
- aph_669_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 669 nm
- aph_670_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 670 nm
- aph_670_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 670 nm
- aph_670_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 670 nm
- aph_670_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 670 nm
- aph_671_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 671 nm
- aph_671_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 671 nm
- aph_671_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 671 nm
- aph_671_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 671 nm
- aph_678_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 678 nm
- aph_678_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 678 nm
- aph_678_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 678 nm
- aph_678_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 678 nm
- aph_681_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 681 nm
- aph_681_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 681 nm
- aph_681_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 681 nm
- aph_681_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 681 nm
- aph_709_giop                 :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 709 nm
- aph_709_gsm                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 709 nm
- aph_709_las                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 709 nm
- aph_709_qaa                  :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption due to phytoplankton at 709 nm
- aph_unc_408_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 408 nm
- aph_unc_412_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 412 nm
- aph_unc_414_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 414 nm
- aph_unc_415_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 415 nm
- aph_unc_442_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 442 nm
- aph_unc_443_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 443 nm
- aph_unc_445_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 445 nm
- aph_unc_469_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 469 nm
- aph_unc_485_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 485 nm
- aph_unc_486_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 486 nm
- aph_unc_488_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 488 nm
- aph_unc_490_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 490 nm
- aph_unc_491_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 491 nm
- aph_unc_510_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 510 nm
- aph_unc_511_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 511 nm
- aph_unc_512_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 512 nm
- aph_unc_516_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 516 nm
- aph_unc_520_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 520 nm
- aph_unc_531_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 531 nm
- aph_unc_547_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 547 nm
- aph_unc_550_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 550 nm
- aph_unc_551_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 551 nm
- aph_unc_555_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 555 nm
- aph_unc_556_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 556 nm
- aph_unc_557_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 557 nm
- aph_unc_570_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 570 nm
- aph_unc_620_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 620 nm
- aph_unc_645_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 645 nm
- aph_unc_665_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 665 nm
- aph_unc_667_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 667 nm
- aph_unc_669_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 669 nm
- aph_unc_670_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 670 nm
- aph_unc_671_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 671 nm
- aph_unc_678_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 678 nm
- aph_unc_681_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 681 nm
- aph_unc_709_giop             :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on absorption due to phytoplankton at 709 nm
- aw_408                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 408 nm
- aw_412                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 412 nm
- aw_414                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 414 nm
- aw_415                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 415 nm
- aw_442                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 442 nm
- aw_443                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 443 nm
- aw_445                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 445 nm
- aw_469                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 469 nm
- aw_485                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 485 nm
- aw_486                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 486 nm
- aw_488                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 488 nm
- aw_490                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 490 nm
- aw_491                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 491 nm
- aw_510                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 510 nm
- aw_511                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 511 nm
- aw_512                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 512 nm
- aw_516                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 516 nm
- aw_520                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 520 nm
- aw_531                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 531 nm
- aw_547                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 547 nm
- aw_550                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 550 nm
- aw_551                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 551 nm
- aw_555                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 555 nm
- aw_556                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 556 nm
- aw_557                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 557 nm
- aw_570                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 570 nm
- aw_620                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 620 nm
- aw_645                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 645 nm
- aw_665                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 665 nm
- aw_667                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 667 nm
- aw_669                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 669 nm
- aw_670                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 670 nm
- aw_671                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 671 nm
- aw_678                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 678 nm
- aw_681                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 681 nm
- aw_709                       :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Absorption coefficient of seawater at 709 nm
- a_408_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 408 nm
- a_408_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 408 nm
- a_408_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 408 nm
- a_408_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 408 nm
- a_412_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 412 nm
- a_412_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 412 nm
- a_412_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 412 nm
- a_412_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 412 nm
- a_414_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 414 nm
- a_414_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 414 nm
- a_414_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 414 nm
- a_414_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 414 nm
- a_415_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 415 nm
- a_415_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 415 nm
- a_415_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 415 nm
- a_415_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 415 nm
- a_442_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 442 nm
- a_442_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 442 nm
- a_442_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 442 nm
- a_442_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 442 nm
- a_443_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 443 nm
- a_443_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 443 nm
- a_443_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 443 nm
- a_443_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 443 nm
- a_445_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 445 nm
- a_445_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 445 nm
- a_445_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 445 nm
- a_445_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 445 nm
- a_469_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 469 nm
- a_469_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 469 nm
- a_469_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 469 nm
- a_469_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 469 nm
- a_485_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 485 nm
- a_485_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 485 nm
- a_485_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 485 nm
- a_485_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 485 nm
- a_486_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 486 nm
- a_486_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 486 nm
- a_486_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 486 nm
- a_486_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 486 nm
- a_488_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 488 nm
- a_488_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 488 nm
- a_488_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 488 nm
- a_488_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 488 nm
- a_490_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 490 nm
- a_490_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 490 nm
- a_490_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 490 nm
- a_490_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 490 nm
- a_491_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 491 nm
- a_491_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 491 nm
- a_491_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 491 nm
- a_491_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 491 nm
- a_510_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 510 nm
- a_510_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 510 nm
- a_510_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 510 nm
- a_510_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 510 nm
- a_511_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 511 nm
- a_511_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 511 nm
- a_511_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 511 nm
- a_511_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 511 nm
- a_512_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 512 nm
- a_512_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 512 nm
- a_512_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 512 nm
- a_512_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 512 nm
- a_516_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 516 nm
- a_516_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 516 nm
- a_516_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 516 nm
- a_516_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 516 nm
- a_520_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 520 nm
- a_520_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 520 nm
- a_520_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 520 nm
- a_520_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 520 nm
- a_531_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 531 nm
- a_531_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 531 nm
- a_531_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 531 nm
- a_531_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 531 nm
- a_547_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 547 nm
- a_547_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 547 nm
- a_547_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 547 nm
- a_547_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 547 nm
- a_550_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 550 nm
- a_550_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 550 nm
- a_550_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 550 nm
- a_550_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 550 nm
- a_551_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 551 nm
- a_551_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 551 nm
- a_551_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 551 nm
- a_551_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 551 nm
- a_555_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 555 nm
- a_555_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 555 nm
- a_555_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 555 nm
- a_555_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 555 nm
- a_556_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 556 nm
- a_556_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 556 nm
- a_556_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 556 nm
- a_556_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 556 nm
- a_557_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 557 nm
- a_557_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 557 nm
- a_557_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 557 nm
- a_557_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 557 nm
- a_570_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 570 nm
- a_570_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 570 nm
- a_570_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 570 nm
- a_570_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 570 nm
- a_620_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 620 nm
- a_620_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 620 nm
- a_620_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 620 nm
- a_620_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 620 nm
- a_645_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 645 nm
- a_645_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 645 nm
- a_645_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 645 nm
- a_645_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 645 nm
- a_665_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 665 nm
- a_665_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 665 nm
- a_665_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 665 nm
- a_665_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 665 nm
- a_667_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 667 nm
- a_667_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 667 nm
- a_667_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 667 nm
- a_667_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 667 nm
- a_669_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 669 nm
- a_669_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 669 nm
- a_669_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 669 nm
- a_669_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 669 nm
- a_670_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 670 nm
- a_670_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 670 nm
- a_670_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 670 nm
- a_670_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 670 nm
- a_671_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 671 nm
- a_671_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 671 nm
- a_671_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 671 nm
- a_671_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 671 nm
- a_678_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 678 nm
- a_678_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 678 nm
- a_678_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 678 nm
- a_678_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 678 nm
- a_681_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 681 nm
- a_681_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 681 nm
- a_681_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 681 nm
- a_681_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 681 nm
- a_709_giop                   :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 709 nm
- a_709_gsm                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 709 nm
- a_709_las                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 709 nm
- a_709_qaa                    :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Total absorption at 709 nm
- a_unc_408_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 408 nm
- a_unc_412_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 412 nm
- a_unc_414_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 414 nm
- a_unc_415_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 415 nm
- a_unc_442_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 442 nm
- a_unc_443_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 443 nm
- a_unc_445_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 445 nm
- a_unc_469_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 469 nm
- a_unc_485_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 485 nm
- a_unc_486_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 486 nm
- a_unc_488_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 488 nm
- a_unc_490_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 490 nm
- a_unc_491_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 491 nm
- a_unc_510_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 510 nm
- a_unc_511_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 511 nm
- a_unc_512_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 512 nm
- a_unc_516_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 516 nm
- a_unc_520_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 520 nm
- a_unc_531_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 531 nm
- a_unc_547_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 547 nm
- a_unc_550_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 550 nm
- a_unc_551_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 551 nm
- a_unc_555_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 555 nm
- a_unc_556_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 556 nm
- a_unc_557_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 557 nm
- a_unc_570_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 570 nm
- a_unc_620_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 620 nm
- a_unc_645_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 645 nm
- a_unc_665_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 665 nm
- a_unc_667_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 667 nm
- a_unc_669_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 669 nm
- a_unc_670_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 670 nm
- a_unc_671_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 671 nm
- a_unc_678_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 678 nm
- a_unc_681_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 681 nm
- a_unc_709_giop               :1.0000e-03 :1.0000e+00 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total absorption at 709 nm
- bbp_408_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 408 nm
- bbp_408_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 408 nm
- bbp_408_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 408 nm
- bbp_408_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 408 nm
- bbp_412_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 412 nm
- bbp_412_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 412 nm
- bbp_412_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 412 nm
- bbp_412_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 412 nm
- bbp_414_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 414 nm
- bbp_414_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 414 nm
- bbp_414_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 414 nm
- bbp_414_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 414 nm
- bbp_415_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 415 nm
- bbp_415_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 415 nm
- bbp_415_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 415 nm
- bbp_415_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 415 nm
- bbp_442_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 442 nm
- bbp_442_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 442 nm
- bbp_442_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 442 nm
- bbp_442_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 442 nm
- bbp_443_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 443 nm
- bbp_443_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 443 nm
- bbp_443_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 443 nm
- bbp_443_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 443 nm
- bbp_445_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 445 nm
- bbp_445_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 445 nm
- bbp_445_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 445 nm
- bbp_445_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 445 nm
- bbp_469_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 469 nm
- bbp_469_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 469 nm
- bbp_469_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 469 nm
- bbp_469_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 469 nm
- bbp_485_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 485 nm
- bbp_485_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 485 nm
- bbp_485_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 485 nm
- bbp_485_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 485 nm
- bbp_486_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 486 nm
- bbp_486_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 486 nm
- bbp_486_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 486 nm
- bbp_486_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 486 nm
- bbp_488_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 488 nm
- bbp_488_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 488 nm
- bbp_488_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 488 nm
- bbp_488_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 488 nm
- bbp_490_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 490 nm
- bbp_490_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 490 nm
- bbp_490_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 490 nm
- bbp_490_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 490 nm
- bbp_491_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 491 nm
- bbp_491_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 491 nm
- bbp_491_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 491 nm
- bbp_491_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 491 nm
- bbp_510_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 510 nm
- bbp_510_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 510 nm
- bbp_510_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 510 nm
- bbp_510_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 510 nm
- bbp_511_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 511 nm
- bbp_511_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 511 nm
- bbp_511_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 511 nm
- bbp_511_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 511 nm
- bbp_512_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 512 nm
- bbp_512_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 512 nm
- bbp_512_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 512 nm
- bbp_512_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 512 nm
- bbp_516_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 516 nm
- bbp_516_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 516 nm
- bbp_516_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 516 nm
- bbp_516_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 516 nm
- bbp_520_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 520 nm
- bbp_520_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 520 nm
- bbp_520_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 520 nm
- bbp_520_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 520 nm
- bbp_531_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 531 nm
- bbp_531_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 531 nm
- bbp_531_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 531 nm
- bbp_531_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 531 nm
- bbp_547_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 547 nm
- bbp_547_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 547 nm
- bbp_547_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 547 nm
- bbp_547_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 547 nm
- bbp_550_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 550 nm
- bbp_550_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 550 nm
- bbp_550_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 550 nm
- bbp_550_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 550 nm
- bbp_551_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 551 nm
- bbp_551_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 551 nm
- bbp_551_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 551 nm
- bbp_551_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 551 nm
- bbp_555_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 555 nm
- bbp_555_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 555 nm
- bbp_555_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 555 nm
- bbp_555_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 555 nm
- bbp_556_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 556 nm
- bbp_556_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 556 nm
- bbp_556_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 556 nm
- bbp_556_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 556 nm
- bbp_557_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 557 nm
- bbp_557_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 557 nm
- bbp_557_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 557 nm
- bbp_557_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 557 nm
- bbp_570_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 570 nm
- bbp_570_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 570 nm
- bbp_570_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 570 nm
- bbp_570_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 570 nm
- bbp_620_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 620 nm
- bbp_620_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 620 nm
- bbp_620_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 620 nm
- bbp_620_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 620 nm
- bbp_645_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 645 nm
- bbp_645_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 645 nm
- bbp_645_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 645 nm
- bbp_645_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 645 nm
- bbp_665_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 665 nm
- bbp_665_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 665 nm
- bbp_665_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 665 nm
- bbp_665_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 665 nm
- bbp_667_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 667 nm
- bbp_667_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 667 nm
- bbp_667_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 667 nm
- bbp_667_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 667 nm
- bbp_669_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 669 nm
- bbp_669_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 669 nm
- bbp_669_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 669 nm
- bbp_669_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 669 nm
- bbp_670_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 670 nm
- bbp_670_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 670 nm
- bbp_670_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 670 nm
- bbp_670_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 670 nm
- bbp_671_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 671 nm
- bbp_671_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 671 nm
- bbp_671_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 671 nm
- bbp_671_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 671 nm
- bbp_678_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 678 nm
- bbp_678_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 678 nm
- bbp_678_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 678 nm
- bbp_678_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 678 nm
- bbp_681_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 681 nm
- bbp_681_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 681 nm
- bbp_681_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 681 nm
- bbp_681_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 681 nm
- bbp_709_giop                 :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 709 nm
- bbp_709_gsm                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 709 nm
- bbp_709_las                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 709 nm
- bbp_709_qaa                  :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter at 709 nm
- bbp_s_giop                   :-1.0000e+00:1.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for particle backscatter
- bbp_s_gsm                    :-1.0000e+00:1.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for particle backscatter
- bbp_s_las                    :-1.0000e+00:1.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for particle backscatter
- bbp_s_qaa                    :-1.0000e+00:1.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for particle backscatter
- bbp_unc_408_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 408 nm
- bbp_unc_412_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 412 nm
- bbp_unc_414_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 414 nm
- bbp_unc_415_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 415 nm
- bbp_unc_442_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 442 nm
- bbp_unc_443_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 443 nm
- bbp_unc_445_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 445 nm
- bbp_unc_469_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 469 nm
- bbp_unc_485_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 485 nm
- bbp_unc_486_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 486 nm
- bbp_unc_488_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 488 nm
- bbp_unc_490_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 490 nm
- bbp_unc_491_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 491 nm
- bbp_unc_510_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 510 nm
- bbp_unc_511_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 511 nm
- bbp_unc_512_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 512 nm
- bbp_unc_516_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 516 nm
- bbp_unc_520_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 520 nm
- bbp_unc_531_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 531 nm
- bbp_unc_547_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 547 nm
- bbp_unc_550_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 550 nm
- bbp_unc_551_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 551 nm
- bbp_unc_555_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 555 nm
- bbp_unc_556_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 556 nm
- bbp_unc_557_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 557 nm
- bbp_unc_570_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 570 nm
- bbp_unc_620_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 620 nm
- bbp_unc_645_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 645 nm
- bbp_unc_665_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 665 nm
- bbp_unc_667_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 667 nm
- bbp_unc_669_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 669 nm
- bbp_unc_670_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 670 nm
- bbp_unc_671_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 671 nm
- bbp_unc_678_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 678 nm
- bbp_unc_681_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 681 nm
- bbp_unc_709_giop             :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on particle backscatter at 709 nm
- bbw_408                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 408 nm
- bbw_412                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 412 nm
- bbw_414                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 414 nm
- bbw_415                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 415 nm
- bbw_442                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 442 nm
- bbw_443                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 443 nm
- bbw_445                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 445 nm
- bbw_469                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 469 nm
- bbw_485                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 485 nm
- bbw_486                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 486 nm
- bbw_488                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 488 nm
- bbw_490                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 490 nm
- bbw_491                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 491 nm
- bbw_510                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 510 nm
- bbw_511                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 511 nm
- bbw_512                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 512 nm
- bbw_516                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 516 nm
- bbw_520                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 520 nm
- bbw_531                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 531 nm
- bbw_547                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 547 nm
- bbw_550                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 550 nm
- bbw_551                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 551 nm
- bbw_555                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 555 nm
- bbw_556                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 556 nm
- bbw_557                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 557 nm
- bbw_570                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 570 nm
- bbw_620                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 620 nm
- bbw_645                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 645 nm
- bbw_665                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 665 nm
- bbw_667                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 667 nm
- bbw_669                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 669 nm
- bbw_670                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 670 nm
- bbw_671                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 671 nm
- bbw_678                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 678 nm
- bbw_681                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 681 nm
- bbw_709                      :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater at 709 nm
- bb_408_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 408 nm
- bb_408_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 408 nm
- bb_408_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 408 nm
- bb_408_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 408 nm
- bb_412_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 412 nm
- bb_412_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 412 nm
- bb_412_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 412 nm
- bb_412_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 412 nm
- bb_414_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 414 nm
- bb_414_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 414 nm
- bb_414_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 414 nm
- bb_414_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 414 nm
- bb_415_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 415 nm
- bb_415_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 415 nm
- bb_415_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 415 nm
- bb_415_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 415 nm
- bb_442_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 442 nm
- bb_442_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 442 nm
- bb_442_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 442 nm
- bb_442_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 442 nm
- bb_443_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 443 nm
- bb_443_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 443 nm
- bb_443_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 443 nm
- bb_443_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 443 nm
- bb_445_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 445 nm
- bb_445_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 445 nm
- bb_445_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 445 nm
- bb_445_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 445 nm
- bb_469_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 469 nm
- bb_469_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 469 nm
- bb_469_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 469 nm
- bb_469_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 469 nm
- bb_485_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 485 nm
- bb_485_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 485 nm
- bb_485_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 485 nm
- bb_485_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 485 nm
- bb_486_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 486 nm
- bb_486_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 486 nm
- bb_486_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 486 nm
- bb_486_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 486 nm
- bb_488_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 488 nm
- bb_488_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 488 nm
- bb_488_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 488 nm
- bb_488_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 488 nm
- bb_490_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 490 nm
- bb_490_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 490 nm
- bb_490_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 490 nm
- bb_490_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 490 nm
- bb_491_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 491 nm
- bb_491_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 491 nm
- bb_491_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 491 nm
- bb_491_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 491 nm
- bb_510_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 510 nm
- bb_510_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 510 nm
- bb_510_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 510 nm
- bb_510_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 510 nm
- bb_511_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 511 nm
- bb_511_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 511 nm
- bb_511_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 511 nm
- bb_511_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 511 nm
- bb_512_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 512 nm
- bb_512_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 512 nm
- bb_512_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 512 nm
- bb_512_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 512 nm
- bb_516_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 516 nm
- bb_516_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 516 nm
- bb_516_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 516 nm
- bb_516_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 516 nm
- bb_520_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 520 nm
- bb_520_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 520 nm
- bb_520_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 520 nm
- bb_520_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 520 nm
- bb_531_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 531 nm
- bb_531_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 531 nm
- bb_531_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 531 nm
- bb_531_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 531 nm
- bb_547_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 547 nm
- bb_547_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 547 nm
- bb_547_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 547 nm
- bb_547_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 547 nm
- bb_550_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 550 nm
- bb_550_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 550 nm
- bb_550_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 550 nm
- bb_550_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 550 nm
- bb_551_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 551 nm
- bb_551_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 551 nm
- bb_551_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 551 nm
- bb_551_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 551 nm
- bb_555_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 555 nm
- bb_555_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 555 nm
- bb_555_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 555 nm
- bb_555_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 555 nm
- bb_556_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 556 nm
- bb_556_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 556 nm
- bb_556_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 556 nm
- bb_556_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 556 nm
- bb_557_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 557 nm
- bb_557_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 557 nm
- bb_557_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 557 nm
- bb_557_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 557 nm
- bb_570_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 570 nm
- bb_570_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 570 nm
- bb_570_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 570 nm
- bb_570_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 570 nm
- bb_620_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 620 nm
- bb_620_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 620 nm
- bb_620_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 620 nm
- bb_620_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 620 nm
- bb_645_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 645 nm
- bb_645_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 645 nm
- bb_645_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 645 nm
- bb_645_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 645 nm
- bb_665_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 665 nm
- bb_665_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 665 nm
- bb_665_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 665 nm
- bb_665_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 665 nm
- bb_667_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 667 nm
- bb_667_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 667 nm
- bb_667_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 667 nm
- bb_667_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 667 nm
- bb_669_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 669 nm
- bb_669_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 669 nm
- bb_669_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 669 nm
- bb_669_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 669 nm
- bb_670_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 670 nm
- bb_670_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 670 nm
- bb_670_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 670 nm
- bb_670_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 670 nm
- bb_671_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 671 nm
- bb_671_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 671 nm
- bb_671_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 671 nm
- bb_671_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 671 nm
- bb_678_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 678 nm
- bb_678_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 678 nm
- bb_678_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 678 nm
- bb_678_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 678 nm
- bb_681_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 681 nm
- bb_681_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 681 nm
- bb_681_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 681 nm
- bb_681_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 681 nm
- bb_709_giop                  :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 709 nm
- bb_709_gsm                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 709 nm
- bb_709_las                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 709 nm
- bb_709_qaa                   :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter at 709 nm
- bb_unc_408_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 408 nm
- bb_unc_412_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 412 nm
- bb_unc_414_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 414 nm
- bb_unc_415_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 415 nm
- bb_unc_442_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 442 nm
- bb_unc_443_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 443 nm
- bb_unc_445_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 445 nm
- bb_unc_469_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 469 nm
- bb_unc_485_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 485 nm
- bb_unc_486_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 486 nm
- bb_unc_488_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 488 nm
- bb_unc_490_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 490 nm
- bb_unc_491_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 491 nm
- bb_unc_510_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 510 nm
- bb_unc_511_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 511 nm
- bb_unc_512_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 512 nm
- bb_unc_516_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 516 nm
- bb_unc_520_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 520 nm
- bb_unc_531_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 531 nm
- bb_unc_547_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 547 nm
- bb_unc_550_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 550 nm
- bb_unc_551_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 551 nm
- bb_unc_555_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 555 nm
- bb_unc_556_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 556 nm
- bb_unc_557_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 557 nm
- bb_unc_570_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 570 nm
- bb_unc_620_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 620 nm
- bb_unc_645_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 645 nm
- bb_unc_665_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 665 nm
- bb_unc_667_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 667 nm
- bb_unc_669_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 669 nm
- bb_unc_670_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 670 nm
- bb_unc_671_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 671 nm
- bb_unc_678_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 678 nm
- bb_unc_681_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 681 nm
- bb_unc_709_giop              :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Uncertainty on total backscatter at 709 nm
+ aot                          :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness
+ bbp                          :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter
+ bbp_s                        :-1.0000e+00:1.0000e+00 :false     :oceancolor_standard.cpd  :true  :Spectral slope for particle backscatter
+ bbw                          :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater
+ bb                           :1.0000e-03 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter
+ bbp_giop                     :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter
  BSi                          :0.001      :10         :true      :oceancolor_standard.cpd  :true  :Biogenic Silica
- BulkSST                      :271.15     :318.15     :false     :oceancolor_sst.cpd  :true       :Sea Surface Temperature (VIIRSN)
+ BulkSST                      :271.15     :318.15     :false     :oceancolor_sst.cpd       :true   :Sea Surface Temperature (VIIRSN)
  calcite                      :5.e-05     :0.05       :true      :oceancolor_standard.cpd  :true  :Calcite Concentration
- calcite_2b                   :5.0e-05    :0.05       :true      :oceancolor_standard.cpd  :true  :Calcite Concentration (2-Band)
- calcite_3b                   :5.0e-05    :0.05       :true      :oceancolor_standard.cpd  :true  :Calcite Concentration (3-Band)
  cdom_index                   :0          :7          :false     :oceancolor_standard.cpd  :true  :CDOM Index
  chisqr_giop                  :0.00000    :5.0000     :false     :oceancolor_standard.cpd  :true  :Chi-square per degree of freedom
- Chlorophyll_a                :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration (VIIRSN)
  chlor_a                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration
  chlor_a_owterr               :0.0        :100.0      :false     :oceancolor_standard.cpd  :true  :Chlorophyll a relative error, OWT algorithm
- chl_carder                   :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, Carder model
- chl_ci                       :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, Chlorophyll Index Algorithm
- chl_giop                     :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, Generic IOP algorithm
- chl_gsm                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, Garver-Siegel-Maritorena Model
- chl_hu                       :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, Hu Algorithm
- chl_oc2                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, OC2 Algorithm
- chl_oc3                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, OC3 Algorithm
- chl_oc3c                     :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, OC3c Algorithm
- chl_oc4                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, OC4 Algorithm
- chl_oci                      :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration, Chlorophyll Index Algorithm
- chl_unc_giop                 :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Uncertainty on chlorophyll a concentration, Generic IOP algorithm
  elev                         :-12000.0   :15000.0    :false     :oceancolor_standard.cpd  :true  :Elevation
  epsilon                      :0.850000   :1.23100    :false     :oceancolor_standard.cpd  :true  :Epsilon of aerosol correction
- eps_78                       :0.850000   :1.23100    :false     :oceancolor_standard.cpd  :true  :Epsilon of aerosol correction at 765 and 865 nm
- EVI                          :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd  :true      :Enhanced Vegetation Index
- evi                          :-0.350000  :0.920000   :false     :oceancolor_ndvi.cpd  :true      :Enhanced Vegetation Index
- FLAG_ABSAER                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Absorbing Aerosol Flag, Frequency of Occurence
- FLAG_ATMFAIL                 :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Atmospheric Failure Flag, Frequency of Occurence
- FLAG_ATMWARN                 :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Atmospheric Correction Warning Flag, Frequency of Occurence
- FLAG_BADANC                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Bad Ancillary Data Flag,  Frequency of Occurence
- FLAG_CHLFAIL                 :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Chlorophyll Failure Flag,  Frequency of Occurence
- FLAG_CHLWARN                 :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Chlorophyll Warning Flag, Frequency of Occurence
- FLAG_CLDICE                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Cloud or Ice Flag,  Frequency of Occurence
- FLAG_COASTZ                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Shallow Water Flag,  Frequency of Occurence
- FLAG_COCCOLITH               :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Coccolithofore Flag,  Frequency of Occurence
- FLAG_DARKPIXEL               :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Dark Pixel Flag, Frequency of Occurence
- FLAG_HIGLINT                 :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :High Sun Glint Flag,  Frequency of Occurence
- FLAG_HILT                    :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :High TOA Radiance Flag,  Frequency of Occurence
- FLAG_HISATZEN                :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :High Satellite Zenith Flag,  Frequency of Occurence
- FLAG_HISOLZEN                :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :High Solar Zenith Angle Flag,  Frequency of Occurence
- FLAG_HITAU                   :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :High Aerosol Optical Thickness Flag,  Frequency of Occurence
- FLAG_LAND                    :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Land Flag, Frequency of Occurence
- FLAG_LOWLW                   :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Cloud Shadow Flag,  Frequency of Occurence
- FLAG_MAXAERITER              :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Maximum Aerosol Iterations Reached Flag, Frequency of Occurence
- FLAG_MODGLINT                :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Moderately High Sun Glint Flag, Frequency of Occurence
- FLAG_NAVWARN                 :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Navigation Warning Flag,  Frequency of Occurence
- FLAG_NEGLW                   :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Negative Lw Flag,  Frequency of Occurence
- FLAG_OCEAN                   :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Cloud-Free Ocean Flag, Frequency of Occurence
- FLAG_SEAICE                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Sea Ice Flag, Frequency of Occurence
- FLAG_STRAYLIGHT              :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Straylight Flag,  Frequency of Occurence
- FLAG_TRICHO                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Trichodesmium Flag, Frequency of Occurence
- FLAG_TURBIDW                 :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Turbid Water Flag,  Frequency of Occurence
+ EVI                          :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd      :true  :Enhanced Vegetation Index
+ evi                          :-0.350000  :0.920000   :false     :oceancolor_ndvi.cpd      :true  :Enhanced Vegetation Index
+ flag                         :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Flags
  flh                          :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Line Height
- fqy                          :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Quantum Yield
- fqy2                         :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Quantum Yield
- fsat                         :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Line Height (normalized)
  ipar                         :0.0        :0.0025     :false     :oceancolor_standard.cpd  :true  :Instantaneous Photosynthetically Available Radiation
- Kd_408_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 408 nm
- Kd_412_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 412 nm
- Kd_414_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 414 nm
- Kd_415_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 415 nm
- Kd_442_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 442 nm
- Kd_443_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 443 nm
- Kd_445_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 445 nm
- Kd_469_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 469 nm
- Kd_485_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 485 nm
- Kd_486_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 486 nm
- Kd_488_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 488 nm
+ Kd_lee                       :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation
  Kd_490                       :0.01000000 :6.0        :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation coefficient at 490 nm
- Kd_490_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 490 nm
- Kd_491_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 491 nm
- Kd_510_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 510 nm
- Kd_511_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 511 nm
- Kd_512_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 512 nm
- Kd_516_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 516 nm
- Kd_520_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 520 nm
- Kd_531_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 531 nm
- Kd_547_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 547 nm
- Kd_550_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 550 nm
- Kd_551_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 551 nm
- Kd_555_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 555 nm
- Kd_556_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 556 nm
- Kd_557_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 557 nm
- Kd_570_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 570 nm
- Kd_620_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 620 nm
- Kd_645_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 645 nm
- Kd_665_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 665 nm
- Kd_667_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 667 nm
- Kd_669_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 669 nm
- Kd_670_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 670 nm
- Kd_671_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 671 nm
- Kd_678_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 678 nm
- Kd_681_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 681 nm
- Kd_709_lee                   :1.0000e-02 :6.0000e+00 :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation at 709 nm
- Kd_PAR_lee                   :0.01000000 :6.0        :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation coefficient for PAR (Lee)
- Kd_PAR_morel                 :0.01000000 :6.0        :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation coefficient for PAR (Morel)
- K_490                        :0.01000000 :6.0        :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation coefficient at 490 nm
- NDVI                         :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd  :true      :Normalized Difference Vegetation Index
- ndvi                         :-0.350000  :0.920000   :false     :oceancolor_ndvi.cpd  :true      :Normalized Difference Vegetation Index
- nflh                         :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Line Height (normalized)
- nflh2                        :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Line Height (normalized)
- nLw_412                      :0.00000    :5.08000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 412 nm
- nLw_412nm                    :0.00000    :5.08000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 412 nm
- nLw_415                      :0.00000    :5.08000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 415 nm
- nLw_442                      :0.00000    :3.81000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 442 nm
- nLw_443                      :0.00000    :3.81000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 443 nm
- nLw_445nm                    :0.00000    :3.81000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 445 nm
- nLw_469                      :0.00000    :3.81000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 469 nm
- nLw_488                      :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 488 nm
- nLw_488nm                    :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 488 nm
- nLw_490                      :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 490 nm
- nLw_491                      :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 491 nm
- nLw_510                      :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 510 nm
- nLw_512                      :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 512 nm
- nLw_516                      :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 516 nm
- nLw_520                      :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 520 nm
- nLw_531                      :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 531 nm
- nLw_547                      :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 547 nm
- nLw_550                      :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 550 nm
- nLw_551                      :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 551 nm
- nLw_555                      :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 555 nm
- nLw_555nm                    :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 555 nm
- nLw_557                      :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 557 nm
- nLw_560                      :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 560 nm
- nLw_565                      :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 565 nm
- nLw_620                      :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 620 nm
- nLw_645                      :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 645 nm
- nLw_667                      :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 667 nm
- nLw_670                      :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 670 nm
- nLw_672nm                    :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 672 nm
- nLw_678                      :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 678 nm
- nLw_681                      :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 681 nm
- nLw_709                      :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at 709 nm
- nw_408                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 408 nm
- nw_412                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 412 nm
- nw_414                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 414 nm
- nw_415                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 415 nm
- nw_442                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 442 nm
- nw_443                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 443 nm
- nw_445                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 445 nm
- nw_469                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 469 nm
- nw_485                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 485 nm
- nw_486                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 486 nm
- nw_488                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 488 nm
- nw_490                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 490 nm
- nw_491                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 491 nm
- nw_510                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 510 nm
- nw_511                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 511 nm
- nw_512                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 512 nm
- nw_516                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 516 nm
- nw_520                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 520 nm
- nw_531                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 531 nm
- nw_547                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 547 nm
- nw_550                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 550 nm
- nw_551                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 551 nm
- nw_555                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 555 nm
- nw_556                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 556 nm
- nw_557                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 557 nm
- nw_570                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 570 nm
- nw_620                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 620 nm
- nw_645                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 645 nm
- nw_665                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 665 nm
- nw_667                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 667 nm
- nw_669                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 669 nm
- nw_670                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 670 nm
- nw_671                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 671 nm
- nw_678                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 678 nm
- nw_681                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 681 nm
- nw_709                       :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater at 709 nm
+ NDVI                         :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd      :true  :Normalized Difference Vegetation Index
+ ndvi                         :-0.350000  :0.920000   :false     :oceancolor_ndvi.cpd      :true  :Normalized Difference Vegetation Index
+ nLw_lt_430                   :0.00000    :5.08000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [less than 430] nm
+ nLw_430_479                  :0.00000    :3.81000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [430-479] nm
+ nLw_480_529                  :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [480-529] nm
+ nLw_530_599                  :0.00000    :1.27000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [530-599] nm
+ nLw_ge_600                   :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [greater than or equal to 600] nm
+ nw                           :1.3000e+00 :1.4000e+00 :false     :oceancolor_standard.cpd  :true  :Index of refraction of seawater
  owtd                         :1          :8          :false     :oceancolor_standard.cpd  :true  :Dominant optical Water Type
- owtn_1                       :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type 1
- owtn_2                       :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type 2
- owtn_3                       :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type 3
- owtn_4                       :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type 4
- owtn_5                       :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type 5
- owtn_6                       :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type 6
- owtn_7                       :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type 7
- owtn_8                       :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type 8
- owt_1                        :0          :1          :false     :oceancolor_standard.cpd  :true  :Optical Water Type 1
- owt_2                        :0          :1          :false     :oceancolor_standard.cpd  :true  :Optical Water Type 2
- owt_3                        :0          :1          :false     :oceancolor_standard.cpd  :true  :Optical Water Type 3
- owt_4                        :0          :1          :false     :oceancolor_standard.cpd  :true  :Optical Water Type 4
- owt_5                        :0          :1          :false     :oceancolor_standard.cpd  :true  :Optical Water Type 5
- owt_6                        :0          :1          :false     :oceancolor_standard.cpd  :true  :Optical Water Type 6
- owt_7                        :0          :1          :false     :oceancolor_standard.cpd  :true  :Optical Water Type 7
- owt_8                        :0          :1          :false     :oceancolor_standard.cpd  :true  :Optical Water Type 8
+ owt                          :0          :1          :false     :oceancolor_standard.cpd  :true  :Normalized optical Water Type
  par                          :0.00000    :76.2000    :false     :oceancolor_standard.cpd  :true  :Photosynthetically Available Radiation
  pic                          :5.0e-05    :0.05       :true      :oceancolor_standard.cpd  :true  :Particulate Inorganic Carbon
- pic2                         :5.0e-05    :0.05       :true      :oceancolor_standard.cpd  :true  :Particulate Inorganic Carbon
  pixels                       :0          :65500      :false     :oceancolor_standard.cpd  :true  :Number of pixels per bin
  poc                          :10         :1000       :true      :oceancolor_standard.cpd  :true  :Particulate Organic Carbon
- poc_stramski                 :10         :1000       :true      :oceancolor_standard.cpd  :true  :Particulate Organic Carbon
- rad_sm                       :0          :0.4        :false     :sm.cpd  :true                   :Soil Moisture
+ rad_sm                       :0          :0.4        :false     :sm.cpd                   :true  :Soil Moisture
+ Rrs_lt_430                   :0.00000    :0.02500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [less than 430 nm]
+ Rrs_430_459                  :0.00000    :0.02000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [430-459] nm
+ Rrs_460_499                  :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [460 - 499] nm
+ Rrs_ge_500                   :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at [greater than or equal to 500] nm
  rrsdiff_giop                 :0.0000e+00 :1.0000e-01 :false     :oceancolor_standard.cpd  :true  :Relative Rrs difference
- Rrs_410                      :0.00000    :0.02500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 410 nm
- Rrs_412                      :0.00000    :0.02500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 412 nm
- Rrs_413                      :0.00000    :0.02500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 413 nm
- Rrs_415                      :0.00000    :0.02500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 415 nm
- Rrs_442                      :0.00000    :0.02000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 442 nm
- Rrs_443                      :0.00000    :0.02000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 443 nm
- Rrs_469                      :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 469 nm
- Rrs_486                      :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 486 nm
- Rrs_488                      :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 488 nm
- Rrs_490                      :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 490 nm
- Rrs_491                      :0.00000    :0.01500    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 491 nm
- Rrs_510                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 510 nm
- Rrs_512                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 512 nm
- Rrs_516                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 516 nm
- Rrs_520                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 520 nm
- Rrs_531                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 531 nm
- Rrs_547                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 547 nm
- Rrs_550                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 550 nm
- Rrs_551                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 551 nm
- Rrs_555                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 555 nm
- Rrs_557                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 557 nm
- Rrs_560                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 560 nm
- Rrs_565                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 565 nm
- Rrs_620                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 620 nm
- Rrs_645                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 645 nm
- Rrs_665                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 665 nm
- Rrs_667                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 667 nm
- Rrs_670                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 670 nm
- Rrs_671                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 671 nm
- Rrs_678                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 678 nm
- Rrs_681                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 681 nm
- Rrs_709                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 709 nm
- Rrs_748                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 748 nm
- Rrs_765                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 765 nm
- Rrs_865                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 865 nm
- Rrs_869                      :0.00000    :0.01000    :false     :oceancolor_standard.cpd  :true  :Remote sensing reflectance at 869 nm
  scat_wind_speed              :0          :20         :false     :oceancolor_standard.cpd  :true  :Scatterometer Wind Speed
  scenes                       :0          :65500      :false     :oceancolor_standard.cpd  :true  :Number of scenes per bin
  solz                         :0.00000    :90.0000    :false     :oceancolor_standard.cpd  :true  :Solar Zenith Angle
- SSS                          :0          :70         :false     :oceancolor_sss.cpd  :true       :Sea Surface Salinity
- sst                          :-2.00000   :45.0000    :false     :oceancolor_sst.cpd  :true       :Sea Surface Temperature
- sst4                         :-2.00000   :45.0000    :false     :oceancolor_sst.cpd  :true       :Sea Surface Temperature (4 micron)
- sstref                       :-2.00000   :45.0000    :false     :oceancolor_sst.cpd  :true       :Sea Surface Temperature Reference
- taua_865                     :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 865 nm
- taua_866                     :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 866 nm
- taua_869                     :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 869 nm
- tau_670                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 670 nm
- tau_865                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 865 nm
- tau_869                      :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 869 nm
- Zeu_lee                      :5.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Euphotic Depth (Lee)
- Zeu_morel                    :5.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Euphotic Depth (Morel)
- Zhl_morel                    :2.0        :65.0       :false     :oceancolor_zphotic.cpd  :true   :Heated Layer Depth (Morel)
- Zp_10_lee                    :2.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Photic Depth at 10% Light (Lee)
- Zp_50_lee                    :5.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Photic Depth at 50% Light (Lee)
- Zsd_gbr                      :2.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Secchi Depth (Lee GBR)
- Zsd_morel                    :2.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Secchi Depth (Morel)
- ---------- other ----------  :       0   :0          :false     :null                     :
- elevation                    :-12000.0   :15000.0    :false     :gray_scale.cpd  :true  :Elevation
- elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd  :true :Bathymetry (Colormap used in the ETOPO1 global relief map)
- elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
- topography_sealevel          :       0   :8500.0     :false     :elevation_topography.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
- bathymetry_sealevel          :10.0        : 11000.0   :true      :bathymetry.cpd  :true           :Bathymetry
+ SSS                          :0          :70         :false     :oceancolor_sss.cpd       :true  :Sea Surface Salinity
+ sst                          :-2.00000   :45.0000    :false     :oceancolor_sst.cpd       :true  :Sea Surface Temperature
+ Zeu                          :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :true  :Euphotic Depth
+ Zhl_morel                    :2.0        :65.0       :false     :oceancolor_zphotic.cpd   :true  :Heated Layer Depth (Morel)
+ Zp_10_lee                    :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :true  :Photic Depth at 10% Light (Lee)
+ Zp_50_lee                    :5.0        :180.0      :false     :oceancolor_zphotic.cpd   :true  :Photic Depth at 50% Light (Lee)
+ Zsd                          :2.0        :180.0      :false     :oceancolor_zphotic.cpd   :true  :Secchi Depth
+
+# BATHYMETRY MODULE
+ elevation                    :-12000.0   :15000.0    :false     :gray_scale.cpd           :true  :Elevation
+ elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd :true  :Bathymetry (Colormap used in the ETOPO1 global relief map)
+ elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd :true  :Topography (Colormap used in the ETOPO1 global relief map)
+ topography_sealevel          :       0   :8500.0     :false     :elevation_topography.cpd :true  :Topography (Colormap used in the ETOPO1 global relief map)
+ bathymetry_sealevel          :10.0       : 11000.0   :true      :bathymetry.cpd           :true  :Bathymetry
+
+
+
+
+#FIELD NAME                   SCHEME            OVERRIDE
+ adg_unc_*_giop               :absorption       :false
+ adg_*_giop                   :absorption       :false
+ adg_s_*                      :adg_s            :false
+ angstrom_*                   :angstrom         :false
+ aot_*                        :aot              :false
+ aph_*                        :absorption       :false
+ aw_*                         :absorption       :false
+ a_*                          :absorption       :false
+ a_unc_*                      :absorption       :false
+ bbp_unc_*_giop               :bbp_giop         :false
+ bbp_*_giop                   :bbp_giop         :false
+ bbp_s_*                      :bbp_s            :false
+ bbp_*                        :bbp              :false
+ bb_*_giop                    :bbp_giop         :false
+ bb_unc_*_giop                :bbp_giop         :false
+ bbw_*                        :bbw              :false
+ bb_*                         :bb               :false
+ calcite_*                    :calcite          :false
+ chl_*                        :chlor_a          :false
+ Chlorophyll_a                :chlor_a          :true
+ eps_78                       :epsilon          :true
+ FLAG_*                       :flags            :false
+ fqy                          :flh              :true
+ fqy2                         :flh              :true
+ fsat                         :flh              :true
+ Kd_PAR_*                     :Kd_490           :false
+ Kd_*_lee                     :Kd_lee           :false
+ K_490                        :Kd_490           :true
+ nflh                         :flh              :true
+ nflh2                        :flh              :true
+ nw_*                         :nw               :false
+ owtn_*                       :owt              :false
+ owt_*                        :owt              :false
+ pic2                         :pic              :true
+ poc_*                        :poc              :false
+ Rrs_40*                      :Rrs_lt_430       :false
+ Rrs_41*                      :Rrs_lt_430       :false
+ Rrs_42*                      :Rrs_lt_430       :false
+ Rrs_43*                      :Rrs_430_459      :false
+ Rrs_44*                      :Rrs_430_459      :false
+ Rrs_45*                      :Rrs_430_459      :false
+ Rrs_46*                      :Rrs_460_499      :false
+ Rrs_47*                      :Rrs_460_499      :false
+ Rrs_48*                      :Rrs_460_499      :false
+ Rrs_49*                      :Rrs_460_499      :false
+ Rrs_5*                       :Rrs_ge_500       :false
+ Rrs_6*                       :Rrs_ge_500       :false
+ Rrs_7*                       :Rrs_ge_500       :false
+ Rrs_8*                       :Rrs_ge_500       :false
+ Rrs_9*                       :Rrs_ge_500       :false
+ nLw_40*                      :nLw_lt_430       :false
+ nLw_41*                      :nLw_lt_430       :false
+ nLw_42*                      :nLw_lt_430       :false
+ nLw_43*                      :nLw_430_479      :false
+ nLw_44*                      :nLw_430_479      :false
+ nLw_45*                      :nLw_430_479      :false
+ nLw_46*                      :nLw_430_479      :false
+ nLw_47*                      :nLw_430_479      :false
+ nLw_48*                      :nLw_480_529      :false
+ nLw_49*                      :nLw_480_529      :false
+ nLw_50*                      :nLw_480_529      :false
+ nLw_51*                      :nLw_480_529      :false
+ nLw_52*                      :nLw_480_529      :false
+ nLw_53*                      :nLw_530_599      :false
+ nLw_54*                      :nLw_530_599      :false
+ nLw_55*                      :nLw_530_599      :false
+ nLw_56*                      :nLw_530_599      :false
+ nLw_57*                      :nLw_530_599      :false
+ nLw_58*                      :nLw_530_599      :false
+ nLw_59*                      :nLw_530_599      :false
+ nLw_6*                       :nLw_ge_600       :false
+ nLw_7*                       :nLw_ge_600       :false
+ nLw_8*                       :nLw_ge_600       :false
+ nLw_9*                       :nLw_ge_600       :false
+ sst*                         :sst              :false
+ taua_*                       :aot              :false
+ tau_*                        :aot              :false
+ Zeu_*                        :Zeu              :false
+ Zsd_*                        :Zsd              :false
+
+
+
+
