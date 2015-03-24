@@ -86,7 +86,7 @@ public class ColorPaletteSchemes {
 
     private void initComboBox() {
 
-        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null, null, 0, 0, false, null, true, true);
+        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null,  null, null, 0, 0, false, null, true, true);
         colorPaletteInfos.add(jComboBoxFirstEntryColorPaletteInfo);
 
         initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, true);
@@ -150,6 +150,7 @@ public class ColorPaletteSchemes {
                     String cpdFileName = null;
                     boolean overRide = false;
                     String description = null;
+                    String rootSchemeName = null;
 
 
                     if (values.length == 3) {
@@ -172,6 +173,7 @@ public class ColorPaletteSchemes {
                                         minVal = storedColorPaletteInfo.getMinValue();
                                         maxVal = storedColorPaletteInfo.getMaxValue();
                                         logScaled = storedColorPaletteInfo.isLogScaled();
+                                        rootSchemeName = desiredScheme;
                                         fieldsInitialized = true;
                                     }
                                 }
@@ -234,7 +236,7 @@ public class ColorPaletteSchemes {
                                 ColorPaletteDef colorPaletteDef;
                                 try {
                                     colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
-                                    colorPaletteInfo = new ColorPaletteInfo(name, description, cpdFileName, minVal, maxVal, logScaled, colorPaletteDef, overRide, true);
+                                    colorPaletteInfo = new ColorPaletteInfo(name, rootSchemeName, description, cpdFileName, minVal, maxVal, logScaled, colorPaletteDef, overRide, true);
 
                                 } catch (IOException e) {
                                     colorPaletteInfo = new ColorPaletteInfo(name, description);

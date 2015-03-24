@@ -541,7 +541,7 @@ public class ProductSceneView extends BasicView
                         matchingColorPaletteInfo.isLogScaled());
                 getImageInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
                 //      this.productSceneView.setColorPaletteInfo(cpdInfo);
-                getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(matchingColorPaletteInfo.getName());
+                getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(matchingColorPaletteInfo.getRootName());
                 getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
                 getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename());
 

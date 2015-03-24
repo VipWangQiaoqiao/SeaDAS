@@ -5,6 +5,7 @@ package org.esa.beam.framework.datamodel;
  */
 public class ColorPaletteInfo {
     private String name;
+    private String rootName;
     private String description;
     private String cpdFilename;
     private double minValue;
@@ -15,9 +16,14 @@ public class ColorPaletteInfo {
     private boolean enabled;
     private boolean isOverRide;
 
-    public ColorPaletteInfo(String name, String description, String cpdFilename, double minValue, double maxValue,
+    public ColorPaletteInfo(String name, String rootName, String description, String cpdFilename, double minValue, double maxValue,
                             boolean isLogScaled, ColorPaletteDef colorPaletteDef, boolean isOverRide, boolean enabled) {
         this.setName(name);
+        if (rootName != null) {
+            this.setRootName(rootName);
+        } else {
+            this.setRootName(name);
+        }
         this.setDescription(description);
         this.setCpdFilename(cpdFilename);
         this.setMinValue(minValue);
@@ -132,5 +138,13 @@ public class ColorPaletteInfo {
 
     public void setOverRide(boolean overRide) {
         isOverRide = overRide;
+    }
+
+    public String getRootName() {
+        return rootName;
+    }
+
+    public void setRootName(String rootName) {
+        this.rootName = rootName;
     }
 }

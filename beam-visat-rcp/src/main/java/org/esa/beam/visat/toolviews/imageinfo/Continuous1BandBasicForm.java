@@ -419,7 +419,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                         colorPaletteInfo.getMaxValue(),
                         colorPaletteDef,
                         colorPaletteInfo.isSourceLogScaled(),
-                        colorPaletteInfo.isLogScaled(), colorPaletteInfo.getName(), isDefaultList);
+                        colorPaletteInfo.isLogScaled(), colorPaletteInfo.getRootName(), isDefaultList);
 
 
                 shouldFireChooserEvent = origShouldFireChooserEvent;
