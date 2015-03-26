@@ -17,6 +17,7 @@ public class ColorPaletteSchemes {
     public static final String CPD_SCHEMES_FILENAME = "scheme_selector.txt";
     public static final String USER_CPD_DEFAULTS_FILENAME = "scheme_defaults_user.txt";
     public static final String USER_CPD_SCHEMES_FILENAME = "scheme_selector_user.txt";
+    public static final String DEFAULT_CPD_FILENAME = "gray_scale.cpd";
 
     public boolean isjComboBoxShouldFire() {
         return jComboBoxShouldFire;
@@ -227,11 +228,15 @@ public class ColorPaletteSchemes {
                     }
 
                     if (fieldsInitialized) {
-                        ColorPaletteInfo colorPaletteInfo;
+                        ColorPaletteInfo colorPaletteInfo = null;
 
                         if (testMinMax(minVal, maxVal, logScaled)) {
 
                             File cpdFile = new File(dirName, cpdFileName);
+                            if (!cpdFile.exists()) {
+                                cpdFile = new File(dirName, DEFAULT_CPD_FILENAME);
+                            }
+
                             if (cpdFile.exists()) {
                                 ColorPaletteDef colorPaletteDef;
                                 try {
@@ -239,13 +244,13 @@ public class ColorPaletteSchemes {
                                     colorPaletteInfo = new ColorPaletteInfo(name, rootSchemeName, description, cpdFileName, minVal, maxVal, logScaled, colorPaletteDef, overRide, true);
 
                                 } catch (IOException e) {
-                                    colorPaletteInfo = new ColorPaletteInfo(name, description);
+                                    //        colorPaletteInfo = new ColorPaletteInfo(name, description);
                                 }
                             } else {
-                                colorPaletteInfo = new ColorPaletteInfo(name, description);
+                                //      colorPaletteInfo = new ColorPaletteInfo(name, description);
                             }
                         } else {
-                            colorPaletteInfo = new ColorPaletteInfo(name, description);
+                            //  colorPaletteInfo = new ColorPaletteInfo(name, description);
                         }
 
                         if (colorPaletteInfo != null) {
