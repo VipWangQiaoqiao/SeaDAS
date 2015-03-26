@@ -13,10 +13,10 @@ import java.util.ArrayList;
  * Created by danielknowles on 6/28/14.
  */
 public class ColorPaletteSchemes {
-    public static final String CPD_DEFAULTS_FILENAME = "scheme_defaults.dat";
-    public static final String CPD_SCHEMES_FILENAME = "scheme_selector.dat";
-    public static final String USER_CPD_DEFAULTS_FILENAME = "scheme_defaults_user.dat";
-    public static final String USER_CPD_SCHEMES_FILENAME = "scheme_selector_user.dat";
+    public static final String CPD_DEFAULTS_FILENAME = "scheme_defaults.txt";
+    public static final String CPD_SCHEMES_FILENAME = "scheme_selector.txt";
+    public static final String USER_CPD_DEFAULTS_FILENAME = "scheme_defaults_user.txt";
+    public static final String USER_CPD_SCHEMES_FILENAME = "scheme_selector_user.txt";
 
     public boolean isjComboBoxShouldFire() {
         return jComboBoxShouldFire;
