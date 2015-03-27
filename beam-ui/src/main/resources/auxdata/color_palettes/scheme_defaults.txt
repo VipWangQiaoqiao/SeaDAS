@@ -68,7 +68,9 @@
  elevation                    :-12000.0   :15000.0    :false     :gray_scale.cpd           :true  :Elevation
  elevation_bathymetry         :-11000.0   : 0.0       :false     :smooth_inv_blue.cpd :true  :Bathymetry (Colormap used in the ETOPO1 global relief map)
  elevation_topography         :       0   :8500.0     :false     :topography.cpd :true  :Topography (Colormap used in the ETOPO1 global relief map)
- topography                   :       0   :8500.0     :false     :topography.cpd :true  :Topography (Colormap used in the ETOPO1 global relief map)
+#topography                   :       0   :8500.0     :false     :topography.cpd :true  :Topography (Colormap used in the ETOPO1 global relief map)
+ topography                   :      5   :5000.0     :true     :smooth_green.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
+
  bathymetry                   :10.0       : 11000.0   :true      :smooth_inv_blue.cpd      :true  :Bathymetry
 
 
