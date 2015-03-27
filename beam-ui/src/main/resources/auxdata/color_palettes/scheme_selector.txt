@@ -39,6 +39,7 @@
  nLw >= 600 nm                  :0.00000    :1.01600    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [greater than 600] nm
  SSS                          :30.53      :39.47      :false     :oceancolor_sss.cpd  :true       :Sea Surface Salinity (trimmed to better fit linear scaling)
  topography                   :       0   :8500.0     :false     :topography.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
+ topography2                   :      5   :5000.0     :true     :smooth_green.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
  Zeu                          :5.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Euphotic Depth
  Zhl                          :2.0        :65.0       :false     :oceancolor_zphotic.cpd  :true   :Heated Layer Depth
  Zsd                          :2.0        :180.0      :false     :oceancolor_zphotic.cpd  :true   :Secchi Depth
