@@ -55,7 +55,7 @@
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-envisat-reader</artifactId>
-            <version>${beam.versionRange}</version>
+            <version>5.0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
