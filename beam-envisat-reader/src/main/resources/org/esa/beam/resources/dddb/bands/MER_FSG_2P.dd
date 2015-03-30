@@ -2,9 +2,8 @@
 # 1) product_type
 # 2) description
 #
-MER_FR__2P|MERIS Level 2 Full Resolution Geophysical Product
+MER_FSG__2P|MERIS Level 2 Full Swath Orthorectified Geophysical Product
 
-# IMPORTANT NOTE: The bands described in tjhis file are absolutely identical to the ones in ATS_RR__2P.dd
 #
 # 1) band_name
 # 2) dataset_name

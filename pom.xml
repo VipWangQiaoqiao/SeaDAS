@@ -87,6 +87,7 @@
         <module>beam-opendap</module>
         <module>beam-pconvert</module>
         <module>beam-pixel-extraction</module>
+        <module>beam-proba-v-reader</module>
         <module>beam-rtp-codec</module>
         <module>beam-pgx-reader</module>
         <module>beam-spot-vgt-reader</module>
@@ -97,6 +98,7 @@
         <module>blue-marble-worldmap</module>
         <module>globcover-worldmap</module>
         <module>lib-hdf</module>
+        <module>beam-bigtiff</module>
     </modules>
 
     <organization>
@@ -425,6 +427,30 @@
                 <groupId>org.geotools</groupId>
                 <artifactId>gt-geotiff</artifactId>
                 <version>${geotools.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.media</groupId>
+                        <artifactId>jai_core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.media</groupId>
+                        <artifactId>jai_codec</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.media</groupId>
+                        <artifactId>jai_imageio</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>it.geosolutions.imageio-ext</groupId>
+                        <artifactId>imageio-ext-tiff</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>it.geosolutions.imageio-ext</groupId>
+                <artifactId>imageio-ext-tiff</artifactId>
+                <version>1.2-SENTBX</version>
                 <exclusions>
                     <exclusion>
                         <groupId>javax.media</groupId>

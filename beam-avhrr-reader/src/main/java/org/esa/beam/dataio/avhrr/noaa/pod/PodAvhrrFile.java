@@ -1,20 +1,37 @@
+/*
+ * Copyright (C) 2014 Brockmann Consult GmbH (info@brockmann-consult.de)
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 3 of the License, or (at your option)
+ * any later version.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, see http://www.gnu.org/licenses/
+ */
+
 package org.esa.beam.dataio.avhrr.noaa.pod;
 
 import com.bc.ceres.binio.CompoundData;
 import com.bc.ceres.binio.DataContext;
 import com.bc.ceres.binio.DataFormat;
+import com.bc.ceres.binio.IOHandler;
 import com.bc.ceres.binio.SequenceData;
 import org.esa.beam.dataio.avhrr.AvhrrConstants;
 import org.esa.beam.dataio.avhrr.BandReader;
 import org.esa.beam.dataio.avhrr.HeaderUtil;
+import org.esa.beam.dataio.avhrr.noaa.HeaderWrapper;
 import org.esa.beam.framework.datamodel.Band;
+import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.datamodel.TiePointGrid;
 
-import java.awt.Dimension;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.awt.*;
 import java.io.IOException;
 import java.nio.ByteOrder;
 import java.util.HashMap;
@@ -37,25 +54,28 @@ final class PodAvhrrFile implements VideoDataProvider, CalibrationCoefficientsPr
     private static final double SLOPE_SCALE_FACTOR = PodTypes.getSlopeMetadata().getScalingFactor();
     private static final double INTERCEPT_SCALE_FACTOR = PodTypes.getInterceptMetadata().getScalingFactor();
 
-    private final File file;
     private final DataContext context;
     private final CompoundData data;
+    private final int tbmHeaderRecordIndex;
+    private final int datasetHeaderRecordIndex;
     private final int dataRecordsIndex;
     private final int videoDataIndex;
     private final int qualityDataIndex;
     private final int calibrationCofficientsIndex;
     private final Map<Band, BandReader> bandReaderMap;
+    private final String productName;
 
-    static boolean canDecode(File file) {
-        return new PodFormatDetector().canDecode(file);
+    static boolean canDecode(IOHandler ioHandler) {
+        return new PodFormatDetector().canDecode(ioHandler);
     }
 
-    PodAvhrrFile(File file) throws FileNotFoundException {
-        this.file = file;
-
+    PodAvhrrFile(IOHandler ioHandler, String productName) {
+        this.productName = productName;
         final DataFormat dataFormat = new DataFormat(PodTypes.HRPT_TYPE, ByteOrder.BIG_ENDIAN);
-        context = dataFormat.createContext(file, "r");
+        context = dataFormat.createContext(ioHandler);
         data = context.getData();
+        tbmHeaderRecordIndex = PodTypes.HRPT_TYPE.getMemberIndex("TBM_HEADER_RECORD");
+        datasetHeaderRecordIndex = PodTypes.HRPT_TYPE.getMemberIndex("DATASET_HEADER_RECORD");
         dataRecordsIndex = PodTypes.HRPT_TYPE.getMemberIndex("DATA_RECORDS");
         videoDataIndex = PodTypes.DATA_RECORD_TYPE.getMemberIndex("VIDEO_DATA");
         qualityDataIndex = PodTypes.DATA_RECORD_TYPE.getMemberIndex("QUALITY_INDICATORS");
@@ -97,7 +117,6 @@ final class PodAvhrrFile implements VideoDataProvider, CalibrationCoefficientsPr
     }
 
     Product createProduct() throws IOException {
-        final String productName = file.getName();
         final String productType = "NOAA_POD_AVHRR_HRPT";
         final int dataRecordCount = data.getUShort("NUMBER_OF_SCANS");
         final Product product = new Product(productName, productType, PRODUCT_WIDTH, dataRecordCount);
@@ -125,7 +144,18 @@ final class PodAvhrrFile implements VideoDataProvider, CalibrationCoefficientsPr
         final ProductData.UTC endTime = toUTC(endTimeCode);
         product.setEndTime(endTime);
 
+        addMetadata(product);
+
         return product;
+    }
+
+    private void addMetadata(Product product) throws IOException {
+        final MetadataElement tbmHeaderElement = HeaderWrapper.getAsMetadataElement(
+                data.getCompound(tbmHeaderRecordIndex));
+        product.getMetadataRoot().addElement(tbmHeaderElement);
+        final MetadataElement datasetHeaderElement = HeaderWrapper.getAsMetadataElement(
+                data.getCompound(datasetHeaderRecordIndex));
+        product.getMetadataRoot().addElement(datasetHeaderElement);
     }
 
     // package public for testing only
@@ -179,12 +209,13 @@ final class PodAvhrrFile implements VideoDataProvider, CalibrationCoefficientsPr
             final CompoundData dataRecord = getDataRecord(y);
             final SequenceData solarZenithAngleSequence = dataRecord.getSequence("SOLAR_ZENITH_ANGLES");
             for (int i = 0; i < TIE_POINT_GRID_WIDTH; i++) {
-                rawAngles[i] = solarZenithAngleSequence.getByte(i);
+                rawAngles[i] = solarZenithAngleSequence.getUByte(i);
             }
             final SequenceData earthLocationSequence = dataRecord.getSequence("EARTH_LOCATION");
             for (int i = 0; i < TIE_POINT_GRID_WIDTH; i++) {
-                rawLat[i] = earthLocationSequence.getCompound(i).getInt(0);
-                rawLon[i] = earthLocationSequence.getCompound(i).getInt(1);
+                CompoundData earthLocationSequenceCompound = earthLocationSequence.getCompound(i);
+                rawLat[i] = earthLocationSequenceCompound.getInt(0);
+                rawLon[i] = earthLocationSequenceCompound.getInt(1);
             }
             final double solarZenithAnglesScaleFactor = PodTypes.getSolarZenithAnglesMetadata().getScalingFactor();
             final double latScaleFactor = PodTypes.getLatMetadata().getScalingFactor();
@@ -199,23 +230,26 @@ final class PodAvhrrFile implements VideoDataProvider, CalibrationCoefficientsPr
         }
 
         addTiePointGrid(product, AvhrrConstants.SZA_DS_NAME, PodTypes.getSolarZenithAnglesMetadata().getUnits(),
-                        tiePointGridHeight, gridData[0]);
+                        tiePointGridHeight, gridData[0], TiePointGrid.DISCONT_AT_180);
         final TiePointGrid latGrid = addTiePointGrid(product, AvhrrConstants.LAT_DS_NAME,
                                                      PodTypes.getLatMetadata().getUnits(),
-                                                     tiePointGridHeight, gridData[1]);
+                                                     tiePointGridHeight, gridData[1], TiePointGrid.DISCONT_NONE);
         final TiePointGrid lonGrid = addTiePointGrid(product, AvhrrConstants.LON_DS_NAME,
                                                      PodTypes.getLonMetadata().getUnits(),
-                                                     tiePointGridHeight, gridData[2]);
+                                                     tiePointGridHeight, gridData[2], TiePointGrid.DISCONT_AT_180);
 
         product.setGeoCoding(new PodGeoCoding(latGrid, lonGrid));
     }
 
-    private TiePointGrid addTiePointGrid(Product product, String name, String units, int height, float[] data) {
+
+
+    private TiePointGrid addTiePointGrid(Product product, String name, String units, int height, float[] data,
+                                         int discontinuity) {
         final TiePointGrid grid = new TiePointGrid(name,
                                                    TIE_POINT_GRID_WIDTH, height,
                                                    TIE_POINT_OFFSET_X + 0.5f, 0.5f,
                                                    TIE_POINT_SAMPLING_X, 1,
-                                                   data);
+                                                   data, discontinuity);
         grid.setUnit(units);
         product.addTiePointGrid(grid);
         return grid;
@@ -224,4 +258,5 @@ final class PodAvhrrFile implements VideoDataProvider, CalibrationCoefficientsPr
     private CompoundData getDataRecord(int i) throws IOException {
         return data.getSequence(dataRecordsIndex).getCompound(i);
     }
+
 }

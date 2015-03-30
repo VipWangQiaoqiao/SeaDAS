@@ -18,10 +18,13 @@ package org.esa.beam.dataio.landsat.geotiff;
 
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.ProductData;
+import org.esa.beam.util.logging.BeamLogManager;
+import org.esa.beam.util.math.MathUtils;
 
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -83,6 +86,8 @@ class Landsat8Metadata extends AbstractLandsatMetadata {
                     590,
                     1010
             };
+    private static final double DEFAULT_SCALE_FACTOR = 1.0;
+    private static final double DEFAULT_OFFSET = 0.0;
 
     public Landsat8Metadata(Reader fileReader) throws IOException {
         super(fileReader);
@@ -119,12 +124,32 @@ class Landsat8Metadata extends AbstractLandsatMetadata {
 
     @Override
     public double getScalingFactor(String bandId) {
-        return getScalingFactor(bandId, "MIN_MAX_RADIANCE", "RADIANCE_MINIMUM_BAND_", "RADIANCE_MAXIMUM_BAND_", "MIN_MAX_PIXEL_VALUE", "QUANTIZE_CAL_MIN_BAND_", "QUANTIZE_CAL_MAX_BAND_");
+        final String spectralInput = getSpectralInputString();
+        String attributeKey = String.format("%s_MULT_BAND_%s", spectralInput, bandId);
+        MetadataElement radiometricRescalingElement = getMetaDataElementRoot().getElement("RADIOMETRIC_RESCALING");
+        if (radiometricRescalingElement.getAttribute(attributeKey) == null) {
+            return DEFAULT_SCALE_FACTOR;
+        }
+
+        final double scalingFactor = radiometricRescalingElement.getAttributeDouble(attributeKey);
+        final double sunAngleCorrectionFactor = getSunAngleCorrectionFactor(spectralInput);
+
+        return scalingFactor / sunAngleCorrectionFactor;
     }
 
     @Override
     public double getScalingOffset(String bandId) {
-        return getScalingOffset(bandId, "MIN_MAX_RADIANCE", "RADIANCE_MINIMUM_BAND_", "RADIANCE_MAXIMUM_BAND_", "MIN_MAX_PIXEL_VALUE", "QUANTIZE_CAL_MIN_BAND_", "QUANTIZE_CAL_MAX_BAND_");
+        final String spectralInput = getSpectralInputString();
+        String attributeKey = String.format("%s_ADD_BAND_%s", spectralInput, bandId);
+        MetadataElement radiometricRescalingElement = getMetaDataElementRoot().getElement("RADIOMETRIC_RESCALING");
+        if (radiometricRescalingElement.getAttribute(attributeKey) == null) {
+            return DEFAULT_OFFSET;
+        }
+
+        final double scalingOffset = radiometricRescalingElement.getAttributeDouble(attributeKey);
+        final double sunAngleCorrectionFactor = getSunAngleCorrectionFactor(spectralInput);
+
+        return scalingOffset / sunAngleCorrectionFactor;
     }
 
     @Override
@@ -168,5 +193,38 @@ class Landsat8Metadata extends AbstractLandsatMetadata {
 
     private static int getIndex(String bandIndexNumber) {
         return Integer.parseInt(bandIndexNumber) - 1;
+    }
+
+    static String getSpectralInputString() {
+        String spectralInput = "RADIANCE";
+        final String readAs = System.getProperty(LandsatGeotiffReader.SYSPROP_READ_AS);
+        if (readAs != null) {
+            if (readAs.trim().equals("reflectance")) {
+                spectralInput = "REFLECTANCE";
+            }  else {
+                Logger systemLogger = BeamLogManager.getSystemLogger();
+                systemLogger.warning(String.format("Property '%s' has unsupported value '%s'",
+                                                   LandsatGeotiffReader.SYSPROP_READ_AS, readAs));
+            }
+        }
+
+        return spectralInput;
+    }
+
+    private double getSunAngleCorrectionFactor(String spectralInput) {
+        // this follows:
+        // http://landsat.usgs.gov/Landsat8_Using_Product.php, section 'Conversion to TOA Reflectance'
+        double sunAngleCorrectionFactor = 1.0;
+        if (spectralInput.equals("REFLECTANCE")) {
+            MetadataElement imageAttributesElement = getMetaDataElementRoot().getElement("IMAGE_ATTRIBUTES");
+            if (imageAttributesElement != null) {
+                final String sunElevationAttributeKey = "SUN_ELEVATION";
+                if (imageAttributesElement.getAttribute(sunElevationAttributeKey) != null) {
+                    final double sunElevationAngle = imageAttributesElement.getAttributeDouble(sunElevationAttributeKey);
+                    sunAngleCorrectionFactor = Math.sin(sunElevationAngle* MathUtils.DTOR);
+                }
+            }
+        }
+        return sunAngleCorrectionFactor;
     }
 }

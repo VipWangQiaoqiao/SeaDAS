@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Brockmann Consult GmbH (info@brockmann-consult.de)
+ * Copyright (C) 2015 Brockmann Consult GmbH (info@brockmann-consult.de)
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -26,6 +26,7 @@ import org.esa.beam.binning.ObservationSlice;
 import org.esa.beam.binning.PlanetaryGrid;
 import org.esa.beam.binning.SpatialBinner;
 import org.esa.beam.binning.VariableContext;
+import org.esa.beam.binning.support.BinTracer;
 import org.esa.beam.binning.support.PlateCarreeGrid;
 import org.esa.beam.framework.datamodel.Band;
 import org.esa.beam.framework.datamodel.Product;
@@ -59,6 +60,7 @@ import java.util.logging.Logger;
 public class SpatialProductBinner {
 
     private static final String PROPERTY_KEY_SLICE_HEIGHT = "beam.binning.sliceHeight";
+    private static final String BINNING_MASK_NAME = "_binning_mask";
 
     /**
      * Processes a source product and generated spatial bins.
@@ -92,7 +94,7 @@ public class SpatialProductBinner {
             PlateCarreeGrid plateCarreeGrid = (PlateCarreeGrid) planetaryGrid;
             sourceProductGeometry = plateCarreeGrid.computeProductGeometry(product);
             product = plateCarreeGrid.reprojectToPlateCareeGrid(product);
-            maskImage = product.getBand("binning_mask").getGeophysicalImage();
+            maskImage = product.getBand(BINNING_MASK_NAME).getGeophysicalImage();
         } else {
             maskImage = getMaskImage(product, variableContext.getValidMaskExpression());
         }
@@ -110,7 +112,12 @@ public class SpatialProductBinner {
         }
         final float[] superSamplingSteps = getSuperSamplingSteps(binningContext.getSuperSampling());
         long numObsTotal = 0;
-        progressMonitor.beginTask("Spatially binning of " + product.getName(), sliceRectangles.length);
+        String productName = product.getName();
+        BinTracer binTracer = spatialBinner.getBinningContext().getBinManager().getBinTracer();
+        if (binTracer != null) {
+            binTracer.setProductName(productName);
+        }
+        progressMonitor.beginTask("Spatially binning of " + productName, sliceRectangles.length);
         final Logger logger = BeamLogManager.getSystemLogger();
         for (int idx = 0; idx < sliceRectangles.length; idx++) {
             StopWatch stopWatch = new StopWatch();
@@ -252,7 +259,7 @@ public class SpatialProductBinner {
 
     private static void addMaskToProduct(String maskExpr, Product product,
                                          Map<Product, List<Band>> addedBands) {
-        VirtualBand band = new VirtualBand("binning_mask",
+        VirtualBand band = new VirtualBand(BINNING_MASK_NAME,
                                            ProductData.TYPE_UINT8,
                                            product.getSceneRasterWidth(),
                                            product.getSceneRasterHeight(),

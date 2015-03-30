@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Brockmann Consult GmbH (info@brockmann-consult.de)
+ * Copyright (C) 2015 Brockmann Consult GmbH (info@brockmann-consult.de)
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -15,15 +15,7 @@
  */
 package org.esa.beam.framework.gpf.internal;
 
-import com.bc.ceres.binding.ConversionException;
-import com.bc.ceres.binding.Property;
-import com.bc.ceres.binding.PropertyContainer;
-import com.bc.ceres.binding.PropertyDescriptor;
-import com.bc.ceres.binding.PropertyDescriptorFactory;
-import com.bc.ceres.binding.PropertySet;
-import com.bc.ceres.binding.PropertySetDescriptor;
-import com.bc.ceres.binding.ValidationException;
-import com.bc.ceres.binding.ValueSet;
+import com.bc.ceres.binding.*;
 import com.bc.ceres.binding.dom.DefaultDomConverter;
 import com.bc.ceres.binding.dom.DomElement;
 import com.bc.ceres.binding.dom.XppDomElement;
@@ -35,23 +27,9 @@ import com.bc.ceres.jai.tilecache.DefaultSwapSpace;
 import com.bc.ceres.jai.tilecache.SwappingTileCache;
 import org.esa.beam.framework.dataio.ProductIO;
 import org.esa.beam.framework.dataio.ProductWriter;
-import org.esa.beam.framework.datamodel.Band;
-import org.esa.beam.framework.datamodel.MetadataAttribute;
-import org.esa.beam.framework.datamodel.MetadataElement;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductData;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.gpf.GPF;
-import org.esa.beam.framework.gpf.Operator;
-import org.esa.beam.framework.gpf.OperatorException;
-import org.esa.beam.framework.gpf.OperatorSpi;
-import org.esa.beam.framework.gpf.OperatorSpiRegistry;
-import org.esa.beam.framework.gpf.Tile;
-import org.esa.beam.framework.gpf.annotations.ParameterDescriptorFactory;
-import org.esa.beam.framework.gpf.annotations.SourceProduct;
-import org.esa.beam.framework.gpf.annotations.SourceProducts;
-import org.esa.beam.framework.gpf.annotations.TargetProduct;
-import org.esa.beam.framework.gpf.annotations.TargetProperty;
+import org.esa.beam.framework.datamodel.*;
+import org.esa.beam.framework.gpf.*;
+import org.esa.beam.framework.gpf.annotations.*;
 import org.esa.beam.framework.gpf.descriptor.AnnotationOperatorDescriptor;
 import org.esa.beam.framework.gpf.descriptor.OperatorDescriptor;
 import org.esa.beam.framework.gpf.descriptor.PropertySetDescriptorFactory;
@@ -63,34 +41,18 @@ import org.esa.beam.gpf.operators.standard.WriteOp;
 import org.esa.beam.util.jai.JAIUtils;
 import org.esa.beam.util.logging.BeamLogManager;
 
-import javax.media.jai.BorderExtender;
-import javax.media.jai.JAI;
-import javax.media.jai.OpImage;
-import javax.media.jai.PlanarImage;
-import javax.media.jai.TileCache;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import javax.media.jai.*;
+import java.awt.*;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TimeZone;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -103,6 +65,12 @@ import java.util.regex.Pattern;
 public class OperatorContext {
 
     static final String PROCESSING_GRAPH_ELEMENT_NAME = "Processing_Graph";
+
+    private static final String DATETIME_OUTPUT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+    private static final SimpleDateFormat DATETIME_OUTPUT_FORMAT = new SimpleDateFormat(DATETIME_OUTPUT_PATTERN);
+    static {
+        DATETIME_OUTPUT_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     private static TileCache tileCache;
     private static TileComputationObserver tileComputationObserver;
@@ -166,15 +134,15 @@ public class OperatorContext {
                     System.getProperty(GPF.USE_FILE_TILE_CACHE_PROPERTY, "false"));
             if (useFileTileCache) {
                 tileCache = new SwappingTileCache(JAI.getDefaultInstance().getTileCache().getMemoryCapacity(),
-                                                  new DefaultSwapSpace(SwappingTileCache.DEFAULT_SWAP_DIR,
-                                                                       BeamLogManager.getSystemLogger()));
+                        new DefaultSwapSpace(SwappingTileCache.DEFAULT_SWAP_DIR,
+                                BeamLogManager.getSystemLogger()));
             } else {
                 tileCache = JAI.getDefaultInstance().getTileCache();
             }
             BeamLogManager.getSystemLogger().info(
                     String.format("All GPF operators will share an instance of %s with a capacity of %dM",
-                                  tileCache.getClass().getName(),
-                                  tileCache.getMemoryCapacity() / (1024 * 1024)));
+                            tileCache.getClass().getName(),
+                            tileCache.getMemoryCapacity() / (1024 * 1024)));
         }
         return tileCache;
     }
@@ -322,7 +290,7 @@ public class OperatorContext {
     public void setParameter(String name, Object value) {
         Assert.notNull(name, "name");
         PropertySet paramSet = getParameterSet();
-        if(paramSet.isPropertyDefined(name)) {
+        if (paramSet.isPropertyDefined(name)) {
             Property property = paramSet.getProperty(name);
             if (value != null) {
                 setPropertyValue(value, property);
@@ -397,6 +365,7 @@ public class OperatorContext {
     }
 
     public Tile getSourceTile(RasterDataNode rasterDataNode, Rectangle region, BorderExtender borderExtender) {
+        suspendWatch();
         MultiLevelImage image = rasterDataNode.getSourceImage();
         /////////////////////////////////////////////////////////////////////
         //
@@ -410,6 +379,7 @@ public class OperatorContext {
         }
         //
         /////////////////////////////////////////////////////////////////////
+        resumeWatch();
         return new TileImpl(rasterDataNode, awtRaster);
     }
 
@@ -438,20 +408,20 @@ public class OperatorContext {
 
     private static boolean canOperatorComputeTile(Class<? extends Operator> aClass) {
         return implementsMethod(aClass, "computeTile",
-                                new Class[]{
-                                        Band.class,
-                                        Tile.class,
-                                        ProgressMonitor.class
-                                });
+                new Class[]{
+                        Band.class,
+                        Tile.class,
+                        ProgressMonitor.class
+                });
     }
 
     private static boolean canOperatorComputeTileStack(Class<? extends Operator> aClass) {
         return implementsMethod(aClass, "computeTileStack",
-                                new Class[]{
-                                        Map.class,
-                                        Rectangle.class,
-                                        ProgressMonitor.class
-                                });
+                new Class[]{
+                        Map.class,
+                        Rectangle.class,
+                        ProgressMonitor.class
+                });
     }
 
     private boolean operatorMustComputeTileStack() {
@@ -461,7 +431,7 @@ public class OperatorContext {
     private static boolean implementsMethod(Class<?> aClass, String methodName, Class[] methodParameterTypes) {
         while (true) {
             if (Operator.class.equals(aClass)
-                || !Operator.class.isAssignableFrom(aClass)) {
+                    || !Operator.class.isAssignableFrom(aClass)) {
                 return false;
             }
             try {
@@ -514,7 +484,7 @@ public class OperatorContext {
             if (operatorSpi == null) {
                 PropertyDescriptorFactory parameterDescriptorFactory = new ParameterDescriptorFactory(sourceProductMap);
                 parameterSet = PropertyContainer.createObjectBacked(operator, parameterDescriptorFactory);
-            }else {
+            } else {
                 OperatorDescriptor operatorDescriptor = operatorSpi.getOperatorDescriptor();
                 PropertySetDescriptor propertySetDescriptor;
                 try {
@@ -524,7 +494,7 @@ public class OperatorContext {
                 }
                 if (operatorDescriptor instanceof AnnotationOperatorDescriptor) {
                     parameterSet = PropertyContainer.createObjectBacked(operator, propertySetDescriptor);
-                }else{
+                } else {
                     parameterSet = PropertyContainer.createMapBacked(new HashMap<String, Object>(), propertySetDescriptor);
                 }
             }
@@ -548,7 +518,7 @@ public class OperatorContext {
         int nodeElementCount = 0;
         for (MetadataElement element : targetGraphME.getElements()) {
             MetadataAttribute idAttribute = element.getAttribute("id");
-            if (idAttribute.getData().getElemString().equals(opId)) {
+            if (idAttribute != null && idAttribute.getData().getElemString().equals(opId)) {
                 contains = true;
             }
             if (element.getName().startsWith("node")) {
@@ -599,7 +569,8 @@ public class OperatorContext {
                 targetNodeME.addAttribute(new MetadataAttribute("copyright", copyrightValue, false));
             }
         }
-
+        ProductData processingTime = ProductData.createInstance(DATETIME_OUTPUT_FORMAT.format(new Date()));
+        targetNodeME.addAttribute(new MetadataAttribute("processingTime", processingTime, false));
 
         List<MetadataAttribute> sourceAttributeList = new ArrayList<>(context.sourceProductList.size() * 2);
         for (Product sourceProduct : context.sourceProductList) {
@@ -615,8 +586,8 @@ public class OperatorContext {
                 sourceNodeId = "product:" + sourceProduct.getDisplayName();
             }
             final MetadataAttribute sourceAttribute = new MetadataAttribute(sourceId,
-                                                                            ProductData.createInstance(sourceNodeId),
-                                                                            false);
+                    ProductData.createInstance(sourceNodeId),
+                    false);
             sourceAttributeList.add(sourceAttribute);
         }
         final MetadataElement targetSourcesME = new MetadataElement("sources");
@@ -632,7 +603,7 @@ public class OperatorContext {
         targetNodeME.addElement(targetSourcesME);
 
         final DefaultDomConverter domConverter = new DefaultDomConverter(operatorClass,
-                                                                         new ParameterDescriptorFactory(sourceProductMap));
+                new ParameterDescriptorFactory(sourceProductMap));
         final XppDomElement parametersDom = new XppDomElement("parameters");
         try {
             domConverter.convertValueToDom(context.operator, parametersDom);
@@ -752,10 +723,10 @@ public class OperatorContext {
                 // The WriteOp needs to be called for VirtualBands in order to write them as real bands, where necessary (NetCDF-CF).
                 // For other operators it should not be called
                 if (operator instanceof WriteOp) {
-                    WriteOp writer = (WriteOp)operator;
+                    WriteOp writer = (WriteOp) operator;
                     ProductWriter productWriter = ProductIO.getProductWriter(writer.getFormatName());
 
-                    if(productWriter.shouldWrite(targetBand)) {
+                    if (productWriter.shouldWrite(targetBand)) {
                         targetImageMap.put(targetBand, new OperatorImage(targetBand, this) {
                             @Override
                             protected void computeRect(PlanarImage[] ignored, WritableRaster tile, Rectangle destRect) {
@@ -796,15 +767,15 @@ public class OperatorContext {
         Dimension tileSize = null;
         for (final Product sourceProduct : sourceProductList) {
             if (sourceProduct.getPreferredTileSize() != null &&
-                sourceProduct.getSceneRasterWidth() == targetProduct.getSceneRasterWidth() &&
-                sourceProduct.getSceneRasterHeight() == targetProduct.getSceneRasterHeight()) {
+                    sourceProduct.getSceneRasterWidth() == targetProduct.getSceneRasterWidth() &&
+                    sourceProduct.getSceneRasterHeight() == targetProduct.getSceneRasterHeight()) {
                 tileSize = sourceProduct.getPreferredTileSize();
                 break;
             }
         }
         if (tileSize == null) {
             tileSize = JAIUtils.computePreferredTileSize(targetProduct.getSceneRasterWidth(),
-                                                         targetProduct.getSceneRasterHeight(), 4);
+                    targetProduct.getSceneRasterHeight(), 4);
         }
         return tileSize;
     }
@@ -840,7 +811,7 @@ public class OperatorContext {
             if (targetProductAnnotation != null) {
                 if (!declaredField.getType().equals(Product.class)) {
                     String msg = formatExceptionMessage("Field '%s' annotated as target product is not of type '%s'.",
-                                                        declaredField.getName(), Product.class);
+                            declaredField.getName(), Product.class);
                     throw new OperatorException(msg);
                 }
                 final Product targetProduct = (Product) getOperatorFieldValue(declaredField);
@@ -909,7 +880,7 @@ public class OperatorContext {
     }
 
     private void processSourceProductField(Field declaredField, SourceProduct sourceProductAnnotation) throws
-                                                                                                       OperatorException {
+            OperatorException {
         if (declaredField.getType().equals(Product.class)) {
             String productMapName = declaredField.getName();
             Product sourceProduct = getSourceProduct(productMapName);
@@ -919,9 +890,9 @@ public class OperatorContext {
             }
             if (sourceProduct != null) {
                 validateSourceProduct(declaredField.getName(),
-                                      sourceProduct,
-                                      sourceProductAnnotation.type(),
-                                      sourceProductAnnotation.bands());
+                        sourceProduct,
+                        sourceProductAnnotation.type(),
+                        sourceProductAnnotation.bands());
                 setSourceProductFieldValue(declaredField, sourceProduct);
                 setSourceProduct(productMapName, sourceProduct);
             } else {
@@ -942,7 +913,7 @@ public class OperatorContext {
     }
 
     private void processSourceProductsField(Field declaredField, SourceProducts sourceProductsAnnotation) throws
-                                                                                                          OperatorException {
+            OperatorException {
         if (declaredField.getType().equals(Product[].class)) {
             Product[] sourceProducts = getSourceProductsFieldValue(declaredField);
             if (sourceProducts != null) {
@@ -972,9 +943,9 @@ public class OperatorContext {
             }
             for (Product sourceProduct : sourceProducts) {
                 validateSourceProduct(declaredField.getName(),
-                                      sourceProduct,
-                                      sourceProductsAnnotation.type(),
-                                      sourceProductsAnnotation.bands());
+                        sourceProduct,
+                        sourceProductsAnnotation.type(),
+                        sourceProductsAnnotation.bands());
             }
         } else {
             String text = "Source products (field '%s') must be of type '%s'.";
@@ -1042,7 +1013,7 @@ public class OperatorContext {
             for (String bandName : bandNames) {
                 if (!sourceProduct.containsBand(bandName)) {
                     String msg = formatExceptionMessage("A source product (field '%s') does not contain the band '%s'",
-                                                        fieldName, bandName);
+                            fieldName, bandName);
                     throw new OperatorException(msg);
                 }
             }
@@ -1099,7 +1070,7 @@ public class OperatorContext {
         ParameterDescriptorFactory descriptorFactory = new ParameterDescriptorFactory(sourceProductMap);
 
         PropertySetDescriptor propertySetDescriptor = PropertySetDescriptorFactory.createForOperator(operatorDescriptor,
-                                                                                                     descriptorFactory.getSourceProductMap());
+                descriptorFactory.getSourceProductMap());
 
         Class<? extends Operator> operatorType = operatorDescriptor.getOperatorClass();
         DefaultDomConverter domConverter = new DefaultDomConverter(operatorType, descriptorFactory, propertySetDescriptor);
@@ -1165,11 +1136,47 @@ public class OperatorContext {
             long endNanos = System.nanoTime();
             int tileX = operatorImage.XToTileX(destRect.x);
             int tileY = operatorImage.YToTileY(destRect.y);
+            long nettoNanos = getNettoTime();
             tileComputationObserver.tileComputed(
-                    new TileComputationEvent(operatorImage, tileX, tileY, startNanos, endNanos));
+                    new TileComputationEvent(operatorImage, tileX, tileY, startNanos, endNanos, nettoNanos));
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////
+    private final ThreadLocal<SuspendableStopWatch> nettoWatch = new ThreadLocal<SuspendableStopWatch>() {
+        @Override
+        protected SuspendableStopWatch initialValue() {
+            return new SuspendableStopWatch();
+        }
+    };
+
+    public void startWatch() {
+        if (tileComputationObserver != null) {
+            nettoWatch.get().start();
         }
     }
 
+    public void stopWatch() {
+        if (tileComputationObserver != null) {
+            nettoWatch.get().stop();
+        }
+    }
+
+    public void suspendWatch() {
+        if (tileComputationObserver != null) {
+            nettoWatch.get().suspend();
+        }
+    }
+
+    public void resumeWatch() {
+        if (tileComputationObserver != null) {
+            nettoWatch.get().resume();
+        }
+    }
+
+    public long getNettoTime() {
+        return nettoWatch.get().getTime();
+    }
+    /////////////////////////////////////////////////////////////////////////////////////
     boolean isComputingImageOf(Band band) {
         if (band.isSourceImageSet()) {
             RenderedImage sourceImage = band.getSourceImage().getImage(0);
@@ -1189,4 +1196,30 @@ public class OperatorContext {
         this.requiresAllBands = requiresAllBands;
     }
 
+    private static final class SuspendableStopWatch {
+        private long startTime = -1;
+        private long stopTime = -1;
+
+        public void start() {
+            this.stopTime = -1;
+            this.startTime = System.nanoTime();
+        }
+
+        public void stop() {
+            this.stopTime = System.nanoTime();
+        }
+
+        public void suspend() {
+            this.stopTime = System.nanoTime();
+        }
+
+        public void resume() {
+            this.startTime += (System.nanoTime() - this.stopTime);
+            this.stopTime = -1;
+        }
+
+        public long getTime() {
+            return this.stopTime - this.startTime;
+        }
+    }
 }

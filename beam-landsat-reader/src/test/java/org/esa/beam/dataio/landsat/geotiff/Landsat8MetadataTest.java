@@ -58,15 +58,21 @@ public class Landsat8MetadataTest {
 
     @Test
     public void testGetScalingFactor() throws Exception {
-        assertEquals(0.0128377, metadata.getScalingFactor("1"), 1E-7);
+        assertEquals(0.012838, metadata.getScalingFactor("1"), 1E-7);
         assertEquals(0.0003342, metadata.getScalingFactor("11"), 1E-7);
-        assertEquals(1, metadata.getScalingFactor("12"), 1E-5);
     }
 
     @Test
     public void testGetScalingOffset() throws Exception {
-        assertEquals(-64.18854770, metadata.getScalingOffset("1"), 1E-7);
-        assertEquals(0.09999579, metadata.getScalingOffset("11"), 1E-7);
-        assertEquals(0, metadata.getScalingOffset("12"), 1E-7);
+        assertEquals(-64.18855, metadata.getScalingOffset("1"), 1E-7);
+        assertEquals(0.1, metadata.getScalingOffset("11"), 1E-7);
+    }
+
+    @Test
+    public void testGetSpectralInputString() throws Exception {
+        System.setProperty(LandsatGeotiffReader.SYSPROP_READ_AS, "reflectance");
+        assertEquals("REFLECTANCE", Landsat8Metadata.getSpectralInputString());
+        System.setProperty(LandsatGeotiffReader.SYSPROP_READ_AS, "radiance");
+        assertEquals("RADIANCE", Landsat8Metadata.getSpectralInputString());
     }
 }

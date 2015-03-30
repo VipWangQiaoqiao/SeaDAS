@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Brockmann Consult GmbH (info@brockmann-consult.de)
+ * Copyright (C) 2014 Brockmann Consult GmbH (info@brockmann-consult.de)
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -143,11 +143,19 @@ class CommandLineTool implements GraphProcessingObserver {
     }
 
     private void run() throws Exception {
+        initializeSystemProperties();
         initializeJAI();
         initVelocityContext();
         readMetadata();
         runGraphOrOperator();
         runVelocityTemplates();
+    }
+
+    private void initializeSystemProperties() {
+        Map<String, String> systemPropertiesMap = commandLineArgs.getSystemPropertiesMap();
+        for (Entry<String, String> properties : systemPropertiesMap.entrySet()) {
+            System.setProperty(properties.getKey(), properties.getValue());
+        }
     }
 
     private void initializeJAI() {
@@ -589,11 +597,13 @@ class CommandLineTool implements GraphProcessingObserver {
         velocityContext.put("targetProducts", outputProducts);
 
         Product sourceProduct = null;
+        Operator currentOperator = null;
         Map<String, Product> sourceProducts = new HashMap<>();
         for (Node node : graphContext.getGraph().getNodes()) {
             final NodeContext nodeContext = graphContext.getNodeContext(node);
-            if (nodeContext.getOperator() instanceof ReadOp) {
-                final Product product = nodeContext.getOperator().getTargetProduct();
+            currentOperator = nodeContext.getOperator();
+            if (currentOperator instanceof ReadOp) {
+                final Product product = currentOperator.getTargetProduct();
                 if (sourceProduct == null) {
                     sourceProduct = product;
                 }
@@ -603,6 +613,10 @@ class CommandLineTool implements GraphProcessingObserver {
                 }
             }
         }
+        if (currentOperator != null) {
+            currentOperator.stopTileComputationObservation();
+        }
+
         velocityContext.put("sourceProduct", sourceProduct);
         velocityContext.put("sourceProducts", sourceProducts);
     }

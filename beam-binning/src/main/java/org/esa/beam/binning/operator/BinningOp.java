@@ -19,9 +19,17 @@ package org.esa.beam.binning.operator;
 import com.bc.ceres.core.ProgressMonitor;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
-import org.esa.beam.binning.*;
+import org.esa.beam.binning.AggregatorConfig;
+import org.esa.beam.binning.BinningContext;
+import org.esa.beam.binning.CellProcessorConfig;
+import org.esa.beam.binning.DataPeriod;
+import org.esa.beam.binning.ProductCustomizerConfig;
+import org.esa.beam.binning.SpatialBin;
+import org.esa.beam.binning.SpatialBinner;
+import org.esa.beam.binning.TemporalBin;
+import org.esa.beam.binning.TemporalBinSource;
+import org.esa.beam.binning.TemporalBinner;
 import org.esa.beam.binning.cellprocessor.CellProcessorChain;
-import org.esa.beam.binning.operator.metadata.GlobalMetaParameter;
 import org.esa.beam.binning.operator.metadata.GlobalMetadata;
 import org.esa.beam.binning.operator.metadata.MetadataAggregator;
 import org.esa.beam.binning.operator.metadata.MetadataAggregatorFactory;
@@ -39,6 +47,7 @@ import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProducts;
 import org.esa.beam.framework.gpf.annotations.TargetProduct;
 import org.esa.beam.gpf.operators.standard.SubsetOp;
+import org.esa.beam.util.Debug;
 import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.StopWatch;
 import org.esa.beam.util.converters.JtsGeometryConverter;
@@ -50,7 +59,13 @@ import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Level;
 
 /*
@@ -86,6 +101,7 @@ todo - address the following BinningOp requirements (nf, 2012-03-09)
         description = "Performs spatial and temporal aggregation of pixel values into cells ('bins') of a planetary grid",
         autoWriteDisabled = true)
 public class BinningOp extends Operator {
+
 
     public static enum TimeFilterMethod {
         NONE,
@@ -143,7 +159,7 @@ public class BinningOp extends Operator {
 
     @Parameter(interval = "[0,24]",
             description = "A sensor-dependent constant given in hours of a day (0 to 24) at which a sensor has a minimum number of " +
-                    "observations at the date line (the 180 degree meridian). Only used if parameter 'dataDayMode' is set to 'SPATIOTEMPORAL_DATADAY'.")
+                    "observations at the date line (the 180 degree meridian). Only used if parameter 'timeFilterMethod' is set to 'SPATIOTEMPORAL_DATADAY'.")
     private Double minDataHour;
 
     @Parameter(description = "Number of rows in the (global) planetary grid. Must be even.", defaultValue = "2160")
@@ -214,6 +230,7 @@ public class BinningOp extends Operator {
     private transient BinWriter binWriter;
     private transient Area regionArea;
     private transient MetadataAggregator metadataAggregator;
+    private transient String planetaryGridClass;
 
     private final Map<Product, List<Band>> addedVariableBands;
     private Product writtenProduct;
@@ -341,6 +358,14 @@ public class BinningOp extends Operator {
         this.metadataAggregatorName = metadataAggregatorName;
     }
 
+    public String getOutputFile() {
+        return outputFile;
+    }
+
+    public void setPlanetaryGridClass(String planetaryGridClass) {
+        this.planetaryGridClass = planetaryGridClass;
+    }
+
     /**
      * Processes all source products and writes the output file.
      * The target product represents the written output file
@@ -375,15 +400,7 @@ public class BinningOp extends Operator {
             regionArea = new Area();
         }
 
-        BinningConfig binningConfig = new BinningConfig();
-        binningConfig.setNumRows(numRows);
-        binningConfig.setSuperSampling(superSampling);
-        binningConfig.setMaskExpr(maskExpr);
-        binningConfig.setVariableConfigs(variableConfigs);
-        binningConfig.setAggregatorConfigs(aggregatorConfigs);
-        binningConfig.setPostProcessorConfig(postProcessorConfig);
-        binningConfig.setMinDataHour(minDataHour);
-
+        final BinningConfig binningConfig = createConfig();
         binningContext = binningConfig.createBinningContext(region, startDateUtc, periodDuration);
 
         BinningProductFilter productFilter = createSourceProductFilter(binningContext.getDataPeriod(),
@@ -437,6 +454,27 @@ public class BinningOp extends Operator {
             writtenProduct.dispose();
         }
         super.dispose();
+    }
+
+    public BinningConfig createConfig() {
+        final BinningConfig config = new BinningConfig();
+        config.setNumRows(numRows);
+        config.setSuperSampling(superSampling);
+        config.setMaskExpr(maskExpr);
+        config.setVariableConfigs(variableConfigs);
+        config.setAggregatorConfigs(aggregatorConfigs);
+        config.setPostProcessorConfig(postProcessorConfig);
+        config.setMinDataHour(minDataHour);
+        config.setMetadataAggregatorName(metadataAggregatorName);
+        config.setStartDateTime(startDateTime);
+        config.setPeriodDuration(periodDuration);
+        config.setTimeFilterMethod(timeFilterMethod);
+        config.setOutputFile(outputFile);
+        config.setRegion(region);
+        if (planetaryGridClass != null) {
+            config.setPlanetaryGrid(planetaryGridClass);
+        }
+        return config;
     }
 
     private void validateInput() {
@@ -505,14 +543,7 @@ public class BinningOp extends Operator {
     }
 
     private void initMetadataProperties() {
-        final GlobalMetaParameter parameter = new GlobalMetaParameter();
-
-        parameter.setDescriptor(getSpi().getOperatorDescriptor());
-        parameter.setOutputFile(new File(outputFile));
-        parameter.setStartDateTime(startDateTime);
-        parameter.setPeriodDuration(periodDuration);
-
-        globalMetadata = GlobalMetadata.create(parameter);
+        globalMetadata = GlobalMetadata.create(this);
         globalMetadata.load(metadataPropertiesFile, getLogger());
     }
 
@@ -619,7 +650,14 @@ public class BinningOp extends Operator {
 
         if (region == null && regionArea != null) {
             for (GeneralPath generalPath : ProductUtils.createGeoBoundaryPaths(sourceProduct)) {
-                regionArea.add(new Area(generalPath));
+                try {
+                    Area area = new Area(generalPath);
+                    regionArea.add(area);
+                } catch (Throwable e) {
+                    getLogger().log(Level.SEVERE, String.format("Failed to handle product boundary: %s", e.getMessage()), e);
+                    // sometimes the Area constructor throw an "java.lang.InternalError: Odd number of new curves!"
+                    // then just ignore this geometry
+                }
             }
         }
 
@@ -677,8 +715,7 @@ public class BinningOp extends Operator {
 
         if (outputTargetProduct) {
             getLogger().info(String.format("Writing mapped product '%s'...", formatterConfig.getOutputFile()));
-            final MetadataElement globalAttributes = globalMetadata.asMetadataElement();
-            globalAttributes.addElement(metadataAggregator.getMetadata());
+            final MetadataElement processingGraphMetadata = getProcessingGraphMetadata();
             Formatter.format(binningContext.getPlanetaryGrid(),
                     getTemporalBinSource(temporalBins),
                     binningContext.getBinManager().getResultFeatureNames(),
@@ -686,7 +723,7 @@ public class BinningOp extends Operator {
                     region,
                     startTime,
                     stopTime,
-                    globalAttributes);
+                    processingGraphMetadata);
             stopWatch.stop();
 
             String msgPattern = "Writing mapped product '%s' done, took %s";
@@ -703,6 +740,14 @@ public class BinningOp extends Operator {
         } else {
             this.targetProduct = new Product("Dummy", "t", 10, 10);
         }
+    }
+
+    private MetadataElement getProcessingGraphMetadata() {
+        final MetadataElement processingGraphMetadata = globalMetadata.asMetadataElement();
+
+        final MetadataElement node_0 = processingGraphMetadata.getElement("node.0");
+        node_0.addElement(metadataAggregator.getMetadata());
+        return processingGraphMetadata;
     }
 
     private TemporalBinSource getTemporalBinSource(List<TemporalBin> temporalBins) throws IOException {

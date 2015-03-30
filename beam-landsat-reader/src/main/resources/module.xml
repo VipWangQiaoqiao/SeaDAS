@@ -1,7 +1,7 @@
 <module>
     <manifestVersion>1.0.0</manifestVersion>
     <symbolicName>beam-landsat-reader</symbolicName>
-    <version>5.0</version>
+    <version>5.0.5</version>
     <name>Landsat Product Reader</name>
     <description>
         A product reader for Landsat files. It supports the instruments MSS of Landsat 1-5, TM of Landsat 4 and 5, ETM+ of Landsat 7
@@ -15,6 +15,14 @@
 
     <changelog>
         <![CDATA[
+        <b>Changes in 5.0.5</b><br/>
+            [BEAM-1760] - Landsat 8 now applies correction for sun angles in case of reflectance mode</br>
+        <b>Changes in 5.0.4</b><br/>
+            [BEAM-1760] - Landsat 8 using wrong scale factors and add offsets</br>
+        <b>Changes in 5.0.3</b><br/>
+            [BEAM-1755] Introduce system property to switch between radiance and reflectance<br/>
+        <b>Changes in 5.0.2</b><br/>
+            [BEAM-1725] Introduce system property to disable upscaling for Landsat 8<br/>
         <b>Changes in 5.0</b><br/>
             [BEAM-1635] Support .tar.gz format for Landsat 4 GeoTIFF products<br/>
             [BEAM-1604] Wavelength values for Landsat need to be updated<br/>
