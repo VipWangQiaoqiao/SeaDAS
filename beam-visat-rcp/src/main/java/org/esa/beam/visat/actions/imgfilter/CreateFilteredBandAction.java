@@ -62,7 +62,7 @@ public class CreateFilteredBandAction extends ExecCommand {
         }
     }
 
-    private static FilterBand createFilterBand(Filter filter, String bandName, int iterationCount) {
+    public static FilterBand createFilterBand(Filter filter, String bandName, int iterationCount) {
         RasterDataNode sourceRaster = (RasterDataNode) VisatApp.getApp().getSelectedProductNode();
 
         FilterBand targetBand;
