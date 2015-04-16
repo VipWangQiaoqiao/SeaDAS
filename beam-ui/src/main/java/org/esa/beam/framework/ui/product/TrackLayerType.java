@@ -5,6 +5,7 @@ import com.bc.ceres.grender.Rendering;
 import com.bc.ceres.swing.figure.support.DefaultFigureStyle;
 import com.vividsolutions.jts.geom.Geometry;
 import org.esa.beam.framework.datamodel.VectorDataNode;
+import org.esa.beam.util.SystemUtils;
 import org.opengis.feature.simple.SimpleFeature;
 
 import java.awt.*;
@@ -34,12 +35,11 @@ public class TrackLayerType extends VectorDataLayerType {
 
     public static class TrackLayer extends VectorDataLayer {
 
-        public static final Color STROKE_COLOR = Color.ORANGE;
+        public static final Color STROKE_COLOR = Color.decode(System.getProperty(SystemUtils.getApplicationContextId() + ".track.line.color", "#ffa500"));
         public static final double STROKE_OPACITY = 0.8;
         public static final double STROKE_WIDTH = 2.0;
         public static final double FILL_OPACITY = 0.5;
         public static final Color FILL_COLOR = Color.WHITE;
-
         private final Paint strokePaint;
 
         public TrackLayer(VectorDataLayerType vectorDataLayerType, VectorDataNode vectorDataNode, PropertySet configuration) {
