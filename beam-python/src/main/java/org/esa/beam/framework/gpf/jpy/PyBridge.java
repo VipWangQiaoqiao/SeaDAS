@@ -2,6 +2,7 @@ package org.esa.beam.framework.gpf.jpy;
 
 import org.esa.beam.framework.gpf.OperatorException;
 import org.esa.beam.util.Debug;
+import org.esa.beam.util.SystemUtils;
 import org.esa.beam.util.logging.BeamLogManager;
 import org.jpy.PyLib;
 
@@ -61,7 +62,7 @@ public class PyBridge {
 
         BeamLogManager.getSystemLogger().info("BEAM-Python module directory: " + beampyDir);
 
-        boolean forcePythonConfig = System.getProperty("beam.forcePythonConfig", "true").equalsIgnoreCase("true");
+        boolean forcePythonConfig = System.getProperty(SystemUtils.getApplicationContextId() + ".forcePythonConfig", "true").equalsIgnoreCase("true");
         File jpyConfigFile = new File(beampyDir, JPY_JAVA_API_CONFIG_FILENAME);
         if (forcePythonConfig || !jpyConfigFile.exists()) {
             configureJpy();
@@ -112,7 +113,7 @@ public class PyBridge {
     private static void configureJpy() {
         BeamLogManager.getSystemLogger().info("Configuring BEAM-Python bridge...");
 
-        String pythonExecutable = System.getProperty("beam.pythonExecutable", "python");
+        String pythonExecutable = System.getProperty(SystemUtils.getApplicationContextId() + ".pythonExecutable", "python");
 
         // "java.home" is always present
         List<String> command = new ArrayList<>();

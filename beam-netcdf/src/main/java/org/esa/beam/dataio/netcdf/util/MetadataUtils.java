@@ -20,6 +20,7 @@ import org.esa.beam.framework.datamodel.MetadataAttribute;
 import org.esa.beam.framework.datamodel.MetadataElement;
 import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.util.Debug;
+import org.esa.beam.util.SystemUtils;
 import org.esa.beam.util.logging.BeamLogManager;
 import ucar.ma2.Array;
 import ucar.ma2.DataType;
@@ -41,7 +42,7 @@ public class MetadataUtils {
 
     public static final String GLOBAL_ATTRIBUTES = "Global_Attributes";
     public static final String VARIABLE_ATTRIBUTES = "Variable_Attributes";
-    private static final String PROPERTY_KEY_METADATA_ELEMENT_LIMIT = "beam.netcdf.metadataElementLimit";
+    private static final String PROPERTY_KEY_METADATA_ELEMENT_LIMIT = SystemUtils.getApplicationContextId() + ".netcdf.metadataElementLimit";
     private static final String DEFAULT_MAX_NUM_VALUES_READ = "100";
 
     private MetadataUtils() {
