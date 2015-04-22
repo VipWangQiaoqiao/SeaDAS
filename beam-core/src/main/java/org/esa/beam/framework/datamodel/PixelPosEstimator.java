@@ -32,7 +32,7 @@ import java.awt.image.Raster;
  */
 public class PixelPosEstimator {
 
-    private static final boolean EXTRAPOLATE = false;
+    private static final boolean EXTRAPOLATE = true;
 
     private final GeoApproximation[] approximations;
     private final Rectangle bounds;
