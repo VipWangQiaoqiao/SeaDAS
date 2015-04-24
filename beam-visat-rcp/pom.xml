@@ -47,7 +47,6 @@
         <dependency>
             <groupId>org.esa.beam</groupId>
             <artifactId>beam-statistics-op</artifactId>
-            <version>${beam.versionRange}</version>
         </dependency>
         <dependency>
             <groupId>com.bc.ceres</groupId>
