@@ -1646,11 +1646,11 @@ public class VisatApp extends BasicApp implements AppContext {
             }
         };
         try {
-            if (product.getProductReader() instanceof OperatorProductReader) {
+            //if (product.getProductReader() instanceof OperatorProductReader) {
                 GPF.writeProduct(product, file, formatName, incremental, pm);
-            } else {
-                ProductIO.writeProduct(product, file, formatName, incremental, pm);
-            }
+            //} else {
+            //    ProductIO.writeProduct(product, file, formatName, incremental, pm);
+            //}
             updateState();
             status = !pm.isCanceled();
         } catch (Exception e) {
