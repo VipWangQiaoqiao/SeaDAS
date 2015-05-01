@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Thu Apr 30 21:01:28 EDT 2015
+name=MODIS_RHOS_LOG
+blue=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ? log(rhos_469/0.01)/log(1.0/0.01) \: NaN
+green=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ? log(rhos_555/0.01)/log(1.0/0.01) \: NaN
+red=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ? log(rhos_645/0.01)/log(1.0/0.01) \: NaN

@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Thu Apr 30 21:00:59 EDT 2015
+name=MODIS_RHOS_ATAN
+blue=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ? 0.091935692 + 0.61788 * atan(10*(rhos_469-.015)) \: NaN
+green=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ? 0.091935692 + 0.61788 * atan(10*(rhos_555-.015)) \: NaN
+red=(rhos_469 \!\= NaN and rhos_555 \!\= NaN and rhos_645 \!\= NaN) ? 0.091935692 + 0.61788 * atan(10*(rhos_645-.015)) \: NaN

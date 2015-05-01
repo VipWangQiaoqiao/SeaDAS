@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Thu Apr 30 21:00:23 EDT 2015
+name=SEAWIFS_RHOS_ATAN_LAND_WATER_HYBRID
+blue=if (rhos_443 \!\= NaN and rhos_555 \!\= NaN and rhos_670 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_443-.015)) )       else           (0.29319407 + 0.45585 * atan(50*(rhos_443-.015)) ) ) else NaN
+green=if (rhos_443 \!\= NaN and rhos_555 \!\= NaN and rhos_670 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_555-.015)) )       else           (0.29319407 + 0.45585 * atan(50*(rhos_555-.015)) ) ) else NaN
+red=if (rhos_443 \!\= NaN and rhos_555 \!\= NaN and rhos_670 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_670-.015)) )       else           (0.29319407 + 0.45585 * atan(50*(rhos_670-.015)) ) ) else NaN

@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Thu Apr 30 21:01:28 EDT 2015
+name=VIIRS_RHOS_LOG
+blue=(rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN) ? log(rhos_443/0.01)/log(1.0/0.01) \: NaN
+green=(rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN) ? log(rhos_551/0.01)/log(1.0/0.01) \: NaN
+red=(rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN) ? log(rhos_671/0.01)/log(1.0/0.01) \: NaN
