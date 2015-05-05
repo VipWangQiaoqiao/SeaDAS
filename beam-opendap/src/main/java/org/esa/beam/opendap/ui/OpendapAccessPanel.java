@@ -198,7 +198,7 @@ public class OpendapAccessPanel extends JPanel implements CatalogTree.UIContext 
             }
         });
 
-        openInVisat = new JCheckBox("Open in VISAT");
+        openInVisat = new JCheckBox("Open in SeaDAS");
         statusBar = new StatusBar();
         final LabelStatusBarItem message = new LabelStatusBarItem("label");
         message.setText("Ready.");
