@@ -4,7 +4,7 @@
 # To obtain the desired results, once this profile is loaded, go to the Color Manager and toggle through the 'Red', 'Green', and 'Blue' windows
 # setting the minimum (left-most arrow) to 0.0 and the maximum (right-most arrow) to 1.0.  By default these minimums and maximums are set based
 # on the statistics of the band.
-name=VIIRS_RHOS_LOG
-blue=(rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN) ? log(rhos_443/0.01)/log(1.0/0.01) \: NaN
-green=(rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN) ? log(rhos_551/0.01)/log(1.0/0.01) \: NaN
-red=(rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN) ? log(rhos_671/0.01)/log(1.0/0.01) \: NaN
+name=LANDSAT_RHOS_LOG
+blue=(rhos_443 \!\= NaN and rhos_561 \!\= NaN and rhos_655 \!\= NaN) ? log(rhos_443/0.01)/log(1.0/0.01) \: NaN
+green=(rhos_443 \!\= NaN and rhos_561 \!\= NaN and rhos_655 \!\= NaN) ? log(rhos_561/0.01)/log(1.0/0.01) \: NaN
+red=(rhos_443 \!\= NaN and rhos_561 \!\= NaN and rhos_655 \!\= NaN) ? log(rhos_655/0.01)/log(1.0/0.01) \: NaN

@@ -1,5 +1,11 @@
-#RGB-Image Profile
-#Thu Apr 30 21:00:59 EDT 2015
+# RGB-Image Profile
+# Created by Daniel Knowles, 2015
+# The reflectance offset (0.015) was chosen as a ball-park value based on the green band average value over clear oceanic water.
+# The gain coefficient was chosen by eye to keep the land from saturating.
+# Note: these are not standardized values and the user may easily modify these coefficients to focus in on different ocean and/or land features.
+# To obtain the desired results, once this profile is loaded, go to the Color Manager and toggle through the 'Red', 'Green', and 'Blue' windows
+# setting the minimum (left-most arrow) to 0.0 and the maximum (right-most arrow) to 1.0.  By default these minimums and maximums are set based
+# on the statistics of the band.
 name=SEAWIFS_RHOS_ATAN
 blue=(rhos_443 \!\= NaN and rhos_555 \!\= NaN and rhos_670 \!\= NaN) ? 0.091935692 + 0.61788 * atan(10*(rhos_443-.015)) \: NaN
 green=(rhos_443 \!\= NaN and rhos_555 \!\= NaN and rhos_670 \!\= NaN) ? 0.091935692 + 0.61788 * atan(10*(rhos_555-.015)) \: NaN
