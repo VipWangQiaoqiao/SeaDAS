@@ -153,7 +153,7 @@ public class ProductSceneImage implements ProductLayerContext {
         return LayerUtils.getChildLayerById(getRootLayer(), id);
     }
 
-    void addLayer(int index, Layer layer) {
+    public void addLayer(int index, Layer layer) {
         rootLayer.getChildren().add(index, layer);
     }
 
