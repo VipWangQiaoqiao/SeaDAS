@@ -221,7 +221,7 @@ public class ProductSceneView extends BasicView
         this.layerCanvas.setNavControlShown(navControlShown);
         this.layerCanvas.setAntialiasing(
                 sceneImage.getConfiguration().getPropertyBool(PROPERTY_KEY_GRAPHICS_ANTIALIASING, true));
-        this.layerCanvas.setPreferredSize(new Dimension(400, 400));
+        this.layerCanvas.setPreferredSize(new Dimension(sceneImage.getBaseImageLayer().getImage().getWidth(), sceneImage.getBaseImageLayer().getImage().getHeight()));
         this.layerCanvas.addOverlay(new LayerCanvas.Overlay() {
             @Override
             public void paintOverlay(LayerCanvas canvas, Rendering rendering) {
