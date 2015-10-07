@@ -18,4 +18,8 @@
  chlor_a*       :chlor_a        :false
  *chlor_a       :chlor_a        :false
 
+# UNCOMMENT THE FOLLOWING TO SET CHLOROPHYLL (BLUE-GREEN) AS THE DEFAULT SCHEME FOR chlor_a
+# chlor_a       :chlor_a_bluegreen :true
+# chlor_a*       :chlor_a_bluegreen :false
+# *chlor_a       :chlor_a_bluegreen :false
 
