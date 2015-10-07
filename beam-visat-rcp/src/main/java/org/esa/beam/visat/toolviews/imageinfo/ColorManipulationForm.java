@@ -778,23 +778,26 @@ class ColorManipulationForm {
                 "Installing Auxdata...") {
             @Override
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
-                resourceInstaller.install(".*.cpd", progressMonitor, true);
+                resourceInstaller.install(".*.cpd", progressMonitor, false);
+                resourceInstaller.install("oceancolor.*.cpd", progressMonitor, true);
 
 
                 resourceInstaller.install(ColorPaletteSchemes.CPD_DEFAULTS_FILENAME, progressMonitor, true);
+                resourceInstaller.install(ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME, progressMonitor, false);
                 resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor, true);
+                resourceInstaller.install(ColorPaletteSchemes.USER_CPD_SCHEMES_FILENAME, progressMonitor, false);
 
 
-                File userCpdDefaultsFile = new File(auxdataDir, ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME);
-                if (!userCpdDefaultsFile.exists()) {
-                    resourceInstaller.install(userCpdDefaultsFile.getName(), progressMonitor);
-                }
-
-
-                File userCpdSchemesFile = new File(auxdataDir, ColorPaletteSchemes.USER_CPD_SCHEMES_FILENAME);
-                if (!userCpdSchemesFile.exists()) {
-                    resourceInstaller.install(userCpdSchemesFile.getName(), progressMonitor);
-                }
+//                File userCpdDefaultsFile = new File(auxdataDir, ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME);
+//                if (!userCpdDefaultsFile.exists()) {
+//                    resourceInstaller.install(userCpdDefaultsFile.getName(), progressMonitor);
+//                }
+//
+//
+//                File userCpdSchemesFile = new File(auxdataDir, ColorPaletteSchemes.USER_CPD_SCHEMES_FILENAME);
+//                if (!userCpdSchemesFile.exists()) {
+//                    resourceInstaller.install(userCpdSchemesFile.getName(), progressMonitor);
+//                }
 
                 defaultColorPalettesInstalled = true;
                 return Boolean.TRUE;
@@ -843,7 +846,7 @@ class ColorManipulationForm {
                 "Installing RGB Auxdata...") {
             @Override
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
-                resourceInstaller.install(".*.rgb", progressMonitor, true);
+                resourceInstaller.install(".*.rgb", progressMonitor, false);
                 defaultRgbProfilesInstalled = true;
                 return Boolean.TRUE;
             }
