@@ -74,6 +74,7 @@
  bathymetry                   :10.0       : 11000.0   :true      :smooth_inv_blue.cpd      :true  :Bathymetry
 
 
+ chlor_a_bluegreen            :0.01000000 :20.0       :true      :bluegreen_chlor.cpd  :true  :Chlorophyll a concentration
 
 
 #FIELD NAME                   SCHEME            OVERRIDE
