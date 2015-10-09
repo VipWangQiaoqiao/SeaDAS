@@ -91,6 +91,7 @@ public class Product extends ProductNode {
 
     private static final String PIN_GROUP_NAME = "pins";
     private static final String GCP_GROUP_NAME = "ground_control_points";
+    private static final String TEXT_ANNOTATION_GROUP_NAME = "text_annotations";
 
     public static final String PROPERTY_NAME_GEOCODING = "geoCoding";
     public static final String PROPERTY_NAME_PRODUCT_TYPE = "productType";
@@ -176,6 +177,7 @@ public class Product extends ProductNode {
     private AutoGrouping autoGrouping;
     private final PlacemarkGroup pinGroup;
     private final PlacemarkGroup gcpGroup;
+    private final PlacemarkGroup textAnnotationGroup;
 
     /**
      * The group which contains all other product node groups.
@@ -250,6 +252,7 @@ public class Product extends ProductNode {
 
         pinGroup = createPinGroup();
         gcpGroup = createGcpGroup();
+        textAnnotationGroup = createTextAnnotationGroup();
 
         groups = new ProductNodeGroup<>(this, "groups", false);
         groups.add(bandGroup);
@@ -1262,6 +1265,15 @@ public class Product extends ProductNode {
         return vectorDataNode.getPlacemarkGroup();
     }
 
+    private synchronized PlacemarkGroup createTextAnnotationGroup() {
+        final VectorDataNode vectorDataNode = new VectorDataNode(TEXT_ANNOTATION_GROUP_NAME, Placemark.createTextAnnotationFeatureType());
+        vectorDataNode.setDefaultStyleCss("symbol:plus; stroke:#ff8800; stroke-opacity:0.0; stroke-width:0.0");
+        vectorDataNode.setPermanent(true);
+        this.vectorDataGroup.add(vectorDataNode);
+        return vectorDataNode.getPlacemarkGroup();
+    }
+
+
     /**
      * Gets the group of ground-control points (GCPs).
      *
@@ -1290,6 +1302,15 @@ public class Product extends ProductNode {
      */
     public synchronized PlacemarkGroup getPinGroup() {
         return pinGroup;
+    }
+
+    /**
+     * Gets the group of text annotations.
+     *
+     * @return the text annotation group.
+     */
+    public synchronized PlacemarkGroup getTextAnnotationGroup() {
+        return textAnnotationGroup;
     }
 
     //

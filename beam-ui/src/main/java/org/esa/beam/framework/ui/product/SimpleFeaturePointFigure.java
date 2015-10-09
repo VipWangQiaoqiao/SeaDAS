@@ -44,13 +44,13 @@ import java.awt.geom.Rectangle2D;
 
 public class SimpleFeaturePointFigure extends AbstractPointFigure implements SimpleFeatureFigure {
 
-    private static final Font labelFont = new Font("Helvetica", Font.BOLD, 14);
+    private static Font labelFont = new Font("Helvetica", Font.BOLD, 14);
     private static final int[] labelOutlineAlphas = new int[]{64, 128, 192, 255};
-    private static final Stroke[] labelOutlineStrokes = new Stroke[labelOutlineAlphas.length];
-    private static final Color[] labelOutlineColors = new Color[labelOutlineAlphas.length];
-    private static final Color labelFontColor = Color.WHITE;
-    private static final Color labelOutlineColor = Color.BLACK;
-    private static final String[] labelAttributeNames = new String[] {
+    private static  Stroke[] labelOutlineStrokes = new Stroke[labelOutlineAlphas.length];
+    private static Color[] labelOutlineColors = new Color[labelOutlineAlphas.length];
+    private static  Color labelFontColor = Color.WHITE;
+    private static Color labelOutlineColor = Color.BLACK;
+    private static String[] labelAttributeNames = new String[]{
             Placemark.PROPERTY_NAME_LABEL,
             "Label",
     };
@@ -62,9 +62,22 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
         for (int i = 0; i < labelOutlineAlphas.length; i++) {
             labelOutlineStrokes[i] = new BasicStroke((labelOutlineAlphas.length - i));
             labelOutlineColors[i] = new Color(labelOutlineColor.getRed(),
-                                              labelOutlineColor.getGreen(),
-                                              labelOutlineColor.getBlue(),
-                                              labelOutlineAlphas[i]);
+                    labelOutlineColor.getGreen(),
+                    labelOutlineColor.getBlue(),
+                    labelOutlineAlphas[i]);
+        }
+    }
+
+    public void updateFontColor(Font newFont, Color newLabelFontColor, Color newLabelOutlineColor) {
+        SimpleFeaturePointFigure.labelFont=newFont;
+        SimpleFeaturePointFigure.labelFontColor = newLabelFontColor;
+        SimpleFeaturePointFigure.labelOutlineColor = newLabelOutlineColor;
+        for (int i = 0; i < labelOutlineAlphas.length; i++) {
+            labelOutlineStrokes[i] = new BasicStroke((labelOutlineAlphas.length - i));
+            labelOutlineColors[i] = new Color(labelOutlineColor.getRed(),
+                    labelOutlineColor.getGreen(),
+                    labelOutlineColor.getBlue(),
+                    labelOutlineAlphas[i]);
         }
     }
 
@@ -81,6 +94,14 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
         }
         geometry = (Point) o;
         setSelectable(true);
+    }
+
+    public static Font getLabelFont() {
+        return labelFont;
+    }
+
+    public static void setLabelFont(Font labelFont) {
+        SimpleFeaturePointFigure.labelFont = labelFont;
     }
 
     @Override
@@ -153,8 +174,8 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
         final Paint oldPaint = graphics.getPaint();
 
         try {
-            graphics.setFont(labelFont);
-            GlyphVector glyphVector = labelFont.createGlyphVector(graphics.getFontRenderContext(), label);
+            graphics.setFont(getLabelFont());
+            GlyphVector glyphVector = getLabelFont().createGlyphVector(graphics.getFontRenderContext(), label);
             Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
             float tx = (float) (logicalBounds.getX() - 0.5 * logicalBounds.getWidth());
             float ty = (float) (getSymbol().getBounds().getMaxY() + logicalBounds.getHeight() + 1.0);

@@ -356,9 +356,9 @@ public class Placemark extends ProductNode {
 
         final Point geometry = geometryFactory.createPoint(toCoordinate(i2m.transform(imagePos, null)));
         final SimpleFeature feature = PlainFeatureFactory.createPlainFeature(descriptor.getBaseFeatureType(),
-                                                                             name,
-                                                                             geometry,
-                                                                             null);
+                name,
+                geometry,
+                null);
 
         feature.setAttribute(Placemark.PROPERTY_NAME_PIXELPOS, geometryFactory.createPoint(toCoordinate(imagePos)));
 
@@ -414,6 +414,10 @@ public class Placemark extends ProductNode {
 
     public static SimpleFeatureType createGcpFeatureType() {
         return createPointFeatureType("org.esa.beam.GroundControlPoint");
+    }
+
+    public static SimpleFeatureType createTextAnnotationFeatureType() {
+        return createPointFeatureType("org.esa.beam.Annotation");
     }
 
     public static SimpleFeatureType createGeometryFeatureType() {
