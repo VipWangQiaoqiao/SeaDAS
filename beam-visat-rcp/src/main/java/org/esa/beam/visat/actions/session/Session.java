@@ -16,12 +16,7 @@
 
 package org.esa.beam.visat.actions.session;
 
-import com.bc.ceres.binding.ConversionException;
-import com.bc.ceres.binding.Property;
-import com.bc.ceres.binding.PropertyContainer;
-import com.bc.ceres.binding.PropertyDescriptor;
-import com.bc.ceres.binding.PropertySet;
-import com.bc.ceres.binding.ValidationException;
+import com.bc.ceres.binding.*;
 import com.bc.ceres.binding.accessors.DefaultPropertyAccessor;
 import com.bc.ceres.binding.dom.DefaultDomElement;
 import com.bc.ceres.binding.dom.DomElement;
@@ -39,29 +34,20 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.converters.SingleValueConverterWrapper;
 import com.thoughtworks.xstream.converters.basic.AbstractSingleValueConverter;
 import org.esa.beam.framework.dataio.ProductIO;
-import org.esa.beam.framework.datamodel.Band;
-import org.esa.beam.framework.datamodel.MetadataElement;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductData;
-import org.esa.beam.framework.datamodel.ProductManager;
-import org.esa.beam.framework.datamodel.RGBImageProfile;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.datamodel.VirtualBand;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.AppContext;
 import org.esa.beam.framework.ui.product.ProductMetadataView;
 import org.esa.beam.framework.ui.product.ProductNodeView;
 import org.esa.beam.framework.ui.product.ProductSceneImage;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.glayer.ColorBarLayerType;
 import org.esa.beam.glayer.MaskCollectionLayerType;
 import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.io.FileUtils;
 import org.esa.beam.visat.actions.session.dom.SessionDomConverter;
 
-import javax.swing.JComponent;
-import javax.swing.RootPaneContainer;
-import javax.swing.SwingUtilities;
-import java.awt.Container;
-import java.awt.Rectangle;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -226,7 +212,7 @@ public class Session {
 
     private static boolean isSerializableLayer(Layer layer) {
         // todo - check, this could be solved in a generic way (nf, 10.2009)
-        return !(layer.getLayerType() instanceof MaskCollectionLayerType);
+        return !(layer.getLayerType() instanceof MaskCollectionLayerType || layer.getLayerType() instanceof ColorBarLayerType);
     }
 
 
