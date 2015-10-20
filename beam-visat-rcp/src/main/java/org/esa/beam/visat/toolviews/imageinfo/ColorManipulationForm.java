@@ -769,7 +769,8 @@ class ColorManipulationForm {
         }
     }
 
-    private void installDefaultColorPalettes() {
+
+    protected void installDefaultColorPalettes() {
         final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
         final File auxdataDir = getSystemAuxdataDir();
         final ResourceInstaller resourceInstaller = new ResourceInstaller(codeSourceUrl, "auxdata/color_palettes/",
@@ -778,13 +779,20 @@ class ColorManipulationForm {
                 "Installing Auxdata...") {
             @Override
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
-                resourceInstaller.install(".*.cpd", progressMonitor, false);
-                resourceInstaller.install("oceancolor.*.cpd", progressMonitor, true);
 
+                // this enables user to delete any palettes except for the oceancolor prefix ones.
+                File cpdDefaultsFile = new File(auxdataDir, ColorPaletteSchemes.CPD_DEFAULTS_FILENAME);
+                if (!cpdDefaultsFile.exists()) {
+                    resourceInstaller.install(".*.cpd", progressMonitor, false);
 
-                resourceInstaller.install(ColorPaletteSchemes.CPD_DEFAULTS_FILENAME, progressMonitor, true);
+                }
+
+//                // theses files have to exist
+
+                resourceInstaller.install("gray_scale.cpd", progressMonitor, false);
+                resourceInstaller.install(ColorPaletteSchemes.CPD_DEFAULTS_FILENAME, progressMonitor, false);
                 resourceInstaller.install(ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME, progressMonitor, false);
-                resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor, true);
+                resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor, false);
                 resourceInstaller.install(ColorPaletteSchemes.USER_CPD_SCHEMES_FILENAME, progressMonitor, false);
 
 
@@ -826,6 +834,8 @@ class ColorManipulationForm {
         };
         swingWorker.executeWithBlocking();
     }
+
+
 
 
     private File getSystemAuxdataDir() {
