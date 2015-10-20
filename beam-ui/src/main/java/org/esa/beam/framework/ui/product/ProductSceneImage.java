@@ -183,7 +183,7 @@ public class ProductSceneImage implements ProductLayerContext {
         return layer;
     }
 
-    Layer getMaskCollectionLayer(boolean create) {
+    public Layer getMaskCollectionLayer(boolean create) {
         Layer layer = getLayer(ProductSceneView.MASKS_LAYER_ID);
         if (layer == null && create) {
             layer = createMaskCollectionLayer();

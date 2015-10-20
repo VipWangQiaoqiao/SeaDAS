@@ -201,7 +201,7 @@ class ColorManipulationForm {
             if (isContinuous3BandImage()) {
                 if (oldForm instanceof Continuous3BandGraphicalForm) {
                     newForm = oldForm;
-                } else {
+                } else {/**/
                     newForm = getContinuous3BandGraphicalForm();
                 }
             } else if (isContinuous1BandImage()) {

@@ -212,6 +212,7 @@ public class Session {
 
     private static boolean isSerializableLayer(Layer layer) {
         // todo - check, this could be solved in a generic way (nf, 10.2009)
+        //return !(layer.getLayerType() instanceof MaskCollectionLayerType);
         return !(layer.getLayerType() instanceof MaskCollectionLayerType || layer.getLayerType() instanceof ColorBarLayerType);
     }
 
