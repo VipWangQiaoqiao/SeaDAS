@@ -785,14 +785,46 @@ class ColorManipulationForm {
                 if (!cpdDefaultsFile.exists()) {
                     resourceInstaller.install(".*.cpd", progressMonitor, false);
 
+                } else {
+                    resourceInstaller.install("gray_scale.cpd", progressMonitor, false);
+
+                    File oceancolorStandardCpdFile = new File(auxdataDir, "oceancolor_standard.cpd");
+                    if (oceancolorStandardCpdFile.exists()) {
+                        resourceInstaller.install("oceancolor_standard.cpd", progressMonitor, true);
+                    }
+
+                    File oceancolorSssCpdFile = new File(auxdataDir, "oceancolor_sss.cpd");
+                    if (oceancolorSssCpdFile.exists()) {
+                        resourceInstaller.install("oceancolor_sss.cpd", progressMonitor, true);
+                    }
+
+                    File oceancolorSstCpdFile = new File(auxdataDir, "oceancolor_sst.cpd");
+                    if (oceancolorSstCpdFile.exists()) {
+                        resourceInstaller.install("oceancolor_sst.cpd", progressMonitor, true);
+                    }
+
+                    File oceancolorZphoticCpdFile = new File(auxdataDir, "oceancolor_zphotic.cpd");
+                    if (oceancolorZphoticCpdFile.exists()) {
+                        resourceInstaller.install("oceancolor_zphotic.cpd", progressMonitor, true);
+                    }
+
+                    File oceancolorNdviCpdFile = new File(auxdataDir, "oceancolor_ndvi.cpd");
+                    if (oceancolorNdviCpdFile.exists()) {
+                        resourceInstaller.install("oceancolor_ndvi.cpd", progressMonitor, true);
+                    }
+
                 }
+
+
+
+
 
 //                // theses files have to exist
 
-                resourceInstaller.install("gray_scale.cpd", progressMonitor, false);
-                resourceInstaller.install(ColorPaletteSchemes.CPD_DEFAULTS_FILENAME, progressMonitor, false);
+
+                resourceInstaller.install(ColorPaletteSchemes.CPD_DEFAULTS_FILENAME, progressMonitor, true);
                 resourceInstaller.install(ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME, progressMonitor, false);
-                resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor, false);
+                resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor, true);
                 resourceInstaller.install(ColorPaletteSchemes.USER_CPD_SCHEMES_FILENAME, progressMonitor, false);
 
 
