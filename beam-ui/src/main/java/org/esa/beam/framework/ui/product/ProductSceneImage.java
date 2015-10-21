@@ -161,6 +161,10 @@ public class ProductSceneImage implements ProductLayerContext {
         return LayerUtils.getChildLayerIndex(getRootLayer(), LayerUtils.SEARCH_DEEP, 0, IMAGE_LAYER_FILTER);
     }
 
+    int getLastLayerIndex(){
+        return rootLayer.getChildren().size();
+    }
+
     ImageLayer getBaseImageLayer() {
         return (ImageLayer) getLayer(ProductSceneView.BASE_IMAGE_LAYER_ID);
     }
@@ -169,7 +173,9 @@ public class ProductSceneImage implements ProductLayerContext {
         Layer layer = getLayer(ProductSceneView.NO_DATA_LAYER_ID);
         if (layer == null && create) {
             layer = createNoDataLayer();
-            addLayer(getFirstImageLayerIndex(), layer);
+            //addLayer(getFirstImageLayerIndex(), layer);
+            //inserting no-data layer as the last layer to the image
+            addLayer(getLastLayerIndex(), layer);
         }
         return layer;
     }
