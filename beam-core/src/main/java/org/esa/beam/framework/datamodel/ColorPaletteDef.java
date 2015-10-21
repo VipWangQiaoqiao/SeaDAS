@@ -292,8 +292,8 @@ public class ColorPaletteDef implements Cloneable  {
         propertyMap.setPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, colorPaletteDef.isAutoDistribute());
         propertyMap.setPropertyBool(_PROPERTY_KEY_IS_LOG_SCALED, colorPaletteDef.isLogScaled());
         for (int i = 0; i < numPoints; i++) {
-            propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR + i, points[i].getColor());
-            propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + i, points[i].getSample());
+            propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR + (i < 10 ? "0" : "") + i, points[i].getColor());
+            propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + (i < 10 ? "0" : "") + i, points[i].getSample());
         }
         propertyMap.store(file, "BEAM Colour Palette Definition File"); /*I18N*/
     }
