@@ -257,8 +257,8 @@ public class ColorPaletteDef implements Cloneable  {
         double lastSample = 0;
         for (int i = 0; i < points.length; i++) {
             final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
-            final Color color = propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR + i);
-            double sample = propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + i);
+            final Color color = propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR +  (i < 10 ? "0" : "") + i);
+            double sample = propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + (i < 10 ? "0" : "") + i);
             if (i > 0 && sample < lastSample) {
                 sample = lastSample + 1.0;
             }
