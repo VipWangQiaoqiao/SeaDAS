@@ -162,7 +162,7 @@ public class ProductSceneImage implements ProductLayerContext {
     }
 
     int getLastLayerIndex(){
-        return rootLayer.getChildren().size();
+        return rootLayer.getChildren().size()-1;
     }
 
     ImageLayer getBaseImageLayer() {
