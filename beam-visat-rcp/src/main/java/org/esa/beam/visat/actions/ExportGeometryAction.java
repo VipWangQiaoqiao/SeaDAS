@@ -207,29 +207,10 @@ public class ExportGeometryAction extends ExecCommand {
             modelCrs = DefaultGeographicCRS.WGS84;
         }
         if (!CRS.equalsIgnoreMetadata(crs, modelCrs)) { // we have to reproject the features
-            //this is added to fix vector node import and export problem with smi and seadas generated hdf files -- aynur
-            if (!vectorNode.getProduct().getGeoCoding().getMapCRS().equals(DefaultGeographicCRS.WGS84)
-                    || (vectorNode.getProduct().getGeoCoding() instanceof CrsGeoCoding))
-            {
-                featureCollection = new ReprojectingFeatureCollection(featureCollection, vectorNode.getProduct().getGeoCoding().getMapCRS(), crs);
-            }  else {
-                featureCollection = new ReprojectingFeatureCollection(featureCollection, crs, modelCrs);
-            }
+            featureCollection = new ReprojectingFeatureCollection(featureCollection, crs, modelCrs);
         }
 
-        //Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<>();
-
-        Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<Class<?>, List<SimpleFeature>>();
-
-        GeoCoding geoCoding = vectorNode.getProduct().getGeoCoding();
-        final CoordinateReferenceSystem mapCRS = geoCoding.getMapCRS();
-        if (!mapCRS.equals(DefaultGeographicCRS.WGS84) || (geoCoding instanceof CrsGeoCoding)) {
-             try {
-                 transformFeatureCollection(featureCollection, mapCRS, geoCoding.getImageCRS());
-             } catch (TransformException e) {
-                 VisatApp.getApp().showErrorDialog("transformation failed!");
-             }
-         }
+        Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<>();
 
         final FeatureIterator<SimpleFeature> featureIterator = featureCollection.features();
         while (featureIterator.hasNext()) {
@@ -245,18 +226,6 @@ public class ExportGeometryAction extends ExecCommand {
             featureList.add(feature);
         }
         return featureListMap;
-    }
-
-    private static void transformFeatureCollection(FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection, CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws TransformException {
-        final GeometryCoordinateSequenceTransformer transform = FeatureUtils.getTransform(sourceCRS, targetCRS);
-        final FeatureIterator<SimpleFeature> features = featureCollection.features();
-        final GeometryFactory geometryFactory = new GeometryFactory();
-        while (features.hasNext()) {
-            final SimpleFeature simpleFeature = features.next();
-            final LineString sourceLine = (LineString) simpleFeature.getDefaultGeometry();
-            final LineString targetLine = transform.transformLineString(sourceLine, geometryFactory);
-            simpleFeature.setDefaultGeometry(targetLine);
-        }
     }
 
     private static SimpleFeatureType changeGeometryType(SimpleFeatureType original, Class<?> geometryType) {
