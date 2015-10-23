@@ -1,6 +1,7 @@
 #SeaDAS Color Palette Definition File
-# DO NOT EDIT! - this file is automatically reinstalled each time SeaDAS is run, so any edits to this file will be lost
+# DO NOT EDIT! - this file, if it exists, is automatically overwritten with the default each time SeaDAS is run, so any edits to this file will be lost
 # Aquarius Sea Surface Salinity (reduced points to better enable linear scaling)
+numPoints=20
 color0=117,2,125
 color1=70,1,131
 color2=23,1,137
@@ -21,7 +22,6 @@ color16=255,153,0
 color17=255,96,0
 color18=255,13,0
 color19=225,0,0
-numPoints=20
 sample0=30.53
 sample1=31.67
 sample2=32.44

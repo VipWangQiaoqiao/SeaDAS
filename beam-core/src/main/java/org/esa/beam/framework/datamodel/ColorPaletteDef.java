@@ -295,7 +295,7 @@ public class ColorPaletteDef implements Cloneable  {
             propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR +  i, points[i].getColor());
             propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + i, points[i].getSample());
         }
-        propertyMap.store(file, "BEAM Colour Palette Definition File"); /*I18N*/
+        propertyMap.store(file, "SeaDAS Color Palette Definition File"); /*I18N*/
     }
 
     private void check2PointsMinimum() {

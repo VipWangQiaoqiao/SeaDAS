@@ -10,6 +10,7 @@
 # The ocean colors are adapted from GMT_haxby.cpt, popularized by Bill Haxby, LDEO
 # COLOR_MODEL = RGB
 #Thu Mar 14 12:26:42 EDT 2013
+numPoints=20
 color0=51,102,0
 color1=51,204,102
 color2=187,228,146
@@ -30,7 +31,6 @@ color16=194,176,176
 color17=204,204,204
 color18=229,229,229	
 color19=255,255,255
-numPoints=20
 sample0=0
 sample1=80
 sample2=180
