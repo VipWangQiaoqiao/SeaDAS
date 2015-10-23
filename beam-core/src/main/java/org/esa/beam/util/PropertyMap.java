@@ -25,10 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.esa.beam.util.logging.BeamLogManager;
@@ -97,216 +94,38 @@ public class PropertyMap {
 
         final String text = baos.toString();
         final StringTokenizer st = new StringTokenizer(text, "\n\r", false);
-        final String[] lines = new String[st.countTokens()];
-        for (int i = 0; st.hasMoreElements(); i++) {
-            lines[i] = st.nextElement().toString();
-        }
-
-        for (int i = 0; i < lines.length; i++) {
-
-            if (lines[i].startsWith("numPoints="))
-            {
-                lines[i] = lines[i].replaceFirst("numPoints=", "a1_numPoints=");
+        
+        final String[] colors = new String[st.countTokens()/2];
+        final String[] samples = new String[st.countTokens()/2];
+        final ArrayList<String> metaInfo = new ArrayList<>();
+        int pos, numOfColors = 0, numOfSamples = 0;
+        String nextToken;
+        while (st.hasMoreElements()) {
+            nextToken = st.nextElement().toString();
+            if (nextToken.startsWith("color") ){
+                pos = new Integer(nextToken.substring(nextToken.indexOf("color") + "color".length(), nextToken.indexOf("="))).intValue();
+                colors[pos] = nextToken;
+                numOfColors++;
             }
-            if (lines[i].startsWith("isLogScaled="))
-            {
-                lines[i] = lines[i].replaceFirst("isLogScaled=", "a2_isLogScaled=");
-            }
-            if (lines[i].startsWith("autoDistribute="))
-            {
-                lines[i] = lines[i].replaceFirst("autoDistribute=", "a3_autoDistribute=");
-            }
-
-
-
-            if (lines[i].startsWith("sample0="))
-            {
-                lines[i] = lines[i].replaceFirst("sample0=", "sample00=");
-            }
-            if (lines[i].startsWith("sample1="))
-            {
-                lines[i] = lines[i].replaceFirst("sample1=", "sample01=");
-            }
-            if (lines[i].startsWith("sample2="))
-            {
-                lines[i] = lines[i].replaceFirst("sample2=", "sample02=");
-            }
-            if (lines[i].startsWith("sample3="))
-            {
-                lines[i] = lines[i].replaceFirst("sample3=", "sample03=");
-            }
-            if (lines[i].startsWith("sample4="))
-            {
-                lines[i] = lines[i].replaceFirst("sample4=", "sample04=");
-            }
-            if (lines[i].startsWith("sample5="))
-            {
-                lines[i] = lines[i].replaceFirst("sample5=", "sample05=");
-            }
-            if (lines[i].startsWith("sample6="))
-            {
-                lines[i] = lines[i].replaceFirst("sample6=", "sample06=");
-            }
-            if (lines[i].startsWith("sample7="))
-            {
-                lines[i] = lines[i].replaceFirst("sample7=", "sample07=");
-            }
-            if (lines[i].startsWith("sample8="))
-            {
-                lines[i] = lines[i].replaceFirst("sample8=", "sample08=");
-            }
-            if (lines[i].startsWith("sample9="))
-            {
-                lines[i] = lines[i].replaceFirst("sample9=", "sample09=");
-            }
-
-            if (lines[i].startsWith("color0="))
-            {
-                lines[i] = lines[i].replaceFirst("color0=", "color00=");
-            }
-            if (lines[i].startsWith("color1="))
-            {
-                lines[i] = lines[i].replaceFirst("color1=", "color01=");
-            }
-            if (lines[i].startsWith("color2="))
-            {
-                lines[i] = lines[i].replaceFirst("color2=", "color02=");
-            }
-            if (lines[i].startsWith("color3="))
-            {
-                lines[i] = lines[i].replaceFirst("color3=", "color03=");
-            }
-            if (lines[i].startsWith("color4="))
-            {
-                lines[i] = lines[i].replaceFirst("color4=", "color04=");
-            }
-            if (lines[i].startsWith("color5="))
-            {
-                lines[i] = lines[i].replaceFirst("color5=", "color05=");
-            }
-            if (lines[i].startsWith("color6="))
-            {
-                lines[i] = lines[i].replaceFirst("color6=", "color06=");
-            }
-            if (lines[i].startsWith("color7="))
-            {
-                lines[i] = lines[i].replaceFirst("color7=", "color07=");
-            }
-            if (lines[i].startsWith("color8="))
-            {
-                lines[i] = lines[i].replaceFirst("color8=", "color08=");
-            }
-            if (lines[i].startsWith("color9="))
-            {
-                lines[i] = lines[i].replaceFirst("color9=", "color09=");
+            else if (nextToken.startsWith("sample") ){
+                pos = new Integer(nextToken.substring(nextToken.indexOf("sample") + "sample".length(), nextToken.indexOf("="))).intValue();
+                samples[pos] = nextToken;
+                numOfSamples++;
+            } else {
+                metaInfo.add(nextToken);
             }
         }
-
-        Arrays.sort(lines);
-
-        for (int i = 0; i < lines.length; i++) {
-
-            if (lines[i].startsWith("a1_numPoints="))
-            {
-                lines[i] = lines[i].replaceFirst("a1_numPoints=", "numPoints=");
-            }
-            if (lines[i].startsWith("a2_isLogScaled="))
-            {
-                lines[i] = lines[i].replaceFirst("a2_isLogScaled=", "isLogScaled=");
-            }
-            if (lines[i].startsWith("a3_autoDistribute="))
-            {
-                lines[i] = lines[i].replaceFirst("a3_autoDistribute=", "autoDistribute=");
-            }
-
-
-            if (lines[i].startsWith("sample00="))
-            {
-                lines[i] = lines[i].replaceFirst("sample00=", "sample0=");
-            }
-            if (lines[i].startsWith("sample01="))
-            {
-                lines[i] = lines[i].replaceFirst("sample01=", "sample1=");
-            }
-            if (lines[i].startsWith("sample02="))
-            {
-                lines[i] = lines[i].replaceFirst("sample02=", "sample2=");
-            }
-            if (lines[i].startsWith("sample03="))
-            {
-                lines[i] = lines[i].replaceFirst("sample03=", "sample3=");
-            }
-            if (lines[i].startsWith("sample04="))
-            {
-                lines[i] = lines[i].replaceFirst("sample04=", "sample4=");
-            }
-            if (lines[i].startsWith("sample05="))
-            {
-                lines[i] = lines[i].replaceFirst("sample05=", "sample5=");
-            }
-            if (lines[i].startsWith("sample06="))
-            {
-                lines[i] = lines[i].replaceFirst("sample06=", "sample6=");
-            }
-            if (lines[i].startsWith("sample07="))
-            {
-                lines[i] = lines[i].replaceFirst("sample07=", "sample7=");
-            }
-            if (lines[i].startsWith("sample08="))
-            {
-                lines[i] = lines[i].replaceFirst("sample08=", "sample8=");
-            }
-            if (lines[i].startsWith("sample09="))
-            {
-                lines[i] = lines[i].replaceFirst("sample09=", "sample9=");
-            }
-
-            if (lines[i].startsWith("color00="))
-            {
-                lines[i] = lines[i].replaceFirst("color00=", "color0=");
-            }
-            if (lines[i].startsWith("color01="))
-            {
-                lines[i] = lines[i].replaceFirst("color01=", "color1=");
-            }
-            if (lines[i].startsWith("color02="))
-            {
-                lines[i] = lines[i].replaceFirst("color02=", "color2=");
-            }
-            if (lines[i].startsWith("color03="))
-            {
-                lines[i] = lines[i].replaceFirst("color03=", "color3=");
-            }
-            if (lines[i].startsWith("color04="))
-            {
-                lines[i] = lines[i].replaceFirst("color04=", "color4=");
-            }
-            if (lines[i].startsWith("color05="))
-            {
-                lines[i] = lines[i].replaceFirst("color05=", "color5=");
-            }
-            if (lines[i].startsWith("color06="))
-            {
-                lines[i] = lines[i].replaceFirst("color06=", "color6=");
-            }
-            if (lines[i].startsWith("color07="))
-            {
-                lines[i] = lines[i].replaceFirst("color07=", "color7=");
-            }
-            if (lines[i].startsWith("color08="))
-            {
-                lines[i] = lines[i].replaceFirst("color08=", "color8=");
-            }
-            if (lines[i].startsWith("color09="))
-            {
-                lines[i] = lines[i].replaceFirst("color09=", "color9=");
-            }
-        }
-
-
         BufferedWriter bos = new BufferedWriter(new FileWriter(file));
-        for (int i = 0; i < lines.length; i++) {
-            bos.write(lines[i]);
+        for (int i=0; i<metaInfo.size(); i++) {
+            bos.write(metaInfo.get(i));
+            bos.newLine();
+        }
+        for (int i=0; i<numOfColors; i++) {
+            bos.write(colors[i]);
+            bos.newLine();
+        }
+        for (int i=0; i<numOfSamples; i++) {
+            bos.write(samples[i]);
             bos.newLine();
         }
         bos.close();

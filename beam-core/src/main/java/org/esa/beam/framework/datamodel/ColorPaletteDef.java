@@ -257,8 +257,8 @@ public class ColorPaletteDef implements Cloneable  {
         double lastSample = 0;
         for (int i = 0; i < points.length; i++) {
             final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
-            final Color color = propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR +  (i < 10 ? "0" : "") + i) == Color.black ? propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR + i) :propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR +  (i < 10 ? "0" : "") + i);
-            double sample = propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + (i < 10 ? "0" : "") + i) == 0.0 ? propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + i) : propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + (i < 10 ? "0" : "") + i);
+            final Color color =  propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR + i);
+            double sample =  propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + i);
             if (i > 0 && sample < lastSample) {
                 sample = lastSample + 1.0;
             }
@@ -292,8 +292,8 @@ public class ColorPaletteDef implements Cloneable  {
         propertyMap.setPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, colorPaletteDef.isAutoDistribute());
         propertyMap.setPropertyBool(_PROPERTY_KEY_IS_LOG_SCALED, colorPaletteDef.isLogScaled());
         for (int i = 0; i < numPoints; i++) {
-            propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR + (i < 10 ? "0" : "") + i, points[i].getColor());
-            propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + (i < 10 ? "0" : "") + i, points[i].getSample());
+            propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR +  i, points[i].getColor());
+            propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + i, points[i].getSample());
         }
         propertyMap.store(file, "BEAM Colour Palette Definition File"); /*I18N*/
     }
