@@ -236,10 +236,11 @@ class ProductTN extends AbstractTN {
         final ProductNodeGroup<VectorDataNode> vectorNodeGroup = product.getVectorDataGroup();
         VectorDataNode gcpVectorDataNode = product.getGcpGroup().getVectorDataNode();
         VectorDataNode pinVectorDataNode = product.getPinGroup().getVectorDataNode();
+        VectorDataNode textAnnotationVectorDataNode = product.getTextAnnotationGroup().getVectorDataNode();
         for (int i = 0; i < vectorNodeGroup.getNodeCount(); i++) {
             final VectorDataNode vectorDataNode = vectorNodeGroup.get(i);
-            boolean isPinOrGcpNode = vectorDataNode.equals(gcpVectorDataNode) || vectorDataNode.equals(pinVectorDataNode);
-            if (isPinOrGcpNode) {
+            boolean isPinOrGcpOrTextNode = vectorDataNode.equals(gcpVectorDataNode) || vectorDataNode.equals(pinVectorDataNode) || vectorDataNode.equals(textAnnotationVectorDataNode) ;
+            if (isPinOrGcpOrTextNode) {
                 if(vectorDataNode.getPlacemarkGroup().getNodeCount() > 0) {
                     return true;
                 }
