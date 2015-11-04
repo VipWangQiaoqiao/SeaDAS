@@ -1,5 +1,6 @@
 #SeaDAS Red-Blue Anomoly Color Palette Definition File
 #Mon May 30 15:16:51 EDT 2011
+numPoints=26
 color0=162,0,0
 color1=191,0,0
 color2=220,0,0
@@ -26,7 +27,6 @@ color22=0,10,255
 color23=22,0,226
 color24=52,0,186
 color25=83,0,146
-numPoints=26
 sample0=0.0000
 sample1=1.0000
 sample2=2.0000

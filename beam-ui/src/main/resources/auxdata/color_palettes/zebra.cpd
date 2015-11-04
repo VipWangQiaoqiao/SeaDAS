@@ -1,5 +1,6 @@
 #SeaDAS Zebra Color Palette Definition File
 #Mon May 30 15:16:51 EDT 2011
+numPoints=26
 color0=243,159,218
 color1=111,63,113
 color2=110,63,141
@@ -26,7 +27,6 @@ color22=251,123,90
 color23=173,62,44
 color24=95,20,14
 color25=233,15,9
-numPoints=26
 sample0=0.0000
 sample1=1.0000
 sample2=2.0000
