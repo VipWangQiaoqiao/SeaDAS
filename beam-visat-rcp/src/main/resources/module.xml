@@ -1625,7 +1625,7 @@
             <description>Open a RGB image view for the selected product.</description>
             <context>product</context>
             <!--<smallIcon>icons/ImageView16.gif</smallIcon>-->
-            <largeIcon>icons/ImageView24.gif</largeIcon>
+            <largeIcon>icons/RgbTool24.png</largeIcon>
             <placeBefore>toolBars</placeBefore>
             <placeAfter>showPlacemarkView</placeAfter>
             <helpId>rgbImageProfile</helpId>
