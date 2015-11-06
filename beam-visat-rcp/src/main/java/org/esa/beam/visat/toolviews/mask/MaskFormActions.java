@@ -178,7 +178,7 @@ class MaskFormActions {
                     new Product[]{product}, product, null);
             expressionPane.setEmptyExpressionAllowed(false);
             expressionPane.setCode("");
-            if (expressionPane.showModalDialog(null, "New Logical Band Maths Expression") == AbstractDialog.ID_OK) {
+            if (expressionPane.showModalDialog(null, "Create Logical Expression Mask") == AbstractDialog.ID_OK) {
                 final String code = expressionPane.getCode();
                 if (!code.isEmpty()) {
                     return code;
@@ -739,7 +739,7 @@ class MaskFormActions {
                         new Product[]{product}, product, null);
                 expressionPane.setEmptyExpressionAllowed(false);
                 expressionPane.setCode((String) selectedMaskConfig.getValue("expression"));
-                if (expressionPane.showModalDialog(window, "Edit Band Maths Mask") == AbstractDialog.ID_OK) {
+                if (expressionPane.showModalDialog(window, "Expression Editor") == AbstractDialog.ID_OK) {
                     String code = expressionPane.getCode();
                     selectedMaskConfig.setValue("expression", code);
                     selectedMask.setDescription(code);

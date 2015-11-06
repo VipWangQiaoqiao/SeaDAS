@@ -468,7 +468,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         public ImageLegendDialog(VisatApp visatApp, ParamGroup paramGroup, ImageLegend imageLegend,
                                  boolean transparencyEnabled) {
-            super(visatApp.getMainFrame(), visatApp.getAppName() + " - Color Bar Settings", ID_OK_APPLY_CANCEL, _HELP_ID);
+//            super(visatApp.getMainFrame(), visatApp.getAppName() + " - Color Bar Settings", ID_OK_APPLY_CANCEL, _HELP_ID);
+            super(visatApp.getMainFrame(), "Create/Edit Color Bar", ID_OK_APPLY_CANCEL, _HELP_ID);
             this.visatApp = visatApp;
             okWasClicked = false;
 

@@ -50,7 +50,7 @@ import java.text.MessageFormat;
  * @since BEAM 4.7
  */
 public class CreateVectorDataNodeAction extends ExecCommand {
-    private static final String DIALOG_TITLE = "New Vector Data Container";
+    private static final String DIALOG_TITLE = "Create Geometry Container";
     private static final String KEY_VECTOR_DATA_INITIAL_NAME = "geometry.initialName";
 
 

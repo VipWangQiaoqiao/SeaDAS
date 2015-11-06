@@ -33,7 +33,7 @@ public class ReprojectionAction extends AbstractVisatAction {
     @Override
     public void actionPerformed(CommandEvent event) {
         if (dialog == null) {
-            dialog = new ReprojectionDialog(false, "Reprojection", event.getCommand().getHelpId(), getAppContext());
+            dialog = new ReprojectionDialog(false, "Create Reprojected File", event.getCommand().getHelpId(), getAppContext());
         }
         dialog.show();
     }

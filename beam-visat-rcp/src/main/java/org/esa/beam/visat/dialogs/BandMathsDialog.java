@@ -99,7 +99,7 @@ public class BandMathsDialog extends ModalDialog {
 
     public BandMathsDialog(final VisatApp visatApp, Product currentProduct, ProductNodeList<Product> productsList,
                                 String helpId) {
-        super(visatApp.getMainFrame(), "Band Maths", ID_OK_CANCEL_HELP, helpId); /* I18N */
+        super(visatApp.getMainFrame(), "Create Math (Logical Expression) Band", ID_OK_CANCEL_HELP, helpId); /* I18N */
         Guardian.assertNotNull("currentProduct", currentProduct);
         Guardian.assertNotNull("productsList", productsList);
         Guardian.assertGreaterThan("productsList must be not empty", productsList.size(), 0);
@@ -237,7 +237,7 @@ public class BandMathsDialog extends ModalDialog {
 
         gbc.gridy = ++line;
 
-        JLabel expressionLabel = new JLabel("Band maths expression:");
+        JLabel expressionLabel = new JLabel("Math Band expression:");
         JTextArea expressionArea = new JTextArea();
         expressionArea.setRows(3);
         TextComponentAdapter textComponentAdapter = new TextComponentAdapter(expressionArea);
@@ -305,8 +305,8 @@ public class BandMathsDialog extends ModalDialog {
         descriptor.setDescription("The physical unit for the new band.");
 
         descriptor = container.getDescriptor(PROPERTY_NAME_EXPRESSION);
-        descriptor.setDisplayName("Band maths expression");
-        descriptor.setDescription("Band maths expression");
+        descriptor.setDisplayName("Math Band expression");
+        descriptor.setDescription("Math Band expression");
         descriptor.setNotEmpty(true);
 
         descriptor = container.getDescriptor(PROPERTY_NAME_SAVE_EXPRESSION_ONLY);
@@ -383,7 +383,7 @@ public class BandMathsDialog extends ModalDialog {
                                                                                               targetProduct,
                                                                                               visatApp.getPreferences());
                 pep.setCode(getExpression());
-                int status = pep.showModalDialog(getJDialog(), "Band Maths Expression Editor");
+                int status = pep.showModalDialog(getJDialog(), "Expression Editor");
                 if (status == ModalDialog.ID_OK) {
                     bindingContext.getBinding(PROPERTY_NAME_EXPRESSION).setPropertyValue(pep.getCode());
                 }

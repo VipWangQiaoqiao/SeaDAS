@@ -39,7 +39,7 @@ class CollocationDialog extends SingleTargetProductDialog {
     private final CollocationForm form;
 
     public CollocationDialog(AppContext appContext) {
-        super(appContext, "Collocation", ID_APPLY_CLOSE, HELP_ID);
+        super(appContext, "Create Collocated File", ID_APPLY_CLOSE, HELP_ID);
         final OperatorSpi operatorSpi = GPF.getDefaultInstance().getOperatorSpiRegistry().getOperatorSpi(CollocateOp.Spi.class.getName());
 
         parameterSupport = new OperatorParameterSupport(operatorSpi.getOperatorDescriptor());

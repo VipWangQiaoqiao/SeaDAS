@@ -1242,7 +1242,8 @@ public class VisatApp extends BasicApp implements AppContext {
         BeamFileChooser fileChooser = new BeamFileChooser();
         fileChooser.setCurrentDirectory(new File(lastDir));
         fileChooser.setAcceptAllFileFilterUsed(true);
-        fileChooser.setDialogTitle(getAppName() + " - " + "Open Data Product(s)"); /*I18N*/
+//        fileChooser.setDialogTitle(getAppName() + " - " + "Open Data Product(s)"); /*I18N*/
+        fileChooser.setDialogTitle( "Open Data Product(s)"); /*I18N*/
         fileChooser.setMultiSelectionEnabled(true);
 
         FileFilter actualFileFilter = fileChooser.getAcceptAllFileFilter();
