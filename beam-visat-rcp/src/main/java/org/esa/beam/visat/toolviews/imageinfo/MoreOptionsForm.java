@@ -94,7 +94,7 @@ class MoreOptionsForm {
             }
         };
 
-        JLabel noDataColorLabel = new JLabel("No-data colour: ");
+        JLabel noDataColorLabel = new JLabel("No-data color: ");
         ColorComboBox noDataColorComboBox = new ColorComboBox();
         noDataColorComboBox.setColorValueVisible(false);
         noDataColorComboBox.setAllowDefaultColor(true);
