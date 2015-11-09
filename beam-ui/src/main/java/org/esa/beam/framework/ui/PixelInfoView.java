@@ -273,7 +273,7 @@ public class PixelInfoView extends JPanel {
                                               scanlineModel);
 //        bandPixelInfoPane = createDockablePane("Bands", 2, UIUtils.loadImageIcon("icons/RsBandAsSwath16.gif"),
 //                                               bandModel);
-                bandPixelInfoPane = createDockablePane("Bands (Products)", 2, UIUtils.loadImageIcon("icons/RsBandAsSwath16.gif"),
+                bandPixelInfoPane = createDockablePane("Raster Data", 2, UIUtils.loadImageIcon("icons/RsBandAsSwath16.gif"),
                 bandModel);
         tiePointGridPixelInfoPane = createDockablePane("Tie Point Grids", 3,
                                                        UIUtils.loadImageIcon("icons/RsBandAsTiePoint16.gif"),

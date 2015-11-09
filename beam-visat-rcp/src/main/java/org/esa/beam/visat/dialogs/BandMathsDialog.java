@@ -99,7 +99,7 @@ public class BandMathsDialog extends ModalDialog {
 
     public BandMathsDialog(final VisatApp visatApp, Product currentProduct, ProductNodeList<Product> productsList,
                                 String helpId) {
-        super(visatApp.getMainFrame(), "Create Math (Logical Expression) Band", ID_OK_CANCEL_HELP, helpId); /* I18N */
+        super(visatApp.getMainFrame(), "Create Logical Expression (Math) Band", ID_OK_CANCEL_HELP, helpId); /* I18N */
         Guardian.assertNotNull("currentProduct", currentProduct);
         Guardian.assertNotNull("productsList", productsList);
         Guardian.assertGreaterThan("productsList must be not empty", productsList.size(), 0);
