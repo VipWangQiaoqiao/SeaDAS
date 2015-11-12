@@ -1932,7 +1932,8 @@
             <parent>processing</parent>
             <!--<placeAfter>orthorectificationAction</placeAfter>-->
             <class>org.esa.beam.gpf.operators.reproject.ReprojectionAction</class>
-            <shortDescr>Apply a reprojection.</shortDescr>
+            <shortDescr>Apply a map projection to create a new file</shortDescr>
+            <largeIcon>icons/Reproject24.png</largeIcon>
             <helpId>reprojectionAction</helpId>
         </action>
 
