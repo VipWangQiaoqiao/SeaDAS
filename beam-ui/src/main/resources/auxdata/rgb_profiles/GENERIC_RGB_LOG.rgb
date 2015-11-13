@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Fri Nov 13 13:46:28 EST 2015
+blue=(blue \!\= NaN  and green \!\= NaN and red \!\= NaN and red \!\= 0 and green \!\= 0 and blue \!\= 0) ? log(blue) \: NaN
+name=GENERIC_RGB_LOG
+green=(blue \!\= NaN  and green \!\= NaN and red \!\= NaN and red \!\= 0 and green \!\= 0 and blue \!\= 0) ? log(green) \: NaN
+red=(blue \!\= NaN  and green \!\= NaN and red \!\= NaN and red \!\= 0 and green \!\= 0 and blue \!\= 0) ? log(blue) \: NaN

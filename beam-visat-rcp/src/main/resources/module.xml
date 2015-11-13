@@ -1710,8 +1710,9 @@
 
             <text>Filtered Band...</text>
             <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
-            <shortDescr>Creates a filtered band</shortDescr>
-            <description>Creates a filtered band from the currently selected band</description>
+            <shortDescr>Apply a filter (smoothing, convolution, etc.) to the currently selected raster image to
+                create a new raster band</shortDescr>
+            <!--<description>Creates a filtered band from the currently selected band</description>-->
             <largeIcon>icons/FilteredBand24.png</largeIcon>
             <context>band</context>
             <helpId>createFilteredBand</helpId>
@@ -1727,7 +1728,8 @@
 
             <text>Math Band...</text>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
-            <shortDescr>Create a new band using an arbitrary mathematical expression</shortDescr>
+            <shortDescr>Create a new band using a logical math expression (often referred to as an algorithm band,
+                math band, or expression band)</shortDescr>
             <context>image,band,tiePointGrid</context>
             <!--<smallIcon>icons/BAritmethic16.gif</smallIcon>-->
             <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
@@ -1863,8 +1865,8 @@
             <id>createSubsetFromView</id>
             <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
             <text>Crop...</text>
-            <shortDescr>Crop a file spatially (default boundaries are the current view)</shortDescr>
-            <description>Crop a file spatially (default boundaries are the current view)
+            <shortDescr>Crop a file (spatial, subsample, raster) to create a new file (default boundaries are the current view)</shortDescr>
+        //    <description>Crop a file spatially (default boundaries are the current view)
             </description>
             <context>image</context>
             <helpId>subsetFromView</helpId>
