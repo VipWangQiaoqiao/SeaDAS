@@ -1621,7 +1621,7 @@
             <text>RGB Image...</text>
             <!--<mnemonic>R</mnemonic>-->
             <accellerator>control alt G</accellerator>
-            <shortDescr>Open RGB image view.</shortDescr>
+            <shortDescr>Create a RGB image view.</shortDescr>
             <description>Open a RGB image view for the selected product.</description>
             <context>product</context>
             <!--<smallIcon>icons/ImageView16.gif</smallIcon>-->
