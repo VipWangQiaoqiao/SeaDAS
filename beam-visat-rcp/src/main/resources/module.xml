@@ -806,7 +806,7 @@
         <action>
             <id>importSeaDASTrack</id>
             <class>org.esa.beam.visat.actions.ImportTrackAction</class>
-            <text>SeaDAS 6.x Track</text>
+            <text>Generic Ship Track (6.x)</text>
             <parent>importVectorData</parent>
             <helpId>importSeaDASTrack</helpId>
         </action>
@@ -1046,7 +1046,8 @@
             <class>org.esa.beam.visat.actions.layout.ResetLayoutAction</class>
             <parent>view</parent>
             <placeAtContextTop>true</placeAtContextTop>
-            <text>Reset to Default Layout</text>
+            <text>Restore windows and toolbars arrangement to default</text>
+            <largeIcon>icons/Undo24.gif</largeIcon>
             <shortDescr>Reset to initial layout.</shortDescr>
         </action>
 
@@ -1621,7 +1622,7 @@
             <text>RGB Image...</text>
             <!--<mnemonic>R</mnemonic>-->
             <accellerator>control alt G</accellerator>
-            <shortDescr>Create a RGB image view.</shortDescr>
+            <shortDescr>Use 3 raster bands to create a RGB (true color, etc.) image</shortDescr>
             <description>Open a RGB image view for the selected product.</description>
             <context>product</context>
             <!--<smallIcon>icons/ImageView16.gif</smallIcon>-->
@@ -1710,8 +1711,7 @@
 
             <text>Filtered Band...</text>
             <class>org.esa.beam.visat.actions.imgfilter.CreateFilteredBandAction</class>
-            <shortDescr>Apply a filter (smoothing, convolution, etc.) to the currently selected raster image to
-                create a new raster band</shortDescr>
+            <shortDescr>Create a new raster band by applying a filter (smoothing, convolution, etc.) to the currently selected raster band</shortDescr>
             <!--<description>Creates a filtered band from the currently selected band</description>-->
             <largeIcon>icons/FilteredBand24.png</largeIcon>
             <context>band</context>
@@ -1728,8 +1728,7 @@
 
             <text>Math Band...</text>
             <class>org.esa.beam.visat.actions.BandMathsAction</class>
-            <shortDescr>Create a new band using a logical math expression (often referred to as an algorithm band,
-                math band, or expression band)</shortDescr>
+            <shortDescr>Create a new raster band using a logical math expression (commonly referred to as math band, algorithm band, or expression band)</shortDescr>
             <context>image,band,tiePointGrid</context>
             <!--<smallIcon>icons/BAritmethic16.gif</smallIcon>-->
             <!--<largeIcon>icons/BAritmethic24.gif</largeIcon>-->
