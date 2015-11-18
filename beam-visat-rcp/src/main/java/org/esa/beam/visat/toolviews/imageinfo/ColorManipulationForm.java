@@ -317,7 +317,7 @@ class ColorManipulationForm {
 
         resetButton = createButton("icons/Undo24.gif");
         resetButton.setName("ResetButton");
-        resetButton.setToolTipText("Reset to defaults"); /*I18N*/
+        resetButton.setToolTipText("Reset to color scheme defaults"); /*I18N*/
         resetButton.addActionListener(wrapWithAutoApplyActionListener(new ActionListener() {
 
             @Override

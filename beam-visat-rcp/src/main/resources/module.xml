@@ -235,7 +235,8 @@
             <!--<smallIcon>/org/esa/beam/resources/images/icons/Navigation16.gif</smallIcon>-->
             <largeIcon>/org/esa/beam/resources/images/icons/Navigation24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/Navigation24.gif</largeIcon>-->
-            <helpId>showNavigationWnd</helpId>
+            <!--<helpId>showNavigationWnd</helpId>-->
+            <helpId>visat</helpId>
             <initState>DOCKED</initState>
             <initSide>EAST</initSide>
             <initIndex>2</initIndex>
@@ -1046,9 +1047,9 @@
             <class>org.esa.beam.visat.actions.layout.ResetLayoutAction</class>
             <parent>view</parent>
             <placeAtContextTop>true</placeAtContextTop>
-            <text>Restore windows and toolbars arrangement to default</text>
+            <text>Reset to initial layout</text>
             <largeIcon>icons/Undo24.gif</largeIcon>
-            <shortDescr>Reset to initial layout.</shortDescr>
+            <shortDescr>Restore window and toolbar arrangement to default</shortDescr>
         </action>
 
         <action>
