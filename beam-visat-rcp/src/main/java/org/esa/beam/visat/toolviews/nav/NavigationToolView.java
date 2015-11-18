@@ -225,7 +225,7 @@ public class NavigationToolView extends AbstractToolView {
         gbc.weighty = 0.0;
 
         gbc.gridy++;
-        eastPane.add(helpButton, gbc);
+//        eastPane.add(helpButton, gbc);
 
         zoomFactorField = new JTextField();
         zoomFactorField.setColumns(8);

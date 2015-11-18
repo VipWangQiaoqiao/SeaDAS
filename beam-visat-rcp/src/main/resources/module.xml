@@ -235,8 +235,8 @@
             <!--<smallIcon>/org/esa/beam/resources/images/icons/Navigation16.gif</smallIcon>-->
             <largeIcon>/org/esa/beam/resources/images/icons/Navigation24.png</largeIcon>
             <!--<largeIcon>/org/esa/beam/resources/images/icons/Navigation24.gif</largeIcon>-->
-            <!--<helpId>showNavigationWnd</helpId>-->
-            <helpId>visat</helpId>
+            <helpId>showNavigationWnd</helpId>
+            <!--<helpId>visat</helpId>-->
             <initState>DOCKED</initState>
             <initSide>EAST</initSide>
             <initIndex>2</initIndex>
