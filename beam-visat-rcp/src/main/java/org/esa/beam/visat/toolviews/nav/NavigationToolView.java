@@ -167,7 +167,8 @@ public class NavigationToolView extends AbstractToolView {
             }
         });
 
-        syncViewsButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/SyncViews24.png"), true);
+//        syncViewsButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/SyncViews24.png"), true);
+        syncViewsButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/Chain24.png"), true);
         syncViewsButton.setToolTipText("Synchronise compatible product views."); /*I18N*/
         syncViewsButton.setName("syncViewsButton");
         syncViewsButton.addActionListener(new ActionListener() {
