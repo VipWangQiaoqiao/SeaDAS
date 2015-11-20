@@ -33,6 +33,10 @@
  Kd                           :0.01000000 :6.0        :true      :oceancolor_standard.cpd  :true  :Diffuse attenuation coefficient
  NDVI                         :-0.0500000 :0.915200   :false     :oceancolor_ndvi.cpd  :true      :Normalized Difference Vegetation Index
  Quantum Yield                :0.0        :0.05       :false     :oceancolor_standard.cpd  :true  :Fluorescence Quantum Yield
+ rhos (gray)                  :0.01000000 :1.0        :true      :gray_scale.cpd           :true  :rho
+ rhos (red)                   :0.01000000 :1.0        :true      :standard_red.cpd         :true  :rho red bands
+ rhos (blue)                  :0.01000000 :1.0        :true      :standard_blue.cpd        :true  :rho blue bands
+ rhos (green)                 :0.01000000 :1.0        :true      :standard_green.cpd       :true  :rho green bands
  nLw < 430 nm                 :0.00000    :5.08000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [less than 430] nm
  nLw 430-479 nm               :0.00000    :3.81000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [430-479] nm
  nLw 480-529 nm               :0.00000    :2.54000    :false     :oceancolor_standard.cpd  :true  :Normalized water-leaving radiance at [480-529] nm

@@ -75,6 +75,8 @@
 
 
  chlor_a_bluegreen            :0.01000000 :20.0       :true      :bluegreen_chlor.cpd  :true  :Chlorophyll a concentration
+ rhos                         :0.01000000 :1.0        :true      :gray_scale.cpd              :true  :rhos
+
 
 
 #FIELD NAME                   SCHEME            OVERRIDE
@@ -128,6 +130,7 @@
  Rrs_7*                       :Rrs_ge_500       :false
  Rrs_8*                       :Rrs_ge_500       :false
  Rrs_9*                       :Rrs_ge_500       :false
+ rhos_*                       :rhos             :false
  nLw_40*                      :nLw_lt_430       :false
  nLw_41*                      :nLw_lt_430       :false
  nLw_42*                      :nLw_lt_430       :false
