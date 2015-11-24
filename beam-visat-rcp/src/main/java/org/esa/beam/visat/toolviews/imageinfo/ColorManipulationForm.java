@@ -822,9 +822,10 @@ class ColorManipulationForm {
 //                // theses files have to exist
 
 
-                resourceInstaller.install(ColorPaletteSchemes.CPD_DEFAULTS_FILENAME, progressMonitor, true);
+                resourceInstaller.install(ColorPaletteSchemes.CPD_DEFAULTS_FILENAME, progressMonitor, false);
+                resourceInstaller.install(ColorPaletteSchemes.CPD_COLORBLIND_DEFAULTS_FILENAME, progressMonitor, false);
                 resourceInstaller.install(ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME, progressMonitor, false);
-                resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor, true);
+                resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor, false);
                 resourceInstaller.install(ColorPaletteSchemes.USER_CPD_SCHEMES_FILENAME, progressMonitor, false);
 
 
