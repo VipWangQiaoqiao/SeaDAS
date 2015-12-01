@@ -120,6 +120,8 @@ class ColorManipulationForm {
             installDefaultColorPalettes();
         }
 
+        installColorPalettesExtras();
+
         if (!defaultRgbProfilesInstalled) {
             installDefaultRgbProfiles();
         }
@@ -770,6 +772,50 @@ class ColorManipulationForm {
     }
 
 
+    protected void installColorPalettesExtras() {
+        final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
+        final File auxdataDir = getColorPalettesExtrasAuxdataDir();
+        final ResourceInstaller resourceInstaller = new ResourceInstaller(codeSourceUrl, "auxdata/color_palettes_extras/",
+                auxdataDir);
+        ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(toolView.getPaneControl(),
+                "Installing Auxdata Extras ...") {
+            @Override
+            protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
+
+                resourceInstaller.install(".*.cpd", progressMonitor, false);
+                resourceInstaller.install(".*.txt", progressMonitor, false);
+
+                return Boolean.TRUE;
+            }
+
+            /**
+             * Executed on the <i>Event Dispatch Thread</i> after the {@code doInBackground}
+             * method is finished. The default
+             * implementation does nothing. Subclasses may override this method to
+             * perform completion actions on the <i>Event Dispatch Thread</i>. Note
+             * that you can query status inside the implementation of this method to
+             * determine the result of this task or whether this task has been cancelled.
+             *
+             * @see #doInBackground
+             * @see #isCancelled()
+             * @see #get
+             */
+            @Override
+            protected void done() {
+                try {
+                    get();
+                } catch (Exception e) {
+                    visatApp.getLogger().log(Level.SEVERE, "Could not install auxdata/color_palettes_extras", e);
+                }
+            }
+        };
+        swingWorker.executeWithBlocking();
+    }
+
+
+
+
+
     protected void installDefaultColorPalettes() {
         final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
         final File auxdataDir = getSystemAuxdataDir();
@@ -874,6 +920,10 @@ class ColorManipulationForm {
 
     private File getSystemAuxdataDir() {
         return new File(SystemUtils.getApplicationDataDir(), "beam-ui/auxdata/color-palettes");
+    }
+
+    private File getColorPalettesExtrasAuxdataDir() {
+        return new File(SystemUtils.getApplicationDataDir(), "beam-ui/auxdata/color-palettes-extras");
     }
 
     private File getRGBAuxdataDir() {
