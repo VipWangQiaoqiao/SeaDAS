@@ -25,19 +25,7 @@ import com.jidesoft.grid.ColorCellEditor;
 import com.jidesoft.grid.ColorCellRenderer;
 import com.jidesoft.grid.SortableTable;
 import org.esa.beam.dataio.placemark.PlacemarkIO;
-import org.esa.beam.framework.datamodel.Band;
-import org.esa.beam.framework.datamodel.GeoCoding;
-import org.esa.beam.framework.datamodel.GeoPos;
-import org.esa.beam.framework.datamodel.PinDescriptor;
-import org.esa.beam.framework.datamodel.PixelPos;
-import org.esa.beam.framework.datamodel.Placemark;
-import org.esa.beam.framework.datamodel.PlacemarkDescriptor;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductNode;
-import org.esa.beam.framework.datamodel.ProductNodeEvent;
-import org.esa.beam.framework.datamodel.ProductNodeGroup;
-import org.esa.beam.framework.datamodel.ProductNodeListener;
-import org.esa.beam.framework.datamodel.TiePointGrid;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.help.HelpSys;
 import org.esa.beam.framework.ui.AbstractDialog;
 import org.esa.beam.framework.ui.DecimalTableCellRenderer;
@@ -1077,7 +1065,10 @@ public class PlacemarkManagerToolView extends AbstractToolView {
                     Placemark[] placemarkArray = selectedPlacemarks.toArray(new Placemark[selectedPlacemarks.size()]);
                     if (getPlacemarkDescriptor() instanceof PinDescriptor) {
                         sceneView.selectPins(placemarkArray);
-                    } else {
+                    } else if (getPlacemarkDescriptor() instanceof TextAnnotationDescriptor) {
+                        sceneView.selectTextAnnotations(placemarkArray);
+                    }
+                    else {
                         sceneView.selectGcps(placemarkArray);
                     }
                 }
