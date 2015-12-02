@@ -955,6 +955,14 @@ public class ProductSceneView extends BasicView
     }
 
     /**
+     * @param textAnnotations The selected textAnnotations.
+     * @since BEAM 5.0
+     */
+    public void selectTextAnnotations(Placemark[] textAnnotations) {
+        selectPlacemarks(getProduct().getTextAnnotationGroup(), textAnnotations);
+    }
+
+    /**
      * @param gpcs The selected ground control points.
      * @since BEAM 4.7
      */
