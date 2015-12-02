@@ -23,10 +23,19 @@ class ColorPalettesManager {
         cpdRasterList = new HashMap<>();
         final ArrayList<ColorPaletteDef> newCpdList = new ArrayList<>();
         final ArrayList<String> newCpdNames = new ArrayList<>();
+
+        final File[] file_oceancolor_default = palettesDir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return (name.toLowerCase().equals("oceancolor_standard.cpd"));
+
+            }
+        });
+
         final File[] files_oceancolor = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.toLowerCase().endsWith(".cpd") && name.toLowerCase().startsWith("oceancolor_"));
+                return (name.toLowerCase().endsWith(".cpd") && name.toLowerCase().startsWith("oceancolor_") && !name.toLowerCase().equals("oceancolor_standard.cpd") );
 
             }
         });
@@ -41,7 +50,8 @@ class ColorPalettesManager {
 
         Arrays.sort(files_oceancolor);
         Arrays.sort(files_other);
-        File[] files = concat(files_oceancolor, files_other);
+        File[] tmpfiles = concat(file_oceancolor_default, files_oceancolor);
+        File[] files = concat(tmpfiles, files_other);
 
         for (File file : files) {
             try {
