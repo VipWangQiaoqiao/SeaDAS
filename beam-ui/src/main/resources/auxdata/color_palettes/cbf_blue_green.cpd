@@ -1,6 +1,6 @@
 #SeaDAS Color Palette Definition File
 # created by Daniel Knowles
-# colorblind friend palette
+# colorblind friendly palette
 isLogScaled=false
 numPoints=21
 autoDistribute=false

@@ -5,6 +5,8 @@
  AOT                          :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 869 nm
  Angstrom                     :-0.150000  :2.2        :false     :oceancolor_standard.cpd  :true  :Angstrom coefficient
  Chlorophyll                  :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration
+ Chlorophyll (Blue-Green)     :0.01000000 :50.0       :true      :chlor_blue_green.cpd      :true  :Chlorophyll a concentration split between eutrophic and oligotrophic
+# Chlorophyll (Eu/Oligo)     :0.01000000 :20.0       :true      :cbf_blue_yellow_green_eu-olig.cpd      :true  :Chlorophyll a concentration split between eutrophic and oligotrophic
  PAR                          :0.00000    :76.2000    :false     :oceancolor_standard.cpd  :true  :Photosynthetically Available Radiation
  PIC                          :5.0e-05    :0.05       :true      :oceancolor_standard.cpd  :true  :Particulate Inorganic Carbon
  POC                          :10         :1000       :true      :oceancolor_standard.cpd  :true  :Particulate Organic Carbon
@@ -22,8 +24,6 @@
  bb                           :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Total backscatter
  bbp                          :1.0000e-04 :1.0000e-01 :true      :oceancolor_standard.cpd  :true  :Particle backscatter
  bbw                          :1.0000e-04 :1.0000e-02 :true      :oceancolor_standard.cpd  :true  :Backscattering coefficient of seawater
- Chlorophyll (Eu/Oligo)     :0.01000000 :20.0       :true      :chlor_eu-oligo.cpd      :true  :Chlorophyll a concentration split between eutrophic and oligotrophic
-# Chlorophyll (Eu/Oligo)     :0.01000000 :20.0       :true      :cbf_blue_yellow_green_eu-olig.cpd      :true  :Chlorophyll a concentration split between eutrophic and oligotrophic
 elevation                    :-12000.0   :15000.0    :false     :oceancolor_standard.cpd  :true  :Elevation
 #elevation_bathymetry         :-11000.0   : 0.0       :false     :elevation_bathymetry.cpd  :true :Bathymetry (Colormap used in the ETOPO1 global relief map)
 #elevation_topography         :       0   :8500.0     :false     :elevation_topography.cpd  :true :Topography (Colormap used in the ETOPO1 global relief map)
