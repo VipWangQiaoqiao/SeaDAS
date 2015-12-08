@@ -18,6 +18,7 @@ class ColorPalettesManager {
     private static ArrayList<String> cpdNames;
     private static Map<ColorPaletteDef, List<RasterDataNode>> cpdRasterList;
 
+
     public static void loadAvailableColorPalettes(File palettesDir) {
 
         cpdRasterList = new HashMap<>();
@@ -32,26 +33,43 @@ class ColorPalettesManager {
             }
         });
 
-        final File[] files_oceancolor = palettesDir.listFiles(new FilenameFilter() {
+        final File[] file_seadas_universal = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.toLowerCase().endsWith(".cpd") && name.toLowerCase().startsWith("oceancolor_") && !name.toLowerCase().equals("oceancolor_standard.cpd") );
+                return (name.toLowerCase().equals("seadas_universal.cpd"));
 
             }
         });
+//        final File[] files_oceancolor = palettesDir.listFiles(new FilenameFilter() {
+//            @Override
+//            public boolean accept(File dir, String name) {
+//                return (name.toLowerCase().endsWith(".cpd") && name.toLowerCase().startsWith("oceancolor_") && !name.toLowerCase().equals("oceancolor_standard.cpd") );
+//
+//            }
+//        });
+
+//        final File[] files_other = palettesDir.listFiles(new FilenameFilter() {
+//            @Override
+//            public boolean accept(File dir, String name) {
+//                return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().startsWith("oceancolor_"));
+//
+//            }
+//        });
 
         final File[] files_other = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().startsWith("oceancolor_"));
+                return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().equals("oceancolor_standard.cpd")
+                        && !name.toLowerCase().equals("seadas_universal.cpd"));
 
             }
         });
 
-        Arrays.sort(files_oceancolor);
+//        Arrays.sort(files_oceancolor);
         Arrays.sort(files_other);
-        File[] tmpfiles = concat(file_oceancolor_default, files_oceancolor);
-        File[] files = concat(tmpfiles, files_other);
+        File[] tmpfiles1 = concat(file_oceancolor_default, file_seadas_universal);
+//        File[] tmpfiles2 = concat(tmpfiles1, files_oceancolor);
+        File[] files = concat(tmpfiles1, files_other);
 
         for (File file : files) {
             try {
