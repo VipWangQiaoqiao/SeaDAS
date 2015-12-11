@@ -1047,7 +1047,7 @@
             <class>org.esa.beam.visat.actions.layout.ResetLayoutAction</class>
             <parent>view</parent>
             <placeAtContextTop>true</placeAtContextTop>
-            <text>Reset to initial layout</text>
+            <text>Reset to Default Layout</text>
             <largeIcon>icons/Undo24.gif</largeIcon>
             <shortDescr>Restore window and toolbar arrangement to default</shortDescr>
         </action>
