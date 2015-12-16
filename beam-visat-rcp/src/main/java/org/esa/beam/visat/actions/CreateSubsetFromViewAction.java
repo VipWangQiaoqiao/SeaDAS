@@ -46,7 +46,8 @@ public class CreateSubsetFromViewAction extends ExecCommand {
             }
 
             final Product sourceProduct = psv.getProduct();
-            final String subsetName = "subset_" + subsetNumber + "_of_" + sourceProduct.getName();
+//            final String subsetName = "subset_" + subsetNumber + "_of_" + sourceProduct.getName();
+            final String subsetName = sourceProduct.getName() + "_subset";
             final ProductSubsetDef initSubset = new ProductSubsetDef();
             initSubset.setRegion(bounds);
             initSubset.setNodeNames(sourceProduct.getBandNames());
