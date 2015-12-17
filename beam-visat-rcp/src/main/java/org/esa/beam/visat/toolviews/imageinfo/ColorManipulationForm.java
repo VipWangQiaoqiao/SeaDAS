@@ -375,6 +375,7 @@ class ColorManipulationForm {
         contentPanel = new JPanel(new BorderLayout(4, 4));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         contentPanel.setPreferredSize(new Dimension(320, 200));
+        contentPanel.setMinimumSize(new Dimension(100, 200));
         contentPanel.add(editorPanel, BorderLayout.CENTER);
         contentPanel.add(toolButtonsPanel, BorderLayout.EAST);
 

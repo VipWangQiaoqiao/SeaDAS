@@ -81,9 +81,13 @@ public class PixelInfoToolView extends AbstractToolView {
 
         pixelInfoView = new PixelInfoView(visatApp);
         final DisplayFilter bandDisplayValidator = new DisplayFilter(visatApp);
-//        pixelInfoView.setPreferredSize(new Dimension(250, 150));
-        pixelInfoView.setMinimumSize(new Dimension(250, 200));
-        pixelInfoView.setPreferredSize(new Dimension(250, 600));
+
+        pixelInfoView.setMinimumSize(new Dimension(50, 200));
+        pixelInfoView.setPreferredSize(new Dimension(100, 600));
+
+
+
+
         pixelInfoView.setDisplayFilter(bandDisplayValidator);
         final PropertyMap preferences = visatApp.getPreferences();
         preferences.addPropertyChangeListener(new PropertyChangeListener() {

@@ -36,7 +36,7 @@ class ColorPalettesManager {
         final File[] file_seadas_universal = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.toLowerCase().equals("science_universal.cpd"));
+                return (name.toLowerCase().equals("universal.cpd"));
 
             }
         });
@@ -60,14 +60,14 @@ class ColorPalettesManager {
             @Override
             public boolean accept(File dir, String name) {
                 return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().equals("oceancolor_standard.cpd")
-                        && !name.toLowerCase().equals("science_universal.cpd"));
+                        && !name.toLowerCase().equals("universal.cpd"));
 
             }
         });
 
 //        Arrays.sort(files_oceancolor);
         Arrays.sort(files_other);
-        File[] tmpfiles1 = concat(file_seadas_universal, file_oceancolor_default);
+        File[] tmpfiles1 = concat(file_oceancolor_default,file_seadas_universal);
 //        File[] tmpfiles2 = concat(tmpfiles1, files_oceancolor);
         File[] files = concat(tmpfiles1, files_other);
 

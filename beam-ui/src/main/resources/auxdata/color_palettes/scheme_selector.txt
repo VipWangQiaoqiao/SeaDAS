@@ -4,9 +4,9 @@
 #FIELD_NAME                    MIN         MAX         LOG_SCALE  CPD_FILENAME            OVERRIDE   DESCRIPTION
  AOT                          :0.00000    :0.25       :false     :oceancolor_standard.cpd  :true  :Aerosol optical thickness at 869 nm
  Angstrom                     :-0.150000  :2.2        :false     :oceancolor_standard.cpd  :true  :Angstrom coefficient
- Chlorophyll (Standard Palette)   :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration with oceancolor standard palette
- Chlorophyll (Universal Palette)  :0.01000000 :20.0       :true      :science_universal.cpd    :true  :Chlorophyll a concentration with universal (color-blind compliant) color palette.
- Chlorophyll (Blue-Green Palette) :0.01000000 :50.0       :true      :chlor_blue_green.cpd     :true  :Chlorophyll a concentration with color palette split between eutrophic (blue) and oligotrophic (green)
+ Chl    :0.01000000 :20.0       :true      :oceancolor_standard.cpd  :true  :Chlorophyll a concentration with oceancolor standard palette
+ Chl (Uni-Palette)  :0.01000000 :20.0       :true      :universal.cpd    :true  :Chlorophyll a concentration with universal (color-blind compliant) color palette.
+ Chl (BG-Palette) :0.01000000 :50.0       :true      :chlor_blue_green.cpd     :true  :Chlorophyll a concentration with color palette split between eutrophic (blue) and oligotrophic (green)
  PAR                          :0.00000    :76.2000    :false     :oceancolor_standard.cpd  :true  :Photosynthetically Available Radiation
  PIC                          :5.0e-05    :0.05       :true      :oceancolor_standard.cpd  :true  :Particulate Inorganic Carbon
  POC                          :10         :1000       :true      :oceancolor_standard.cpd  :true  :Particulate Organic Carbon

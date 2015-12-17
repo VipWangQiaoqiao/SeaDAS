@@ -85,7 +85,8 @@ class MaskManagerForm extends MaskForm {
         contentPane1.add(buttonPanel, gbc);
 
 
-        contentPane1.setMinimumSize(new Dimension(300, 400));
+       contentPane1.setMinimumSize(new Dimension(100, 400));
+       contentPane1.setPreferredSize(new Dimension(320, 400));
 
         updateState();
 
