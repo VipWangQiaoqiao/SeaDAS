@@ -90,6 +90,33 @@ public class CreateFilteredBandAction extends ExecCommand {
         return targetBand;
     }
 
+    public static FilterBand createFilterBandForGPT(RasterDataNode sourceRaster, Filter filter, String bandName, int iterationCount) {
+        FilterBand targetBand;
+        Product product = sourceRaster.getProduct();
+
+        if (filter.getOperation() == Filter.Operation.CONVOLVE) {
+            targetBand = new ConvolutionFilterBand(bandName, sourceRaster, getKernel(filter), iterationCount);
+            if (sourceRaster instanceof Band) {
+                ProductUtils.copySpectralBandProperties((Band) sourceRaster, targetBand);
+            }
+        } else {
+            GeneralFilterBand.OpType opType = getOpType(filter.getOperation());
+            targetBand = new GeneralFilterBand(bandName, sourceRaster, opType, getKernel(filter), iterationCount);
+            if (sourceRaster instanceof Band) {
+                ProductUtils.copySpectralBandProperties((Band) sourceRaster, targetBand);
+            }
+        }
+
+        targetBand.setDescription(String.format("Filter '%s' (=%s) applied to '%s'", filter.getName(), filter.getOperation(), sourceRaster.getName()));
+        if (sourceRaster instanceof Band) {
+            ProductUtils.copySpectralBandProperties((Band) sourceRaster, targetBand);
+        }
+        product.addBand(targetBand);
+        targetBand.fireProductNodeDataChanged();
+        return targetBand;
+    }
+
+
     private static Kernel getKernel(Filter filter) {
         return new Kernel(filter.getKernelWidth(),
                           filter.getKernelHeight(),
