@@ -501,16 +501,18 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
             command.setPlaceLast(true);
 
         } else if (commandId.contains("WorldMapToolView") ||
-                commandId.contains("NavigationToolView")) {
+                commandId.contains("NavigationToolView") ||
+                commandId.contains("ProductsToolView")) {
             command.setParent("view");
             command.setPlaceAfter("toolBars");
 
 //        } else if (commandId.contains("MaskManagerToolView")) {
 //            command.setParent("masks");
 //            command.setSeparatorBefore(true);
-        } else if (commandId.contains("ProductsToolView")) {
-            command.setParent("file");
-            command.setPlaceAfter("exportRasterData");
+//        } else if (commandId.contains("ProductsToolView")) {
+//            command.setParent("file");
+//            command.setPlaceAfter("exportRasterData");
+//            command.setPlaceBefore("exit");
         } else {
             command.setParent("tools");
 //            command.setParent("showToolViews");
