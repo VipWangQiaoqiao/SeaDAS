@@ -1268,7 +1268,8 @@ public class Product extends ProductNode {
 
     private synchronized PlacemarkGroup createTextAnnotationGroup() {
         final VectorDataNode vectorDataNode = new VectorDataNode(TEXT_ANNOTATION_GROUP_NAME, Placemark.createTextAnnotationFeatureType());
-        vectorDataNode.setDefaultStyleCss("symbol:plus; stroke:#ff8800; stroke-opacity:0.0; stroke-width:0.0");
+        vectorDataNode.setDefaultStyleCss("symbol:plus; stroke:#ff8800; stroke-opacity:0.0; stroke-width:0.0; fill-opacity:0.0");
+        //"fill:%s; fill-opacity:0.5; stroke:#ffffff; stroke-opacity:1.0; stroke-dasharray:1.0; stroke-width:1.0; symbol:cross";
         vectorDataNode.setPermanent(false);
         this.vectorDataGroup.add(vectorDataNode);
         return vectorDataNode.getPlacemarkGroup();
