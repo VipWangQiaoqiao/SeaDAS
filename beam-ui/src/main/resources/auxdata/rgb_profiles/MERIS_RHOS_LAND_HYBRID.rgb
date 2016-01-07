@@ -1,0 +1,12 @@
+# RGB-Image Profile
+# Created by Daniel Knowles, 2016
+# This is a Land/Water hybrid and requires a land mask named LAND.  The algorithm in MERIS_RHOS_LOG is used for water and
+# the algorithm in MERIS_RHOS_ATAN is used for land
+# Note: these are not standardized values and the user may easily modify these coefficients to focus in on different ocean and/or land features.
+# To obtain the desired results, once this profile is loaded, go to the Color Manager and toggle through the 'Red', 'Green', and 'Blue' windows
+# setting the minimum (left-most arrow) to 0.0 and the maximum (right-most arrow) to 1.0.  By default these minimums and maximums are set based
+# on the statistics of the band.
+name=MERIS_RHOS_LAND_HYBRID
+blue=if (rhos_443 \!\= NaN and rhos_560 \!\= NaN and rhos_665 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_443-.015)) )       else           log(rhos_443/0.01)/log(1.0/0.01) else NaN
+green=if (rhos_443 \!\= NaN and rhos_560 \!\= NaN and rhos_665 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_560-.015)) )       else           log(rhos_560/0.01)/log(1.0/0.01) else NaN
+red=if (rhos_443 \!\= NaN and rhos_560 \!\= NaN and rhos_665 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_665-.015)) )       else           log(rhos_665/0.01)/log(1.0/0.01) else NaN
