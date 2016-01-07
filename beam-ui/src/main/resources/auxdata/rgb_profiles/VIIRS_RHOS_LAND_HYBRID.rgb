@@ -7,6 +7,6 @@
 # setting the minimum (left-most arrow) to 0.0 and the maximum (right-most arrow) to 1.0.  By default these minimums and maximums are set based
 # on the statistics of the band.
 name=VIIRS_RHOS_LAND_HYBRID
-blue=if (rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_443-.015)) )       else            log(rhos_443/0.01)/log(1.0/0.01) else NaN
-green=if (rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_551-.015)) )       else            log(rhos_551/0.01)/log(1.0/0.01) else NaN
-red=if (rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_671-.015)) )       else           log(rhos_671/0.01)/log(1.0/0.01) else NaN
+blue=if (rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_443-.015)) )       else            log(rhos_443/0.01)/log(1.0/0.01)) else NaN
+green=if (rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_551-.015)) )       else            log(rhos_551/0.01)/log(1.0/0.01)) else NaN
+red=if (rhos_443 \!\= NaN and rhos_551 \!\= NaN and rhos_671 \!\= NaN)  then (       if (LAND)        then            (.091935692 + .61788 * atan(10*(rhos_671-.015)) )       else           log(rhos_671/0.01)/log(1.0/0.01)) else NaN
