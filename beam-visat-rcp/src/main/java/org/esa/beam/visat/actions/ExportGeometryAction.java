@@ -73,7 +73,7 @@ public class ExportGeometryAction extends ExecCommand {
 
     /**
      * Called when a command should update its state.
-     * <p/>
+     * <p>
      * <p> This method can contain some code which analyzes the underlying element and makes a decision whether
      * this item or group should be made visible/invisible or enabled/disabled etc.
      *
@@ -130,11 +130,11 @@ public class ExportGeometryAction extends ExecCommand {
 
     private static File promptForFile(final VisatApp visatApp, String defaultFileName) {
         return visatApp.showFileSaveDialog(DLG_TITLE,
-                                           false,
-                                           new BeamFileFilter(ESRI_SHAPEFILE, FILE_EXTENSION_SHAPEFILE, ESRI_SHAPEFILE),
-                                           FILE_EXTENSION_SHAPEFILE,
-                                           defaultFileName,
-                                           "exportVectorDataNode.lastDir");
+                false,
+                new BeamFileFilter(ESRI_SHAPEFILE, FILE_EXTENSION_SHAPEFILE, ESRI_SHAPEFILE),
+                FILE_EXTENSION_SHAPEFILE,
+                defaultFileName,
+                "exportVectorDataNode.lastDir");
     }
 
     private static void exportVectorDataNode(VectorDataNode vectorNode, File file, ProgressMonitor pm) throws
@@ -207,10 +207,30 @@ public class ExportGeometryAction extends ExecCommand {
             modelCrs = DefaultGeographicCRS.WGS84;
         }
         if (!CRS.equalsIgnoreMetadata(crs, modelCrs)) { // we have to reproject the features
-            featureCollection = new ReprojectingFeatureCollection(featureCollection, crs, modelCrs);
+            //this is added to fix vector node import and export problem with smi and seadas generated hdf files.
+            // The fix should be applied to contour vector data nodes only. -- aynur
+             if ((!vectorNode.getProduct().getGeoCoding().getMapCRS().equals(DefaultGeographicCRS.WGS84)
+                    || (vectorNode.getProduct().getGeoCoding() instanceof CrsGeoCoding)) && vectorNode.getName().contains("contour_")) {
+
+                featureCollection = new ReprojectingFeatureCollection(featureCollection, vectorNode.getProduct().getGeoCoding().getMapCRS(), crs);
+            } else {
+                featureCollection = new ReprojectingFeatureCollection(featureCollection, crs, modelCrs);
+            }
         }
 
-        Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<>();
+        Map<Class<?>, List<SimpleFeature>> featureListMap = new HashMap<Class<?>, List<SimpleFeature>>();
+
+        // The following block of code is added to fix contour data export/import problem.
+        // This should be specific to contour data onlyThis will stay until a permanent solution is found. --aynur
+        GeoCoding geoCoding = vectorNode.getProduct().getGeoCoding();
+        final CoordinateReferenceSystem mapCRS = geoCoding.getMapCRS();
+        if ((!mapCRS.equals(DefaultGeographicCRS.WGS84) || (geoCoding instanceof CrsGeoCoding)) && vectorNode.getName().contains("contour_") ) {
+            try {
+                transformFeatureCollection(featureCollection, mapCRS, geoCoding.getImageCRS());
+            } catch (TransformException e) {
+                VisatApp.getApp().showErrorDialog("transformation failed!");
+            }
+        }  //end of code insert
 
         final FeatureIterator<SimpleFeature> featureIterator = featureCollection.features();
         while (featureIterator.hasNext()) {
@@ -226,6 +246,19 @@ public class ExportGeometryAction extends ExecCommand {
             featureList.add(feature);
         }
         return featureListMap;
+    }
+
+
+    private static void transformFeatureCollection(FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection, CoordinateReferenceSystem sourceCRS, CoordinateReferenceSystem targetCRS) throws TransformException {
+        final GeometryCoordinateSequenceTransformer transform = FeatureUtils.getTransform(sourceCRS, targetCRS);
+        final FeatureIterator<SimpleFeature> features = featureCollection.features();
+        final GeometryFactory geometryFactory = new GeometryFactory();
+        while (features.hasNext()) {
+            final SimpleFeature simpleFeature = features.next();
+            final LineString sourceLine = (LineString) simpleFeature.getDefaultGeometry();
+            final LineString targetLine = transform.transformLineString(sourceLine, geometryFactory);
+            simpleFeature.setDefaultGeometry(targetLine);
+        }
     }
 
     private static SimpleFeatureType changeGeometryType(SimpleFeatureType original, Class<?> geometryType) {
