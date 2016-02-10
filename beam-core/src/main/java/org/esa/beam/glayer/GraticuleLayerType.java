@@ -104,10 +104,10 @@ public class GraticuleLayerType extends LayerType {
     public static final boolean DEFAULT_BORDER_ENABLED = true;
     public static final double DEFAULT_BORDER_WIDTH = 1.2;
 
-    public static final boolean DEFAULT_TEXT_CORNER_TOP_LON_ENABLED =  true;
-    public static final boolean DEFAULT_TEXT_CORNER_LEFT_LAT_ENABLED = true;
-    public static final boolean DEFAULT_TEXT_CORNER_RIGHT_LAT_ENABLED = true;
-    public static final boolean DEFAULT_TEXT_CORNER_BOTTOM_LON_ENABLED =  true;
+    public static final boolean DEFAULT_TEXT_CORNER_TOP_LON_ENABLED =  false;
+    public static final boolean DEFAULT_TEXT_CORNER_LEFT_LAT_ENABLED = false;
+    public static final boolean DEFAULT_TEXT_CORNER_RIGHT_LAT_ENABLED = false;
+    public static final boolean DEFAULT_TEXT_CORNER_BOTTOM_LON_ENABLED =  false;
 
 
     public static final boolean DEFAULT_TICKMARK_ENABLED = true;
