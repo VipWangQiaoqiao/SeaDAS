@@ -2,7 +2,7 @@
 # created by Daniel Knowles, 2016
 # SeaDAS Standard Universal Palette
 # Color blind compliant
-# Version 2: darkens center of palette more to help distinguish from white (nodata, clouds, etc.)
+# Version 3: darkens center of palette more to help distinguish from white (nodata, clouds, etc.)
 #
 isLogScaled=false
 numPoints=41
@@ -22,17 +22,17 @@ color11=4,134,255
 color12=6,160,255
 color13=10,185,254
 color14=15,205,252
-color15=21,224,248
-color16=30,238,242
-color17=45,248,234
-color18=70,253,224
-color19=100,255,210
-color20=135,255,192
-color21=165,255,170
-color22=195,253,145
-color23=220,248,115
-color24=238,238,80
-color25=248,224,50
+color15=25,220,248
+color16=40,231,242
+color17=60,239,234
+color18=100,244,224
+color19=135,246,210
+color20=165,246,192
+color21=190,246,170
+color22=210,244,145
+color23=227,239,115
+color24=240,231,80
+color25=248,220,50
 color26=253,205,30
 color27=255,185,18
 color28=255,160,10
