@@ -2,7 +2,7 @@
 # created by Daniel Knowles, 2016
 # SeaDAS Standard Universal Palette
 # Color blind compliant
-# Version 2: darkens center of palette more to help distinguish from white (nodata, clouds, etc.)
+# Version 2: darkens center of palette more than version 1 to help distinguish from white (nodata, clouds, etc.)
 #
 isLogScaled=false
 numPoints=41
