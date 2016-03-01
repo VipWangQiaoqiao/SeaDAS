@@ -33,13 +33,14 @@ class ColorPalettesManager {
             }
         });
 
-        final File[] file_seadas_universal = palettesDir.listFiles(new FilenameFilter() {
+        final File[] universal_palettes = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.toLowerCase().equals("universal_2.cpd"));
+                return (name.toLowerCase().startsWith("universal"));
 
             }
         });
+        Arrays.sort(universal_palettes);
 //        final File[] files_oceancolor = palettesDir.listFiles(new FilenameFilter() {
 //            @Override
 //            public boolean accept(File dir, String name) {
@@ -60,14 +61,14 @@ class ColorPalettesManager {
             @Override
             public boolean accept(File dir, String name) {
                 return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().equals("oceancolor_standard.cpd")
-                        && !name.toLowerCase().equals("universal_2.cpd"));
+                        && !name.toLowerCase().startsWith("universal"));
 
             }
         });
 
 //        Arrays.sort(files_oceancolor);
         Arrays.sort(files_other);
-        File[] tmpfiles1 = concat(file_oceancolor_default,file_seadas_universal);
+        File[] tmpfiles1 = concat(file_oceancolor_default,universal_palettes);
 //        File[] tmpfiles2 = concat(tmpfiles1, files_oceancolor);
         File[] files = concat(tmpfiles1, files_other);
 
