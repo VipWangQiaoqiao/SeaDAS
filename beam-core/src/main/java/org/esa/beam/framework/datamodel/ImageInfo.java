@@ -291,25 +291,25 @@ public class ImageInfo implements Cloneable {
     }
 
     private static void transferPoints(ColorPaletteDef sourceCPD,
-                                       double minSample,
-                                       double maxSample,
+                                       double minTargetValue,
+                                       double maxTargetValue,
                                        boolean autoDistribute,
                                        ColorPaletteDef targetCPD) {
 
         if (autoDistribute || sourceCPD.isAutoDistribute()) {
             alignNumPoints(sourceCPD, targetCPD);
-            double minDisplaySample = sourceCPD.getMinDisplaySample();
-            double maxDisplaySample = sourceCPD.getMaxDisplaySample();
-            double delta1 = (maxSample > minSample) ? maxSample - minSample : 1.0;
-            double delta2 = (maxDisplaySample > minDisplaySample) ? maxDisplaySample - minDisplaySample : 1.0;
+            double minSourceValue = sourceCPD.getMinDisplaySample();
+            double maxSourceValue = sourceCPD.getMaxDisplaySample();
+            double delta1 = (maxTargetValue > minTargetValue) ? maxTargetValue - minTargetValue : 1.0;
+            double delta2 = (maxSourceValue > minSourceValue) ? maxSourceValue - minSourceValue : 1.0;
             double b = delta1 / delta2;
-            double a = minSample - minDisplaySample * b;
+            double a = minTargetValue - minSourceValue * b;
 
 //            if (1 == 1) {
 //                for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
-//                    if (maxSample != minSample) {
-//                        double weight = (sourceCPD.getPointAt(i).getSample() - minSample) / (minSample - maxSample);
-//                        double logValue = getLogarithmicValue(weight, minSample, maxSample);
+//                    if (maxTargetValue != minTargetValue) {
+//                        double weight = (sourceCPD.getPointAt(i).getSample() - minTargetValue) / (minTargetValue - maxTargetValue);
+//                        double logValue = getLogarithmicValue(weight, minTargetValue, maxTargetValue);
 //                        targetCPD.getPointAt(i).setSample(logValue);
 //                        targetCPD.getPointAt(i).setColor(sourceCPD.getPointAt(i).getColor());
 //                        targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
@@ -317,7 +317,16 @@ public class ImageInfo implements Cloneable {
 //                }
 //            } else {
             for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
-                targetCPD.getPointAt(i).setSample(a + b * sourceCPD.getPointAt(i).getSample());
+                double currTargetValue;
+                if (i == 0) {
+                    currTargetValue = minTargetValue;
+                } else if (i == sourceCPD.getNumPoints() -1) {
+                    currTargetValue = maxTargetValue;
+                } else {
+                    currTargetValue = a + b * sourceCPD.getPointAt(i).getSample();
+                }
+
+                targetCPD.getPointAt(i).setSample(currTargetValue);
                 targetCPD.getPointAt(i).setColor(sourceCPD.getPointAt(i).getColor());
                 targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
 //                }
@@ -395,6 +404,13 @@ public class ImageInfo implements Cloneable {
 
     private static double getLogarithmicValue(double linearWeight, double min, double max) {
 
+        if (linearWeight == 0) {
+            return min;
+        }
+
+        if (linearWeight == 1) {
+            return max;
+        }
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
         double logValue = a * Math.exp(b * linearWeight);
@@ -403,6 +419,14 @@ public class ImageInfo implements Cloneable {
     }
 
     private static double getLinearValue(double linearWeight, double min, double max) {
+
+        if (linearWeight == 0) {
+            return min;
+        }
+
+        if (linearWeight == 1) {
+            return max;
+        }
         double deltaNormalized = (max - min);
 
         double linearValue = min + linearWeight * (deltaNormalized);
@@ -413,11 +437,20 @@ public class ImageInfo implements Cloneable {
 
     private static double getLinearWeightFromLogValue(double logValue, double min, double max) {
 
+        if (logValue == min) {
+            return 0;
+        }
+
+        if (logValue == max) {
+            return 1;
+        }
+
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
 
-        double linearWeight = Math.log(logValue / a) / b;
-        linearWeight = (linearWeight - min) / (max - min);
+//        double linearWeight = Math.log(logValue / a) / b;
+//        linearWeight = (linearWeight - min) / (max - min);
+        double linearWeight = ((Math.log(logValue / a) / b) - min) / (max - min);
 
         return linearWeight;
     }

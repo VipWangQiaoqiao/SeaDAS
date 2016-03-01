@@ -338,6 +338,9 @@ class ColorManipulationForm {
                 applyMultipleColorPaletteDef();
             }
         });
+        // todo Made this invisible till bug is fixed
+        multiApplyButton.setVisible(false);
+
 
         importButton = createButton("/com/bc/ceres/swing/actions/icons_16x16/document-open.png");
         importButton.setName("ImportButton");
@@ -554,7 +557,8 @@ class ColorManipulationForm {
         }
     }
 
-
+// todo This applies palette to other bands which does not really work correctly due to the new color scheme log mode etc.
+    // todo needs revamping: make sure log mode works, and loaded palette display info in GUI is correct.
     private void applyMultipleColorPaletteDef() {
         if (productSceneView == null) {
             return;
