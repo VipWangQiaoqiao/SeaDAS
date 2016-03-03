@@ -245,13 +245,14 @@ class Continuous3BandGraphicalForm implements ColorManipulationChildForm {
     @Override
     public AbstractButton[] getToolButtons() {
         return new AbstractButton[]{
-                    imageInfoEditorSupport.autoStretch95Button,
-                    imageInfoEditorSupport.autoStretch100Button,
-                    imageInfoEditorSupport.zoomInVButton,
-                    imageInfoEditorSupport.zoomOutVButton,
-                    imageInfoEditorSupport.zoomInHButton,
-                    imageInfoEditorSupport.zoomOutHButton,
-                    imageInfoEditorSupport.showExtraInfoButton,
+                imageInfoEditorSupport.autoStretch95Button,
+                imageInfoEditorSupport.autoStretch100Button,
+                imageInfoEditorSupport.setRGBminmax0to1,
+                imageInfoEditorSupport.zoomInVButton,
+                imageInfoEditorSupport.zoomOutVButton,
+                imageInfoEditorSupport.zoomInHButton,
+                imageInfoEditorSupport.zoomOutHButton,
+                imageInfoEditorSupport.showExtraInfoButton,
         };
     }
 
@@ -279,8 +280,8 @@ class Continuous3BandGraphicalForm implements ColorManipulationChildForm {
         }
         if (newChannelSource == null) {
             JOptionPane.showMessageDialog(contentPanel,
-                                          MessageFormat.format("Unknown band: ''{0}''", channelSourceName),
-                                          "Error", JOptionPane.ERROR_MESSAGE);
+                    MessageFormat.format("Unknown band: ''{0}''", channelSourceName),
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
