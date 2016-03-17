@@ -402,18 +402,18 @@ public class ImageInfo implements Cloneable {
     }
 
 
-    private static double getLogarithmicValue(double linearWeight, double min, double max) {
+    private static double getLogarithmicValue(double linearTargetValue, double min, double max) {
 
-        if (linearWeight == 0) {
+        if (linearTargetValue == min) {
             return min;
         }
 
-        if (linearWeight == 1) {
+        if (linearTargetValue == max) {
             return max;
         }
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
-        double logValue = a * Math.exp(b * linearWeight);
+        double logValue = a * Math.exp(b * linearTargetValue);
 
         return logValue;
     }
