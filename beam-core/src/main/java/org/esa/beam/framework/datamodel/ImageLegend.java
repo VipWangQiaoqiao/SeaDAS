@@ -66,7 +66,8 @@ public class ImageLegend {
     public static final int DEFAULT_TICKMARK_WIDTH = 3;
 
 
-    public static final double WEIGHT_TOLERANCE = 0.01;
+    public static final double WEIGHT_TOLERANCE = 0.00;
+    public static final double FORCED_CHANGE_FACTOR = 0.0001; 
     public static final double INVALID_WEIGHT = -1.0;
 
     // Independent attributes (Properties)
@@ -972,35 +973,132 @@ public class ImageLegend {
 
 
     private double getLinearWeightFromLinearValue(double linearValue, double min, double max) {
+
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearValue == min) {
+            return 0;
+        }
+        if (linearValue == max) {
+            return 1;
+        }
+
         double linearWeight = (linearValue - min) / (max - min);
+
+        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearValue > min && linearWeight < 0) {
+            return 0;
+        }
+        if (linearValue < max && linearWeight > 1) {
+            return 1;
+        }
+        if (linearValue < min && linearWeight >= 0) {
+            return 0 - FORCED_CHANGE_FACTOR;
+        }
+        if (linearValue > max && linearWeight <= 1) {
+            return 1 + FORCED_CHANGE_FACTOR;
+        }
         return linearWeight;
     }
 
 
     private double getLinearValue(double linearWeight, double min, double max) {
+
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight == 0) {
+            return min;
+        }
+        if (linearWeight == 1) {
+            return max;
+        }
+
         double deltaNormalized = (max - min);
         double linearValue = min + linearWeight * (deltaNormalized);
+
+        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight > 0 && linearValue < min) {
+            return min;
+        }
+        if (linearWeight < 1 && linearValue > max) {
+            return max;
+        }
+        if (linearWeight < 0 && linearValue >= min) {
+            return min - (max-min)*FORCED_CHANGE_FACTOR;
+        }
+        if (linearWeight > 1 && linearValue <= max) {
+            return max + (max-min)*FORCED_CHANGE_FACTOR;
+        }
+
         return linearValue;
     }
 
 
     private double getLinearWeightFromLogValue(double logValue, double min, double max) {
+
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (logValue == min) {
+            return 0;
+        }
+        if (logValue == max) {
+            return 1;
+        }
+
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
-
         double linearWeight = Math.log(logValue / a) / b;
         linearWeight = linearWeight / (max - min);
+
+        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
+        if (logValue > min && linearWeight < 0) {
+            return 0;
+        }
+        if (logValue < max && linearWeight > 1) {
+            return 1;
+        }
+        if (logValue < min && linearWeight >= 0) {
+            return 0 - FORCED_CHANGE_FACTOR;
+        }
+        if (logValue > max && linearWeight <= 1.0) {
+            return 1 + FORCED_CHANGE_FACTOR;
+        }
+
         return linearWeight;
     }
 
 
     private double getLogarithmicValue(double linearWeight, double min, double max) {
+
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight == 0) {
+            return min;
+        }
+        if (linearWeight == 1) {
+            return max;
+        }
+
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
 
         double logValue = a * Math.exp(b * linearWeight);
+
+        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight > 0 && logValue < min) {
+            return min;
+        }
+        if (linearWeight < 1 && logValue > max) {
+            return max;
+        }
+        if (linearWeight < 0 && logValue >= min) {
+            return min - (max-min)*FORCED_CHANGE_FACTOR;
+        }
+        if (linearWeight > 1 && logValue <= max) {
+            return max + (max-min)*FORCED_CHANGE_FACTOR;
+        }
+
         return logValue;
     }
+
+
+
 
 
     private double normalizeSample(double sample) {

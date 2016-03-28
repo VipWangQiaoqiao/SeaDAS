@@ -45,6 +45,7 @@ public class ImageInfo implements Cloneable {
     @Deprecated
     public static final String HISTOGRAM_MATCHING_NORMALIZE = "normalize";
 
+    private static final double FORCED_CHANGE_FACTOR = 0.0001;
 
     private ColorPaletteSourcesInfo colorPaletteSourcesInfo = new ColorPaletteSourcesInfo();
 
@@ -402,26 +403,32 @@ public class ImageInfo implements Cloneable {
     }
 
 
-    private static double getLogarithmicValue(double linearTargetValue, double min, double max) {
+    private static double getLogarithmicValue(double linearValue, double min, double max) {
 
         // Prevent extrapolation which could occur due to machine roundoffs in the calculations
-        if (linearTargetValue <= min) {
+        if (linearValue == min) {
             return min;
         }
-        if (linearTargetValue >= max) {
+        if (linearValue == max) {
             return max;
         }
 
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
-        double logValue = a * Math.exp(b * linearTargetValue);
+        double logValue = a * Math.exp(b * linearValue);
 
-        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
-        if (logValue < min) {
+        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearValue > min && logValue < min) {
             return min;
         }
-        if (logValue > max) {
+        if (linearValue < max && logValue > max) {
             return max;
+        }
+        if (linearValue < min && logValue >= min) {
+            return min - (max-min)*FORCED_CHANGE_FACTOR;
+        }
+        if (linearValue > max && logValue <= max) {
+            return max + (max-min)*FORCED_CHANGE_FACTOR;
         }
 
         return logValue;
@@ -430,22 +437,28 @@ public class ImageInfo implements Cloneable {
     private static double getLinearValue(double linearWeight, double min, double max) {
 
         // Prevent extrapolation which could occur due to machine roundoffs in the calculations
-        if (linearWeight <= 0) {
+        if (linearWeight == 0) {
             return min;
         }
-        if (linearWeight >= 1) {
+        if (linearWeight == 1) {
             return max;
         }
 
         double deltaNormalized = (max - min);
         double linearValue = min + linearWeight * (deltaNormalized);
 
-        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
-        if (linearValue < min) {
+        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight > 0 && linearValue < min) {
             return min;
         }
-        if (linearValue > max) {
+        if (linearWeight < 1 && linearValue > max) {
             return max;
+        }
+        if (linearWeight < 0 && linearValue >= min) {
+            return min - (max-min)*FORCED_CHANGE_FACTOR;
+        }
+        if (linearWeight > 1 && linearValue <= max) {
+            return max + (max-min)*FORCED_CHANGE_FACTOR;
         }
 
         return linearValue;
@@ -455,10 +468,10 @@ public class ImageInfo implements Cloneable {
     private static double getLinearWeightFromLogValue(double logValue, double min, double max) {
 
         // Prevent extrapolation which could occur due to machine roundoffs in the calculations
-        if (logValue <= min) {
+        if (logValue == min) {
             return 0;
         }
-        if (logValue >= max) {
+        if (logValue == max) {
             return 1;
         }
 
@@ -469,12 +482,18 @@ public class ImageInfo implements Cloneable {
 //        linearWeight = (linearWeight - min) / (max - min);
         double linearWeight = ((Math.log(logValue / a) / b) - min) / (max - min);
 
-        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
-        if (linearWeight < 0) {
+        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
+        if (logValue > min && linearWeight < 0) {
             return 0;
         }
-        if (linearWeight > 1) {
+        if (logValue < max && linearWeight > 1) {
             return 1;
+        }
+        if (logValue < min && linearWeight >= 0) {
+            return 0 - FORCED_CHANGE_FACTOR;
+        }
+        if (logValue > max && linearWeight <= 1) {
+            return 1 + FORCED_CHANGE_FACTOR;
         }
 
         return linearWeight;
