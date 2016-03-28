@@ -404,32 +404,49 @@ public class ImageInfo implements Cloneable {
 
     private static double getLogarithmicValue(double linearTargetValue, double min, double max) {
 
-        if (linearTargetValue == min) {
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearTargetValue <= min) {
             return min;
         }
-
-        if (linearTargetValue == max) {
+        if (linearTargetValue >= max) {
             return max;
         }
+
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
         double logValue = a * Math.exp(b * linearTargetValue);
+
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (logValue < min) {
+            return min;
+        }
+        if (logValue > max) {
+            return max;
+        }
 
         return logValue;
     }
 
     private static double getLinearValue(double linearWeight, double min, double max) {
 
-        if (linearWeight == 0) {
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight <= 0) {
             return min;
         }
-
-        if (linearWeight == 1) {
+        if (linearWeight >= 1) {
             return max;
         }
-        double deltaNormalized = (max - min);
 
+        double deltaNormalized = (max - min);
         double linearValue = min + linearWeight * (deltaNormalized);
+
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearValue < min) {
+            return min;
+        }
+        if (linearValue > max) {
+            return max;
+        }
 
         return linearValue;
     }
@@ -437,11 +454,11 @@ public class ImageInfo implements Cloneable {
 
     private static double getLinearWeightFromLogValue(double logValue, double min, double max) {
 
-        if (logValue == min) {
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (logValue <= min) {
             return 0;
         }
-
-        if (logValue == max) {
+        if (logValue >= max) {
             return 1;
         }
 
@@ -451,6 +468,14 @@ public class ImageInfo implements Cloneable {
 //        double linearWeight = Math.log(logValue / a) / b;
 //        linearWeight = (linearWeight - min) / (max - min);
         double linearWeight = ((Math.log(logValue / a) / b) - min) / (max - min);
+
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight < 0) {
+            return 0;
+        }
+        if (linearWeight > 1) {
+            return 1;
+        }
 
         return linearWeight;
     }
