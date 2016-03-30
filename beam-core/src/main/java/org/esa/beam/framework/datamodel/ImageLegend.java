@@ -67,7 +67,7 @@ public class ImageLegend {
 
 
     public static final double WEIGHT_TOLERANCE = 0.00;
-    public static final double FORCED_CHANGE_FACTOR = 0.0001; 
+    public static final double FORCED_CHANGE_FACTOR = 0.0001;
     public static final double INVALID_WEIGHT = -1.0;
 
     // Independent attributes (Properties)
@@ -1065,32 +1065,31 @@ public class ImageLegend {
     }
 
 
-    private double getLogarithmicValue(double linearWeight, double min, double max) {
+    private double getLogarithmicValue(double linearValue, double min, double max) {
 
         // Prevent extrapolation which could occur due to machine roundoffs in the calculations
-        if (linearWeight == 0) {
+        if (linearValue == min) {
             return min;
         }
-        if (linearWeight == 1) {
+        if (linearValue == max) {
             return max;
         }
 
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
-
-        double logValue = a * Math.exp(b * linearWeight);
+        double logValue = a * Math.exp(b * linearValue);
 
         // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
-        if (linearWeight > 0 && logValue < min) {
+        if (linearValue > min && logValue < min) {
             return min;
         }
-        if (linearWeight < 1 && logValue > max) {
+        if (linearValue < max && logValue > max) {
             return max;
         }
-        if (linearWeight < 0 && logValue >= min) {
+        if (linearValue < min && logValue >= min) {
             return min - (max-min)*FORCED_CHANGE_FACTOR;
         }
-        if (linearWeight > 1 && logValue <= max) {
+        if (linearValue > max && logValue <= max) {
             return max + (max-min)*FORCED_CHANGE_FACTOR;
         }
 
