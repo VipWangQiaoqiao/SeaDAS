@@ -67,11 +67,10 @@ public class VersionCheckerVPI extends AbstractVisatPlugIn {
         };
         CommandManager commandManager = visatApp.getCommandManager();
         ExecCommand versionCheckerCommand = commandManager.createExecCommand("checkForUpdate", versionCheckerAction);
-        versionCheckerCommand.setText("Check for New Release...");
+        versionCheckerCommand.setText("Check for Updates");
         versionCheckerCommand.setShortDescription("Checks for a new release");
         versionCheckerCommand.setParent("help");
-        versionCheckerCommand.setPlaceAfter("showUpdateDialog");
-        versionCheckerCommand.setPlaceBefore("about");
+        versionCheckerCommand.setPlaceAfter("showDataSources");
     }
 
     /**

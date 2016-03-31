@@ -473,27 +473,28 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
         } else if (commandId.contains("PixelInfoToolView") ||
                 commandId.contains("GeoCodingToolView") ||
                 commandId.contains("TileCacheDiagnosisToolView") ||
-                commandId.contains("PlacemarkEditorToolView") ||
                 commandId.contains("InformationToolView")) {
             command.setParent("info");
         } else if (commandId.contains("timeSeries")) {
             command.setParent("timeSeriesFolder");
         } else if (commandId.contains("PinManagerToolView") ||
+                commandId.contains("PlacemarkEditorToolView") ||
                 commandId.contains("GcpManagerToolView")) {
-            command.setParent("layers");
-            command.setPlaceAfter("showWorldMapOverlay");
+            command.setParent("vector");
+            command.setPlaceAfter("exportVectorData");
         } else if (commandId.contains("LayerManagerToolView")) {
             command.setParent("layers");
-            command.setPlaceAfter("vectorsFolder");
+            command.setPlaceAfter("showWorldMapOverlay");
 
         } else if (commandId.contains("LayerEditorToolView")) {
             command.setParent("layers");
-            command.setPlaceAfter("vectorsFolder");
+            command.setPlaceAfter("showWorldMapOverlay");
             command.setSeparatorAfter(true);
 
-        } else if (commandId.contains("MaskManagerToolView")) {
-            command.setParent("layers");
-            command.setPlaceAfter("vectorsFolder");
+        } else if (commandId.contains("MaskManagerToolView")
+                ) {
+            command.setParent("raster");
+            command.setPlaceAfter("convertComputedBand2Band");
 
         } else if (commandId.contains("ColorManipulationToolView")
                 ) {

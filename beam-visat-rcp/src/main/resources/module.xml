@@ -555,36 +555,7 @@
             <text>Open Utilities</text>
             <sortChildren>true</sortChildren>
             <placeAfter>reopen</placeAfter>
-        </action>
-
-        <action>
-            <id>save</id>
-            <parent>file</parent>
-            <class>org.esa.beam.visat.actions.SaveAction</class>
-            <text>Save</text>
-            <mnemonic>S</mnemonic>
-            <shortDescr>Save a BEAM-DIMAP data file.</shortDescr>
-            <description>Save a BEAM-DIMAP data file.</description>
-            <accelerator>control S</accelerator>
-            <!--<smallIcon>icons/Save16.gif</smallIcon>-->
-            <largeIcon>icons/Save24.gif</largeIcon>
-            <helpId>save</helpId>
-            <placeAfter>openSubMenu</placeAfter>
-        </action>
-
-        <action>
-            <id>saveAs</id>
-            <parent>file</parent>
-            <class>org.esa.beam.visat.actions.SaveAsAction</class>
-            <text>Save as...</text>
-            <!--<mnemonic>A</mnemonic>-->
-            <shortDescr>Save a BEAM-DIMAP data file with a different name.</shortDescr>
-            <description>Save a BEAM-DIMAP data file with a different name.</description>
-            <!--<smallIcon>icons/SaveAs16.gif</smallIcon>-->
-            <largeIcon>icons/SaveAs24.gif</largeIcon>
-            <helpId>saveAs</helpId>
-            <context>product</context>
-            <placeAfter>save</placeAfter>
+            <separatorAfter>true</separatorAfter>
         </action>
 
 
@@ -600,31 +571,66 @@
             <description>Close an open data file.</description>
             <helpId>close</helpId>
             <context>product</context>
-            <placeAfter>saveAs</placeAfter>
+            <placeAfter>openSubMenu</placeAfter>
+            <separatorAfter>true</separatorAfter>
         </action>
 
+
+        <action>
+            <id>save</id>
+            <parent>file</parent>
+            <class>org.esa.beam.visat.actions.SaveAction</class>
+            <text>Save</text>
+            <mnemonic>S</mnemonic>
+            <shortDescr>Save a BEAM-DIMAP data file.</shortDescr>
+            <description>Save a BEAM-DIMAP data file.</description>
+            <accelerator>control S</accelerator>
+            <!--<smallIcon>icons/Save16.gif</smallIcon>-->
+            <largeIcon>icons/Save24.gif</largeIcon>
+            <helpId>save</helpId>
+            <placeAfter>close</placeAfter>
+        </action>
+
+        <action>
+            <id>saveAs</id>
+            <parent>file</parent>
+            <class>org.esa.beam.visat.actions.SaveAsAction</class>
+            <text>Save as...</text>
+            <!--<mnemonic>A</mnemonic>-->
+            <shortDescr>Save a BEAM-DIMAP data file with a different name.</shortDescr>
+            <description>Save a BEAM-DIMAP data file with a different name.</description>
+            <!--<smallIcon>icons/SaveAs16.gif</smallIcon>-->
+            <largeIcon>icons/SaveAs24.gif</largeIcon>
+            <helpId>saveAs</helpId>
+            <context>product</context>
+            <placeAfter>save</placeAfter>
+            <separatorAfter>true</separatorAfter>
+        </action>
+
+
+
         <!--<action>-->
-            <!--<id>sessionTop</id>-->
-            <!--<parent>file</parent>-->
-            <!--<class>org.esa.beam.visat.actions.session.OpenSessionAction</class>-->
-            <!--<text>Session</text>-->
-            <!--&lt;!&ndash;<accelerator>shift control O</accelerator>&ndash;&gt;-->
-            <!--&lt;!&ndash;<shortDescr>Open a BEAM session.</shortDescr>&ndash;&gt;-->
-            <!--&lt;!&ndash;<longDescr>Open a BEAM session.</longDescr>&ndash;&gt;-->
-            <!--<placeAfter>close</placeAfter>-->
-            <!--<helpId>openSession</helpId>-->
+        <!--<id>sessionTop</id>-->
+        <!--<parent>file</parent>-->
+        <!--<class>org.esa.beam.visat.actions.session.OpenSessionAction</class>-->
+        <!--<text>Session</text>-->
+        <!--&lt;!&ndash;<accelerator>shift control O</accelerator>&ndash;&gt;-->
+        <!--&lt;!&ndash;<shortDescr>Open a BEAM session.</shortDescr>&ndash;&gt;-->
+        <!--&lt;!&ndash;<longDescr>Open a BEAM session.</longDescr>&ndash;&gt;-->
+        <!--<placeAfter>close</placeAfter>-->
+        <!--<helpId>openSession</helpId>-->
         <!--</action>-->
 
         <action>
-        <id>openSession</id>
+            <id>openSession</id>
             <parent>file</parent>
-        <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
-        <text>Session Open...</text>
-        <!--<accelerator>shift control O</accelerator>-->
-        <shortDescr>Open a SeaDAS session.</shortDescr>
-        <longDescr>Open a SeaDAS session.</longDescr>
-            <placeAfter>close</placeAfter>
-        <helpId>openSession</helpId>
+            <class>org.esa.beam.visat.actions.session.OpenSessionAction</class>
+            <text>Session Open...</text>
+            <!--<accelerator>shift control O</accelerator>-->
+            <shortDescr>Open a SeaDAS session.</shortDescr>
+            <longDescr>Open a SeaDAS session.</longDescr>
+            <placeAfter>saveAs</placeAfter>
+            <helpId>openSession</helpId>
         </action>
 
 
@@ -666,58 +672,47 @@
         </action>
 
 
-        <action>
-            <id>exportOther</id>
-            <parent>file</parent>
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
-            <text>Export Utilities</text>
-            <!--<shortDescr>Export</shortDescr>-->
-            <description>Export</description>
-            <helpId>exportOther</helpId>
-            <sortChildren>true</sortChildren>
-            <separatorAfter>true</separatorAfter>
-            <placeAfter>closeSession</placeAfter>
-        </action>
 
         <action>
             <id>importVectorData</id>
-            <text>Vector Import</text>
-            <parent>file</parent>
+            <text>Import</text>
+            <parent>vector</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <!--<shortDescr>Import vector data</shortDescr>-->
             <description>Import vector data</description>
             <helpId>importVectorData</helpId>
             <sortChildren>true</sortChildren>
-            <placeAfter>exportOther</placeAfter>
+            <placeAfter>showGeometryAsWkt</placeAfter>
         </action>
 
         <action>
             <id>exportVectorData</id>
-            <text>Vector Export</text>
-            <parent>file</parent>
+            <text>Export</text>
+            <parent>vector</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <!--<shortDescr>Export vector data</shortDescr>-->
             <description>Export vector data</description>
             <separatorAfter>true</separatorAfter>
             <sortChildren>true</sortChildren>
             <placeAfter>importVectorData</placeAfter>
+            <separatorAfter>true</separatorAfter>
         </action>
 
         <action>
             <id>importRasterData</id>
-            <text>Raster Import</text>
+            <text>Import</text>
             <parent>file</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <!--<shortDescr>Import raster data</shortDescr>-->
             <description>Import raster data</description>
             <helpId>importRasterData</helpId>
             <sortChildren>true</sortChildren>
-            <placeAfter>exportVectorData</placeAfter>
+            <placeAfter>closeSession</placeAfter>
         </action>
 
         <action>
             <id>exportRasterData</id>
-            <text>Raster Export</text>
+            <text>Export</text>
             <parent>file</parent>
             <class>org.esa.beam.visat.actions.ActionGroup</class>
             <!--<mnemonic>I</mnemonic>-->
@@ -729,18 +724,33 @@
             <placeAfter>importRasterData</placeAfter>
         </action>
 
+
+        <action>
+            <id>exportOther</id>
+            <parent>file</parent>
+            <class>org.esa.beam.visat.actions.ActionGroup</class>
+            <text>Export Other</text>
+            <!--<shortDescr>Export</shortDescr>-->
+            <description>Export</description>
+            <helpId>exportOther</helpId>
+            <sortChildren>true</sortChildren>
+            <separatorAfter>true</separatorAfter>
+            <placeAfter>exportRasterData</placeAfter>
+        </action>
+
         <action>
             <id>exit</id>
-            <parent>file</parent>
+            <parent>seadas</parent>
             <class>org.esa.beam.visat.actions.ExitAction</class>
-            <text>Exit</text>
+            <text>Quit</text>
             <mnemonic>x</mnemonic>
             <separatorBefore>true</separatorBefore>
             <shortDescr>Exit the VISAT application.</shortDescr>
             <description>Exit the VISAT application.</description>
-            <accelerator>alt F4</accelerator>
+            <!--<accelerator>alt F4</accelerator>-->
             <helpId>exit</helpId>
-            <placeAfter>exportRasterData</placeAfter>
+            <placeAfter>preferences</placeAfter>
+            <separatorBefore>true</separatorBefore>
         </action>
 
         <!-- end of -->
@@ -1000,7 +1010,7 @@
         <!--####################-->
 
         <action>
-            <parent>edit</parent>
+            <parent>seadas</parent>
             <id>preferences</id>
             <class>org.esa.beam.visat.actions.PreferencesAction</class>
             <text>Preferences...</text>
@@ -1011,6 +1021,7 @@
             <description>Edit VISAT preferences.</description>
             <!--<smallIcon>icons/Preferences16.gif</smallIcon>-->
             <largeIcon>icons/Preferences24.gif</largeIcon>
+            <placeAfter>about</placeAfter>
             <helpId>preferences</helpId>
         </action>
 
@@ -1088,13 +1099,13 @@
 
 
         <!--<action>-->
-            <!--<id>openViewsMenu</id>-->
-            <!--<parent>view</parent>-->
-            <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
-            <!--<text>Windows</text>-->
-            <!--<sortChildren>true</sortChildren>-->
-            <!--<placeAfter>toolBars</placeAfter>-->
-            <!--<separatorAfter>true</separatorAfter>-->
+        <!--<id>openViewsMenu</id>-->
+        <!--<parent>view</parent>-->
+        <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
+        <!--<text>Windows</text>-->
+        <!--<sortChildren>true</sortChildren>-->
+        <!--<placeAfter>toolBars</placeAfter>-->
+        <!--<separatorAfter>true</separatorAfter>-->
         <!--</action>-->
 
 
@@ -1224,12 +1235,12 @@
         <!--</action>-->
 
         <!--<action>-->
-            <!--<id>showOverlaysMenu</id>-->
-            <!--<parent>view</parent>-->
-            <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
-            <!--<text>Overlays</text>-->
-            <!--<sortChildren>true</sortChildren>-->
-            <!--<placeAfter>toolBars</placeAfter>-->
+        <!--<id>showOverlaysMenu</id>-->
+        <!--<parent>view</parent>-->
+        <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
+        <!--<text>Overlays</text>-->
+        <!--<sortChildren>true</sortChildren>-->
+        <!--<placeAfter>toolBars</placeAfter>-->
         <!--</action>-->
 
 
@@ -1641,35 +1652,23 @@
         <!-- Tools menu -->
 
         <!--<action>-->
-            <!--<id>showToolViews</id>-->
-            <!--<parent>tools</parent>-->
-            <!--<placeAtContextTop>top</placeAtContextTop>-->
-            <!--<separatorBefore>true</separatorBefore>-->
+        <!--<id>showToolViews</id>-->
+        <!--<parent>tools</parent>-->
+        <!--<placeAtContextTop>top</placeAtContextTop>-->
+        <!--<separatorBefore>true</separatorBefore>-->
 
-            <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
-            <!--<text>Tool Windows</text>-->
-            <!--<sortChildren>true</sortChildren>-->
+        <!--<class>org.esa.beam.visat.actions.ActionGroup</class>-->
+        <!--<text>Tool Windows</text>-->
+        <!--<sortChildren>true</sortChildren>-->
         <!--</action>-->
 
-
-        <action>
-            <id>vectorsFolder</id>
-            <parent>layers</parent>
-            <!--<placeAfter>showWorldMapOverlay</placeAfter>-->
-            <separatorAfter>true</separatorAfter>
-            <sortChildren>true</sortChildren>
-
-            <placeAfter>showWorldMapOverlay</placeAfter>
-            <text>Geometry Tools</text>
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
-        </action>
 
 
 
         <action>
             <id>geocodingFolder</id>
             <parent>tools</parent>
-            <placeAfter>vectorsFolder</placeAfter>
+            <placeAfter>showWorldMapOverlay</placeAfter>
             <sortChildren>true</sortChildren>
 
             <text>Geo-Coding</text>
@@ -1691,7 +1690,7 @@
 
         <action>
             <id>createDemRelatedBands</id>
-            <parent>tools</parent>
+            <parent>raster</parent>
             <placeAfter>geocodingFolder</placeAfter>
             <separatorBefore>true</separatorBefore>
 
@@ -1707,7 +1706,7 @@
 
         <action>
             <id>createFilteredBand</id>
-            <parent>tools</parent>
+            <parent>raster</parent>
             <placeAfter>createDemRelatedBands</placeAfter>
 
             <text>Filtered Band...</text>
@@ -1723,7 +1722,7 @@
 
         <action>
             <id>bandArithmetic</id>
-            <parent>tools</parent>
+            <parent>raster</parent>
             <placeAfter>createFilteredBand</placeAfter>
 
 
@@ -1742,7 +1741,7 @@
 
         <action>
             <id>convertComputedBand2Band</id>
-            <parent>tools</parent>
+            <parent>raster</parent>
             <placeAfter>bandArithmetic</placeAfter>
 
             <text>Real Band</text>
@@ -1763,6 +1762,7 @@
 
 
         <action>
+            <parent>vector</parent>
             <id>createVectorDataNode</id>
             <class>org.esa.beam.visat.actions.CreateVectorDataNodeAction</class>
             <text>New Geometry Container...</text>
@@ -1774,13 +1774,14 @@
             <largeIcon>icons/NewVectorContainer.png</largeIcon>
             <helpId>createVectorDataNode</helpId>
             <context>product</context>
-            <parent>vectorsFolder</parent>
-            <placeAfter>pixelGeoCodingSubMenu</placeAfter>
+            <placeBefore>insertWktAsGeometry</placeBefore>
+
+
         </action>
 
 
         <action>
-            <parent>vectorsFolder</parent>
+            <parent>vector</parent>
             <id>insertWktAsGeometry</id>
             <placeAfter>computeMaskArea</placeAfter>
             <!--<text>Geometry from WKT...</text>-->
@@ -1792,11 +1793,12 @@
             <context>image</context>
             <helpId>insertWktAsGeometry</helpId>
             <largeIcon>icons/InsertWKTTool24.png</largeIcon>
+            <placeAfter>createVectorDataNode</placeAfter>
             <!--<separatorAfter>true</separatorAfter>-->
         </action>
 
         <action>
-            <parent>info</parent>
+            <parent>vector</parent>
             <id>showGeometryAsWkt</id>
             <!--<placeAfter>insertWktAsGeometry</placeAfter>-->
             <!--<text>WKT from Geometry...</text>-->
@@ -1807,6 +1809,8 @@
             <shortDescr>Get the well-known-text (WKT) representation of a selected geomety</shortDescr>
             <context>image</context>
             <helpId>showGeometryAsWkt</helpId>
+            <placeAfter>insertWktAsGeometry</placeAfter>
+            <separatorAfter>true</separatorAfter>
         </action>
 
 
@@ -1866,8 +1870,8 @@
             <class>org.esa.beam.visat.actions.CreateSubsetFromViewAction</class>
             <text>Crop...</text>
             <shortDescr>Crop a file (spatial, subsample, raster) to create a new file (default boundaries are the current view)</shortDescr>
-        //    <description>Crop a file spatially (default boundaries are the current view)
-            </description>
+            //    <description>Crop a file spatially (default boundaries are the current view)
+        </description>
             <context>image</context>
             <helpId>subsetFromView</helpId>
             <parent>processing</parent>
@@ -2037,21 +2041,20 @@
             <shortDescr>Provides information how different data products are accessed.</shortDescr>
             <description>Provides information how different data products are accessed.</description>
             <helpId>showDataSources</helpId>
-            <placeAfter>showOceanColorPage</placeAfter>
+            <placeAfter>showTutorialPage</placeAfter>
             <separatorAfter>true</separatorAfter>
         </action>
 
-
         <action>
             <id>showUpdateDialog</id>
-            <parent>help</parent>
+            <parent>tools</parent>
             <class>org.esa.beam.visat.actions.ShowModuleManagerAction</class>
             <text>Module Manager...</text>
             <!--<mnemonic>M</mnemonic>-->
             <shortDescr>Opens the module manager.</shortDescr>
             <description>Opens the module manager.</description>
             <helpId>moduleManager</helpId>
-            <placeAfter>showDataSources</placeAfter>
+            <placeAfter>exportOther</placeAfter>
             <separatorBefore>true</separatorBefore>
             <!--<smallIcon>icons/ModuleManager16.png</smallIcon>-->
             <largeIcon>icons/ModuleManager22.png</largeIcon>
@@ -2059,7 +2062,7 @@
 
         <action>
             <id>about</id>
-            <parent>help</parent>
+            <parent>seadas</parent>
             <class>org.esa.beam.visat.actions.AboutAction</class>
             <text>About SeaDAS</text>
             <!--<mnemonic>A</mnemonic>-->
@@ -2069,8 +2072,9 @@
             <!--<smallIcon>icons/About16.gif</smallIcon>-->
             <largeIcon>icons/About24.gif</largeIcon>
             <helpId>about</helpId>
-            <placeAfter>showUpdateDialog</placeAfter>
-            <separatorBefore>true</separatorBefore>
+            <placeAtContextTop></placeAtContextTop>
+            <placeBefore>preferences</placeBefore>
+            <separatorAfter>true</separatorAfter>
         </action>
 
         <action>
