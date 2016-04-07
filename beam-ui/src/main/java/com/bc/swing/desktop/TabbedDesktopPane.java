@@ -312,16 +312,16 @@ public class TabbedDesktopPane extends JPanel {
         sortFrames(allFrames);
         final JInternalFrame[] visibleFrames = getVisibleFrames(allFrames);
 
-        final JMenuItem cascadeMenuItem = new JMenuItem("Cascade"); /*I18N*/
-        cascadeMenuItem.setMnemonic('C'); /*I18N*/
-        cascadeMenuItem.setEnabled(visibleFrames.length > 1);
-        cascadeMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cascadeFrames();
-            }
-        });
-        windowMenu.add(cascadeMenuItem);
+//        final JMenuItem cascadeMenuItem = new JMenuItem("Cascade"); /*I18N*/
+//        cascadeMenuItem.setMnemonic('C'); /*I18N*/
+//        cascadeMenuItem.setEnabled(visibleFrames.length > 1);
+//        cascadeMenuItem.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                cascadeFrames();
+//            }
+//        });
+//        windowMenu.add(cascadeMenuItem);
 
         final JMenuItem tileEMenuItem = new JMenuItem("Tile Evenly"); /*I18N*/
         tileEMenuItem.setMnemonic('E'); /*I18N*/

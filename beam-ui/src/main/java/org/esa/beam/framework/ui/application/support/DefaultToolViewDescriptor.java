@@ -468,14 +468,15 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
                 commandId.contains("ProfilePlotToolView") ||
                 commandId.contains("StatisticsToolView") ||
                 commandId.contains("SpectrumToolView") ||
-                commandId.contains("DensityPlotToolView")) {
-            command.setParent("analysis");
-        } else if (commandId.contains("PixelInfoToolView") ||
+                commandId.contains("DensityPlotToolView") ||
+                commandId.contains("PixelInfoToolView") ||
                 commandId.contains("GeoCodingToolView") ||
                 commandId.contains("TileCacheDiagnosisToolView") ||
-                commandId.contains("InformationToolView")) {
-            command.setParent("info");
-        } else if (commandId.contains("timeSeries")) {
+                commandId.contains("InformationToolView")
+
+                ) {
+            command.setParent("analysis");
+        }  else if (commandId.contains("timeSeries")) {
             command.setParent("timeSeriesFolder");
         } else if (commandId.contains("PinManagerToolView") ||
                 commandId.contains("PlacemarkEditorToolView") ||
@@ -489,34 +490,17 @@ public class DefaultToolViewDescriptor implements ToolViewDescriptor, Configurab
         } else if (commandId.contains("LayerEditorToolView")) {
             command.setParent("layers");
             command.setPlaceAfter("showWorldMapOverlay");
-            command.setSeparatorAfter(true);
 
-        } else if (commandId.contains("MaskManagerToolView")
-                ) {
-            command.setParent("raster");
-            command.setPlaceAfter("convertComputedBand2Band");
-
-        } else if (commandId.contains("ColorManipulationToolView")
-                ) {
-            command.setParent("tools");
-            command.setPlaceLast(true);
-
-        } else if (commandId.contains("WorldMapToolView") ||
+        }  else if (commandId.contains("WorldMapToolView") ||
                 commandId.contains("NavigationToolView") ||
-                commandId.contains("ProductsToolView")) {
-            command.setParent("view");
+                commandId.contains("ProductsToolView") ||
+                commandId.contains("MaskManagerToolView") ||
+                commandId.contains("ColorManipulationToolView")) {
+            command.setParent("toolWindows");
             command.setPlaceAfter("toolBars");
 
-//        } else if (commandId.contains("MaskManagerToolView")) {
-//            command.setParent("masks");
-//            command.setSeparatorBefore(true);
-//        } else if (commandId.contains("ProductsToolView")) {
-//            command.setParent("file");
-//            command.setPlaceAfter("exportRasterData");
-//            command.setPlaceBefore("exit");
         } else {
             command.setParent("tools");
-//            command.setParent("showToolViews");
         }
 
 

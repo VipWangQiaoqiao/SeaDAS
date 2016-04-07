@@ -69,7 +69,7 @@ public class VersionCheckerVPI extends AbstractVisatPlugIn {
         ExecCommand versionCheckerCommand = commandManager.createExecCommand("checkForUpdate", versionCheckerAction);
         versionCheckerCommand.setText("Check for Updates");
         versionCheckerCommand.setShortDescription("Checks for a new release");
-        versionCheckerCommand.setParent("help");
+        versionCheckerCommand.setParent("seadas");
         versionCheckerCommand.setPlaceAfter("showDataSources");
     }
 

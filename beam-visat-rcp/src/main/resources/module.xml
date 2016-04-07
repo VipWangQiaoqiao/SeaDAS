@@ -1091,10 +1091,20 @@
             <text>Tool Bars</text>
             <!--<mnemonic>T</mnemonic>-->
             <sortChildren>true</sortChildren>
-            <helpId>toolBars</helpId>
             <placeAfter>saveAsUserLayout</placeAfter>
+            <helpId>toolBars</helpId>
             <separatorBefore>true</separatorBefore>
-            <separatorAfter>true</separatorAfter>
+        </action>
+
+        <action>
+            <id>toolWindows</id>
+            <parent>view</parent>
+            <class>org.esa.beam.visat.actions.ActionGroup</class>
+            <text>Tool Windows</text>
+            <!--<mnemonic>T</mnemonic>-->
+            <sortChildren>true</sortChildren>
+            <helpId>toolWindows</helpId>
+            <placeAfter>toolBars</placeAfter>
         </action>
 
 
@@ -1677,8 +1687,7 @@
 
         <action>
             <id>computeMaskArea</id>
-            <parent>info</parent>
-            <placeAfter>geocodingFolder</placeAfter>
+            <parent>analysis</parent>
 
             <text>Mask Area...</text>
             <!--<mnemonic>A</mnemonic>-->
@@ -1690,8 +1699,7 @@
 
         <action>
             <id>createDemRelatedBands</id>
-            <parent>raster</parent>
-            <placeAfter>geocodingFolder</placeAfter>
+            <parent>processing</parent>
             <separatorBefore>true</separatorBefore>
 
 
@@ -1706,7 +1714,7 @@
 
         <action>
             <id>createFilteredBand</id>
-            <parent>raster</parent>
+            <parent>processing</parent>
             <placeAfter>createDemRelatedBands</placeAfter>
 
             <text>Filtered Band...</text>
@@ -1722,7 +1730,7 @@
 
         <action>
             <id>bandArithmetic</id>
-            <parent>raster</parent>
+            <parent>processing</parent>
             <placeAfter>createFilteredBand</placeAfter>
 
 
@@ -1741,7 +1749,7 @@
 
         <action>
             <id>convertComputedBand2Band</id>
-            <parent>raster</parent>
+            <parent>processing</parent>
             <placeAfter>bandArithmetic</placeAfter>
 
             <text>Real Band</text>
@@ -1749,6 +1757,7 @@
             <shortDescr>Computes a "real" band from a virtual/filtered band</shortDescr>
             <context>virtualBand</context>
             <separatorAfter>true</separatorAfter>
+            <placeBefore>collocation</placeBefore>
             <helpId>convertComputedBand2Band</helpId>
         </action>
 
@@ -1876,6 +1885,7 @@
             <helpId>subsetFromView</helpId>
             <parent>processing</parent>
             <largeIcon>icons/dannys_spatial_subset24.png</largeIcon>
+            <placeAfter>collocation</placeAfter>
 
         </action>
 
@@ -1976,12 +1986,13 @@
             <text>SeaDAS Help</text>
             <!--<mnemonic>T</mnemonic>-->
             <!--<accelerator>F1</accelerator>-->
-            <separatorBefore>false</separatorBefore>
+            <separatorAfter>true</separatorAfter>
             <shortDescr>SeaDAS help</shortDescr>
             <description>Opens the SeaDAS help browser.</description>
             <!--<smallIcon>icons/Help16.png</smallIcon>-->
             <!--<largeIcon>icons/Help22.png</largeIcon>-->
             <helpId>visat</helpId>
+            <placeBefore>showDataSources</placeBefore>
         </action>
 
         <action>
@@ -1992,7 +2003,6 @@
             <!--<mnemonic>B</mnemonic>-->
             <shortDescr>Opens the SeaDAS tutorial page.</shortDescr>
             <description>Opens the SeaDAS tutorial page with the default web browser.</description>
-            <placeAfter>helpTopics</placeAfter>
         </action>
 
         <action>
@@ -2003,7 +2013,6 @@
             <!--<mnemonic>B</mnemonic>-->
             <shortDescr>Opens the OceanColor forum web page.</shortDescr>
             <description>Opens he OceanColor forum web page with the default web browser.</description>
-            <placeAfter>showTutorialPage</placeAfter>
         </action>
 
         <action>
@@ -2014,7 +2023,6 @@
             <!--<mnemonic>B</mnemonic>-->
             <shortDescr>Opens the SeaDAS home page.</shortDescr>
             <description>Opens the SeaDAS home page with the default web browser.</description>
-            <placeAfter>showForumPage</placeAfter>
         </action>
 
 
@@ -2026,8 +2034,6 @@
             <!--<mnemonic>B</mnemonic>-->
             <shortDescr>Opens the NASA OceanColor home page.</shortDescr>
             <description>Opens the NASA OceanColor home page with the default web browser.</description>
-            <placeAfter>showHomePage</placeAfter>
-            <separatorAfter>true</separatorAfter>
         </action>
 
 
@@ -2041,8 +2047,6 @@
             <shortDescr>Provides information how different data products are accessed.</shortDescr>
             <description>Provides information how different data products are accessed.</description>
             <helpId>showDataSources</helpId>
-            <placeAfter>showTutorialPage</placeAfter>
-            <separatorAfter>true</separatorAfter>
         </action>
 
         <action>

@@ -38,6 +38,8 @@
             <helpId>collocation</helpId>
             <class>org.esa.beam.collocation.visat.CollocationAction</class>
             <parent>tools</parent>
+            <placeAfter>convertComputedBand2Band</placeAfter>
+            <placeBefore>createSubsetFromView</placeBefore>
             <text>Collocate...</text>
             <!--<placeAfter>createSubsetFromView</placeAfter>-->
             <!--<placeBefore>mosaicAction</placeBefore>-->
