@@ -1674,17 +1674,6 @@
 
 
 
-
-        <action>
-            <id>geocodingFolder</id>
-            <parent>tools</parent>
-            <placeAfter>showWorldMapOverlay</placeAfter>
-            <sortChildren>true</sortChildren>
-
-            <text>Geo-Coding</text>
-            <class>org.esa.beam.visat.actions.ActionGroup</class>
-        </action>
-
         <action>
             <id>computeMaskArea</id>
             <parent>analysis</parent>
@@ -1832,33 +1821,33 @@
         <action>
             <id>attachPixelGeoCoding</id>
             <class>org.esa.beam.visat.actions.AttachPixelGeoCodingAction</class>
-            <text>Attach Geo-Coding...</text>
+            <text>Geo-Coding Attach...</text>
             <shortDescr>Attaches a pixel based geo-coding</shortDescr>
             <description>Attaches a pixel based geo-coding to the selected product</description>
             <context>attachPixelGeoCoding</context>
             <helpId>attachPixelGeoCoding</helpId>
-            <parent>geocodingFolder</parent>
+            <parent>tools</parent>
             <separatorBefore>true</separatorBefore>
         </action>
 
         <action>
             <id>detachPixelGeoCoding</id>
             <class>org.esa.beam.visat.actions.DetachPixelGeoCodingAction</class>
-            <text>Detach Geo-Coding...</text>
+            <text>Geo-Coding Detach...</text>
             <shortDescr>Detaches a pixel based geo-coding</shortDescr>
             <description>Detaches a pixel based geo-coding from the selected product</description>
             <context>detachPixelGeoCoding</context>
             <helpId>detachPixelGeoCoding</helpId>
-            <parent>geocodingFolder</parent>
+            <parent>tools</parent>
             <placeAfter>attachPixelGeoCoding</placeAfter>
         </action>
 
 
         <action>
             <id>createXYDisplacementBandsAction</id>
-            <parent>geocodingFolder</parent>
+            <parent>tools</parent>
 
-            <text>Create Displacement Bands...</text>
+            <text>Displacement Bands...</text>
             <class>org.esa.beam.visat.actions.CreateGeoCodingDisplacementBandsAction</class>
             <shortDescr>&lt;html&gt;Computes actual pixel position minus pixel position c
                 geo-coding&lt;br/&gt;
@@ -2058,7 +2047,7 @@
             <shortDescr>Opens the module manager.</shortDescr>
             <description>Opens the module manager.</description>
             <helpId>moduleManager</helpId>
-            <placeAfter>exportOther</placeAfter>
+            <placeAfter>createXYDisplacementBandsAction</placeAfter>
             <separatorBefore>true</separatorBefore>
             <!--<smallIcon>icons/ModuleManager16.png</smallIcon>-->
             <largeIcon>icons/ModuleManager22.png</largeIcon>

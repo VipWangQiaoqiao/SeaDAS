@@ -58,8 +58,7 @@
         <action>
             <parent>tools</parent>
             <id>pixelExtraction</id>
-            <placeAfter>computeMaskArea</placeAfter>
-            <placeBefore>createDemRelatedBands</placeBefore>
+            <placeBefore>attachPixelGeoCoding</placeBefore>
             <text>Pixel Extraction...</text>
             <class>org.esa.beam.pixex.visat.PixelExtractionAction</class>
             <helpId>pixelExtraction</helpId>
