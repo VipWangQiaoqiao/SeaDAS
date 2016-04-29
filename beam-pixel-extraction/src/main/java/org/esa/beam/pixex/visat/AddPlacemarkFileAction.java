@@ -39,7 +39,7 @@ class AddPlacemarkFileAction extends AbstractAction {
     private final JComponent parentComponent;
 
     AddPlacemarkFileAction(AppContext appContext, CoordinateTableModel tableModel, JPanel parentComponent) {
-        super("Add coordinates from tab-delimited text file...");
+        super("Import from text file (tab-delimited)...");
         this.tableModel = tableModel;
         this.appContext = appContext;
         this.parentComponent = parentComponent;

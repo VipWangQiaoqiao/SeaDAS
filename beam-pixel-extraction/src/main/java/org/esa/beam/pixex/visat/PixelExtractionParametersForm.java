@@ -599,7 +599,7 @@ class PixelExtractionParametersForm {
                 popup.add(new AddCoordinateAction(coordinateTableModel));
                 popup.add(new AddPlacemarkFileAction(appContext, coordinateTableModel, mainPanel));
                 // todo Danny commented this line out because this mechanism does not work for dates.  A beam forum posting suggests this problem may notify() have ever been fixed.
-          //      popup.add(new AddCsvFileAction(appContext, coordinateTableModel, mainPanel));
+               popup.add(new AddCsvFileAction(appContext, coordinateTableModel, mainPanel));
                 popup.show(component, 1, buttonBounds.height + 1);
             }
         }

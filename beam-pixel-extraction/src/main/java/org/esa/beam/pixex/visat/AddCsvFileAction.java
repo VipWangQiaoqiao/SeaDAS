@@ -28,7 +28,7 @@ class AddCsvFileAction extends AbstractAction {
     private final CoordinateTableModel tableModel;
 
     AddCsvFileAction(AppContext appContext, CoordinateTableModel tableModel, JPanel parent) {
-        super("Add measurements from CSV file...");
+        super("Import from CSV file...");
         this.appContext = appContext;
         this.parent = parent;
         this.tableModel = tableModel;
