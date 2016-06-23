@@ -365,6 +365,25 @@
             <initIndex>0</initIndex>
         </toolView>
 
+
+        <toolView>
+            <id>org.esa.beam.visat.toolviews.placemark.annotation.TextAnnotationManagerToolView</id>
+            <class>org.esa.beam.visat.toolviews.placemark.annotation.TextAnnotationManagerToolView</class>
+            <title>Text Annotation Manager</title>
+            <tabTitle>Text Annotation Manager</tabTitle>
+            <!--<mnemonic>a</mnemonic>-->
+            <!--<accelerator>ctrl alt A</accelerator>-->
+            <description>Manage text annotations.</description>
+            <!--<smallIcon>/org/esa/beam/resources/images/icons/PinManager16.gif</smallIcon>-->
+            <largeIcon>/org/esa/beam/resources/images/icons/TextAnnotationManager24.png</largeIcon>
+            <!--<largeIcon>/org/esa/beam/resources/images/icons/PinManager24.gif</largeIcon>-->
+          //  <helpId>showPinManagerWnd</helpId>
+            <initState>HIDDEN</initState>
+            <initSide>SOUTH</initSide>
+            <initIndex>0</initIndex>
+        </toolView>
+
+
         <toolView>
             <id>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</id>
             <class>org.esa.beam.visat.toolviews.placemark.gcp.GcpManagerToolView</class>
@@ -1194,6 +1213,8 @@
 
 
 
+
+
         <action>
             <id>showPinOverlay</id>
             <class>org.esa.beam.visat.actions.ShowPinOverlayAction</class>
@@ -1878,6 +1899,11 @@
 
         </action>
 
+
+
+
+
+
         <action>
             <id>mosaicAction</id>
             <class>org.esa.beam.gpf.operators.mosaic.MosaicAction</class>
@@ -2129,6 +2155,23 @@
             <selected>false</selected>
             <helpId>pinTool</helpId>
         </action>
+
+        <action>
+            <id>textAnnotationTool</id>
+            <class>org.esa.beam.visat.actions.PlacemarkToolAction</class>
+            <interactor>org.esa.beam.visat.toolviews.placemark.annotation.InsertTextAnnotationInteractor</interactor>
+            <parent>tools</parent>
+            <placeAfter>zoomTool</placeAfter>
+            <text>Text Annotation Tool</text>
+            <shortDescr>Text annotation tool</shortDescr>
+            <description>Sets, edits or deletes text annotation</description>
+            <largeIcon>icons/TextAnnotationPlacer24.png</largeIcon>
+            <!--<largeIcon>icons/PinTool24.png</largeIcon>-->
+            <!--<largeIcon>icons/PinTool24.gif</largeIcon>-->
+            <selected>false</selected>
+            <helpId>textAnnotation</helpId>
+        </action>
+
 
         <action>
             <id>gcpTool</id>

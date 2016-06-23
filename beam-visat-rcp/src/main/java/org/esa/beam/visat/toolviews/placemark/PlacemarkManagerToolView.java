@@ -138,7 +138,7 @@ public class PlacemarkManagerToolView extends AbstractToolView {
         prefixTitle = getDescriptor().getTitle();
         placemarkTable = new SortableTable();
         placemarkTable.setName("placemarkTable");
-        placemarkTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        placemarkTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         placemarkTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         placemarkTable.setRowSelectionAllowed(true);
         // IMPORTANT: We set ReorderingAllowed=false, because we export the
