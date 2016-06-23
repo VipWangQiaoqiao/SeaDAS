@@ -44,12 +44,14 @@ import java.awt.geom.Rectangle2D;
 
 public class SimpleFeaturePointFigure extends AbstractPointFigure implements SimpleFeatureFigure {
 
-    private static Font labelFont = new Font("Helvetica", Font.BOLD, 14);
-    private static final int[] labelOutlineAlphas = new int[]{64, 128, 192, 255};
-    private static  Stroke[] labelOutlineStrokes = new Stroke[labelOutlineAlphas.length];
+    private static Font labelFont = new Font("SansSerif", Font.PLAIN, 14);
+    private static final int[] labelOutlineAlphas = new int[]{210};
+    // todo Danny commented this out ... though it it useful for fading the outline or background out so I'm leaving comments just in case we go that route
+    // private static final int[] labelOutlineAlphas = new int[]{64, 128, 192, 255};
+    private static Stroke[] labelOutlineStrokes = new Stroke[labelOutlineAlphas.length];
     private static Color[] labelOutlineColors = new Color[labelOutlineAlphas.length];
-    private static  Color labelFontColor = Color.WHITE;
-    private static Color labelOutlineColor = Color.BLACK;
+    private static Color labelFontColor = Color.BLACK;
+    private static Color labelOutlineColor = Color.WHITE;
     private static String[] labelAttributeNames = new String[]{
             Placemark.PROPERTY_NAME_LABEL,
             "Label",
@@ -69,7 +71,7 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
     }
 
     public void updateFontColor(Font newFont, Color newLabelFontColor, Color newLabelOutlineColor) {
-        SimpleFeaturePointFigure.labelFont=newFont;
+        SimpleFeaturePointFigure.labelFont = newFont;
         SimpleFeaturePointFigure.labelFontColor = newLabelFontColor;
         SimpleFeaturePointFigure.labelOutlineColor = newLabelOutlineColor;
         for (int i = 0; i < labelOutlineAlphas.length; i++) {
@@ -166,6 +168,7 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
         return null;
     }
 
+
     private void drawLabel(Rendering rendering, String label) {
 
         final Graphics2D graphics = rendering.getGraphics();
@@ -173,19 +176,50 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
         final Stroke oldStroke = graphics.getStroke();
         final Paint oldPaint = graphics.getPaint();
 
+        //todo Danny  this toggles the new mode but is hard coded
+        boolean backgroundBox = true;
+        //todo Danny  this adjust symbol location ... ideally for text annotation it is over text.
+        boolean isTextAnnotation = false;
+
         try {
             graphics.setFont(getLabelFont());
             GlyphVector glyphVector = getLabelFont().createGlyphVector(graphics.getFontRenderContext(), label);
             Rectangle2D logicalBounds = glyphVector.getLogicalBounds();
             float tx = (float) (logicalBounds.getX() - 0.5 * logicalBounds.getWidth());
             float ty = (float) (getSymbol().getBounds().getMaxY() + logicalBounds.getHeight() + 1.0);
+
+            if (isTextAnnotation) {
+                ty = (float) (0.5* logicalBounds.getHeight());
+            }
             Shape labelOutline = glyphVector.getOutline(tx, ty);
 
-            for (int i = 0; i < labelOutlineAlphas.length; i++) {
-                graphics.setStroke(labelOutlineStrokes[i]);
-                graphics.setPaint(labelOutlineColors[i]);
-                graphics.draw(labelOutline);
+            if (backgroundBox) {
+
+                logicalBounds.setRect(tx-1.0,
+                        ty - logicalBounds.getHeight()+3.0,
+                        logicalBounds.getWidth()+2.0,
+                        logicalBounds.getHeight());
+
+                for (int i = 0; i < labelOutlineAlphas.length; i++) {
+                    graphics.setStroke(labelOutlineStrokes[i]);
+                    graphics.setPaint(labelOutlineColors[i]);
+
+                    graphics.fill(logicalBounds);
+                    graphics.draw(logicalBounds);
+
+                }
+            } else {
+                for (int i = 0; i < labelOutlineAlphas.length; i++) {
+                    graphics.setStroke(labelOutlineStrokes[i]);
+                    graphics.setPaint(labelOutlineColors[i]);
+
+                    graphics.draw(labelOutline);
+                    graphics.fill(labelOutline);
+                }
             }
+
+
+
 
             graphics.setPaint(labelFontColor);
             graphics.fill(labelOutline);
