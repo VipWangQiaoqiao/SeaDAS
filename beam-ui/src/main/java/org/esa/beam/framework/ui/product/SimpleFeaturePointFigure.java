@@ -71,7 +71,7 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
     }
 
     public void updateFontColor(Font newFont, Color newLabelFontColor, Color newLabelOutlineColor) {
-        labelFont = newFont;
+        setLabelFont(newFont);
         labelFontColor = newLabelFontColor;
         labelOutlineColor = newLabelOutlineColor;
         for (int i = 0; i < labelOutlineAlphas.length; i++) {
