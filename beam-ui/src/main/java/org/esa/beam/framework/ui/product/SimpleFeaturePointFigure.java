@@ -44,8 +44,8 @@ import java.awt.geom.Rectangle2D;
 
 public class SimpleFeaturePointFigure extends AbstractPointFigure implements SimpleFeatureFigure {
 
-    private Font labelFont = new Font("SansSerif", Font.PLAIN, 14);
-    private static final int[] labelOutlineAlphas = new int[]{210};
+    private Font labelFont = new Font("SansSerif", Font.PLAIN, 16);
+    private static final int[] labelOutlineAlphas = new int[]{255};
     // todo Danny commented this out ... though it it useful for fading the outline or background out so I'm leaving comments just in case we go that route
     // private static final int[] labelOutlineAlphas = new int[]{64, 128, 192, 255};
     private static Stroke[] labelOutlineStrokes = new Stroke[labelOutlineAlphas.length];
