@@ -44,14 +44,14 @@ import java.awt.geom.Rectangle2D;
 
 public class SimpleFeaturePointFigure extends AbstractPointFigure implements SimpleFeatureFigure {
 
-    private static Font labelFont = new Font("SansSerif", Font.PLAIN, 14);
+    private Font labelFont = new Font("SansSerif", Font.PLAIN, 14);
     private static final int[] labelOutlineAlphas = new int[]{210};
     // todo Danny commented this out ... though it it useful for fading the outline or background out so I'm leaving comments just in case we go that route
     // private static final int[] labelOutlineAlphas = new int[]{64, 128, 192, 255};
     private static Stroke[] labelOutlineStrokes = new Stroke[labelOutlineAlphas.length];
     private static Color[] labelOutlineColors = new Color[labelOutlineAlphas.length];
-    private static Color labelFontColor = Color.BLACK;
-    private static Color labelOutlineColor = Color.WHITE;
+    private Color labelFontColor = Color.BLACK;
+    private Color labelOutlineColor = Color.WHITE;
     private static String[] labelAttributeNames = new String[]{
             Placemark.PROPERTY_NAME_LABEL,
             "Label",
@@ -60,7 +60,7 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
     private final SimpleFeature simpleFeature;
     private Point geometry;
 
-    static {
+    {
         for (int i = 0; i < labelOutlineAlphas.length; i++) {
             labelOutlineStrokes[i] = new BasicStroke((labelOutlineAlphas.length - i));
             labelOutlineColors[i] = new Color(labelOutlineColor.getRed(),
@@ -71,9 +71,9 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
     }
 
     public void updateFontColor(Font newFont, Color newLabelFontColor, Color newLabelOutlineColor) {
-        SimpleFeaturePointFigure.labelFont = newFont;
-        SimpleFeaturePointFigure.labelFontColor = newLabelFontColor;
-        SimpleFeaturePointFigure.labelOutlineColor = newLabelOutlineColor;
+        labelFont = newFont;
+        labelFontColor = newLabelFontColor;
+        labelOutlineColor = newLabelOutlineColor;
         for (int i = 0; i < labelOutlineAlphas.length; i++) {
             labelOutlineStrokes[i] = new BasicStroke((labelOutlineAlphas.length - i));
             labelOutlineColors[i] = new Color(labelOutlineColor.getRed(),
@@ -98,12 +98,12 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
         setSelectable(true);
     }
 
-    public static Font getLabelFont() {
+    public Font getLabelFont() {
         return labelFont;
     }
 
-    public static void setLabelFont(Font labelFont) {
-        SimpleFeaturePointFigure.labelFont = labelFont;
+    public void setLabelFont(Font labelFont) {
+        this.labelFont = labelFont;
     }
 
     @Override
