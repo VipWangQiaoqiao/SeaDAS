@@ -1,0 +1,41 @@
+# Represents the primary defaults for masks created when loading a level-2 file.
+# This file may be edited by the user.
+#
+# Delimit on colons and then sub-delimit on commas so be careful on formatting
+
+
+
+#MASK_NAME       FLAGS                 UNION   COLOR             TRANS    DESCRIPTION
+Land          :  l2_flags.LAND       : true   : 100,100,100    : 0.0  : l2_flags.LAND
+Aeros_Absorb  :  l2_flags.ABSAER     : true   : 255,200,0      : 0.0  : l2_flags.ABSAER - Absorbing Aerosols determined
+Atmos_Fail    :  l2_flags.ATMFAIL    : true   : 255,0,26       : 0.0  : l2_flags.ATMFAIL - Atmospheric correction failure
+Atmos_Iter    :  l2_flags.MAXAERITER : true   : 160,160,160    : 0.0  : l2_flags.MAXAERITER - Maximum iterations reached for NIR correction
+Atmos_Warn    :  l2_flags.ATMWARN    : true   : 255,0,255      : 0.0  : l2_flags.ATMWARN - Atmospheric correction warning; Epsilon out-of-bounds
+Chl_Fail      :  l2_flags.CHLFAIL    : true   : 255,0,0        : 0.0  : l2_flags.CHLFAIL - Chlorophyll algorithm failure
+Chl_Warn      :  l2_flags.CHLWARN    : true   : 192,192,192    : 0.0  : l2_flags.CHLWARN - Chlorophyll out-of-bounds (<0.01 or >100 mg m^-3)
+Cloud_Ice     :  l2_flags.CLDICE     : true   : 255,255,255    : 0.0  : l2_flags.CLDICE - Cloud/Ice determined
+Coccolith     :  l2_flags.COCCOLITH  : true   : 0,50,0         : 0.0  : l2_flags.COCCOLITH - Coccolithophores detected
+Filter        :  l2_flags.FILTER     : true   : 128,128,128    : 0.0  : l2_flags.FILTER - Insufficient data for smoothing filter
+Glint         :  l2_flags.MODGLINT   : true   : 191,143,247    : 0.0  : l2_flags.MODGLINT - Moderate glint determined
+Glint_High    :  l2_flags.HIGLINT    : true   : 255,61,245     : 0.0  : l2_flags_HIGLINT - High glint determined
+Lt_High       :  l2_flags.HILT       : true   : 255,255,255    : 0.0  : l2_flags.HILT - High (or saturating) TOA radiance
+Lw_Low        :  l2_flags.LOWLW      : true   : 0,0,0          : 0.0  : l2_flags.LOWLW - Low Lw @ 555nm (possible cloud shadow)
+Missing_Data  :  l2_flags.BOWTIEDEL  : true   : 192,192,192    : 0.0  : l2_flags.BOWTIEDEL - specification deleted pixel (i.e. bow-tie VIIRS)
+Nav_Fail      :  l2_flags.NAVFAIL    : true   : 255,0,26       : 0.0  : l2_flags.NAVFAIL - Navigation failure
+Nav_Warn      :  l2_flags.NAVWARN    : true   : 255,0,255      : 0.0  : l2_flags.NAVWARN - Navigation suspect
+Polarization  :  l2_flags.HIPOL      : true   : 128,128,128    : 0.0  : l2_flags.HIPOL - High degree of polarization determined
+Product_Fail  :  l2_flags.PRODFAIL   : true   : 255,175,175    : 0.0  : l2_flags.PRODFAIL - One (or more) product algorithms produced a failure
+Product_Warn  :  l2_flags.PRODWARN   : true   : 255,0,255      : 0.0  : l2_flags.PRODWARN - One (or more) product algorithms generated a warning
+
+Quality_L2    :  l2_flags.ATMFAIL,l2_flags.LAND,l2_flags.CLDICE,l2_flags.HILT           : false  : 0,128,0       :  0.0  : Product could be computed (l2_flags composite)
+Quality_L3    :  l2_flags.ATMFAIL,l2_flags.LAND,l2_flags.HIGLINT,l2_flags.HILT,l2_flags.STRAYLIGHT,l2_flags.CLDICE,l2_flags.COCCOLITH,l2_flags.HISOLZEN,l2_flags.LOWLW,l2_flags.CHLFAIL,l2_flags.NAVWARN,l2_flags.MAXAERITER,l2_flags.CHLWARN,l2_flags.ATMWARN,l2_flags.NAVFAIL,l2_flags.FILTER           : false  : 0,255,0       :  0.0  : Best quality (l2_flags composite)
+
+Sea_Ice       :  l2_flags.SEAICE     : true   : 245,255,255    : 0.0  : l2_flags.SEAICE - Sea ice determined
+Sen_Zen_High  :  l2_flags.HISATZEN   : true   : 193,255,254    : 0.0  : l2_flags.HISATZEN - Large satellite zenith angle
+Sol_Zen_High  :  l2_flags.HISOLZEN   : true   : 141,11,134     : 0.0  : l2_flags.HISOLZEN - High solar zenith angle
+Stray_Light   :  l2_flags.STRAYLIGHT : true   : 96,96,96       : 0.0  : l2_flags.STRAYLIGHT - Straylight determined
+Water_Shallow :  l2_flags.COASTZ     : true   : 165,0,11       : 0.0  : l2_flags.COASTZ - Shallow water (<30m)
+Water_Turbid  :  l2_flags.TURBIDW    : true   : 137,99,31      : 0.0  : l2_flags.TURBIDW - Turbid water determined
+Water         :  l2_flags.LAND       : false  : 0,0,255        : 0.0  : Not land (l2_flags.LAND)
+
+
