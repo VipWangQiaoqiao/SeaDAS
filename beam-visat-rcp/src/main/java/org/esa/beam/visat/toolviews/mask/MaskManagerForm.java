@@ -15,29 +15,47 @@
  */
 package org.esa.beam.visat.toolviews.mask;
 
+import com.bc.ceres.core.*;
+import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
+import org.esa.beam.BeamUiActivator;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.application.support.AbstractToolView;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
+import org.esa.beam.util.ResourceInstaller;
+import org.esa.beam.util.SystemUtils;
+import org.esa.beam.visat.VisatApp;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.io.File;
+import java.net.URL;
+import java.util.logging.Level;
 
 class MaskManagerForm extends MaskForm {
 
     private final AbstractButton helpButton;
     private final MaskFormActions actions;
+    private VisatApp visatApp;
+
+    private boolean defaultMasksInstalled = false;
 
     MaskManagerForm(AbstractToolView maskToolView, ListSelectionListener selectionListener) {
         super(true, selectionListener);
 
         helpButton = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/Help22.png"), false);
         helpButton.setName("helpButton");
+        visatApp = VisatApp.getApp();
         actions = new MaskFormActions(maskToolView, this);
 
+        if (!defaultMasksInstalled) {
+            installDefaultMaskProfiles(maskToolView);
+        }
 
         updateState();
+
+
     }
 
     @Override
@@ -134,6 +152,52 @@ class MaskManagerForm extends MaskForm {
         buttonPanel.add(helpButton, gbc);
         return buttonPanel;
     }
+
+
+    private void installDefaultMaskProfiles(AbstractToolView maskToolView) {
+        final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
+        final File auxdataDir = getMasksAuxdataDir();
+
+        final ResourceInstaller resourceInstaller = new ResourceInstaller(codeSourceUrl, "auxdata/masks/",
+                auxdataDir);
+        ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(maskToolView.getPaneControl(),
+                "Installing Masks Auxdata...") {
+            @Override
+            protected Object doInBackground(com.bc.ceres.core.ProgressMonitor progressMonitor) throws Exception {
+                resourceInstaller.install(".*.xml", progressMonitor, false);
+                defaultMasksInstalled = true;
+                return Boolean.TRUE;
+            }
+
+            /**
+             * Executed on the <i>Event Dispatch Thread</i> after the {@code doInBackground}
+             * method is finished. The default
+             * implementation does nothing. Subclasses may override this method to
+             * perform completion actions on the <i>Event Dispatch Thread</i>. Note
+             * that you can query status inside the implementation of this method to
+             * determine the result of this task or whether this task has been cancelled.
+             *
+             * @see #doInBackground
+             * @see #isCancelled()
+             * @see #get
+             */
+            @Override
+            protected void done() {
+                try {
+                    get();
+                } catch (Exception e) {
+                    visatApp.getLogger().log(Level.SEVERE, "Could not install Masks auxdata", e);
+                }
+            }
+        };
+        swingWorker.executeWithBlocking();
+    }
+
+
+    private File getMasksAuxdataDir() {
+        return new File(SystemUtils.getApplicationDataDir(), "beam-ui/auxdata/masks");
+    }
+
 
 
 //    public JPanel createContentPanel() {

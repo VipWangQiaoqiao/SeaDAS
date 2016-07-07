@@ -84,7 +84,7 @@ class ColorManipulationForm {
     private final ProductNodeListener productNodeListener;
     private boolean defaultColorPalettesInstalled;
     private boolean defaultRgbProfilesInstalled;
-    private boolean defaultMasksInstalled;
+
     private JPanel contentPanel;
     private final ColorManipulationToolView toolView;
     private ColorManipulationChildForm childForm;
@@ -127,9 +127,6 @@ class ColorManipulationForm {
             installDefaultRgbProfiles();
         }
 
-        if (!defaultMasksInstalled) {
-            installDefaultMaskProfiles();
-        }
 
         return contentPanel;
     }
@@ -981,49 +978,6 @@ class ColorManipulationForm {
     }
 
 
-    // todo Danny added this masks installer.  It may be odd to have it here but this is where all auxdir installers currently are and was easy to add here.  Later it can be relocated if desired
-    private File getMasksAuxdataDir() {
-        return new File(SystemUtils.getApplicationDataDir(), "beam-ui/auxdata/masks");
-    }
-
-    private void installDefaultMaskProfiles() {
-        final URL codeSourceUrl = BeamUiActivator.class.getProtectionDomain().getCodeSource().getLocation();
-        final File auxdataDir = getMasksAuxdataDir();
-
-        final ResourceInstaller resourceInstaller = new ResourceInstaller(codeSourceUrl, "auxdata/masks/",
-                auxdataDir);
-        ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(toolView.getPaneControl(),
-                "Installing Masks Auxdata...") {
-            @Override
-            protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
-                resourceInstaller.install(".*.txt", progressMonitor, false);
-                defaultMasksInstalled = true;
-                return Boolean.TRUE;
-            }
-
-            /**
-             * Executed on the <i>Event Dispatch Thread</i> after the {@code doInBackground}
-             * method is finished. The default
-             * implementation does nothing. Subclasses may override this method to
-             * perform completion actions on the <i>Event Dispatch Thread</i>. Note
-             * that you can query status inside the implementation of this method to
-             * determine the result of this task or whether this task has been cancelled.
-             *
-             * @see #doInBackground
-             * @see #isCancelled()
-             * @see #get
-             */
-            @Override
-            protected void done() {
-                try {
-                    get();
-                } catch (Exception e) {
-                    visatApp.getLogger().log(Level.SEVERE, "Could not install Masks auxdata", e);
-                }
-            }
-        };
-        swingWorker.executeWithBlocking();
-    }
 
 
 
