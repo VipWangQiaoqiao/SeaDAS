@@ -22,6 +22,8 @@ import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 // @todo 2 nf/** - if orientation is vertical, sample values should increase from bottom to top
@@ -343,6 +345,7 @@ public class ImageLegend {
         final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
 
         double value, weight;
+        double roundedValue,adjustedWeight;
         colorBarInfos.clear();
 
         if (DISTRIB_EVEN_STR.equals(getDistributionType())) {
@@ -356,15 +359,24 @@ public class ImageLegend {
                     double linearValue = getLinearValue(weight, min, max);
                     if (imageInfo.isLogScaled()) {
                         value = getLogarithmicValue(linearValue, min, max);
+//                        roundedValue = round(value,decimalPlaces-1);
+//                        adjustedWeight = getLinearWeightFromLogValue(roundedValue, min, max);
                     } else {
                         value = linearValue;
+//                        roundedValue = round(linearValue,decimalPlaces);
+//                        adjustedWeight = getLinearWeightFromLinearValue(roundedValue, min, max);
                     }
 
-                    weight = getValidWeight(weight);
-                    if (weight != INVALID_WEIGHT) {
+
+                    // todo try to make some kind of rounding thing work
+                    roundedValue = value;
+                    adjustedWeight = weight;
+
+                    adjustedWeight = getValidWeight(adjustedWeight);
+                    if (adjustedWeight != INVALID_WEIGHT) {
                         if (getScalingFactor() != 0) {
-                            value = value * getScalingFactor();
-                            ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
+                            roundedValue = roundedValue * getScalingFactor();
+                            ColorBarInfo colorBarInfo = new ColorBarInfo(roundedValue, adjustedWeight, getDecimalPlaces());
                             colorBarInfos.add(colorBarInfo);
                             manualPointsArrayList.add(colorBarInfo.getFormattedValue());
                         }
@@ -1288,4 +1300,13 @@ public class ImageLegend {
     public void setCenterOnLayer(boolean centerOnLayer) {
         this.centerOnLayer = centerOnLayer;
     }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 }
+

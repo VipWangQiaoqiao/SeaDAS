@@ -25,6 +25,7 @@ public class ColorBarInfo {
         setLocationWeight(locationWeight);
         setFormattedValue(formattedValue);
     }
+
     public double getValue() {
         return value;
     }
@@ -50,18 +51,61 @@ public class ColorBarInfo {
         this.formattedValue = formattedValue;
     }
 
+
     private void setFormattedValue() {
         StringBuilder decimalFormatStringBuilder = new StringBuilder("0");
-        for (int j = 0; j < getDecimalPlaces(); j++) {
-            if (j == 0) {
-                decimalFormatStringBuilder.append(".");
-            }
-            decimalFormatStringBuilder.append("0");
 
+        //todo look into this but it works badly for decimal places of 1 or 0 (default behavior is dynamic anyway)
+        if (getDecimalPlaces() < 2) {
+            setDecimalPlaces(2);
         }
 
-        this.formattedValue = new DecimalFormat(decimalFormatStringBuilder.toString()).format(getValue()).toString();
+        if (getDecimalPlaces() > 0) {
+
+            double actualDecimalPlaces = getDecimalPlaces();
+            double minValue = 1;
+            for (int j = 0; j < getDecimalPlaces(); j++) {
+                if (j > 0) {
+                    minValue = minValue / 10.0;
+                }
+            }
+
+            // handle smaller numbers
+            while ((getValue()) < minValue) {
+                minValue = minValue / 10.0;
+                actualDecimalPlaces++;
+            }
+
+            //set max decimal places
+            for (int j = 0; j < actualDecimalPlaces; j++) {
+                if (j == 0) {
+                    decimalFormatStringBuilder.append(".");
+                }
+                decimalFormatStringBuilder.append("0");
+
+            }
+
+            String formattedDecimalValue = new DecimalFormat(decimalFormatStringBuilder.toString()).format(getValue()).toString();
+
+
+            // trim off trailing zeros
+            while (formattedDecimalValue.length() > 0 && formattedDecimalValue.endsWith("0")) {
+                formattedDecimalValue = formattedDecimalValue.substring(0, formattedDecimalValue.length() - 1);
+            }
+
+            // trim of period in the case of an integer
+            if (formattedDecimalValue.length() > 0 && formattedDecimalValue.endsWith(".")) {
+                formattedDecimalValue = formattedDecimalValue.substring(0, formattedDecimalValue.length() - 1);
+            }
+
+
+            this.formattedValue = formattedDecimalValue;
+        } else {
+            String formattedDecimalValue = new DecimalFormat(decimalFormatStringBuilder.toString()).format(getValue()).toString();
+            this.formattedValue = formattedDecimalValue;
+        }
     }
+
 
     public int getDecimalPlaces() {
         return decimalPlaces;

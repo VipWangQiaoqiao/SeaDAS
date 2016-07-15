@@ -942,6 +942,7 @@ public class ImageManager {
             maxSample = getSample(cpd.getLastPoint());
         }
         final int numColors = cpd.getNumColors();
+        // todo check this out sometime
         final double scalingFactor = 1 / (numColors - 1.0);
         final Color[] colorPalette = new Color[numColors];
         int pointIndex = 0;
