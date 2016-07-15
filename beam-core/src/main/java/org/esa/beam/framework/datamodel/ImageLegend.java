@@ -1044,8 +1044,8 @@ public class ImageLegend {
 
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
-        double linearWeight = Math.log(logValue / a) / b;
-        linearWeight = linearWeight / (max - min);
+        double linearValue = Math.log(logValue / a) / b;
+        double linearWeight = (linearValue-min) / (max - min);
 
         // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
         if (logValue > min && linearWeight < 0) {
