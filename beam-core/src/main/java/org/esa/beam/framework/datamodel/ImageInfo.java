@@ -310,7 +310,7 @@ public class ImageInfo implements Cloneable {
 //                for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
 //                    if (maxTargetValue != minTargetValue) {
 //                        double weight = (sourceCPD.getPointAt(i).getSample() - minTargetValue) / (minTargetValue - maxTargetValue);
-//                        double logValue = getLogarithmicValue(weight, minTargetValue, maxTargetValue);
+//                        double logValue = getLogarithmicValueUsingLinearWeight(weight, minTargetValue, maxTargetValue);
 //                        targetCPD.getPointAt(i).setSample(logValue);
 //                        targetCPD.getPointAt(i).setColor(sourceCPD.getPointAt(i).getColor());
 //                        targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());

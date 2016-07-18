@@ -53,6 +53,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String MANUAL_POINTS_PARAM_STR = "legend.fullCustomAddThesePoints";
     //    private static final String LABEL_FONT_SIZE_PARAM_STR = "legend.fontSize";
     private static final String DECIMAL_PLACES_PARAM_STR = "legend.decimalPlaces";
+    private static final String DECIMAL_PLACES_FORCE_PARAM_STR = "legend.decimalPlacesForce";
     private static final String FOREGROUND_COLOR_PARAM_STR = "legend.foregroundColor";
     private static final String BACKGROUND_COLOR_PARAM_STR = "legend.backgroundColor";
     //   private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
@@ -175,6 +176,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             view.getColorBarParamInfo().setDistributionType(imageLegend.getDistributionType());
             view.getColorBarParamInfo().setNumTickMarks(imageLegend.getNumberOfTicks());
             view.getColorBarParamInfo().setDecimalPlaces(imageLegend.getDecimalPlaces());
+            view.getColorBarParamInfo().setDecimalPlacesForce(new Boolean(imageLegend.isDecimalPlacesForce()));
             view.getColorBarParamInfo().setForegroundColor(imageLegend.getForegroundColor());
             view.getColorBarParamInfo().setBackgroundColor(imageLegend.getBackgroundColor());
         view.getColorBarParamInfo().setParamsInitialized(true);
@@ -300,10 +302,16 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         paramGroup.addParameter(param);
 
         param = new Parameter(DECIMAL_PLACES_PARAM_STR, view.getColorBarParamInfo().getDecimalPlaces());
-        param.getProperties().setLabel("Decimal Places");
+        param.getProperties().setLabel("Decimal Places*");
         param.getProperties().setMinValue(0);
-        param.getProperties().setMaxValue(5);
+        param.getProperties().setMaxValue(8);
         paramGroup.addParameter(param);
+
+
+        param = new Parameter(DECIMAL_PLACES_FORCE_PARAM_STR, view.getColorBarParamInfo().isDecimalPlacesForce());
+        param.getProperties().setLabel("Force Decimal Places");
+        paramGroup.addParameter(param);
+
 
         param = new Parameter(FOREGROUND_COLOR_PARAM_STR, view.getColorBarParamInfo().getForegroundColor());
         param.getProperties().setLabel("Text Color");
@@ -417,6 +425,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(DECIMAL_PLACES_PARAM_STR).getValue();
         imageLegend.setDecimalPlaces((Integer) value);
 
+        value = legendParamGroup.getParameter(DECIMAL_PLACES_FORCE_PARAM_STR).getValue();
+        imageLegend.setDecimalPlacesForce((Boolean) value);
+
         value = legendParamGroup.getParameter(BACKGROUND_COLOR_PARAM_STR).getValue();
         imageLegend.setBackgroundColor((Color) value);
 
@@ -449,6 +460,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter backgroundColorParam;
         private Parameter foregroundColorParam;
         private Parameter decimalPlacesParam;
+        private Parameter decimalPlacesForceParam;
         private Parameter fullCustomAddThesePointsParam;
 
         private JPanel evenDistribJPanel;
@@ -512,14 +524,17 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 //                }
 
                 decimalPlacesParam.setUIEnabled(true);
+                decimalPlacesForceParam.setUIEnabled(true);
                 fullCustomAddThesePointsParam.setUIEnabled(false);
             } else if (ImageLegend.DISTRIB_EXACT_STR.equals(distributionTypeParam.getValue())) {
                 numberOfTicksParam.setUIEnabled(false);
                 decimalPlacesParam.setUIEnabled(true);
+                decimalPlacesForceParam.setUIEnabled(true);
                 fullCustomAddThesePointsParam.setUIEnabled(false);
             } else if (ImageLegend.DISTRIB_MANUAL_STR.equals(distributionTypeParam.getValue())) {
                 numberOfTicksParam.setUIEnabled(false);
                 decimalPlacesParam.setUIEnabled(false);
+                decimalPlacesForceParam.setUIEnabled(false);
                 fullCustomAddThesePointsParam.setUIEnabled(true);
             }
         }
@@ -705,19 +720,31 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.weightx = 1.0;
-            jPanel.add(decimalPlacesParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(decimalPlacesParam.getEditor().getEditorComponent(), gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.weightx = 1.0;
             JLabel scalingFactorlabel = scalingFactorParam.getEditor().getLabelComponent();
             scalingFactorlabel.setToolTipText("Multiplication factor to be applied to colorbar points (Note this will change units so user will need to adjust units accordingly)");
 
             jPanel.add(scalingFactorlabel, gbc);
             gbc.gridx = 1;
             jPanel.add(scalingFactorParam.getEditor().getEditorComponent(), gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.weightx = 1.0;
+            JLabel decimalPlacesLabel = decimalPlacesParam.getEditor().getLabelComponent();
+            decimalPlacesLabel.setToolTipText("Adds more decimal places if needed for smaller numbers, trims off trailing zeros");
+            jPanel.add(decimalPlacesLabel, gbc);
+            gbc.gridx = 1;
+            jPanel.add(decimalPlacesParam.getEditor().getEditorComponent(), gbc);
+
+
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.gridwidth = 2;
+            jPanel.add(decimalPlacesForceParam.getEditor().getEditorComponent(), gbc);
+            gbc.gridwidth = 1;
+
+
 
 
             return jPanel;
@@ -888,6 +915,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             backgroundColorParam = paramGroup.getParameter(BACKGROUND_COLOR_PARAM_STR);
             transparentParam = paramGroup.getParameter(TRANSPARENT_PARAM_STR);
             decimalPlacesParam = paramGroup.getParameter(DECIMAL_PLACES_PARAM_STR);
+            decimalPlacesForceParam = paramGroup.getParameter(DECIMAL_PLACES_FORCE_PARAM_STR);
             headerUnitsParam = paramGroup.getParameter(TITLE_UNITS_PARAM_STR);
             fullCustomAddThesePointsParam = paramGroup.getParameter(MANUAL_POINTS_PARAM_STR);
 

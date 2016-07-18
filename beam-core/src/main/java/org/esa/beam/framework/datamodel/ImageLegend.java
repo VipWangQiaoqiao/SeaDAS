@@ -87,6 +87,7 @@ public class ImageLegend {
     private float backgroundTransparency;
     private boolean antialiasing;
     private int decimalPlaces;
+    private boolean decimalPlacesForce;
     private String fullCustomAddThesePoints;
 
     private double scalingFactor;
@@ -127,6 +128,7 @@ public class ImageLegend {
         backgroundTransparency = 1.0f;
         antialiasing = true;
         decimalPlaces = 2;
+        decimalPlacesForce = false;
         setFullCustomAddThesePoints("");
         tickWidth = DEFAULT_TICKMARK_WIDTH;
 
@@ -356,13 +358,13 @@ public class ImageLegend {
                 for (int i = 0; i < getNumberOfTicks(); i++) {
 
                     weight = i * normalizedDelta;
-                    double linearValue = getLinearValue(weight, min, max);
+                    double linearValue = getLinearValueUsingLinearWeight(weight, min, max);
                     if (imageInfo.isLogScaled()) {
-                        value = getLogarithmicValue(linearValue, min, max);
+                        value = getLogarithmicValueUsingLinearWeight(weight, min, max);
 //                        roundedValue = round(value,decimalPlaces-1);
 //                        adjustedWeight = getLinearWeightFromLogValue(roundedValue, min, max);
                     } else {
-                        value = linearValue;
+                        value = getLinearValueUsingLinearWeight(weight, min, max);
 //                        roundedValue = round(linearValue,decimalPlaces);
 //                        adjustedWeight = getLinearWeightFromLinearValue(roundedValue, min, max);
                     }
@@ -376,7 +378,21 @@ public class ImageLegend {
                     if (adjustedWeight != INVALID_WEIGHT) {
                         if (getScalingFactor() != 0) {
                             roundedValue = roundedValue * getScalingFactor();
-                            ColorBarInfo colorBarInfo = new ColorBarInfo(roundedValue, adjustedWeight, getDecimalPlaces());
+                            ColorBarInfo colorBarInfo = new ColorBarInfo(roundedValue, adjustedWeight, getDecimalPlaces(), isDecimalPlacesForce());
+
+                            double newValue = Double.valueOf(colorBarInfo.getFormattedValue()) / getScalingFactor();
+                            double newWeight;
+                            if (imageInfo.isLogScaled()) {
+                                 newWeight = getLinearWeightFromLogValue(newValue, min, max);
+                            } else {
+                                 newWeight = getLinearWeightFromLinearValue(newValue, min, max);
+                            }
+
+                            // adjust weight to match formatted string
+                            colorBarInfo.setLocationWeight(newWeight);
+
+
+
                             colorBarInfos.add(colorBarInfo);
                             manualPointsArrayList.add(colorBarInfo.getFormattedValue());
                         }
@@ -407,7 +423,7 @@ public class ImageLegend {
                 if (weight != INVALID_WEIGHT) {
                     if (getScalingFactor() != 0) {
                         value = value * getScalingFactor();
-                        ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces());
+                        ColorBarInfo colorBarInfo = new ColorBarInfo(value, weight, getDecimalPlaces(), isDecimalPlacesForce());
                         colorBarInfos.add(colorBarInfo);
                         manualPointsArrayList.add(colorBarInfo.getFormattedValue());
                     }
@@ -984,7 +1000,7 @@ public class ImageLegend {
     }
 
 
-    private double getLinearWeightFromLinearValue(double linearValue, double min, double max) {
+    public static double getLinearWeightFromLinearValue(double linearValue, double min, double max) {
 
         // Prevent extrapolation which could occur due to machine roundoffs in the calculations
         if (linearValue == min) {
@@ -1013,38 +1029,7 @@ public class ImageLegend {
     }
 
 
-    private double getLinearValue(double linearWeight, double min, double max) {
-
-        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
-        if (linearWeight == 0) {
-            return min;
-        }
-        if (linearWeight == 1) {
-            return max;
-        }
-
-        double deltaNormalized = (max - min);
-        double linearValue = min + linearWeight * (deltaNormalized);
-
-        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
-        if (linearWeight > 0 && linearValue < min) {
-            return min;
-        }
-        if (linearWeight < 1 && linearValue > max) {
-            return max;
-        }
-        if (linearWeight < 0 && linearValue >= min) {
-            return min - (max-min)*FORCED_CHANGE_FACTOR;
-        }
-        if (linearWeight > 1 && linearValue <= max) {
-            return max + (max-min)*FORCED_CHANGE_FACTOR;
-        }
-
-        return linearValue;
-    }
-
-
-    private double getLinearWeightFromLogValue(double logValue, double min, double max) {
+    public static double getLinearWeightFromLogValue(double logValue, double min, double max) {
 
         // Prevent extrapolation which could occur due to machine roundoffs in the calculations
         if (logValue == min) {
@@ -1077,7 +1062,42 @@ public class ImageLegend {
     }
 
 
-    private double getLogarithmicValue(double linearValue, double min, double max) {
+    public static double getLinearValueUsingLinearWeight(double linearWeight, double min, double max) {
+
+        // Prevent extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight == 0) {
+            return min;
+        }
+        if (linearWeight == 1) {
+            return max;
+        }
+
+        double deltaNormalized = (max - min);
+        double linearValue = min + linearWeight * (deltaNormalized);
+
+        // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
+        if (linearWeight > 0 && linearValue < min) {
+            return min;
+        }
+        if (linearWeight < 1 && linearValue > max) {
+            return max;
+        }
+        if (linearWeight < 0 && linearValue >= min) {
+            return min - (max-min)*FORCED_CHANGE_FACTOR;
+        }
+        if (linearWeight > 1 && linearValue <= max) {
+            return max + (max-min)*FORCED_CHANGE_FACTOR;
+        }
+
+        return linearValue;
+    }
+
+
+
+
+    public static double getLogarithmicValueUsingLinearWeight(double weight, double min, double max) {
+
+        double linearValue = getLinearValueUsingLinearWeight(weight, min, max);
 
         // Prevent extrapolation which could occur due to machine roundoffs in the calculations
         if (linearValue == min) {
@@ -1307,6 +1327,14 @@ public class ImageLegend {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    public boolean isDecimalPlacesForce() {
+        return decimalPlacesForce;
+    }
+
+    public void setDecimalPlacesForce(boolean decimalPlacesForce) {
+        this.decimalPlacesForce = decimalPlacesForce;
     }
 }
 

@@ -34,6 +34,7 @@ public class ColorBarParamInfo {
     public static final String DEFAULT_DISTRIBUTION_TYPE = ImageLegend.DISTRIB_EVEN_STR;
     public static final int DEFAULT_NUM_TICK_MARKS = 5;
     public static final int DEFAULT_DECIMAL_PLACES = 2;
+    private static final boolean DEFAULT_DECIMAL_PLACES_FORCE = false;
     public static final Color DEFAULT_FOREGROUND_COLOR = Color.black;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
 
@@ -58,6 +59,7 @@ public class ColorBarParamInfo {
     private String distributionType = DEFAULT_DISTRIBUTION_TYPE;
     private int numTickMarks = DEFAULT_NUM_TICK_MARKS;
     private int decimalPlaces = DEFAULT_DECIMAL_PLACES;
+    private boolean decimalPlacesForce = DEFAULT_DECIMAL_PLACES_FORCE;
     private Color foregroundColor = DEFAULT_FOREGROUND_COLOR;
     private Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
@@ -69,6 +71,8 @@ public class ColorBarParamInfo {
     public ColorBarParamInfo() {
 
     }
+
+
 
     public int getLabelsFontSize() {
         return labelsFontSize;
@@ -228,5 +232,13 @@ public class ColorBarParamInfo {
 
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+    }
+
+    public boolean isDecimalPlacesForce() {
+        return decimalPlacesForce;
+    }
+
+    public void setDecimalPlacesForce(boolean decimalPlacesForce) {
+        this.decimalPlacesForce = decimalPlacesForce;
     }
 }
