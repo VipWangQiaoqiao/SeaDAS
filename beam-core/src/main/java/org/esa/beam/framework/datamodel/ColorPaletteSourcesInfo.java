@@ -15,6 +15,10 @@ public class ColorPaletteSourcesInfo {
 
     private boolean paletteInitialized = false;
 
+    private String colorBarLabels = "";
+    private double colorBarMin;
+    private double colorBarMax;
+    private String colorBarTitle = "";
 
 
     private static final String ALTERED_STRING = "(Altered) ";
@@ -109,5 +113,37 @@ public class ColorPaletteSourcesInfo {
 
     public void setPaletteInitialized(boolean paletteInitialized) {
         this.paletteInitialized = paletteInitialized;
+    }
+
+    public String getColorBarLabels() {
+        return colorBarLabels;
+    }
+
+    public void setColorBarLabels(String colorBarLabels) {
+        this.colorBarLabels = colorBarLabels;
+    }
+
+    public double getColorBarMin() {
+        return colorBarMin;
+    }
+
+    public void setColorBarMin(double colorBarMin) {
+        this.colorBarMin = colorBarMin;
+    }
+
+    public double getColorBarMax() {
+        return colorBarMax;
+    }
+
+    public void setColorBarMax(double colorBarMax) {
+        this.colorBarMax = colorBarMax;
+    }
+
+    public String getColorBarTitle() {
+        return colorBarTitle;
+    }
+
+    public void setColorBarTitle(String colorBarTitle) {
+        this.colorBarTitle = colorBarTitle;
     }
 }

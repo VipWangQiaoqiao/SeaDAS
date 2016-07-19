@@ -31,7 +31,7 @@ public class ColorBarParamInfo {
     public static final Boolean DEFAULT_CENTER_ON_LAYER = Boolean.TRUE;
     public static final String DEFAULT_MANUAL_POINTS = "";
     public static final String DEFAULT_ORIENTATION = HORIZONTAL_STR;
-    public static final String DEFAULT_DISTRIBUTION_TYPE = ImageLegend.DISTRIB_EVEN_STR;
+    public static final String DEFAULT_DISTRIBUTION_TYPE = ImageLegend.DISTRIB_MANUAL_STR;
     public static final int DEFAULT_NUM_TICK_MARKS = 5;
     public static final int DEFAULT_DECIMAL_PLACES = 2;
     private static final boolean DEFAULT_DECIMAL_PLACES_FORCE = false;

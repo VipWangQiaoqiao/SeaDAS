@@ -17,11 +17,13 @@ package org.esa.beam.framework.datamodel;
 
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.util.StringUtils;
+import org.esa.beam.util.SystemUtils;
 
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -116,6 +118,7 @@ public class ImageLegend {
     private int tickWidth;
     private int borderLineWidth;
 
+
     public ImageLegend(ImageInfo imageInfo, RasterDataNode raster) {
         this.imageInfo = imageInfo;
         this.raster = raster;
@@ -128,11 +131,40 @@ public class ImageLegend {
         backgroundTransparency = 1.0f;
         antialiasing = true;
         decimalPlaces = 2;
+        scalingFactor = 1;
         decimalPlacesForce = false;
         setFullCustomAddThesePoints("");
         tickWidth = DEFAULT_TICKMARK_WIDTH;
+    }
+
+    public void initDefaults() {
+        ColorPaletteSourcesInfo colorPaletteSourcesInfo = raster.getImageInfo().getColorPaletteSourcesInfo();
+
+        if (colorPaletteSourcesInfo != null) {
+            final String schemeName = colorPaletteSourcesInfo.getColorPaletteSchemeName();
+            final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
+            final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
 
 
+            if (schemeName != null && schemeName.equals("chlor_a") && colorPaletteSourcesInfo.getColorBarMax() == max && colorPaletteSourcesInfo.getColorBarMin() == min) {
+
+//                    String test = "0.01,0.03,0.1,0.3,1,3,10";
+                //                    String headerText = "Chlorophyll";
+                String test = colorPaletteSourcesInfo.getColorBarLabels();
+                String headerText = colorPaletteSourcesInfo.getColorBarTitle();
+
+                setHeaderText(headerText);
+                setDistributionType(ImageLegend.DISTRIB_MANUAL_STR);
+                setFullCustomAddThesePoints(test);
+
+            } else {
+                setNumberOfTicks(5);
+                setScalingFactor(1.0);
+                setDecimalPlaces(2);
+                distributeEvenly();
+                setDistributionType(ImageLegend.DISTRIB_MANUAL_STR);
+            }
+        }
     }
 
     public ImageInfo getImageInfo() {
@@ -341,68 +373,33 @@ public class ImageLegend {
         return bi;
     }
 
+    private File getColorPalettesAuxdataDir() {
+        return new File(SystemUtils.getApplicationDataDir(), "beam-ui/auxdata/color-palettes");
+    }
+
     private void createColorBarInfos() {
 
         final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
         final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
 
         double value, weight;
-        double roundedValue,adjustedWeight;
+        double roundedValue, adjustedWeight;
         colorBarInfos.clear();
 
+        String schemeName = imageInfo.getColorPaletteSourcesInfo().getColorPaletteSchemeName();
+        boolean isDefault = false;
+
+
+//        if (DISTRIB_DEFAULT_STR.equals(getDistributionType()) && schemeName != null && schemeName.equals("chlor_a")) {
+//            String test = "0.01,0.03,0.1,0.3,1,3,10";
+//    //        setHeaderText("Chlorophyll");
+//            setFullCustomAddThesePoints(test);
+//            isDefault = true;
+//        }
+
+
         if (DISTRIB_EVEN_STR.equals(getDistributionType())) {
-            if (getNumberOfTicks() >= 2) {
-                ArrayList<String> manualPointsArrayList = new ArrayList<>();
-                double normalizedDelta = (1.0 / (getNumberOfTicks() - 1.0));
-
-                for (int i = 0; i < getNumberOfTicks(); i++) {
-
-                    weight = i * normalizedDelta;
-                    double linearValue = getLinearValueUsingLinearWeight(weight, min, max);
-                    if (imageInfo.isLogScaled()) {
-                        value = getLogarithmicValueUsingLinearWeight(weight, min, max);
-//                        roundedValue = round(value,decimalPlaces-1);
-//                        adjustedWeight = getLinearWeightFromLogValue(roundedValue, min, max);
-                    } else {
-                        value = getLinearValueUsingLinearWeight(weight, min, max);
-//                        roundedValue = round(linearValue,decimalPlaces);
-//                        adjustedWeight = getLinearWeightFromLinearValue(roundedValue, min, max);
-                    }
-
-
-                    // todo try to make some kind of rounding thing work
-                    roundedValue = value;
-                    adjustedWeight = weight;
-
-                    adjustedWeight = getValidWeight(adjustedWeight);
-                    if (adjustedWeight != INVALID_WEIGHT) {
-                        if (getScalingFactor() != 0) {
-                            roundedValue = roundedValue * getScalingFactor();
-                            ColorBarInfo colorBarInfo = new ColorBarInfo(roundedValue, adjustedWeight, getDecimalPlaces(), isDecimalPlacesForce());
-
-                            double newValue = Double.valueOf(colorBarInfo.getFormattedValue()) / getScalingFactor();
-                            double newWeight;
-                            if (imageInfo.isLogScaled()) {
-                                 newWeight = getLinearWeightFromLogValue(newValue, min, max);
-                            } else {
-                                 newWeight = getLinearWeightFromLinearValue(newValue, min, max);
-                            }
-
-                            // adjust weight to match formatted string
-                            colorBarInfo.setLocationWeight(newWeight);
-
-
-
-                            colorBarInfos.add(colorBarInfo);
-                            manualPointsArrayList.add(colorBarInfo.getFormattedValue());
-                        }
-                    }
-                }
-                if (manualPointsArrayList.size() > 0) {
-                    String manualPoints = StringUtils.join(manualPointsArrayList, ", ");
-                    setFullCustomAddThesePoints(manualPoints);
-                }
-            }
+            distributeEvenly();
         } else if (DISTRIB_EXACT_STR.equals(getDistributionType())) {
             final int numPointsInCpdFile = getNumGradationCurvePoints();
             int stepSize = 1;
@@ -1042,7 +1039,7 @@ public class ImageLegend {
         double b = Math.log(max / min) / (max - min);
         double a = min / (Math.exp(b * min));
         double linearValue = Math.log(logValue / a) / b;
-        double linearWeight = (linearValue-min) / (max - min);
+        double linearWeight = (linearValue - min) / (max - min);
 
         // Prevent UNEXPECTED interpolation/extrapolation which could occur due to machine roundoffs in the calculations
         if (logValue > min && linearWeight < 0) {
@@ -1083,16 +1080,14 @@ public class ImageLegend {
             return max;
         }
         if (linearWeight < 0 && linearValue >= min) {
-            return min - (max-min)*FORCED_CHANGE_FACTOR;
+            return min - (max - min) * FORCED_CHANGE_FACTOR;
         }
         if (linearWeight > 1 && linearValue <= max) {
-            return max + (max-min)*FORCED_CHANGE_FACTOR;
+            return max + (max - min) * FORCED_CHANGE_FACTOR;
         }
 
         return linearValue;
     }
-
-
 
 
     public static double getLogarithmicValueUsingLinearWeight(double weight, double min, double max) {
@@ -1119,17 +1114,14 @@ public class ImageLegend {
             return max;
         }
         if (linearValue < min && logValue >= min) {
-            return min - (max-min)*FORCED_CHANGE_FACTOR;
+            return min - (max - min) * FORCED_CHANGE_FACTOR;
         }
         if (linearValue > max && logValue <= max) {
-            return max + (max-min)*FORCED_CHANGE_FACTOR;
+            return max + (max - min) * FORCED_CHANGE_FACTOR;
         }
 
         return logValue;
     }
-
-
-
 
 
     private double normalizeSample(double sample) {
@@ -1336,5 +1328,68 @@ public class ImageLegend {
     public void setDecimalPlacesForce(boolean decimalPlacesForce) {
         this.decimalPlacesForce = decimalPlacesForce;
     }
+
+    public void distributeEvenly() {
+
+        final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
+        final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
+
+        double value, weight;
+        double roundedValue, adjustedWeight;
+        colorBarInfos.clear();
+
+        if (getNumberOfTicks() >= 2) {
+            ArrayList<String> manualPointsArrayList = new ArrayList<>();
+            double normalizedDelta = (1.0 / (getNumberOfTicks() - 1.0));
+
+            for (int i = 0; i < getNumberOfTicks(); i++) {
+
+                weight = i * normalizedDelta;
+                double linearValue = getLinearValueUsingLinearWeight(weight, min, max);
+                if (imageInfo.isLogScaled()) {
+                    value = getLogarithmicValueUsingLinearWeight(weight, min, max);
+//                        roundedValue = round(value,decimalPlaces-1);
+//                        adjustedWeight = getLinearWeightFromLogValue(roundedValue, min, max);
+                } else {
+                    value = getLinearValueUsingLinearWeight(weight, min, max);
+//                        roundedValue = round(linearValue,decimalPlaces);
+//                        adjustedWeight = getLinearWeightFromLinearValue(roundedValue, min, max);
+                }
+
+
+                // todo try to make some kind of rounding thing work
+                roundedValue = value;
+                adjustedWeight = weight;
+
+                adjustedWeight = getValidWeight(adjustedWeight);
+                if (adjustedWeight != INVALID_WEIGHT) {
+                    if (getScalingFactor() != 0) {
+                        roundedValue = roundedValue * getScalingFactor();
+                        ColorBarInfo colorBarInfo = new ColorBarInfo(roundedValue, adjustedWeight, getDecimalPlaces(), isDecimalPlacesForce());
+
+                        double newValue = Double.valueOf(colorBarInfo.getFormattedValue()) / getScalingFactor();
+                        double newWeight;
+                        if (imageInfo.isLogScaled()) {
+                            newWeight = getLinearWeightFromLogValue(newValue, min, max);
+                        } else {
+                            newWeight = getLinearWeightFromLinearValue(newValue, min, max);
+                        }
+
+                        // adjust weight to match formatted string
+                        colorBarInfo.setLocationWeight(newWeight);
+
+
+                        colorBarInfos.add(colorBarInfo);
+                        manualPointsArrayList.add(colorBarInfo.getFormattedValue());
+                    }
+                }
+            }
+            if (manualPointsArrayList.size() > 0) {
+                String manualPoints = StringUtils.join(manualPointsArrayList, ", ");
+                setFullCustomAddThesePoints(manualPoints);
+            }
+        }
+    }
+
 }
 

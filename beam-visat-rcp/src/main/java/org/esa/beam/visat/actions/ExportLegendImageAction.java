@@ -85,16 +85,35 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         imageWidth = view.getRaster().getRasterWidth();
 
         colorBarParamGroup = createColorBarParamGroup(view);
+//        if (!view.getColorBarParamInfo().isParamsInitialized()) {
+//            // originally the title contains a title and units
+//            // we only need to split this apart initially
+//            // once the color bar is created, the settings get stored and reloaded and this step is skipped
+//            splitTitleAndUnits(colorBarParamGroup, view.getRaster());
+//        }
+
+
+        final RasterDataNode raster = view.getRaster();
+
+
+        String schemeName = raster.getImageInfo().getColorPaletteSourcesInfo().getColorPaletteSchemeName();
         if (!view.getColorBarParamInfo().isParamsInitialized()) {
             // originally the title contains a title and units
             // we only need to split this apart initially
             // once the color bar is created, the settings get stored and reloaded and this step is skipped
             splitTitleAndUnits(colorBarParamGroup, view.getRaster());
+
         }
 
 
-        final RasterDataNode raster = view.getRaster();
         imageLegend = new ImageLegend(raster.getImageInfo(), raster);
+        imageLegend.initDefaults();
+        if (imageLegend.getHeaderText() != null && imageLegend.getHeaderText().length() > 0) {
+            colorBarParamGroup.getParameter(TITLE_PARAM_STR).setValue(imageLegend.getHeaderText(), null);
+        }
+        colorBarParamGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR).setValue(ImageLegend.DISTRIB_MANUAL_STR, null);
+        colorBarParamGroup.getParameter(MANUAL_POINTS_PARAM_STR).setValue(imageLegend.getFullCustomAddThesePoints(), null);
+
 
         // this will open a dialog before the file chooser
         final ImageLegendDialog dialog = new ImageLegendDialog(getVisatApp(),
@@ -160,33 +179,33 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         transferParamsToImageLegend(colorBarParamGroup, imageLegend);
         // todo DANNY
         //  if (colorBarLayer) {
-            view.getColorBarParamInfo().setLabelsFontSize(imageLegend.getLabelsFontSize());
-            view.getColorBarParamInfo().setBackgroundTransparencyEnabled(new Boolean(imageLegend.isBackgroundTransparencyEnabled()));
-            view.getColorBarParamInfo().setShowTitle(new Boolean(imageLegend.isShowTitle()));
-            view.getColorBarParamInfo().setTitle(imageLegend.getHeaderText());
-            view.getColorBarParamInfo().setTitleUnits(imageLegend.getHeaderUnitsText());
-            view.getColorBarParamInfo().setTitleFontSize(imageLegend.getTitleFontSize());
-            view.getColorBarParamInfo().setTitleUnitsFontSize(imageLegend.getTitleUnitsFontSize());
-            view.getColorBarParamInfo().setScalingFactor(imageLegend.getScalingFactor());
-            view.getColorBarParamInfo().setColorBarLength(imageLegend.getColorBarLength());
-            view.getColorBarParamInfo().setColorBarThickness(imageLegend.getColorBarThickness());
-            view.getColorBarParamInfo().setLayerScaling(imageLegend.getLayerScaling());
-            view.getColorBarParamInfo().setCenterOnLayer(new Boolean(imageLegend.isCenterOnLayer()));
-            view.getColorBarParamInfo().setManualPoints(imageLegend.getFullCustomAddThesePoints());
-            view.getColorBarParamInfo().setDistributionType(imageLegend.getDistributionType());
-            view.getColorBarParamInfo().setNumTickMarks(imageLegend.getNumberOfTicks());
-            view.getColorBarParamInfo().setDecimalPlaces(imageLegend.getDecimalPlaces());
-            view.getColorBarParamInfo().setDecimalPlacesForce(new Boolean(imageLegend.isDecimalPlacesForce()));
-            view.getColorBarParamInfo().setForegroundColor(imageLegend.getForegroundColor());
-            view.getColorBarParamInfo().setBackgroundColor(imageLegend.getBackgroundColor());
+        view.getColorBarParamInfo().setLabelsFontSize(imageLegend.getLabelsFontSize());
+        view.getColorBarParamInfo().setBackgroundTransparencyEnabled(new Boolean(imageLegend.isBackgroundTransparencyEnabled()));
+        view.getColorBarParamInfo().setShowTitle(new Boolean(imageLegend.isShowTitle()));
+        view.getColorBarParamInfo().setTitle(imageLegend.getHeaderText());
+        view.getColorBarParamInfo().setTitleUnits(imageLegend.getHeaderUnitsText());
+        view.getColorBarParamInfo().setTitleFontSize(imageLegend.getTitleFontSize());
+        view.getColorBarParamInfo().setTitleUnitsFontSize(imageLegend.getTitleUnitsFontSize());
+        view.getColorBarParamInfo().setScalingFactor(imageLegend.getScalingFactor());
+        view.getColorBarParamInfo().setColorBarLength(imageLegend.getColorBarLength());
+        view.getColorBarParamInfo().setColorBarThickness(imageLegend.getColorBarThickness());
+        view.getColorBarParamInfo().setLayerScaling(imageLegend.getLayerScaling());
+        view.getColorBarParamInfo().setCenterOnLayer(new Boolean(imageLegend.isCenterOnLayer()));
+        view.getColorBarParamInfo().setManualPoints(imageLegend.getFullCustomAddThesePoints());
+        view.getColorBarParamInfo().setDistributionType(imageLegend.getDistributionType());
+        view.getColorBarParamInfo().setNumTickMarks(imageLegend.getNumberOfTicks());
+        view.getColorBarParamInfo().setDecimalPlaces(imageLegend.getDecimalPlaces());
+        view.getColorBarParamInfo().setDecimalPlacesForce(new Boolean(imageLegend.isDecimalPlacesForce()));
+        view.getColorBarParamInfo().setForegroundColor(imageLegend.getForegroundColor());
+        view.getColorBarParamInfo().setBackgroundColor(imageLegend.getBackgroundColor());
         view.getColorBarParamInfo().setParamsInitialized(true);
 
-            int orientation = imageLegend.getOrientation();
-            if (orientation == ImageLegend.VERTICAL) {
-                view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.VERTICAL_STR);
-            } else {
-                view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR);
-            }
+        int orientation = imageLegend.getOrientation();
+        if (orientation == ImageLegend.VERTICAL) {
+            view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.VERTICAL_STR);
+        } else {
+            view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR);
+        }
 
 
         //   }
@@ -288,7 +307,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         param = new Parameter(DISTRIBUTION_TYPE_PARAM_STR, view.getColorBarParamInfo().getDistributionType());
         param.getProperties().setLabel("Mode");
-        param.getProperties().setValueSet(new String[]{ImageLegend.DISTRIB_EVEN_STR,
+        param.getProperties().setValueSet(new String[]{
+                ImageLegend.DISTRIB_EVEN_STR,
                 ImageLegend.DISTRIB_MANUAL_STR,
                 ImageLegend.DISTRIB_EXACT_STR
         });
@@ -342,6 +362,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
     }
 
+    public static void modifyTitle(ParamGroup legendParamGroup, String value) {
+        legendParamGroup.getParameter(TITLE_PARAM_STR).setValue(value, null);
+    }
 
     private static JComponent createImageLegendAccessory(final VisatApp visatApp,
                                                          final JFileChooser fileChooser,
@@ -496,7 +519,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             JButton applyButton = (JButton) getButton(ID_APPLY);
 //            applyButton.setText("Attach to Image");
             applyButton.setText("Create Layer");
-//
+
             initUI();
             updateUIState();
             this.paramGroup.addParamChangeListener(new ParamChangeListener() {
@@ -504,6 +527,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
                     updateUIState();
                 }
             });
+
+
         }
 
 
@@ -745,8 +770,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridwidth = 1;
 
 
-
-
             return jPanel;
         }
 
@@ -955,6 +978,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             });
 
             modifyManualPoints(paramGroup, imageLegend.getFullCustomAddThesePoints());
+   //         modifyTitle(paramGroup, imageLegend.getHeaderText());
+
 
             final ModalDialog dialog = new ModalDialog(getParent(), VisatApp.getApp().getAppName() + " - Color Bar Preview", imageDisplay,
                     ID_OK, null);
