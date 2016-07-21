@@ -543,10 +543,11 @@ public class ProductSceneView extends BasicView
                 //      this.productSceneView.setColorPaletteInfo(cpdInfo);
                 getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(matchingColorPaletteInfo.getRootName());
                 //todo Danny test
-//                getImageInfo().getColorPaletteSourcesInfo().setColorBarLabels("0.01,0.5,10.0");
-//                getImageInfo().getColorPaletteSourcesInfo().setColorBarTitle("Chlorophyll");
-//                getImageInfo().getColorPaletteSourcesInfo().setColorBarMin(0.01);
-//                getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(20.0);
+
+                getImageInfo().getColorPaletteSourcesInfo().setColorBarLabels(matchingColorPaletteInfo.getColorBarLabels());
+                getImageInfo().getColorPaletteSourcesInfo().setColorBarTitle(matchingColorPaletteInfo.getColorBarTitle());
+                getImageInfo().getColorPaletteSourcesInfo().setColorBarMin(matchingColorPaletteInfo.getMinValue());
+                getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(matchingColorPaletteInfo.getMaxValue());
 
                 getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
                 getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename());

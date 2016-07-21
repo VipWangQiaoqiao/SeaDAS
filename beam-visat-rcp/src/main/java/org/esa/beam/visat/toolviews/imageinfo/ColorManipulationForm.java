@@ -882,6 +882,9 @@ class ColorManipulationForm {
                 resourceInstaller.install(ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME, progressMonitor, false);
                 resourceInstaller.install(ColorPaletteSchemes.CPD_SCHEMES_FILENAME, progressMonitor, false);
                 resourceInstaller.install(ColorPaletteSchemes.USER_CPD_SCHEMES_FILENAME, progressMonitor, false);
+                resourceInstaller.install(ColorPaletteSchemes.NEW_CPD_SCHEMES_FILENAME, progressMonitor, false);
+                resourceInstaller.install(ColorPaletteSchemes.NEW_CPD_DEFAULTS_FILENAME, progressMonitor, false);
+                resourceInstaller.install(ColorPaletteSchemes.NEW_CPD_SELECTOR_FILENAME, progressMonitor, false);
 
 
 //                File userCpdDefaultsFile = new File(auxdataDir, ColorPaletteSchemes.USER_CPD_DEFAULTS_FILENAME);

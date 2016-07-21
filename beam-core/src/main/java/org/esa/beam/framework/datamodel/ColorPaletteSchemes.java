@@ -27,8 +27,13 @@ public class ColorPaletteSchemes {
     public static final String DEFAULT_CPD_FILENAME = "gray_scale.cpd";
 
 
+    public static final String NEW_CPD_SELECTOR_FILENAME = "color_palette_scheme_selector.txt";
+    public static final String NEW_CPD_DEFAULTS_FILENAME = "color_palette_scheme_defaults.txt";
+    public static final String NEW_CPD_SCHEMES_FILENAME = "color_palette_schemes.txt";
+
+
     public static final String PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED = "palettes.colorBlind.enabled";
-    public static final boolean DEFAULT_PALETTES_COLOR_BLIND_ENABLED =   false;
+    public static final boolean DEFAULT_PALETTES_COLOR_BLIND_ENABLED = false;
 
     public boolean isjComboBoxShouldFire() {
         return jComboBoxShouldFire;
@@ -39,12 +44,20 @@ public class ColorPaletteSchemes {
     }
 
     public static enum Id {
-        STANDARD,
+        SELECTOR,
         DEFAULTS
     }
 
 
     private final String STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME = "Scheme Selector";
+
+    private ArrayList<ColorPaletteInfo> newColorPaletteSchemeInfos = new ArrayList<ColorPaletteInfo>();
+//    private ArrayList<ColorPaletteInfo> newColorPaletteDefaultInfos = new ArrayList<ColorPaletteInfo>();
+//    private ArrayList<ColorPaletteInfo> newColorPaletteSelectorInfos = new ArrayList<ColorPaletteInfo>();
+
+    private File newColorPaletteSchemesFile = null;
+    private File newColorPaletteDefaultsFile = null;
+    private File newColorPaletteSelectorFile = null;
 
 
     private JComboBox jComboBox = null;
@@ -55,27 +68,66 @@ public class ColorPaletteSchemes {
 
     private File colorPaletteDir = null;
     private File schemesFile = null;
-    private File userSchemesFile = null;
+ //   private File userSchemesFile = null;
     private String jComboBoxFirstEntryName = null;
     PropertyMap configuration = null;
     boolean useColorBlind = false;
 
+
+//    public ColorPaletteSchemes(File colorPaletteDir, Id id, boolean userInterfaceMode, PropertyMap configuration) {
+//        this.colorPaletteDir = colorPaletteDir;
+//        this.configuration = configuration;
+//        this.useColorBlind = getUseColorBlind();
+//
+//        switch (id) {
+//            case SELECTOR:
+//                schemesFile = new File(this.colorPaletteDir, CPD_SCHEMES_FILENAME);
+//                userSchemesFile = new File(this.colorPaletteDir, USER_CPD_SCHEMES_FILENAME);
+//                setjComboBoxFirstEntryName(STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
+//                break;
+//            case DEFAULTS:
+//                schemesFile = new File(this.colorPaletteDir, CPD_DEFAULTS_FILENAME);
+//                userSchemesFile = new File(this.colorPaletteDir, USER_CPD_DEFAULTS_FILENAME);
+//                //          setjComboBoxFirstEntryName(DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
+//                break;
+//
+//        }
+//
+//
+//        if (colorPaletteDir != null && colorPaletteDir.exists()) {
+//
+//            if (userInterfaceMode) {
+//                initComboBox();
+//            } else {
+//                // this mode is used for setting the default color scheme for an image when first opened
+//                // it doesn't need comboBoxes, only the colorPaletteInfos is needed
+//                initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, false);
+//                if (userSchemesFile.exists()) {
+//                    initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, false);
+//                }
+//
+//            }
+//
+//            reset();
+//        }
+//    }
 
     public ColorPaletteSchemes(File colorPaletteDir, Id id, boolean userInterfaceMode, PropertyMap configuration) {
         this.colorPaletteDir = colorPaletteDir;
         this.configuration = configuration;
         this.useColorBlind = getUseColorBlind();
 
+
+        initColorPaletteSchemeInfos();
+
         switch (id) {
-            case STANDARD:
-                schemesFile = new File(this.colorPaletteDir, CPD_SCHEMES_FILENAME);
-                userSchemesFile = new File(this.colorPaletteDir, USER_CPD_SCHEMES_FILENAME);
+            case SELECTOR:
+                schemesFile = new File(this.colorPaletteDir, NEW_CPD_SELECTOR_FILENAME);
+
                 setjComboBoxFirstEntryName(STANDARD_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
                 break;
             case DEFAULTS:
-                schemesFile = new File(this.colorPaletteDir, CPD_DEFAULTS_FILENAME);
-                userSchemesFile = new File(this.colorPaletteDir, USER_CPD_DEFAULTS_FILENAME);
-                //          setjComboBoxFirstEntryName(DEFAULTS_SCHEME_COMBO_BOX_FIRST_ENTRY_NAME);
+                schemesFile = new File(this.colorPaletteDir, NEW_CPD_DEFAULTS_FILENAME);
                 break;
 
         }
@@ -89,10 +141,6 @@ public class ColorPaletteSchemes {
                 // this mode is used for setting the default color scheme for an image when first opened
                 // it doesn't need comboBoxes, only the colorPaletteInfos is needed
                 initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, false);
-                if (userSchemesFile.exists()) {
-                    initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, false);
-                }
-
             }
 
             reset();
@@ -102,13 +150,11 @@ public class ColorPaletteSchemes {
 
     private void initComboBox() {
 
-        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null,  null, null, 0, 0, false, null, true, true);
+        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null, null, null, 0, 0, false, null, true, true, null, null, null);
         colorPaletteInfos.add(jComboBoxFirstEntryColorPaletteInfo);
 
         initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, true);
-        if (userSchemesFile.exists()) {
-            initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, true);
-        }
+
 
         Object[] colorPaletteInfosArray = colorPaletteInfos.toArray();
 
@@ -137,12 +183,370 @@ public class ColorPaletteSchemes {
         jComboBox.setEditable(false);
         jComboBox.setMaximumRowCount(20);
         if (schemesFile != null) {
-            jComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + userSchemesFile.getName());
+            jComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + schemesFile.getName());
         }
 
 
     }
 
+//    private void initComboBox() {
+//
+//        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null, null, null, 0, 0, false, null, true, true, null, null, null);
+//        colorPaletteInfos.add(jComboBoxFirstEntryColorPaletteInfo);
+//
+//        initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, true);
+//        if (userSchemesFile.exists()) {
+//            initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, userSchemesFile, true);
+//        }
+//
+//        Object[] colorPaletteInfosArray = colorPaletteInfos.toArray();
+//
+//        final String[] toolTipsArray = new String[colorPaletteInfos.size()];
+//
+//        int i = 0;
+//        for (ColorPaletteInfo colorPaletteInfo : colorPaletteInfos) {
+//            toolTipsArray[i] = colorPaletteInfo.getDescription();
+//            i++;
+//        }
+//
+//        final Boolean[] enabledArray = new Boolean[colorPaletteInfos.size()];
+//
+//        i = 0;
+//        for (ColorPaletteInfo colorPaletteInfo : colorPaletteInfos) {
+//            enabledArray[i] = colorPaletteInfo.isEnabled();
+//            i++;
+//        }
+//
+//        final MyComboBoxRenderer myComboBoxRenderer = new MyComboBoxRenderer();
+//        myComboBoxRenderer.setTooltipList(toolTipsArray);
+//        myComboBoxRenderer.setEnabledList(enabledArray);
+//
+//        jComboBox = new JComboBox(colorPaletteInfosArray);
+//        jComboBox.setRenderer(myComboBoxRenderer);
+//        jComboBox.setEditable(false);
+//        jComboBox.setMaximumRowCount(20);
+//        if (schemesFile != null) {
+//            jComboBox.setToolTipText("To modify see file: " + colorPaletteDir + "/" + userSchemesFile.getName());
+//        }
+//
+//
+//    }
+
+
+    private boolean initColorPaletteSchemeInfos() {
+
+
+        newColorPaletteSchemesFile = new File(this.colorPaletteDir, NEW_CPD_SCHEMES_FILENAME);
+        if (!newColorPaletteSchemesFile.exists()) {
+            return false;
+        }
+
+        ArrayList<String> lines = readFileIntoArrayList(newColorPaletteSchemesFile);
+
+
+        int i = 0;
+        for (String line : lines) {
+            line.trim();
+            if (!line.startsWith("#")) {
+                String[] values = line.split(":");
+
+                if (values != null) {
+                    boolean validEntry = true;
+                    boolean fieldsInitialized = false;
+
+                    String id = null;
+                    Double min = null;
+                    Double max = null;
+                    boolean logScaled = false;
+                    String cpdFileNameStandard = null;
+                    String cpdFileNameColorBlind = null;
+                    String colorBarTitle = null;
+                    String colorBarLabels = null;
+                    String description = null;
+                    String rootSchemeName = null;
+
+                    File standardCpdFile = null;
+                    File colorBlindCpdFile = null;
+                    File cpdFile = null;
+
+                    boolean overRide = true;
+
+                    //        ID    MIN   MAX     LOG_SCALE  CPD_FILENAME   CPD_FILENAME(COLORBLIND)  COLORBAR_TITLE    COLORBAR_LABELS     DESCRIPTION
+
+
+
+
+
+                    if (values.length >= 8) {
+
+                        if (values.length >= 9) {
+                            description = values[8].trim();
+                        } else {
+                            description = "";
+                        }
+
+                        if (values.length >= 8) {
+                            colorBarLabels = values[7].trim();
+                        } else {
+                            colorBarLabels = "";
+                        }
+
+                        if (values.length >= 7) {
+                            colorBarTitle = values[6].trim();
+                        } else {
+                            colorBarTitle = "";
+                        }
+
+                        id = values[0].trim();
+                        String minStr = values[1].trim();
+                        String maxStr = values[2].trim();
+                        String logScaledStr = values[3].trim();
+                        cpdFileNameStandard = values[4].trim();
+                        cpdFileNameColorBlind = values[5].trim();
+
+
+
+
+                        if (id != null && id.length() > 0 &&
+                                minStr != null && minStr.length() > 0 &&
+                                maxStr != null && maxStr.length() > 0 &&
+                                logScaledStr != null && logScaledStr.length() > 0 &&
+                                cpdFileNameStandard != null && cpdFileNameStandard.length() > 0 &&
+                                cpdFileNameColorBlind != null && cpdFileNameStandard.length() > 0
+                                ) {
+
+
+                            min = Double.valueOf(minStr);
+                            max = Double.valueOf(maxStr);
+                            logScaled = false;
+                            if (logScaledStr != null && logScaledStr.toLowerCase().equals("true")) {
+                                logScaled = true;
+                            }
+
+                            fieldsInitialized = true;
+                        }
+                    }
+
+                    if (fieldsInitialized) {
+
+                        if (!testMinMax(min, max, logScaled)) {
+                            validEntry = false;
+                        }
+
+                        if (validEntry) {
+                            standardCpdFile = new File(colorPaletteDir, cpdFileNameStandard);
+
+                            if (!standardCpdFile.exists()) {
+                                validEntry = false;
+                                //  standardCpdFile = new File(dirName, DEFAULT_CPD_FILENAME);
+                            }
+                        }
+
+                        if (validEntry) {
+                            colorBlindCpdFile = new File(colorPaletteDir, cpdFileNameColorBlind);
+
+                            if (!colorBlindCpdFile.exists()) {
+                                validEntry = false;
+                            }
+                        }
+
+                        if (validEntry) {
+                            if (getUseColorBlind()) {
+                                cpdFile = colorBlindCpdFile;
+                            } else {
+                                cpdFile = standardCpdFile;
+                            }
+                        }
+
+
+                        if (validEntry) {
+                            ColorPaletteInfo colorPaletteInfo = null;
+
+                            ColorPaletteDef colorPaletteDef;
+                            try {
+                                colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
+                                colorPaletteInfo = new ColorPaletteInfo(id, rootSchemeName, description, cpdFileNameStandard, min, max, logScaled, colorPaletteDef, overRide, true, cpdFileNameColorBlind, colorBarTitle, colorBarLabels);
+
+                            } catch (IOException e) {
+                                //        colorPaletteInfo = new ColorPaletteInfo(name, description);
+                            }
+
+
+                            if (colorPaletteInfo != null) {
+                                if (overRide) {
+                                    // look for previous name which user may be overriding and delete it in the colorPaletteInfo object
+                                    ColorPaletteInfo colorPaletteInfoToDelete = null;
+                                    for (ColorPaletteInfo storedColorPaletteInfo : newColorPaletteSchemeInfos) {
+                                        if (storedColorPaletteInfo.getName().equals(id)) {
+                                            colorPaletteInfoToDelete = storedColorPaletteInfo;
+                                            break;
+                                        }
+                                    }
+                                    if (colorPaletteInfoToDelete != null) {
+                                        newColorPaletteSchemeInfos.remove(colorPaletteInfoToDelete);
+                                    }
+                                }
+                                newColorPaletteSchemeInfos.add(colorPaletteInfo);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+//    private void initColorPaletteInfosOld(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file, boolean schemeSelectorMode) {
+//
+//        ArrayList<String> lines = readFileIntoArrayList(file);
+//
+//
+//        int i = 0;
+//        for (String line : lines) {
+//            line.trim();
+//            if (!line.startsWith("#")) {
+//                String[] values = line.split(":");
+//
+//                if (values != null) {
+//                    boolean validEntry = false;
+//                    boolean fieldsInitialized = false;
+//
+//                    String name = null;
+//                    Double minVal = null;
+//                    Double maxVal = null;
+//                    boolean logScaled = false;
+//                    String cpdFileName = null;
+//                    boolean overRide = false;
+//                    String description = null;
+//                    String rootSchemeName = null;
+//
+//
+//                    if (values.length == 3) {
+//                        name = values[0].trim();
+//                        String desiredScheme = values[1].trim();
+//                        String overRideStr = values[2].trim();
+//
+//                        if (overRideStr != null && overRideStr.toLowerCase().equals("true")) {
+//                            overRide = true;
+//                        }
+//
+//                        if (name != null && name.length() > 0 && desiredScheme != null && desiredScheme.length() > 0) {
+//
+//                            for (ColorPaletteInfo storedColorPaletteInfo : colorPaletteInfos) {
+//                                if (storedColorPaletteInfo.getName().equals(desiredScheme)) {
+//                                    if (!fieldsInitialized ||
+//                                            (fieldsInitialized && overRide)) {
+//                                        description = storedColorPaletteInfo.getDescription();
+//                                        cpdFileName = storedColorPaletteInfo.getCpdFilename();
+//                                        minVal = storedColorPaletteInfo.getMinValue();
+//                                        maxVal = storedColorPaletteInfo.getMaxValue();
+//                                        logScaled = storedColorPaletteInfo.isLogScaled();
+//                                        rootSchemeName = desiredScheme;
+//                                        fieldsInitialized = true;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//
+//                    if (values.length == 6 || values.length == 7) {
+//
+//                        name = values[0].trim();
+//                        String minValStr = values[1].trim();
+//                        String maxValStr = values[2].trim();
+//                        String logScaledStr = values[3].trim();
+//                        cpdFileName = values[4].trim();
+//
+//
+//                        if (name != null && name.length() > 0 &&
+//                                minValStr != null && minValStr.length() > 0 &&
+//                                maxValStr != null && maxValStr.length() > 0 &&
+//                                logScaledStr != null && logScaledStr.length() > 0 &&
+//                                cpdFileName != null && cpdFileName.length() > 0) {
+//
+//                            String overRideStr = null;
+//                            if (values.length >= 6) {
+//                                overRideStr = values[5].trim();
+//                            } else {
+//                                overRideStr = "false";
+//                            }
+//
+//                            if (values.length >= 7) {
+//                                description = values[6].trim();
+//                            } else {
+//                                description = "";
+//                            }
+//
+//                            minVal = Double.valueOf(minValStr);
+//                            maxVal = Double.valueOf(maxValStr);
+//                            logScaled = false;
+//                            if (logScaledStr != null && logScaledStr.toLowerCase().equals("true")) {
+//                                logScaled = true;
+//                            }
+//
+//                            overRide = false;
+//                            if (overRideStr != null && overRideStr.toLowerCase().equals("true")) {
+//                                overRide = true;
+//                            }
+//
+//                            fieldsInitialized = true;
+//                        }
+//                    }
+//
+//                    if (fieldsInitialized) {
+//                        ColorPaletteInfo colorPaletteInfo = null;
+//
+//                        if (testMinMax(minVal, maxVal, logScaled)) {
+//
+//                            File cpdFile = new File(dirName, cpdFileName);
+//                            if (!cpdFile.exists()) {
+//                                cpdFile = new File(dirName, DEFAULT_CPD_FILENAME);
+//                            }
+//
+//                            if (cpdFile.exists()) {
+//                                ColorPaletteDef colorPaletteDef;
+//                                try {
+//                                    colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
+//                                    colorPaletteInfo = new ColorPaletteInfo(name, rootSchemeName, description, cpdFileName, minVal, maxVal, logScaled, colorPaletteDef, overRide, true);
+//
+//                                } catch (IOException e) {
+//                                    //        colorPaletteInfo = new ColorPaletteInfo(name, description);
+//                                }
+//                            } else {
+//                                //      colorPaletteInfo = new ColorPaletteInfo(name, description);
+//                            }
+//                        } else {
+//                            //  colorPaletteInfo = new ColorPaletteInfo(name, description);
+//                        }
+//
+//                        if (colorPaletteInfo != null) {
+//                            if (schemeSelectorMode && overRide) {
+//                                // look for previous name which user may be overriding and delete it in the colorPaletteInfo object
+//                                ColorPaletteInfo colorPaletteInfoToDelete = null;
+//                                for (ColorPaletteInfo storedColorPaletteInfo : colorPaletteInfos) {
+//                                    if (storedColorPaletteInfo.getName().equals(name)) {
+//                                        colorPaletteInfoToDelete = storedColorPaletteInfo;
+//                                        break;
+//                                    }
+//                                }
+//                                if (colorPaletteInfoToDelete != null) {
+//                                    colorPaletteInfos.remove(colorPaletteInfoToDelete);
+//                                }
+//                            }
+//                            colorPaletteInfos.add(colorPaletteInfo);
+//                        }
+//                    }
+//
+//
+//                }
+//            }
+//        }
+//    }
+//
+//
 
     private void initColorPaletteInfos(File dirName, ArrayList<ColorPaletteInfo> colorPaletteInfos, File file, boolean schemeSelectorMode) {
 
@@ -163,33 +567,86 @@ public class ColorPaletteSchemes {
                     Double minVal = null;
                     Double maxVal = null;
                     boolean logScaled = false;
-                    String cpdFileName = null;
-                    boolean overRide = false;
+                    String cpdFileNameStandard = null;
+                    boolean overRide = true;
                     String description = null;
                     String rootSchemeName = null;
+                    String cpdFileNameColorBlind = null;
+                    String colorBarTitle = null;
+                    String colorBarLabels = null;
+
+                    String desiredScheme = null;
+
+                    File standardCpdFile = null;
+                    File colorBlindCpdFile = null;
+                    File cpdFile = null;
 
 
-                    if (values.length == 3) {
+                    //    #PATTERN              SCHEME_ID        :COLORBAR_TITLE(OVERRIDE)    :COLORBAR_LABELS(OVERRIDE)      :DESCRIPTION(OVERRIDE)
+
+
+
+                    if (values.length >= 1) {
                         name = values[0].trim();
-                        String desiredScheme = values[1].trim();
-                        String overRideStr = values[2].trim();
 
-                        if (overRideStr != null && overRideStr.toLowerCase().equals("true")) {
-                            overRide = true;
+
+                        if (values.length >= 5) {
+                            description = values[4].trim();
+                        } else {
+                            description = "";
                         }
+
+                        if (values.length >= 4) {
+                            colorBarLabels = values[3].trim();
+                        } else {
+                            colorBarLabels = "";
+                        }
+
+                        if (values.length >= 3) {
+                            colorBarTitle = values[2].trim();
+                        } else {
+                            colorBarTitle = "";
+                        }
+
+
+                        if (values.length >= 2) {
+                            desiredScheme = values[1].trim();
+                        } else {
+                            desiredScheme = name;
+                        }
+
+
+
+
+
+
 
                         if (name != null && name.length() > 0 && desiredScheme != null && desiredScheme.length() > 0) {
 
-                            for (ColorPaletteInfo storedColorPaletteInfo : colorPaletteInfos) {
+                            for (ColorPaletteInfo storedColorPaletteInfo : newColorPaletteSchemeInfos) {
                                 if (storedColorPaletteInfo.getName().equals(desiredScheme)) {
                                     if (!fieldsInitialized ||
                                             (fieldsInitialized && overRide)) {
-                                        description = storedColorPaletteInfo.getDescription();
-                                        cpdFileName = storedColorPaletteInfo.getCpdFilename();
+
+                                        cpdFileNameStandard = storedColorPaletteInfo.getCpdFilename();
                                         minVal = storedColorPaletteInfo.getMinValue();
                                         maxVal = storedColorPaletteInfo.getMaxValue();
                                         logScaled = storedColorPaletteInfo.isLogScaled();
                                         rootSchemeName = desiredScheme;
+                                        cpdFileNameColorBlind = storedColorPaletteInfo.getCpdFilenameColorBlind();
+
+                                        if (colorBarTitle == null || colorBarTitle.length() == 0) {
+                                            colorBarTitle = storedColorPaletteInfo.getColorBarTitle();
+                                        }
+
+                                        if (colorBarLabels == null || colorBarLabels.length() == 0) {
+                                            colorBarLabels = storedColorPaletteInfo.getColorBarLabels();
+                                        }
+
+                                        if (description == null && description.length() == 0) {
+                                            description = storedColorPaletteInfo.getDescription();
+                                        }
+
                                         fieldsInitialized = true;
                                     }
                                 }
@@ -198,75 +655,28 @@ public class ColorPaletteSchemes {
                     }
 
 
-                    if (values.length == 6 || values.length == 7) {
-
-                        name = values[0].trim();
-                        String minValStr = values[1].trim();
-                        String maxValStr = values[2].trim();
-                        String logScaledStr = values[3].trim();
-                        cpdFileName = values[4].trim();
-
-
-                        if (name != null && name.length() > 0 &&
-                                minValStr != null && minValStr.length() > 0 &&
-                                maxValStr != null && maxValStr.length() > 0 &&
-                                logScaledStr != null && logScaledStr.length() > 0 &&
-                                cpdFileName != null && cpdFileName.length() > 0) {
-
-                            String overRideStr = null;
-                            if (values.length >= 6) {
-                                overRideStr = values[5].trim();
-                            } else {
-                                overRideStr = "false";
-                            }
-
-                            if (values.length >= 7) {
-                                description = values[6].trim();
-                            } else {
-                                description = "";
-                            }
-
-                            minVal = Double.valueOf(minValStr);
-                            maxVal = Double.valueOf(maxValStr);
-                            logScaled = false;
-                            if (logScaledStr != null && logScaledStr.toLowerCase().equals("true")) {
-                                logScaled = true;
-                            }
-
-                            overRide = false;
-                            if (overRideStr != null && overRideStr.toLowerCase().equals("true")) {
-                                overRide = true;
-                            }
-
-                            fieldsInitialized = true;
-                        }
-                    }
-
                     if (fieldsInitialized) {
-                        ColorPaletteInfo colorPaletteInfo = null;
 
-                        if (testMinMax(minVal, maxVal, logScaled)) {
-
-                            File cpdFile = new File(dirName, cpdFileName);
-                            if (!cpdFile.exists()) {
-                                cpdFile = new File(dirName, DEFAULT_CPD_FILENAME);
-                            }
-
-                            if (cpdFile.exists()) {
-                                ColorPaletteDef colorPaletteDef;
-                                try {
-                                    colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
-                                    colorPaletteInfo = new ColorPaletteInfo(name, rootSchemeName, description, cpdFileName, minVal, maxVal, logScaled, colorPaletteDef, overRide, true);
-
-                                } catch (IOException e) {
-                                    //        colorPaletteInfo = new ColorPaletteInfo(name, description);
-                                }
-                            } else {
-                                //      colorPaletteInfo = new ColorPaletteInfo(name, description);
-                            }
+                        colorBlindCpdFile = new File(colorPaletteDir, cpdFileNameColorBlind);
+                        standardCpdFile = new File(colorPaletteDir, cpdFileNameStandard);
+                        if (getUseColorBlind()) {
+                            cpdFile = colorBlindCpdFile;
                         } else {
-                            //  colorPaletteInfo = new ColorPaletteInfo(name, description);
+                            cpdFile = standardCpdFile;
                         }
+
+                        ColorPaletteInfo colorPaletteInfo = null;
+                        ColorPaletteDef colorPaletteDef;
+
+
+                        try {
+                            colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
+                            colorPaletteInfo = new ColorPaletteInfo(name, rootSchemeName, description, cpdFileNameStandard, minVal, maxVal, logScaled, colorPaletteDef, overRide, true, cpdFileNameColorBlind, colorBarTitle, colorBarLabels);
+
+                        } catch (IOException e) {
+                            //        colorPaletteInfo = new ColorPaletteInfo(name, description);
+                        }
+
 
                         if (colorPaletteInfo != null) {
                             if (schemeSelectorMode && overRide) {

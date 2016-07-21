@@ -88,7 +88,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         //     cpdFileNameJLabel.setToolTipText("Currently loaded cpd file name.  Note that the cpd data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
 
 
-        standardColorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir(), ColorPaletteSchemes.Id.STANDARD, true, parentForm.getProductSceneView().getSceneImage().getConfiguration());
+        standardColorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir(), ColorPaletteSchemes.Id.SELECTOR, true, parentForm.getProductSceneView().getSceneImage().getConfiguration());
         VisatApp.getApp().clearStatusBarMessage();
 
         loadWithCPDFileValuesCheckBox = new JCheckBox("Load cpd file exact values", false);

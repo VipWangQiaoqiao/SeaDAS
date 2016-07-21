@@ -108,7 +108,7 @@
  calcite             :
  cdom_index          :
  chisqr_giop         :
- chlor_a             :
+ chlor_a             : chlor_a
  chlor_a_bluegreen   :
  chlor_a_owterr      :
  elev                :

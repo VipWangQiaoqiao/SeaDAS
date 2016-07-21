@@ -8,6 +8,9 @@ public class ColorPaletteInfo {
     private String rootName;
     private String description;
     private String cpdFilename;
+    private String cpdFilenameColorBlind;
+    private String colorBarTitle;
+    private String colorBarLabels;
     private double minValue;
     private double maxValue;
     private boolean isLogScaled;
@@ -16,8 +19,11 @@ public class ColorPaletteInfo {
     private boolean enabled;
     private boolean isOverRide;
 
+
+
+
     public ColorPaletteInfo(String name, String rootName, String description, String cpdFilename, double minValue, double maxValue,
-                            boolean isLogScaled, ColorPaletteDef colorPaletteDef, boolean isOverRide, boolean enabled) {
+                            boolean isLogScaled, ColorPaletteDef colorPaletteDef, boolean isOverRide, boolean enabled, String cpdFilenameColorBlind, String colorBarTitle, String colorBarLabels) {
         this.setName(name);
         if (rootName != null) {
             this.setRootName(rootName);
@@ -32,6 +38,9 @@ public class ColorPaletteInfo {
         this.setEnabled(enabled);
         this.setOverRide(isOverRide);
         this.colorPaletteDef = colorPaletteDef;
+        this.cpdFilenameColorBlind = cpdFilenameColorBlind;
+        this.colorBarLabels = colorBarLabels;
+        this.colorBarTitle = colorBarTitle;
         if (colorPaletteDef != null) {
             this.setSourceLogScaled(colorPaletteDef.isLogScaled());
         } else {
@@ -146,5 +155,29 @@ public class ColorPaletteInfo {
 
     public void setRootName(String rootName) {
         this.rootName = rootName;
+    }
+
+    public String getCpdFilenameColorBlind() {
+        return cpdFilenameColorBlind;
+    }
+
+    public void setCpdFilenameColorBlind(String cpdFilenameColorBlind) {
+        this.cpdFilenameColorBlind = cpdFilenameColorBlind;
+    }
+
+    public String getColorBarTitle() {
+        return colorBarTitle;
+    }
+
+    public void setColorBarTitle(String colorBarTitle) {
+        this.colorBarTitle = colorBarTitle;
+    }
+
+    public String getColorBarLabels() {
+        return colorBarLabels;
+    }
+
+    public void setColorBarLabels(String colorBarLabels) {
+        this.colorBarLabels = colorBarLabels;
     }
 }
