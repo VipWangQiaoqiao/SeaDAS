@@ -18,12 +18,12 @@ import java.util.ArrayList;
 public class ColorPaletteSchemes {
 
 
-    public static final String CPD_DEFAULTS_FILENAME = "scheme_defaults.txt";
-    public static final String CPD_COLORBLIND_DEFAULTS_FILENAME = "scheme_defaults_universal.txt";
-    public static final String CPD_COLORBLIND_SELECTOR_FILENAME = "scheme_selector_universal.txt";
-    public static final String CPD_SCHEMES_FILENAME = "scheme_selector.txt";
-    public static final String USER_CPD_DEFAULTS_FILENAME = "scheme_defaults_user.txt";
-    public static final String USER_CPD_SCHEMES_FILENAME = "scheme_selector_user.txt";
+//    public static final String CPD_DEFAULTS_FILENAME = "scheme_defaults.txt";
+//    public static final String CPD_COLORBLIND_DEFAULTS_FILENAME = "scheme_defaults_universal.txt";
+//    public static final String CPD_COLORBLIND_SELECTOR_FILENAME = "scheme_selector_universal.txt";
+//    public static final String CPD_SCHEMES_FILENAME = "scheme_selector.txt";
+//    public static final String USER_CPD_DEFAULTS_FILENAME = "scheme_defaults_user.txt";
+//    public static final String USER_CPD_SCHEMES_FILENAME = "scheme_selector_user.txt";
     public static final String DEFAULT_CPD_FILENAME = "gray_scale.cpd";
 
 
@@ -643,7 +643,7 @@ public class ColorPaletteSchemes {
                                             colorBarLabels = storedColorPaletteInfo.getColorBarLabels();
                                         }
 
-                                        if (description == null && description.length() == 0) {
+                                        if (description == null || description.length() == 0) {
                                             description = storedColorPaletteInfo.getDescription();
                                         }
 
