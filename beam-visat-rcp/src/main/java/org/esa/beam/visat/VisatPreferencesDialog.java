@@ -22,6 +22,8 @@ import com.bc.ceres.glayer.support.ImageLayer;
 import com.bc.ceres.swing.TableLayout;
 import com.bc.ceres.swing.update.ConnectionConfigData;
 import com.bc.ceres.swing.update.ConnectionConfigPane;
+import org.esa.beam.framework.datamodel.ColorPaletteSchemes;
+import org.esa.beam.framework.datamodel.ImageLegend;
 import org.esa.beam.framework.datamodel.Mask;
 import org.esa.beam.framework.param.ParamChangeEvent;
 import org.esa.beam.framework.param.ParamChangeListener;
@@ -43,7 +45,9 @@ import org.esa.beam.glayer.NoDataLayerType;
 import org.esa.beam.glayer.WorldMapLayerType;
 import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.SystemUtils;
+import org.esa.beam.visat.actions.ExportLegendImageAction;
 import org.esa.beam.visat.actions.ShowModuleManagerAction;
+import org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -103,6 +107,7 @@ import static org.esa.beam.visat.VisatApp.PROPERTY_KEY_SAVE_PRODUCT_ANNOTATIONS;
 import static org.esa.beam.visat.VisatApp.PROPERTY_KEY_SAVE_PRODUCT_HEADERS;
 import static org.esa.beam.visat.VisatApp.PROPERTY_KEY_SAVE_PRODUCT_HISTORY;
 import static org.esa.beam.visat.VisatApp.PROPERTY_KEY_VERSION_CHECK_ENABLED;
+
 import static org.esa.beam.visat.VisatApp.getApp;
 
 public class VisatPreferencesDialog extends ConfigDialog {
@@ -119,6 +124,8 @@ public class VisatPreferencesDialog extends ConfigDialog {
         addRootPage(new ProductSettings());
         addRootPage(new GeolocationDisplayPage());
         addRootPage(new DataIO());
+
+
         final LayerPropertiesPage layerPropertiesPage = new LayerPropertiesPage();
         layerPropertiesPage.addSubPage(new ImageDisplayPage());
         layerPropertiesPage.addSubPage(new NoDataOverlayPage());
@@ -127,6 +134,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
         layerPropertiesPage.addSubPage(new WorldMapLayerPage());
         addRootPage(layerPropertiesPage);
         addRootPage(new RGBImageProfilePage());
+        addRootPage(new ColorPalettesConfigPage());
         addRootPage(new LoggingPage());
         expandAllPages();
     }
@@ -445,6 +453,123 @@ public class VisatPreferencesDialog extends ConfigDialog {
             return UIManager.getLookAndFeel().getClass().getName();
         }
     }
+
+
+
+    public static class ColorPalettesConfigPage extends DefaultConfigPage {
+
+
+        public ColorPalettesConfigPage() {
+            setTitle("Color Palettes"); /*I18N*/
+        }
+
+        @Override
+        protected void initConfigParams(ParamGroup configParams) {
+            final ParamChangeListener paramChangeListener = new ParamChangeListener() {
+                public void parameterValueChanged(ParamChangeEvent event) {
+                    updatePageUI();
+                }
+            };
+
+            Parameter param;
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+
+            param = new Parameter(ColorPaletteSchemes.PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, ColorPaletteSchemes.DEFAULT_PALETTES_COLOR_BLIND_ENABLED);
+            param.getProperties().setLabel("Use color-blind compliant palettes");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+        }
+
+        @Override
+        protected void initPageUI() {
+            JPanel pageUI = createPageUI();
+            setPageUI(pageUI);
+        }
+
+        private JPanel createPageUI() {
+            Parameter param;
+
+            // Font
+            JPanel fontPane = GridBagUtils.createPanel();
+            fontPane.setBorder(UIUtils.createGroupBorder("Color Palette Schemes")); /*I18N*/
+            GridBagConstraints gbc = GridBagUtils.createConstraints("fill=HORIZONTAL,anchor=WEST");
+            gbc.gridy = 0;
+            gbc.insets.bottom = 10;
+
+            param = getConfigParam(ColorPaletteSchemes.PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED);
+            gbc.weightx = 1;
+            gbc.anchor=GridBagConstraints.WEST;
+            gbc.gridwidth = 2;
+            fontPane.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridy++;
+
+
+            gbc.gridwidth = 1;
+            gbc.gridy++;
+            gbc.insets.bottom = 4;
+
+
+
+            //////////////////////////////////////////////////////////////////////////////////////
+            // All together
+            JPanel pageUI = GridBagUtils.createPanel();
+            gbc = GridBagUtils.createConstraints("fill=HORIZONTAL, anchor=WEST, weightx=1, gridy=1");
+
+            pageUI.add(fontPane, gbc);
+            gbc.gridy++;
+            gbc.insets.top = _LINE_INSET_TOP;
+
+            return createPageUIContentPane(pageUI);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @Override
+        public void updatePageUI() {
+//            Parameter param1 = getConfigParam(PROPERTY_KEY_APP_USE_COLOR_BLIND_PALETTES);
+//            boolean enabled = !(Boolean) param1.getValue();
+//            getConfigParam(PROPERTY_KEY_APP_UI_FONT_NAME).setUIEnabled(enabled);
+//            getConfigParam(PROPERTY_KEY_APP_UI_FONT_SIZE).setUIEnabled(enabled);
+        }
+
+        @Override
+        public PropertyMap getConfigParamValues(PropertyMap propertyMap) {
+            propertyMap = super.getConfigParamValues(propertyMap);
+            return propertyMap;
+        }
+
+        @Override
+        public void setConfigParamValues(PropertyMap propertyMap, ParamExceptionHandler errorHandler) {
+
+            super.setConfigParamValues(propertyMap, errorHandler);
+        }
+
+
+    }
+
+
+
 
     public static class RepositoryConnectionConfigPage extends DefaultConfigPage {
 
@@ -1308,7 +1433,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
                 public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
                                                               boolean cellHasFocus) {
                     Component rendererComponent = super.getListCellRendererComponent(list, value, index, isSelected,
-                                                                                     cellHasFocus);
+                            cellHasFocus);
                     if (value instanceof WorldMapLayerType && rendererComponent instanceof JLabel) {
                         WorldMapLayerType worldMapLayerType = (WorldMapLayerType) value;
                         JLabel label = (JLabel) rendererComponent;

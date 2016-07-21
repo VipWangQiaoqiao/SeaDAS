@@ -478,7 +478,7 @@ public class ProductSceneView extends BasicView
     }
 
     public void setToDefaultColorScheme(File auxDir, ImageInfo defaultImageInfo) {
-        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false);
+        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false, sceneImage.getConfiguration());
         boolean defaultSet = false;
 
         if (colorPaletteSchemes != null) {
@@ -542,6 +542,12 @@ public class ProductSceneView extends BasicView
                 getImageInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
                 //      this.productSceneView.setColorPaletteInfo(cpdInfo);
                 getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(matchingColorPaletteInfo.getRootName());
+                //todo Danny test
+//                getImageInfo().getColorPaletteSourcesInfo().setColorBarLabels("0.01,0.5,10.0");
+//                getImageInfo().getColorPaletteSourcesInfo().setColorBarTitle("Chlorophyll");
+//                getImageInfo().getColorPaletteSourcesInfo().setColorBarMin(0.01);
+//                getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(20.0);
+
                 getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
                 getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename());
 

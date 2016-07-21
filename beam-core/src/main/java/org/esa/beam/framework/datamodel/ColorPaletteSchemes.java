@@ -1,5 +1,7 @@
 package org.esa.beam.framework.datamodel;
 
+import org.esa.beam.util.PropertyMap;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import java.awt.*;
@@ -9,10 +11,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 /**
  * Created by danielknowles on 6/28/14.
  */
 public class ColorPaletteSchemes {
+
+
     public static final String CPD_DEFAULTS_FILENAME = "scheme_defaults.txt";
     public static final String CPD_COLORBLIND_DEFAULTS_FILENAME = "scheme_defaults_universal.txt";
     public static final String CPD_COLORBLIND_SELECTOR_FILENAME = "scheme_selector_universal.txt";
@@ -20,6 +25,10 @@ public class ColorPaletteSchemes {
     public static final String USER_CPD_DEFAULTS_FILENAME = "scheme_defaults_user.txt";
     public static final String USER_CPD_SCHEMES_FILENAME = "scheme_selector_user.txt";
     public static final String DEFAULT_CPD_FILENAME = "gray_scale.cpd";
+
+
+    public static final String PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED = "palettes.colorBlind.enabled";
+    public static final boolean DEFAULT_PALETTES_COLOR_BLIND_ENABLED =   false;
 
     public boolean isjComboBoxShouldFire() {
         return jComboBoxShouldFire;
@@ -48,10 +57,14 @@ public class ColorPaletteSchemes {
     private File schemesFile = null;
     private File userSchemesFile = null;
     private String jComboBoxFirstEntryName = null;
+    PropertyMap configuration = null;
+    boolean useColorBlind = false;
 
 
-    public ColorPaletteSchemes(File colorPaletteDir, Id id, boolean userInterfaceMode) {
+    public ColorPaletteSchemes(File colorPaletteDir, Id id, boolean userInterfaceMode, PropertyMap configuration) {
         this.colorPaletteDir = colorPaletteDir;
+        this.configuration = configuration;
+        this.useColorBlind = getUseColorBlind();
 
         switch (id) {
             case STANDARD:
@@ -422,5 +435,11 @@ public class ColorPaletteSchemes {
         this.jComboBoxFirstEntryName = jComboBoxFirstEntryName;
     }
 
+    private boolean getUseColorBlind() {
+
+        return configuration.getPropertyBool(PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, true);
+
+
+    }
 
 }
