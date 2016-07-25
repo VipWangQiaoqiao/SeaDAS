@@ -548,6 +548,7 @@ public class ProductSceneView extends BasicView
                 getImageInfo().getColorPaletteSourcesInfo().setColorBarTitle(matchingColorPaletteInfo.getColorBarTitle());
                 getImageInfo().getColorPaletteSourcesInfo().setColorBarMin(matchingColorPaletteInfo.getMinValue());
                 getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(matchingColorPaletteInfo.getMaxValue());
+                getImageInfo().getColorPaletteSourcesInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
 
                 getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
                 getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename());

@@ -144,12 +144,13 @@ public class ImageLegend {
             final String schemeName = colorPaletteSourcesInfo.getColorPaletteSchemeName();
             final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
             final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
+            final boolean logScaled = getImageInfo().getColorPaletteDef().isLogScaled();
 
 
-            if (schemeName != null && schemeName.equals("chlor_a") && colorPaletteSourcesInfo.getColorBarMax() == max && colorPaletteSourcesInfo.getColorBarMin() == min) {
+      //      if (schemeName != null && schemeName.equals("chlor_a") && colorPaletteSourcesInfo.getColorBarMax() == max && colorPaletteSourcesInfo.getColorBarMin() == min) {
+            // test min and max to see if scheme has changed
+            if (!colorPaletteSourcesInfo.isAlteredScheme(min,max,logScaled)) {
 
-//                    String test = "0.01,0.03,0.1,0.3,1,3,10";
-                //                    String headerText = "Chlorophyll";
                 String test = colorPaletteSourcesInfo.getColorBarLabels();
                 String headerText = colorPaletteSourcesInfo.getColorBarTitle();
 

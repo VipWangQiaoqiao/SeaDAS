@@ -1227,6 +1227,13 @@ public class DimapProductHelpers {
             imageInfo.getColorPaletteSourcesInfo().setAlteredColorScheme(isAlteredColorScheme(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setAlteredCpd(isAlteredCpd(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setPaletteInitialized(isPaletteInitialized(bandStatisticsElem));
+
+            imageInfo.getColorPaletteSourcesInfo().setLogScaled(isPaletteInitialized(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setColorBarMin(getCpdSourcesMin(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setColorBarMax(getCpdSourcesMax(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setColorBarTitle(getCpdSourcesColorbarTitle(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setColorBarLabels(getCpdSourcesColorbarLabels(bandStatisticsElem));
+
             imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(isColorPaletteSchemeDefaultList(bandStatisticsElem));
 
             final Element noDataElem = bandStatisticsElem.getChild(DimapProductConstants.TAG_NO_DATA_COLOR);
@@ -1323,7 +1330,7 @@ public class DimapProductHelpers {
         private static boolean isAlteredColorScheme(Element bandStatisticsElem) {
             boolean altered = false;
             try {
-                String alteredString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_ALTERED_COLOR_SCHEME);
+                String alteredString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_ALTERED_SCHEME);
                 if (alteredString != null) {
                     if (alteredString.toLowerCase().equals("true") || alteredString.toLowerCase().equals("1")) {
                         altered = true;
@@ -1340,7 +1347,7 @@ public class DimapProductHelpers {
         private static boolean isAlteredCpd(Element bandStatisticsElem) {
             boolean altered = false;
             try {
-                String alteredString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_ALTERED_CPD);
+                String alteredString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_ALTERED_CPD);
                 if (alteredString != null) {
                     if (alteredString.toLowerCase().equals("true") || alteredString.toLowerCase().equals("1")) {
                         altered = true;
@@ -1353,10 +1360,76 @@ public class DimapProductHelpers {
             return altered;
         }
 
+
+        private static boolean isCpdSourcesLogScaled(Element bandStatisticsElem) {
+            boolean logScaled = false;
+            try {
+                String paletteInitializedString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_LOG_SCALED);
+                if (paletteInitializedString != null) {
+                    if (paletteInitializedString.toLowerCase().equals("true") || paletteInitializedString.toLowerCase().equals("1")) {
+                        logScaled = true;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return logScaled;
+        }
+
+
+        private static double getCpdSourcesMin(Element element) {
+            final Element sampleElem = element.getChild(DimapProductConstants.TAG_CPD_SOURCES_MIN);
+            if (sampleElem != null) {
+                return Double.parseDouble(sampleElem.getTextTrim());
+            }
+            return 0;
+        }
+
+
+        private static double getCpdSourcesMax(Element bandStatisticsElem) {
+            final Element sampleElem = bandStatisticsElem.getChild(DimapProductConstants.TAG_CPD_SOURCES_MAX);
+            if (sampleElem != null) {
+                return Double.parseDouble(sampleElem.getTextTrim());
+            }
+            return 0;
+        }
+
+
+        private static String getCpdSourcesColorbarTitle(Element bandStatisticsElem) {
+            String cpdSourcesColorbarTitle = null;
+            try {
+                cpdSourcesColorbarTitle = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_COLORBAR_TITLE);
+
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return cpdSourcesColorbarTitle;
+        }
+
+        private static String getCpdSourcesColorbarLabels(Element bandStatisticsElem) {
+            String cpdSourcesColorbarLabels = null;
+            try {
+                cpdSourcesColorbarLabels = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_COLORBAR_LABELS);
+
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return cpdSourcesColorbarLabels;
+        }
+
+
+
+
+
+
+
         private static boolean isPaletteInitialized(Element bandStatisticsElem) {
             boolean paletteInitialized = false;
             try {
-                String paletteInitializedString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_PALETTE_INITIALIZED);
+                String paletteInitializedString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_PALETTE_INITIALIZED);
                 if (paletteInitializedString != null) {
                     if (paletteInitializedString.toLowerCase().equals("true") || paletteInitializedString.toLowerCase().equals("1")) {
                         paletteInitialized = true;
@@ -1373,7 +1446,7 @@ public class DimapProductHelpers {
         private static String getColorPaletteSchemeName(Element bandStatisticsElem) {
             String colorPaletteSchemeName = null;
             try {
-                colorPaletteSchemeName = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_COLOR_SCHEME_NAME);
+                colorPaletteSchemeName = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_SCHEME_NAME);
 
             } catch (NumberFormatException e) {
                 Debug.trace(e);
@@ -1386,7 +1459,7 @@ public class DimapProductHelpers {
         private static String getCpdFileName(Element bandStatisticsElem) {
             String cpdFileName = null;
             try {
-                cpdFileName = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_FILE_NAME);
+                cpdFileName = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_CPD_FILE_NAME);
 
             } catch (NumberFormatException e) {
                 Debug.trace(e);
@@ -1399,7 +1472,7 @@ public class DimapProductHelpers {
         private static boolean isColorPaletteSchemeDefaultList(Element bandStatisticsElem) {
             boolean colorSchemeDefaultList = false;
             try {
-                String discreteString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_COLOR_SCHEME_DEFAULT_LIST);
+                String discreteString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_SCHEME_DEFAULT_LIST);
                 if (discreteString != null) {
                     if (discreteString.toLowerCase().equals("true") || discreteString.toLowerCase().equals("1")) {
                         colorSchemeDefaultList = true;

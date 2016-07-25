@@ -16,6 +16,7 @@ public class ColorPaletteSourcesInfo {
     private boolean paletteInitialized = false;
 
     private String colorBarLabels = "";
+    private boolean isLogScaled;
     private double colorBarMin;
     private double colorBarMax;
     private String colorBarTitle = "";
@@ -67,19 +68,13 @@ public class ColorPaletteSourcesInfo {
     }
 
 
-    public String getDescriptiveColorSchemeName() {
+    public String getDescriptiveColorSchemeName(double min, double max, boolean logScaled) {
         if (getColorPaletteSchemeName() == null) {
             return null;
         }
 
-//        String alteredString = (isAlteredColorScheme()) ? ALTERED_STRING : "";
-//        if (isColorPaletteSchemeDefaultList()) {
-//            return alteredString + "Default '" + getColorPaletteSchemeName() + "'";
-//        } else {
-//            return alteredString + getColorPaletteSchemeName();
-//        }
 
-        String alteredString = (isAlteredColorScheme()) ? "*" : "";
+        String alteredString = (isAlteredScheme(min, max, logScaled)) ? "*" : "";
         if (isColorPaletteSchemeDefaultList()) {
             return "Default '" + getColorPaletteSchemeName() + "'" + alteredString;
         } else {
@@ -88,9 +83,16 @@ public class ColorPaletteSourcesInfo {
     }
 
 
+
+
+    public boolean isAlteredScheme(double min, double max, boolean logScaled) {
+       return (isAlteredColorScheme() || logScaled != isLogScaled || min != getColorBarMin() || max != getColorBarMax());
+    }
+
     public boolean isAlteredCpd() {
         return alteredCpd;
     }
+
 
     public void setAlteredCpd(boolean alteredCpd) {
         this.alteredCpd = alteredCpd;
@@ -145,5 +147,13 @@ public class ColorPaletteSourcesInfo {
 
     public void setColorBarTitle(String colorBarTitle) {
         this.colorBarTitle = colorBarTitle;
+    }
+
+    public boolean isLogScaled() {
+        return isLogScaled;
+    }
+
+    public void setLogScaled(boolean logScaled) {
+        isLogScaled = logScaled;
     }
 }
