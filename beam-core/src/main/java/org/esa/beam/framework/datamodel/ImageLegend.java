@@ -141,7 +141,7 @@ public class ImageLegend {
         ColorPaletteSourcesInfo colorPaletteSourcesInfo = raster.getImageInfo().getColorPaletteSourcesInfo();
 
         if (colorPaletteSourcesInfo != null) {
-            final String schemeName = colorPaletteSourcesInfo.getColorPaletteSchemeName();
+            final String schemeName = colorPaletteSourcesInfo.getSchemeName();
             final double min = getImageInfo().getColorPaletteDef().getMinDisplaySample();
             final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
             final boolean logScaled = getImageInfo().getColorPaletteDef().isLogScaled();
@@ -387,7 +387,7 @@ public class ImageLegend {
         double roundedValue, adjustedWeight;
         colorBarInfos.clear();
 
-        String schemeName = imageInfo.getColorPaletteSourcesInfo().getColorPaletteSchemeName();
+        String schemeName = imageInfo.getColorPaletteSourcesInfo().getSchemeName();
         boolean isDefault = false;
 
 

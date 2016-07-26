@@ -281,12 +281,12 @@ public final class DimapHeaderWriter extends XmlWriter {
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_NUM_COLORS, paletteDefinition.getNumColors());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_LOG_SCALED, paletteDefinition.isLogScaled());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_DISCRETE, paletteDefinition.isDiscrete());
-                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_SCHEME_NAME, band.getImageInfo().getColorPaletteSourcesInfo().getColorPaletteSchemeName());
-                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_ALTERED_SCHEME, band.getImageInfo().getColorPaletteSourcesInfo().isAlteredColorScheme());
+                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_SCHEME_NAME, band.getImageInfo().getColorPaletteSourcesInfo().getSchemeName());
+                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_ALTERED_SCHEME, band.getImageInfo().getColorPaletteSourcesInfo().isAlteredScheme());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_CPD_FILE_NAME, band.getImageInfo().getColorPaletteSourcesInfo().getCpdFileName());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_ALTERED_CPD, band.getImageInfo().getColorPaletteSourcesInfo().isAlteredCpd());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_PALETTE_INITIALIZED, band.getImageInfo().getColorPaletteSourcesInfo().isPaletteInitialized());
-                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_SCHEME_DEFAULT_LIST, band.getImageInfo().getColorPaletteSourcesInfo().isColorPaletteSchemeDefaultList());
+                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_SCHEME_DEFAULT_LIST, band.getImageInfo().getColorPaletteSourcesInfo().isSchemeDefault());
 
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_LOG_SCALED, band.getImageInfo().getColorPaletteSourcesInfo().isLogScaled());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_MIN, band.getImageInfo().getColorPaletteSourcesInfo().getColorBarMin());

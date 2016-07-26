@@ -89,7 +89,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
 //                boolean originalShouldFireChooserEvent = shouldFireChooserEvent;
 //                shouldFireChooserEvent = true;
 
-                parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredColorScheme(true);
+                parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredScheme(true);
 
                 if (listenToLogDisplayButtonEnabled[0]) {
                     listenToLogDisplayButtonEnabled[0] = false;
@@ -109,7 +109,7 @@ class Continuous1BandGraphicalForm implements ColorManipulationChildForm {
             @Override
             public void actionPerformed(ActionEvent e) {
                 distributeSlidersEvenly();
-                parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredColorScheme(true);
+                parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredScheme(true);
             }
         }));
     }

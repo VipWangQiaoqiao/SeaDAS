@@ -96,7 +96,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         final RasterDataNode raster = view.getRaster();
 
 
-        String schemeName = raster.getImageInfo().getColorPaletteSourcesInfo().getColorPaletteSchemeName();
+        String schemeName = raster.getImageInfo().getColorPaletteSourcesInfo().getSchemeName();
         if (!view.getColorBarParamInfo().isParamsInitialized()) {
             // originally the title contains a title and units
             // we only need to split this apart initially

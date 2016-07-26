@@ -541,7 +541,7 @@ public class ProductSceneView extends BasicView
                         matchingColorPaletteInfo.isLogScaled());
                 getImageInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
                 //      this.productSceneView.setColorPaletteInfo(cpdInfo);
-                getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(matchingColorPaletteInfo.getRootName());
+                getImageInfo().getColorPaletteSourcesInfo().setSchemeName(matchingColorPaletteInfo.getRootName());
                 //todo Danny test
 
                 getImageInfo().getColorPaletteSourcesInfo().setColorBarLabels(matchingColorPaletteInfo.getColorBarLabels());
@@ -550,7 +550,7 @@ public class ProductSceneView extends BasicView
                 getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(matchingColorPaletteInfo.getMaxValue());
                 getImageInfo().getColorPaletteSourcesInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
 
-                getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
+                getImageInfo().getColorPaletteSourcesInfo().setSchemeDefault(true);
                 getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename());
 
                 defaultSet = true;
@@ -560,8 +560,8 @@ public class ProductSceneView extends BasicView
         if (!defaultSet) {
             setImageInfo(defaultImageInfo);
             getImageInfo().getColorPaletteSourcesInfo().setCpdFileName("default gray-scale");
-            getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(true);
-            getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName("none");
+            getImageInfo().getColorPaletteSourcesInfo().setSchemeDefault(true);
+            getImageInfo().getColorPaletteSourcesInfo().setSchemeName("none");
         }
 
         // todo Danny added this can be used later in setting min/max from RGB profile

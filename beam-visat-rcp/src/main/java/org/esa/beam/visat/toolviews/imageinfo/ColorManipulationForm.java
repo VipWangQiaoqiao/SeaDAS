@@ -678,7 +678,7 @@ class ColorManipulationForm {
                     childForm.updateFormModel(getProductSceneView());
                     setApplyEnabled(true);
                     getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(file.getName());
-                    getImageInfo().getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
+                    getImageInfo().getColorPaletteSourcesInfo().setSchemeName(null);
                 } catch (IOException e) {
                     showErrorDialog("Failed to import colour palette:\n" + e.getMessage());
                 }
@@ -753,7 +753,7 @@ class ColorManipulationForm {
                     final ColorPaletteDef colorPaletteDef = imageInfo.getColorPaletteDef();
                     ColorPaletteDef.storeColorPaletteDef(colorPaletteDef, file);
                     imageInfo.getColorPaletteSourcesInfo().setCpdFileName(file.getName());
-                    imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeName(null);
+                    imageInfo.getColorPaletteSourcesInfo().setSchemeName(null);
                 } catch (IOException e) {
                     showErrorDialog("Failed to export colour palette:\n" + e.getMessage());  /*I18N*/
                 }

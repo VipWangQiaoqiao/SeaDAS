@@ -1222,9 +1222,9 @@ public class DimapProductHelpers {
             imageInfo.setLogScaled(isLogScaled(bandStatisticsElem));
             imageInfo.getColorPaletteDef().setLogScaled(isLogScaled(bandStatisticsElem));
             imageInfo.getColorPaletteDef().setDiscrete(isDiscrete(bandStatisticsElem));
-            imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeName(getColorPaletteSchemeName(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setSchemeName(getColorPaletteSchemeName(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setCpdFileName(getCpdFileName(bandStatisticsElem));
-            imageInfo.getColorPaletteSourcesInfo().setAlteredColorScheme(isAlteredColorScheme(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setAlteredScheme(isAlteredColorScheme(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setAlteredCpd(isAlteredCpd(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setPaletteInitialized(isPaletteInitialized(bandStatisticsElem));
 
@@ -1234,7 +1234,7 @@ public class DimapProductHelpers {
             imageInfo.getColorPaletteSourcesInfo().setColorBarTitle(getCpdSourcesColorbarTitle(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setColorBarLabels(getCpdSourcesColorbarLabels(bandStatisticsElem));
 
-            imageInfo.getColorPaletteSourcesInfo().setColorPaletteSchemeDefaultList(isColorPaletteSchemeDefaultList(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setSchemeDefault(isColorPaletteSchemeDefaultList(bandStatisticsElem));
 
             final Element noDataElem = bandStatisticsElem.getChild(DimapProductConstants.TAG_NO_DATA_COLOR);
             if (noDataElem != null) {

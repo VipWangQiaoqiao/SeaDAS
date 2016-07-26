@@ -5,13 +5,13 @@ package org.esa.beam.framework.datamodel;
  */
 public class ColorPaletteSourcesInfo {
 
-    private String colorPaletteSchemeName = null;
-    private boolean alteredColorScheme = false;
+    private String schemeName = null;
+    private boolean alteredScheme = false;
 
     private String cpdFileName = null;
     private boolean alteredCpd = false;
 
-    private boolean colorPaletteSchemeDefaultList = true;
+    private boolean schemeDefault = true;
 
     private boolean paletteInitialized = false;
 
@@ -22,27 +22,25 @@ public class ColorPaletteSourcesInfo {
     private String colorBarTitle = "";
 
 
-    private static final String ALTERED_STRING = "(Altered) ";
-
     ColorPaletteSourcesInfo() {
 
     }
 
-    public String getColorPaletteSchemeName() {
-        return colorPaletteSchemeName;
+    public String getSchemeName() {
+        return schemeName;
     }
 
-    public void setColorPaletteSchemeName(String colorPaletteSchemeName) {
-        this.colorPaletteSchemeName = colorPaletteSchemeName;
-        setAlteredColorScheme(false);
+    public void setSchemeName(String schemeName) {
+        this.schemeName = schemeName;
+        setAlteredScheme(false);
     }
 
-    public boolean isColorPaletteSchemeDefaultList() {
-        return colorPaletteSchemeDefaultList;
+    public boolean isSchemeDefault() {
+        return schemeDefault;
     }
 
-    public void setColorPaletteSchemeDefaultList(boolean colorPaletteSchemeDefaultList) {
-        this.colorPaletteSchemeDefaultList = colorPaletteSchemeDefaultList;
+    public void setSchemeDefault(boolean schemeDefault) {
+        this.schemeDefault = schemeDefault;
     }
 
     public String getCpdFileName() {
@@ -60,25 +58,22 @@ public class ColorPaletteSourcesInfo {
             return null;
         }
 
-//        String alteredString = (isAlteredCpd()) ? ALTERED_STRING : "";
-
-     //   return alteredString + getCpdFileName();
         String alteredString = (isAlteredCpd()) ? "*" : "";
         return getCpdFileName() + alteredString;
     }
 
 
     public String getDescriptiveColorSchemeName(double min, double max, boolean logScaled) {
-        if (getColorPaletteSchemeName() == null) {
+        if (getSchemeName() == null) {
             return null;
         }
 
 
         String alteredString = (isAlteredScheme(min, max, logScaled)) ? "*" : "";
-        if (isColorPaletteSchemeDefaultList()) {
-            return "Default '" + getColorPaletteSchemeName() + "'" + alteredString;
+        if (isSchemeDefault()) {
+            return "Default '" + getSchemeName() + "'" + alteredString;
         } else {
-            return getColorPaletteSchemeName() + alteredString;
+            return getSchemeName() + alteredString;
         }
     }
 
@@ -86,7 +81,7 @@ public class ColorPaletteSourcesInfo {
 
 
     public boolean isAlteredScheme(double min, double max, boolean logScaled) {
-       return (isAlteredColorScheme() || logScaled != isLogScaled || min != getColorBarMin() || max != getColorBarMax());
+       return (isAlteredScheme() || logScaled != isLogScaled || min != getColorBarMin() || max != getColorBarMax() || getSchemeName() == null);
     }
 
     public boolean isAlteredCpd() {
@@ -96,17 +91,17 @@ public class ColorPaletteSourcesInfo {
 
     public void setAlteredCpd(boolean alteredCpd) {
         this.alteredCpd = alteredCpd;
-        if (alteredCpd && getColorPaletteSchemeName() != null) {
-            setAlteredColorScheme(alteredCpd);
+        if (alteredCpd && getSchemeName() != null) {
+            setAlteredScheme(alteredCpd);
         }
     }
 
-    public boolean isAlteredColorScheme() {
-        return alteredColorScheme;
+    public boolean isAlteredScheme() {
+        return alteredScheme;
     }
 
-    public void setAlteredColorScheme(boolean alteredColorScheme) {
-        this.alteredColorScheme = alteredColorScheme;
+    public void setAlteredScheme(boolean alteredColorScheme) {
+        this.alteredScheme = alteredColorScheme;
     }
 
     public boolean isPaletteInitialized() {
