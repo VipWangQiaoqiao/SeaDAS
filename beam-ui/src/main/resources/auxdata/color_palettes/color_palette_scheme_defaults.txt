@@ -23,6 +23,7 @@
  bb_*                :bb               :                            :                               :
  calcite_*           :calcite          :                            :                               :
  Chlorophyll_a       :chlor_a          :                            :                               :
+ chlor_*             :chlor_a          :                            :                               :
  chl_*               :chlor_a          :                            :                               :
  eps_78              :epsilon          :                            :                               :
  FLAG_*              :flags            :                            :                               :
@@ -79,7 +80,7 @@
  nLw_7*              :nLw_ge_600       
  nLw_8*              :nLw_ge_600       
  nLw_9*              :nLw_ge_600       
- sst*                :sst              
+ sst*                :sst              45
  taua_*              :aot              
  tau_*               :aot              
  Zeu_*               :Zeu              
@@ -91,7 +92,7 @@
 # Semi-colon must also be used as delimiter for blank SCHEME_ID case
 #PATTERN              SCHEME_ID        :COLORBAR_TITLE(OVERRIDE)    :COLORBAR_LABELS(OVERRIDE)      :DESCRIPTION(OVERRIDE)
  absorption          :
- adg                 :
+ adg                 :45
  adg_s               :
  anc_SSS             :
  angstrom            :
