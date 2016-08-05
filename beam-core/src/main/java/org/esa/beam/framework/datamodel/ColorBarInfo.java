@@ -70,9 +70,12 @@ public class ColorBarInfo {
             }
 
             // handle small numbers increasing number of decimal places if needed
-            while ((getValue()) < minDisplayableValue) {
-                minDisplayableValue = minDisplayableValue / 10.0;
-                actualDecimalPlaces++;
+            if (getValue() > 0) {
+                while ((getValue()) < minDisplayableValue) {
+                    double testValue = getValue();
+                    minDisplayableValue = minDisplayableValue / 10.0;
+                    actualDecimalPlaces++;
+                }
             }
 
             //set max decimal places

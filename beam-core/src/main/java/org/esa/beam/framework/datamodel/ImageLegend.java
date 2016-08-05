@@ -147,16 +147,17 @@ public class ImageLegend {
             final boolean logScaled = getImageInfo().getColorPaletteDef().isLogScaled();
 
 
-      //      if (schemeName != null && schemeName.equals("chlor_a") && colorPaletteSourcesInfo.getColorBarMax() == max && colorPaletteSourcesInfo.getColorBarMin() == min) {
+            //      if (schemeName != null && schemeName.equals("chlor_a") && colorPaletteSourcesInfo.getColorBarMax() == max && colorPaletteSourcesInfo.getColorBarMin() == min) {
             // test min and max to see if scheme has changed
-            if (!colorPaletteSourcesInfo.isAlteredScheme(min,max,logScaled)) {
+            String labels = colorPaletteSourcesInfo.getColorBarLabels();
+         //   String headerText = colorPaletteSourcesInfo.getColorBarTitle();
+            if (!colorPaletteSourcesInfo.isAlteredScheme(min, max, logScaled) && labels != null && labels.length() > 0) {
 
-                String test = colorPaletteSourcesInfo.getColorBarLabels();
-                String headerText = colorPaletteSourcesInfo.getColorBarTitle();
-
-                setHeaderText(headerText);
+                if (headerText != null && headerText.length() > 0) {
+                    setHeaderText(headerText);
+                }
                 setDistributionType(ImageLegend.DISTRIB_MANUAL_STR);
-                setFullCustomAddThesePoints(test);
+                setFullCustomAddThesePoints(labels);
 
             } else {
                 setNumberOfTicks(5);
