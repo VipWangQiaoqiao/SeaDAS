@@ -246,6 +246,7 @@ public final class DimapProductConstants {
     public static final String TAG_CPD_SOURCES_MAX = "CPD_SOURCES_MAX";
     public static final String TAG_CPD_SOURCES_COLORBAR_TITLE = "CPD_SOURCES_COLORBAR_TITLE";
     public static final String TAG_CPD_SOURCES_COLORBAR_LABELS = "CPD_SOURCES_COLORBAR_LABELS";
+    public static final String TAG_CPD_SOURCES_COLORBAR_INITIALIZED = "CPD_SOURCES_COLORBAR_INITIALIZED";
     public static final String TAG_CPD_SOURCES_SCHEME_NAME = "COLOR_SCHEME_NAME";
     public static final String TAG_CPD_SOURCES_ALTERED_SCHEME = "ALTERED_COLOR_SCHEME";
     public static final String TAG_CPD_SOURCES_ALTERED_CPD = "ALTERED_CPD";

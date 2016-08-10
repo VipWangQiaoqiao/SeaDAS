@@ -15,7 +15,9 @@
  */
 package org.esa.beam.framework.datamodel;
 
+import org.esa.beam.framework.param.ParamGroup;
 import org.esa.beam.jai.ImageManager;
+import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.SystemUtils;
 
@@ -43,6 +45,11 @@ import java.util.ArrayList;
  * @version $Revision$ $Date$
  */
 public class ImageLegend {
+
+    public static final String PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE = "palettes.colorbar.Title.Override";
+    public static final boolean DEFAULT_COLORBAR_TITLE_OVERRIDE = false;
+    public static final String PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE = "palettes.colorbar.Lables.Override";
+    public static final boolean DEFAULT_COLORBAR_LABELS_OVERRIDE = false;
 
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
@@ -76,6 +83,7 @@ public class ImageLegend {
 
     // Independent attributes (Properties)
     private final ImageInfo imageInfo;
+    private boolean initialized = false;
     private final RasterDataNode raster;
     private boolean showTitle;
     private String headerText;
@@ -100,6 +108,7 @@ public class ImageLegend {
     private int colorBarThickness;
     private double layerScaling;
     private boolean centerOnLayer;
+    private String titleOverRide = null;
 
 
     private int tickMarkLength = NULL_INT;
@@ -137,7 +146,9 @@ public class ImageLegend {
         tickWidth = DEFAULT_TICKMARK_WIDTH;
     }
 
-    public void initDefaults() {
+    public void initDefaults(PropertyMap configuration) {
+
+        configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, true);
         ColorPaletteSourcesInfo colorPaletteSourcesInfo = raster.getImageInfo().getColorPaletteSourcesInfo();
 
         if (colorPaletteSourcesInfo != null) {
@@ -146,20 +157,26 @@ public class ImageLegend {
             final double max = getImageInfo().getColorPaletteDef().getMaxDisplaySample();
             final boolean logScaled = getImageInfo().getColorPaletteDef().isLogScaled();
 
-
-            //      if (schemeName != null && schemeName.equals("chlor_a") && colorPaletteSourcesInfo.getColorBarMax() == max && colorPaletteSourcesInfo.getColorBarMin() == min) {
-            // test min and max to see if scheme has changed
             String labels = colorPaletteSourcesInfo.getColorBarLabels();
-         //   String headerText = colorPaletteSourcesInfo.getColorBarTitle();
-            if (!colorPaletteSourcesInfo.isAlteredScheme(min, max, logScaled) && labels != null && labels.length() > 0) {
 
-                if (headerText != null && headerText.length() > 0) {
-                    setHeaderText(headerText);
-                }
+
+            setHeaderText(raster.getName());
+
+
+            if (allowTitleOverride(configuration)) {
+                setTitleOverRide(colorPaletteSourcesInfo.getColorBarTitle());
+            } else {
+                setTitleOverRide(null);
+            }
+
+
+            if (!colorPaletteSourcesInfo.isAlteredScheme(min, max, logScaled) && labels != null && labels.length() > 0 && allowLabelsOverride(configuration)) {
+
                 setDistributionType(ImageLegend.DISTRIB_MANUAL_STR);
                 setFullCustomAddThesePoints(labels);
 
             } else {
+
                 setNumberOfTicks(5);
                 setScalingFactor(1.0);
                 setDecimalPlaces(2);
@@ -187,7 +204,11 @@ public class ImageLegend {
     }
 
     public String getHeaderText() {
-        return headerText;
+        if (!isInitialized() && titleOverRide != null && titleOverRide.length() > 0) {
+            return titleOverRide;
+        } else {
+            return headerText;
+        }
     }
 
     public void setHeaderText(String headerText) {
@@ -1393,5 +1414,30 @@ public class ImageLegend {
         }
     }
 
+    public String getTitleOverRide() {
+        return titleOverRide;
+    }
+
+    public void setTitleOverRide(String titleOverRide) {
+        this.titleOverRide = titleOverRide;
+    }
+
+    public boolean isInitialized() {
+        ColorPaletteSourcesInfo colorPaletteSourcesInfo = raster.getImageInfo().getColorPaletteSourcesInfo();
+        return colorPaletteSourcesInfo.isColorBarInitialized();
+    }
+
+    public void setInitialized(boolean initialized) {
+        ColorPaletteSourcesInfo colorPaletteSourcesInfo = raster.getImageInfo().getColorPaletteSourcesInfo();
+        colorPaletteSourcesInfo.setColorBarInitialized(initialized);
+    }
+
+    public boolean allowTitleOverride(PropertyMap configuration) {
+        return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, DEFAULT_COLORBAR_TITLE_OVERRIDE);
+    }
+
+    public boolean allowLabelsOverride(PropertyMap configuration) {
+        return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE, DEFAULT_COLORBAR_LABELS_OVERRIDE);
+    }
 }
 

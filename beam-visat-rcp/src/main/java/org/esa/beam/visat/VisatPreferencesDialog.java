@@ -477,7 +477,17 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
             param = new Parameter(ColorPaletteSchemes.PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, ColorPaletteSchemes.DEFAULT_PALETTES_COLOR_BLIND_ENABLED);
-            param.getProperties().setLabel("Use color-blind compliant palettes");
+            param.getProperties().setLabel("Use color-blind compliant palettes for default schemes");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ImageLegend.PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, ImageLegend.DEFAULT_COLORBAR_TITLE_OVERRIDE);
+            param.getProperties().setLabel("Allow color bar title override from scheme");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ImageLegend.PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE, ImageLegend.DEFAULT_COLORBAR_LABELS_OVERRIDE);
+            param.getProperties().setLabel("Allow color bar labels override from scheme");
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
@@ -500,6 +510,22 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbc.insets.bottom = 10;
 
             param = getConfigParam(ColorPaletteSchemes.PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED);
+            gbc.weightx = 1;
+            gbc.anchor=GridBagConstraints.WEST;
+            gbc.gridwidth = 2;
+            fontPane.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridy++;
+
+
+            param = getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE);
+            gbc.weightx = 1;
+            gbc.anchor=GridBagConstraints.WEST;
+            gbc.gridwidth = 2;
+            fontPane.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridy++;
+
+
+            param = getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE);
             gbc.weightx = 1;
             gbc.anchor=GridBagConstraints.WEST;
             gbc.gridwidth = 2;

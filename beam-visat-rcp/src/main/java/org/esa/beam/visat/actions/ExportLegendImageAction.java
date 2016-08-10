@@ -27,6 +27,7 @@ import org.esa.beam.framework.ui.ModalDialog;
 import org.esa.beam.framework.ui.command.CommandEvent;
 import org.esa.beam.framework.ui.product.ColorBarParamInfo;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.util.io.BeamFileChooser;
 import org.esa.beam.util.io.BeamFileFilter;
@@ -70,6 +71,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String CENTER_ON_LAYER_PARAM_STR = "legend.centerOnLayer";
 
 
+
+
     private ParamGroup colorBarParamGroup;
     private ImageLegend imageLegend;
     private static int imageHeight;
@@ -107,12 +110,26 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         imageLegend = new ImageLegend(raster.getImageInfo(), raster);
-        imageLegend.initDefaults();
-        if (imageLegend.getHeaderText() != null && imageLegend.getHeaderText().length() > 0) {
-            colorBarParamGroup.getParameter(TITLE_PARAM_STR).setValue(imageLegend.getHeaderText(), null);
+
+        if (!view.getColorBarParamInfo().isParamsInitialized()) {
+            imageLegend.setInitialized(false);
+//            view.getSceneImage().getConfiguration().getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, true);
+
+           PropertyMap configuration = view.getSceneImage().getConfiguration();
+            imageLegend.initDefaults(configuration);
+
+
+            if (imageLegend.getHeaderText() != null && imageLegend.getHeaderText().length() > 0) {
+                colorBarParamGroup.getParameter(TITLE_PARAM_STR).setValue(imageLegend.getHeaderText(), null);
+            }
+
+            colorBarParamGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR).setValue(ImageLegend.DISTRIB_MANUAL_STR, null);
+            colorBarParamGroup.getParameter(MANUAL_POINTS_PARAM_STR).setValue(imageLegend.getFullCustomAddThesePoints(), null);
+
+            imageLegend.setInitialized(true);
+
         }
-        colorBarParamGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR).setValue(ImageLegend.DISTRIB_MANUAL_STR, null);
-        colorBarParamGroup.getParameter(MANUAL_POINTS_PARAM_STR).setValue(imageLegend.getFullCustomAddThesePoints(), null);
+
 
 
         // this will open a dialog before the file chooser
@@ -978,7 +995,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             });
 
             modifyManualPoints(paramGroup, imageLegend.getFullCustomAddThesePoints());
-   //         modifyTitle(paramGroup, imageLegend.getHeaderText());
+            //         modifyTitle(paramGroup, imageLegend.getHeaderText());
 
 
             final ModalDialog dialog = new ModalDialog(getParent(), VisatApp.getApp().getAppName() + " - Color Bar Preview", imageDisplay,

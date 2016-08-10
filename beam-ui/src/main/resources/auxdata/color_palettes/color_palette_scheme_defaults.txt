@@ -8,7 +8,7 @@
  adg_*_giop          :absorption       :                            :                               :Absorption due to gelbstof and detritus
  adg_s_*             :adg_s            :                            :                               :
  angstrom_*          :angstrom         :                            :                               :
- aot_*               :aot              :                            :                               :
+ aot_*               :aot              :Aerosol optical thickness   :                               :
  aph_*               :absorption       :                            :                               :Absorption due to phytoplankton
  aw_*                :absorption       :                            :                               :Absorption coefficient of seawater
  a_*                 :absorption       :                            :                               :Total absorption
@@ -22,9 +22,9 @@
  bbw_*               :bbw              :                            :                               :
  bb_*                :bb               :                            :                               :
  calcite_*           :calcite          :                            :                               :
- Chlorophyll_a       :chlor_a          :                            :                               :
- chlor_*             :chlor_a          :                            :                               :
- chl_*               :chlor_a          :                            :                               :
+ Chlorophyll_a       :chlor_a          :Chlorophyll                 :                               :
+ chlor_*             :chlor_a          :Chlorophyll                 :                               :
+ chl_*               :chlor_a          :Chlorophyll                 :                               :
  eps_78              :epsilon          :                            :                               :
  FLAG_*              :flags            :                            :                               :
  fqy                 :fqy              :                            :                               :
@@ -80,7 +80,7 @@
  nLw_7*              :nLw_ge_600       
  nLw_8*              :nLw_ge_600       
  nLw_9*              :nLw_ge_600       
- sst*                :sst              45
+ sst*                :sst
  taua_*              :aot              
  tau_*               :aot              
  Zeu_*               :Zeu              
@@ -92,11 +92,11 @@
 # Semi-colon must also be used as delimiter for blank SCHEME_ID case
 #PATTERN              SCHEME_ID        :COLORBAR_TITLE(OVERRIDE)    :COLORBAR_LABELS(OVERRIDE)      :DESCRIPTION(OVERRIDE)
  absorption          :
- adg                 :45
+ adg                 :
  adg_s               :
  anc_SSS             :
  angstrom            :
- aot                 :
+ aot                 :Aerosol optical thickness
  aph                 :
  aw                  :
  bbp                 :
@@ -109,8 +109,8 @@
  calcite             :
  cdom_index          :
  chisqr_giop         :
- chlor_a             : chlor_a
- chlor_a_bluegreen   :
+ chlor_a             : chlor_a           : Chlorophyll
+ chlor_a_bluegreen   : chlor_a_bluegreen : Chlorophyll
  chlor_a_owterr      :
  elev                :
  epsilon             :

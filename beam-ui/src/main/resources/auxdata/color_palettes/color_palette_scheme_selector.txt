@@ -1,8 +1,9 @@
  SELECTOR_TITLE         :SCHEME_ID          :COLORBAR_TITLE(OVERRIDE)    :COLORBAR_LABELS(OVERRIDE)      :DESCRIPTION(OVERRIDE)
  AOT                    :aot                :                            :                               :
  Angstrom               :angstrom           :                            :                               :
- Chl                    :chlor_a            :                            :                               :
- Chl (Uni-Palette)      :chlor_a_uni        :                            :                               :
+ Chl (Rainbow)          :chlor_a_oc         :                            :                               :
+ Chl (UniBR-Palette)    :chlor_a_uni        :                            :                               :
+ Chl (UniBG-Palette)    :chlor_a_uni_bg     :                            :                               :
  Chl (BG-Palette)       :chlor_a_bluegreen  :                            :                               :
  PAR                    :par                :                            :                               :
  PIC                    :pic                :                            :                               :

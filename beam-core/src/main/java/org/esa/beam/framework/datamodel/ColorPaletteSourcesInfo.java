@@ -14,6 +14,7 @@ public class ColorPaletteSourcesInfo {
     private boolean schemeDefault = true;
 
     private boolean paletteInitialized = false;
+    private boolean colorBarInitialized = false;
 
     private String colorBarLabels = "";
     private boolean isLogScaled;
@@ -91,9 +92,9 @@ public class ColorPaletteSourcesInfo {
 
     public void setAlteredCpd(boolean alteredCpd) {
         this.alteredCpd = alteredCpd;
-        if (alteredCpd && getSchemeName() != null) {
-            setAlteredScheme(alteredCpd);
-        }
+//        if (alteredCpd && getSchemeName() != null) {
+//            setAlteredScheme(alteredCpd);
+//        }
     }
 
     public boolean isAlteredScheme() {
@@ -150,5 +151,13 @@ public class ColorPaletteSourcesInfo {
 
     public void setLogScaled(boolean logScaled) {
         isLogScaled = logScaled;
+    }
+
+    public boolean isColorBarInitialized() {
+        return colorBarInitialized;
+    }
+
+    public void setColorBarInitialized(boolean colorBarInitialized) {
+        this.colorBarInitialized = colorBarInitialized;
     }
 }

@@ -1233,6 +1233,7 @@ public class DimapProductHelpers {
             imageInfo.getColorPaletteSourcesInfo().setColorBarMax(getCpdSourcesMax(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setColorBarTitle(getCpdSourcesColorbarTitle(bandStatisticsElem));
             imageInfo.getColorPaletteSourcesInfo().setColorBarLabels(getCpdSourcesColorbarLabels(bandStatisticsElem));
+            imageInfo.getColorPaletteSourcesInfo().setColorBarInitialized(getCpdSourcesColorbarInitialized(bandStatisticsElem));
 
             imageInfo.getColorPaletteSourcesInfo().setSchemeDefault(isColorPaletteSchemeDefaultList(bandStatisticsElem));
 
@@ -1421,6 +1422,25 @@ public class DimapProductHelpers {
         }
 
 
+
+
+
+
+        private static boolean getCpdSourcesColorbarInitialized(Element bandStatisticsElem) {
+            boolean colorBarInitialized = false;
+            try {
+                String colorBarInitializedString = bandStatisticsElem.getChildTextTrim(DimapProductConstants.TAG_CPD_SOURCES_COLORBAR_INITIALIZED);
+                if (colorBarInitializedString != null) {
+                    if (colorBarInitializedString.toLowerCase().equals("true") || colorBarInitializedString.toLowerCase().equals("1")) {
+                        colorBarInitialized = true;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                Debug.trace(e);
+            }
+
+            return colorBarInitialized;
+        }
 
 
 

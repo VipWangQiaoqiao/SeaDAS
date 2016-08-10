@@ -419,6 +419,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarMin(colorPaletteInfo.getMinValue());
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(colorPaletteInfo.getMaxValue());
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setLogScaled(colorPaletteInfo.isLogScaled());
+                parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarInitialized(false);
+                parentForm.getProductSceneView().getColorBarParamInfo().setParamsInitialized(false);
 
 
 
@@ -708,6 +710,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 case FromMinMaxFields:
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = currentInfo.isLogScaled();
+                    parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredScheme(true);
+
 
                     if (testMinMax(minField.getText().toString(), maxField.getText().toString())) {
                         min = Double.parseDouble(minField.getText().toString());
@@ -723,6 +727,8 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 case ToggleLog:
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = !currentInfo.isLogScaled();
+                    parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredScheme(true);
+
 
                     min = currentCPD.getMinDisplaySample();
                     max = currentCPD.getMaxDisplaySample();

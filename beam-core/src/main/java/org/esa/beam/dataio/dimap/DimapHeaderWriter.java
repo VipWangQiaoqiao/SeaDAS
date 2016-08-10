@@ -293,6 +293,7 @@ public final class DimapHeaderWriter extends XmlWriter {
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_MAX, band.getImageInfo().getColorPaletteSourcesInfo().getColorBarMax());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_COLORBAR_TITLE, band.getImageInfo().getColorPaletteSourcesInfo().getColorBarTitle());
                     sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_COLORBAR_LABELS, band.getImageInfo().getColorPaletteSourcesInfo().getColorBarLabels());
+                    sXmlW.printLine(indent + 2, DimapProductConstants.TAG_CPD_SOURCES_COLORBAR_INITIALIZED, band.getImageInfo().getColorPaletteSourcesInfo().isColorBarInitialized());
 
 
                     final Iterator iterator = paletteDefinition.getIterator();
