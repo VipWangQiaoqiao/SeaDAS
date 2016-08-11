@@ -20,6 +20,7 @@ import com.jidesoft.swing.TitledSeparator;
 import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.math.Range;
 import org.esa.beam.visat.VisatApp;
 
@@ -419,8 +420,13 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarMin(colorPaletteInfo.getMinValue());
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(colorPaletteInfo.getMaxValue());
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setLogScaled(colorPaletteInfo.isLogScaled());
-                parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarInitialized(false);
-                parentForm.getProductSceneView().getColorBarParamInfo().setParamsInitialized(false);
+
+                PropertyMap configuration = parentForm.getProductSceneView().getSceneImage().getConfiguration();
+                if (ImageLegend.allowColorbarAutoReset(configuration)) {
+                    parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarInitialized(false);
+                    parentForm.getProductSceneView().getColorBarParamInfo().setParamsInitialized(false);
+                }
+
 
 
 

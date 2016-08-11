@@ -111,8 +111,16 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         imageLegend = new ImageLegend(raster.getImageInfo(), raster);
 
-        if (!view.getColorBarParamInfo().isParamsInitialized()) {
-            imageLegend.setInitialized(false);
+
+        // Double check to be sure paramGroup is initialized
+        // Right now we are always populating the manualPoints param so using this for the check
+
+        String manualPointsStr = colorBarParamGroup.getParameter(MANUAL_POINTS_PARAM_STR).getValue().toString();
+        boolean paramsInitialized = (manualPointsStr != null && manualPointsStr.length() > 0) ? true : false;
+
+
+        if (!view.getColorBarParamInfo().isParamsInitialized() || !paramsInitialized) {
+ //           imageLegend.setInitialized(false);
 //            view.getSceneImage().getConfiguration().getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, true);
 
            PropertyMap configuration = view.getSceneImage().getConfiguration();
@@ -126,7 +134,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             colorBarParamGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR).setValue(ImageLegend.DISTRIB_MANUAL_STR, null);
             colorBarParamGroup.getParameter(MANUAL_POINTS_PARAM_STR).setValue(imageLegend.getFullCustomAddThesePoints(), null);
 
-            imageLegend.setInitialized(true);
+ //           imageLegend.setInitialized(true);
 
         }
 

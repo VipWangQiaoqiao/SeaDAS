@@ -1,18 +1,18 @@
  SELECTOR_TITLE         :SCHEME_ID          :COLORBAR_TITLE(OVERRIDE)    :COLORBAR_LABELS(OVERRIDE)      :DESCRIPTION(OVERRIDE)
  AOT                    :aot                :                            :                               :
  Angstrom               :angstrom           :                            :                               :
- Chl (Rainbow)          :chlor_a_oc         :                            :                               :
+ Chl (Rainbow)          :chlor_a_oc         :null                        :                               :
  Chl (UniBR-Palette)    :chlor_a_uni        :                            :                               :
- Chl (UniBG-Palette)    :chlor_a_uni_bg     :                            :                               :
- Chl (BG-Palette)       :chlor_a_bluegreen  :                            :                               :
+ Chl (UniBG-Palette)    :chlor_a_uni_bg     :Chlorophyll                 :                               :
+ Chl (BG-Palette)       :chlor_a_bluegreen  :Chlorophyll                 :                               :
  PAR                    :par                :                            :                               :
- PIC                    :pic                :                            :                               :
- POC                    :poc                :                            :                               :
+ PIC                    :pic                :Particulate Inorganic Carbon:                               :
+ POC                    :poc                :Particulate Organic Carbon  :                               :
  Rrs < 430 nm           :Rrs_lt_430         :                            :                               :
  Rrs 430-459 nm         :Rrs_430_459        :                            :                               :
  Rrs 460-499 nm         :Rrs_460_499        :                            :                               :
  Rrs >= 500 nm          :Rrs_ge_500         :                            :                               :
- SST                    :sst                :                            :                               :
+ SST                    :sst                :Sea Surface Temperature     :                               :
  ---------- other ----------  :
  a                      :absorption         :                            :                               :Total absorption
  adg                    :absorption         :                            :                               :Absorption due to gelbstof and detritus

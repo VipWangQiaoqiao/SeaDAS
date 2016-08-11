@@ -48,8 +48,11 @@ public class ImageLegend {
 
     public static final String PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE = "palettes.colorbar.Title.Override";
     public static final boolean DEFAULT_COLORBAR_TITLE_OVERRIDE = false;
-    public static final String PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE = "palettes.colorbar.Lables.Override";
+    public static final String PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE = "palettes.colorbar.Labels.Override";
     public static final boolean DEFAULT_COLORBAR_LABELS_OVERRIDE = false;
+    public static final String PROPERTY_NAME_COLORBAR_ALLOW_RESET = "palettes.colorbar.Allow.Reset";
+    public static final boolean DEFAULT_COLORBAR_ALLOW_RESET = false;
+
 
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
@@ -160,13 +163,12 @@ public class ImageLegend {
             String labels = colorPaletteSourcesInfo.getColorBarLabels();
 
 
-            setHeaderText(raster.getName());
-
-
+           setHeaderText(raster.getName());
             if (allowTitleOverride(configuration)) {
-                setTitleOverRide(colorPaletteSourcesInfo.getColorBarTitle());
-            } else {
-                setTitleOverRide(null);
+                String overrideColorBarTitle = colorPaletteSourcesInfo.getColorBarTitle();
+                if (overrideColorBarTitle != null && overrideColorBarTitle.length() > 0) {
+                    setHeaderText(overrideColorBarTitle);
+                }
             }
 
 
@@ -204,11 +206,12 @@ public class ImageLegend {
     }
 
     public String getHeaderText() {
-        if (!isInitialized() && titleOverRide != null && titleOverRide.length() > 0) {
-            return titleOverRide;
-        } else {
-            return headerText;
-        }
+//        if (!isInitialized() && titleOverRide != null && titleOverRide.length() > 0) {
+//            return titleOverRide;
+//        } else {
+//            return headerText;
+//        }
+        return headerText;
     }
 
     public void setHeaderText(String headerText) {
@@ -1438,6 +1441,10 @@ public class ImageLegend {
 
     public boolean allowLabelsOverride(PropertyMap configuration) {
         return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE, DEFAULT_COLORBAR_LABELS_OVERRIDE);
+    }
+
+    public static boolean allowColorbarAutoReset(PropertyMap configuration) {
+        return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_ALLOW_RESET, DEFAULT_COLORBAR_ALLOW_RESET);
     }
 }
 

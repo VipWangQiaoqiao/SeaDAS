@@ -637,6 +637,8 @@ public class ColorPaletteSchemes {
 
                                         if (colorBarTitle == null || colorBarTitle.length() == 0) {
                                             colorBarTitle = storedColorPaletteInfo.getColorBarTitle();
+                                        } else if (colorBarTitle != null && colorBarTitle.toLowerCase().equals("-1")) {
+                                            colorBarTitle = null;
                                         }
 
                                         if (colorBarLabels == null || colorBarLabels.length() == 0) {

@@ -528,8 +528,6 @@ public class ProductSceneView extends BasicView
             }
 
 
-
-
             if (matchingColorPaletteInfo != null) {
                 //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
                 ColorPaletteDef colorPaletteDef = matchingColorPaletteInfo.getColorPaletteDef();
@@ -549,8 +547,12 @@ public class ProductSceneView extends BasicView
                 getImageInfo().getColorPaletteSourcesInfo().setColorBarMin(matchingColorPaletteInfo.getMinValue());
                 getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(matchingColorPaletteInfo.getMaxValue());
                 getImageInfo().getColorPaletteSourcesInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
-                getImageInfo().getColorPaletteSourcesInfo().setColorBarInitialized(false);
-                getColorBarParamInfo().setParamsInitialized(false);
+
+                PropertyMap configuration = getSceneImage().getConfiguration();
+                if (ImageLegend.allowColorbarAutoReset(configuration)) {
+                    getImageInfo().getColorPaletteSourcesInfo().setColorBarInitialized(false);
+                    getColorBarParamInfo().setParamsInitialized(false);
+                }
 
                 getImageInfo().getColorPaletteSourcesInfo().setSchemeDefault(true);
                 getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename());
