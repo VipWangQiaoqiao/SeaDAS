@@ -42,6 +42,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final ColorManipulationForm parentForm;
     private final JPanel contentPanel;
     private final AbstractButton logDisplayButton;
+
     private final MoreOptionsForm moreOptionsForm;
     private ColorPaletteChooser colorPaletteChooser;
     private JFormattedTextField minField;
@@ -53,6 +54,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private final ColorPaletteSchemes standardColorPaletteSchemes;
     private JButton bandDataButton;
     private JButton exportButton;
+    private JButton paletteInversionButton;
     private JLabel colorSchemeJLabel;
     private JLabel cpdFileNameJLabel;
     private TitledSeparator headerSeparator;
@@ -66,7 +68,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
     private final ImageInfoEditor2 imageInfoEditor;
 
-    private enum RangeKey {FromPaletteSource, FromData, FromMinMaxFields, FromCurrentPalette, ToggleLog, Dummy;}
+    private enum RangeKey {FromPaletteSource, FromData, FromMinMaxFields, FromCurrentPalette, ToggleLog, InvertPalette, Dummy;}
 
     private boolean shouldFireChooserEvent;
     private boolean hidden = false;
@@ -110,6 +112,16 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
         });
         exportButton.setEnabled(true);
+
+        paletteInversionButton = new JButton("Invert Palette");
+        paletteInversionButton.setToolTipText("Invert palette"); /*I18N*/
+        paletteInversionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                applyChanges(RangeKey.InvertPalette);
+            }
+        });
+        paletteInversionButton.setEnabled(true);
 
 
         JPanel colorPaletteJPanel = getColorPaletteFilePanel("Cpd File");
@@ -237,6 +249,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 if (listenToLogDisplayButtonEnabled[0]) {
                     listenToLogDisplayButtonEnabled[0] = false;
                     logDisplayButton.setSelected(!logDisplayButton.isSelected());
+
                     applyChanges(RangeKey.ToggleLog);
                     listenToLogDisplayButtonEnabled[0] = true;
                 }
@@ -386,11 +399,23 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new Insets(4, 0, 0, 0);
+        paletteInversionButton.setMinimumSize(paletteInversionButton.getMinimumSize());
+        paletteInversionButton.setMaximumSize(paletteInversionButton.getMinimumSize());
+        paletteInversionButton.setPreferredSize(paletteInversionButton.getMinimumSize());
+
+        jPanel.add(paletteInversionButton, gbc);
+
+
+        gbc.gridy++;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.insets = new Insets(4, 0, 0, 0);
         exportButton.setMinimumSize(exportButton.getMinimumSize());
         exportButton.setMaximumSize(exportButton.getMinimumSize());
         exportButton.setPreferredSize(exportButton.getMinimumSize());
 
         jPanel.add(exportButton, gbc);
+
+
 
         return jPanel;
     }
@@ -426,9 +451,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                     parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarInitialized(false);
                     parentForm.getProductSceneView().getColorBarParamInfo().setParamsInitialized(false);
                 }
-
-
-
 
 
                 applyChanges(colorPaletteInfo.getMinValue(),
@@ -570,7 +592,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             double min = imageInfo.getColorPaletteDef().getMinDisplaySample();
             double max = imageInfo.getColorPaletteDef().getMaxDisplaySample();
             //todo Danny
-            String currentSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().getDescriptiveColorSchemeName(min,max,logScaled);
+            String currentSchemeName = parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().getDescriptiveColorSchemeName(min, max, logScaled);
 
             if (parentForm.getProductSceneView().getImageInfo().getColorPaletteSourcesInfo().isSchemeDefault()) {
 
@@ -742,6 +764,19 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
                     autoDistribute = true;
                     break;
+                case InvertPalette:
+                    isSourceLogScaled = currentInfo.isLogScaled();
+                    isTargetLogScaled = currentInfo.isLogScaled();
+                    parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredScheme(true);
+                    parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredCpd(true);
+
+
+                    min = currentCPD.getMinDisplaySample();
+                    max = currentCPD.getMaxDisplaySample();
+                    cpd = currentCPD;
+
+                    autoDistribute = true;
+                    break;
                 default:
                     currentInfo.getColorPaletteSourcesInfo().setSchemeName(null);
                     String cpdFileName = ColorPalettesManager.getNameFor(selectedCPD);
@@ -781,8 +816,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
             }
 
 
-            if (checksOut &&  testMinMax(min, max, isTargetLogScaled)) {
-                currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
+             if (checksOut && testMinMax(min, max, isTargetLogScaled)) {
+                if (key == RangeKey.InvertPalette) {
+                    currentInfo.setColorPaletteDefInvert(cpd);
+                } else {
+                    currentInfo.setColorPaletteDef(cpd, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
+                }
 
                 if (key == RangeKey.ToggleLog) {
                     currentInfo.setLogScaled(isTargetLogScaled);
@@ -880,9 +919,6 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         currentInfo.setColorPaletteDef(selectedCPD, min, max, autoDistribute, isSourceLogScaled, isTargetLogScaled);
         currentInfo.getColorPaletteSourcesInfo().setSchemeName(colorSchemaName);
         currentInfo.getColorPaletteSourcesInfo().setSchemeDefault(isDefaultList);
-
-
-
 
 
         currentMinFieldValue = Double.toString(min);

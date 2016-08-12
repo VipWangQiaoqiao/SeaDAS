@@ -25,52 +25,47 @@ class ColorPalettesManager {
         final ArrayList<ColorPaletteDef> newCpdList = new ArrayList<>();
         final ArrayList<String> newCpdNames = new ArrayList<>();
 
-        final File[] file_oceancolor_default = palettesDir.listFiles(new FilenameFilter() {
+        final File[] oceancolor_default = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.toLowerCase().equals("oceancolor_standard.cpd"));
+                return (name.toLowerCase().startsWith("oceancolor_standard"));
 
             }
         });
+        Arrays.sort(oceancolor_default);
 
-        final File[] universal_palettes = palettesDir.listFiles(new FilenameFilter() {
+        final File[] universal_bluered_palettes = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.toLowerCase().startsWith("universal"));
+                return (name.toLowerCase().startsWith("universal_bluered"));
 
             }
         });
-        Arrays.sort(universal_palettes);
-//        final File[] files_oceancolor = palettesDir.listFiles(new FilenameFilter() {
-//            @Override
-//            public boolean accept(File dir, String name) {
-//                return (name.toLowerCase().endsWith(".cpd") && name.toLowerCase().startsWith("oceancolor_") && !name.toLowerCase().equals("oceancolor_standard.cpd") );
-//
-//            }
-//        });
+        Arrays.sort(universal_bluered_palettes);
 
-//        final File[] files_other = palettesDir.listFiles(new FilenameFilter() {
-//            @Override
-//            public boolean accept(File dir, String name) {
-//                return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().startsWith("oceancolor_"));
-//
-//            }
-//        });
+        final File[] universal_bluegreen_palettes = palettesDir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return (name.toLowerCase().startsWith("universal_bluegreen"));
+
+            }
+        });
+        Arrays.sort(universal_bluegreen_palettes);
+
 
         final File[] files_other = palettesDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().equals("oceancolor_standard.cpd")
+                return (name.toLowerCase().endsWith(".cpd") && !name.toLowerCase().startsWith("oceancolor_standard")
                         && !name.toLowerCase().startsWith("universal"));
 
             }
         });
-
-//        Arrays.sort(files_oceancolor);
         Arrays.sort(files_other);
-        File[] tmpfiles1 = concat(file_oceancolor_default,universal_palettes);
-//        File[] tmpfiles2 = concat(tmpfiles1, files_oceancolor);
-        File[] files = concat(tmpfiles1, files_other);
+
+        File[] tmpfiles1 = concat(oceancolor_default,universal_bluered_palettes);
+        File[] tmpfiles2 = concat(universal_bluegreen_palettes,files_other);
+        File[] files = concat(tmpfiles1, tmpfiles2);
 
         for (File file : files) {
             try {

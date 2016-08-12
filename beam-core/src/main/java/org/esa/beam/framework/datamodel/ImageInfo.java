@@ -50,7 +50,6 @@ public class ImageInfo implements Cloneable {
     private ColorPaletteSourcesInfo colorPaletteSourcesInfo = new ColorPaletteSourcesInfo();
 
 
-
     /**
      * Enumerates the possible histogram matching modes.
      */
@@ -105,7 +104,7 @@ public class ImageInfo implements Cloneable {
      * Gets the color palette definition as used for images created from single bands.
      *
      * @return The color palette definition. Can be {@code null}.
-     * In this case {@link #getRgbChannelDef()} is non-null.
+     *         In this case {@link #getRgbChannelDef()} is non-null.
      */
     public ColorPaletteDef getColorPaletteDef() {
         return colorPaletteDef;
@@ -115,7 +114,7 @@ public class ImageInfo implements Cloneable {
      * Gets the RGB(A) channel definition as used for images created from 3 tp 4 bands.
      *
      * @return The RGB(A) channel definition.
-     * Can be {@code null}. In this case {@link #getColorPaletteDef()} is non-null.
+     *         Can be {@code null}. In this case {@link #getColorPaletteDef()} is non-null.
      */
     public RGBChannelDef getRgbChannelDef() {
         return rgbChannelDef;
@@ -321,7 +320,7 @@ public class ImageInfo implements Cloneable {
                 double currTargetValue;
                 if (i == 0) {
                     currTargetValue = minTargetValue;
-                } else if (i == sourceCPD.getNumPoints() -1) {
+                } else if (i == sourceCPD.getNumPoints() - 1) {
                     currTargetValue = maxTargetValue;
                 } else {
                     currTargetValue = a + b * sourceCPD.getPointAt(i).getSample();
@@ -335,6 +334,32 @@ public class ImageInfo implements Cloneable {
         } else {
             targetCPD.setPoints(sourceCPD.getPoints().clone());
         }
+    }
+
+
+    public void setColorPaletteDefInvert(ColorPaletteDef colorPaletteDef) {
+        transferPointsInvert(colorPaletteDef, getColorPaletteDef());
+    }
+
+    private static void transferPointsInvert(ColorPaletteDef sourceCPD, ColorPaletteDef targetCPD) {
+
+        alignNumPoints(sourceCPD, targetCPD);
+
+
+        Color[] targetColors = new Color[sourceCPD.getNumPoints()];
+        for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
+            int targetPointIndex = sourceCPD.getNumPoints() - 1 - i;
+            targetColors[i] = sourceCPD.getPointAt(targetPointIndex).getColor();
+        }
+
+        for (int i = 0; i < sourceCPD.getNumPoints(); i++) {
+            targetCPD.getPointAt(i).setLabel(sourceCPD.getPointAt(i).getLabel());
+            targetCPD.getPointAt(i).setColor(targetColors[i]);
+        }
+
+        targetCPD.setLogScaled(sourceCPD.isLogScaled());
+        targetCPD.setDiscrete(sourceCPD.isDiscrete());
+        targetCPD.setAutoDistribute(sourceCPD.isAutoDistribute());
     }
 
 
@@ -425,10 +450,10 @@ public class ImageInfo implements Cloneable {
             return max;
         }
         if (linearValue < min && logValue >= min) {
-            return min - (max-min)*FORCED_CHANGE_FACTOR;
+            return min - (max - min) * FORCED_CHANGE_FACTOR;
         }
         if (linearValue > max && logValue <= max) {
-            return max + (max-min)*FORCED_CHANGE_FACTOR;
+            return max + (max - min) * FORCED_CHANGE_FACTOR;
         }
 
         return logValue;
@@ -455,10 +480,10 @@ public class ImageInfo implements Cloneable {
             return max;
         }
         if (linearWeight < 0 && linearValue >= min) {
-            return min - (max-min)*FORCED_CHANGE_FACTOR;
+            return min - (max - min) * FORCED_CHANGE_FACTOR;
         }
         if (linearWeight > 1 && linearValue <= max) {
-            return max + (max-min)*FORCED_CHANGE_FACTOR;
+            return max + (max - min) * FORCED_CHANGE_FACTOR;
         }
 
         return linearValue;

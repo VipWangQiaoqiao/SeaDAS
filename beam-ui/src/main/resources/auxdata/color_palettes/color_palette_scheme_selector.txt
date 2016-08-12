@@ -1,10 +1,10 @@
  SELECTOR_TITLE         :SCHEME_ID          :COLORBAR_TITLE(OVERRIDE)    :COLORBAR_LABELS(OVERRIDE)      :DESCRIPTION(OVERRIDE)
- AOT                    :aot                :                            :                               :
- Angstrom               :angstrom           :                            :                               :
- Chl (Rainbow)          :chlor_a_oc         :null                        :                               :
- Chl (UniBR-Palette)    :chlor_a_uni        :                            :                               :
- Chl (UniBG-Palette)    :chlor_a_uni_bg     :Chlorophyll                 :                               :
- Chl (BG-Palette)       :chlor_a_bluegreen  :Chlorophyll                 :                               :
+ AOT                    :aot                :                            :                               :USE_SCHEME_VALUE
+ Angstrom               :angstrom           :                            :                               :USE_SCHEME_VALUE
+ Chl (Rainbow)          :chlor_a_oc         :                            :                               :USE_SCHEME_VALUE
+ Chl (UniBR-Palette)    :chlor_a_uni        :USE_SCHEME_VALUE            :USE_SCHEME_VALUE               :USE_SCHEME_VALUE
+ Chl (UniBG-Palette)    :chlor_a_uni_bg     :Chl (UniBG-Palette)         :                               :USE_SCHEME_VALUE
+ Chl (BG-Palette)       :chlor_a_bluegreen  :Chlorophyll                 :USE_SCHEME_VALUE               :USE_SCHEME_VALUE
  PAR                    :par                :                            :                               :
  PIC                    :pic                :Particulate Inorganic Carbon:                               :
  POC                    :poc                :Particulate Organic Carbon  :                               :
