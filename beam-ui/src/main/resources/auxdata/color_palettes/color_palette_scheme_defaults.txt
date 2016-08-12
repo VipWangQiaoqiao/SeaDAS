@@ -16,15 +16,15 @@
  bbp_unc_*_giop      :bbp_giop         :                            :                               :
  bbp_*_giop          :bbp_giop         :                            :                               :
  bbp_s_*             :bbp_s            :                            :                               :
- bbp_*               :bbp              :                            :                               :
+ bbp_*               :bbp              :USE_SCHEME_VALUE            :USE_SCHEME_VALUE               :USE_SCHEME_VALUE
  bb_*_giop           :bbp_giop         :                            :                               :
  bb_unc_*_giop       :bbp_giop         :                            :                               :
  bbw_*               :bbw              :                            :                               :
  bb_*                :bb               :                            :                               :
  calcite_*           :calcite          :                            :                               :
- Chlorophyll_a       :chlor_a          :Chlorophyll                 :                               :
- chlor_*             :chlor_a          :Chlorophyll                 :                               :
- chl_*               :chlor_a          :Chlorophyll                 :                               :
+ Chlorophyll_a       :chlor_a          :                            :                               :
+ chlor_*             :chlor_a          :USE_SCHEME_VALUE            :USE_SCHEME_VALUE               :USE_SCHEME_VALUE
+ chl_*               :chlor_a          :                            :                               :
  eps_78              :epsilon          :                            :                               :
  FLAG_*              :flags            :                            :                               :
  fqy                 :fqy              :                            :                               :

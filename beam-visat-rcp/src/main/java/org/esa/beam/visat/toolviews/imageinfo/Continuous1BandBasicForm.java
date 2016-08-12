@@ -100,7 +100,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteChooser.setPreferredSize(new Dimension(180, 30));
         colorPaletteChooser.setMaximumRowCount(20);
 
-        exportButton = new JButton("Save CPD File");
+        exportButton = new JButton("Save Palette");
         exportButton.setToolTipText("Save color palette to cpd file."); /*I18N*/
         exportButton.addActionListener(new ActionListener() {
             @Override
@@ -391,9 +391,13 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         jPanel.add(loadWithCPDFileValuesCheckBox, gbc);
 
 
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.weightx = 1.0;
         headerSeparator = new TitledSeparator("", TitledSeparator.TYPE_PARTIAL_ETCHED, SwingConstants.LEFT);
         gbc.gridy++;
         jPanel.add(headerSeparator, gbc);
+
 
 
         gbc.gridy++;
@@ -404,6 +408,10 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         paletteInversionButton.setPreferredSize(paletteInversionButton.getMinimumSize());
 
         jPanel.add(paletteInversionButton, gbc);
+
+
+
+
 
 
         gbc.gridy++;
