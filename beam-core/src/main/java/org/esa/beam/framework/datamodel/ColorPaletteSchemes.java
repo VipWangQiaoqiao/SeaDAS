@@ -115,7 +115,7 @@ public class ColorPaletteSchemes {
 
     private void initComboBox() {
 
-        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null, null, null, 0, 0, false, null, true, true, null, null, null);
+        jComboBoxFirstEntryColorPaletteInfo = new ColorPaletteInfo(getjComboBoxFirstEntryName(), null, null, null, 0, 0, false, true, true, null, null, null,colorPaletteDir);
         colorPaletteInfos.add(jComboBoxFirstEntryColorPaletteInfo);
 
         initColorPaletteInfos(colorPaletteDir, colorPaletteInfos, schemesFile, true);
@@ -289,7 +289,7 @@ public class ColorPaletteSchemes {
                             ColorPaletteDef colorPaletteDef;
                             try {
                                 colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
-                                colorPaletteInfo = new ColorPaletteInfo(id, rootSchemeName, description, cpdFileNameStandard, min, max, logScaled, colorPaletteDef, overRide, true, cpdFileNameColorBlind, colorBarTitle, colorBarLabels);
+                                colorPaletteInfo = new ColorPaletteInfo(id, rootSchemeName, description, cpdFileNameStandard, min, max, logScaled, overRide, true, cpdFileNameColorBlind, colorBarTitle, colorBarLabels,colorPaletteDir);
 
                             } catch (IOException e) {
                                 //        colorPaletteInfo = new ColorPaletteInfo(name, description);
@@ -411,7 +411,7 @@ public class ColorPaletteSchemes {
                                     if (!fieldsInitialized ||
                                             (fieldsInitialized && overRide)) {
 
-                                        cpdFileNameStandard = storedColorPaletteInfo.getCpdFilename();
+                                        cpdFileNameStandard = storedColorPaletteInfo.getCpdFilenameStandard();
                                         minVal = storedColorPaletteInfo.getMinValue();
                                         maxVal = storedColorPaletteInfo.getMaxValue();
                                         logScaled = storedColorPaletteInfo.isLogScaled();
@@ -455,7 +455,7 @@ public class ColorPaletteSchemes {
 
                         try {
                             colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
-                            colorPaletteInfo = new ColorPaletteInfo(name, rootSchemeName, description, cpdFileNameStandard, minVal, maxVal, logScaled, colorPaletteDef, overRide, true, cpdFileNameColorBlind, colorBarTitle, colorBarLabels);
+                            colorPaletteInfo = new ColorPaletteInfo(name, rootSchemeName, description, cpdFileNameStandard, minVal, maxVal, logScaled, overRide, true, cpdFileNameColorBlind, colorBarTitle, colorBarLabels,colorPaletteDir);
 
                         } catch (IOException e) {
                             //        colorPaletteInfo = new ColorPaletteInfo(name, description);
@@ -629,7 +629,14 @@ public class ColorPaletteSchemes {
         this.jComboBoxFirstEntryName = jComboBoxFirstEntryName;
     }
 
-    private boolean getUseColorBlind() {
+
+    public static boolean getUseColorBlind(PropertyMap configuration) {
+
+        return configuration.getPropertyBool(PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, true);
+
+    }
+
+    public boolean getUseColorBlind() {
 
         return configuration.getPropertyBool(PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, true);
 

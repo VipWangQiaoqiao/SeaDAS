@@ -465,11 +465,15 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private void handleColorPaletteInfoComboBoxSelection(JComboBox jComboBox, boolean isDefaultList) {
         ColorPaletteInfo colorPaletteInfo = (ColorPaletteInfo) jComboBox.getSelectedItem();
 
-        if (colorPaletteInfo.getCpdFilename() != null && colorPaletteInfo.isEnabled()) {
+        PropertyMap configuration = parentForm.getProductSceneView().getSceneImage().getConfiguration();
+        boolean useColorBlindPalettes = ColorPaletteSchemes.getUseColorBlind(configuration);
+
+        if (colorPaletteInfo.getCpdFilename(useColorBlindPalettes) != null && colorPaletteInfo.isEnabled()) {
+
 
             try {
 
-                File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename());
+                File cpdFile = new File(parentForm.getIODir(), colorPaletteInfo.getCpdFilename(useColorBlindPalettes));
                 ColorPaletteDef colorPaletteDef = ColorPaletteDef.loadColorPaletteDef(cpdFile);
 
 
@@ -478,7 +482,9 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
                 colorPaletteChooser.setSelectedColorPaletteDefinition(colorPaletteDef);
 
-                parentForm.getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(colorPaletteInfo.getCpdFilename());
+
+
+                parentForm.getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(colorPaletteInfo.getCpdFilename(useColorBlindPalettes));
 
 
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarLabels(colorPaletteInfo.getColorBarLabels());
@@ -487,7 +493,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(colorPaletteInfo.getMaxValue());
                 parentForm.getImageInfo().getColorPaletteSourcesInfo().setLogScaled(colorPaletteInfo.isLogScaled());
 
-                PropertyMap configuration = parentForm.getProductSceneView().getSceneImage().getConfiguration();
+
                 if (ImageLegend.allowColorbarAutoReset(configuration)) {
                     parentForm.getImageInfo().getColorPaletteSourcesInfo().setColorBarInitialized(false);
                     parentForm.getProductSceneView().getColorBarParamInfo().setParamsInitialized(false);
@@ -497,7 +503,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 applyChanges(colorPaletteInfo.getMinValue(),
                         colorPaletteInfo.getMaxValue(),
                         colorPaletteDef,
-                        colorPaletteInfo.isSourceLogScaled(),
+                        colorPaletteDef.isLogScaled(),
                         colorPaletteInfo.isLogScaled(), colorPaletteInfo.getRootName(), isDefaultList);
 
 
@@ -651,7 +657,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 //            if (savedColorPaletteInfo != null) {
 //               double min = savedColorPaletteInfo.getMinValue();
 //               double max = savedColorPaletteInfo.getMaxValue();
-//               String cdp = savedColorPaletteInfo.getCpdFilename();
+//               String cdp = savedColorPaletteInfo.getCpdFilenameStandard();
 //                boolean log = savedColorPaletteInfo.isLogScaled();
 //            }
 

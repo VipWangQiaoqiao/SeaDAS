@@ -530,12 +530,13 @@ public class ProductSceneView extends BasicView
 
             if (matchingColorPaletteInfo != null) {
                 //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
-                ColorPaletteDef colorPaletteDef = matchingColorPaletteInfo.getColorPaletteDef();
+                PropertyMap configuration = getSceneImage().getConfiguration();
+                ColorPaletteDef colorPaletteDef = matchingColorPaletteInfo.getColorPaletteDef(ColorPaletteSchemes.getUseColorBlind(configuration));
                 getImageInfo().setColorPaletteDef(colorPaletteDef,
                         matchingColorPaletteInfo.getMinValue(),
                         matchingColorPaletteInfo.getMaxValue(),
                         true, //colorPaletteDef.isAutoDistribute(),
-                        matchingColorPaletteInfo.isSourceLogScaled(),
+                        colorPaletteDef.isLogScaled(),
                         matchingColorPaletteInfo.isLogScaled());
                 getImageInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
                 //      this.productSceneView.setColorPaletteInfo(cpdInfo);
@@ -548,14 +549,14 @@ public class ProductSceneView extends BasicView
                 getImageInfo().getColorPaletteSourcesInfo().setColorBarMax(matchingColorPaletteInfo.getMaxValue());
                 getImageInfo().getColorPaletteSourcesInfo().setLogScaled(matchingColorPaletteInfo.isLogScaled());
 
-                PropertyMap configuration = getSceneImage().getConfiguration();
+
                 if (ImageLegend.allowColorbarAutoReset(configuration)) {
                     getImageInfo().getColorPaletteSourcesInfo().setColorBarInitialized(false);
                     getColorBarParamInfo().setParamsInitialized(false);
                 }
 
                 getImageInfo().getColorPaletteSourcesInfo().setSchemeDefault(true);
-                getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename());
+                getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(matchingColorPaletteInfo.getCpdFilename(ColorPaletteSchemes.getUseColorBlind(configuration)));
 
                 defaultSet = true;
             }

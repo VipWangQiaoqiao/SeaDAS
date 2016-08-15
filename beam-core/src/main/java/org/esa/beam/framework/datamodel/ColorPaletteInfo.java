@@ -1,5 +1,8 @@
 package org.esa.beam.framework.datamodel;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Created by danielknowles on 6/28/14.
  */
@@ -7,23 +10,20 @@ public class ColorPaletteInfo {
     private String name;
     private String rootName;
     private String description;
-    private String cpdFilename;
+    private String cpdFilenameStandard;
     private String cpdFilenameColorBlind;
     private String colorBarTitle;
     private String colorBarLabels;
     private double minValue;
     private double maxValue;
     private boolean isLogScaled;
-    private boolean isSourceLogScaled = false;
-    private ColorPaletteDef colorPaletteDef;
     private boolean enabled;
     private boolean isOverRide;
+    private File colorPaletteDir;
 
 
-
-
-    public ColorPaletteInfo(String name, String rootName, String description, String cpdFilename, double minValue, double maxValue,
-                            boolean isLogScaled, ColorPaletteDef colorPaletteDef, boolean isOverRide, boolean enabled, String cpdFilenameColorBlind, String colorBarTitle, String colorBarLabels) {
+    public ColorPaletteInfo(String name, String rootName, String description, String cpdFilenameStandard, double minValue, double maxValue,
+                            boolean isLogScaled, boolean isOverRide, boolean enabled, String cpdFilenameColorBlind, String colorBarTitle, String colorBarLabels,  File colorPaletteDir) {
         this.setName(name);
         if (rootName != null) {
             this.setRootName(rootName);
@@ -31,41 +31,44 @@ public class ColorPaletteInfo {
             this.setRootName(name);
         }
         this.setDescription(description);
-        this.setCpdFilename(cpdFilename);
+        this.setCpdFilenameStandard(cpdFilenameStandard);
         this.setMinValue(minValue);
         this.setMaxValue(maxValue);
         this.setLogScaled(isLogScaled);
         this.setEnabled(enabled);
         this.setOverRide(isOverRide);
-        this.colorPaletteDef = colorPaletteDef;
         this.cpdFilenameColorBlind = cpdFilenameColorBlind;
         this.colorBarLabels = colorBarLabels;
         this.colorBarTitle = colorBarTitle;
-        if (colorPaletteDef != null) {
-            this.setSourceLogScaled(colorPaletteDef.isLogScaled());
-        } else {
-            this.setSourceLogScaled(false);
+        this.setColorPaletteDir(colorPaletteDir);
+    }
+
+
+    public ColorPaletteDef getColorPaletteDef(boolean useColorBlindPalette) {
+       File cpdFile = new File(colorPaletteDir, getCpdFilename(useColorBlindPalette));
+        try {
+            return ColorPaletteDef.loadColorPaletteDef(cpdFile);
+
+        } catch (IOException e) {
+            return null;
         }
     }
 
-    public ColorPaletteInfo(String name, String description) {
-        // create a disabled colorPaletteInfo
-        this.setName(name);
-        this.setDescription(description);
-//        this.setCpdFilename(cpdFilename);
-//        this.setMinValue(minValue);
-//        this.setMaxValue(maxValue);
-//        this.setLogScaled(isLogScaled);
-        this.setEnabled(false);
- //       this.colorPaletteDef = colorPaletteDef;
+
+    public String getCpdFilename(boolean isUseColorBlind) {
+        if (isUseColorBlind) {
+            return getCpdFilenameColorBlind();
+        } else {
+            return getCpdFilenameStandard();
+        }
     }
 
-    public String getCpdFilename() {
-        return cpdFilename;
+    public String getCpdFilenameStandard() {
+        return cpdFilenameStandard;
     }
 
-    private void setCpdFilename(String cpdFilename) {
-        this.cpdFilename = cpdFilename;
+    private void setCpdFilenameStandard(String cpdFilename) {
+        this.cpdFilenameStandard = cpdFilename;
     }
 
     public double getMinValue() {
@@ -117,21 +120,6 @@ public class ColorPaletteInfo {
         this.description = description;
     }
 
-    public ColorPaletteDef getColorPaletteDef() {
-        return colorPaletteDef;
-    }
-
-    private void setColorPaletteDef(ColorPaletteDef colorPaletteDef) {
-        this.colorPaletteDef = colorPaletteDef;
-    }
-
-    public boolean isSourceLogScaled() {
-        return isSourceLogScaled;
-    }
-
-    private void setSourceLogScaled(boolean sourceLogScaled) {
-        isSourceLogScaled = sourceLogScaled;
-    }
 
     public boolean isEnabled() {
         return enabled;
@@ -179,5 +167,15 @@ public class ColorPaletteInfo {
 
     public void setColorBarLabels(String colorBarLabels) {
         this.colorBarLabels = colorBarLabels;
+    }
+
+
+
+    public File getColorPaletteDir() {
+        return colorPaletteDir;
+    }
+
+    public void setColorPaletteDir(File colorPaletteDir) {
+        this.colorPaletteDir = colorPaletteDir;
     }
 }
