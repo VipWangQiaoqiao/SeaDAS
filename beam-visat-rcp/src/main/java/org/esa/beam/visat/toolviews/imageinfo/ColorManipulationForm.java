@@ -622,10 +622,12 @@ class ColorManipulationForm {
     }
 
     private void setIODir(final File dir) {
-        if (preferences != null) {
-            preferences.setPropertyString(PREFERENCES_KEY_IO_DIR, dir.getPath());
-        }
-        ioDir = dir;
+        // todo Danny commented out and added line of code to avoid changing the directory for cpd import/export
+//        if (preferences != null) {
+//            preferences.setPropertyString(PREFERENCES_KEY_IO_DIR, dir.getPath());
+//        }
+//        ioDir = dir;
+        ioDir = getSystemAuxdataDir();
     }
 
     protected File getIODir() {
@@ -679,6 +681,9 @@ class ColorManipulationForm {
                     setApplyEnabled(true);
                     getImageInfo().getColorPaletteSourcesInfo().setCpdFileName(file.getName());
                     getImageInfo().getColorPaletteSourcesInfo().setSchemeName(null);
+                    getImageInfo().getColorPaletteSourcesInfo().setAlteredScheme(true);
+
+
                 } catch (IOException e) {
                     showErrorDialog("Failed to import colour palette:\n" + e.getMessage());
                 }
@@ -754,6 +759,7 @@ class ColorManipulationForm {
                     ColorPaletteDef.storeColorPaletteDef(colorPaletteDef, file);
                     imageInfo.getColorPaletteSourcesInfo().setCpdFileName(file.getName());
                     imageInfo.getColorPaletteSourcesInfo().setSchemeName(null);
+                    imageInfo.getColorPaletteSourcesInfo().setAlteredCpd(false);
                 } catch (IOException e) {
                     showErrorDialog("Failed to export colour palette:\n" + e.getMessage());  /*I18N*/
                 }

@@ -10,6 +10,7 @@ public class ColorPaletteSourcesInfo {
 
     private String cpdFileName = null;
     private boolean alteredCpd = false;
+    private boolean invertedCpd = false;
 
     private boolean schemeDefault = true;
 
@@ -59,8 +60,17 @@ public class ColorPaletteSourcesInfo {
             return null;
         }
 
-        String alteredString = (isAlteredCpd()) ? "*" : "";
-        return getCpdFileName() + alteredString;
+        StringBuilder displayedCpdFileName = new StringBuilder("");
+        displayedCpdFileName.append(getCpdFileName());
+
+        if (isInvertedCpd()) {
+            displayedCpdFileName.append(" (inverted)");
+        }
+
+        if (isAlteredCpd()) {
+            displayedCpdFileName.append(" *");
+        }
+        return displayedCpdFileName.toString();
     }
 
 
@@ -71,6 +81,8 @@ public class ColorPaletteSourcesInfo {
 
 
         String alteredString = (isAlteredScheme(min, max, logScaled)) ? "*" : "";
+
+
         if (isSchemeDefault()) {
             return "Default '" + getSchemeName() + "'" + alteredString;
         } else {
@@ -79,10 +91,8 @@ public class ColorPaletteSourcesInfo {
     }
 
 
-
-
     public boolean isAlteredScheme(double min, double max, boolean logScaled) {
-       return (isAlteredScheme() || logScaled != isLogScaled || min != getColorBarMin() || max != getColorBarMax() || getSchemeName() == null);
+        return (isAlteredScheme() || logScaled != isLogScaled || min != getColorBarMin() || max != getColorBarMax() || getSchemeName() == null);
     }
 
     public boolean isAlteredCpd() {
@@ -159,5 +169,21 @@ public class ColorPaletteSourcesInfo {
 
     public void setColorBarInitialized(boolean colorBarInitialized) {
         this.colorBarInitialized = colorBarInitialized;
+    }
+
+    public boolean isInvertedCpd() {
+        return invertedCpd;
+    }
+
+    public void setInvertedCpd(boolean state) {
+        this.invertedCpd = state;
+    }
+
+    public void toggleInvertedCpd() {
+        if (isInvertedCpd()) {
+            this.invertedCpd = false;
+        } else {
+            this.invertedCpd = true;
+        }
     }
 }

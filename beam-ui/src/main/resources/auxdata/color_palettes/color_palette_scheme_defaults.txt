@@ -120,7 +120,7 @@
  flh                 :
  ipar                :
  Kd_lee              :
- Kd_490              :
+ Kd_490              : Kd_490
  NDVI                :
  ndvi                :
  nLw_lt_430          :

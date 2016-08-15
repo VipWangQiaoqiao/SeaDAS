@@ -100,7 +100,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         colorPaletteChooser.setPreferredSize(new Dimension(180, 30));
         colorPaletteChooser.setMaximumRowCount(20);
 
-        exportButton = new JButton("Save Palette");
+        exportButton = new JButton("Save");
         exportButton.setToolTipText("Save color palette to cpd file."); /*I18N*/
         exportButton.addActionListener(new ActionListener() {
             @Override
@@ -113,7 +113,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         });
         exportButton.setEnabled(true);
 
-        paletteInversionButton = new JButton("Invert Palette");
+        paletteInversionButton = new JButton("Invert");
         paletteInversionButton.setToolTipText("Invert palette"); /*I18N*/
         paletteInversionButton.addActionListener(new ActionListener() {
             @Override
@@ -400,30 +400,63 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
 
 
 
-        gbc.gridy++;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(4, 0, 0, 0);
+//        gbc.gridy++;
+//        gbc.fill = GridBagConstraints.NONE;
+//        gbc.insets = new Insets(4, 0, 0, 0);
+//        paletteInversionButton.setMinimumSize(paletteInversionButton.getMinimumSize());
+//        paletteInversionButton.setMaximumSize(paletteInversionButton.getMinimumSize());
+//        paletteInversionButton.setPreferredSize(paletteInversionButton.getMinimumSize());
+//
+//        jPanel.add(paletteInversionButton, gbc);
+//
+//
+//
+//
+//
+//
+//        gbc.gridy++;
+//        gbc.fill = GridBagConstraints.NONE;
+//        gbc.insets = new Insets(4, 0, 0, 0);
+//        exportButton.setMinimumSize(exportButton.getMinimumSize());
+//        exportButton.setMaximumSize(exportButton.getMinimumSize());
+//        exportButton.setPreferredSize(exportButton.getMinimumSize());
+//
+//        jPanel.add(exportButton, gbc);
+
+
+        JPanel buttonsJPanel = new JPanel(new GridBagLayout());
+        final GridBagConstraints gbcButtons = new GridBagConstraints();
+
+        gbcButtons.anchor = GridBagConstraints.WEST;
+        gbcButtons.insets = new Insets(0, 5, 0, 0);
+        gbcButtons.gridy = 0;
+        gbcButtons.gridx = 0;
+        gbcButtons.weightx = 1.0;
+
+        gbcButtons.fill = GridBagConstraints.NONE;
+        gbcButtons.insets = new Insets(4, 0, 0, 0);
         paletteInversionButton.setMinimumSize(paletteInversionButton.getMinimumSize());
         paletteInversionButton.setMaximumSize(paletteInversionButton.getMinimumSize());
         paletteInversionButton.setPreferredSize(paletteInversionButton.getMinimumSize());
 
-        jPanel.add(paletteInversionButton, gbc);
+        buttonsJPanel.add(paletteInversionButton, gbcButtons);
 
-
-
-
-
-
-        gbc.gridy++;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(4, 0, 0, 0);
+        gbcButtons.gridx++;
+        gbcButtons.fill = GridBagConstraints.NONE;
+        gbcButtons.anchor = GridBagConstraints.EAST;
+        gbcButtons.insets = new Insets(4, 0, 0, 0);
         exportButton.setMinimumSize(exportButton.getMinimumSize());
         exportButton.setMaximumSize(exportButton.getMinimumSize());
         exportButton.setPreferredSize(exportButton.getMinimumSize());
 
-        jPanel.add(exportButton, gbc);
+        buttonsJPanel.add(exportButton, gbcButtons);
 
 
+        gbc.gridy++;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(4, 0, 0, 0);
+
+        jPanel.add(buttonsJPanel, gbc);
 
         return jPanel;
     }
@@ -775,9 +808,7 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
                 case InvertPalette:
                     isSourceLogScaled = currentInfo.isLogScaled();
                     isTargetLogScaled = currentInfo.isLogScaled();
-                    parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredScheme(true);
-                    parentForm.getImageInfo().getColorPaletteSourcesInfo().setAlteredCpd(true);
-
+                    parentForm.getImageInfo().getColorPaletteSourcesInfo().toggleInvertedCpd();
 
                     min = currentCPD.getMinDisplaySample();
                     max = currentCPD.getMaxDisplaySample();
