@@ -69,7 +69,9 @@ class ColorManipulationForm {
 
     private final static String PREFERENCES_KEY_IO_DIR = "visat.color_palettes.dir";
 
-    private final static String FILE_EXTENSION = ".cpd";
+    private final static String FILE_EXTENSION_CPD = ".cpd";
+    private final static String FILE_EXTENSION_PAL = ".pal";
+
     private VisatApp visatApp;
     private PropertyMap preferences;
     private AbstractButton resetButton;
@@ -81,6 +83,7 @@ class ColorManipulationForm {
     private ProductSceneView productSceneView;
     private Band[] bandsToBeModified;
     private BeamFileFilter beamFileFilter;
+    private BeamFileFilter palFileFilter;
     private final ProductNodeListener productNodeListener;
     private boolean defaultColorPalettesInstalled;
     private boolean defaultRgbProfilesInstalled;
@@ -642,14 +645,26 @@ class ColorManipulationForm {
         return ioDir;
     }
 
-    private BeamFileFilter getOrCreateColorPaletteDefinitionFileFilter() {
+    private BeamFileFilter getOrCreateCpdFileFilter() {
         if (beamFileFilter == null) {
             final String formatName = "COLOR_PALETTE_DEFINITION_FILE";
-            final String description = "Colour palette files (*" + FILE_EXTENSION + ")";  /*I18N*/
-            beamFileFilter = new BeamFileFilter(formatName, FILE_EXTENSION, description);
+            final String description = "Colour palette files (*" + FILE_EXTENSION_CPD + ")";  /*I18N*/
+            beamFileFilter = new BeamFileFilter(formatName, FILE_EXTENSION_CPD, description);
         }
         return beamFileFilter;
     }
+
+
+
+    private BeamFileFilter getOrCreatePalFileFilter() {
+        if (palFileFilter == null) {
+            final String formatName = "GENERIC_COLOR_PALETTE_FILE";
+            final String description = "Colour palette files (*" + FILE_EXTENSION_PAL + ")";  /*I18N*/
+            palFileFilter = new BeamFileFilter(formatName, FILE_EXTENSION_PAL, description);
+        }
+        return palFileFilter;
+    }
+
 
     private void importColorPaletteDef() {
         final ImageInfo targetImageInfo = getImageInfo();
@@ -660,7 +675,7 @@ class ColorManipulationForm {
         }
         final BeamFileChooser fileChooser = new BeamFileChooser();
         fileChooser.setDialogTitle("Import Colour Palette"); /*I18N*/
-        fileChooser.setFileFilter(getOrCreateColorPaletteDefinitionFileFilter());
+        fileChooser.setFileFilter(getOrCreateCpdFileFilter());
         fileChooser.setCurrentDirectory(getIODir());
         final int result = fileChooser.showOpenDialog(getToolViewPaneControl());
         final File file = fileChooser.getSelectedFile();
@@ -740,8 +755,11 @@ class ColorManipulationForm {
             return;
         }
         final BeamFileChooser fileChooser = new BeamFileChooser();
-        fileChooser.setDialogTitle("Export Colour Palette"); /*I18N*/
-        fileChooser.setFileFilter(getOrCreateColorPaletteDefinitionFileFilter());
+        fileChooser.setDialogTitle("Export Color Palette"); /*I18N*/
+
+     //   fileChooser.setFileFilter(getOrCreateCpdFileFilter());
+        fileChooser.addChoosableFileFilter(getOrCreateCpdFileFilter());
+        fileChooser.addChoosableFileFilter(getOrCreatePalFileFilter());
         fileChooser.setCurrentDirectory(getIODir());
         final int result = fileChooser.showSaveDialog(getToolViewPaneControl());
         File file = fileChooser.getSelectedFile();
@@ -753,19 +771,29 @@ class ColorManipulationForm {
                 if (!visatApp.promptForOverwrite(file)) {
                     return;
                 }
-                file = FileUtils.ensureExtension(file, FILE_EXTENSION);
+
                 try {
                     final ColorPaletteDef colorPaletteDef = imageInfo.getColorPaletteDef();
-                    ColorPaletteDef.storeColorPaletteDef(colorPaletteDef, file);
-                    imageInfo.getColorPaletteSourcesInfo().setCpdFileName(file.getName());
-                    imageInfo.getColorPaletteSourcesInfo().setSchemeName(null);
-                    imageInfo.getColorPaletteSourcesInfo().setAlteredCpd(false);
+
+                    String path = file.getPath();
+                    if (path.endsWith(FILE_EXTENSION_PAL)) {
+                        ColorPaletteDef.storePal(colorPaletteDef, file);
+                    } else {
+                        file = FileUtils.ensureExtension(file, FILE_EXTENSION_CPD);
+                        ColorPaletteDef.storeColorPaletteDef(colorPaletteDef, file);
+                        imageInfo.getColorPaletteSourcesInfo().setCpdFileName(file.getName());
+                        imageInfo.getColorPaletteSourcesInfo().setSchemeName(null);
+                        imageInfo.getColorPaletteSourcesInfo().setAlteredCpd(false);
+                    }
+
+
                 } catch (IOException e) {
-                    showErrorDialog("Failed to export colour palette:\n" + e.getMessage());  /*I18N*/
+                    showErrorDialog("Failed to export color palette:\n" + e.getMessage());  /*I18N*/
                 }
             }
         }
     }
+
 
 
     private boolean isRgbMode() {

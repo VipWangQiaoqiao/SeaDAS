@@ -66,7 +66,6 @@ public class PropertyMap {
      * Loads key/value pairs from a text file into this property map.
      *
      * @param file the text file
-     *
      * @throws IOException if an I/O error occurs
      */
     public void load(File file) throws IOException {
@@ -82,7 +81,6 @@ public class PropertyMap {
      *
      * @param file   the text file
      * @param header an optional file header
-     *
      * @throws IOException if an I/O error occurs
      */
     public void store(File file, String header) throws IOException {
@@ -94,20 +92,19 @@ public class PropertyMap {
 
         final String text = baos.toString();
         final StringTokenizer st = new StringTokenizer(text, "\n\r", false);
-        
-        final String[] colors = new String[st.countTokens()/2];
-        final String[] samples = new String[st.countTokens()/2];
+
+        final String[] colors = new String[st.countTokens() / 2];
+        final String[] samples = new String[st.countTokens() / 2];
         final ArrayList<String> metaInfo = new ArrayList<>();
         int pos, numOfColors = 0, numOfSamples = 0;
         String nextToken;
         while (st.hasMoreElements()) {
             nextToken = st.nextElement().toString();
-            if (nextToken.startsWith("color") ){
+            if (nextToken.startsWith("color")) {
                 pos = new Integer(nextToken.substring(nextToken.indexOf("color") + "color".length(), nextToken.indexOf("="))).intValue();
                 colors[pos] = nextToken;
                 numOfColors++;
-            }
-            else if (nextToken.startsWith("sample") ){
+            } else if (nextToken.startsWith("sample")) {
                 pos = new Integer(nextToken.substring(nextToken.indexOf("sample") + "sample".length(), nextToken.indexOf("="))).intValue();
                 samples[pos] = nextToken;
                 numOfSamples++;
@@ -116,20 +113,67 @@ public class PropertyMap {
             }
         }
         BufferedWriter bos = new BufferedWriter(new FileWriter(file));
-        for (int i=0; i<metaInfo.size(); i++) {
+        for (int i = 0; i < metaInfo.size(); i++) {
             bos.write(metaInfo.get(i));
             bos.newLine();
         }
-        for (int i=0; i<numOfColors; i++) {
+        for (int i = 0; i < numOfColors; i++) {
             bos.write(colors[i]);
             bos.newLine();
         }
-        for (int i=0; i<numOfSamples; i++) {
+        for (int i = 0; i < numOfSamples; i++) {
             bos.write(samples[i]);
             bos.newLine();
         }
         bos.close();
     }
+
+    /**
+     * Stores the key/value pairs of this property map into a text file.
+     *
+     * @param file   the text file
+     * @param header an optional file header
+     * @throws IOException if an I/O error occurs
+     */
+    public void storePal(File file, String header) throws IOException {
+        Guardian.assertNotNull("file", file);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(160000);
+        getProperties().store(baos, header);
+        baos.close();
+
+        final String text = baos.toString();
+        final StringTokenizer st = new StringTokenizer(text, "\n\r", false);
+
+        final String[] colors = new String[st.countTokens() / 2];
+        final ArrayList<String> metaInfo = new ArrayList<>();
+        int pos, numOfColors = 0;
+        String nextToken;
+        while (st.hasMoreElements()) {
+            nextToken = st.nextElement().toString();
+            if (nextToken.startsWith("color")) {
+                pos = new Integer(nextToken.substring(nextToken.indexOf("color") + "color".length(), nextToken.indexOf("="))).intValue();
+                colors[pos] = nextToken;
+                numOfColors++;
+            }
+        }
+        BufferedWriter bos = new BufferedWriter(new FileWriter(file));
+
+
+        bos.write("#" + header);
+        bos.newLine();
+
+        for (int i = 0; i < numOfColors; i++) {
+            String splitString[] = colors[i].split("=");
+            if (splitString != null && splitString.length == 2) {
+                bos.write(splitString[1]);
+                bos.newLine();
+            }
+        }
+
+        bos.close();
+    }
+
 
     /**
      * Returns the <code>Properties</code> instance in which this property map stores its key/value pairs.
@@ -149,7 +193,6 @@ public class PropertyMap {
      * Gets a value of type <code>boolean</code>.
      *
      * @param key the key
-     *
      * @return the value for the given key, or <code>false</code> if the key is not contained in this property set.
      */
     public boolean getPropertyBool(String key) {
@@ -161,7 +204,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -174,7 +216,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -191,7 +232,6 @@ public class PropertyMap {
      *
      * @param key   the key
      * @param value the value
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyBool(String key, boolean value) {
@@ -204,7 +244,6 @@ public class PropertyMap {
      *
      * @param key      the key
      * @param newValue the new value
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyBool(String key, Boolean newValue) {
@@ -217,7 +256,6 @@ public class PropertyMap {
      * Gets a value of type <code>int</code>.
      *
      * @param key the key
-     *
      * @return the value for the given key, or <code>0</code> (zero) if the key is not contained in this property set.
      */
     public int getPropertyInt(String key) {
@@ -229,7 +267,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -241,8 +278,8 @@ public class PropertyMap {
                 return Integer.parseInt(value);
             } catch (NumberFormatException e) {
                 String message = "warning: property value of type 'int' expected: "
-                                 + key + "=" + value + "; using default value: "
-                                 + defaultValue;
+                        + key + "=" + value + "; using default value: "
+                        + defaultValue;
                 _logger.warning(message);
                 Debug.trace(message);
             }
@@ -256,7 +293,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -268,8 +304,8 @@ public class PropertyMap {
                 return new Integer(value);
             } catch (NumberFormatException e) {
                 String message = "warning: property value of type 'Integer' expected: "
-                                 + key + "=" + value + "; using default value: "
-                                 + defaultValue;
+                        + key + "=" + value + "; using default value: "
+                        + defaultValue;
                 _logger.warning(message);
                 Debug.trace(message);
             }
@@ -283,7 +319,6 @@ public class PropertyMap {
      *
      * @param key      the key
      * @param newValue the new value
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyInt(String key, int newValue) {
@@ -295,7 +330,6 @@ public class PropertyMap {
      *
      * @param key      the key
      * @param newValue the value
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyInt(String key, Integer newValue) {
@@ -308,7 +342,6 @@ public class PropertyMap {
      * Gets a value of type <code>double</code>.
      *
      * @param key the key
-     *
      * @return the value for the given key, or <code>0.0</code> (zero) if the key is not contained in this property
      *         set.
      */
@@ -321,7 +354,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -332,8 +364,8 @@ public class PropertyMap {
                 return Double.valueOf(value);
             } catch (NumberFormatException e) {
                 String message = "warning: property value of type 'double' expected: "
-                                 + key + "=" + value + "; using default value: "
-                                 + defaultValue;
+                        + key + "=" + value + "; using default value: "
+                        + defaultValue;
                 _logger.warning(message);
                 Debug.trace(message);
             }
@@ -346,7 +378,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -357,8 +388,8 @@ public class PropertyMap {
                 return new Double(value);
             } catch (NumberFormatException e) {
                 String message = "warning: property value of type 'Double' expected: "
-                                 + key + "=" + value + "; using default value: "
-                                 + defaultValue;
+                        + key + "=" + value + "; using default value: "
+                        + defaultValue;
                 _logger.warning(message);
                 Debug.trace(message);
             }
@@ -371,7 +402,6 @@ public class PropertyMap {
      *
      * @param key      the key
      * @param newValue the new value
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyDouble(String key, double newValue) {
@@ -383,7 +413,6 @@ public class PropertyMap {
      *
      * @param key      the key
      * @param newValue the value
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyDouble(String key, Double newValue) {
@@ -396,7 +425,6 @@ public class PropertyMap {
      * Gets a value of type <code>String</code>.
      *
      * @param key the key
-     *
      * @return the value for the given key, or <code>""</code> (empty string) if the key is not contained in this
      *         property set, never <code>null</code>.
      */
@@ -409,7 +437,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -424,7 +451,6 @@ public class PropertyMap {
      *
      * @param key      the key
      * @param newValue the new value
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyString(String key, String newValue) {
@@ -437,7 +463,6 @@ public class PropertyMap {
      * Gets a value of type <code>Color</code>.
      *
      * @param key the key
-     *
      * @return the value for the given key, or <code>Color.black</code> if the key is not contained in this property
      *         set, never <code>null</code>.
      */
@@ -450,7 +475,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -471,7 +495,6 @@ public class PropertyMap {
      *
      * @param key      the key
      * @param newValue the value
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyColor(String key, Color newValue) {
@@ -494,7 +517,6 @@ public class PropertyMap {
      * integer value)</li> </ld>
      *
      * @param key the key
-     *
      * @return the value for the given key, or a plain, 12-point "SandSerif" font if the key is not contained in this
      *         property set, never <code>null</code>.
      */
@@ -510,7 +532,6 @@ public class PropertyMap {
      *
      * @param key          the key
      * @param defaultValue the default value that is returned if the key was not found in this property set.
-     *
      * @return the value for the given key, or <code>defaultValue</code> if the key is not contained in this property
      *         set.
      */
@@ -533,7 +554,6 @@ public class PropertyMap {
      *
      * @param key      the key
      * @param newValue the font
-     *
      * @throws IllegalArgumentException
      */
     public void setPropertyFont(String key, Font newValue) {

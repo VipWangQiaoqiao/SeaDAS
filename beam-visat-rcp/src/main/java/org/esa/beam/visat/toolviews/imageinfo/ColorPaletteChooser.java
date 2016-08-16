@@ -134,12 +134,22 @@ class ColorPaletteChooser extends JComboBox<ColorPaletteChooser.ColorPaletteWrap
 
 
                 if (isSelected) {
+                    StringBuilder toolTipStringBuilder = new StringBuilder("");
 
                     if (cpd != null) {
-                        list.setToolTipText(ColorPalettesManager.getNameFor(cpd));
-                    } else {
-                        list.setToolTipText("");
+                        String fileName = ColorPalettesManager.getNameFor(cpd);
+                        if (fileName != null && fileName.length() > 0) {
+                            toolTipStringBuilder.append(ColorPalettesManager.getNameFor(cpd));
+
+                            String shortDescription = cpd.getShortDescription();
+                            if (shortDescription != null && shortDescription.length() > 0) {
+                                toolTipStringBuilder.append(" (" +shortDescription+")");
+                            }
+                        }
+                        list.setToolTipText(toolTipStringBuilder.toString());
                     }
+
+
                 }
 
                 //    setToolTipText("Note that the color palette definition data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");

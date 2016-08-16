@@ -4,6 +4,7 @@
 numPoints=21
 autoDistribute=true
 isLogScaled=false
+shortDescription=Rainbow based; NOT Color blind compliant
 color0=147,0,108
 color1=111,0,144
 color2=72,0,183

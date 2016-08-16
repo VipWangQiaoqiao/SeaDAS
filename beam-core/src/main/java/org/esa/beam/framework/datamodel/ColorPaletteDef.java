@@ -35,13 +35,14 @@ import java.util.Vector;
  * contained in the curve. This allows a better image interpretation because certain colors correspond to certain sample
  * values even if the curve points are used to create color gradient palettes.
  */
-public class ColorPaletteDef implements Cloneable  {
+public class ColorPaletteDef implements Cloneable {
 
     private final static String _PROPERTY_KEY_NUM_POINTS = "numPoints";
     private final static String _PROPERTY_KEY_COLOR = "color";
     private final static String _PROPERTY_KEY_SAMPLE = "sample";
     private final static String _PROPERTY_KEY_AUTODISTRIBUTE = "autoDistribute";
     private final static String _PROPERTY_KEY_IS_LOG_SCALED = "isLogScaled";
+    private final static String _PROPERTY_KEY_SHORT_DESCRIPTION = "shortDescription";
 
     /**
      * this curve's points
@@ -51,6 +52,7 @@ public class ColorPaletteDef implements Cloneable  {
     private boolean discrete;
     private boolean autoDistribute;
     private boolean isLogScaled;
+    private String shortDescription;
 
     public ColorPaletteDef(double minSample, double maxSample) {
         this(minSample, 0.5 * (maxSample + minSample), maxSample);
@@ -144,7 +146,6 @@ public class ColorPaletteDef implements Cloneable  {
      *
      * @param index   the index
      * @param scaling the scaling
-     *
      * @return true, if a point has been inserted
      */
     public boolean createPointAfter(int index, Scaling scaling) {
@@ -171,7 +172,6 @@ public class ColorPaletteDef implements Cloneable  {
      *
      * @param c1 1st color
      * @param c2 2nd color
-     *
      * @return the center color
      */
     public static Color getCenterColor(Color c1, Color c2) {
@@ -240,9 +240,7 @@ public class ColorPaletteDef implements Cloneable  {
      * Loads a color palette definition from the given file
      *
      * @param file the file
-     *
      * @return the color palette definition, never null
-     *
      * @throws IOException if an I/O error occurs
      */
     public static ColorPaletteDef loadColorPaletteDef(File file) throws IOException {
@@ -257,8 +255,8 @@ public class ColorPaletteDef implements Cloneable  {
         double lastSample = 0;
         for (int i = 0; i < points.length; i++) {
             final ColorPaletteDef.Point point = new ColorPaletteDef.Point();
-            final Color color =  propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR + i);
-            double sample =  propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + i);
+            final Color color = propertyMap.getPropertyColor(_PROPERTY_KEY_COLOR + i);
+            double sample = propertyMap.getPropertyDouble(_PROPERTY_KEY_SAMPLE + i);
             if (i > 0 && sample < lastSample) {
                 sample = lastSample + 1.0;
             }
@@ -273,6 +271,7 @@ public class ColorPaletteDef implements Cloneable  {
         ColorPaletteDef paletteDef = new ColorPaletteDef(points, 256);
         paletteDef.setAutoDistribute(propertyMap.getPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, false));
         paletteDef.setLogScaled(propertyMap.getPropertyBool(_PROPERTY_KEY_IS_LOG_SCALED, false));
+        paletteDef.setShortDescription(propertyMap.getPropertyString(_PROPERTY_KEY_SHORT_DESCRIPTION, ""));
         return paletteDef;
     }
 
@@ -281,7 +280,6 @@ public class ColorPaletteDef implements Cloneable  {
      *
      * @param colorPaletteDef thje color palette definition
      * @param file            the file
-     *
      * @throws IOException if an I/O error occurs
      */
     public static void storeColorPaletteDef(ColorPaletteDef colorPaletteDef, File file) throws IOException {
@@ -291,11 +289,50 @@ public class ColorPaletteDef implements Cloneable  {
         propertyMap.setPropertyInt(_PROPERTY_KEY_NUM_POINTS, numPoints);
         propertyMap.setPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, colorPaletteDef.isAutoDistribute());
         propertyMap.setPropertyBool(_PROPERTY_KEY_IS_LOG_SCALED, colorPaletteDef.isLogScaled());
+        propertyMap.setPropertyString(_PROPERTY_KEY_SHORT_DESCRIPTION, colorPaletteDef.getShortDescription());
         for (int i = 0; i < numPoints; i++) {
-            propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR +  i, points[i].getColor());
+            propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR + i, points[i].getColor());
             propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + i, points[i].getSample());
         }
         propertyMap.store(file, "SeaDAS Color Palette Definition File"); /*I18N*/
+    }
+
+    /**
+     * Stores a 256 point generic color palette
+     *
+     * @param colorPaletteDef thje color palette definition
+     * @param file            the file
+     * @throws IOException if an I/O error occurs
+     */
+    public static void storePal(ColorPaletteDef colorPaletteDef, File file) throws IOException {
+
+        final ColorPaletteDef.Point[] points = colorPaletteDef.getPoints();
+        final PropertyMap propertyMap = new PropertyMap();
+        final int numPoints = points.length;
+        propertyMap.setPropertyInt(_PROPERTY_KEY_NUM_POINTS, numPoints);
+        propertyMap.setPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, colorPaletteDef.isAutoDistribute());
+        propertyMap.setPropertyBool(_PROPERTY_KEY_IS_LOG_SCALED, colorPaletteDef.isLogScaled());
+        propertyMap.setPropertyString(_PROPERTY_KEY_SHORT_DESCRIPTION, colorPaletteDef.getShortDescription());
+
+        double min = colorPaletteDef.getMinDisplaySample();
+        double max = colorPaletteDef.getMaxDisplaySample();
+        double sample;
+
+        for (int i = 0; i < 256; i++) {
+            double weight = i / 255.0;
+
+            if (colorPaletteDef.isLogScaled()) {
+                sample = ImageLegend.getLogarithmicValueUsingLinearWeight(weight, min, max);
+            } else {
+                sample = weight * (max - min) + min;
+            }
+            Color color = colorPaletteDef.computeColor(sample);
+            propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR + i, color);
+            propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + i, i);
+
+        }
+
+        propertyMap.storePal(file, "Generic 256 Point RGB Color Palette"); /*I18N*/
     }
 
     private void check2PointsMinimum() {
@@ -447,6 +484,14 @@ public class ColorPaletteDef implements Cloneable  {
 
     public void setLogScaled(boolean logScaled) {
         isLogScaled = logScaled;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
     public static class Point implements Cloneable {

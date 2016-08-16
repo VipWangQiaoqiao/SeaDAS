@@ -3,6 +3,7 @@
 numPoints=41
 autoDistribute=false
 isLogScaled=true
+shortDescription=Color blind semi-compliant
 color0=0,0,130
 color1=0,0,144
 color2=0,0,161
