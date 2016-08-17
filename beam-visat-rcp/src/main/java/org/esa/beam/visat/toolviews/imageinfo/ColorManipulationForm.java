@@ -69,9 +69,10 @@ class ColorManipulationForm {
 
     private final static String PREFERENCES_KEY_IO_DIR = "visat.color_palettes.dir";
 
-    private final static String FILE_EXTENSION_CPD = ".cpd";
-    private final static String FILE_EXTENSION_PAL = ".pal";
-    private final static String FILE_EXTENSION_CPT = ".cpt";
+
+    private final static String FILE_EXTENSION_CPD = "cpd";
+    private final static String FILE_EXTENSION_PAL = "pal";
+    private final static String FILE_EXTENSION_CPT = "cpt";
 
     private VisatApp visatApp;
     private PropertyMap preferences;
@@ -650,8 +651,8 @@ class ColorManipulationForm {
     private BeamFileFilter getOrCreateCpdFileFilter() {
         if (beamFileFilter == null) {
             final String formatName = "COLOR_PALETTE_DEFINITION_FILE";
-            final String description = "Colour palette files (*" + FILE_EXTENSION_CPD + ")";  /*I18N*/
-            beamFileFilter = new BeamFileFilter(formatName, FILE_EXTENSION_CPD, description);
+            final String description = FILE_EXTENSION_CPD.toUpperCase() + " - SeaDAS color palette format (*."+FILE_EXTENSION_CPD + ")";  /*I18N*/
+            beamFileFilter = new BeamFileFilter(formatName, "."+FILE_EXTENSION_CPD, description);
         }
         return beamFileFilter;
     }
@@ -661,17 +662,17 @@ class ColorManipulationForm {
     private BeamFileFilter getOrCreatePalFileFilter() {
         if (palFileFilter == null) {
             final String formatName = "GENERIC_COLOR_PALETTE_FILE";
-            final String description = "Color palette files (*" + FILE_EXTENSION_PAL + ")";  /*I18N*/
-            palFileFilter = new BeamFileFilter(formatName, FILE_EXTENSION_PAL, description);
+            final String description = FILE_EXTENSION_PAL.toUpperCase() + " - Generic 256 point color palette format (*."+FILE_EXTENSION_PAL + ")";  /*I18N*/
+            palFileFilter = new BeamFileFilter(formatName, "."+FILE_EXTENSION_PAL, description);
         }
         return palFileFilter;
     }
 
     private BeamFileFilter getOrCreateCptFileFilter() {
         if (cptFileFilter == null) {
-            final String formatName = "GENERIC_COLOR_PALETTE_FILE";
-            final String description = "Color palette files (*" + FILE_EXTENSION_CPT + ")";  /*I18N*/
-            cptFileFilter = new BeamFileFilter(formatName, FILE_EXTENSION_CPT, description);
+            final String formatName = "CPT_COLOR_PALETTE_FILE";
+            final String description = FILE_EXTENSION_CPT.toUpperCase() + " - Generic mapping tools color palette format (*."+FILE_EXTENSION_CPT + ")";  /*I18N*/
+            cptFileFilter = new BeamFileFilter(formatName, "."+FILE_EXTENSION_CPT, description);
         }
         return cptFileFilter;
     }
@@ -789,12 +790,12 @@ class ColorManipulationForm {
                     final ColorPaletteDef colorPaletteDef = imageInfo.getColorPaletteDef();
 
                     String path = file.getPath();
-                    if (path.endsWith(FILE_EXTENSION_PAL)) {
+                    if (path.endsWith("."+FILE_EXTENSION_PAL)) {
                         ColorPaletteDef.storePal(colorPaletteDef, file);
-                    } else if (path.endsWith(FILE_EXTENSION_CPT)) {
+                    } else if (path.endsWith("."+FILE_EXTENSION_CPT)) {
                         ColorPaletteDef.storeCpt(colorPaletteDef, file);
                     } else {
-                        file = FileUtils.ensureExtension(file, FILE_EXTENSION_CPD);
+                        file = FileUtils.ensureExtension(file, "."+FILE_EXTENSION_CPD);
                         ColorPaletteDef.storeColorPaletteDef(colorPaletteDef, file);
                         imageInfo.getColorPaletteSourcesInfo().setCpdFileName(file.getName());
                         imageInfo.getColorPaletteSourcesInfo().setSchemeName(null);

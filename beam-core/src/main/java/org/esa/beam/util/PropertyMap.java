@@ -128,51 +128,6 @@ public class PropertyMap {
         bos.close();
     }
 
-    /**
-     * Stores the key/value pairs of this property map into a text file.
-     *
-     * @param file   the text file
-     * @param header an optional file header
-     * @throws IOException if an I/O error occurs
-     */
-    public void storePal(File file, String header) throws IOException {
-        Guardian.assertNotNull("file", file);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(160000);
-        getProperties().store(baos, header);
-        baos.close();
-
-        final String text = baos.toString();
-        final StringTokenizer st = new StringTokenizer(text, "\n\r", false);
-
-        final String[] colors = new String[st.countTokens() / 2];
-        final ArrayList<String> metaInfo = new ArrayList<>();
-        int pos, numOfColors = 0;
-        String nextToken;
-        while (st.hasMoreElements()) {
-            nextToken = st.nextElement().toString();
-            if (nextToken.startsWith("color")) {
-                pos = new Integer(nextToken.substring(nextToken.indexOf("color") + "color".length(), nextToken.indexOf("="))).intValue();
-                colors[pos] = nextToken;
-                numOfColors++;
-            }
-        }
-        BufferedWriter bos = new BufferedWriter(new FileWriter(file));
-
-
-        bos.write("#" + header);
-        bos.newLine();
-
-        for (int i = 0; i < numOfColors; i++) {
-            String splitString[] = colors[i].split("=");
-            if (splitString != null && splitString.length == 2) {
-                bos.write(splitString[1]);
-                bos.newLine();
-            }
-        }
-
-        bos.close();
-    }
 
 
     /**

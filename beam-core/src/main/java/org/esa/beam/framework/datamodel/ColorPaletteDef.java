@@ -309,13 +309,8 @@ public class ColorPaletteDef implements Cloneable {
      */
     public static void storePal(ColorPaletteDef colorPaletteDef, File file) throws IOException {
 
-        final ColorPaletteDef.Point[] points = colorPaletteDef.getPoints();
-        final PropertyMap propertyMap = new PropertyMap();
-        final int numPoints = points.length;
-        propertyMap.setPropertyInt(_PROPERTY_KEY_NUM_POINTS, numPoints);
-        propertyMap.setPropertyBool(_PROPERTY_KEY_AUTODISTRIBUTE, colorPaletteDef.isAutoDistribute());
-        propertyMap.setPropertyBool(_PROPERTY_KEY_IS_LOG_SCALED, colorPaletteDef.isLogScaled());
-        propertyMap.setPropertyString(_PROPERTY_KEY_SHORT_DESCRIPTION, colorPaletteDef.getShortDescription());
+        ArrayList<String> fileContents = new ArrayList<String>();
+        String DELIMITER = " ";
 
         double min = colorPaletteDef.getMinDisplaySample();
         double max = colorPaletteDef.getMaxDisplaySample();
@@ -330,12 +325,11 @@ public class ColorPaletteDef implements Cloneable {
                 sample = weight * (max - min) + min;
             }
             Color color = colorPaletteDef.computeColor(sample);
-            propertyMap.setPropertyColor(_PROPERTY_KEY_COLOR + i, color);
-            propertyMap.setPropertyDouble(_PROPERTY_KEY_SAMPLE + i, i);
+            fileContents.add(getCptColorEntry(color, DELIMITER));
 
         }
 
-        propertyMap.storePal(file, "Generic 256 Point RGB Color Palette"); /*I18N*/
+        printStringArrayListToFile(file, "Generic 256 Point RGB Color Palette", fileContents);
     }
 
 
