@@ -21,8 +21,11 @@ import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.math.MathUtils;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Vector;
@@ -334,6 +337,97 @@ public class ColorPaletteDef implements Cloneable {
 
         propertyMap.storePal(file, "Generic 256 Point RGB Color Palette"); /*I18N*/
     }
+
+
+    /**
+     * Stores  color palette in cpt format
+     *
+     * @param colorPaletteDef thje color palette definition
+     * @param file            the file
+     * @throws IOException if an I/O error occurs
+     */
+    public static void storeCpt(ColorPaletteDef colorPaletteDef, File file) throws IOException {
+
+        ArrayList<String> cptFileContents = new ArrayList<String>();
+        String DELIMITER = " \t";
+        String DELIMITER_BIG = " \t\t";
+
+        final ColorPaletteDef.Point[] points = colorPaletteDef.getPoints();
+        final int numPoints = points.length;
+        boolean discrete = colorPaletteDef.isDiscrete();
+
+
+        int numEntries;
+
+        if (discrete) {
+            numEntries = numPoints;
+        } else {
+            numEntries = numPoints - 1;
+        }
+
+        for (int i = 0; i < numEntries; i++) {
+            String currLine;
+
+//            this code would be used if one wanted to include values
+//            double currValue = colorPaletteDef.getPointAt(i).getSample();
+//            double nextValue = colorPaletteDef.getPointAt(i + 1).getSample();
+//            String currValueString = Double.toString(currValue);
+//            String nextValueString = Double.toString(nextValue);
+
+            Color currColor = colorPaletteDef.getPointAt(i).getColor();
+            String currColorString = getCptColorEntry(currColor, DELIMITER);
+
+            String currValueString = Integer.toString(i) + ".0";
+            String nextValueString = Integer.toString(i + 1) + ".0";
+
+            if (discrete) {
+                currLine = "  " + currValueString + DELIMITER + currColorString + DELIMITER_BIG + nextValueString + DELIMITER + currColorString;
+            } else {
+                Color nextColor = colorPaletteDef.getPointAt(i + 1).getColor();
+                String nextColorString = getCptColorEntry(nextColor, DELIMITER);
+                currLine = "  " + currValueString + DELIMITER + currColorString + DELIMITER_BIG + nextValueString + DELIMITER + nextColorString;
+            }
+
+            cptFileContents.add(currLine);
+
+        }
+
+
+        printStringArrayListToFile(file, "CPT Format Color Palette", cptFileContents);
+    }
+
+    private static String getCptColorEntry(Color color, String DELIMITER) {
+
+        String colorRed = Integer.toString(color.getRed());
+        String colorGreen = Integer.toString(color.getGreen());
+        String colorBlue = Integer.toString(color.getBlue());
+        String colorString = colorRed + DELIMITER + colorGreen + DELIMITER + colorBlue;
+
+        return colorString;
+
+    }
+
+    private static void printStringArrayListToFile(File file, String header, ArrayList<String> contentsArrayList) {
+
+        BufferedWriter bos = null;
+        try {
+            bos = new BufferedWriter(new FileWriter(file));
+
+            bos.write("#" + header);
+            bos.newLine();
+
+            for (String currLine : contentsArrayList) {
+                bos.write(currLine);
+                bos.newLine();
+            }
+
+            bos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
 
     private void check2PointsMinimum() {
         if (getNumPoints() == 2) {

@@ -1,0 +1,52 @@
+# SeaDAS Color Palette Definition File
+# created by Daniel Knowles, 2016
+# SeaDAS Standard Universal Palette
+# Color blind compliant
+# Version 2: darkens center of palette slightly to help distinguist from white (nodata, clouds, etc.)
+# splits at .15 to delineate eutrophic and ligotrophic
+#
+isLogScaled=true
+numPoints=21
+autoDistribute=false
+color0=0,0,130
+color1=0,0,161
+color2=0,3,202
+color3=0,20,235
+color4=1,62,251
+color5=4,109,255
+color6=10,160,255
+color7=30,205,254
+color8=80,231,249
+color9=153,244,233
+color10=203,246,203
+color11=233,244,153
+color12=249,231,80
+color13=254,205,30
+color14=255,160,10
+color15=255,109,4
+color16=251,62,1
+color17=235,20,0
+color18=202,3,0
+color19=161,0,0
+color20=130,0,0
+sample0=0.01
+sample1=0.013108999999999999
+sample2=0.017185
+sample3=0.022536000000000004
+sample4=0.029543000000000003
+sample5=0.038729000000000006
+sample6=0.050771
+sample7=0.066556
+sample8=0.08728299999999999
+sample9=0.11442099999999998
+sample10=0.1499969999999999
+sample11=0.2520851715298311
+sample12=0.5013862673269619
+sample13=1.0
+sample14=2.0
+sample15=3.0
+sample16=5.0
+sample17=10.0
+sample18=20.0
+sample19=30.0
+sample20=50.0
