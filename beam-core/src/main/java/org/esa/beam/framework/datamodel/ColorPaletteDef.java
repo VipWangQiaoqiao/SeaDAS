@@ -360,29 +360,48 @@ public class ColorPaletteDef implements Cloneable {
         }
 
         for (int i = 0; i < numEntries; i++) {
-            String currLine;
+            String currLine = null;
 
 //            this code would be used if one wanted to include values
-//            double currValue = colorPaletteDef.getPointAt(i).getSample();
-//            double nextValue = colorPaletteDef.getPointAt(i + 1).getSample();
-//            String currValueString = Double.toString(currValue);
-//            String nextValueString = Double.toString(nextValue);
+            double currValue = colorPaletteDef.getPointAt(i).getSample();
+            String currValueString = Double.toString(currValue);
+
+            double nextValue;
+            String nextValueString = null;
+
 
             Color currColor = colorPaletteDef.getPointAt(i).getColor();
             String currColorString = getCptColorEntry(currColor, DELIMITER);
 
-            String currValueString = Integer.toString(i) + ".0";
-            String nextValueString = Integer.toString(i + 1) + ".0";
+//            String currValueString = Integer.toString(i) + ".0";
+//            String nextValueString = Integer.toString(i + 1) + ".0";
 
             if (discrete) {
-                currLine = "  " + currValueString + DELIMITER + currColorString + DELIMITER_BIG + nextValueString + DELIMITER + currColorString;
+                if (i == numPoints - 1) {
+                    if ((i - 1) >= 0) {
+                        double delta = colorPaletteDef.getPointAt(i).getSample() - colorPaletteDef.getPointAt(i - 1).getSample();
+                        nextValue = colorPaletteDef.getPointAt(i).getSample() + delta;
+                        nextValueString = Double.toString(nextValue);
+                    }
+                } else {
+                    nextValue = colorPaletteDef.getPointAt(i + 1).getSample();
+                    nextValueString = Double.toString(nextValue);
+                }
+
+                if (nextValueString != null) {
+                    currLine = "  " + currValueString + DELIMITER + currColorString + DELIMITER_BIG + nextValueString + DELIMITER + currColorString;
+                }
             } else {
+                nextValue = colorPaletteDef.getPointAt(i + 1).getSample();
+                nextValueString = Double.toString(nextValue);
                 Color nextColor = colorPaletteDef.getPointAt(i + 1).getColor();
                 String nextColorString = getCptColorEntry(nextColor, DELIMITER);
                 currLine = "  " + currValueString + DELIMITER + currColorString + DELIMITER_BIG + nextValueString + DELIMITER + nextColorString;
             }
 
-            cptFileContents.add(currLine);
+            if (currLine != null) {
+                cptFileContents.add(currLine);
+            }
 
         }
 
