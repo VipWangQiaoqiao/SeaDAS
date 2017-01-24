@@ -467,7 +467,15 @@ public class ImageLegend {
                     if (formattedValue != null) {
                         formattedValue.trim();
                         if (formattedValue.length() > 0 && scalingFactor != 0) {
-                            value = Double.valueOf(formattedValue) / getScalingFactor();
+
+                            String[] valueAndString = formattedValue.split(":");
+                            if (valueAndString.length == 2) {
+                                value = Double.valueOf(valueAndString[0]) / getScalingFactor();
+                                formattedValue = valueAndString[1];
+                            } else {
+                                value = Double.valueOf(formattedValue) / getScalingFactor();
+                            }
+
 
                             if (imageInfo.isLogScaled()) {
                                 if (value == min) {
