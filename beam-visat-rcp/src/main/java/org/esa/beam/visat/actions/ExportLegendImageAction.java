@@ -68,6 +68,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String COLOR_BAR_LENGTH_PARAM_STR = "legend.colorBarLength";
     private static final String COLOR_BAR_THICKNESS_PARAM_STR = "legend.colorBarThickness";
     private static final String LAYER_SCALING_PARAM_STR = "legend.layerScalingThickness";
+    private static final String LAYER_OFFSET_PARAM_STR = "legend.layerOffset";
+    private static final String LAYER_SHIFT_PARAM_STR = "legend.layerShift";
     private static final String CENTER_ON_LAYER_PARAM_STR = "legend.centerOnLayer";
 
 
@@ -157,6 +159,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             ShowColorBarOverlayAction showColorBarOverlayAction = new ShowColorBarOverlayAction();
             RenderedImage colorBarImage = createImage("PNG", view);
             showColorBarOverlayAction.setColorBarImage(colorBarImage);
+            showColorBarOverlayAction.setOrientation(imageLegend.getOrientation());
+            showColorBarOverlayAction.setLayerOffset(imageLegend.getLayerOffset());
+            showColorBarOverlayAction.setLayerShift(imageLegend.getLayerShift());
             //showColorBarOverlayAction.setFeatureCollection(imageLegend.getFeatureCollection());
             showColorBarOverlayAction.actionPerformed(event);
             //showColorBarOverlayAction.createColorBarVectorNode();
@@ -215,6 +220,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         view.getColorBarParamInfo().setColorBarLength(imageLegend.getColorBarLength());
         view.getColorBarParamInfo().setColorBarThickness(imageLegend.getColorBarThickness());
         view.getColorBarParamInfo().setLayerScaling(imageLegend.getLayerScaling());
+        view.getColorBarParamInfo().setLayerOffset(imageLegend.getLayerOffset());
+        view.getColorBarParamInfo().setLayerShift(imageLegend.getLayerShift());
         view.getColorBarParamInfo().setCenterOnLayer(new Boolean(imageLegend.isCenterOnLayer()));
         view.getColorBarParamInfo().setManualPoints(imageLegend.getFullCustomAddThesePoints());
         view.getColorBarParamInfo().setDistributionType(imageLegend.getDistributionType());
@@ -312,6 +319,19 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setMinValue(5);
         param.getProperties().setMaxValue(150);
         paramGroup.addParameter(param);
+
+        param = new Parameter(LAYER_OFFSET_PARAM_STR, view.getColorBarParamInfo().getLayerOffset());
+        param.getProperties().setLabel("Location Offset (percent of color bar image height)");
+        param.getProperties().setMinValue(-500);
+        param.getProperties().setMaxValue(500);
+        paramGroup.addParameter(param);
+
+        param = new Parameter(LAYER_SHIFT_PARAM_STR, view.getColorBarParamInfo().getLayerShift());
+        param.getProperties().setLabel("Location Shift (percent of color bar image width)");
+        param.getProperties().setMinValue(-500);
+        param.getProperties().setMaxValue(500);
+        paramGroup.addParameter(param);
+
 
         param = new Parameter(CENTER_ON_LAYER_PARAM_STR, view.getColorBarParamInfo().getCenterOnLayer());
         param.getProperties().setLabel("Center on layer");
@@ -463,6 +483,12 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(LAYER_SCALING_PARAM_STR).getValue();
         imageLegend.setLayerScaling((Double) value);
 
+        value = legendParamGroup.getParameter(LAYER_OFFSET_PARAM_STR).getValue();
+        imageLegend.setLayerOffset((Double) value);
+
+        value = legendParamGroup.getParameter(LAYER_SHIFT_PARAM_STR).getValue();
+        imageLegend.setLayerShift((Double) value);
+
         value = legendParamGroup.getParameter(CENTER_ON_LAYER_PARAM_STR).getValue();
         imageLegend.setCenterOnLayer((Boolean) value);
 
@@ -521,6 +547,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter colorBarLengthParam;
         private Parameter colorBarThicknessParam;
         private Parameter layerScalingParam;
+        private Parameter layerOffsetParam;
+        private Parameter layerShiftParam;
         private Parameter centerOnLayerParam;
 
         private boolean okWasClicked = false;
@@ -678,7 +706,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridy++;
             gbc.gridwidth = 2;
             gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(getScalingPanel("Layer Scaling"), gbc);
+            jPanel.add(getScalingPanel("Scaling and Location (For Layer Only)"), gbc);
 
 
             gbc.gridwidth = 2;
@@ -933,6 +961,18 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridx = 1;
             jPanel.add(layerScalingParam.getEditor().getEditorComponent(), gbc);
 
+            gbc.gridy++;
+            gbc.gridx = 0;
+            jPanel.add(layerOffsetParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(layerOffsetParam.getEditor().getEditorComponent(), gbc);
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            jPanel.add(layerShiftParam.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            jPanel.add(layerShiftParam.getEditor().getEditorComponent(), gbc);
+
 
 //            gbc.gridx = 0;
 //            gbc.gridy++;
@@ -957,6 +997,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             colorBarLengthParam = paramGroup.getParameter(COLOR_BAR_LENGTH_PARAM_STR);
             colorBarThicknessParam = paramGroup.getParameter(COLOR_BAR_THICKNESS_PARAM_STR);
             layerScalingParam = paramGroup.getParameter(LAYER_SCALING_PARAM_STR);
+            layerOffsetParam = paramGroup.getParameter(LAYER_OFFSET_PARAM_STR);
+            layerShiftParam = paramGroup.getParameter(LAYER_SHIFT_PARAM_STR);
             centerOnLayerParam = paramGroup.getParameter(CENTER_ON_LAYER_PARAM_STR);
             numberOfTicksParam = paramGroup.getParameter(NUM_TICKS_PARAM_STR);
             foregroundColorParam = paramGroup.getParameter(FOREGROUND_COLOR_PARAM_STR);

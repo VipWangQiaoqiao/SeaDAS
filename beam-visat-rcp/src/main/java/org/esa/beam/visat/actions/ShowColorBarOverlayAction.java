@@ -38,6 +38,9 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
     private static final String COLORBAR_TYPE_PROPERTY_NAME = "colorbar.type";
     private static final String DEFAULT_LAYER_TYPE = "ColorBarLayerType";
     private RenderedImage colorBarImage;
+    private int orientation;
+    private double layerOffset = 0;
+    private double layerShift = 0;
     private FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection;
 
     @Override
@@ -149,17 +152,33 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
 
         int rasterWidth = raster.getRasterWidth();
         int rasterHeight = raster.getRasterHeight();
+
+        // todo Danny commented these out as orientation was being determined by image dimensions not by actual orientation
         //if color bar is horizontal
-        double scaleX = (colorBarImageHeight < colorBarImageWidth) ? (double) rasterWidth / colorBarImageWidth : 0.6;
+       // double scaleX = (colorBarImageHeight < colorBarImageWidth) ? (double) rasterWidth / colorBarImageWidth : 0.6;
+
         //if color bar is vertical
-        double scaleY = (colorBarImageHeight > colorBarImageWidth) ? (double) rasterHeight / colorBarImageHeight : 0.6;
-        if (scaleX > 1) {
-            scaleY = scaleY + 1;
-        }   else if (scaleY > 1) { //this statement must have the "else" clause, otherwise the scaleX will be problematic.
-            scaleX = scaleX + 1;
-        }
-        int y_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? rasterHeight : (rasterHeight - colorBarImageHeight)/2;
-        int x_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? (rasterWidth - colorBarImageWidth)/2 : rasterWidth ;
+       // double scaleY = (colorBarImageHeight > colorBarImageWidth) ? (double) rasterHeight / colorBarImageHeight : 0.6;
+
+//        if (scaleX > 1) {
+//            scaleY = scaleY + 1;
+//        }   else if (scaleY > 1) { //this statement must have the "else" clause, otherwise the scaleX will be problematic.
+//            scaleX = scaleX + 1;
+//        }
+//        int y_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? rasterHeight : (rasterHeight - colorBarImageHeight)/2;
+//        int x_axis_translation = (colorBarImageHeight < colorBarImageWidth) ? (rasterWidth - colorBarImageWidth)/2 : rasterWidth ;
+
+        //todo Danny added the following 2 lines and commented out the preceding block
+
+
+//        double y_axis_translation = (getOrientation() == ImageLegend.HORIZONTAL) ? rasterHeight + (rasterHeight * getLayerOffset()/100) : (rasterHeight - colorBarImageHeight)/2;
+//        double x_axis_translation = (getOrientation() == ImageLegend.HORIZONTAL) ? (rasterWidth - colorBarImageWidth)/2 : rasterWidth + (rasterWidth * getLayerOffset()/100) ;
+
+        double offset = (getOrientation() == ImageLegend.HORIZONTAL) ?  (colorBarImageHeight * getLayerOffset()/100) : (colorBarImageWidth * getLayerOffset()/100);
+        double shift = (getOrientation() == ImageLegend.HORIZONTAL) ?  (colorBarImageWidth * getLayerShift()/100) : -(colorBarImageHeight * getLayerShift()/100);
+
+        double y_axis_translation = (getOrientation() == ImageLegend.HORIZONTAL) ? rasterHeight + offset : shift+ (rasterHeight - colorBarImageHeight)/2;
+        double x_axis_translation = (getOrientation() == ImageLegend.HORIZONTAL) ? shift+ (rasterWidth - colorBarImageWidth)/2 : rasterWidth + offset ;
         //double[] flatmatrix = {scaleX, 0.0, 0.0, scaleY, x_axis_translation, y_axis_translation};
         double[] flatmatrix = {1, 0.0, 0.0, 1, x_axis_translation, y_axis_translation};
         AffineTransform i2mTransform = new AffineTransform(flatmatrix);
@@ -184,5 +203,29 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
 
     public void setFeatureCollection(FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection) {
         this.featureCollection = featureCollection;
+    }
+
+    public int getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+
+    public double getLayerOffset() {
+        return layerOffset;
+    }
+
+    public void setLayerOffset(double layerOffset) {
+        this.layerOffset = layerOffset;
+    }
+
+    public double getLayerShift() {
+        return layerShift;
+    }
+
+    public void setLayerShift(double layerShift) {
+        this.layerShift = layerShift;
     }
 }

@@ -28,6 +28,8 @@ public class ColorBarParamInfo {
     public static final int  DEFAULT_COLOR_BAR_LENGTH = ImageLegend.DEFAULT_COLOR_BAR_LENGTH;
     public static final int DEFAULT_COLOR_BAR_THICKNESS = 60;
     public static final double DEFAULT_LAYER_SCALING = 90;
+    public static final double DEFAULT_LAYER_OFFSET = 0;
+    public static final double DEFAULT_LAYER_SHIFT = 0;
     public static final Boolean DEFAULT_CENTER_ON_LAYER = Boolean.TRUE;
     public static final String DEFAULT_MANUAL_POINTS = "";
     public static final String DEFAULT_ORIENTATION = HORIZONTAL_STR;
@@ -53,6 +55,8 @@ public class ColorBarParamInfo {
     private int colorBarLength = DEFAULT_COLOR_BAR_LENGTH;
     private int colorBarThickness = DEFAULT_COLOR_BAR_THICKNESS;
     private double layerScaling = DEFAULT_LAYER_SCALING;
+    private double layerOffset = DEFAULT_LAYER_OFFSET;
+    private double layerShift = DEFAULT_LAYER_SHIFT;
     private Boolean centerOnLayer = DEFAULT_CENTER_ON_LAYER;
     private String manualPoints = DEFAULT_MANUAL_POINTS;
     private String orientation = DEFAULT_ORIENTATION;
@@ -240,5 +244,22 @@ public class ColorBarParamInfo {
 
     public void setDecimalPlacesForce(boolean decimalPlacesForce) {
         this.decimalPlacesForce = decimalPlacesForce;
+    }
+
+    public double getLayerOffset() {
+        return layerOffset;
+    }
+
+    public void setLayerOffset(double layerOffset) {
+        this.layerOffset = layerOffset;
+    }
+
+
+    public double getLayerShift() {
+        return layerShift;
+    }
+
+    public void setLayerShift(double layerShift) {
+        this.layerShift = layerShift;
     }
 }

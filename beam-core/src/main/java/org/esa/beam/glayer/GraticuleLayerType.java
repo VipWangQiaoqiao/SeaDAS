@@ -94,9 +94,9 @@ public class GraticuleLayerType extends LayerType {
     public static final int DEFAULT_TEXT_ROTATION_NORTH_SOUTH = 45;
     public static final int DEFAULT_TEXT_ROTATION_WEST_EAST = 0;
     public static final boolean DEFAULT_TEXT_ENABLED_NORTH = true;
-    public static final boolean DEFAULT_TEXT_ENABLED_SOUTH = false;
+    public static final boolean DEFAULT_TEXT_ENABLED_SOUTH = true;
     public static final boolean DEFAULT_TEXT_ENABLED_WEST = true;
-    public static final boolean DEFAULT_TEXT_ENABLED_EAST = false;
+    public static final boolean DEFAULT_TEXT_ENABLED_EAST = true;
     public static final boolean DEFAULT_LINE_ENABLED = true;
     public static final boolean DEFAULT_LINE_DASHED = true;
     public static final double DEFAULT_LINE_DASHED_PHASE = 3;

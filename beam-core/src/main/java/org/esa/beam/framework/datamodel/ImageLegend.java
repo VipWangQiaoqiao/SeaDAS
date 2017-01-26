@@ -65,6 +65,8 @@ public class ImageLegend {
 
 
     public static final int DEFAULT_COLOR_BAR_LENGTH = 1200;
+    public static final double DEFAULT_LAYER_OFFSET = 0.0;
+    public static final double DEFAULT_LAYER_SHIFT = 0.0;
     public static final int DEFAULT_COLOR_BAR_THICKNESS = 48;
     public static final double DEFAULT_LAYER_SCALING = 75;
     public static final double DEFAULT_SCALING_FACTOR = 1;
@@ -110,6 +112,8 @@ public class ImageLegend {
     private int colorBarLength;
     private int colorBarThickness;
     private double layerScaling;
+    private double layerOffset;
+    private double layerShift;
     private boolean centerOnLayer;
     private String titleOverRide = null;
 
@@ -1453,6 +1457,23 @@ public class ImageLegend {
 
     public static boolean allowColorbarAutoReset(PropertyMap configuration) {
         return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_ALLOW_RESET, DEFAULT_COLORBAR_ALLOW_RESET);
+    }
+
+    public double getLayerOffset() {
+        return layerOffset;
+    }
+
+    public void setLayerOffset(double layerOffset) {
+        this.layerOffset = layerOffset;
+    }
+
+
+    public double getLayerShift() {
+        return layerShift;
+    }
+
+    public void setLayerShift(double layerShift) {
+        this.layerShift = layerShift;
     }
 }
 
