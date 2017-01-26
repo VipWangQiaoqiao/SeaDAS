@@ -805,7 +805,7 @@
         <repository>
             <id>jide</id>
             <name>Internal JIDE repository</name>
-            <url>http://seadasdev.domain.pub/mvn-seadas/</url>
+            <url>https://seadasdev.domain.pub/mvn-seadas/</url>
         </repository>
         <repository>
             <id>bc-mvn</id>
