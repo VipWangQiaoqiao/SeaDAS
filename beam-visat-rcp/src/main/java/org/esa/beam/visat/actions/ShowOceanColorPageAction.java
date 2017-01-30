@@ -33,7 +33,7 @@ public class ShowOceanColorPageAction  extends ExecCommand {
 
         try {
             final Desktop desktop = Desktop.getDesktop();
-            desktop.browse(URI.create("http://oceancolor.gsfc.nasa.gov"));
+            desktop.browse(URI.create("https://oceancolor.gsfc.nasa.gov"));
         } catch (IOException e) {
             // TODO - handle
         } catch (UnsupportedOperationException e) {

@@ -33,7 +33,7 @@ public class ShowForumPage extends ExecCommand {
 
         try {
             final Desktop desktop = Desktop.getDesktop();
-            desktop.browse(URI.create("http://oceancolor.gsfc.nasa.gov/forum/oceancolor/forum_show.pl"));
+            desktop.browse(URI.create("https://oceancolor.gsfc.nasa.gov/forum/oceancolor/forum_show.pl"));
         } catch (IOException e) {
             // TODO - handle
         } catch (UnsupportedOperationException e) {

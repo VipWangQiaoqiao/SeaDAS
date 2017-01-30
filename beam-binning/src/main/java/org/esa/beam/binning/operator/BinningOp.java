@@ -73,7 +73,7 @@ import java.util.logging.Level;
 todo - address the following BinningOp requirements (nf, 2012-03-09)
 
 (1) allow for reading a metadata attributes file (e.g. Java Properties file) whose content will be converted
-    to NetCDF global attributes. See http://oceancolor.gsfc.nasa.gov/DOCS/Ocean_Level-3_Binned_Data_Products.pdf
+    to NetCDF global attributes. See https://oceancolor.gsfc.nasa.gov/DOCS/Ocean_Level-3_Binned_Data_Products.pdf
     for possible attributes. Ideally, we treat the metadata file as a template and fill in placeholders, e.g.
     ${operatorParameters}, or ${operatorName} or ${operatorVersion} ...
 (2) For simplicity, we shall introduce a Boolean parameter 'global'. If it is true, 'region' will be ignored.

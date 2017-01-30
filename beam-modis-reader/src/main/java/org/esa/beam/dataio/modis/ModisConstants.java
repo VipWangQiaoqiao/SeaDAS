@@ -83,7 +83,7 @@ public class ModisConstants {
             940.f, //  19
             3750.f, //  20
             3959.f, //  21
-            3959.f, //  22  YES, they repeat this on the modis site: http://modis.gsfc.nasa.gov/about/specs.html
+            3959.f, //  22  YES, they repeat this on the modis site: https://modis.gsfc.nasa.gov/about/specs.html
             4050.f, //  23
             4465.5f, //  24
             4515.5f, //  25

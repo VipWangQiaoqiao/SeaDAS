@@ -75,9 +75,9 @@ public class TestOpendapAPI {
 //        final String url = "http://stellwagen.er.usgs.gov/opendap/SED_TRANS/catalog.xml";
 //        final String url = "http://www.usgodae.org/dods/GDS/fnmoc_ghrsst/catalog.xml";  // Not a Catalog
 //        final String url = "http://www.usgodae.org/dods/GDS/coamps_cent_am/catalog.xml";  // Not a Catalog
-//        final String url = "http://acdisc.sci.gsfc.nasa.gov/opendap/EarthProbe_TOMS_Level3/TOMSEPL3.008/1996/catalog.xml";
-//        final String url = "http://acdisc.sci.gsfc.nasa.gov/opendap/EarthProbe_TOMS_Level3/catalog.xml";
-//        final String url = "http://acdisc.sci.gsfc.nasa.gov/opendap/catalog.xml";
+//        final String url = "https://acdisc.sci.gsfc.nasa.gov/opendap/EarthProbe_TOMS_Level3/TOMSEPL3.008/1996/catalog.xml";
+//        final String url = "https://acdisc.sci.gsfc.nasa.gov/opendap/EarthProbe_TOMS_Level3/catalog.xml";
+//        final String url = "https://acdisc.sci.gsfc.nasa.gov/opendap/catalog.xml";
 //        final String url = "http://10.3.13.120:8084/thredds/catalog/testAll/catalog.xml";
         final String url = "http://10.3.13.120:8084/thredds/catalog/catalog.xml";
 //        final String url = "http://10.3.13.120:8084/thredds/catalog.xml";

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 
 /**
- * See http://oceancolor.gsfc.nasa.gov/DOCS/OCSSW/l2bin_8c_source.html
+ * See https://oceancolor.gsfc.nasa.gov/DOCS/OCSSW/l2bin_8c_source.html
  *
  * @author Norman Fomferra
  * @author Thomas Storm
