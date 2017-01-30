@@ -43,6 +43,7 @@ public class Graticule {
     private final PixelPos[] _tickPointsEast;
 
 
+
     public enum TextLocation {
         NORTH,
         SOUTH,
@@ -53,6 +54,7 @@ public class Graticule {
         LEFT,
         RIGHT
     }
+
 
 
     public static int TOP_LEFT_CORNER_INDEX = 0;
@@ -238,7 +240,9 @@ public class Graticule {
     public static Graticule create(RasterDataNode raster,
                                    int desiredNumGridLines,
                                    double latMajorStep,
-                                   double lonMajorStep) {
+                                   double lonMajorStep,
+                                   boolean formatCompass,
+                                   boolean decimalFormat) {
 
 
         if (desiredNumGridLines <= 1) {
@@ -375,13 +379,13 @@ public class Graticule {
             final GeneralPath[] paths = createPaths(parallelList, meridianList);
 
 
-            final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH);
-            final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH);
-            final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST);
-            final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST);
+            final TextGlyph[] textGlyphsNorth = createTextGlyphs(parallelList, meridianList, TextLocation.NORTH, formatCompass, decimalFormat);
+            final TextGlyph[] textGlyphsSouth = createTextGlyphs(parallelList, meridianList, TextLocation.SOUTH, formatCompass, decimalFormat);
+            final TextGlyph[] textGlyphsWest = createTextGlyphs(parallelList, meridianList, TextLocation.WEST, formatCompass, decimalFormat);
+            final TextGlyph[] textGlyphsEast = createTextGlyphs(parallelList, meridianList, TextLocation.EAST, formatCompass, decimalFormat);
 
-            final TextGlyph[] textGlyphsLatCorners = createLatCornerTextGlyphs(raster);
-            final TextGlyph[] textGlyphsLonCorners = createLonCornerTextGlyphs(raster);
+            final TextGlyph[] textGlyphsLatCorners = createLatCornerTextGlyphs(raster, formatCompass, decimalFormat);
+            final TextGlyph[] textGlyphsLonCorners = createLonCornerTextGlyphs(raster, formatCompass, decimalFormat);
 
             final PixelPos[] tickPointsNorth = createTickPoints(parallelList, meridianList, TextLocation.NORTH);
             final PixelPos[] tickPointsSouth = createTickPoints(parallelList, meridianList, TextLocation.SOUTH);
@@ -730,7 +734,7 @@ public class Graticule {
     }
 
 
-    private static TextGlyph[] createLonCornerTextGlyphs(RasterDataNode raster) {
+    private static TextGlyph[] createLonCornerTextGlyphs(RasterDataNode raster, boolean formatCompass, boolean formatDecimal) {
         final TextGlyph[] textGlyphs;
         textGlyphs = new TextGlyph[4];
 
@@ -742,26 +746,26 @@ public class Graticule {
         if (geoCoding != null && raster.getSceneRasterHeight() >= 2 && raster.getSceneRasterWidth() >= 2) {
             pixelPos1 = new PixelPos(0, 0);
             pixelPos2 = new PixelPos(0, 1);
-            textGlyphs[TOP_LEFT_CORNER_INDEX] = getLonCornerTextGlyph(geoCoding, pixelPos1, pixelPos2);
+            textGlyphs[TOP_LEFT_CORNER_INDEX] = getLonCornerTextGlyph(geoCoding, pixelPos1, pixelPos2, formatCompass, formatDecimal);
 
             pixelPos1 = new PixelPos(raster.getRasterWidth(), 0);
             pixelPos2 = new PixelPos(raster.getRasterWidth(), 1);
-            textGlyphs[TOP_RIGHT_CORNER_INDEX] = getLonCornerTextGlyph(geoCoding, pixelPos1, pixelPos2);
+            textGlyphs[TOP_RIGHT_CORNER_INDEX] = getLonCornerTextGlyph(geoCoding, pixelPos1, pixelPos2, formatCompass, formatDecimal);
 
             pixelPos1 = new PixelPos(raster.getRasterWidth(), raster.getRasterHeight());
             pixelPos2 = new PixelPos(raster.getRasterWidth(), raster.getRasterHeight() - 1);
-            textGlyphs[BOTTOM_RIGHT_CORNER_INDEX] = getLonCornerTextGlyph(geoCoding, pixelPos1, pixelPos2);
+            textGlyphs[BOTTOM_RIGHT_CORNER_INDEX] = getLonCornerTextGlyph(geoCoding, pixelPos1, pixelPos2, formatCompass, formatDecimal);
 
             pixelPos1 = new PixelPos(0, raster.getRasterHeight());
             pixelPos2 = new PixelPos(0, raster.getRasterHeight() - 1);
-            textGlyphs[BOTTOM_LEFT_CORNER_INDEX] = getLonCornerTextGlyph(geoCoding, pixelPos1, pixelPos2);
+            textGlyphs[BOTTOM_LEFT_CORNER_INDEX] = getLonCornerTextGlyph(geoCoding, pixelPos1, pixelPos2, formatCompass, formatDecimal);
         }
 
         return textGlyphs;
     }
 
 
-    private static TextGlyph[] createLatCornerTextGlyphs(RasterDataNode raster) {
+    private static TextGlyph[] createLatCornerTextGlyphs(RasterDataNode raster, boolean formatCompass, boolean formatDecimal) {
         final TextGlyph[] textGlyphs;
         textGlyphs = new TextGlyph[4];
 
@@ -773,19 +777,19 @@ public class Graticule {
         if (geoCoding != null && raster.getSceneRasterHeight() >= 2 && raster.getSceneRasterWidth() >= 2) {
             pixelPos1 = new PixelPos(0, 0);
             pixelPos2 = new PixelPos(1, 0);
-            textGlyphs[TOP_LEFT_CORNER_INDEX] = getLatCornerTextGlyph(geoCoding, pixelPos1, pixelPos2);
+            textGlyphs[TOP_LEFT_CORNER_INDEX] = getLatCornerTextGlyph(geoCoding, pixelPos1, pixelPos2, formatCompass, formatDecimal);
 
             pixelPos1 = new PixelPos(raster.getRasterWidth(), 0);
             pixelPos2 = new PixelPos(raster.getRasterWidth() - 1, 0);
-            textGlyphs[TOP_RIGHT_CORNER_INDEX] = getLatCornerTextGlyph(geoCoding, pixelPos1, pixelPos2);
+            textGlyphs[TOP_RIGHT_CORNER_INDEX] = getLatCornerTextGlyph(geoCoding, pixelPos1, pixelPos2, formatCompass, formatDecimal);
 
             pixelPos1 = new PixelPos(raster.getRasterWidth(), raster.getRasterHeight());
             pixelPos2 = new PixelPos(raster.getRasterWidth() - 1, raster.getRasterHeight());
-            textGlyphs[BOTTOM_RIGHT_CORNER_INDEX] = getLatCornerTextGlyph(geoCoding, pixelPos1, pixelPos2);
+            textGlyphs[BOTTOM_RIGHT_CORNER_INDEX] = getLatCornerTextGlyph(geoCoding, pixelPos1, pixelPos2, formatCompass, formatDecimal);
 
             pixelPos1 = new PixelPos(0, raster.getRasterHeight());
             pixelPos2 = new PixelPos(1, raster.getRasterHeight());
-            textGlyphs[BOTTOM_LEFT_CORNER_INDEX] = getLatCornerTextGlyph(geoCoding, pixelPos1, pixelPos2);
+            textGlyphs[BOTTOM_LEFT_CORNER_INDEX] = getLatCornerTextGlyph(geoCoding, pixelPos1, pixelPos2, formatCompass, formatDecimal);
         }
 
         return textGlyphs;
@@ -817,21 +821,21 @@ public class Graticule {
 
     private static TextGlyph[] createTextGlyphs(List<List<Coord>> latitudeGridLinePoints,
                                                 List<List<Coord>> longitudeGridLinePoints,
-                                                TextLocation textLocation) {
+                                                TextLocation textLocation, boolean formatCompass, boolean formatDecimal) {
         final List<TextGlyph> textGlyphs = new ArrayList<TextGlyph>();
 
         switch (textLocation) {
             case NORTH:
-                createNorthernLongitudeTextGlyphs(longitudeGridLinePoints, textGlyphs);
+                createNorthernLongitudeTextGlyphs(longitudeGridLinePoints, textGlyphs, formatCompass, formatDecimal);
                 break;
             case SOUTH:
-                createSouthernLongitudeTextGlyphs(longitudeGridLinePoints, textGlyphs);
+                createSouthernLongitudeTextGlyphs(longitudeGridLinePoints, textGlyphs, formatCompass, formatDecimal);
                 break;
             case WEST:
-                createWesternLatitudeTextGlyphs(latitudeGridLinePoints, textGlyphs);
+                createWesternLatitudeTextGlyphs(latitudeGridLinePoints, textGlyphs, formatCompass, formatDecimal);
                 break;
             case EAST:
-                createEasternLatitudeTextGlyphs(latitudeGridLinePoints, textGlyphs);
+                createEasternLatitudeTextGlyphs(latitudeGridLinePoints, textGlyphs, formatCompass, formatDecimal);
                 break;
         }
 
@@ -857,7 +861,7 @@ public class Graticule {
 
 
     private static void createWesternLatitudeTextGlyphs(List<List<Coord>> latitudeGridLinePoints,
-                                                        List<TextGlyph> textGlyphs) {
+                                                        List<TextGlyph> textGlyphs, boolean formatCompass, boolean formatDecimal) {
 
         // Assumes that the line was drawn from west to east
         // coord1 set to first point in order to anchor the text to the edge of the line
@@ -875,7 +879,7 @@ public class Graticule {
                 coord2 = new Coord(coord1.geoPos, pixelPos2);
 
                 if (isCoordPairValid(coord1, coord2)) {
-                    TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(), coord1, coord2);
+                    TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(formatCompass, formatDecimal), coord1, coord2);
                     textGlyphs.add(textGlyph);
                 }
             }
@@ -901,7 +905,7 @@ public class Graticule {
 
 
     private static void createEasternLatitudeTextGlyphs(List<List<Coord>> latitudeGridLinePoints,
-                                                        List<TextGlyph> textGlyphs) {
+                                                        List<TextGlyph> textGlyphs, boolean formatCompass, boolean formatDecimal) {
 
         // Assumes that the line was drawn from west to east
         // coord1 set to last point in order to anchor the text to the edge of the line
@@ -919,7 +923,7 @@ public class Graticule {
                 coord2 = new Coord(coord1.geoPos, pixelPos2);
 
                 if (isCoordPairValid(coord1, coord2)) {
-                    TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(), coord1, coord2);
+                    TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(formatCompass, formatDecimal), coord1, coord2);
                     textGlyphs.add(textGlyph);
                 }
             }
@@ -943,7 +947,7 @@ public class Graticule {
     }
 
     private static void createNorthernLongitudeTextGlyphs(List<List<Coord>> longitudeGridLinePoints,
-                                                          List<TextGlyph> textGlyphs) {
+                                                          List<TextGlyph> textGlyphs, boolean formatCompass, boolean formatDecimal) {
 
         // Assumes that the line was drawn from north to south
         // coord1 set to first point in order to anchor the text to the edge of the line
@@ -961,7 +965,7 @@ public class Graticule {
 
 
                 if (isCoordPairValid(coord1, coord2)) {
-                    TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLonString(), coord1, coord2);
+                    TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLonString(formatCompass, formatDecimal), coord1, coord2);
                     textGlyphs.add(textGlyph);
                 }
             }
@@ -989,7 +993,7 @@ public class Graticule {
 
 
     private static void createSouthernLongitudeTextGlyphs(List<List<Coord>> longitudeGridLinePoints,
-                                                          List<TextGlyph> textGlyphs) {
+                                                          List<TextGlyph> textGlyphs, boolean formatCompass, boolean formatDecimal) {
 
         // Assumes that the line was drawn from north to south
         // coord1 set to last point in order to anchor the text to the edge of the line
@@ -1007,7 +1011,7 @@ public class Graticule {
                 coord2 = new Coord(coord1.geoPos, pixelPos2);
 
                 if (isCoordPairValid(coord1, coord2)) {
-                    TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLonString(), coord1, coord2);
+                    TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLonString(formatCompass, formatDecimal), coord1, coord2);
                     textGlyphs.add(textGlyph);
                 }
             }
@@ -1015,7 +1019,7 @@ public class Graticule {
     }
 
 
-    private static TextGlyph getLonCornerTextGlyph(GeoCoding geoCoding, PixelPos pixelPos1, PixelPos pixelPos2) {
+    private static TextGlyph getLonCornerTextGlyph(GeoCoding geoCoding, PixelPos pixelPos1, PixelPos pixelPos2, boolean formatCompass, boolean formatDecimal) {
 
         if (geoCoding != null) {
             GeoPos geoPos1 = geoCoding.getGeoPos(pixelPos1, null);
@@ -1025,7 +1029,7 @@ public class Graticule {
             Coord coord2 = new Coord(geoPos2, pixelPos2);
 
             if (isCoordPairValid(coord1, coord2)) {
-                TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLonString(), coord1, coord2);
+                TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLonString(formatCompass, formatDecimal), coord1, coord2);
                 return textGlyph;
             }
         }
@@ -1033,7 +1037,7 @@ public class Graticule {
         return null;
     }
 
-    private static TextGlyph getLatCornerTextGlyph(GeoCoding geoCoding, PixelPos pixelPos1, PixelPos pixelPos2) {
+    private static TextGlyph getLatCornerTextGlyph(GeoCoding geoCoding, PixelPos pixelPos1, PixelPos pixelPos2, boolean formatCompass, boolean formatDecimal) {
 
         if (geoCoding != null) {
             GeoPos geoPos1 = geoCoding.getGeoPos(pixelPos1, null);
@@ -1043,7 +1047,7 @@ public class Graticule {
             Coord coord2 = new Coord(geoPos2, pixelPos2);
 
             if (isCoordPairValid(coord1, coord2)) {
-                TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(), coord1, coord2);
+                TextGlyph textGlyph = createTextGlyph(coord1.geoPos.getLatString(formatCompass, formatDecimal), coord1, coord2);
                 return textGlyph;
             }
         }
@@ -1198,4 +1202,7 @@ public class Graticule {
             }
         }
     }
+
+
+
 }

@@ -87,7 +87,7 @@ public class GraticuleLayer extends Layer {
             graticule = Graticule.create(raster,
                     getNumGridLines(),
                     getResLat(),
-                    getResLon());
+                    getResLon(), isFormatCompass(), isFormatDecimal());
         }
         if (graticule != null) {
 
@@ -433,11 +433,14 @@ public class GraticuleLayer extends Layer {
                                    RasterDataNode raster) {
         Font origFont = g2d.getFont();
         Font font = null;
-        if (isCorner) {
-            font = new Font("SansSerif", Font.ITALIC, getCornerFontSizePixels());
-        } else {
-            font = new Font("SansSerif", Font.PLAIN, getFontSizePixels());
-        }
+//        if (isCorner) {
+//            font = new Font("SansSerif", Font.ITALIC, getCornerFontSizePixels());
+//        } else {
+//            font = new Font("SansSerif", Font.PLAIN, getFontSizePixels());
+//        }
+
+        font = new Font("SansSerif", Font.PLAIN, getFontSizePixels());
+
         g2d.setFont(font);
 
         Rectangle2D singleLetter = g2d.getFontMetrics().getStringBounds("W", g2d);
@@ -532,11 +535,13 @@ public class GraticuleLayer extends Layer {
 
         Font origFont = g2d.getFont();
         Font font = null;
-        if (isCorner) {
-            font = new Font("SansSerif", Font.ITALIC, getCornerFontSizePixels());
-        } else {
-            font = new Font("SansSerif", Font.PLAIN, getFontSizePixels());
-        }
+//        if (isCorner) {
+//            font = new Font("SansSerif", Font.ITALIC, getCornerFontSizePixels());
+//        } else {
+//            font = new Font("SansSerif", Font.PLAIN, getFontSizePixels());
+//        }
+        font = new Font("SansSerif", Font.PLAIN, getFontSizePixels());
+
         g2d.setFont(font);
 
 
@@ -893,7 +898,10 @@ public class GraticuleLayer extends Layer {
         if (
                 propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LAT) ||
                         propertyName.equals(GraticuleLayerType.PROPERTY_NAME_RES_LON) ||
-                        propertyName.equals(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES)) {
+                        propertyName.equals(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES) ||
+                        propertyName.equals(GraticuleLayerType.PROPERTY_NAME_FORMAT_COMPASS) ||
+                        propertyName.equals(GraticuleLayerType.PROPERTY_NAME_FORMAT_DECIMAL)
+                ) {
             graticule = null;
         }
         if (getConfiguration().getProperty(propertyName) != null) {
@@ -1072,6 +1080,15 @@ public class GraticuleLayer extends Layer {
                 GraticuleLayerType.DEFAULT_BORDER_ENABLED);
     }
 
+    private boolean isFormatCompass() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_FORMAT_COMPASS,
+                GraticuleLayerType.DEFAULT_FORMAT_COMPASS);
+    }
+
+    private boolean isFormatDecimal() {
+        return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_FORMAT_DECIMAL,
+                GraticuleLayerType.DEFAULT_FORMAT_DECIMAL);
+    }
 
     private Color getBorderColor() {
         return getConfigurationProperty(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR,

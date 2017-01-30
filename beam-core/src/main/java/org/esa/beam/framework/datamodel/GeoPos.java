@@ -198,7 +198,10 @@ public class GeoPos {
      * @return a string of the form DDD°[MM'[SS"]] [N|S].
      */
     public String getLatString() {
-        return getLatString(lat);
+        return getLatString(lat,true, false);
+    }
+    public String getLatString(boolean compassFormat, boolean decimalFormat) {
+        return getLatString(lat, compassFormat, decimalFormat);
     }
 
     /**
@@ -207,7 +210,10 @@ public class GeoPos {
      * @return a string of the form DDD°[MM'[SS"]] [W|E].
      */
     public String getLonString() {
-        return getLonString(lon);
+        return getLonString(lon,true, false);
+    }
+    public String getLonString(boolean compassFormat, boolean decimalFormat) {
+        return getLonString(lon,compassFormat, decimalFormat);
     }
 
     /**
@@ -218,8 +224,11 @@ public class GeoPos {
      * @return a string of the form DDD°[MM'[SS"]] [N|S].
      */
     public static String getLatString(float lat) {
+        return getLatString(lat,true, false);
+    }
+    public static String getLatString(float lat, boolean compassFormat, boolean decimalFormat) {
         if (isLatValid(lat)) {
-            return getDegreeString(lat, false);
+            return getDegreeString(lat, false, compassFormat, decimalFormat);
         } else {
             return "Inv N";
         }
@@ -233,8 +242,12 @@ public class GeoPos {
      * @return a string of the form DDD°[MM'[SS"]] [W|E].
      */
     public static String getLonString(float lon) {
+        return getLonString(lon, true, false);
+    }
+
+    public static String getLonString(float lon, boolean compassFormat, boolean decimalFormat) {
         if (isLonValid(lon)) {
-            return getDegreeString(lon, true);
+            return getDegreeString(lon, true, compassFormat, decimalFormat);
         } else {
             return "Inv E";
         }
@@ -245,7 +258,8 @@ public class GeoPos {
      * Creates a string representation of the given decimal degree value. The string returned has the format
      * DDD°[MM'[SS"]] [N|S|W|E].
      */
-    private static String getDegreeString(float value, boolean longitudial) {
+    private static String getDegreeString(float value, boolean longitudial, boolean compassFormat, boolean decimalFormat) {
+
 
         int sign = (value == 0.0F) ? 0 : (value < 0.0F) ? -1 : 1;
         float rest = Math.abs(value);
@@ -265,35 +279,46 @@ public class GeoPos {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append(degree);
-        sb.append('°');
-        if (minutes != 0 || seconds != 0) {
-            if (minutes < 10) {
-                sb.append('0');
-            }
-            sb.append(minutes);
-            sb.append('\'');
-            if (seconds != 0) {
-                if (seconds < 10) {
+        if (!compassFormat && sign == -1) {
+            sb.append("- ");
+        }
+
+        if (decimalFormat) {
+            sb.append(Math.abs(value));
+        } else {
+            sb.append(degree);
+            sb.append('°');
+            if (minutes != 0 || seconds != 0) {
+                if (minutes < 10) {
                     sb.append('0');
                 }
-                sb.append(seconds);
-                sb.append('"');
+                sb.append(minutes);
+                sb.append('\'');
+                if (seconds != 0) {
+                    if (seconds < 10) {
+                        sb.append('0');
+                    }
+                    sb.append(seconds);
+                    sb.append('"');
+                }
             }
         }
-        if (sign == -1) {
-            sb.append(' ');
-            if (longitudial) {
-                sb.append('W');
-            } else {
-                sb.append('S');
-            }
-        } else if (sign == 1) {
-            sb.append(' ');
-            if (longitudial) {
-                sb.append('E');
-            } else {
-                sb.append('N');
+
+        if (compassFormat) {
+            if (sign == -1) {
+                sb.append(' ');
+                if (longitudial) {
+                    sb.append('W');
+                } else {
+                    sb.append('S');
+                }
+            } else if (sign == 1) {
+                sb.append(' ');
+                if (longitudial) {
+                    sb.append('E');
+                } else {
+                    sb.append('N');
+                }
             }
         }
 

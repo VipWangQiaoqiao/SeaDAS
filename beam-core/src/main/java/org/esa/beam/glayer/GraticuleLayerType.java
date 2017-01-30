@@ -63,6 +63,8 @@ public class GraticuleLayerType extends LayerType {
     public static final String PROPERTY_NAME_BORDER_ENABLED = "graticule.border.enabled";
     public static final String PROPERTY_NAME_BORDER_WIDTH = "graticule.border.width";
     public static final String PROPERTY_NAME_BORDER_COLOR = "graticule.border.color";
+    public static final String PROPERTY_NAME_FORMAT_COMPASS = "graticule.format.compass";
+    public static final String PROPERTY_NAME_FORMAT_DECIMAL = "graticule.format.decimal";
     public static final String PROPERTY_NAME_TICKMARK_ENABLED = "graticule.tickmark.enabled";
     public static final String PROPERTY_NAME_TICKMARK_INSIDE = "graticule.tickmark.inside";
     public static final String PROPERTY_NAME_TICKMARK_LENGTH = "graticule.tickmark.length";
@@ -82,13 +84,13 @@ public class GraticuleLayerType extends LayerType {
     public static final double DEFAULT_LINE_TRANSPARENCY = 0.6;
     public static final double DEFAULT_LINE_WIDTH = 0.8;
     public static final Color DEFAULT_TEXT_FG_COLOR = Color.BLACK;
-    public static final Color DEFAULT_TEXT_CORNER_FONT_COLOR = new Color(0,80,0);
+    public static final Color DEFAULT_TEXT_CORNER_FONT_COLOR = Color.BLACK;
     public static final Color DEFAULT_TEXT_BG_COLOR = Color.WHITE;
     public static final double DEFAULT_TEXT_BG_TRANSPARENCY = 0.3;
 
 
     public static final int DEFAULT_TEXT_FONT_SIZE = 12;
-    public static final int DEFAULT_TEXT_CORNER_FONT_SIZE = 9;
+    public static final int DEFAULT_TEXT_CORNER_FONT_SIZE = 12;
     public static final boolean DEFAULT_TEXT_FONT_ITALIC = false;
     public static final boolean DEFAULT_TEXT_INSIDE = false;
     public static final int DEFAULT_TEXT_ROTATION_NORTH_SOUTH = 45;
@@ -102,6 +104,8 @@ public class GraticuleLayerType extends LayerType {
     public static final double DEFAULT_LINE_DASHED_PHASE = 3;
     public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
     public static final boolean DEFAULT_BORDER_ENABLED = true;
+    public static final boolean DEFAULT_FORMAT_COMPASS = true;
+    public static final boolean DEFAULT_FORMAT_DECIMAL = false;
     public static final double DEFAULT_BORDER_WIDTH = 1.2;
 
     public static final boolean DEFAULT_TEXT_CORNER_TOP_LON_ENABLED =  false;
@@ -145,6 +149,8 @@ public class GraticuleLayerType extends LayerType {
     private static final String ALIAS_NAME_BORDER_ENABLED = "graticuleBorderEnabled";
     private static final String ALIAS_NAME_BORDER_WIDTH = "graticuleBorderWidth";
     private static final String ALIAS_NAME_BORDER_COLOR = "graticuleBorderColor";
+    private static final String ALIAS_NAME_FORMAT_COMPASS = "graticuleFormatCompass";
+    private static final String ALIAS_NAME_FORMAT_DECIMAL = "graticuleFormatDecimal";
 
     public static final String ALIAS_NAME_TEXT_CORNER_TOP_LON_ENABLED =  "graticuleTextCornerTopLonEnabled";
     public static final String ALIAS_NAME_TEXT_CORNER_LEFT_LAT_ENABLED = "graticuleTextCornerLeftLatEnabled";
@@ -291,6 +297,15 @@ public class GraticuleLayerType extends LayerType {
         final Property borderEnabledModel = Property.create(PROPERTY_NAME_BORDER_ENABLED, Boolean.class, DEFAULT_BORDER_ENABLED, true);
         borderEnabledModel.getDescriptor().setAlias(ALIAS_NAME_BORDER_ENABLED);
         vc.addProperty(borderEnabledModel);
+
+        final Property formatCompassModel = Property.create(PROPERTY_NAME_FORMAT_COMPASS, Boolean.class, DEFAULT_FORMAT_COMPASS, false);
+        formatCompassModel.getDescriptor().setAlias(ALIAS_NAME_FORMAT_COMPASS);
+        vc.addProperty(formatCompassModel);
+
+        final Property formatDecimalModel = Property.create(PROPERTY_NAME_FORMAT_DECIMAL, Boolean.class, DEFAULT_FORMAT_DECIMAL, false);
+        formatDecimalModel.getDescriptor().setAlias(ALIAS_NAME_FORMAT_DECIMAL);
+        vc.addProperty(formatDecimalModel);
+
 
         final Property borderColorModel = Property.create(PROPERTY_NAME_BORDER_COLOR, Color.class, DEFAULT_BORDER_COLOR, true);
         borderColorModel.getDescriptor().setAlias(ALIAS_NAME_BORDER_COLOR);

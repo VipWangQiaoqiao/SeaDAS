@@ -498,6 +498,14 @@ public class ProductSceneImage implements ProductLayerContext {
                 configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED,
                         GraticuleLayerType.DEFAULT_BORDER_ENABLED));
 
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_FORMAT_COMPASS,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_FORMAT_COMPASS,
+                        GraticuleLayerType.DEFAULT_FORMAT_COMPASS));
+
+        layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_FORMAT_DECIMAL,
+                configuration.getPropertyBool(GraticuleLayerType.PROPERTY_NAME_FORMAT_DECIMAL,
+                        GraticuleLayerType.DEFAULT_FORMAT_DECIMAL));
+
         layerConfiguration.setValue(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
                 configuration.getPropertyDouble(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH,
                         GraticuleLayerType.DEFAULT_BORDER_WIDTH));

@@ -83,17 +83,7 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         addPropertyDescriptor(vd23);
 
 
-        PropertyDescriptor vdTickMarkEnabled = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED, Boolean.class);
-        vdTickMarkEnabled.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_ENABLED);
-        vdTickMarkEnabled.setDisplayName("Include Tick Marks (with labels)");
-        vdTickMarkEnabled.setDefaultConverter();
-        addPropertyDescriptor(vdTickMarkEnabled);
 
-        PropertyDescriptor vdTickMarkInside = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, Boolean.class);
-        vdTickMarkInside.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_INSIDE);
-        vdTickMarkInside.setDisplayName("Put Tick Marks Inside");
-        vdTickMarkInside.setDefaultConverter();
-        addPropertyDescriptor(vdTickMarkInside);
 
 
 
@@ -149,6 +139,26 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
 //        vd15.setDefaultConverter();
 //        addPropertyDescriptor(vd15);
 
+        PropertyDescriptor vdTickMarkEnabled = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED, Boolean.class);
+        vdTickMarkEnabled.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_ENABLED);
+        vdTickMarkEnabled.setDisplayName("Include Tick Marks (with labels)");
+        vdTickMarkEnabled.setDefaultConverter();
+        addPropertyDescriptor(vdTickMarkEnabled);
+
+        PropertyDescriptor vdTickMarkInside = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, Boolean.class);
+        vdTickMarkInside.setDefaultValue(GraticuleLayerType.DEFAULT_TICKMARK_INSIDE);
+        vdTickMarkInside.setDisplayName("Put Tick Marks Inside");
+        vdTickMarkInside.setDefaultConverter();
+        addPropertyDescriptor(vdTickMarkInside);
+
+
+
+        PropertyDescriptor vd14 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, Boolean.class);
+        vd14.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_INSIDE);
+        vd14.setDisplayName("Put Labels on Inside");
+        vd14.setDefaultConverter();
+        addPropertyDescriptor(vd14);
+
 
 
 
@@ -175,14 +185,17 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd27.setDefaultConverter();
         addPropertyDescriptor(vd27);
 
+        PropertyDescriptor vd281 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_FORMAT_COMPASS, Boolean.class);
+        vd281.setDefaultValue(GraticuleLayerType.DEFAULT_FORMAT_COMPASS);
+        vd281.setDisplayName("Labels Format: Compass");
+        vd281.setDefaultConverter();
+        addPropertyDescriptor(vd281);
 
-        PropertyDescriptor vd14 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, Boolean.class);
-        vd14.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_INSIDE);
-        vd14.setDisplayName("Put Labels on Inside");
-        vd14.setDefaultConverter();
-        addPropertyDescriptor(vd14);
-
-
+        PropertyDescriptor vd282 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_FORMAT_DECIMAL, Boolean.class);
+        vd282.setDefaultValue(GraticuleLayerType.DEFAULT_FORMAT_DECIMAL);
+        vd282.setDisplayName("Labels Format: Decimal");
+        vd282.setDefaultConverter();
+        addPropertyDescriptor(vd282);
 
 
 
