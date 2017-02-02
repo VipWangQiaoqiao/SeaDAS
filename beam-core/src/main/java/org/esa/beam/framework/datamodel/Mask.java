@@ -182,6 +182,9 @@ public class Mask extends Band {
         public static final Color DEFAULT_COLOR = new Color(100,0,255);
 //        public static final Color DEFAULT_COLOR = Color.RED;
         public static final double DEFAULT_TRANSPARENCY = 0.5;
+        public static final boolean DEFAULT_L2_FLAGNAMES_ENABLED = true;
+        public static final String PARAMETER_NAME_MASK_L2_FLAGNAMES_ENABLED = "mask.l2.flagnames.enabled";
+
         private final String name;
 
         protected ImageType(String name) {

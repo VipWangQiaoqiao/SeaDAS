@@ -608,6 +608,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
 
+
+
+
     public static class RepositoryConnectionConfigPage extends DefaultConfigPage {
 
         private ConnectionConfigData connectionConfigData;
@@ -1391,6 +1394,11 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setMinValue(0.0);
             param.getProperties().setMaxValue(0.95);
             configParams.addParameter(param);
+
+            param = new Parameter(Mask.ImageType.PARAMETER_NAME_MASK_L2_FLAGNAMES_ENABLED, Mask.ImageType.DEFAULT_L2_FLAGNAMES_ENABLED);
+            param.getProperties().setLabel("Name Level2 masks the same as Level2 flags"); /*I18N*/
+            configParams.addParameter(param);
+
         }
 
         @Override
@@ -1424,6 +1432,14 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbc.weightx = 1;
             pageUI.add(param.getEditor().getEditorComponent(), gbc);
             gbc.gridy++;
+
+            param = getConfigParam(Mask.ImageType.PARAMETER_NAME_MASK_L2_FLAGNAMES_ENABLED);
+            gbc.weightx = 1;
+            gbc.anchor=GridBagConstraints.WEST;
+            gbc.gridwidth = 2;
+            pageUI.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridy++;
+
 
             return createPageUIContentPane(pageUI);
         }
