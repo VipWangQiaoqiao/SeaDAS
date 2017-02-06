@@ -86,6 +86,8 @@
  Zeu_*               :Zeu              
  Zsd_*               :Zsd              
 
+ CI_stumpf           :CI
+ CI_cyano            :CI
 
 
 # Note: blank SCHEME_ID means use PATTERN as SCHEME_ID

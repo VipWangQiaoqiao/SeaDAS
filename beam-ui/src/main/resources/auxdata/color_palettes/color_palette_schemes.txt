@@ -80,6 +80,7 @@
  chlor_a_uni_bg       :0.01       :20.0       :true      :universal_bluegreen.cpd  :universal_bluegreen.cpd  :  Chlorophyll                     :0.01,0.03,0.1,0.3,1,3,20         :Chlorophyll a concentration with universal (semi-color-blind compliant) blue to green color palette
  chlor_a_oc           :0.01       :20.0       :true      :oceancolor_standard.cpd  :oceancolor_standard.cpd  :  Chlorophyll                   :0.01,0.03,0.1,0.3,1,3,20         :Chlorophyll a concentration
 
+ CI                   :0.0001     :0.01       :true      :oceancolor_standard.cpd  :universal_bluered.cpd    : Cyanobacteria Index          :                                      :Cyanobacteria Index
 
 
 
