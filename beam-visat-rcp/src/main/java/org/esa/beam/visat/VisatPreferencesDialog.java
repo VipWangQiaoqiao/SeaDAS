@@ -39,6 +39,7 @@ import org.esa.beam.framework.ui.SuppressibleOptionPane;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.config.ConfigDialog;
 import org.esa.beam.framework.ui.config.DefaultConfigPage;
+import org.esa.beam.framework.ui.product.ColorBarParamInfo;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.glayer.GraticuleLayerType;
 import org.esa.beam.glayer.NoDataLayerType;
@@ -47,7 +48,6 @@ import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.visat.actions.ExportLegendImageAction;
 import org.esa.beam.visat.actions.ShowModuleManagerAction;
-import org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -495,6 +495,28 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setLabel("Allow automated color bar reset on any scheme change");
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
+
+            param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, ExportLegendImageAction.DEFAULT_COLORBAR_LOCATION_INSIDE);
+            param.getProperties().setLabel("Default color bar location inside image");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ExportLegendImageAction.SHOW_TITLE_PARAM_STR, ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED);
+            param.getProperties().setLabel("Default color bar show title");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ExportLegendImageAction.TRANSPARENT_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED);
+            param.getProperties().setLabel("Default color bar transparency");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+            param = new Parameter(ExportLegendImageAction.ORIENTATION_PARAM_STR, ColorBarParamInfo.DEFAULT_ORIENTATION);
+            param.getProperties().setLabel("Orientation");
+            param.getProperties().setValueSet(new String[]{ColorBarParamInfo.HORIZONTAL_STR, ColorBarParamInfo.VERTICAL_STR});
+            param.getProperties().setValueSetBound(true);
+            configParams.addParameter(param);
         }
 
         @Override
@@ -520,12 +542,63 @@ public class VisatPreferencesDialog extends ConfigDialog {
             fontPane.add(param.getEditor().getEditorComponent(), gbc);
             gbc.gridy++;
 
+            JPanel fontPane2 = GridBagUtils.createPanel();
+            fontPane2.setBorder(UIUtils.createGroupBorder("Color Bar")); /*I18N*/
+            gbc = GridBagUtils.createConstraints("fill=HORIZONTAL,anchor=WEST");
+            gbc.gridy = 0;
+            gbc.insets.bottom = 10;
+
+
+
+            param = getConfigParam(ExportLegendImageAction.ORIENTATION_PARAM_STR);
+            gbc.anchor=GridBagConstraints.WEST;
+            gbc.fill = GridBagConstraints.NONE;
+            gbc.gridwidth = 1;
+            gbc.gridx = 0;
+            fontPane2.add(param.getEditor().getLabelComponent(), gbc);
+            gbc.gridx = 1;
+            fontPane2.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridx = 0;
+            gbc.gridy++;
+
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+
+
+            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE);
+            gbc.weightx = 1;
+            gbc.anchor=GridBagConstraints.WEST;
+            gbc.gridwidth = 2;
+            fontPane2.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridy++;
+
+
+            param = getConfigParam(ExportLegendImageAction.SHOW_TITLE_PARAM_STR);
+            gbc.weightx = 1;
+            gbc.anchor=GridBagConstraints.WEST;
+            gbc.gridwidth = 2;
+            fontPane2.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridy++;
+
+            param = getConfigParam(ExportLegendImageAction.TRANSPARENT_PARAM_STR);
+            gbc.weightx = 1;
+            gbc.anchor=GridBagConstraints.WEST;
+            gbc.gridwidth = 2;
+            fontPane2.add(param.getEditor().getEditorComponent(), gbc);
+            gbc.gridy++;
+
+
+
+            JPanel fontPane3 = GridBagUtils.createPanel();
+            fontPane3.setBorder(UIUtils.createGroupBorder("Color Bar Schemes")); /*I18N*/
+            gbc = GridBagUtils.createConstraints("fill=HORIZONTAL,anchor=WEST");
+            gbc.gridy = 0;
+            gbc.insets.bottom = 10;
 
             param = getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE);
             gbc.weightx = 1;
             gbc.anchor=GridBagConstraints.WEST;
             gbc.gridwidth = 2;
-            fontPane.add(param.getEditor().getEditorComponent(), gbc);
+            fontPane3.add(param.getEditor().getEditorComponent(), gbc);
             gbc.gridy++;
 
 
@@ -533,15 +606,16 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbc.weightx = 1;
             gbc.anchor=GridBagConstraints.WEST;
             gbc.gridwidth = 2;
-            fontPane.add(param.getEditor().getEditorComponent(), gbc);
+            fontPane3.add(param.getEditor().getEditorComponent(), gbc);
             gbc.gridy++;
 
             param = getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_ALLOW_RESET);
             gbc.weightx = 1;
             gbc.anchor=GridBagConstraints.WEST;
             gbc.gridwidth = 2;
-            fontPane.add(param.getEditor().getEditorComponent(), gbc);
+            fontPane3.add(param.getEditor().getEditorComponent(), gbc);
             gbc.gridy++;
+
 
 
             gbc.gridwidth = 1;
@@ -557,7 +631,12 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
             pageUI.add(fontPane, gbc);
             gbc.gridy++;
+            pageUI.add(fontPane2, gbc);
+            gbc.gridy++;
+            pageUI.add(fontPane3, gbc);
             gbc.insets.top = _LINE_INSET_TOP;
+
+
 
             return createPageUIContentPane(pageUI);
         }

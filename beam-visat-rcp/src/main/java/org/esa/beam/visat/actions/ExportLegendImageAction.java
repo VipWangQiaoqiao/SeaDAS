@@ -45,10 +45,15 @@ import java.awt.image.RenderedImage;
 
 public class ExportLegendImageAction extends AbstractExportImageAction {
 
-    private static final String ORIENTATION_PARAM_STR = "legend.orientation";
+
+    public static final String PARAMETER_NAME_COLORBAR_LOCATION_INSIDE = "legend.locationInside";
+    public static final boolean DEFAULT_COLORBAR_LOCATION_INSIDE = false;
+
+
+    public static final String ORIENTATION_PARAM_STR = "legend.orientation";
     private static final String DISTRIBUTION_TYPE_PARAM_STR = "legend.label.distribution.type";
     private static final String NUM_TICKS_PARAM_STR = "legend.numberOfTicks";
-    private static final String SHOW_TITLE_PARAM_STR = "legend.usingHeader";
+    public static final String SHOW_TITLE_PARAM_STR = "legend.usingHeader";
     private static final String TITLE_PARAM_STR = "legend.headerText";
     private static final String TITLE_UNITS_PARAM_STR = "legend.header.units.text";
     private static final String MANUAL_POINTS_PARAM_STR = "legend.fullCustomAddThesePoints";
@@ -58,7 +63,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static final String FOREGROUND_COLOR_PARAM_STR = "legend.foregroundColor";
     private static final String BACKGROUND_COLOR_PARAM_STR = "legend.backgroundColor";
     //   private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
-    private static final String TRANSPARENT_PARAM_STR = "legend.transparent";
+    public static final String TRANSPARENT_PARAM_STR = "legend.transparent";
 
     private static final String SCALING_FACTOR_PARAM_STR = "legend.scalingFactor";
     private static final String TITLE_FONT_SIZE_PARAM_STR = "legend.titleFontSize";
@@ -81,6 +86,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     private static int imageWidth;
     boolean colorBarLayer = false;
 
+    private VisatApp visatApp;
+    private PropertyMap configuration;
+
+
     @Override
     public void actionPerformed(CommandEvent event) {
         ProductSceneView view = getVisatApp().getSelectedProductSceneView();
@@ -88,6 +97,21 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         imageHeight = view.getRaster().getRasterHeight();
         imageWidth = view.getRaster().getRasterWidth();
+
+
+        // config with preferences
+        visatApp = VisatApp.getApp();
+        this.configuration = visatApp.getPreferences();
+
+        if (getColorBarLocationInside()) {
+            view.getColorBarParamInfo().setLayerOffset(-100);
+        }
+
+        view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR.equals(getColorBarOrientationPreference()) ? ColorBarParamInfo.HORIZONTAL_STR : ColorBarParamInfo.VERTICAL_STR);
+
+        view.getColorBarParamInfo().setShowTitle(getColorBarShowTitlePreference());
+        view.getColorBarParamInfo().setBackgroundTransparencyEnabled(getColorBarTransparencyPreference());
+
 
         colorBarParamGroup = createColorBarParamGroup(view);
 //        if (!view.getColorBarParamInfo().isParamsInitialized()) {
@@ -206,6 +230,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
     @Override
     protected RenderedImage createImage(String imageFormat, ProductSceneView view) {
+
         transferParamsToImageLegend(colorBarParamGroup, imageLegend);
         // todo DANNY
         //  if (colorBarLayer) {
@@ -322,14 +347,14 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         param = new Parameter(LAYER_OFFSET_PARAM_STR, view.getColorBarParamInfo().getLayerOffset());
         param.getProperties().setLabel("Location Offset (percent of color bar image height)");
-        param.getProperties().setMinValue(-500);
-        param.getProperties().setMaxValue(500);
+        param.getProperties().setMinValue(-2000);
+        param.getProperties().setMaxValue(2000);
         paramGroup.addParameter(param);
 
         param = new Parameter(LAYER_SHIFT_PARAM_STR, view.getColorBarParamInfo().getLayerShift());
         param.getProperties().setLabel("Location Shift (percent of color bar image width)");
-        param.getProperties().setMinValue(-500);
-        param.getProperties().setMaxValue(500);
+        param.getProperties().setMinValue(-2000);
+        param.getProperties().setMaxValue(2000);
         paramGroup.addParameter(param);
 
 
@@ -1070,5 +1095,23 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             }
         }
     }
+
+    public boolean getColorBarLocationInside() {
+        return configuration.getPropertyBool(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, ExportLegendImageAction.DEFAULT_COLORBAR_LOCATION_INSIDE);
+    }
+
+    public boolean getColorBarShowTitlePreference() {
+        return configuration.getPropertyBool(ExportLegendImageAction.SHOW_TITLE_PARAM_STR, ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED);
+    }
+
+    public boolean getColorBarTransparencyPreference() {
+        return configuration.getPropertyBool(ExportLegendImageAction.TRANSPARENT_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED);
+    }
+
+    public String getColorBarOrientationPreference() {
+        return configuration.getPropertyString(ExportLegendImageAction.ORIENTATION_PARAM_STR, ColorBarParamInfo.DEFAULT_ORIENTATION);
+    }
+
+
 
 }

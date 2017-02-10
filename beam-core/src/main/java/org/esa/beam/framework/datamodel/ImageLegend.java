@@ -120,7 +120,7 @@ public class ImageLegend {
 
     private int tickMarkLength = NULL_INT;
     private int borderGap = NULL_INT;   // TITLE_TO_PALETTE_GAP
-    private int labelGap = NULL_INT;      // LABEL_TO_COLORBAR BORDER_GAP
+    private int labelGap = NULL_INT;      // LABEL_TO_COLORBAR BORDER_GAP9
     private int headerGap = NULL_INT;      // HEADER_TO_COLORBAR BORDER_GAP
 
 
@@ -942,7 +942,7 @@ public class ImageLegend {
         }
 
 
-        g2d.setColor(foregroundColor);
+        g2d.setColor(Color.black);
         g2d.setStroke(new BasicStroke(1));
         g2d.draw(paletteRect);
         g2d.setStroke(originalStroke);
@@ -957,8 +957,10 @@ public class ImageLegend {
         Font originalFont = g2d.getFont();
 
         g2d.setFont(getLabelsFont());
+        g2d.setPaint(foregroundColor);
 
-        Color tickMarkColor = new Color(0, 0, 0);
+     //   Color tickMarkColor = new Color(0, 0, 0);
+        Color tickMarkColor = foregroundColor;
 
         Stroke tickMarkStroke = new BasicStroke(tickWidth);
         g2d.setStroke(tickMarkStroke);
