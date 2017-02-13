@@ -497,17 +497,17 @@ public class VisatPreferencesDialog extends ConfigDialog {
             configParams.addParameter(param);
 
             param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, ExportLegendImageAction.DEFAULT_COLORBAR_LOCATION_INSIDE);
-            param.getProperties().setLabel("Default color bar location inside image");
+            param.getProperties().setLabel("Location inside image");
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
             param = new Parameter(ExportLegendImageAction.SHOW_TITLE_PARAM_STR, ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED);
-            param.getProperties().setLabel("Default color bar show title");
+            param.getProperties().setLabel("Show title");
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
             param = new Parameter(ExportLegendImageAction.TRANSPARENT_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED);
-            param.getProperties().setLabel("Default color bar transparency");
+            param.getProperties().setLabel("Transparency");
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
@@ -516,6 +516,22 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setLabel("Orientation");
             param.getProperties().setValueSet(new String[]{ColorBarParamInfo.HORIZONTAL_STR, ColorBarParamInfo.VERTICAL_STR});
             param.getProperties().setValueSetBound(true);
+            configParams.addParameter(param);
+
+
+            param = new Parameter(ExportLegendImageAction.FOREGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_FOREGROUND_COLOR);
+            param.getProperties().setLabel("Text/Tick color"); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(ExportLegendImageAction.BACKGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_COLOR);
+            param.getProperties().setLabel("Backdrop color"); /*I18N*/
+            configParams.addParameter(param);
+
+
+            param = new Parameter(ExportLegendImageAction.LAYER_SCALING_PARAM_STR, ColorBarParamInfo.DEFAULT_LAYER_SCALING);
+            param.getProperties().setLabel("Size scaling"); /*I18N*/
+            param.getProperties().setMinValue(5.0);
+            param.getProperties().setMaxValue(150.0);
             configParams.addParameter(param);
         }
 
@@ -531,134 +547,104 @@ public class VisatPreferencesDialog extends ConfigDialog {
             // Font
             JPanel fontPane = GridBagUtils.createPanel();
             fontPane.setBorder(UIUtils.createGroupBorder("Color Palette Schemes")); /*I18N*/
-            GridBagConstraints gbc = GridBagUtils.createConstraints("fill=HORIZONTAL,anchor=WEST");
-            gbc.gridy = 0;
-            gbc.insets.bottom = 10;
+            GridBagConstraints gbcColorPaletteSchemes = GridBagUtils.createConstraints("");
+            gbcColorPaletteSchemes.gridy = 0;
 
             param = getConfigParam(ColorPaletteSchemes.PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED);
-            gbc.weightx = 1;
-            gbc.anchor=GridBagConstraints.WEST;
-            gbc.gridwidth = 2;
-            fontPane.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+
 
             JPanel fontPane2 = GridBagUtils.createPanel();
             fontPane2.setBorder(UIUtils.createGroupBorder("Color Bar")); /*I18N*/
-            gbc = GridBagUtils.createConstraints("fill=HORIZONTAL,anchor=WEST");
-            gbc.gridy = 0;
-            gbc.insets.bottom = 10;
+            GridBagConstraints gbcColorBar = GridBagUtils.createConstraints("");
+            gbcColorBar.gridy = 0;
 
+            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE);
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
 
 
             param = getConfigParam(ExportLegendImageAction.ORIENTATION_PARAM_STR);
-            gbc.anchor=GridBagConstraints.WEST;
-            gbc.fill = GridBagConstraints.NONE;
-            gbc.gridwidth = 1;
-            gbc.gridx = 0;
-            fontPane2.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            fontPane2.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridx = 0;
-            gbc.gridy++;
-
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-
-
-            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE);
-            gbc.weightx = 1;
-            gbc.anchor=GridBagConstraints.WEST;
-            gbc.gridwidth = 2;
-            fontPane2.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
 
 
             param = getConfigParam(ExportLegendImageAction.SHOW_TITLE_PARAM_STR);
-            gbc.weightx = 1;
-            gbc.anchor=GridBagConstraints.WEST;
-            gbc.gridwidth = 2;
-            fontPane2.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
 
             param = getConfigParam(ExportLegendImageAction.TRANSPARENT_PARAM_STR);
-            gbc.weightx = 1;
-            gbc.anchor=GridBagConstraints.WEST;
-            gbc.gridwidth = 2;
-            fontPane2.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
+
+
+            param = getConfigParam(ExportLegendImageAction.LAYER_SCALING_PARAM_STR);
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
+
+            param = getConfigParam(ExportLegendImageAction.FOREGROUND_COLOR_PARAM_STR);
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
+
+            param = getConfigParam(ExportLegendImageAction.BACKGROUND_COLOR_PARAM_STR);
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
 
 
 
             JPanel fontPane3 = GridBagUtils.createPanel();
             fontPane3.setBorder(UIUtils.createGroupBorder("Color Bar Schemes")); /*I18N*/
-            gbc = GridBagUtils.createConstraints("fill=HORIZONTAL,anchor=WEST");
-            gbc.gridy = 0;
-            gbc.insets.bottom = 10;
+            GridBagConstraints gbcColorBarSchemes = GridBagUtils.createConstraints("");
+            gbcColorBarSchemes.gridy = 0;
 
             param = getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE);
-            gbc.weightx = 1;
-            gbc.anchor=GridBagConstraints.WEST;
-            gbc.gridwidth = 2;
-            fontPane3.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+            addParamToPane(fontPane3, param, gbcColorBarSchemes);
+            gbcColorBarSchemes.gridy++;
 
 
             param = getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE);
-            gbc.weightx = 1;
-            gbc.anchor=GridBagConstraints.WEST;
-            gbc.gridwidth = 2;
-            fontPane3.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+            addParamToPane(fontPane3, param, gbcColorBarSchemes);
+            gbcColorBarSchemes.gridy++;
 
             param = getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_ALLOW_RESET);
-            gbc.weightx = 1;
-            gbc.anchor=GridBagConstraints.WEST;
-            gbc.gridwidth = 2;
-            fontPane3.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+            addParamToPane(fontPane3, param, gbcColorBarSchemes);
+            gbcColorBarSchemes.gridy++;
 
 
 
-            gbc.gridwidth = 1;
-            gbc.gridy++;
-            gbc.insets.bottom = 4;
+            JPanel contentsPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcContents = GridBagUtils.createConstraints("fill=HORIZONTAL, anchor=WEST");
+            gbcContents.gridx = 0;
+            gbcContents.gridy = 0;
+            gbcContents.insets.bottom = 10;
+            contentsPanel.add(fontPane, gbcContents);
+            gbcContents.gridy++;
+            contentsPanel.add(fontPane2, gbcContents);
+            gbcContents.gridy++;
+            contentsPanel.add(fontPane3, gbcContents);
+
 
 
 
             //////////////////////////////////////////////////////////////////////////////////////
             // All together
             JPanel pageUI = GridBagUtils.createPanel();
-            gbc = GridBagUtils.createConstraints("fill=HORIZONTAL, anchor=WEST, weightx=1, gridy=1");
+            GridBagConstraints gbcMain = GridBagUtils.createConstraints("fill=NONE, anchor=WEST, weightx=1, gridy=1");
+            gbcMain.insets.bottom = 4;
 
-            pageUI.add(fontPane, gbc);
-            gbc.gridy++;
-            pageUI.add(fontPane2, gbc);
-            gbc.gridy++;
-            pageUI.add(fontPane3, gbc);
-            gbc.insets.top = _LINE_INSET_TOP;
-
-
+            pageUI.add(contentsPanel, gbcMain);
+//
+//            pageUI.add(fontPane, gbcMain);
+//            gbcMain.gridy++;
+//            pageUI.add(fontPane2, gbcMain);
+//            gbcMain.gridy++;
+//            pageUI.add(fontPane3, gbcMain);
+            gbcMain.insets.top = _LINE_INSET_TOP;
 
             return createPageUIContentPane(pageUI);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         @Override
@@ -1896,4 +1882,76 @@ public class VisatPreferencesDialog extends ConfigDialog {
         }
         noteLabel.setForeground(new Color(0, 0, 92));
     }
+
+
+
+
+
+    public static JPanel createLabelComponentPane(JLabel jLabel, JComponent jComponent)  {
+        JPanel pane = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints("fill=NONE,anchor=WEST");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets.bottom = 0;
+
+        if (jLabel != null) {
+            pane.add(jLabel, gbc);
+            gbc.gridx++;
+        }
+
+        if (jComponent != null) {
+            gbc.weightx = 1;
+            pane.add(jComponent, gbc);
+        }
+
+        return pane;
+    }
+
+    public static JPanel createParamPane(Parameter param)  {
+
+        JLabel jLabel = param.getEditor().getLabelComponent();
+        JComponent jComponent = param.getEditor().getEditorComponent();
+
+        JPanel jPanel = createLabelComponentPane(jLabel, jComponent);
+
+        return jPanel;
+    }
+
+
+    public static void addLabelComponentToPane(JPanel pane, JLabel jLabel, JComponent jComponent, GridBagConstraints gbc)  {
+        gbc.gridx = 0;
+        gbc.fill=GridBagConstraints.NONE;
+        gbc.anchor=GridBagConstraints.WEST;
+        gbc.insets.bottom = 10;
+
+        if (jLabel != null) {
+            gbc.gridwidth = 1;
+            gbc.weightx = 0;
+            gbc.insets.left = 5;
+            pane.add(jLabel, gbc);
+            gbc.gridx = 1;
+            gbc.insets.left = 0;
+
+        } else {
+            gbc.insets.left = 0;
+            gbc.gridwidth = 2;
+        }
+
+        if (jComponent != null) {
+            gbc.weightx = 1;
+            gbc.fill=GridBagConstraints.HORIZONTAL;
+            pane.add(jComponent, gbc);
+        }
+
+    }
+
+    public static void addParamToPane(JPanel jPanel, Parameter param, GridBagConstraints gbc)  {
+
+        JLabel jLabel = param.getEditor().getLabelComponent();
+        JComponent jComponent = param.getEditor().getEditorComponent();
+
+        addLabelComponentToPane(jPanel, jLabel, jComponent, gbc);
+
+    }
+
 }

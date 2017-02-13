@@ -60,19 +60,19 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     //    private static final String LABEL_FONT_SIZE_PARAM_STR = "legend.fontSize";
     private static final String DECIMAL_PLACES_PARAM_STR = "legend.decimalPlaces";
     private static final String DECIMAL_PLACES_FORCE_PARAM_STR = "legend.decimalPlacesForce";
-    private static final String FOREGROUND_COLOR_PARAM_STR = "legend.foregroundColor";
-    private static final String BACKGROUND_COLOR_PARAM_STR = "legend.backgroundColor";
+    public static final String FOREGROUND_COLOR_PARAM_STR = "legend.foregroundColor";
+    public static final String BACKGROUND_COLOR_PARAM_STR = "legend.backgroundColor";
     //   private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
     public static final String TRANSPARENT_PARAM_STR = "legend.transparent";
 
-    private static final String SCALING_FACTOR_PARAM_STR = "legend.scalingFactor";
+    public static final String SCALING_FACTOR_PARAM_STR = "legend.scalingFactor";
     private static final String TITLE_FONT_SIZE_PARAM_STR = "legend.titleFontSize";
     private static final String TITLE_UNITS_FONT_SIZE_PARAM_STR = "legend.titleUnitsFontSize";
     private static final String LABELS_FONT_SIZE_PARAM_STR = "legend.labelsFontSize";
 
     private static final String COLOR_BAR_LENGTH_PARAM_STR = "legend.colorBarLength";
     private static final String COLOR_BAR_THICKNESS_PARAM_STR = "legend.colorBarThickness";
-    private static final String LAYER_SCALING_PARAM_STR = "legend.layerScalingThickness";
+    public static final String LAYER_SCALING_PARAM_STR = "legend.layerScalingThickness";
     private static final String LAYER_OFFSET_PARAM_STR = "legend.layerOffset";
     private static final String LAYER_SHIFT_PARAM_STR = "legend.layerShift";
     private static final String CENTER_ON_LAYER_PARAM_STR = "legend.centerOnLayer";
@@ -111,6 +111,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         view.getColorBarParamInfo().setShowTitle(getColorBarShowTitlePreference());
         view.getColorBarParamInfo().setBackgroundTransparencyEnabled(getColorBarTransparencyPreference());
+        view.getColorBarParamInfo().setBackgroundColor(getBackgroundColorPreference());
+        view.getColorBarParamInfo().setForegroundColor(getForegroundColorPreference());
+        view.getColorBarParamInfo().setLayerScaling(getLayerScalingFactorPreference());
 
 
         colorBarParamGroup = createColorBarParamGroup(view);
@@ -1112,6 +1115,16 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         return configuration.getPropertyString(ExportLegendImageAction.ORIENTATION_PARAM_STR, ColorBarParamInfo.DEFAULT_ORIENTATION);
     }
 
+    public Color getForegroundColorPreference() {
+        return configuration.getPropertyColor(ExportLegendImageAction.FOREGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_FOREGROUND_COLOR);
+    }
 
+    public Color getBackgroundColorPreference() {
+        return configuration.getPropertyColor(ExportLegendImageAction.BACKGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_COLOR);
+    }
+
+    public double getLayerScalingFactorPreference() {
+        return configuration.getPropertyDouble(ExportLegendImageAction.LAYER_SCALING_PARAM_STR, ColorBarParamInfo.DEFAULT_LAYER_SCALING);
+    }
 
 }
