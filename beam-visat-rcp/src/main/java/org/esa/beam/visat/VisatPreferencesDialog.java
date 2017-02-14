@@ -496,10 +496,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
-            param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, ExportLegendImageAction.DEFAULT_COLORBAR_LOCATION_INSIDE);
-            param.getProperties().setLabel("Place inside image");
-            param.addParamChangeListener(paramChangeListener);
-            configParams.addParameter(param);
+
 
             param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION);
             param.getProperties().setLabel("Location (if horizontal)");
@@ -583,9 +580,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(fontPane2, param, gbcColorBar);
             gbcColorBar.gridy++;
 
-//            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE);
-//            addParamToPane(fontPane2, param, gbcColorBar);
-//            gbcColorBar.gridy++;
+
 
             param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION);
             addParamToPane(fontPane2, param, gbcColorBar);

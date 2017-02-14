@@ -47,7 +47,6 @@ import java.awt.image.RenderedImage;
 public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
-    public static final String PARAMETER_NAME_COLORBAR_LOCATION_INSIDE = "legend.locationInside";
     public static final String PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION = "legend.horizontalLocation";
     public static final String PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION = "legend.verticalLocation";
 
@@ -113,7 +112,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 //            view.getColorBarParamInfo().setLayerOffset(-100);
 //        }
 
-            view.getColorBarParamInfo().setColorBarLocationInside(getColorBarLocationInsidePreference());
 
             view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR.equals(getColorBarOrientationPreference()) ? ColorBarParamInfo.HORIZONTAL_STR : ColorBarParamInfo.VERTICAL_STR);
 
@@ -198,7 +196,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             showColorBarOverlayAction.setColorBarImage(colorBarImage);
             showColorBarOverlayAction.setOrientation(imageLegend.getOrientation());
             showColorBarOverlayAction.setLayerOffset(imageLegend.getLayerOffset());
-            showColorBarOverlayAction.setLocationInside(imageLegend.isColorBarLocationInside());
             showColorBarOverlayAction.setHorizontalLocation(imageLegend.getHorizontalLocation());
             showColorBarOverlayAction.setVerticalLocation(imageLegend.getVerticalLocation());
             showColorBarOverlayAction.setLayerShift(imageLegend.getLayerShift());
@@ -262,7 +259,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         view.getColorBarParamInfo().setColorBarThickness(imageLegend.getColorBarThickness());
         view.getColorBarParamInfo().setLayerScaling(imageLegend.getLayerScaling());
         view.getColorBarParamInfo().setLayerOffset(imageLegend.getLayerOffset());
-        view.getColorBarParamInfo().setColorBarLocationInside(imageLegend.isColorBarLocationInside());
         view.getColorBarParamInfo().setHorizontalLocation(imageLegend.getHorizontalLocation());
         view.getColorBarParamInfo().setVerticalLocation(imageLegend.getVerticalLocation());
         view.getColorBarParamInfo().setLayerShift(imageLegend.getLayerShift());
@@ -370,9 +366,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setMaxValue(2000);
         paramGroup.addParameter(param);
 
-        param = new Parameter(PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, view.getColorBarParamInfo().isColorBarLocationInside());
-        param.getProperties().setLabel("Location Inside");
-        paramGroup.addParameter(param);
+
 
 
         param = new Parameter(PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, view.getColorBarParamInfo().getHorizontalLocation());
@@ -551,8 +545,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(LAYER_OFFSET_PARAM_STR).getValue();
         imageLegend.setLayerOffset((Double) value);
 
-        value = legendParamGroup.getParameter(PARAMETER_NAME_COLORBAR_LOCATION_INSIDE).getValue();
-        imageLegend.setColorBarLocationInside((Boolean) value);
 
         value = legendParamGroup.getParameter(PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION).getValue();
         imageLegend.setHorizontalLocation((String) value);
@@ -623,7 +615,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter colorBarThicknessParam;
         private Parameter layerScalingParam;
         private Parameter layerOffsetParam;
-        private Parameter locationInsideParam;
         private Parameter horizontalLocationParam;
         private Parameter verticalLocationParam;
         private Parameter layerShiftParam;
@@ -937,8 +928,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             addParamToPane(jPanel, layerShiftParam, gbc);
             gbc.gridy++;
 
-//            addParamToPane(jPanel, locationInsideParam, gbc);
-//            gbc.gridy++;
+
 
             addParamToPane(jPanel, horizontalLocationParam, gbc);
             gbc.gridy++;
@@ -964,7 +954,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             colorBarThicknessParam = paramGroup.getParameter(COLOR_BAR_THICKNESS_PARAM_STR);
             layerScalingParam = paramGroup.getParameter(LAYER_SCALING_PARAM_STR);
             layerOffsetParam = paramGroup.getParameter(LAYER_OFFSET_PARAM_STR);
-            locationInsideParam = paramGroup.getParameter(PARAMETER_NAME_COLORBAR_LOCATION_INSIDE);
             horizontalLocationParam = paramGroup.getParameter(PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION);
             verticalLocationParam = paramGroup.getParameter(PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION);
             layerShiftParam = paramGroup.getParameter(LAYER_SHIFT_PARAM_STR);
@@ -1040,9 +1029,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         }
     }
 
-    public boolean getColorBarLocationInsidePreference() {
-        return configuration.getPropertyBool(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, ExportLegendImageAction.DEFAULT_COLORBAR_LOCATION_INSIDE);
-    }
+
 
     public String getHorizontalLocationPreference() {
         return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION);

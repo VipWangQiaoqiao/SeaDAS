@@ -42,7 +42,6 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
     private int orientation;
     private double layerOffset = 0;
     private double layerShift = 0;
-    private boolean locationInside = false;
     private String horizontalLocation = "";
     private String verticalLocation = "";
     private FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection;
@@ -183,28 +182,20 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
 
         double defaultOffset =  0;
 
-        if (isLocationInside()) {
-            offset = -offset;
 
-            if (getOrientation() == ImageLegend.HORIZONTAL) {
-                defaultOffset = -colorBarImageHeight;
-            } else {
-                defaultOffset = -colorBarImageWidth;
-            }
-        }
 
         if (getOrientation() == ImageLegend.HORIZONTAL) {
             switch (getHorizontalLocation()) {
-                case ColorBarParamInfo.BOTTOM_OUTSIDE:
+                case ColorBarParamInfo.LOCATION_BOTTOM_OUTSIDE:
                     defaultOffset = 0;
                     break;
-                case ColorBarParamInfo.BOTTOM_INSIDE:
+                case ColorBarParamInfo.LOCATION_BOTTOM_INSIDE:
                     defaultOffset = -colorBarImageHeight;
                     break;
-                case ColorBarParamInfo.TOP_INSIDE:
+                case ColorBarParamInfo.LOCATION_TOP_INSIDE:
                     defaultOffset = -rasterHeight;
                     break;
-                case ColorBarParamInfo.TOP_OUTSIDE:
+                case ColorBarParamInfo.LOCATION_TOP_OUTSIDE:
                     defaultOffset = -rasterHeight -colorBarImageHeight;
                     break;
                 default:
@@ -212,16 +203,16 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
             }
         } else {
             switch (getVerticalLocation()) {
-                case ColorBarParamInfo.LEFT_OUTSIDE:
+                case ColorBarParamInfo.LOCATION_LEFT_OUTSIDE:
                     defaultOffset = -rasterWidth - colorBarImageWidth;
                     break;
-                case ColorBarParamInfo.LEFT_INSIDE:
+                case ColorBarParamInfo.LOCATION_LEFT_INSIDE:
                     defaultOffset = -rasterWidth;
                     break;
-                case ColorBarParamInfo.RIGHT_INSIDE:
+                case ColorBarParamInfo.LOCATION_RIGHT_INSIDE:
                     defaultOffset = -colorBarImageWidth;
                     break;
-                case ColorBarParamInfo.RIGHT_OUTSIDE:
+                case ColorBarParamInfo.LOCATION_RIGHT_OUTSIDE:
                     defaultOffset = 0;
                     break;
                 default:
@@ -287,13 +278,7 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         this.layerShift = layerShift;
     }
 
-    public boolean isLocationInside() {
-        return locationInside;
-    }
 
-    public void setLocationInside(boolean locationInside) {
-        this.locationInside = locationInside;
-    }
 
     public String getHorizontalLocation() {
         return horizontalLocation;
