@@ -24,6 +24,7 @@ import org.esa.beam.framework.param.ParamGroup;
 import org.esa.beam.framework.param.Parameter;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.ModalDialog;
+import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.command.CommandEvent;
 import org.esa.beam.framework.ui.product.ColorBarParamInfo;
 import org.esa.beam.framework.ui.product.ProductSceneView;
@@ -47,6 +48,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
     public static final String PARAMETER_NAME_COLORBAR_LOCATION_INSIDE = "legend.locationInside";
+    public static final String PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION = "legend.horizontalLocation";
+    public static final String PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION = "legend.verticalLocation";
+
     public static final boolean DEFAULT_COLORBAR_LOCATION_INSIDE = false;
 
 
@@ -103,18 +107,24 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         visatApp = VisatApp.getApp();
         this.configuration = visatApp.getPreferences();
 
-        if (getColorBarLocationInside()) {
-            view.getColorBarParamInfo().setLayerOffset(-100);
+
+        if (!view.getColorBarParamInfo().isParamsInitialized()) {
+            //        if (getColorBarLocationInsidePreference()) {
+//            view.getColorBarParamInfo().setLayerOffset(-100);
+//        }
+
+            view.getColorBarParamInfo().setColorBarLocationInside(getColorBarLocationInsidePreference());
+
+            view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR.equals(getColorBarOrientationPreference()) ? ColorBarParamInfo.HORIZONTAL_STR : ColorBarParamInfo.VERTICAL_STR);
+
+            view.getColorBarParamInfo().setShowTitle(getColorBarShowTitlePreference());
+            view.getColorBarParamInfo().setBackgroundTransparencyEnabled(getColorBarTransparencyPreference());
+            view.getColorBarParamInfo().setBackgroundColor(getBackgroundColorPreference());
+            view.getColorBarParamInfo().setForegroundColor(getForegroundColorPreference());
+            view.getColorBarParamInfo().setLayerScaling(getLayerScalingFactorPreference());
+            view.getColorBarParamInfo().setHorizontalLocation(getHorizontalLocationPreference());
+            view.getColorBarParamInfo().setVerticalLocation(getVerticalLocationPreference());
         }
-
-        view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR.equals(getColorBarOrientationPreference()) ? ColorBarParamInfo.HORIZONTAL_STR : ColorBarParamInfo.VERTICAL_STR);
-
-        view.getColorBarParamInfo().setShowTitle(getColorBarShowTitlePreference());
-        view.getColorBarParamInfo().setBackgroundTransparencyEnabled(getColorBarTransparencyPreference());
-        view.getColorBarParamInfo().setBackgroundColor(getBackgroundColorPreference());
-        view.getColorBarParamInfo().setForegroundColor(getForegroundColorPreference());
-        view.getColorBarParamInfo().setLayerScaling(getLayerScalingFactorPreference());
-
 
         colorBarParamGroup = createColorBarParamGroup(view);
 //        if (!view.getColorBarParamInfo().isParamsInitialized()) {
@@ -188,6 +198,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             showColorBarOverlayAction.setColorBarImage(colorBarImage);
             showColorBarOverlayAction.setOrientation(imageLegend.getOrientation());
             showColorBarOverlayAction.setLayerOffset(imageLegend.getLayerOffset());
+            showColorBarOverlayAction.setLocationInside(imageLegend.isColorBarLocationInside());
+            showColorBarOverlayAction.setHorizontalLocation(imageLegend.getHorizontalLocation());
+            showColorBarOverlayAction.setVerticalLocation(imageLegend.getVerticalLocation());
             showColorBarOverlayAction.setLayerShift(imageLegend.getLayerShift());
             //showColorBarOverlayAction.setFeatureCollection(imageLegend.getFeatureCollection());
             showColorBarOverlayAction.actionPerformed(event);
@@ -249,6 +262,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         view.getColorBarParamInfo().setColorBarThickness(imageLegend.getColorBarThickness());
         view.getColorBarParamInfo().setLayerScaling(imageLegend.getLayerScaling());
         view.getColorBarParamInfo().setLayerOffset(imageLegend.getLayerOffset());
+        view.getColorBarParamInfo().setColorBarLocationInside(imageLegend.isColorBarLocationInside());
+        view.getColorBarParamInfo().setHorizontalLocation(imageLegend.getHorizontalLocation());
+        view.getColorBarParamInfo().setVerticalLocation(imageLegend.getVerticalLocation());
         view.getColorBarParamInfo().setLayerShift(imageLegend.getLayerShift());
         view.getColorBarParamInfo().setCenterOnLayer(new Boolean(imageLegend.isCenterOnLayer()));
         view.getColorBarParamInfo().setManualPoints(imageLegend.getFullCustomAddThesePoints());
@@ -353,6 +369,27 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setMinValue(-2000);
         param.getProperties().setMaxValue(2000);
         paramGroup.addParameter(param);
+
+        param = new Parameter(PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, view.getColorBarParamInfo().isColorBarLocationInside());
+        param.getProperties().setLabel("Location Inside");
+        paramGroup.addParameter(param);
+
+
+        param = new Parameter(PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, view.getColorBarParamInfo().getHorizontalLocation());
+        param.getProperties().setLabel("Location (if Horizontal)");
+        param.getProperties().setValueSet(ColorBarParamInfo.getHorizontalLocationArray());
+        param.getProperties().setValueSetBound(true);
+        paramGroup.addParameter(param);
+
+
+        param = new Parameter(PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION, view.getColorBarParamInfo().getVerticalLocation());
+        param.getProperties().setLabel("Location (if Vertical)");
+        param.getProperties().setValueSet(ColorBarParamInfo.getVerticalLocationArray());
+        param.getProperties().setValueSetBound(true);
+        paramGroup.addParameter(param);
+
+
+
 
         param = new Parameter(LAYER_SHIFT_PARAM_STR, view.getColorBarParamInfo().getLayerShift());
         param.getProperties().setLabel("Location Shift (percent of color bar image width)");
@@ -514,6 +551,16 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(LAYER_OFFSET_PARAM_STR).getValue();
         imageLegend.setLayerOffset((Double) value);
 
+        value = legendParamGroup.getParameter(PARAMETER_NAME_COLORBAR_LOCATION_INSIDE).getValue();
+        imageLegend.setColorBarLocationInside((Boolean) value);
+
+        value = legendParamGroup.getParameter(PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION).getValue();
+        imageLegend.setHorizontalLocation((String) value);
+
+        value = legendParamGroup.getParameter(PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION).getValue();
+        imageLegend.setVerticalLocation((String) value);
+
+
         value = legendParamGroup.getParameter(LAYER_SHIFT_PARAM_STR).getValue();
         imageLegend.setLayerShift((Double) value);
 
@@ -576,6 +623,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private Parameter colorBarThicknessParam;
         private Parameter layerScalingParam;
         private Parameter layerOffsetParam;
+        private Parameter locationInsideParam;
+        private Parameter horizontalLocationParam;
+        private Parameter verticalLocationParam;
         private Parameter layerShiftParam;
         private Parameter centerOnLayerParam;
 
@@ -618,6 +668,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             headerTextParam.setUIEnabled(headerTextEnabled);
             headerUnitsParam.setUIEnabled(headerTextEnabled);
 
+            if (ColorBarParamInfo.HORIZONTAL_STR.equals(orientationParam.getValue())) {
+                horizontalLocationParam.setUIEnabled(true);
+                verticalLocationParam.setUIEnabled(false);
+            } else {
+                horizontalLocationParam.setUIEnabled(false);
+                verticalLocationParam.setUIEnabled(true);
+            }
 
             if (ImageLegend.DISTRIB_EVEN_STR.equals(distributionTypeParam.getValue())) {
                 numberOfTicksParam.setUIEnabled(true);
@@ -704,37 +761,53 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.insets.top = 10;
+            gbc.weightx=0;
+            gbc.weighty=0;
             jPanel.add(orientationParam.getEditor().getLabelComponent(), gbc);
             gbc.gridx = 1;
             jPanel.add(orientationParam.getEditor().getEditorComponent(), gbc);
-
+            gbc.gridy++;
 
             gbc.gridx = 0;
-            gbc.gridy++;
             gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            evenDistribJPanel = getDistributionPanel("Data Label Distribution & Numeric Formatting");
-            jPanel.add(evenDistribJPanel, gbc);
-
-
+            gbc.gridy++;
+            gbc.insets.top = 10;
             gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(getTitlePanel("Title"), gbc);
 
 
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(getFormatsPanel("Formatting"), gbc);
 
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(getScalingPanel("Scaling and Location (For Layer Only)"), gbc);
+            JPanel jPanelGroup = GridBagUtils.createPanel();
+            GridBagConstraints gbcGroup = GridBagUtils.createConstraints("");
+            gbcGroup.gridx = 0;
+            gbcGroup.gridy = 0;
+            gbcGroup.weightx = 1.0;
+            gbcGroup.fill = GridBagConstraints.HORIZONTAL;
+            gbcGroup.anchor = GridBagConstraints.WEST;
+            gbcGroup.insets.bottom=10;
+
+            jPanelGroup.add(getDistributionPanel("Data Label Distribution & Numeric Formatting"), gbcGroup);
+            gbcGroup.gridy++;
+
+            jPanelGroup.add(getTitlePanel("Title"), gbcGroup);
+            gbcGroup.gridy++;
+
+            jPanelGroup.add(getFormatsPanel("Formatting"), gbcGroup);
+            gbcGroup.gridy++;
+
+            jPanelGroup.add(getScalingPanel("Scaling and Location (For Layer Only)"), gbcGroup);
+
+
+
+
+            final JScrollPane paramsScroll = new JScrollPane(jPanelGroup);
+            paramsScroll.setBorder(null);
+            paramsScroll.setMaximumSize(new Dimension(200,200));
+
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.anchor = GridBagConstraints.WEST;
+            gbc.weightx=1.0;
+            gbc.weighty=.5;
+            jPanel.add(paramsScroll, gbc);
 
 
             gbc.gridwidth = 2;
@@ -744,141 +817,94 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.anchor = GridBagConstraints.CENTER;
             gbc.fill = GridBagConstraints.NONE;
 
+            gbc.weightx=0;
+            gbc.weighty=0;
             jPanel.add(previewButton, gbc);
 
             jPanel.setBorder(new EmptyBorder(7, 7, 7, 7));
+
+            jPanel.setMaximumSize(new Dimension(UIUtils.getScreenWidth(),UIUtils.getScreenHeight()));
+
 
             setContent(jPanel);
         }
 
 
         private JPanel getTitlePanel(String title) {
-            JPanel jPanel = new JPanel(new GridBagLayout());
-            jPanel.setBorder(BorderFactory.createTitledBorder(title));
-            final GridBagConstraints gbc = new GridBagConstraints();
-
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.anchor = GridBagConstraints.WEST;
-
-
-            gbc.gridx = 0;
+            JPanel jPanel = GridBagUtils.createPanel();
+            jPanel.setBorder(UIUtils.createGroupBorder(title)); /*I18N*/
+            GridBagConstraints gbc = GridBagUtils.createConstraints("");
             gbc.gridy = 0;
-            gbc.gridwidth = 2;
-            jPanel.add(usingHeaderParam.getEditor().getEditorComponent(), gbc);
 
-            gbc.gridx = 0;
+            addParamToPane(jPanel, usingHeaderParam, gbc);
             gbc.gridy++;
-            gbc.gridwidth = 1;
-            gbc.weightx = 0;
-            jPanel.add(headerTextParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            jPanel.add(headerTextParam.getEditor().getEditorComponent(), gbc);
 
-            gbc.gridx = 0;
+            addParamToPane(jPanel, headerTextParam, gbc);
             gbc.gridy++;
-            gbc.insets.top = 3;
-            gbc.weightx = 0;
-            jPanel.add(headerUnitsParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            jPanel.add(headerUnitsParam.getEditor().getEditorComponent(), gbc);
+
+            addParamToPane(jPanel, headerUnitsParam, gbc);
+            gbc.gridy++;
 
             return jPanel;
         }
 
         private JPanel getDistributionPanel(String title) {
-            JPanel jPanel = new JPanel(new GridBagLayout());
-            jPanel.setBorder(BorderFactory.createTitledBorder(title));
-            final GridBagConstraints gbc = new GridBagConstraints();
-
-            gbc.fill = GridBagConstraints.NONE;
-            gbc.anchor = GridBagConstraints.WEST;
-
-            gbc.gridx = 0;
+            JPanel jPanel = GridBagUtils.createPanel();
+            jPanel.setBorder(UIUtils.createGroupBorder(title)); /*I18N*/
+            GridBagConstraints gbc = GridBagUtils.createConstraints("");
             gbc.gridy = 0;
-            gbc.weightx = 1.0;
-            gbc.gridwidth = 1;
-            jPanel.add(distributionTypeParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(distributionTypeParam.getEditor().getEditorComponent(), gbc);
 
-
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-
-            gbc.gridwidth = 1;
-            gbc.gridx = 0;
+            addParamToPane(jPanel, distributionTypeParam, gbc);
             gbc.gridy++;
-            gbc.weightx = 1.0;
-            jPanel.add(numberOfTicksParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(numberOfTicksParam.getEditor().getEditorComponent(), gbc);
 
-
-            gbc.gridx = 0;
+            addParamToPane(jPanel, numberOfTicksParam, gbc);
             gbc.gridy++;
-            JLabel label = fullCustomAddThesePointsParam.getEditor().getLabelComponent();
-            label.setToolTipText("Add values comma delimited.  i.e.  5,7,9");
-            jPanel.add(label, gbc);
-            gbc.gridx = 1;
-            jPanel.add(fullCustomAddThesePointsParam.getEditor().getEditorComponent(), gbc);
 
-            gbc.gridx = 0;
+            addParamToPane(jPanel, fullCustomAddThesePointsParam, gbc);
             gbc.gridy++;
-            gbc.weightx = 1.0;
-            JLabel scalingFactorlabel = scalingFactorParam.getEditor().getLabelComponent();
-            scalingFactorlabel.setToolTipText("Multiplication factor to be applied to colorbar points (Note this will change units so user will need to adjust units accordingly)");
 
-            jPanel.add(scalingFactorlabel, gbc);
-            gbc.gridx = 1;
-            jPanel.add(scalingFactorParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.gridx = 0;
+            addParamToPane(jPanel, scalingFactorParam, gbc);
             gbc.gridy++;
-            gbc.weightx = 1.0;
-            JLabel decimalPlacesLabel = decimalPlacesParam.getEditor().getLabelComponent();
-            decimalPlacesLabel.setToolTipText("Adds more decimal places if needed for smaller numbers, trims off trailing zeros");
-            jPanel.add(decimalPlacesLabel, gbc);
-            gbc.gridx = 1;
-            jPanel.add(decimalPlacesParam.getEditor().getEditorComponent(), gbc);
 
-
-            gbc.gridx = 0;
+            addParamToPane(jPanel, decimalPlacesParam, gbc);
             gbc.gridy++;
-            gbc.gridwidth = 2;
-            jPanel.add(decimalPlacesForceParam.getEditor().getEditorComponent(), gbc);
-            gbc.gridwidth = 1;
 
+            addParamToPane(jPanel, decimalPlacesForceParam, gbc);
+            gbc.gridy++;
 
             return jPanel;
         }
 
 
         private JPanel getFormatsPanel(String title) {
-            JPanel jPanel = new JPanel(new GridBagLayout());
-            jPanel.setBorder(BorderFactory.createTitledBorder(title));
-            final GridBagConstraints gbc = new GridBagConstraints();
-
-            gbc.anchor = GridBagConstraints.WEST;
-
-
-            gbc.gridwidth = 1;
-
-            gbc.insets.top = 3;
-
-            gbc.gridx = 0;
+            JPanel jPanel = GridBagUtils.createPanel();
+            jPanel.setBorder(UIUtils.createGroupBorder(title)); /*I18N*/
+            GridBagConstraints gbc = GridBagUtils.createConstraints("");
             gbc.gridy = 0;
-            JLabel colorBarLengthJlabel = colorBarLengthParam.getEditor().getLabelComponent();
-            colorBarLengthJlabel.setToolTipText("This is a minimum length, an accumulation of tickmarks and font sizes could increase the actual length");
-            gbc.fill = GridBagConstraints.NONE;
-            gbc.weightx = 0.5;
-            jPanel.add(colorBarLengthJlabel, gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(colorBarLengthParam.getEditor().getEditorComponent(), gbc);
 
+            addParamToPane(jPanel, colorBarLengthParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, colorBarThicknessParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, titleFontSizeParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, titleUnitsFontSizeParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, labelsFontSizeParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, foregroundColorParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, backgroundColorParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, transparentParam, gbc);
+            gbc.gridy++;
 
 //            gbc.gridx = 0;
 //            gbc.gridy++;
@@ -891,122 +917,34 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 //            gbc.gridwidth = 1;
 //            gbc.insets.bottom = 0;
 
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.weightx = 0.5;
-            gbc.fill = GridBagConstraints.NONE;
-            jPanel.add(colorBarThicknessParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(colorBarThicknessParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.weightx = 0.5;
-            gbc.fill = GridBagConstraints.NONE;
-            jPanel.add(titleFontSizeParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(titleFontSizeParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.weightx = 0.5;
-            gbc.fill = GridBagConstraints.NONE;
-            jPanel.add(titleUnitsFontSizeParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(titleUnitsFontSizeParam.getEditor().getEditorComponent(), gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.weightx = 0.5;
-            gbc.fill = GridBagConstraints.NONE;
-            jPanel.add(labelsFontSizeParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(labelsFontSizeParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.weightx = 0.5;
-            gbc.fill = GridBagConstraints.NONE;
-            jPanel.add(foregroundColorParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(foregroundColorParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-            gbc.weightx = 0.5;
-            gbc.fill = GridBagConstraints.NONE;
-            jPanel.add(backgroundColorParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            gbc.weightx = 1.0;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            jPanel.add(backgroundColorParam.getEditor().getEditorComponent(), gbc);
-
-
-            gbc.insets.top = 10;
-
-            gbc.gridx = 0;
-            gbc.gridy++;
-
-            gbc.gridwidth = 2;
-            gbc.fill = GridBagConstraints.NONE;
-            gbc.anchor = GridBagConstraints.NORTHWEST;
-            jPanel.add(transparentParam.getEditor().getEditorComponent(), gbc);
-
             return jPanel;
         }
 
 
+
         private JPanel getScalingPanel(String title) {
-            JPanel jPanel = new JPanel(new GridBagLayout());
-            jPanel.setBorder(BorderFactory.createTitledBorder(title));
-            final GridBagConstraints gbc = new GridBagConstraints();
-
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.anchor = GridBagConstraints.WEST;
-
-
-            gbc.weightx = 1.0;
-            gbc.insets.top = 3;
-
-            gbc.gridx = 0;
+            JPanel jPanel = GridBagUtils.createPanel();
+            jPanel.setBorder(UIUtils.createGroupBorder(title)); /*I18N*/
+            GridBagConstraints gbc = GridBagUtils.createConstraints("");
             gbc.gridy = 0;
-            jPanel.add(layerScalingParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(layerScalingParam.getEditor().getEditorComponent(), gbc);
 
+            addParamToPane(jPanel, layerScalingParam, gbc);
             gbc.gridy++;
-            gbc.gridx = 0;
-            jPanel.add(layerOffsetParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(layerOffsetParam.getEditor().getEditorComponent(), gbc);
 
+            addParamToPane(jPanel, layerOffsetParam, gbc);
             gbc.gridy++;
-            gbc.gridx = 0;
-            jPanel.add(layerShiftParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(layerShiftParam.getEditor().getEditorComponent(), gbc);
 
+            addParamToPane(jPanel, layerShiftParam, gbc);
+            gbc.gridy++;
 
-//            gbc.gridx = 0;
+//            addParamToPane(jPanel, locationInsideParam, gbc);
 //            gbc.gridy++;
-//            gbc.gridwidth = 2;
-//            jPanel.add(centerOnLayerParam.getEditor().getEditorComponent(), gbc);
 
+            addParamToPane(jPanel, horizontalLocationParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, verticalLocationParam, gbc);
+            gbc.gridy++;
 
             return jPanel;
         }
@@ -1026,6 +964,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             colorBarThicknessParam = paramGroup.getParameter(COLOR_BAR_THICKNESS_PARAM_STR);
             layerScalingParam = paramGroup.getParameter(LAYER_SCALING_PARAM_STR);
             layerOffsetParam = paramGroup.getParameter(LAYER_OFFSET_PARAM_STR);
+            locationInsideParam = paramGroup.getParameter(PARAMETER_NAME_COLORBAR_LOCATION_INSIDE);
+            horizontalLocationParam = paramGroup.getParameter(PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION);
+            verticalLocationParam = paramGroup.getParameter(PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION);
             layerShiftParam = paramGroup.getParameter(LAYER_SHIFT_PARAM_STR);
             centerOnLayerParam = paramGroup.getParameter(CENTER_ON_LAYER_PARAM_STR);
             numberOfTicksParam = paramGroup.getParameter(NUM_TICKS_PARAM_STR);
@@ -1099,8 +1040,15 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         }
     }
 
-    public boolean getColorBarLocationInside() {
+    public boolean getColorBarLocationInsidePreference() {
         return configuration.getPropertyBool(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, ExportLegendImageAction.DEFAULT_COLORBAR_LOCATION_INSIDE);
+    }
+
+    public String getHorizontalLocationPreference() {
+        return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION);
+    }
+    public String getVerticalLocationPreference() {
+        return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION, ColorBarParamInfo.DEFAULT_VERTICAL_LOCATION);
     }
 
     public boolean getColorBarShowTitlePreference() {
@@ -1127,4 +1075,41 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         return configuration.getPropertyDouble(ExportLegendImageAction.LAYER_SCALING_PARAM_STR, ColorBarParamInfo.DEFAULT_LAYER_SCALING);
     }
 
+
+
+    public static void addLabelComponentToPane(JPanel pane, JLabel jLabel, JComponent jComponent, GridBagConstraints gbc)  {
+        gbc.gridx = 0;
+        gbc.fill=GridBagConstraints.NONE;
+        gbc.anchor=GridBagConstraints.WEST;
+        gbc.insets.bottom = 10;
+
+        if (jLabel != null) {
+            gbc.gridwidth = 1;
+            gbc.weightx = 0;
+            gbc.insets.left = 5;
+            pane.add(jLabel, gbc);
+            gbc.gridx = 1;
+            gbc.insets.left = 0;
+
+        } else {
+            gbc.insets.left = 0;
+            gbc.gridwidth = 2;
+        }
+
+        if (jComponent != null) {
+            gbc.weightx = 1;
+            gbc.fill=GridBagConstraints.HORIZONTAL;
+            pane.add(jComponent, gbc);
+        }
+
+    }
+
+    public static void addParamToPane(JPanel jPanel, Parameter param, GridBagConstraints gbc)  {
+
+        JLabel jLabel = param.getEditor().getLabelComponent();
+        JComponent jComponent = param.getEditor().getEditorComponent();
+
+        addLabelComponentToPane(jPanel, jLabel, jComponent, gbc);
+
+    }
 }

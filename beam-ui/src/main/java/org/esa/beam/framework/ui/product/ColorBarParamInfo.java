@@ -17,6 +17,87 @@ public class ColorBarParamInfo {
     public static final String VERTICAL_STR = "Vertical";
 
 
+    public static final String TOP_INSIDE = "top_inside";
+    public static final String TOP_OUTSIDE = "top_outside";
+    public static final String BOTTOM_INSIDE = "bottom_inside";
+    public static final String BOTTOM_OUTSIDE = "bottom_outside";
+
+
+
+    public  static enum HorizontalLocation {
+        TOP_INSIDE("top_inside"),
+        TOP_OUTSIDE("top_outside"),
+        BOTTOM_INSIDE("bottom_inside"),
+        BOTTOM_OUTSIDE("bottom_outside");
+
+        private HorizontalLocation(String name) {
+            this.name = name;
+        }
+        private final String name;
+        public String toString() {
+            return name;
+        }
+        public String[] getNames() {
+          return  new String[]{
+              HorizontalLocation.TOP_OUTSIDE.toString(),
+                  HorizontalLocation.TOP_INSIDE.toString(),
+                  HorizontalLocation.BOTTOM_INSIDE.toString(),
+                  HorizontalLocation.BOTTOM_OUTSIDE.toString()
+          };
+
+        }
+
+    }
+
+    public static String[] getHorizontalLocationArray() {
+        return  new String[]{
+                HorizontalLocation.TOP_OUTSIDE.toString(),
+                HorizontalLocation.TOP_INSIDE.toString(),
+                HorizontalLocation.BOTTOM_INSIDE.toString(),
+                HorizontalLocation.BOTTOM_OUTSIDE.toString()
+        };    }
+
+
+    public static final String LEFT_INSIDE = "left_inside";
+    public static final String LEFT_OUTSIDE = "left_outside";
+    public static final String RIGHT_INSIDE = "right_inside";
+    public static final String RIGHT_OUTSIDE = "right_outside";
+
+    public static enum VerticalLocation {
+        LEFT_INSIDE("left_inside"),
+        LEFT_OUTSIDE("left_outside"),
+        RIGHT_INSIDE("right_inside"),
+        RIGHT_OUTSIDE("right_outside");
+
+        private VerticalLocation(String name) {
+            this.name = name;
+        }
+        private final String name;
+        public String toString() {
+            return name;
+        }
+
+        public String[] getNames() {
+            return  new String[]{
+                    VerticalLocation.LEFT_OUTSIDE.toString(),
+                    VerticalLocation.LEFT_INSIDE.toString(),
+                    VerticalLocation.RIGHT_INSIDE.toString(),
+                    VerticalLocation.RIGHT_OUTSIDE.toString()
+            };
+
+        }
+    }
+
+    public static String[] getVerticalLocationArray() {
+        return  new String[]{
+                VerticalLocation.LEFT_OUTSIDE.toString(),
+                VerticalLocation.LEFT_INSIDE.toString(),
+                VerticalLocation.RIGHT_INSIDE.toString(),
+                VerticalLocation.RIGHT_OUTSIDE.toString()
+        };    }
+
+
+
     public static final int DEFAULT_LABELS_FONT_SIZE = 45;
     public static final Boolean DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED = Boolean.TRUE;
     public static final Boolean DEFAULT_SHOW_TITLE_ENABLED = Boolean.TRUE;
@@ -31,6 +112,7 @@ public class ColorBarParamInfo {
     public static final double DEFAULT_LAYER_OFFSET = 0;
     public static final double DEFAULT_LAYER_SHIFT = 0;
     public static final Boolean DEFAULT_CENTER_ON_LAYER = Boolean.TRUE;
+    public static final Boolean DEFAULT_COLORBAR_LOCATION_INSIDE = Boolean.FALSE;
     public static final String DEFAULT_MANUAL_POINTS = "";
     public static final String DEFAULT_ORIENTATION = HORIZONTAL_STR;
     public static final String DEFAULT_DISTRIBUTION_TYPE = ImageLegend.DISTRIB_MANUAL_STR;
@@ -39,6 +121,9 @@ public class ColorBarParamInfo {
     private static final boolean DEFAULT_DECIMAL_PLACES_FORCE = false;
     public static final Color DEFAULT_FOREGROUND_COLOR = Color.black;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
+
+    public static final String DEFAULT_HORIZONTAL_LOCATION = HorizontalLocation.BOTTOM_OUTSIDE.toString();
+    public static final String DEFAULT_VERTICAL_LOCATION = VerticalLocation.RIGHT_OUTSIDE.toString();
 
 
 
@@ -64,8 +149,14 @@ public class ColorBarParamInfo {
     private int numTickMarks = DEFAULT_NUM_TICK_MARKS;
     private int decimalPlaces = DEFAULT_DECIMAL_PLACES;
     private boolean decimalPlacesForce = DEFAULT_DECIMAL_PLACES_FORCE;
+    private boolean colorBarLocationInside = DEFAULT_COLORBAR_LOCATION_INSIDE;
     private Color foregroundColor = DEFAULT_FOREGROUND_COLOR;
     private Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
+
+    private String  horizontalLocation = DEFAULT_HORIZONTAL_LOCATION;
+    private String verticalLocation = DEFAULT_VERTICAL_LOCATION;
+
+
 
 
     private boolean paramsInitialized = false;
@@ -261,5 +352,29 @@ public class ColorBarParamInfo {
 
     public void setLayerShift(double layerShift) {
         this.layerShift = layerShift;
+    }
+
+    public boolean isColorBarLocationInside() {
+        return colorBarLocationInside;
+    }
+
+    public void setColorBarLocationInside(boolean colorBarLocationInside) {
+        this.colorBarLocationInside = colorBarLocationInside;
+    }
+
+    public String getHorizontalLocation() {
+        return horizontalLocation;
+    }
+
+    public void setHorizontalLocation(String horizontalLocation) {
+        this.horizontalLocation = horizontalLocation;
+    }
+
+    public String getVerticalLocation() {
+        return verticalLocation;
+    }
+
+    public void setVerticalLocation(String verticalLocation) {
+        this.verticalLocation = verticalLocation;
     }
 }

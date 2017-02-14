@@ -115,6 +115,9 @@ public class ImageLegend {
     private double layerOffset;
     private double layerShift;
     private boolean centerOnLayer;
+    private boolean colorBarLocationInside;
+    private String horizontalLocation;
+    private String verticalLocation;
     private String titleOverRide = null;
 
 
@@ -852,6 +855,9 @@ public class ImageLegend {
                         + getHeaderGap()
                         + singleLetter.getHeight();
 
+
+
+
                 double translateY = y0 + paletteRect.height + labelOverhangHeight;
 
                 double rotate = -Math.PI / 2.0;
@@ -1476,6 +1482,30 @@ public class ImageLegend {
 
     public void setLayerShift(double layerShift) {
         this.layerShift = layerShift;
+    }
+
+    public boolean isColorBarLocationInside() {
+        return colorBarLocationInside;
+    }
+
+    public void setColorBarLocationInside(boolean colorBarLocationInside) {
+        this.colorBarLocationInside = colorBarLocationInside;
+    }
+
+    public String getHorizontalLocation() {
+        return horizontalLocation;
+    }
+
+    public void setHorizontalLocation(String horizontalLocation) {
+        this.horizontalLocation = horizontalLocation;
+    }
+
+    public String getVerticalLocation() {
+        return verticalLocation;
+    }
+
+    public void setVerticalLocation(String verticalLocation) {
+        this.verticalLocation = verticalLocation;
     }
 }
 

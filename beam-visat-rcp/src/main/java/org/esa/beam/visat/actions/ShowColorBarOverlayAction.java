@@ -10,6 +10,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
 import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.command.CommandEvent;
+import org.esa.beam.framework.ui.product.ColorBarParamInfo;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.glayer.ColorBarLayerType;
 import org.esa.beam.util.FeatureUtils;
@@ -41,6 +42,9 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
     private int orientation;
     private double layerOffset = 0;
     private double layerShift = 0;
+    private boolean locationInside = false;
+    private String horizontalLocation = "";
+    private String verticalLocation = "";
     private FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection;
 
     @Override
@@ -177,8 +181,62 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         double offset = (getOrientation() == ImageLegend.HORIZONTAL) ?  (colorBarImageHeight * getLayerOffset()/100) : (colorBarImageWidth * getLayerOffset()/100);
         double shift = (getOrientation() == ImageLegend.HORIZONTAL) ?  (colorBarImageWidth * getLayerShift()/100) : -(colorBarImageHeight * getLayerShift()/100);
 
-        double y_axis_translation = (getOrientation() == ImageLegend.HORIZONTAL) ? rasterHeight + offset : shift+ (rasterHeight - colorBarImageHeight)/2;
-        double x_axis_translation = (getOrientation() == ImageLegend.HORIZONTAL) ? shift+ (rasterWidth - colorBarImageWidth)/2 : rasterWidth + offset ;
+        double defaultOffset =  0;
+
+        if (isLocationInside()) {
+            offset = -offset;
+
+            if (getOrientation() == ImageLegend.HORIZONTAL) {
+                defaultOffset = -colorBarImageHeight;
+            } else {
+                defaultOffset = -colorBarImageWidth;
+            }
+        }
+
+        if (getOrientation() == ImageLegend.HORIZONTAL) {
+            switch (getHorizontalLocation()) {
+                case ColorBarParamInfo.BOTTOM_OUTSIDE:
+                    defaultOffset = 0;
+                    break;
+                case ColorBarParamInfo.BOTTOM_INSIDE:
+                    defaultOffset = -colorBarImageHeight;
+                    break;
+                case ColorBarParamInfo.TOP_INSIDE:
+                    defaultOffset = -rasterHeight;
+                    break;
+                case ColorBarParamInfo.TOP_OUTSIDE:
+                    defaultOffset = -rasterHeight -colorBarImageHeight;
+                    break;
+                default:
+                    defaultOffset = -colorBarImageHeight;
+            }
+        } else {
+            switch (getVerticalLocation()) {
+                case ColorBarParamInfo.LEFT_OUTSIDE:
+                    defaultOffset = -rasterWidth - colorBarImageWidth;
+                    break;
+                case ColorBarParamInfo.LEFT_INSIDE:
+                    defaultOffset = -rasterWidth;
+                    break;
+                case ColorBarParamInfo.RIGHT_INSIDE:
+                    defaultOffset = -colorBarImageWidth;
+                    break;
+                case ColorBarParamInfo.RIGHT_OUTSIDE:
+                    defaultOffset = 0;
+                    break;
+                default:
+                    defaultOffset = 0;
+            }
+        }
+
+
+
+
+
+
+
+        double y_axis_translation = (getOrientation() == ImageLegend.HORIZONTAL) ? rasterHeight + offset + defaultOffset : shift+ (rasterHeight - colorBarImageHeight)/2;
+        double x_axis_translation = (getOrientation() == ImageLegend.HORIZONTAL) ? shift+ (rasterWidth - colorBarImageWidth)/2 : rasterWidth + offset + defaultOffset ;
         //double[] flatmatrix = {scaleX, 0.0, 0.0, scaleY, x_axis_translation, y_axis_translation};
         double[] flatmatrix = {1, 0.0, 0.0, 1, x_axis_translation, y_axis_translation};
         AffineTransform i2mTransform = new AffineTransform(flatmatrix);
@@ -227,5 +285,29 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
 
     public void setLayerShift(double layerShift) {
         this.layerShift = layerShift;
+    }
+
+    public boolean isLocationInside() {
+        return locationInside;
+    }
+
+    public void setLocationInside(boolean locationInside) {
+        this.locationInside = locationInside;
+    }
+
+    public String getHorizontalLocation() {
+        return horizontalLocation;
+    }
+
+    public void setHorizontalLocation(String horizontalLocation) {
+        this.horizontalLocation = horizontalLocation;
+    }
+
+    public String getVerticalLocation() {
+        return verticalLocation;
+    }
+
+    public void setVerticalLocation(String verticalLocation) {
+        this.verticalLocation = verticalLocation;
     }
 }

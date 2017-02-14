@@ -497,9 +497,24 @@ public class VisatPreferencesDialog extends ConfigDialog {
             configParams.addParameter(param);
 
             param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE, ExportLegendImageAction.DEFAULT_COLORBAR_LOCATION_INSIDE);
-            param.getProperties().setLabel("Location inside image");
+            param.getProperties().setLabel("Place inside image");
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
+
+            param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION);
+            param.getProperties().setLabel("Location (if horizontal)");
+            param.getProperties().setValueSet(ColorBarParamInfo.getHorizontalLocationArray());
+            param.getProperties().setValueSetBound(true);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION, ColorBarParamInfo.DEFAULT_VERTICAL_LOCATION);
+            param.getProperties().setLabel("Location (if vertical)");
+            param.getProperties().setValueSet(ColorBarParamInfo.getVerticalLocationArray());
+            param.getProperties().setValueSetBound(true);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
 
             param = new Parameter(ExportLegendImageAction.SHOW_TITLE_PARAM_STR, ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED);
             param.getProperties().setLabel("Show title");
@@ -516,6 +531,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setLabel("Orientation");
             param.getProperties().setValueSet(new String[]{ColorBarParamInfo.HORIZONTAL_STR, ColorBarParamInfo.VERTICAL_STR});
             param.getProperties().setValueSetBound(true);
+            param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
 
@@ -561,15 +577,23 @@ public class VisatPreferencesDialog extends ConfigDialog {
             GridBagConstraints gbcColorBar = GridBagUtils.createConstraints("");
             gbcColorBar.gridy = 0;
 
-            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE);
-            addParamToPane(fontPane2, param, gbcColorBar);
-            gbcColorBar.gridy++;
 
 
             param = getConfigParam(ExportLegendImageAction.ORIENTATION_PARAM_STR);
             addParamToPane(fontPane2, param, gbcColorBar);
             gbcColorBar.gridy++;
 
+//            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_LOCATION_INSIDE);
+//            addParamToPane(fontPane2, param, gbcColorBar);
+//            gbcColorBar.gridy++;
+
+            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION);
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
+
+            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION);
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
 
             param = getConfigParam(ExportLegendImageAction.SHOW_TITLE_PARAM_STR);
             addParamToPane(fontPane2, param, gbcColorBar);
@@ -653,6 +677,15 @@ public class VisatPreferencesDialog extends ConfigDialog {
 //            boolean enabled = !(Boolean) param1.getValue();
 //            getConfigParam(PROPERTY_KEY_APP_UI_FONT_NAME).setUIEnabled(enabled);
 //            getConfigParam(PROPERTY_KEY_APP_UI_FONT_SIZE).setUIEnabled(enabled);
+//            if (ColorBarParamInfo.HORIZONTAL_STR.equals(getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION))) {
+//                getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION).setUIEnabled(true);
+//                getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION).setUIEnabled(false);
+//            } else {
+//                getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION).setUIEnabled(false);
+//                getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION).setUIEnabled(true);
+//            }
+
+
         }
 
         @Override
