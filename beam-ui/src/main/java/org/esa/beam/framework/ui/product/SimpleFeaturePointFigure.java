@@ -59,6 +59,7 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
 
     private final SimpleFeature simpleFeature;
     private Point geometry;
+    private boolean backgroundBox = true;
 
     {
         for (int i = 0; i < labelOutlineAlphas.length; i++) {
@@ -177,7 +178,7 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
         final Paint oldPaint = graphics.getPaint();
 
         //todo Danny  this toggles the new mode but is hard coded
-        boolean backgroundBox = true;
+      //  boolean backgroundBox = true;
         //todo Danny  this adjust symbol location ... ideally for text annotation it is over text.
         boolean isTextAnnotation = false;
 
@@ -193,7 +194,7 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
             }
             Shape labelOutline = glyphVector.getOutline(tx, ty);
 
-            if (backgroundBox) {
+            if (isBackgroundBox()) {
 
                 logicalBounds.setRect(tx-1.0,
                         ty - logicalBounds.getHeight()+3.0,
@@ -256,5 +257,13 @@ public class SimpleFeaturePointFigure extends AbstractPointFigure implements Sim
             return new Handle[]{new PointHandle(this, handleStyle)};
         }
         return super.createHandles(selectionStage);
+    }
+
+    public boolean isBackgroundBox() {
+        return backgroundBox;
+    }
+
+    public void setBackgroundBox(boolean backgroundBox) {
+        this.backgroundBox = backgroundBox;
     }
 }

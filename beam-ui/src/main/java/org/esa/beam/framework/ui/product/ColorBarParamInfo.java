@@ -59,7 +59,7 @@ public class ColorBarParamInfo {
 
 
     public static final int DEFAULT_LABELS_FONT_SIZE = 45;
-    public static final float DEFAULT_BACKGROUND_TRANSPARENCY = 0.25f;
+    public static final float DEFAULT_BACKGROUND_TRANSPARENCY = 0.5f;
     public static final Boolean DEFAULT_SHOW_TITLE_ENABLED = Boolean.TRUE;
     public static final String DEFAULT_TITLE = "";
     public static final String DEFAULT_TITLE_UNITS = "";
@@ -68,7 +68,7 @@ public class ColorBarParamInfo {
     public static final double DEFAULT_SCALING_FACTOR = 1.0;
     public static final int  DEFAULT_COLOR_BAR_LENGTH = ImageLegend.DEFAULT_COLOR_BAR_LENGTH;
     public static final int DEFAULT_COLOR_BAR_THICKNESS = 60;
-    public static final double DEFAULT_LAYER_SCALING = 90;
+    public static final double DEFAULT_LAYER_SCALING = 50;
     public static final double DEFAULT_LAYER_OFFSET = 0;
     public static final double DEFAULT_LAYER_SHIFT = 0;
     public static final Boolean DEFAULT_CENTER_ON_LAYER = Boolean.TRUE;
@@ -77,12 +77,12 @@ public class ColorBarParamInfo {
     public static final int DEFAULT_NUM_TICK_MARKS = 5;
     public static final int DEFAULT_DECIMAL_PLACES = 2;
     private static final boolean DEFAULT_DECIMAL_PLACES_FORCE = false;
-    public static final Color DEFAULT_FOREGROUND_COLOR = Color.lightGray;
-    public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
+    public static final Color DEFAULT_FOREGROUND_COLOR = Color.yellow;
+    public static final Color DEFAULT_BACKGROUND_COLOR = new Color(51,51,0);
 
     public static final String DEFAULT_ORIENTATION = HORIZONTAL_STR;
-    public static final String DEFAULT_HORIZONTAL_LOCATION = LOCATION_BOTTOM_CENTER;
-    public static final String DEFAULT_VERTICAL_LOCATION = LOCATION_RIGHT_CENTER;
+    public static final String DEFAULT_HORIZONTAL_LOCATION = LOCATION_BOTTOM_RIGHT;
+    public static final String DEFAULT_VERTICAL_LOCATION = LOCATION_RIGHT_LOWER;
     public static final String DEFAULT_INSIDE_OUTSIDE_LOCATION_ = LOCATION_INSIDE_STR;
 
 
