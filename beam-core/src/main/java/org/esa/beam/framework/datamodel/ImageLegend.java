@@ -57,6 +57,9 @@ public class ImageLegend {
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
 
+    public static final int INSIDE = 0;
+    public static final int OUTSIDE = 1;
+
     public static final int NULL_INT = -999;
 
     public static final String DISTRIB_EVEN_STR = "Use Even Distribution";
@@ -115,9 +118,9 @@ public class ImageLegend {
     private double layerOffset;
     private double layerShift;
     private boolean centerOnLayer;
-    private boolean colorBarLocationInside;
     private String horizontalLocation;
     private String verticalLocation;
+    private String insideOutsideLocation;
     private String titleOverRide = null;
 
 
@@ -1318,7 +1321,7 @@ public class ImageLegend {
         if (borderGap != NULL_INT) {
             return borderGap;
         } else {
-            return (int) Math.round(0.5 * getLabelsFontSize());
+          return (int) Math.round(0.5 * getLabelsFontSize());
         }
     }
 
@@ -1484,13 +1487,7 @@ public class ImageLegend {
         this.layerShift = layerShift;
     }
 
-    public boolean isColorBarLocationInside() {
-        return colorBarLocationInside;
-    }
 
-    public void setColorBarLocationInside(boolean colorBarLocationInside) {
-        this.colorBarLocationInside = colorBarLocationInside;
-    }
 
     public String getHorizontalLocation() {
         return horizontalLocation;
@@ -1506,6 +1503,14 @@ public class ImageLegend {
 
     public void setVerticalLocation(String verticalLocation) {
         this.verticalLocation = verticalLocation;
+    }
+
+    public String getInsideOutsideLocation() {
+        return insideOutsideLocation;
+    }
+
+    public void setInsideOutsideLocation(String insideOutsideLocation) {
+        this.insideOutsideLocation = insideOutsideLocation;
     }
 }
 

@@ -15,43 +15,51 @@ public class ColorBarParamInfo {
 
     public static final String HORIZONTAL_STR = "Horizontal";
     public static final String VERTICAL_STR = "Vertical";
+    public static final String LOCATION_INSIDE_STR = "Inside Image";
+    public static final String LOCATION_OUTSIDE_STR = "Outside Image";
 
+    public static final String LOCATION_TOP_LEFT = "Top Left";
+    public static final String LOCATION_TOP_CENTER = "Top Center";
+    public static final String LOCATION_TOP_RIGHT = "Top Right";
+    public static final String LOCATION_BOTTOM_LEFT = "Bottom Left";
+    public static final String LOCATION_BOTTOM_CENTER = "Bottom Center";
+    public static final String LOCATION_BOTTOM_RIGHT = "Bottom Right";
 
-    public static final String LOCATION_TOP_INSIDE = "Top Inside";
-    public static final String LOCATION_TOP_OUTSIDE = "Top Outside";
-    public static final String LOCATION_BOTTOM_INSIDE = "Bottom Inside";
-    public static final String LOCATION_BOTTOM_OUTSIDE = "Bottom Outside";
-
-    public static final String LOCATION_LEFT_INSIDE = "Left Inside";
-    public static final String LOCATION_LEFT_OUTSIDE = "Left Outside";
-    public static final String LOCATION_RIGHT_INSIDE = "Right Inside";
-    public static final String LOCATION_RIGHT_OUTSIDE = "Right Outside";
+    public static final String LOCATION_LEFT_UPPER = "Left Upper";
+    public static final String LOCATION_LEFT_CENTER = "Left Center";
+    public static final String LOCATION_LEFT_LOWER = "Left Lower";
+    public static final String LOCATION_RIGHT_UPPER = "Right Upper";
+    public static final String LOCATION_RIGHT_CENTER = "Right Center";
+    public static final String LOCATION_RIGHT_LOWER = "Right Lower";
 
 
 
     public static String[] getHorizontalLocationArray() {
         return  new String[]{
-                LOCATION_TOP_OUTSIDE,
-                LOCATION_TOP_INSIDE,
-                LOCATION_BOTTOM_INSIDE,
-                LOCATION_BOTTOM_OUTSIDE
+                LOCATION_TOP_LEFT,
+                LOCATION_TOP_CENTER,
+                LOCATION_TOP_RIGHT,
+                LOCATION_BOTTOM_LEFT,
+                LOCATION_BOTTOM_CENTER,
+                LOCATION_BOTTOM_RIGHT
         };    }
 
     public static String[] getVerticalLocationArray() {
         return  new String[]{
-                LOCATION_LEFT_OUTSIDE,
-                LOCATION_LEFT_INSIDE,
-                LOCATION_RIGHT_INSIDE,
-                LOCATION_RIGHT_OUTSIDE
+                LOCATION_LEFT_UPPER,
+                LOCATION_LEFT_CENTER,
+                LOCATION_LEFT_LOWER,
+                LOCATION_RIGHT_UPPER,
+                LOCATION_RIGHT_CENTER,
+                LOCATION_RIGHT_LOWER
         };    }
-
 
 
 
 
 
     public static final int DEFAULT_LABELS_FONT_SIZE = 45;
-    public static final Boolean DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED = Boolean.TRUE;
+    public static final float DEFAULT_BACKGROUND_TRANSPARENCY = 0.25f;
     public static final Boolean DEFAULT_SHOW_TITLE_ENABLED = Boolean.TRUE;
     public static final String DEFAULT_TITLE = "";
     public static final String DEFAULT_TITLE_UNITS = "";
@@ -65,23 +73,24 @@ public class ColorBarParamInfo {
     public static final double DEFAULT_LAYER_SHIFT = 0;
     public static final Boolean DEFAULT_CENTER_ON_LAYER = Boolean.TRUE;
     public static final String DEFAULT_MANUAL_POINTS = "";
-    public static final String DEFAULT_ORIENTATION = HORIZONTAL_STR;
     public static final String DEFAULT_DISTRIBUTION_TYPE = ImageLegend.DISTRIB_MANUAL_STR;
     public static final int DEFAULT_NUM_TICK_MARKS = 5;
     public static final int DEFAULT_DECIMAL_PLACES = 2;
     private static final boolean DEFAULT_DECIMAL_PLACES_FORCE = false;
-    public static final Color DEFAULT_FOREGROUND_COLOR = Color.black;
+    public static final Color DEFAULT_FOREGROUND_COLOR = Color.lightGray;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.white;
 
-    public static final String DEFAULT_HORIZONTAL_LOCATION = LOCATION_BOTTOM_OUTSIDE;
-    public static final String DEFAULT_VERTICAL_LOCATION = LOCATION_RIGHT_OUTSIDE;
+    public static final String DEFAULT_ORIENTATION = HORIZONTAL_STR;
+    public static final String DEFAULT_HORIZONTAL_LOCATION = LOCATION_BOTTOM_CENTER;
+    public static final String DEFAULT_VERTICAL_LOCATION = LOCATION_RIGHT_CENTER;
+    public static final String DEFAULT_INSIDE_OUTSIDE_LOCATION_ = LOCATION_INSIDE_STR;
 
 
 
 
 
     private int labelsFontSize = DEFAULT_LABELS_FONT_SIZE;
-    private Boolean backgroundTransparencyEnabled = DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED;
+    private float backgroundTransparency = DEFAULT_BACKGROUND_TRANSPARENCY;
     private Boolean showTitle = DEFAULT_SHOW_TITLE_ENABLED;
     private String title = DEFAULT_TITLE;
     private String titleUnits = DEFAULT_TITLE_UNITS;
@@ -103,6 +112,7 @@ public class ColorBarParamInfo {
     private Color foregroundColor = DEFAULT_FOREGROUND_COLOR;
     private Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
+    private String insideOutsideLocation = DEFAULT_INSIDE_OUTSIDE_LOCATION_;
     private String  horizontalLocation = DEFAULT_HORIZONTAL_LOCATION;
     private String verticalLocation = DEFAULT_VERTICAL_LOCATION;
 
@@ -135,13 +145,6 @@ public class ColorBarParamInfo {
         this.paramsInitialized = titleModified;
     }
 
-    public Boolean getBackgroundTransparencyEnabled() {
-        return backgroundTransparencyEnabled;
-    }
-
-    public void setBackgroundTransparencyEnabled(Boolean backgroundTransparencyEnabled) {
-        this.backgroundTransparencyEnabled = backgroundTransparencyEnabled;
-    }
 
     public Boolean getShowTitle() {
         return showTitle;
@@ -319,5 +322,29 @@ public class ColorBarParamInfo {
 
     public void setVerticalLocation(String verticalLocation) {
         this.verticalLocation = verticalLocation;
+    }
+
+    public String getInsideOutsideLocation() {
+        return insideOutsideLocation;
+    }
+
+    public void setInsideOutsideLocation(String insideOutsideLocation) {
+        this.insideOutsideLocation = insideOutsideLocation;
+    }
+
+    public boolean isInsideLocation() {
+        if (LOCATION_INSIDE_STR.equals(getInsideOutsideLocation())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public float getBackgroundTransparency() {
+        return backgroundTransparency;
+    }
+
+    public void setBackgroundTransparency(float backgroundTransparency) {
+        this.backgroundTransparency = backgroundTransparency;
     }
 }

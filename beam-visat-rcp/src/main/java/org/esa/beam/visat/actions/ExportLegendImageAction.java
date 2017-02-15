@@ -15,6 +15,11 @@
 */
 package org.esa.beam.visat.actions;
 
+import com.bc.ceres.binding.PropertyContainer;
+import com.bc.ceres.binding.PropertyDescriptor;
+import com.bc.ceres.binding.ValueRange;
+import com.bc.ceres.swing.binding.BindingContext;
+import com.bc.ceres.swing.binding.internal.RangeEditor;
 import org.esa.beam.framework.datamodel.ImageInfo;
 import org.esa.beam.framework.datamodel.ImageLegend;
 import org.esa.beam.framework.datamodel.RasterDataNode;
@@ -49,8 +54,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
     public static final String PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION = "legend.horizontalLocation";
     public static final String PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION = "legend.verticalLocation";
+    public static final String PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION = "legend.insideOutsideLocation";
 
-    public static final boolean DEFAULT_COLORBAR_LOCATION_INSIDE = false;
 
 
     public static final String ORIENTATION_PARAM_STR = "legend.orientation";
@@ -66,7 +71,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
     public static final String FOREGROUND_COLOR_PARAM_STR = "legend.foregroundColor";
     public static final String BACKGROUND_COLOR_PARAM_STR = "legend.backgroundColor";
     //   private static final String BACKGROUND_TRANSPARENCY_PARAM_STR = "legend.backgroundTransparency";
-    public static final String TRANSPARENT_PARAM_STR = "legend.transparent";
+    public static final String TRANSPARENCY_PARAM_STR = "legend.transparent";
 
     public static final String SCALING_FACTOR_PARAM_STR = "legend.scalingFactor";
     private static final String TITLE_FONT_SIZE_PARAM_STR = "legend.titleFontSize";
@@ -114,9 +119,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
             view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR.equals(getColorBarOrientationPreference()) ? ColorBarParamInfo.HORIZONTAL_STR : ColorBarParamInfo.VERTICAL_STR);
-
+            view.getColorBarParamInfo().setInsideOutsideLocation(getColorBarInsideOutsideLocationPreference());
             view.getColorBarParamInfo().setShowTitle(getColorBarShowTitlePreference());
-            view.getColorBarParamInfo().setBackgroundTransparencyEnabled(getColorBarTransparencyPreference());
+            view.getColorBarParamInfo().setBackgroundTransparency((float) getColorBarTransparencyPreference());
             view.getColorBarParamInfo().setBackgroundColor(getBackgroundColorPreference());
             view.getColorBarParamInfo().setForegroundColor(getForegroundColorPreference());
             view.getColorBarParamInfo().setLayerScaling(getLayerScalingFactorPreference());
@@ -195,9 +200,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             RenderedImage colorBarImage = createImage("PNG", view);
             showColorBarOverlayAction.setColorBarImage(colorBarImage);
             showColorBarOverlayAction.setOrientation(imageLegend.getOrientation());
+            showColorBarOverlayAction.setTransparency(imageLegend.getBackgroundTransparency());
             showColorBarOverlayAction.setLayerOffset(imageLegend.getLayerOffset());
             showColorBarOverlayAction.setHorizontalLocation(imageLegend.getHorizontalLocation());
             showColorBarOverlayAction.setVerticalLocation(imageLegend.getVerticalLocation());
+            showColorBarOverlayAction.setInsideOutsideLocation(imageLegend.getInsideOutsideLocation());
             showColorBarOverlayAction.setLayerShift(imageLegend.getLayerShift());
             //showColorBarOverlayAction.setFeatureCollection(imageLegend.getFeatureCollection());
             showColorBarOverlayAction.actionPerformed(event);
@@ -248,7 +255,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         // todo DANNY
         //  if (colorBarLayer) {
         view.getColorBarParamInfo().setLabelsFontSize(imageLegend.getLabelsFontSize());
-        view.getColorBarParamInfo().setBackgroundTransparencyEnabled(new Boolean(imageLegend.isBackgroundTransparencyEnabled()));
+        view.getColorBarParamInfo().setBackgroundTransparency(imageLegend.getBackgroundTransparency());
         view.getColorBarParamInfo().setShowTitle(new Boolean(imageLegend.isShowTitle()));
         view.getColorBarParamInfo().setTitle(imageLegend.getHeaderText());
         view.getColorBarParamInfo().setTitleUnits(imageLegend.getHeaderUnitsText());
@@ -271,6 +278,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         view.getColorBarParamInfo().setForegroundColor(imageLegend.getForegroundColor());
         view.getColorBarParamInfo().setBackgroundColor(imageLegend.getBackgroundColor());
         view.getColorBarParamInfo().setParamsInitialized(true);
+        view.getColorBarParamInfo().setInsideOutsideLocation(imageLegend.getInsideOutsideLocation());
 
         int orientation = imageLegend.getOrientation();
         if (orientation == ImageLegend.VERTICAL) {
@@ -301,9 +309,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setLabel("Show Title");
         paramGroup.addParameter(param);
 
-        param = new Parameter(TRANSPARENT_PARAM_STR, view.getColorBarParamInfo().getBackgroundTransparencyEnabled());
-        param.getProperties().setLabel("Transparent");
+
+        param = new Parameter(TRANSPARENCY_PARAM_STR, view.getColorBarParamInfo().getBackgroundTransparency());
+        param.getProperties().setLabel("Transparency of Backdrop");
+        param.getProperties().setMinValue(0.0f);
+        param.getProperties().setMaxValue(1.0f);
         paramGroup.addParameter(param);
+
 
         param = new Parameter(TITLE_PARAM_STR, view.getColorBarParamInfo().getTitle());
         param.getProperties().setLabel("Title");
@@ -355,13 +367,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         param = new Parameter(LAYER_SCALING_PARAM_STR, view.getColorBarParamInfo().getLayerScaling());
-        param.getProperties().setLabel("Scaling (percent of layer image size)");
+        param.getProperties().setLabel("Size Scaling (percent of layer image size)");
         param.getProperties().setMinValue(5);
         param.getProperties().setMaxValue(150);
         paramGroup.addParameter(param);
 
         param = new Parameter(LAYER_OFFSET_PARAM_STR, view.getColorBarParamInfo().getLayerOffset());
-        param.getProperties().setLabel("Location Offset (percent of color bar image height)");
+        param.getProperties().setLabel("Location Offset (percent of color bar height)");
         param.getProperties().setMinValue(-2000);
         param.getProperties().setMaxValue(2000);
         paramGroup.addParameter(param);
@@ -370,14 +382,14 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         param = new Parameter(PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, view.getColorBarParamInfo().getHorizontalLocation());
-        param.getProperties().setLabel("Location (if Horizontal)");
+        param.getProperties().setLabel("Location & Alignment (if Horizontal)");
         param.getProperties().setValueSet(ColorBarParamInfo.getHorizontalLocationArray());
         param.getProperties().setValueSetBound(true);
         paramGroup.addParameter(param);
 
 
         param = new Parameter(PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION, view.getColorBarParamInfo().getVerticalLocation());
-        param.getProperties().setLabel("Location (if Vertical)");
+        param.getProperties().setLabel("Location & Alignment (if Vertical)");
         param.getProperties().setValueSet(ColorBarParamInfo.getVerticalLocationArray());
         param.getProperties().setValueSetBound(true);
         paramGroup.addParameter(param);
@@ -386,7 +398,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         param = new Parameter(LAYER_SHIFT_PARAM_STR, view.getColorBarParamInfo().getLayerShift());
-        param.getProperties().setLabel("Location Shift (percent of color bar image width)");
+        param.getProperties().setLabel("Location Shift (percent of color bar width)");
         param.getProperties().setMinValue(-2000);
         param.getProperties().setMaxValue(2000);
         paramGroup.addParameter(param);
@@ -407,6 +419,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         param.getProperties().setValueSet(new String[]{ColorBarParamInfo.HORIZONTAL_STR, ColorBarParamInfo.VERTICAL_STR});
         param.getProperties().setValueSetBound(true);
         paramGroup.addParameter(param);
+
+        param = new Parameter(PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION, view.getColorBarParamInfo().getInsideOutsideLocation());
+        param.getProperties().setLabel("Location (Inside/Outside)");
+        param.getProperties().setValueSet(new String[]{ColorBarParamInfo.LOCATION_INSIDE_STR, ColorBarParamInfo.LOCATION_OUTSIDE_STR});
+        param.getProperties().setValueSetBound(true);
+        paramGroup.addParameter(param);
+
 
 
         param = new Parameter(DISTRIBUTION_TYPE_PARAM_STR, view.getColorBarParamInfo().getDistributionType());
@@ -438,11 +457,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         param = new Parameter(FOREGROUND_COLOR_PARAM_STR, view.getColorBarParamInfo().getForegroundColor());
-        param.getProperties().setLabel("Text Color");
+        param.getProperties().setLabel("Text/Tick Color");
         paramGroup.addParameter(param);
 
         param = new Parameter(BACKGROUND_COLOR_PARAM_STR, view.getColorBarParamInfo().getBackgroundColor());
-        param.getProperties().setLabel("Background Color");
+        param.getProperties().setLabel("Backdrop Color");
         paramGroup.addParameter(param);
 
 
@@ -517,6 +536,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(ORIENTATION_PARAM_STR).getValue();
         imageLegend.setOrientation(ColorBarParamInfo.HORIZONTAL_STR.equals(value) ? ImageLegend.HORIZONTAL : ImageLegend.VERTICAL);
 
+        value = legendParamGroup.getParameter(PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION).getValue();
+        imageLegend.setInsideOutsideLocation((String) value);
+
         value = legendParamGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR).getValue();
         imageLegend.setDistributionType((String) value);
 
@@ -575,8 +597,8 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         value = legendParamGroup.getParameter(FOREGROUND_COLOR_PARAM_STR).getValue();
         imageLegend.setForegroundColor((Color) value);
 
-        value = legendParamGroup.getParameter(TRANSPARENT_PARAM_STR).getValue();
-        imageLegend.setTransparent((Boolean) value);
+        value = legendParamGroup.getParameter(TRANSPARENCY_PARAM_STR).getValue();
+        imageLegend.setBackgroundTransparency((Float) value);
     }
 
 
@@ -592,10 +614,11 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         private ParamGroup paramGroup;
 
         private Parameter usingHeaderParam;
-        private Parameter transparentParam;
+        private Parameter transparencyParam;
         private Parameter headerTextParam;
         private Parameter headerUnitsParam;
         private Parameter orientationParam;
+        private Parameter insideOutsideLocationParam;
         private Parameter distributionTypeParam;
         private Parameter numberOfTicksParam;
         private Parameter backgroundColorParam;
@@ -754,10 +777,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbc.insets.top = 10;
             gbc.weightx=0;
             gbc.weighty=0;
-            jPanel.add(orientationParam.getEditor().getLabelComponent(), gbc);
-            gbc.gridx = 1;
-            jPanel.add(orientationParam.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
+//            jPanel.add(orientationParam.getEditor().getLabelComponent(), gbc);
+//            gbc.gridx = 1;
+//            jPanel.add(orientationParam.getEditor().getEditorComponent(), gbc);
+//            gbc.gridy++;
 
             gbc.gridx = 0;
             gbc.gridwidth = 2;
@@ -773,26 +796,61 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             gbcGroup.gridy = 0;
             gbcGroup.weightx = 1.0;
             gbcGroup.fill = GridBagConstraints.HORIZONTAL;
-            gbcGroup.anchor = GridBagConstraints.WEST;
+            gbcGroup.anchor = GridBagConstraints.NORTHWEST;
             gbcGroup.insets.bottom=10;
 
-            jPanelGroup.add(getDistributionPanel("Data Label Distribution & Numeric Formatting"), gbcGroup);
+            jPanelGroup.add(getFormatsPanel("Formatting"), gbcGroup);
+
             gbcGroup.gridy++;
+            gbcGroup.weighty = 1.0;
 
             jPanelGroup.add(getTitlePanel("Title"), gbcGroup);
+
             gbcGroup.gridy++;
 
-            jPanelGroup.add(getFormatsPanel("Formatting"), gbcGroup);
+
+            JPanel jPanelGroup2 = GridBagUtils.createPanel();
+            GridBagConstraints gbcGroup2 = GridBagUtils.createConstraints("");
+            gbcGroup2.gridx = 0;
+            gbcGroup2.gridy = 0;
+            gbcGroup2.weightx = 1.0;
+            gbcGroup2.fill = GridBagConstraints.HORIZONTAL;
+            gbcGroup2.anchor = GridBagConstraints.NORTHWEST;
+            gbcGroup2.insets.bottom=10;
+
+
+            jPanelGroup2.add(getScalingPanel("Scaling and Location (For Layer Only)"), gbcGroup);
+
+
             gbcGroup.gridy++;
 
-            jPanelGroup.add(getScalingPanel("Scaling and Location (For Layer Only)"), gbcGroup);
+            gbcGroup2.weighty = 1.0;
+            jPanelGroup2.add(getDistributionPanel("Data Label Distribution & Numeric Formatting"), gbcGroup);
+
+
+            JPanel jPanelGroupAll = GridBagUtils.createPanel();
+            GridBagConstraints gbcGroupAll = GridBagUtils.createConstraints("");
+            gbcGroupAll.gridx = 0;
+            gbcGroupAll.gridy = 0;
+            gbcGroupAll.weightx = 1.0;
+            gbcGroupAll.fill = GridBagConstraints.HORIZONTAL;
+            gbcGroupAll.anchor = GridBagConstraints.NORTHWEST;
+            gbcGroupAll.insets.bottom=10;
+            gbcGroupAll.insets.right=10;
+            jPanelGroupAll.add(jPanelGroup, gbcGroupAll);
+            gbcGroupAll.gridx++;
+            gbcGroupAll.weighty = 1.0;
+            gbcGroupAll.insets.right=0;
+
+
+            jPanelGroupAll.add(jPanelGroup2, gbcGroupAll);
 
 
 
 
-            final JScrollPane paramsScroll = new JScrollPane(jPanelGroup);
+
+            final JScrollPane paramsScroll = new JScrollPane(jPanelGroupAll);
             paramsScroll.setBorder(null);
-            paramsScroll.setMaximumSize(new Dimension(200,200));
 
             gbc.fill = GridBagConstraints.BOTH;
             gbc.anchor = GridBagConstraints.WEST;
@@ -848,10 +906,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             addParamToPane(jPanel, distributionTypeParam, gbc);
             gbc.gridy++;
 
-            addParamToPane(jPanel, numberOfTicksParam, gbc);
+            addParamToPane(jPanel, fullCustomAddThesePointsParam, gbc);
             gbc.gridy++;
 
-            addParamToPane(jPanel, fullCustomAddThesePointsParam, gbc);
+            addParamToPane(jPanel, numberOfTicksParam, gbc);
             gbc.gridy++;
 
             addParamToPane(jPanel, scalingFactorParam, gbc);
@@ -873,10 +931,18 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             GridBagConstraints gbc = GridBagUtils.createConstraints("");
             gbc.gridy = 0;
 
-            addParamToPane(jPanel, colorBarLengthParam, gbc);
+
+
+            addParamToPane(jPanel, orientationParam, gbc);
             gbc.gridy++;
 
-            addParamToPane(jPanel, colorBarThicknessParam, gbc);
+            addParamToPane(jPanel, foregroundColorParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, transparencyParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, backgroundColorParam, gbc);
             gbc.gridy++;
 
             addParamToPane(jPanel, titleFontSizeParam, gbc);
@@ -888,14 +954,13 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             addParamToPane(jPanel, labelsFontSizeParam, gbc);
             gbc.gridy++;
 
-            addParamToPane(jPanel, foregroundColorParam, gbc);
+            addParamToPane(jPanel, colorBarLengthParam, gbc);
             gbc.gridy++;
 
-            addParamToPane(jPanel, backgroundColorParam, gbc);
+            addParamToPane(jPanel, colorBarThicknessParam, gbc);
             gbc.gridy++;
 
-            addParamToPane(jPanel, transparentParam, gbc);
-            gbc.gridy++;
+
 
 //            gbc.gridx = 0;
 //            gbc.gridy++;
@@ -919,7 +984,17 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             GridBagConstraints gbc = GridBagUtils.createConstraints("");
             gbc.gridy = 0;
 
+
             addParamToPane(jPanel, layerScalingParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, insideOutsideLocationParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, horizontalLocationParam, gbc);
+            gbc.gridy++;
+
+            addParamToPane(jPanel, verticalLocationParam, gbc);
             gbc.gridy++;
 
             addParamToPane(jPanel, layerOffsetParam, gbc);
@@ -930,11 +1005,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
 
-            addParamToPane(jPanel, horizontalLocationParam, gbc);
-            gbc.gridy++;
-
-            addParamToPane(jPanel, verticalLocationParam, gbc);
-            gbc.gridy++;
 
             return jPanel;
         }
@@ -944,6 +1014,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             usingHeaderParam = paramGroup.getParameter(SHOW_TITLE_PARAM_STR);
             headerTextParam = paramGroup.getParameter(TITLE_PARAM_STR);
             orientationParam = paramGroup.getParameter(ORIENTATION_PARAM_STR);
+            insideOutsideLocationParam = paramGroup.getParameter(PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION);
             distributionTypeParam = paramGroup.getParameter(DISTRIBUTION_TYPE_PARAM_STR);
 //            fontSizeParam = paramGroup.getParameter(LABEL_FONT_SIZE_PARAM_STR);
             scalingFactorParam = paramGroup.getParameter(SCALING_FACTOR_PARAM_STR);
@@ -961,7 +1032,7 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             numberOfTicksParam = paramGroup.getParameter(NUM_TICKS_PARAM_STR);
             foregroundColorParam = paramGroup.getParameter(FOREGROUND_COLOR_PARAM_STR);
             backgroundColorParam = paramGroup.getParameter(BACKGROUND_COLOR_PARAM_STR);
-            transparentParam = paramGroup.getParameter(TRANSPARENT_PARAM_STR);
+            transparencyParam = paramGroup.getParameter(TRANSPARENCY_PARAM_STR);
             decimalPlacesParam = paramGroup.getParameter(DECIMAL_PLACES_PARAM_STR);
             decimalPlacesForceParam = paramGroup.getParameter(DECIMAL_PLACES_FORCE_PARAM_STR);
             headerUnitsParam = paramGroup.getParameter(TITLE_UNITS_PARAM_STR);
@@ -1042,12 +1113,18 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         return configuration.getPropertyBool(ExportLegendImageAction.SHOW_TITLE_PARAM_STR, ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED);
     }
 
-    public boolean getColorBarTransparencyPreference() {
-        return configuration.getPropertyBool(ExportLegendImageAction.TRANSPARENT_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED);
+
+
+    public double getColorBarTransparencyPreference() {
+        return configuration.getPropertyDouble(ExportLegendImageAction.TRANSPARENCY_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY);
     }
 
     public String getColorBarOrientationPreference() {
         return configuration.getPropertyString(ExportLegendImageAction.ORIENTATION_PARAM_STR, ColorBarParamInfo.DEFAULT_ORIENTATION);
+    }
+
+    public String getColorBarInsideOutsideLocationPreference() {
+        return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION, ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION_);
     }
 
     public Color getForegroundColorPreference() {

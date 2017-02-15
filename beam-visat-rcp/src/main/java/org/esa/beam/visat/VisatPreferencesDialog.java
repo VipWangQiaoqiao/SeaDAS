@@ -499,14 +499,14 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
             param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION);
-            param.getProperties().setLabel("Location (if horizontal)");
+            param.getProperties().setLabel("Location & Alignment (if horizontal)");
             param.getProperties().setValueSet(ColorBarParamInfo.getHorizontalLocationArray());
             param.getProperties().setValueSetBound(true);
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
             param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION, ColorBarParamInfo.DEFAULT_VERTICAL_LOCATION);
-            param.getProperties().setLabel("Location (if vertical)");
+            param.getProperties().setLabel("Location & Alignment (if vertical)");
             param.getProperties().setValueSet(ColorBarParamInfo.getVerticalLocationArray());
             param.getProperties().setValueSetBound(true);
             param.addParamChangeListener(paramChangeListener);
@@ -514,12 +514,15 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
             param = new Parameter(ExportLegendImageAction.SHOW_TITLE_PARAM_STR, ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED);
-            param.getProperties().setLabel("Show title");
+            param.getProperties().setLabel("Show Title");
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
-            param = new Parameter(ExportLegendImageAction.TRANSPARENT_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY_ENABLED);
-            param.getProperties().setLabel("Transparency");
+
+            param = new Parameter(ExportLegendImageAction.TRANSPARENCY_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY);
+            param.getProperties().setLabel("Transparency of Backdrop");
+            param.getProperties().setMinValue(0.0f);
+            param.getProperties().setMaxValue(1.0f);
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
@@ -527,6 +530,13 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param = new Parameter(ExportLegendImageAction.ORIENTATION_PARAM_STR, ColorBarParamInfo.DEFAULT_ORIENTATION);
             param.getProperties().setLabel("Orientation");
             param.getProperties().setValueSet(new String[]{ColorBarParamInfo.HORIZONTAL_STR, ColorBarParamInfo.VERTICAL_STR});
+            param.getProperties().setValueSetBound(true);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION, ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION_);
+            param.getProperties().setLabel("Location (Inside/Outside)");
+            param.getProperties().setValueSet(new String[]{ColorBarParamInfo.LOCATION_INSIDE_STR, ColorBarParamInfo.LOCATION_OUTSIDE_STR});
             param.getProperties().setValueSetBound(true);
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
@@ -542,7 +552,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
             param = new Parameter(ExportLegendImageAction.LAYER_SCALING_PARAM_STR, ColorBarParamInfo.DEFAULT_LAYER_SCALING);
-            param.getProperties().setLabel("Size scaling"); /*I18N*/
+            param.getProperties().setLabel("Size Scaling"); /*I18N*/
             param.getProperties().setMinValue(5.0);
             param.getProperties().setMaxValue(150.0);
             configParams.addParameter(param);
@@ -580,7 +590,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(fontPane2, param, gbcColorBar);
             gbcColorBar.gridy++;
 
-
+            param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION);
+            addParamToPane(fontPane2, param, gbcColorBar);
+            gbcColorBar.gridy++;
 
             param = getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION);
             addParamToPane(fontPane2, param, gbcColorBar);
@@ -594,7 +606,8 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(fontPane2, param, gbcColorBar);
             gbcColorBar.gridy++;
 
-            param = getConfigParam(ExportLegendImageAction.TRANSPARENT_PARAM_STR);
+
+            param = getConfigParam(ExportLegendImageAction.TRANSPARENCY_PARAM_STR);
             addParamToPane(fontPane2, param, gbcColorBar);
             gbcColorBar.gridy++;
 
