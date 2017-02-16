@@ -53,8 +53,17 @@ public abstract class AbstractLayerConfigurationEditor extends AbstractLayerEdit
         PropertySet propertySet = bindingContext.getPropertySet();
         propertySet.addPropertyChangeListener(new PropertyChangeHandler());
         addEditablePropertyDescriptors();
-        PropertyPane propertyPane = new PropertyPane(bindingContext);
-        return propertyPane.createPanel();
+
+
+       // if (propertySet.getProperties().length > 15) {
+        if ("Graticule".equals(getCurrentLayer().getName())) {
+          PropertyPaneRevised propertyPaneRevised = new PropertyPaneRevised(bindingContext);
+            return propertyPaneRevised.createPanel(getCurrentLayer().getName());
+        } else {
+            PropertyPane propertyPane = new PropertyPane(bindingContext);
+             return  propertyPane.createPanel();
+        }
+
     }
 
     @Override

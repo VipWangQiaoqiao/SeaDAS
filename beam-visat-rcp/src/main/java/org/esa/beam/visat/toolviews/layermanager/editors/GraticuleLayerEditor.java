@@ -40,23 +40,6 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         final PropertyEditorRegistry propertyEditorRegistry = PropertyEditorRegistry.getInstance();
 
 
-        PropertyDescriptor vd2 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_LAT, Double.class);
-        vd2.setDefaultValue(GraticuleLayerType.DEFAULT_RES_LAT);
-        vd2.setValueRange(new ValueRange(0.0, 90.00));
-//        vd2.setValueRange(new ValueRange(0.01, 90.00));
-        vd2.setDisplayName("Latitude Step Size (0=AUTO-SIZING)");
-        vd2.setDefaultConverter();
-        addPropertyDescriptor(vd2);
-
-        PropertyDescriptor vd3 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_LON, Double.class);
-        vd3.setDefaultValue(GraticuleLayerType.DEFAULT_RES_LON);
-        vd3.setValueRange(new ValueRange(0.0, 180.00));
-//        vd3.setValueRange(new ValueRange(0.01, 180.00));
-        vd3.setDisplayName("Longitude Step Size (0=AUTO-SIZING)");
-        vd3.setDefaultConverter();
-        addPropertyDescriptor(vd3);
-
-
         PropertyDescriptor vd20 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_NORTH, Boolean.class);
         vd20.setDefaultValue(GraticuleLayerType.DEFAULT_TEXT_ENABLED_NORTH);
         vd20.setDisplayName("Show Longitude Labels - North");
@@ -198,6 +181,24 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         addPropertyDescriptor(vd282);
 
 
+
+
+
+        PropertyDescriptor vd2 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_LAT, Double.class);
+        vd2.setDefaultValue(GraticuleLayerType.DEFAULT_RES_LAT);
+        vd2.setValueRange(new ValueRange(0.0, 90.00));
+//        vd2.setValueRange(new ValueRange(0.01, 90.00));
+        vd2.setDisplayName("Latitude Step Size (0=AUTO-SIZING)");
+        vd2.setDefaultConverter();
+        addPropertyDescriptor(vd2);
+
+        PropertyDescriptor vd3 = new PropertyDescriptor(GraticuleLayerType.PROPERTY_NAME_RES_LON, Double.class);
+        vd3.setDefaultValue(GraticuleLayerType.DEFAULT_RES_LON);
+        vd3.setValueRange(new ValueRange(0.0, 180.00));
+//        vd3.setValueRange(new ValueRange(0.01, 180.00));
+        vd3.setDisplayName("Longitude Step Size (0=AUTO-SIZING)");
+        vd3.setDefaultConverter();
+        addPropertyDescriptor(vd3);
 
 
 
