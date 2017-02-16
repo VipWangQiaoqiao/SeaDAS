@@ -1217,7 +1217,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
     public static class GraticuleOverlayPage extends DefaultConfigPage {
 
         public GraticuleOverlayPage() {
-            setTitle("Graticule Layer"); /*I18N*/
+            setTitle("Map Gridlines Layer"); /*I18N*/
         }
 
         @Override
