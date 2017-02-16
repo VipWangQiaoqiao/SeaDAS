@@ -1232,76 +1232,152 @@ public class VisatPreferencesDialog extends ConfigDialog {
             };
 
 
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_NUM_GRID_LINES, 128);
-//            param.getProperties().setLabel("Average grid size in pixels"); /*I18N*/
-//            param.getProperties().setMinValue(16);
-//            param.getProperties().setMaxValue(512);
-//            configParams.addParameter(param);
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_NORTH, GraticuleLayerType.DEFAULT_TEXT_ENABLED_NORTH);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_ENABLED_NORTH); /*I18N*/
+            configParams.addParameter(param);
 
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_LAT, 1.0);
-//            param.getProperties().setLabel("Latitude step (dec. degree)"); /*I18N*/
-//            param.getProperties().setMinValue(0.01);
-//            param.getProperties().setMaxValue(90.0);
-//            configParams.addParameter(param);
-//
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_LON, 1.0);
-//            param.getProperties().setLabel("Longitude step (dec. degree)"); /*I18N*/
-//            param.getProperties().setMinValue(0.01);
-//            param.getProperties().setMaxValue(180.0);
-//            configParams.addParameter(param);
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_SOUTH, GraticuleLayerType.DEFAULT_TEXT_ENABLED_SOUTH);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_ENABLED_SOUTH); /*I18N*/
+            configParams.addParameter(param);
 
-            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR, GraticuleLayerType.DEFAULT_LINE_COLOR);
-            param.getProperties().setLabel("Line colour"); /*I18N*/
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_WEST, GraticuleLayerType.DEFAULT_TEXT_ENABLED_WEST);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_ENABLED_WEST); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_EAST, GraticuleLayerType.DEFAULT_TEXT_ENABLED_EAST);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_ENABLED_EAST); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LON_ENABLED, GraticuleLayerType.DEFAULT_TEXT_CORNER_TOP_LON_ENABLED);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_CORNER_TOP_LON_ENABLED); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LON_ENABLED, GraticuleLayerType.DEFAULT_TEXT_CORNER_BOTTOM_LON_ENABLED);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_CORNER_BOTTOM_LON_ENABLED); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_LEFT_LAT_ENABLED, GraticuleLayerType.DEFAULT_TEXT_CORNER_LEFT_LAT_ENABLED);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_CORNER_LEFT_LAT_ENABLED); /*I18N*/
+            configParams.addParameter(param);
+
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_RIGHT_LAT_ENABLED, GraticuleLayerType.DEFAULT_TEXT_CORNER_RIGHT_LAT_ENABLED);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_CORNER_RIGHT_LAT_ENABLED); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED, GraticuleLayerType.DEFAULT_TICKMARK_ENABLED);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TICKMARK_ENABLED); /*I18N*/
+            configParams.addParameter(param);
+
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE, GraticuleLayerType.DEFAULT_TICKMARK_INSIDE);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TICKMARK_INSIDE); /*I18N*/
+            configParams.addParameter(param);
+
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, GraticuleLayerType.DEFAULT_TEXT_INSIDE);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_INSIDE); /*I18N*/
+            configParams.addParameter(param);
+
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_ENABLED, GraticuleLayerType.DEFAULT_LINE_ENABLED);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_LINE_ENABLED); /*I18N*/
+            configParams.addParameter(param);
+
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED, GraticuleLayerType.DEFAULT_BORDER_ENABLED);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_BORDER_ENABLED); /*I18N*/
+            configParams.addParameter(param);
+
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_FORMAT_COMPASS, GraticuleLayerType.DEFAULT_FORMAT_COMPASS);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_FORMAT_COMPASS); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_FORMAT_DECIMAL, GraticuleLayerType.DEFAULT_FORMAT_DECIMAL);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_FORMAT_DECIMAL); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_LAT, GraticuleLayerType.DEFAULT_RES_LAT);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_RES_LAT); /*I18N*/
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_ROTATION_NORTH_SOUTH); /*I18N*/
+            param.getProperties().setMinValue(0.0);
+            param.getProperties().setMaxValue(90.0);
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_RES_LON, GraticuleLayerType.DEFAULT_RES_LON);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_RES_LON); /*I18N*/
+            param.getProperties().setMinValue(0.0);
+            param.getProperties().setMaxValue(180.0);
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH_SOUTH, GraticuleLayerType.DEFAULT_TEXT_ROTATION_NORTH_SOUTH);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_ROTATION_NORTH_SOUTH); /*I18N*/
+            param.getProperties().setMinValue(0);
+            param.getProperties().setMaxValue(90);
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST_EAST, GraticuleLayerType.DEFAULT_TEXT_ROTATION_WEST_EAST);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_ROTATION_WEST_EAST); /*I18N*/
+            param.getProperties().setMinValue(0);
+            param.getProperties().setMaxValue(180);
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, GraticuleLayerType.DEFAULT_TEXT_FONT_SIZE);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_FONT_SIZE); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_SIZE, GraticuleLayerType.DEFAULT_TEXT_CORNER_FONT_SIZE);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_CORNER_FONT_SIZE); /*I18N*/
             configParams.addParameter(param);
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH, GraticuleLayerType.DEFAULT_LINE_WIDTH);
-            param.getProperties().setLabel("Line width"); /*I18N*/
-            param.getProperties().setMinValue(0);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_LINE_WIDTH); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE, GraticuleLayerType.DEFAULT_LINE_DASHED_PHASE);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_LINE_DASHED_PHASE); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH, GraticuleLayerType.DEFAULT_TICKMARK_LENGTH);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TICKMARK_LENGTH); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH, GraticuleLayerType.DEFAULT_BORDER_WIDTH);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_BORDER_WIDTH); /*I18N*/
             configParams.addParameter(param);
 
             param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY, GraticuleLayerType.DEFAULT_LINE_TRANSPARENCY);
-            param.getProperties().setLabel("Line transparency"); /*I18N*/
-            param.getProperties().setMinValue(0.0);
-            param.getProperties().setMaxValue(1.0);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_LINE_TRANSPARENCY); /*I18N*/
+            param.getProperties().setMinValue(0);
+            param.getProperties().setMaxValue(1);
             configParams.addParameter(param);
 
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, Color.white);
-//            param.getProperties().setLabel("Text foreground colour"); /*I18N*/
-//            configParams.addParameter(param);
-//
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, Color.black);
-//            param.getProperties().setLabel("Text background colour"); /*I18N*/
-//            configParams.addParameter(param);
-//
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY, 0.7);
-//            param.getProperties().setLabel("Text background transparency"); /*I18N*/
-//            param.getProperties().setMinValue(0.0);
-//            param.getProperties().setMaxValue(1.0);
-//            configParams.addParameter(param);
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY, GraticuleLayerType.DEFAULT_TEXT_BG_TRANSPARENCY);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_BG_TRANSPARENCY); /*I18N*/
+            param.getProperties().setMinValue(0);
+            param.getProperties().setMaxValue(1);
+            configParams.addParameter(param);
 
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE, 12);
-//            param.getProperties().setLabel("Text font size"); /*I18N*/
-//            param.getProperties().setMinValue(6);
-//            param.getProperties().setMaxValue(150);
-//            configParams.addParameter(param);
-//
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_OUTWARD, 0);
-//            param.getProperties().setLabel("Text offset outward"); /*I18N*/
-//            param.getProperties().setMinValue(-300);
-//            param.getProperties().setMaxValue(300);
-//            configParams.addParameter(param);
-//
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_OFFSET_SIDEWARD, 0);
-//            param.getProperties().setLabel("Text offset sideward"); /*I18N*/
-//            param.getProperties().setMinValue(-300);
-//            param.getProperties().setMaxValue(300);
-//            configParams.addParameter(param);
-//
-//            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE, Boolean.TRUE);
-//            param.addParamChangeListener(paramChangeListener);
-//            param.getProperties().setLabel("Labels inside"); /*I18N*/
-//            configParams.addParameter(param);
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR, GraticuleLayerType.DEFAULT_TEXT_FG_COLOR);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_FG_COLOR); /*I18N*/
+            configParams.addParameter(param);
 
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_COLOR, GraticuleLayerType.DEFAULT_TEXT_CORNER_FONT_COLOR);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_CORNER_FONT_COLOR); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR, GraticuleLayerType.DEFAULT_LINE_COLOR);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_LINE_COLOR); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR, GraticuleLayerType.DEFAULT_BORDER_COLOR);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_BORDER_COLOR); /*I18N*/
+            configParams.addParameter(param);
+
+            param = new Parameter(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR, GraticuleLayerType.DEFAULT_TEXT_BG_COLOR);
+            param.getProperties().setLabel(GraticuleLayerType.PROPERTY_LABEL_TEXT_BG_COLOR); /*I18N*/
+            configParams.addParameter(param);
 
         }
 
@@ -1314,151 +1390,184 @@ public class VisatPreferencesDialog extends ConfigDialog {
         private JPanel createPageUI() {
             Parameter param;
 
-            JPanel pageUI = GridBagUtils.createPanel();
-            //pageUI.setBorder(UIUtils.createGroupBorder("Graticule Overlay")); /*I18N*/
 
-            GridBagConstraints gbc = GridBagUtils.createConstraints("fill=HORIZONTAL,anchor=WEST");
-            gbc.gridy = 0;
-
-//            param = getConfigParam("graticule.res.auto");
-//            gbc.weightx = 0;
-//            gbc.gridwidth = 2;
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
-
-//            final JLabel note1 = new JLabel(
-//                    "Note: Deselect this option only very carefully. The latitude and longitude");
-//            configureNoteLabel(note1);
-//            pageUI.add(note1, gbc);
-//            gbc.gridy++;
-//
-//            final JLabel note2 = new JLabel("steps you enter will be used for low and high resolution products.");
-//            configureNoteLabel(note2);
-//            pageUI.add(note2, gbc);
-//            gbc.gridy++;
-//
-//            gbc.gridwidth = 1;
-//            gbc.insets.top = 2 * _LINE_INSET_TOP;
-//
-////            param = getConfigParam("graticule.res.pixels");
-////            gbc.weightx = 0;
-////            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-////            gbc.weightx = 1;
-////            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-////            gbc.gridy++;
-//
-//            param = getConfigParam("graticule.res.lat");
-//            gbc.weightx = 0;
-//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
-//
-//            gbc.insets.top = _LINE_INSET_TOP;
-//
-//            param = getConfigParam("graticule.res.lon");
-//            gbc.weightx = 0;
-//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
-//
-//            gbc.insets.top = 3 * _LINE_INSET_TOP;
-
-            param = getConfigParam("graticule.line.color");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-            gbc.insets.top = _LINE_INSET_TOP;
-
-            param = getConfigParam("graticule.line.width");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-            param = getConfigParam("graticule.line.transparency");
-            gbc.weightx = 0;
-            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-            gbc.weightx = 1;
-            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-            gbc.gridy++;
-
-            gbc.insets.top = 3 * _LINE_INSET_TOP;
-
-//            param = getConfigParam("graticule.text.enabled");
-//            gbc.weightx = 0;
-//            gbc.gridwidth = 2;
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridwidth = 1;
-//            gbc.gridy++;
-
-            gbc.insets.top = _LINE_INSET_TOP;
+            JPanel leftPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcLeft = GridBagUtils.createConstraints("");
+            gbcLeft.gridx = 0;
+            gbcLeft.gridy = 0;
+            gbcLeft.weightx = 0.0;
+            gbcLeft.fill = GridBagConstraints.HORIZONTAL;
+            gbcLeft.anchor = GridBagConstraints.NORTHWEST;
+            gbcLeft.insets.bottom=0;
+            gbcLeft.insets.top=0;
 
 
-//
-//            param = getConfigParam("graticule.text.inside");
-//            gbc.weightx = 0;
-//            gbc.gridwidth = 2;
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridwidth = 1;
-//            gbc.gridy++;
-//
-//
-//
-//            param = getConfigParam("graticule.text.font.size");
-//            gbc.weightx = 0;
-//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
-//
-//
-//            param = getConfigParam("graticule.text.offset.outward");
-//            gbc.weightx = 0;
-//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
-//
-//
-//            param = getConfigParam("graticule.text.offset.sideward");
-//            gbc.weightx = 0;
-//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
+
+            JPanel rightPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcRight = GridBagUtils.createConstraints("");
+            gbcRight.gridx = 0;
+            gbcRight.gridy = 0;
+            gbcRight.weightx = 0.0;
+            gbcRight.fill = GridBagConstraints.HORIZONTAL;
+            gbcRight.anchor = GridBagConstraints.NORTHWEST;
+            gbcRight.insets.bottom=0;
+            gbcRight.insets.top=0;
 
 
-//            param = getConfigParam("graticule.text.fg.color");
-//            gbc.weightx = 0;
-//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
-//
-//            param = getConfigParam("graticule.text.bg.color");
-//            gbc.weightx = 0;
-//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
-//
-//            param = getConfigParam("graticule.text.bg.transparency");
-//            gbc.weightx = 0;
-//            pageUI.add(param.getEditor().getLabelComponent(), gbc);
-//            gbc.weightx = 1;
-//            pageUI.add(param.getEditor().getEditorComponent(), gbc);
-//            gbc.gridy++;
 
-            return createPageUIContentPane(pageUI);
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_NORTH);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_SOUTH);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_WEST);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_ENABLED_EAST);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_TOP_LON_ENABLED);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_BOTTOM_LON_ENABLED);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_LEFT_LAT_ENABLED);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_RIGHT_LAT_ENABLED);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TICKMARK_ENABLED);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TICKMARK_INSIDE);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_INSIDE);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_LINE_ENABLED);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_BORDER_ENABLED);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_FORMAT_COMPASS);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_FORMAT_DECIMAL);
+            addParamToPane(leftPanel, param, gbcLeft);
+            gbcLeft.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_RES_LAT);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_RES_LON);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_NORTH_SOUTH);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_ROTATION_WEST_EAST);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_FONT_SIZE);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_SIZE);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_LINE_WIDTH);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_LINE_DASHED_PHASE);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TICKMARK_LENGTH);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_BORDER_WIDTH);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_LINE_TRANSPARENCY);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_TRANSPARENCY);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_FG_COLOR);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_CORNER_FONT_COLOR);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_LINE_COLOR);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_BORDER_COLOR);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+            param = getConfigParam(GraticuleLayerType.PROPERTY_NAME_TEXT_BG_COLOR);
+            addParamToPane(rightPanel, param, gbcRight);
+            gbcRight.gridy++;
+
+
+
+
+
+            JPanel groupPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcGroup = GridBagUtils.createConstraints("");
+            gbcGroup.gridx = 0;
+            gbcGroup.gridy = 0;
+            gbcGroup.weightx = 0.0;
+            gbcGroup.fill = GridBagConstraints.NONE;
+            gbcGroup.anchor = GridBagConstraints.NORTHWEST;
+            gbcGroup.insets.bottom=10;
+            gbcGroup.insets.right=20;
+            groupPanel.add(leftPanel, gbcGroup);
+            gbcGroup.gridx++;
+            gbcGroup.weightx = 1.0;
+            gbcGroup.weighty = 1.0;
+            gbcGroup.insets.right=0;
+            gbcGroup.fill = GridBagConstraints.HORIZONTAL;
+            gbcGroup.insets.top = _LINE_INSET_TOP;
+
+            groupPanel.add(rightPanel, gbcGroup);
+
+
+            return createPageUIContentPane(groupPanel);
         }
 
         @Override

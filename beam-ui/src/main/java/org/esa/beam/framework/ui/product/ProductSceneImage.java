@@ -390,7 +390,7 @@ public class ProductSceneImage implements ProductLayerContext {
         final GraticuleLayer graticuleLayer = (GraticuleLayer) layerType.createLayer(null, template);
         graticuleLayer.setId(ProductSceneView.GRATICULE_LAYER_ID);
         graticuleLayer.setVisible(false);
-        graticuleLayer.setName("Graticule");
+        graticuleLayer.setName(ProductSceneView.GRATICULE_LAYER_NAME);
         setGraticuleLayerStyle(configuration, graticuleLayer);
         return graticuleLayer;
     }

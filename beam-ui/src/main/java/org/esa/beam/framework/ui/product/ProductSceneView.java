@@ -76,6 +76,7 @@ public class ProductSceneView extends BasicView
     public static final String VECTOR_DATA_LAYER_ID = VectorDataCollectionLayer.ID;
     public static final String MASKS_LAYER_ID = MaskCollectionLayer.ID;
     public static final String GRATICULE_LAYER_ID = "org.esa.beam.layers.graticule";
+    public static final String GRATICULE_LAYER_NAME = "Map Gridlines";
     /**
      * @deprecated since BEAM 4.7
      */

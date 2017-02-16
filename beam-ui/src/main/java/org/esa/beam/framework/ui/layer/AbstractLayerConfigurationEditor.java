@@ -24,6 +24,7 @@ import com.bc.ceres.binding.accessors.DefaultPropertyAccessor;
 import com.bc.ceres.swing.binding.Binding;
 import com.bc.ceres.swing.binding.BindingContext;
 import com.bc.ceres.swing.binding.PropertyPane;
+import org.esa.beam.framework.ui.product.ProductSceneView;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
@@ -56,7 +57,7 @@ public abstract class AbstractLayerConfigurationEditor extends AbstractLayerEdit
 
 
        // if (propertySet.getProperties().length > 15) {
-        if ("Graticule".equals(getCurrentLayer().getName())) {
+        if (ProductSceneView.GRATICULE_LAYER_NAME.equals(getCurrentLayer().getName())) {
           PropertyPaneRevised propertyPaneRevised = new PropertyPaneRevised(bindingContext);
             return propertyPaneRevised.createPanel(getCurrentLayer().getName());
         } else {

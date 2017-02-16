@@ -8,6 +8,7 @@ import com.bc.ceres.swing.binding.BindingContext;
 import com.bc.ceres.swing.binding.PropertyEditor;
 import com.bc.ceres.swing.binding.PropertyEditorRegistry;
 import org.esa.beam.framework.ui.GridBagUtils;
+import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.glayer.GraticuleLayerType;
 
 import javax.swing.*;
@@ -63,7 +64,7 @@ public class PropertyPaneRevised {
 
         for (Property property : properties) {
 
-            if ("Graticule".equals(layerName)) {
+            if (ProductSceneView.GRATICULE_LAYER_NAME.equals(layerName)) {
                 if (GraticuleLayerType.PROPERTY_NAME_RES_LAT.equals(property.getName())) {
                     leftSide = false;
                 }

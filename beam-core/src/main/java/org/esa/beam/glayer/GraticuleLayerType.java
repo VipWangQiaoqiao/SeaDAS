@@ -35,45 +35,90 @@ public class GraticuleLayerType extends LayerType {
 
     public static final String PROPERTY_NAME_RASTER = "raster";
     public static final String PROPERTY_NAME_NUM_GRID_LINES = "graticule.num.grid.lines"; // todo Danny changed this to number of lines so need to change variable names
-    public static final String PROPERTY_NAME_RES_LAT = "graticule.res.lat";
-    public static final String PROPERTY_NAME_RES_LON = "graticule.res.lon";
-    public static final String PROPERTY_NAME_LINE_COLOR = "graticule.line.color";
-    public static final String PROPERTY_NAME_LINE_TRANSPARENCY = "graticule.line.transparency";
-    public static final String PROPERTY_NAME_LINE_WIDTH = "graticule.line.width";
-    public static final String PROPERTY_NAME_TEXT_FG_COLOR = "graticule.text.fg.color";
-    public static final String PROPERTY_NAME_TEXT_CORNER_FONT_COLOR = "graticule.text.corner.font.color";
-    public static final String PROPERTY_NAME_TEXT_BG_COLOR = "graticule.text.bg.color";
-    public static final String PROPERTY_NAME_TEXT_BG_TRANSPARENCY = "graticule.text.bg.transparency";
+
+
 
 
     // DANNY added these
-    public static final String PROPERTY_NAME_TEXT_FONT_SIZE = "graticule.text.font.size";
-    public static final String PROPERTY_NAME_TEXT_CORNER_FONT_SIZE = "graticule.text.corner.font.size";
+
     public static final String PROPERTY_NAME_TEXT_FONT_ITALIC = "graticule.text.font.italic";
-    public static final String PROPERTY_NAME_TEXT_INSIDE = "graticule.text.inside";
-    public static final String PROPERTY_NAME_TEXT_ROTATION_NORTH_SOUTH = "graticule.text.rotation.north.south";
-    public static final String PROPERTY_NAME_TEXT_ROTATION_WEST_EAST = "graticule.text.rotation.west.east";
+    public static final String PROPERTY_NAME_LINE_DASHED = "graticule.line.dashed";
+
+
     public static final String PROPERTY_NAME_TEXT_ENABLED_NORTH = "graticule.text.enabled.north";
     public static final String PROPERTY_NAME_TEXT_ENABLED_SOUTH = "graticule.text.enabled.south";
     public static final String PROPERTY_NAME_TEXT_ENABLED_WEST = "graticule.text.enabled.west";
     public static final String PROPERTY_NAME_TEXT_ENABLED_EAST = "graticule.text.enabled.east";
-    public static final String PROPERTY_NAME_LINE_ENABLED = "graticule.line.enabled";
-    public static final String PROPERTY_NAME_LINE_DASHED = "graticule.line.dashed";
-    public static final String PROPERTY_NAME_LINE_DASHED_PHASE = "graticule.line.dashed.phase";
-    public static final String PROPERTY_NAME_BORDER_ENABLED = "graticule.border.enabled";
-    public static final String PROPERTY_NAME_BORDER_WIDTH = "graticule.border.width";
-    public static final String PROPERTY_NAME_BORDER_COLOR = "graticule.border.color";
-    public static final String PROPERTY_NAME_FORMAT_COMPASS = "graticule.format.compass";
-    public static final String PROPERTY_NAME_FORMAT_DECIMAL = "graticule.format.decimal";
-    public static final String PROPERTY_NAME_TICKMARK_ENABLED = "graticule.tickmark.enabled";
-    public static final String PROPERTY_NAME_TICKMARK_INSIDE = "graticule.tickmark.inside";
-    public static final String PROPERTY_NAME_TICKMARK_LENGTH = "graticule.tickmark.length";
-
-
     public static final String PROPERTY_NAME_TEXT_CORNER_TOP_LON_ENABLED =  "graticule.text.corner.top.left.lon.enabled";
     public static final String PROPERTY_NAME_TEXT_CORNER_LEFT_LAT_ENABLED = "graticule.text.corner.top.left.lat.enabled";
     public static final String PROPERTY_NAME_TEXT_CORNER_RIGHT_LAT_ENABLED = "graticule.text.corner.top.right.lat.enabled";
     public static final String PROPERTY_NAME_TEXT_CORNER_BOTTOM_LON_ENABLED =  "graticule.text.corner.bottom.left.lon.enabled";
+    public static final String PROPERTY_NAME_TICKMARK_ENABLED = "graticule.tickmark.enabled";
+    public static final String PROPERTY_NAME_TICKMARK_INSIDE = "graticule.tickmark.inside";
+    public static final String PROPERTY_NAME_TEXT_INSIDE = "graticule.text.inside";
+    public static final String PROPERTY_NAME_LINE_ENABLED = "graticule.line.enabled";
+    public static final String PROPERTY_NAME_BORDER_ENABLED = "graticule.border.enabled";
+    public static final String PROPERTY_NAME_FORMAT_COMPASS = "graticule.format.compass";
+    public static final String PROPERTY_NAME_FORMAT_DECIMAL = "graticule.format.decimal";
+
+    public static final String PROPERTY_NAME_RES_LAT = "graticule.res.lat";
+    public static final String PROPERTY_NAME_RES_LON = "graticule.res.lon";
+    public static final String PROPERTY_NAME_TEXT_ROTATION_NORTH_SOUTH = "graticule.text.rotation.north.south";
+    public static final String PROPERTY_NAME_TEXT_ROTATION_WEST_EAST = "graticule.text.rotation.west.east";
+    public static final String PROPERTY_NAME_TEXT_FONT_SIZE = "graticule.text.font.size";
+    public static final String PROPERTY_NAME_TEXT_CORNER_FONT_SIZE = "graticule.text.corner.font.size";
+    public static final String PROPERTY_NAME_LINE_WIDTH = "graticule.line.width";
+    public static final String PROPERTY_NAME_LINE_DASHED_PHASE = "graticule.line.dashed.phase";
+    public static final String PROPERTY_NAME_TICKMARK_LENGTH = "graticule.tickmark.length";
+    public static final String PROPERTY_NAME_BORDER_WIDTH = "graticule.border.width";
+    public static final String PROPERTY_NAME_LINE_TRANSPARENCY = "graticule.line.transparency";
+    public static final String PROPERTY_NAME_TEXT_BG_TRANSPARENCY = "graticule.text.bg.transparency";
+    public static final String PROPERTY_NAME_TEXT_FG_COLOR = "graticule.text.fg.color";
+    public static final String PROPERTY_NAME_TEXT_CORNER_FONT_COLOR = "graticule.text.corner.font.color";
+    public static final String PROPERTY_NAME_LINE_COLOR = "graticule.line.color";
+    public static final String PROPERTY_NAME_BORDER_COLOR = "graticule.border.color";
+    public static final String PROPERTY_NAME_TEXT_BG_COLOR = "graticule.text.bg.color";
+
+
+    public static final String PROPERTY_LABEL_TEXT_ENABLED_NORTH = "Show Longitude Labels - North";
+    public static final String PROPERTY_LABEL_TEXT_ENABLED_SOUTH = "Show Longitude Labels - South";
+    public static final String PROPERTY_LABEL_TEXT_ENABLED_WEST = "Show Longitude Labels - West";
+    public static final String PROPERTY_LABEL_TEXT_ENABLED_EAST = "Show Longitude Labels - East";
+    public static final String PROPERTY_LABEL_TEXT_CORNER_TOP_LON_ENABLED =  "Show Longitude Corner Labels - Top";
+    public static final String PROPERTY_LABEL_TEXT_CORNER_LEFT_LAT_ENABLED = "Show Longitude Corner Labels - Left";
+    public static final String PROPERTY_LABEL_TEXT_CORNER_RIGHT_LAT_ENABLED = "Show Longitude Corner Labels - Right";
+    public static final String PROPERTY_LABEL_TEXT_CORNER_BOTTOM_LON_ENABLED =  "Show Longitude Corner Labels - Bottom";
+    public static final String PROPERTY_LABEL_TICKMARK_ENABLED = "Include Tick Marks (with labels)";
+    public static final String PROPERTY_LABEL_TICKMARK_INSIDE = "Put Tick Marks Inside";
+    public static final String PROPERTY_LABEL_TEXT_INSIDE = "Put Labels on Inside";
+    public static final String PROPERTY_LABEL_LINE_ENABLED = "Show Grid Lines";
+    public static final String PROPERTY_LABEL_BORDER_ENABLED = "Show Border";
+    public static final String PROPERTY_LABEL_FORMAT_COMPASS = "Labels Format: Compass";
+    public static final String PROPERTY_LABEL_FORMAT_DECIMAL = "Labels Format: Decimal";
+
+    public static final String PROPERTY_LABEL_RES_LAT = "Latitude Step Size (0=AUTO-SIZING)";
+    public static final String PROPERTY_LABEL_RES_LON = "Longitude Step Size (0=AUTO-SIZING)";
+    public static final String PROPERTY_LABEL_TEXT_ROTATION_NORTH_SOUTH = "Label Angle - Longitude";
+    public static final String PROPERTY_LABEL_TEXT_ROTATION_WEST_EAST = "Label Angle - Latitude";
+    public static final String PROPERTY_LABEL_TEXT_FONT_SIZE = "Font Size";
+    public static final String PROPERTY_LABEL_TEXT_CORNER_FONT_SIZE = "Corner Font Size";
+    public static final String PROPERTY_LABEL_LINE_WIDTH = "Grid Line / Tick Mark Width";
+    public static final String PROPERTY_LABEL_LINE_DASHED_PHASE = "Grid Line Dash Length (0=SOLID)";
+    public static final String PROPERTY_LABEL_TICKMARK_LENGTH = "Tick Mark Length";
+    public static final String PROPERTY_LABEL_BORDER_WIDTH = "Border Width";
+    public static final String PROPERTY_LABEL_LINE_TRANSPARENCY = "Grid Line Transparency";
+    public static final String PROPERTY_LABEL_TEXT_BG_TRANSPARENCY = "Inside Label Backdrop Transparency";
+    public static final String PROPERTY_LABEL_TEXT_FG_COLOR = "Font / Tick Mark Color";
+    public static final String PROPERTY_LABEL_TEXT_CORNER_FONT_COLOR = "Corner Font Color";
+    public static final String PROPERTY_LABEL_LINE_COLOR = "Grid Line Color";
+    public static final String PROPERTY_LABEL_BORDER_COLOR = "Border Color";
+    public static final String PROPERTY_LABEL_TEXT_BG_COLOR = "Inside Label Backdrop Color";
+
+
+
+
+
+
 
 
 
