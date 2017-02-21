@@ -48,6 +48,7 @@ import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.visat.actions.ExportLegendImageAction;
 import org.esa.beam.visat.actions.ShowModuleManagerAction;
+import org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -133,8 +134,8 @@ public class VisatPreferencesDialog extends ConfigDialog {
         layerPropertiesPage.addSubPage(new GraticuleOverlayPage());
         layerPropertiesPage.addSubPage(new WorldMapLayerPage());
         addRootPage(layerPropertiesPage);
-        addRootPage(new RGBImageProfilePage());
         addRootPage(new ColorPalettesConfigPage());
+        addRootPage(new RGBImageProfilePage());
         addRootPage(new LoggingPage());
         expandAllPages();
     }
@@ -556,6 +557,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setMinValue(5.0);
             param.getProperties().setMaxValue(150.0);
             configParams.addParameter(param);
+
         }
 
         @Override
@@ -576,7 +578,6 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param = getConfigParam(ColorPaletteSchemes.PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED);
             addParamToPane(fontPane, param, gbcColorPaletteSchemes);
             gbcColorPaletteSchemes.gridy++;
-
 
 
             JPanel fontPane2 = GridBagUtils.createPanel();
@@ -692,7 +693,6 @@ public class VisatPreferencesDialog extends ConfigDialog {
 //                getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION).setUIEnabled(false);
 //                getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION).setUIEnabled(true);
 //            }
-
 
         }
 
@@ -1939,26 +1939,134 @@ public class VisatPreferencesDialog extends ConfigDialog {
     public static class RGBImageProfilePage extends DefaultConfigPage {
 
         public RGBImageProfilePage() {
-            setTitle("RGB-Image Profiles"); /*I18N*/
+            setTitle("RGB Image"); /*I18N*/
         }
 
         @Override
-        public PropertyMap getConfigParamValues(final PropertyMap propertyMap) {
+        public PropertyMap getConfigParamValues(PropertyMap propertyMap) {
+            propertyMap = super.getConfigParamValues(propertyMap);
             return propertyMap;
         }
 
         @Override
-        public void setConfigParamValues(final PropertyMap propertyMap, final ParamExceptionHandler errorHandler) {
+        public void setConfigParamValues(PropertyMap propertyMap, ParamExceptionHandler errorHandler) {
+
+            super.setConfigParamValues(propertyMap, errorHandler);
         }
+
+
 
         @Override
         protected void initConfigParams(final ParamGroup configParams) {
+            final ParamChangeListener paramChangeListener = new ParamChangeListener() {
+                public void parameterValueChanged(ParamChangeEvent event) {
+                    updatePageUI();
+                }
+            };
+
+            Parameter param;
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+
+            param = new Parameter(ImageLegend.PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE, ImageLegend.DEFAULT_COLORBAR_LABELS_OVERRIDE);
+            param.getProperties().setLabel("Allow color bar labels override from scheme definition");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MANUAL_MINMAX);
+            param.getProperties().setLabel("Range (Default uses band statistics)"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN);
+            param.getProperties().setLabel("Min"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX);
+            param.getProperties().setLabel("Max"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+        }
+
+        @Override
+        public void updatePageUI() {
+            boolean enabled = (Boolean) getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX).getValue();
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN, enabled);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX, enabled);
         }
 
         @Override
         protected void initPageUI() {
             RGBImageProfilePane _profilePane = new RGBImageProfilePane(new PropertyMap());
-            setPageUI(_profilePane);
+
+            Parameter param;
+
+            // Font
+            JPanel fontPane = GridBagUtils.createPanel();
+            fontPane.setBorder(UIUtils.createGroupBorder("Palette Settings")); /*I18N*/
+            GridBagConstraints gbcColorPaletteSchemes = GridBagUtils.createConstraints("");
+            gbcColorPaletteSchemes.gridy = 0;
+
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+
+            JPanel fontPane2 = GridBagUtils.createPanel();
+            fontPane2.setBorder(UIUtils.createGroupBorder("Profile Settings")); /*I18N*/
+            GridBagConstraints gbcPane2 = GridBagUtils.createConstraints("");
+            gbcPane2.gridy = 0;
+            fontPane2.add(_profilePane);
+
+
+
+            JPanel contentsPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcContents = GridBagUtils.createConstraints("fill=HORIZONTAL, anchor=WEST");
+            gbcContents.gridx = 0;
+            gbcContents.gridy = 0;
+            gbcContents.insets.bottom = 10;
+            contentsPanel.add(fontPane, gbcContents);
+            gbcContents.gridy++;
+            contentsPanel.add(fontPane2, gbcContents);
+
+
+
+
+
+
+
+
+
+            //////////////////////////////////////////////////////////////////////////////////////
+            // All together
+            JPanel pageUI = GridBagUtils.createPanel();
+            GridBagConstraints gbcMain = GridBagUtils.createConstraints("fill=NONE");
+            gbcMain.insets.bottom = 4;
+            gbcMain.anchor = GridBagConstraints.NORTHWEST;
+            gbcMain.weighty = 1.0;
+            gbcMain.weightx = 1.0;
+
+            gbcMain.insets.top = _LINE_INSET_TOP;
+
+            pageUI.add(contentsPanel, gbcMain);
+
+
+
+
+
+            setPageUI(pageUI);
         }
     }
 

@@ -122,6 +122,16 @@ public class ProductUtils {
      */
     public static ImageInfo createImageInfo(RasterDataNode[] rasters, boolean assignMissingImageInfos,
                                             ProgressMonitor pm) throws IOException {
+
+       return createImageInfoRGB(rasters, assignMissingImageInfos, false, 0.0, 0.0, pm);
+
+    }
+
+
+    // Danny added this to enable auto-setting the min and max range of the RGB image.
+
+    public static ImageInfo createImageInfoRGB(RasterDataNode[] rasters, boolean assignMissingImageInfos, boolean manualMinMax, double min, double max,
+                                            ProgressMonitor pm) throws IOException {
         Assert.notNull(rasters, "rasters");
         Assert.argument(rasters.length == 1 || rasters.length == 3, "rasters.length == 1 || rasters.length == 3");
         if (rasters.length == 1) {
@@ -137,27 +147,14 @@ public class ProductUtils {
                             subPm) : raster.createDefaultImageInfo(null, subPm);
                     rgbChannelDef.setSourceName(i, raster.getName());
 
-                    // Danny added this to make the default range consistent.
-                    // ideally it should be ties to the band
-                    // perhaps the rgb_profile is where it should ideally go
-                    // essentially it's a palette scheme
-                    //
-//                    String name = raster.getName();
-//                    Double min = 0.0;
-//                    Double max = 0.0;
-//                    if (name != null && (name.equals("virtual_red") || name.equals("virtual_green") || name.equals("virtual_blue"))) {
-//                        min = 0.0;
-//                        max = 100.0;
-//                    } else {
-//                        min = imageInfo.getColorPaletteDef().getMinDisplaySample();
-//                        max = imageInfo.getColorPaletteDef().getMaxDisplaySample();
-//                    }
-//                    rgbChannelDef.setMinDisplaySample(i, min);
-//                    rgbChannelDef.setMaxDisplaySample(i, max);
-                    // Danny added the previous code, this is the BEAM code which makes the default based on the statistics
-                    //
-                    rgbChannelDef.setMinDisplaySample(i, imageInfo.getColorPaletteDef().getMinDisplaySample());
-                    rgbChannelDef.setMaxDisplaySample(i, imageInfo.getColorPaletteDef().getMaxDisplaySample());
+                    if (manualMinMax && min != max) {
+                        rgbChannelDef.setMinDisplaySample(i, min);
+                        rgbChannelDef.setMaxDisplaySample(i, max);
+                    } else {
+                        rgbChannelDef.setMinDisplaySample(i, imageInfo.getColorPaletteDef().getMinDisplaySample());
+                        rgbChannelDef.setMaxDisplaySample(i, imageInfo.getColorPaletteDef().getMaxDisplaySample());
+                    }
+
                 }
                 return new ImageInfo(rgbChannelDef);
             } finally {
@@ -165,6 +162,8 @@ public class ProductUtils {
             }
         }
     }
+
+
 
     /**
      * Creates a RGB image from the given array of <code>{@link RasterDataNode}</code>s.

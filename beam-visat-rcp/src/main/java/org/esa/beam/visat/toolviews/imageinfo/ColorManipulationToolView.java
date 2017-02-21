@@ -25,6 +25,13 @@ import javax.swing.JComponent;
  */
 public class ColorManipulationToolView extends AbstractToolView {
 
+    public final static String PREFERENCES_KEY_RGB_MANUAL_MINMAX = "visat.color_palettes.rgb.manualMinMax";
+    public final static String PREFERENCES_KEY_RGB_MIN = "visat.color_palettes.rgb.min";
+    public final static String PREFERENCES_KEY_RGB_MAX = "visat.color_palettes.rgb.max";
+    public final static boolean PREFERENCES_DEFAULT_RGB_MANUAL_MINMAX = false;
+    public final static double PREFERENCES_DEFAULT_RGB_MIN = 0.0;
+    public final static double PREFERENCES_DEFAULT_RGB_MAX = 1.0;
+
     public static final String ID = ColorManipulationToolView.class.getName();
 
     public ColorManipulationToolView() {

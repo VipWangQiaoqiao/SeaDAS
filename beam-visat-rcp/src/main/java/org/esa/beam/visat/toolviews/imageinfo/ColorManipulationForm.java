@@ -61,6 +61,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import static org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX;
+
 
 /**
  * The contrast stretch window.
@@ -69,13 +71,13 @@ class ColorManipulationForm {
 
     private final static String PREFERENCES_KEY_IO_DIR = "visat.color_palettes.dir";
 
-
     private final static String FILE_EXTENSION_CPD = "cpd";
     private final static String FILE_EXTENSION_PAL = "pal";
     private final static String FILE_EXTENSION_CPT = "cpt";
 
     private VisatApp visatApp;
     private PropertyMap preferences;
+    private PropertyMap configuration = null;
     private AbstractButton resetButton;
     private AbstractButton multiApplyButton;
     private AbstractButton importButton;
@@ -1036,7 +1038,21 @@ class ColorManipulationForm {
 
     private ImageInfo createDefaultImageInfo() {
         try {
-            return ProductUtils.createImageInfo(productSceneView.getRasters(), false, ProgressMonitor.NULL);
+            RasterDataNode[] rasters = productSceneView.getRasters();
+
+            if (configuration == null) {
+                configuration = visatApp.getPreferences();
+            }
+
+            if (rasters != null && rasters.length == 3)
+            {
+                boolean manualMinMax = configuration.getPropertyBool(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MANUAL_MINMAX);
+                double min = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN);
+                double max = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX);
+                return ProductUtils.createImageInfoRGB(productSceneView.getRasters(), false, manualMinMax, min, max, ProgressMonitor.NULL);
+            } else {
+                return ProductUtils.createImageInfo(productSceneView.getRasters(), false, ProgressMonitor.NULL);
+            }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(getContentPanel(),
                     "Failed to create default image settings:\n" + e.getMessage(),
