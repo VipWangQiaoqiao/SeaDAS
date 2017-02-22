@@ -113,25 +113,29 @@ public class VisatPreferencesDialog extends ConfigDialog {
     public VisatPreferencesDialog(VisatApp visatApp, String helpId) {
         super(visatApp.getMainFrame(), helpId);
         setTitleBase(visatApp.getAppName() + " Preferences");  /*I18N*/
-        addRootPage(new BehaviorPage());
-        addRootPage(new AppearancePage());
-        addRootPage(new RepositoryConnectionConfigPage());
-        addRootPage(new ProductSettings());
-        addRootPage(new GeolocationDisplayPage());
+
+        addRootPage(new ColorPalettesConfigPage());
+
         addRootPage(new DataIO());
+        addRootPage(new GeolocationDisplayPage());
+
 
 
         final LayerPropertiesPage layerPropertiesPage = new LayerPropertiesPage();
         layerPropertiesPage.addSubPage(new ColorBarConfigPage());
         layerPropertiesPage.addSubPage(new ImageDisplayPage());
         layerPropertiesPage.addSubPage(new NoDataOverlayPage());
-        layerPropertiesPage.addSubPage(new MaskOverlayPage());
         layerPropertiesPage.addSubPage(new GraticuleOverlayPage());
+        layerPropertiesPage.addSubPage(new MaskOverlayPage());
         layerPropertiesPage.addSubPage(new WorldMapLayerPage());
         addRootPage(layerPropertiesPage);
-        addRootPage(new ColorPalettesConfigPage());
-        addRootPage(new RGBImageProfilePage());
         addRootPage(new LoggingPage());
+        addRootPage(new RepositoryConnectionConfigPage());
+        addRootPage(new ProductSettings());
+        addRootPage(new RGBImageProfilePage());
+        addRootPage(new AppearancePage());
+        addRootPage(new BehaviorPage());
+
         expandAllPages();
     }
 

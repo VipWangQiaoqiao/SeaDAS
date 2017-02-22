@@ -116,11 +116,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         if (!view.getColorBarParamInfo().isParamsInitialized()) {
-            //        if (getColorBarLocationInsidePreference()) {
-//            view.getColorBarParamInfo().setLayerOffset(-100);
-//        }
-
-
             view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR.equals(getColorBarOrientationPreference()) ? ColorBarParamInfo.HORIZONTAL_STR : ColorBarParamInfo.VERTICAL_STR);
             view.getColorBarParamInfo().setInsideOutsideLocation(getColorBarInsideOutsideLocationPreference());
             view.getColorBarParamInfo().setShowTitle(getColorBarShowTitlePreference());
@@ -203,7 +198,6 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             RenderedImage colorBarImage = createImage("PNG", view);
             showColorBarOverlayAction.setColorBarImage(colorBarImage);
             showColorBarOverlayAction.setOrientation(imageLegend.getOrientation());
-            showColorBarOverlayAction.setTransparency(imageLegend.getBackgroundTransparency());
             showColorBarOverlayAction.setLayerOffset(imageLegend.getLayerOffset());
             showColorBarOverlayAction.setHorizontalLocation(imageLegend.getHorizontalLocation());
             showColorBarOverlayAction.setVerticalLocation(imageLegend.getVerticalLocation());
@@ -280,20 +274,20 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
         view.getColorBarParamInfo().setDecimalPlacesForce(new Boolean(imageLegend.isDecimalPlacesForce()));
         view.getColorBarParamInfo().setForegroundColor(imageLegend.getForegroundColor());
         view.getColorBarParamInfo().setBackgroundColor(imageLegend.getBackgroundColor());
-        view.getColorBarParamInfo().setParamsInitialized(true);
         view.getColorBarParamInfo().setInsideOutsideLocation(imageLegend.getInsideOutsideLocation());
 
-        int orientation = imageLegend.getOrientation();
-        if (orientation == ImageLegend.VERTICAL) {
+
+        if (imageLegend.getOrientation() == ImageLegend.VERTICAL) {
             view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.VERTICAL_STR);
         } else {
             view.getColorBarParamInfo().setOrientation(ColorBarParamInfo.HORIZONTAL_STR);
         }
 
 
-        //   }
-
         imageLegend.setBackgroundTransparencyEnabled(isTransparencySupportedByFormat(imageFormat));
+
+        view.getColorBarParamInfo().setParamsInitialized(true);
+
         return imageLegend.createImage(new Dimension(imageWidth, imageHeight), colorBarLayer);
     }
 

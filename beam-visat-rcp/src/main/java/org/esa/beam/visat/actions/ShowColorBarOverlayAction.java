@@ -40,7 +40,6 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
     private static final String DEFAULT_LAYER_TYPE = "ColorBarLayerType";
     private RenderedImage colorBarImage;
     private int orientation;
-    private float transparency;
     private double layerOffset = 0;
     private double layerShift = 0;
     private String horizontalLocation = "";
@@ -416,11 +415,4 @@ public class ShowColorBarOverlayAction extends AbstractShowOverlayAction {
         this.insideOutsideLocation = insideOutsideLocation;
     }
 
-    public float getTransparency() {
-        return transparency;
-    }
-
-    public void setTransparency(float transparency) {
-        this.transparency = transparency;
-    }
 }
