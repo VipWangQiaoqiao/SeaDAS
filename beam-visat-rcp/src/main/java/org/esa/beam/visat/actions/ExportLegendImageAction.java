@@ -52,6 +52,9 @@ import java.awt.image.RenderedImage;
 public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
+    public static final String RESET_TO_DEFAULTS_PARAM_STR = "legend.resetToDefaults";
+
+
     public static final String PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION = "legend.horizontalLocation";
     public static final String PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION = "legend.verticalLocation";
     public static final String PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION = "legend.insideOutsideLocation";
@@ -939,10 +942,10 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
             addParamToPane(jPanel, foregroundColorParam, gbc);
             gbc.gridy++;
 
-            addParamToPane(jPanel, transparencyParam, gbc);
+            addParamToPane(jPanel, backgroundColorParam, gbc);
             gbc.gridy++;
 
-            addParamToPane(jPanel, backgroundColorParam, gbc);
+            addParamToPane(jPanel, transparencyParam, gbc);
             gbc.gridy++;
 
             addParamToPane(jPanel, titleFontSizeParam, gbc);

@@ -25,13 +25,7 @@ import com.bc.ceres.swing.update.ConnectionConfigPane;
 import org.esa.beam.framework.datamodel.ColorPaletteSchemes;
 import org.esa.beam.framework.datamodel.ImageLegend;
 import org.esa.beam.framework.datamodel.Mask;
-import org.esa.beam.framework.param.ParamChangeEvent;
-import org.esa.beam.framework.param.ParamChangeListener;
-import org.esa.beam.framework.param.ParamExceptionHandler;
-import org.esa.beam.framework.param.ParamGroup;
-import org.esa.beam.framework.param.ParamProperties;
-import org.esa.beam.framework.param.ParamValidateException;
-import org.esa.beam.framework.param.Parameter;
+import org.esa.beam.framework.param.*;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.PixelInfoView;
 import org.esa.beam.framework.ui.RGBImageProfilePane;
@@ -574,6 +568,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
     public static class ColorBarConfigPage extends DefaultConfigPage {
 
+        private boolean resettingDefaults = false;
 
         public ColorBarConfigPage() {
             setTitle("Color Bar"); /*I18N*/
@@ -583,13 +578,30 @@ public class VisatPreferencesDialog extends ConfigDialog {
         protected void initConfigParams(ParamGroup configParams) {
             final ParamChangeListener paramChangeListener = new ParamChangeListener() {
                 public void parameterValueChanged(ParamChangeEvent event) {
-                    updatePageUI();
+                    if (!resettingDefaults) {
+                        updatePageUI();
+                    }
                 }
             };
-
+            final ParamChangeListener paramChangeListenerResetToDefaults = new ParamChangeListener() {
+                public void parameterValueChanged(ParamChangeEvent event) {
+                  if ((Boolean) getConfigParam(ExportLegendImageAction.RESET_TO_DEFAULTS_PARAM_STR).getValue()) {
+                      resettingDefaults = true;
+                      resetToDefaults();
+                      resettingDefaults = false;
+                  }
+                }
+            };
             Parameter param;
 
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+            param = new Parameter(ExportLegendImageAction.RESET_TO_DEFAULTS_PARAM_STR, false);
+            param.getProperties().setLabel("Restore Default Preferences (Color Bar)");
+            param.addParamChangeListener(paramChangeListenerResetToDefaults);
+            configParams.addParameter(param);
+
+
 
 
             param = new Parameter(ImageLegend.PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, ImageLegend.DEFAULT_COLORBAR_TITLE_OVERRIDE);
@@ -655,14 +667,17 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
             param = new Parameter(ExportLegendImageAction.FOREGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_FOREGROUND_COLOR);
             param.getProperties().setLabel("Text/Tick color"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
             param = new Parameter(ExportLegendImageAction.BACKGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_COLOR);
             param.getProperties().setLabel("Backdrop color"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
 
             param = new Parameter(ExportLegendImageAction.LAYER_SCALING_PARAM_STR, ColorBarParamInfo.DEFAULT_LAYER_SCALING);
+            param.addParamChangeListener(paramChangeListener);
             param.getProperties().setLabel("Size Scaling"); /*I18N*/
             param.getProperties().setMinValue(5.0);
             param.getProperties().setMaxValue(150.0);
@@ -757,6 +772,13 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbcSchemes.gridy++;
 
 
+            JPanel resetPane = GridBagUtils.createPanel();
+            GridBagConstraints gbcReset = GridBagUtils.createConstraints("");
+            gbcReset.gridy = 0;
+            param = getConfigParam(ExportLegendImageAction.RESET_TO_DEFAULTS_PARAM_STR);
+            addParamToPane(resetPane, param, gbcReset);
+
+
 
             JPanel contentsPanel = GridBagUtils.createPanel();
             GridBagConstraints gbcContents = GridBagUtils.createConstraints("fill=HORIZONTAL, anchor=WEST");
@@ -768,6 +790,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
             contentsPanel.add(layerPane, gbcContents);
             gbcContents.gridy++;
             contentsPanel.add(schemesPane, gbcContents);
+            gbcContents.gridy++;
+            contentsPanel.add(resetPane, gbcContents);
+
 
 
 
@@ -779,23 +804,48 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbcMain.insets.bottom = 4;
 
             pageUI.add(contentsPanel, gbcMain);
-//
-//            pageUI.add(fontPane, gbcMain);
-//            gbcMain.gridy++;
-//            pageUI.add(fontPane2, gbcMain);
-//            gbcMain.gridy++;
-//            pageUI.add(fontPane3, gbcMain);
-            gbcMain.insets.top = _LINE_INSET_TOP;
 
             return createPageUIContentPane(pageUI);
         }
 
 
-        @Override
-        public void updatePageUI() {
+        public void resetToDefaults() {
+
+            ParamExceptionHandler errorHandler = new ParamExceptionHandler() {
+                @Override
+                public boolean handleParamException(ParamException e) {
+                    return false;
+                }
+            };
+
+            getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE).setValue(ImageLegend.DEFAULT_COLORBAR_TITLE_OVERRIDE, errorHandler);
+            getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE).setValue(ImageLegend.DEFAULT_COLORBAR_LABELS_OVERRIDE, errorHandler);
+            getConfigParam(ImageLegend.PROPERTY_NAME_COLORBAR_ALLOW_RESET).setValue(ImageLegend.DEFAULT_COLORBAR_ALLOW_RESET, errorHandler);
+            getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION).setValue(ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION, errorHandler);
+            getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION).setValue(ColorBarParamInfo.DEFAULT_VERTICAL_LOCATION, errorHandler);
+            getConfigParam(ExportLegendImageAction.SHOW_TITLE_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED, errorHandler);
+            getConfigParam(ExportLegendImageAction.TRANSPARENCY_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY, errorHandler);
+            getConfigParam(ExportLegendImageAction.ORIENTATION_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_ORIENTATION, errorHandler);
+            getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION).setValue(ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION_, errorHandler);
+            getConfigParam(ExportLegendImageAction.FOREGROUND_COLOR_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_FOREGROUND_COLOR, errorHandler);
+            getConfigParam(ExportLegendImageAction.BACKGROUND_COLOR_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_BACKGROUND_COLOR, errorHandler);
+            getConfigParam(ExportLegendImageAction.LAYER_SCALING_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_LAYER_SCALING, errorHandler);
 
 
         }
+
+        @Override
+        public void updatePageUI() {
+            ParamExceptionHandler errorHandler = new ParamExceptionHandler() {
+                @Override
+                public boolean handleParamException(ParamException e) {
+                    return false;
+                }
+            };
+
+            getConfigParam(ExportLegendImageAction.RESET_TO_DEFAULTS_PARAM_STR).setValue(false, errorHandler);
+        }
+
 
         @Override
         public PropertyMap getConfigParamValues(PropertyMap propertyMap) {
