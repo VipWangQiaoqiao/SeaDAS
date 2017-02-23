@@ -45,6 +45,7 @@ public class GraticuleLayerType extends LayerType {
     public static final String PROPERTY_NAME_LINE_DASHED = "graticule.line.dashed";
 
 
+    public static final String RESET_TO_DEFAULTS_PARAM_STR = "graticule.resetToDefaults";
     public static final String PROPERTY_NAME_TEXT_ENABLED_NORTH = "graticule.text.enabled.north";
     public static final String PROPERTY_NAME_TEXT_ENABLED_SOUTH = "graticule.text.enabled.south";
     public static final String PROPERTY_NAME_TEXT_ENABLED_WEST = "graticule.text.enabled.west";
@@ -80,6 +81,7 @@ public class GraticuleLayerType extends LayerType {
     public static final String PROPERTY_NAME_TEXT_BG_COLOR = "graticule.text.bg.color";
 
 
+    public static final String PROPERTY_LABEL_RESET_TO_DEFAULTS = "RESTORE DEFAULTS (Map Gridline Preferences)";
     public static final String PROPERTY_LABEL_TEXT_ENABLED_NORTH = "Show Longitude Labels - North";
     public static final String PROPERTY_LABEL_TEXT_ENABLED_SOUTH = "Show Longitude Labels - South";
     public static final String PROPERTY_LABEL_TEXT_ENABLED_WEST = "Show Longitude Labels - West";
@@ -120,6 +122,8 @@ public class GraticuleLayerType extends LayerType {
 
 
 
+
+    public static final boolean DEFAULT_RESET_TO_DEFAULTS = false;
 
 
     public static final int DEFAULT_NUM_GRID_LINES = 4;
