@@ -1492,7 +1492,18 @@
             <description>Toggle visibility of the Ground Control Points tool bar.</description>
         </action>
 
+        <action>
+            <id>showTextAnnotationToolBar</id>
+            <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
+            <context>seadasTextAnnotationToolBar</context>
+            <parent>toolBars</parent>
+            <text> Text Annotation </text>
 
+            <selected>true</selected>
+            <toggle>true</toggle>
+            <shortDescr>Add text annotation to an image (This tool is a Beta version and may not work on some files)</shortDescr>
+            <description>Add text annotation to an image.</description>
+        </action>
 
 
 
