@@ -1501,8 +1501,8 @@
 
             <selected>true</selected>
             <toggle>true</toggle>
-            <shortDescr>Add text annotation to an image (This tool is a Beta version and may not work on some files)</shortDescr>
-            <description>Add text annotation to an image.</description>
+            <shortDescr>Add text annotation to an image (This annotation tool is a Beta version and may not work on some files)</shortDescr>
+            <description>Add text annotation to an image (This annotation tool is a Beta version and may not work on some files).</description>
         </action>
 
 
