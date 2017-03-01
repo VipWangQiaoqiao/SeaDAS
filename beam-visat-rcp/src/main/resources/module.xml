@@ -1497,12 +1497,12 @@
             <class>org.esa.beam.visat.actions.ShowToolBarAction</class>
             <context>seadasTextAnnotationToolBar</context>
             <parent>toolBars</parent>
-            <text> Text Annotation </text>
+            <text> Text Annotation (Beta)</text>
 
             <selected>true</selected>
             <toggle>true</toggle>
-            <shortDescr>Add text annotation to an image (This annotation tool is a Beta version and may not work on some files)</shortDescr>
-            <description>Add text annotation to an image (This annotation tool is a Beta version and may not work on some files).</description>
+            <shortDescr>Add text annotation to an image (This annotation tool is a Beta test version and may not work on some files)</shortDescr>
+            <description>Add text annotation to an image (This annotation tool is a Beta test version and may not work on some files).</description>
         </action>
 
 

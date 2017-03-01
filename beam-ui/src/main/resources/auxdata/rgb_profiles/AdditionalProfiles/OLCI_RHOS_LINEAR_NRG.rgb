@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Tue Feb 28 18:22:49 EST 2017
+name=OLCI_RHOS_LINEAR_NRG
+red=(rhos_865 \!\= NaN and rhos_665 \!\= NaN and rhos_560 \!\= NaN) ? rhos_865 \: NaN
+green=(rhos_865 \!\= NaN and rhos_665 \!\= NaN and rhos_560 \!\= NaN) ? rhos_665 \: NaN
+blue=(rhos_865 \!\= NaN and rhos_665 \!\= NaN and rhos_560 \!\= NaN) ? rhos_560 \: NaN

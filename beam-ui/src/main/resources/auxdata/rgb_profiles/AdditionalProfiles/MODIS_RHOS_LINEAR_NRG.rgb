@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Tue Feb 28 18:22:49 EST 2017
+name=MODIS_RHOS_LINEAR_NRG
+red=(rhos_859 \!\= NaN and rhos_645 \!\= NaN and rhos_555 \!\= NaN) ? rhos_859 \: NaN
+green=(rhos_859 \!\= NaN and rhos_645 \!\= NaN and rhos_555 \!\= NaN) ? rhos_645 \: NaN
+blue=(rhos_859 \!\= NaN and rhos_645 \!\= NaN and rhos_555 \!\= NaN) ? rhos_555 \: NaN

@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Tue Feb 28 18:22:49 EST 2017
+name=OLI_RHOS_LINEAR_RGB_432
+red=(rhos_655 \!\= NaN and rhos_561 \!\= NaN and rhos_482 \!\= NaN) ? rhos_655 \: NaN
+green=(rhos_655 \!\= NaN and rhos_561 \!\= NaN and rhos_482 \!\= NaN) ? rhos_561 \: NaN
+blue=(rhos_655 \!\= NaN and rhos_561 \!\= NaN and rhos_482 \!\= NaN) ? rhos_482 \: NaN

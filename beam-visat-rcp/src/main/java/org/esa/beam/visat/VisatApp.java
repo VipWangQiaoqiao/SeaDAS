@@ -323,9 +323,9 @@ public class VisatApp extends BasicApp implements AppContext {
 
     private boolean visatExitConfirmed = false;
 
-    private VisatApplicationPage applicationPage;
+    protected VisatApplicationPage applicationPage;
 
-    private ProductsToolView productsToolView;
+    protected ProductsToolView productsToolView;
     private ExecutorService singleThreadExecutor;
     private File sessionFile;
 
@@ -557,7 +557,7 @@ public class VisatApp extends BasicApp implements AppContext {
         return applicationPage;
     }
 
-    private void loadToolViews() {
+    protected void loadToolViews() {
         ToolViewDescriptor[] toolViewDescriptors = VisatActivator.getInstance().getToolViewDescriptors();
         for (ToolViewDescriptor toolViewDescriptor : toolViewDescriptors) {
             applicationPage.addToolView(toolViewDescriptor);
