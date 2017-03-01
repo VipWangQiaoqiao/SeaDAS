@@ -231,6 +231,18 @@ public class ProductSceneImage implements ProductLayerContext {
         }
     }
 
+    Layer getTextAnnotationLayer(boolean create) {
+        final VectorDataNode vectorDataNode = getProduct().getTextAnnotationGroup().getVectorDataNode();
+        final Layer vectorDataCollectionLayer = getVectorDataCollectionLayer(create);
+        if (vectorDataCollectionLayer != null) {
+            return LayerUtils.getChildLayer(getRootLayer(),
+                    LayerUtils.SEARCH_DEEP,
+                    VectorDataLayerFilterFactory.createNodeFilter(vectorDataNode));
+        } else {
+            return null;
+        }
+    }
+
     private RasterDataNode getRaster() {
         return rasters[0];
     }

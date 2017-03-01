@@ -22,13 +22,13 @@ public class TextAnnotationDescriptor extends PointPlacemarkDescriptor {
     @Override
     @Deprecated
     public String getRoleName() {
-        return "annotation";
+        return "text-annotation";
     }
 
     @Override
     @Deprecated
     public String getRoleLabel() {
-        return "Text";
+        return "text-annotation";
     }
 
     @Override

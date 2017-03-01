@@ -1235,6 +1235,20 @@
 
 
         <action>
+            <id>showTextAnnotationOverlay</id>
+            <class>org.esa.beam.visat.actions.ShowTextAnnotationOverlayAction</class>
+            <parent>layers</parent>
+            <text>TextAnnotation</text>
+            <toggle>true</toggle>
+            <shortDescr>Show text annotation layer</shortDescr>
+            <description>Show text annotation layer for the selected image</description>
+            <largeIcon>icons/TextAnnotationLayer24.png</largeIcon>
+            <context>image</context>
+            <placeAfter>showPinOverlay</placeAfter>
+            <helpId>showTextAnnotationOverlay</helpId>
+        </action>
+
+        <action>
             <id>showWorldMapOverlay</id>
             <class>org.esa.beam.visat.actions.ShowWorldMapOverlayAction</class>
             <parent>layers</parent>
@@ -2177,8 +2191,6 @@
             <shortDescr>Text annotation tool</shortDescr>
             <description>Sets, edits or deletes text annotation</description>
             <largeIcon>icons/TextAnnotationPlacer24.png</largeIcon>
-            <!--<largeIcon>icons/PinTool24.png</largeIcon>-->
-            <!--<largeIcon>icons/PinTool24.gif</largeIcon>-->
             <selected>false</selected>
             <helpId>textAnnotation</helpId>
         </action>

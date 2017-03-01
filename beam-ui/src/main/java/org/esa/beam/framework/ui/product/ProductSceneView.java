@@ -719,6 +719,19 @@ public class ProductSceneView extends BasicView
         }
     }
 
+    public boolean isTextAnnotationOverlayEnabled() {
+        Layer textAnnotationLayer = getTextAnnotationLayer(false);
+        return textAnnotationLayer != null && textAnnotationLayer.isVisible();
+    }
+
+    public void setTextAnnotationOverlayEnabled(boolean enabled) {
+        if (isTextAnnotationOverlayEnabled() != enabled) {
+            Layer layer = getTextAnnotationLayer(true);
+            layer.setVisible(enabled);
+            updateCurrentLayer(layer, enabled);
+        }
+    }
+
     public void setVectorLayersVisible(boolean visible) {
         // assumes that pins/gcp/and geometries are all siblings
         Layer layer = getPinLayer(true);
@@ -1372,6 +1385,10 @@ public class ProductSceneView extends BasicView
 
     private Layer getPinLayer(boolean create) {
         return getSceneImage().getPinLayer(create);
+    }
+
+    private Layer getTextAnnotationLayer(boolean create) {
+        return getSceneImage().getTextAnnotationLayer(create);
     }
 
     private Layer getGcpLayer(boolean create) {
