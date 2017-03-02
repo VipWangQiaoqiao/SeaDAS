@@ -61,8 +61,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import static org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX;
-
 
 /**
  * The contrast stretch window.
@@ -1047,9 +1045,22 @@ class ColorManipulationForm {
             if (rasters != null && rasters.length == 3)
             {
                 boolean manualMinMax = configuration.getPropertyBool(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MANUAL_MINMAX);
-                double min = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN);
-                double max = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX);
-                return ProductUtils.createImageInfoRGB(productSceneView.getRasters(), false, manualMinMax, min, max, ProgressMonitor.NULL);
+                double minRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_RED);
+                double minGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_GREEN);
+                double minBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_BLUE);
+                double maxRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_RED);
+                double maxGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_GREEN);
+                double maxBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_BLUE);
+                boolean setGamma = configuration.getPropertyBool(ColorManipulationToolView.PREFERENCES_KEY_RGB_SET_GAMMA, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_SET_GAMMA);
+                double gammaRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_RED);
+                double gammaGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_GREEN);
+                double gammaBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_BLUE);
+
+                double[] minRgb = {minRed, minGreen, minBlue};
+                double[] maxRgb = {maxRed, maxGreen, maxBlue};
+                double[] gammaRgb = {gammaRed, gammaGreen, gammaBlue};
+
+                return ProductUtils.createImageInfoRGB(productSceneView.getRasters(), false, manualMinMax, minRgb, maxRgb, setGamma, gammaRgb, ProgressMonitor.NULL);
             } else {
                 return ProductUtils.createImageInfo(productSceneView.getRasters(), false, ProgressMonitor.NULL);
             }

@@ -123,14 +123,14 @@ public class ProductUtils {
     public static ImageInfo createImageInfo(RasterDataNode[] rasters, boolean assignMissingImageInfos,
                                             ProgressMonitor pm) throws IOException {
 
-       return createImageInfoRGB(rasters, assignMissingImageInfos, false, 0.0, 0.0, pm);
+       return createImageInfoRGB(rasters, assignMissingImageInfos, false, null, null, false, null, pm);
 
     }
 
 
     // Danny added this to enable auto-setting the min and max range of the RGB image.
 
-    public static ImageInfo createImageInfoRGB(RasterDataNode[] rasters, boolean assignMissingImageInfos, boolean manualMinMax, double min, double max,
+    public static ImageInfo createImageInfoRGB(RasterDataNode[] rasters, boolean assignMissingImageInfos, boolean manualMinMax, double[] min, double[] max, boolean setGamma, double[] gamma,
                                             ProgressMonitor pm) throws IOException {
         Assert.notNull(rasters, "rasters");
         Assert.argument(rasters.length == 1 || rasters.length == 3, "rasters.length == 1 || rasters.length == 3");
@@ -147,12 +147,16 @@ public class ProductUtils {
                             subPm) : raster.createDefaultImageInfo(null, subPm);
                     rgbChannelDef.setSourceName(i, raster.getName());
 
-                    if (manualMinMax && min != max) {
-                        rgbChannelDef.setMinDisplaySample(i, min);
-                        rgbChannelDef.setMaxDisplaySample(i, max);
+                    if (manualMinMax && min != null && max != null && min[i] != max[i]) {
+                        rgbChannelDef.setMinDisplaySample(i, min[i]);
+                        rgbChannelDef.setMaxDisplaySample(i, max[i]);
                     } else {
                         rgbChannelDef.setMinDisplaySample(i, imageInfo.getColorPaletteDef().getMinDisplaySample());
                         rgbChannelDef.setMaxDisplaySample(i, imageInfo.getColorPaletteDef().getMaxDisplaySample());
+                    }
+
+                    if (setGamma && gamma != null) {
+                        rgbChannelDef.setGamma(i,gamma[i]);
                     }
 
                 }

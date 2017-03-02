@@ -2277,17 +2277,58 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
             param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MANUAL_MINMAX);
-            param.getProperties().setLabel("Range (Default uses band statistics)"); /*I18N*/
+            param.getProperties().setLabel("Set Range (Default uses band statistics)"); /*I18N*/
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
-            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN);
-            param.getProperties().setLabel("Min"); /*I18N*/
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_RED);
+            param.getProperties().setLabel("Min (Red Channel)"); /*I18N*/
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
-            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX);
-            param.getProperties().setLabel("Max"); /*I18N*/
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_RED);
+            param.getProperties().setLabel("Max (Red Channel)"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_GREEN);
+            param.getProperties().setLabel("Min (Green Channel)"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_RED);
+            param.getProperties().setLabel("Max (Green Channel)"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_BLUE);
+            param.getProperties().setLabel("Min (Blue Channel)"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_RED);
+            param.getProperties().setLabel("Max (Blue Channel)"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_SET_GAMMA, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_SET_GAMMA);
+            param.getProperties().setLabel("Set Gamma"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_RED);
+            param.getProperties().setLabel("Gamma (Red Channel)"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_GREEN);
+            param.getProperties().setLabel("Gamma (Green Channel)"); /*I18N*/
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_BLUE);
+            param.getProperties().setLabel("Gamma (Blue Channel)"); /*I18N*/
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
         }
@@ -2295,8 +2336,17 @@ public class VisatPreferencesDialog extends ConfigDialog {
         @Override
         public void updatePageUI() {
             boolean enabled = (Boolean) getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX).getValue();
-            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN, enabled);
-            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX, enabled);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_RED, enabled);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_GREEN, enabled);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_BLUE, enabled);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_RED, enabled);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_GREEN, enabled);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_BLUE, enabled);
+
+            boolean setGamma = (Boolean) getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_SET_GAMMA).getValue();
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_RED, setGamma);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_GREEN, setGamma);
+            setConfigParamUIEnabled(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_BLUE, setGamma);
         }
 
         @Override
@@ -2316,11 +2366,49 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(fontPane, param, gbcColorPaletteSchemes);
             gbcColorPaletteSchemes.gridy++;
 
-            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN);
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_RED);
             addParamToPane(fontPane, param, gbcColorPaletteSchemes);
             gbcColorPaletteSchemes.gridy++;
 
-            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX);
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_GREEN);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_BLUE);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_RED);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_GREEN);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_BLUE);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_SET_GAMMA);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_RED);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_GREEN);
+            addParamToPane(fontPane, param, gbcColorPaletteSchemes);
+            gbcColorPaletteSchemes.gridy++;
+
+            param = getConfigParam(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_BLUE);
             addParamToPane(fontPane, param, gbcColorPaletteSchemes);
             gbcColorPaletteSchemes.gridy++;
 
