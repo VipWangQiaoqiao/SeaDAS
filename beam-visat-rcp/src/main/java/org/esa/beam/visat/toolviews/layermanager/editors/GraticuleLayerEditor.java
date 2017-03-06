@@ -270,7 +270,7 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd6.setValueRange(new ValueRange(0, 1));
         vd6.setDisplayName(GraticuleLayerType.PROPERTY_LABEL_LINE_TRANSPARENCY);
         vd6.setDefaultConverter();
-        vd6.setAttribute("propertyEditor", propertyEditorRegistry.getPropertyEditor(RangeEditor.class.getName()));
+      //  vd6.setAttribute("propertyEditor", propertyEditorRegistry.getPropertyEditor(RangeEditor.class.getName()));
         addPropertyDescriptor(vd6);
 
 
@@ -279,7 +279,7 @@ public class GraticuleLayerEditor extends AbstractLayerConfigurationEditor {
         vd10.setValueRange(new ValueRange(0, 1));
         vd10.setDisplayName(GraticuleLayerType.PROPERTY_LABEL_TEXT_BG_TRANSPARENCY);
         vd10.setDefaultConverter();
-        vd10.setAttribute("propertyEditor", propertyEditorRegistry.getPropertyEditor(RangeEditor.class.getName()));
+   //     vd10.setAttribute("propertyEditor", propertyEditorRegistry.getPropertyEditor(RangeEditor.class.getName()));
         addPropertyDescriptor(vd10);
 
 

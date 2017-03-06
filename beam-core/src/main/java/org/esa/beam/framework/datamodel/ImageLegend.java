@@ -161,7 +161,7 @@ public class ImageLegend {
 
     public void initDefaults(PropertyMap configuration) {
 
-        configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, true);
+        configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, DEFAULT_COLORBAR_TITLE_OVERRIDE);
         ColorPaletteSourcesInfo colorPaletteSourcesInfo = raster.getImageInfo().getColorPaletteSourcesInfo();
 
         if (colorPaletteSourcesInfo != null) {
