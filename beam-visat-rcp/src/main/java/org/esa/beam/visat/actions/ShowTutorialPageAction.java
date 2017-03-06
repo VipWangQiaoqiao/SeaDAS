@@ -34,7 +34,7 @@ public class ShowTutorialPageAction  extends ExecCommand {
 
         try {
             final Desktop desktop = Desktop.getDesktop();
-            desktop.browse(URI.create(homePageUrl+"/tutorial"));
+            desktop.browse(URI.create(homePageUrl+"tutorials/video_tutorials"));
         } catch (IOException e) {
             // TODO - handle
         } catch (UnsupportedOperationException e) {
