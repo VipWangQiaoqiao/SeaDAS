@@ -29,7 +29,6 @@ import com.jidesoft.swing.SearchableUtils;
 import org.esa.beam.framework.datamodel.GeoPos;
 import org.esa.beam.framework.ui.AbstractDialog;
 import org.esa.beam.framework.ui.ModalDialog;
-import org.esa.beam.framework.ui.ModelessDialog;
 import org.geotools.referencing.AbstractIdentifiedObject;
 import org.geotools.referencing.ReferencingFactoryFinder;
 import org.geotools.referencing.datum.DefaultGeodeticDatum;
@@ -388,12 +387,12 @@ public class CustomCrsPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             final String operationName = model.operationWrapper.getName();
-            final ModelessDialog modelessDialog = new ModelessDialog(parent, operationName + " - Parameters",
-                                                            ModelessDialog.ID_APPLY_CLOSE, null);
+            final ModalDialog modalDialog = new ModalDialog(parent, operationName + " - Parameters",
+                                                            ModalDialog.ID_OK_CANCEL, null);
             final ParameterValueGroup workCopy = model.parameters.clone();
             final PropertyContainer propertyContainer = createValueContainer(workCopy);
-            modelessDialog.setContent(new PropertyPane(propertyContainer).createPanel());
-            if (modelessDialog.show() == AbstractDialog.ID_OK) {
+            modalDialog.setContent(new PropertyPane(propertyContainer).createPanel());
+            if (modalDialog.show() == AbstractDialog.ID_OK) {
                 vc.setValue(PARAMETERS, workCopy);
             }
         }
