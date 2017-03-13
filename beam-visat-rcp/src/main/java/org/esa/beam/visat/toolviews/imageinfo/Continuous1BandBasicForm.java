@@ -88,8 +88,12 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
         cpdFileNameJLabel.setToolTipText("The color data is stored in the band.  Astericks suffix (*) denotes that some parameters have been altered ");
         //     cpdFileNameJLabel.setToolTipText("Currently loaded cpd file name.  Note that the cpd data has been stored within the current band and any subsequent alterations to the cpd file will not show up unless the file is reloaded");
 
+        PropertyMap configuration = null;
+        if (parentForm.getProductSceneView() != null && parentForm.getProductSceneView().getSceneImage() != null) {
+            configuration = parentForm.getProductSceneView().getSceneImage().getConfiguration();
+        }
 
-        standardColorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir(), ColorPaletteSchemes.Id.SELECTOR, true, parentForm.getProductSceneView().getSceneImage().getConfiguration());
+        standardColorPaletteSchemes = new ColorPaletteSchemes(parentForm.getIODir(), ColorPaletteSchemes.Id.SELECTOR, true, configuration);
         VisatApp.getApp().clearStatusBarMessage();
 
         loadWithCPDFileValuesCheckBox = new JCheckBox("Load cpd file exact values", false);
@@ -466,7 +470,11 @@ class Continuous1BandBasicForm implements ColorManipulationChildForm {
     private void handleColorPaletteInfoComboBoxSelection(JComboBox jComboBox, boolean isDefaultList) {
         ColorPaletteInfo colorPaletteInfo = (ColorPaletteInfo) jComboBox.getSelectedItem();
 
-        PropertyMap configuration = parentForm.getProductSceneView().getSceneImage().getConfiguration();
+        PropertyMap configuration = null;
+        if (parentForm.getProductSceneView() != null && parentForm.getProductSceneView().getSceneImage() != null) {
+            configuration = parentForm.getProductSceneView().getSceneImage().getConfiguration();
+        }
+
         boolean useColorBlindPalettes = ColorPaletteSchemes.getUseColorBlind(configuration);
 
         if (colorPaletteInfo.getCpdFilename(useColorBlindPalettes) != null && colorPaletteInfo.isEnabled()) {

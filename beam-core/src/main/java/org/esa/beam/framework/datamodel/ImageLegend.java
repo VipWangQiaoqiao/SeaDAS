@@ -161,7 +161,8 @@ public class ImageLegend {
 
     public void initDefaults(PropertyMap configuration) {
 
-        configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, DEFAULT_COLORBAR_TITLE_OVERRIDE);
+
+      //  configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, DEFAULT_COLORBAR_TITLE_OVERRIDE);
         ColorPaletteSourcesInfo colorPaletteSourcesInfo = raster.getImageInfo().getColorPaletteSourcesInfo();
 
         if (colorPaletteSourcesInfo != null) {
@@ -1459,15 +1460,27 @@ public class ImageLegend {
     }
 
     public boolean allowTitleOverride(PropertyMap configuration) {
-        return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, DEFAULT_COLORBAR_TITLE_OVERRIDE);
+        if (configuration != null) {
+            return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, DEFAULT_COLORBAR_TITLE_OVERRIDE);
+        } else {
+            return DEFAULT_COLORBAR_TITLE_OVERRIDE;
+        }
     }
 
     public boolean allowLabelsOverride(PropertyMap configuration) {
-        return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE, DEFAULT_COLORBAR_LABELS_OVERRIDE);
+        if (configuration != null) {
+            return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_LABELS_OVERRIDE, DEFAULT_COLORBAR_LABELS_OVERRIDE);
+        } else {
+            return DEFAULT_COLORBAR_LABELS_OVERRIDE;
+        }
     }
 
     public static boolean allowColorbarAutoReset(PropertyMap configuration) {
-        return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_ALLOW_RESET, DEFAULT_COLORBAR_ALLOW_RESET);
+        if (configuration != null) {
+            return configuration.getPropertyBool(PROPERTY_NAME_COLORBAR_ALLOW_RESET, DEFAULT_COLORBAR_ALLOW_RESET);
+        } else {
+            return DEFAULT_COLORBAR_ALLOW_RESET;
+        }
     }
 
     public double getLayerOffset() {

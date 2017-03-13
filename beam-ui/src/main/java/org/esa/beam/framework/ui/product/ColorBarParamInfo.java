@@ -83,7 +83,7 @@ public class ColorBarParamInfo {
     public static final String DEFAULT_ORIENTATION = HORIZONTAL_STR;
     public static final String DEFAULT_HORIZONTAL_LOCATION = LOCATION_BOTTOM_RIGHT;
     public static final String DEFAULT_VERTICAL_LOCATION = LOCATION_RIGHT_LOWER;
-    public static final String DEFAULT_INSIDE_OUTSIDE_LOCATION_ = LOCATION_INSIDE_STR;
+    public static final String DEFAULT_INSIDE_OUTSIDE_LOCATION = LOCATION_INSIDE_STR;
 
 
 
@@ -112,7 +112,7 @@ public class ColorBarParamInfo {
     private Color foregroundColor = DEFAULT_FOREGROUND_COLOR;
     private Color backgroundColor = DEFAULT_BACKGROUND_COLOR;
 
-    private String insideOutsideLocation = DEFAULT_INSIDE_OUTSIDE_LOCATION_;
+    private String insideOutsideLocation = DEFAULT_INSIDE_OUTSIDE_LOCATION;
     private String  horizontalLocation = DEFAULT_HORIZONTAL_LOCATION;
     private String verticalLocation = DEFAULT_VERTICAL_LOCATION;
 

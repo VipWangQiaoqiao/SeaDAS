@@ -661,7 +661,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
-            param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION, ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION_);
+            param = new Parameter(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION, ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION);
             param.getProperties().setLabel("Location (Inside/Outside)");
             param.getProperties().setValueSet(new String[]{ColorBarParamInfo.LOCATION_INSIDE_STR, ColorBarParamInfo.LOCATION_OUTSIDE_STR});
             param.getProperties().setValueSetBound(true);
@@ -830,7 +830,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam(ExportLegendImageAction.SHOW_TITLE_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED, errorHandler);
             getConfigParam(ExportLegendImageAction.TRANSPARENCY_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY, errorHandler);
             getConfigParam(ExportLegendImageAction.ORIENTATION_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_ORIENTATION, errorHandler);
-            getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION).setValue(ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION_, errorHandler);
+            getConfigParam(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION).setValue(ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION, errorHandler);
             getConfigParam(ExportLegendImageAction.FOREGROUND_COLOR_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_FOREGROUND_COLOR, errorHandler);
             getConfigParam(ExportLegendImageAction.BACKGROUND_COLOR_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_BACKGROUND_COLOR, errorHandler);
             getConfigParam(ExportLegendImageAction.LAYER_SCALING_PARAM_STR).setValue(ColorBarParamInfo.DEFAULT_LAYER_SCALING, errorHandler);

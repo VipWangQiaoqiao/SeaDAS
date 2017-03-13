@@ -1044,17 +1044,31 @@ class ColorManipulationForm {
 
             if (rasters != null && rasters.length == 3)
             {
-                boolean manualMinMax = configuration.getPropertyBool(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MANUAL_MINMAX);
-                double minRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_RED);
-                double minGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_GREEN);
-                double minBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_BLUE);
-                double maxRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_RED);
-                double maxGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_GREEN);
-                double maxBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_BLUE);
-                boolean setGamma = configuration.getPropertyBool(ColorManipulationToolView.PREFERENCES_KEY_RGB_SET_GAMMA, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_SET_GAMMA);
-                double gammaRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_RED);
-                double gammaGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_GREEN);
-                double gammaBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_BLUE);
+                boolean manualMinMax = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MANUAL_MINMAX;
+                double minRed = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_RED;
+                double minGreen = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_GREEN;
+                double minBlue = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_BLUE;
+                double maxRed = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_RED;
+                double maxGreen = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_GREEN;
+                double maxBlue = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_BLUE;
+                boolean setGamma = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_SET_GAMMA;
+                double gammaRed = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_RED;
+                double gammaGreen = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_GREEN;
+                double gammaBlue = ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_BLUE;
+
+                if (configuration != null) {
+                    manualMinMax = configuration.getPropertyBool(ColorManipulationToolView.PREFERENCES_KEY_RGB_MANUAL_MINMAX, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MANUAL_MINMAX);
+                    minRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_RED);
+                    minGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_GREEN);
+                    minBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MIN_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MIN_BLUE);
+                    maxRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_RED);
+                    maxGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_GREEN);
+                    maxBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_MAX_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_MAX_BLUE);
+                    setGamma = configuration.getPropertyBool(ColorManipulationToolView.PREFERENCES_KEY_RGB_SET_GAMMA, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_SET_GAMMA);
+                    gammaRed = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_RED, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_RED);
+                    gammaGreen = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_GREEN, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_GREEN);
+                    gammaBlue = configuration.getPropertyDouble(ColorManipulationToolView.PREFERENCES_KEY_RGB_GAMMA_BLUE, ColorManipulationToolView.PREFERENCES_DEFAULT_RGB_GAMMA_BLUE);
+                }
 
                 double[] minRgb = {minRed, minGreen, minBlue};
                 double[] maxRgb = {maxRed, maxGreen, maxBlue};

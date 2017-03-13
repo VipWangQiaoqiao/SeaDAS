@@ -479,7 +479,12 @@ public class ProductSceneView extends BasicView
     }
 
     public void setToDefaultColorScheme(File auxDir, ImageInfo defaultImageInfo) {
-        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false, sceneImage.getConfiguration());
+        PropertyMap configuration = null;
+        if (sceneImage != null) {
+            configuration = sceneImage.getConfiguration();
+        }
+
+        ColorPaletteSchemes colorPaletteSchemes = new ColorPaletteSchemes(auxDir, ColorPaletteSchemes.Id.DEFAULTS, false, configuration);
         boolean defaultSet = false;
 
         if (colorPaletteSchemes != null) {
@@ -531,7 +536,6 @@ public class ProductSceneView extends BasicView
 
             if (matchingColorPaletteInfo != null) {
                 //if (this.productSceneView.getBaseImageLayer().getName().trim().equals(cpdInfo.getName().trim())) {
-                PropertyMap configuration = getSceneImage().getConfiguration();
                 ColorPaletteDef colorPaletteDef = matchingColorPaletteInfo.getColorPaletteDef(ColorPaletteSchemes.getUseColorBlind(configuration));
                 getImageInfo().setColorPaletteDef(colorPaletteDef,
                         matchingColorPaletteInfo.getMinValue(),

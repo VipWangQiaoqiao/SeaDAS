@@ -15,11 +15,6 @@
 */
 package org.esa.beam.visat.actions;
 
-import com.bc.ceres.binding.PropertyContainer;
-import com.bc.ceres.binding.PropertyDescriptor;
-import com.bc.ceres.binding.ValueRange;
-import com.bc.ceres.swing.binding.BindingContext;
-import com.bc.ceres.swing.binding.internal.RangeEditor;
 import org.esa.beam.framework.datamodel.ImageInfo;
 import org.esa.beam.framework.datamodel.ImageLegend;
 import org.esa.beam.framework.datamodel.RasterDataNode;
@@ -112,7 +107,9 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
         // config with preferences
         visatApp = VisatApp.getApp();
-        this.configuration = visatApp.getPreferences();
+        if (visatApp != null) {
+            this.configuration = visatApp.getPreferences();
+        }
 
 
         if (!view.getColorBarParamInfo().isParamsInitialized()) {
@@ -160,10 +157,12 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
         if (!view.getColorBarParamInfo().isParamsInitialized() || !paramsInitialized) {
- //           imageLegend.setInitialized(false);
-//            view.getSceneImage().getConfiguration().getPropertyBool(PROPERTY_NAME_COLORBAR_TITLE_OVERRIDE, true);
 
-           PropertyMap configuration = view.getSceneImage().getConfiguration();
+           PropertyMap configuration = null;
+            if (view.getSceneImage() != null && view.getSceneImage().getConfiguration() != null) {
+                configuration = view.getSceneImage().getConfiguration();
+            }
+
             imageLegend.initDefaults(configuration);
 
 
@@ -1100,40 +1099,76 @@ public class ExportLegendImageAction extends AbstractExportImageAction {
 
 
     public String getHorizontalLocationPreference() {
-        return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION);
+        if (configuration != null) {
+            return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_HORIZONTAL_LOCATION, ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION);
+        } else {
+            return ColorBarParamInfo.DEFAULT_HORIZONTAL_LOCATION;
+        }
     }
     public String getVerticalLocationPreference() {
-        return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION, ColorBarParamInfo.DEFAULT_VERTICAL_LOCATION);
+        if (configuration != null) {
+            return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_VERTICAL_LOCATION, ColorBarParamInfo.DEFAULT_VERTICAL_LOCATION);
+        } else {
+            return ColorBarParamInfo.DEFAULT_VERTICAL_LOCATION;
+        }
     }
 
     public boolean getColorBarShowTitlePreference() {
-        return configuration.getPropertyBool(ExportLegendImageAction.SHOW_TITLE_PARAM_STR, ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED);
+        if (configuration != null) {
+            return configuration.getPropertyBool(ExportLegendImageAction.SHOW_TITLE_PARAM_STR, ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED);
+        } else {
+            return ColorBarParamInfo.DEFAULT_SHOW_TITLE_ENABLED;
+        }
     }
 
 
 
     public double getColorBarTransparencyPreference() {
-        return configuration.getPropertyDouble(ExportLegendImageAction.TRANSPARENCY_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY);
+        if (configuration != null) {
+            return configuration.getPropertyDouble(ExportLegendImageAction.TRANSPARENCY_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY);
+        } else {
+            return ColorBarParamInfo.DEFAULT_BACKGROUND_TRANSPARENCY;
+        }
     }
 
     public String getColorBarOrientationPreference() {
-        return configuration.getPropertyString(ExportLegendImageAction.ORIENTATION_PARAM_STR, ColorBarParamInfo.DEFAULT_ORIENTATION);
+        if (configuration != null) {
+            return configuration.getPropertyString(ExportLegendImageAction.ORIENTATION_PARAM_STR, ColorBarParamInfo.DEFAULT_ORIENTATION);
+        } else {
+            return ColorBarParamInfo.DEFAULT_ORIENTATION;
+        }
     }
 
     public String getColorBarInsideOutsideLocationPreference() {
-        return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION, ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION_);
+        if (configuration != null) {
+            return configuration.getPropertyString(ExportLegendImageAction.PARAMETER_NAME_COLORBAR_INSIDE_OUTSIDE_LOCATION, ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION);
+        } else {
+            return ColorBarParamInfo.DEFAULT_INSIDE_OUTSIDE_LOCATION;
+        }
     }
 
     public Color getForegroundColorPreference() {
-        return configuration.getPropertyColor(ExportLegendImageAction.FOREGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_FOREGROUND_COLOR);
+        if (configuration != null) {
+            return configuration.getPropertyColor(ExportLegendImageAction.FOREGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_FOREGROUND_COLOR);
+        } else {
+            return ColorBarParamInfo.DEFAULT_FOREGROUND_COLOR;
+        }
     }
 
     public Color getBackgroundColorPreference() {
-        return configuration.getPropertyColor(ExportLegendImageAction.BACKGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_COLOR);
+        if (configuration != null) {
+            return configuration.getPropertyColor(ExportLegendImageAction.BACKGROUND_COLOR_PARAM_STR, ColorBarParamInfo.DEFAULT_BACKGROUND_COLOR);
+        } else {
+            return ColorBarParamInfo.DEFAULT_BACKGROUND_COLOR;
+        }
     }
 
     public double getLayerScalingFactorPreference() {
-        return configuration.getPropertyDouble(ExportLegendImageAction.LAYER_SCALING_PARAM_STR, ColorBarParamInfo.DEFAULT_LAYER_SCALING);
+        if (configuration != null) {
+            return configuration.getPropertyDouble(ExportLegendImageAction.LAYER_SCALING_PARAM_STR, ColorBarParamInfo.DEFAULT_LAYER_SCALING);
+        } else {
+            return ColorBarParamInfo.DEFAULT_LAYER_SCALING;
+        }
     }
 
 

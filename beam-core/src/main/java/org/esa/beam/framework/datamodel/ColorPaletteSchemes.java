@@ -632,13 +632,21 @@ public class ColorPaletteSchemes {
 
     public static boolean getUseColorBlind(PropertyMap configuration) {
 
-        return configuration.getPropertyBool(PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, DEFAULT_PALETTES_COLOR_BLIND_ENABLED);
+        if (configuration != null) {
+            return configuration.getPropertyBool(PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, DEFAULT_PALETTES_COLOR_BLIND_ENABLED);
+        } else {
+            return DEFAULT_PALETTES_COLOR_BLIND_ENABLED;
+        }
 
     }
 
     public boolean getUseColorBlind() {
 
-        return configuration.getPropertyBool(PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, DEFAULT_PALETTES_COLOR_BLIND_ENABLED);
+        if (configuration != null) {
+            return configuration.getPropertyBool(PROPERTY_NAME_PALETTES_COLOR_BLIND_ENABLED, DEFAULT_PALETTES_COLOR_BLIND_ENABLED);
+        } else {
+            return  DEFAULT_PALETTES_COLOR_BLIND_ENABLED;
+        }
 
 
     }
