@@ -135,7 +135,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         final JPanel rightPanel = GridBagUtils.createPanel();
         GridBagConstraints extendedOptionsPanelConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,fill=HORIZONTAL,insets.top=2,weightx=1,insets.right=-2");
         GridBagUtils.addToPanel(rightPanel, computePanel, extendedOptionsPanelConstraints, "gridy=0,fill=BOTH,weighty=1");
-        GridBagUtils.addToPanel(rightPanel, createAccuracyPanel(), extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=1");
+        GridBagUtils.addToPanel(rightPanel, createAccuracyPanel(), extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
         GridBagUtils.addToPanel(rightPanel, exportAndHelpPanel, extendedOptionsPanelConstraints, "gridy=2,anchor=SOUTHWEST,fill=HORIZONTAL,weighty=0");
 
         final ImageIcon collapseIcon = UIUtils.loadImageIcon("icons/PanelRight12.png");
@@ -189,7 +189,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private JPanel createAccuracyPanel() {
         final JPanel accuracyPanel = new JPanel(new GridBagLayout());
         final GridBagConstraints gbc = new GridBagConstraints();
-        final JLabel label = new JLabel("Histogram accuracy:");
+        final JLabel label = new JLabel("Histogram Bins (10^):");
 
         accuracyModel = new AccuracyModel();
         final BindingContext bindingContext = new BindingContext(PropertyContainer.createObjectBacked(accuracyModel));
@@ -197,7 +197,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         final JSpinner accuracySpinner = new JSpinner(accuracyNumberModel);
         ((JSpinner.DefaultEditor) accuracySpinner.getEditor()).getTextField().setEditable(false);
         bindingContext.bind("accuracy", accuracySpinner);
-        final JCheckBox checkBox = new JCheckBox("Auto accuracy");
+        final JCheckBox checkBox = new JCheckBox("Auto");
         bindingContext.bind("useAutoAccuracy", checkBox);
 
         final IntervalValidator rangeValidator = new IntervalValidator(new ValueRange(0, Util.MAX_ACCURACY));
@@ -228,7 +228,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
         });
 
-        GridBagUtils.addToPanel(accuracyPanel, new TitledSeparator("Histogram accuracy", SwingConstants.CENTER), gbc, "fill=HORIZONTAL, weightx=1.0,anchor=NORTH,gridwidth=2");
+        GridBagUtils.addToPanel(accuracyPanel, new TitledSeparator("Histogram Bins", SwingConstants.CENTER), gbc, "fill=HORIZONTAL, weightx=1.0,anchor=NORTH,gridwidth=2");
         GridBagUtils.addToPanel(accuracyPanel, checkBox, gbc, "gridy=1,insets.left=5,insets.top=2");
         GridBagUtils.addToPanel(accuracyPanel, label, gbc, "gridy=2, insets.left=26,weightx=0.0,fill=NONE,anchor=WEST,gridwidth=1");
         GridBagUtils.addToPanel(accuracyPanel, accuracySpinner, gbc, "gridx=1,weightx=1.0,fill=HORIZONTAL,insets.right=5,insets.left=5");
@@ -394,23 +394,28 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percentile (%)", "Value Threshold", new Color(127, 0, 0));
 
+
+
         Object[][] tableData = new Object[][]{
-                new Object[]{"#Pixels total:", histogram.getTotals()[0]},
+                new Object[]{"Total Pixels:", histogram.getTotals()[0]},
                 new Object[]{"Minimum:", stx.getMinimum()},
                 new Object[]{"Maximum:", stx.getMaximum()},
                 new Object[]{"Mean:", stx.getMean()},
-                new Object[]{"Sigma:", stx.getStandardDeviation()},
-                new Object[]{"Median:", stx.getMedian()},
-                new Object[]{"P75 threshold:", histogram.getPTileThreshold(0.75)[0]},
-                new Object[]{"P80 threshold:", histogram.getPTileThreshold(0.80)[0]},
-                new Object[]{"P85 threshold:", histogram.getPTileThreshold(0.85)[0]},
-                new Object[]{"P90 threshold:", histogram.getPTileThreshold(0.90)[0]},
-                new Object[]{"Max error:", getBinSize(histogram)},
+                new Object[]{"Standard Deviation:", stx.getStandardDeviation()},
+                new Object[]{"Total Bins:", histogram.getNumBins()[0]},
+                new Object[]{"75% Percentile:", histogram.getPTileThreshold(0.75)[0]},
+                new Object[]{"80% Percentile:", histogram.getPTileThreshold(0.80)[0]},
+                new Object[]{"85% Percentile:", histogram.getPTileThreshold(0.85)[0]},
+                new Object[]{"90% Percentile:", histogram.getPTileThreshold(0.90)[0]},
+                new Object[]{"95% Percentile:", histogram.getPTileThreshold(0.95)[0]},
+                new Object[]{"Median of Bins", stx.getMedian()},
+                new Object[]{"Bin Width:", getBinSize(histogram)},
         };
 
         JPanel plotContainerPanel = new JPanel(new GridLayout(1, 2));
+      //  JPanel plotContainerPanel = new JPanel(new GridLayout(2, 1));
         plotContainerPanel.add(histogramPanel);
-        plotContainerPanel.add(percentilePanel);
+       plotContainerPanel.add(percentilePanel);
 
         TableModel tableModel = new DefaultTableModel(tableData, new String[]{"Name", "Value"}) {
             @Override
@@ -423,6 +428,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 return false;
             }
         };
+
 
         final JTable table = new JTable(tableModel);
         table.setDefaultRenderer(Number.class, new DefaultTableCellRenderer() {
@@ -445,18 +451,57 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         });
         table.addMouseListener(popupHandler);
 
+      //  table.setMinimumSize(new Dimension(800,800));
+
         JPanel textContainerPanel = new JPanel(new BorderLayout(2, 2));
         textContainerPanel.setBackground(Color.WHITE);
         textContainerPanel.add(table, BorderLayout.CENTER);
+     //  textContainerPanel.setMinimumSize(new Dimension(800,800));
 
-        JPanel statPanel = new JPanel(new BorderLayout(4, 4));
-        statPanel.setBorder(new EmptyBorder(10, 2, 10, 2));
-        statPanel.setBackground(Color.WHITE);
-        statPanel.add(new JLabel(getSubPanelTitle(mask)), BorderLayout.NORTH);
-        statPanel.add(textContainerPanel, BorderLayout.WEST);
-        statPanel.add(plotContainerPanel, BorderLayout.CENTER);
+        JPanel statsPane = GridBagUtils.createPanel();
+        statsPane.setBorder(UIUtils.createGroupBorder(getSubPanelTitle(mask))); /*I18N*/
+        GridBagConstraints gbc = GridBagUtils.createConstraints("");
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        statsPane.add(table, gbc);
 
-        return statPanel;
+        JPanel plotsPane = GridBagUtils.createPanel();
+        plotsPane.setBorder(UIUtils.createGroupBorder(" ")); /*I18N*/
+        GridBagConstraints gbcPlots = GridBagUtils.createConstraints("");
+        gbcPlots.gridy = 0;
+        gbcPlots.fill = GridBagConstraints.BOTH;
+        gbcPlots.weightx = 1;
+        gbcPlots.weighty = 1;
+        plotsPane.add(plotContainerPanel, gbcPlots);
+
+
+
+        JPanel mainPane = GridBagUtils.createPanel();
+        mainPane.setBorder(UIUtils.createGroupBorder(" ")); /*I18N*/
+        GridBagConstraints gbcMain = GridBagUtils.createConstraints("");
+        gbcMain.gridx = 0;
+        gbcMain.gridy = 0;
+        gbcMain.anchor = GridBagConstraints.NORTHWEST;
+       gbcMain.fill = GridBagConstraints.BOTH;
+       gbcMain.weightx = 1;
+       gbcMain.weighty = 1;
+        mainPane.add(statsPane, gbcMain);
+        gbcMain.gridx++;
+        mainPane.add(plotsPane, gbcMain);
+
+
+
+//        JPanel statPanel = new JPanel(new BorderLayout(4, 4));
+//        statPanel.setBorder(new EmptyBorder(10, 2, 10, 2));
+//        statPanel.setBackground(Color.WHITE);
+//        statPanel.add(new JLabel(getSubPanelTitle(mask)), BorderLayout.NORTH);
+//        statPanel.add(textContainerPanel, BorderLayout.WEST);
+     //   statPanel.add(plotContainerPanel, BorderLayout.CENTER);
+
+       // return statPanel;
+        return mainPane;
     }
 
     static double getBinSize(Histogram histogram) {
