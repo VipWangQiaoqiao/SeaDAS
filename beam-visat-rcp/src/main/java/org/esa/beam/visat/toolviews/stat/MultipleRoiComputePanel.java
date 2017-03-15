@@ -85,7 +85,7 @@ class MultipleRoiComputePanel extends JPanel {
         DefaultListModel maskNameListModel = new DefaultListModel();
 
         maskNameSearchField = new QuickListFilterField(maskNameListModel);
-        maskNameSearchField.setHintText("Filter masks here");
+        maskNameSearchField.setHintText("Mask Filter");
         maskNameSearchField.setPreferredSize(new Dimension(150, 21));
 
         maskNameList = new CheckBoxList(maskNameSearchField.getDisplayListModel()) {

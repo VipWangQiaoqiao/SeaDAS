@@ -189,7 +189,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private JPanel createAccuracyPanel() {
         final JPanel accuracyPanel = new JPanel(new GridBagLayout());
         final GridBagConstraints gbc = new GridBagConstraints();
-        final JLabel label = new JLabel("Histogram Bins (10^):");
+        final JLabel label = new JLabel("Histogram Bins (10^value):");
 
         accuracyModel = new AccuracyModel();
         final BindingContext bindingContext = new BindingContext(PropertyContainer.createObjectBacked(accuracyModel));
@@ -220,7 +220,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         label.setEnabled(false);
         accuracySpinner.setEnabled(false);
-        accuracySpinner.setToolTipText("Specify the number of histogram bins (#bins: 10^accuracy).");
+        accuracySpinner.setToolTipText("Specify the number of histogram bins (#bins: 10^value).");
         accuracySpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -374,7 +374,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                 j < bins.length - 1 ? histogram.getBinLowValue(0, j + 1) : histogram.getHighValue(0),
                                 bins[j]);
         }
-        ChartPanel histogramPanel = createChartPanel(histogramSeries, "Value", "#Pixels", new Color(0, 0, 127));
+       // ChartPanel histogramPanel = createChartPanel(histogramSeries, "Value", "#Pixels", new Color(0, 0, 127));
+        ChartPanel histogramPanel = createChartPanel(histogramSeries, getRaster().getName()+ " (" + getRaster().getUnit()+")", "Frequency in #Pixels", new Color(0, 0, 127));
 
         XIntervalSeries percentileSeries = new XIntervalSeries("Percentile");
         percentileSeries.add(0,
@@ -392,25 +393,31 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                              100,
                              histogram.getHighValue(0));
 
-        ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percentile (%)", "Value Threshold", new Color(127, 0, 0));
+   //     ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percentile (%)", "Value Threshold", new Color(127, 0, 0));
+        ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percent Threshold", getRaster().getName()+ " (" + getRaster().getUnit()+")", new Color(127, 0, 0));
 
+          int size = getRaster().getRasterHeight() * getRaster().getRasterWidth();
+          int sceneSize = getRaster().getSceneRasterHeight() * getRaster().getSceneRasterWidth();
 
 
         Object[][] tableData = new Object[][]{
-                new Object[]{"Total Pixels:", histogram.getTotals()[0]},
+                new Object[]{"Raster Size (Pixels):", size},
+                new Object[]{"Sample Size (Pixels):", histogram.getTotals()[0]},
                 new Object[]{"Minimum:", stx.getMinimum()},
                 new Object[]{"Maximum:", stx.getMaximum()},
                 new Object[]{"Mean:", stx.getMean()},
                 new Object[]{"Standard Deviation:", stx.getStandardDeviation()},
                 new Object[]{"Total Bins:", histogram.getNumBins()[0]},
+                new Object[]{"Bin Width:", getBinSize(histogram)},
+                new Object[]{"Bin Median", stx.getMedian()},
                 new Object[]{"75% Threshold:", histogram.getPTileThreshold(0.75)[0]},
                 new Object[]{"80% Threshold:", histogram.getPTileThreshold(0.80)[0]},
                 new Object[]{"85% Threshold:", histogram.getPTileThreshold(0.85)[0]},
                 new Object[]{"90% Threshold:", histogram.getPTileThreshold(0.90)[0]},
                 new Object[]{"95% Threshold:", histogram.getPTileThreshold(0.95)[0]},
                 new Object[]{"98% Threshold:", histogram.getPTileThreshold(0.98)[0]},
-                new Object[]{"Median of Bins", stx.getMedian()},
-                new Object[]{"Bin Width:", getBinSize(histogram)},
+                new Object[]{"99% Threshold:", histogram.getPTileThreshold(0.99)[0]},
+
         };
 
         JPanel plotContainerPanel = new JPanel(new GridLayout(1, 2));
