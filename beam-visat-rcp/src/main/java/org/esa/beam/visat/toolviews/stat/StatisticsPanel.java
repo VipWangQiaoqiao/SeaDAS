@@ -69,15 +69,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -260,6 +254,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         contentPanel.revalidate();
         contentPanel.repaint();
+        backgroundPanel.revalidate();
+        backgroundPanel.repaint();
     }
 
     @Override
@@ -330,6 +326,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     contentPanel.add(statPanel);
                     contentPanel.revalidate();
                     contentPanel.repaint();
+                    backgroundPanel.revalidate();
+                    backgroundPanel.repaint();
                 }
             }
 
@@ -346,13 +344,15 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     }
                     putStatisticsIntoVectorDataAction.setSelectedMasks(selectedMasks);
                     exportButton.setEnabled(true);
+                    backgroundPanel.revalidate();
+                    backgroundPanel.repaint();
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(getParentDialogContentPane(),
-                                                  "Failed to compute statistics.\nAn error occurred:" + e.getMessage(),
+                            "Failed to compute statistics.\nAn error occurred:" + e.getMessage(),
                                                   /*I18N*/
-                                                  "Statistics", /*I18N*/
-                                                  JOptionPane.ERROR_MESSAGE);
+                            "Statistics", /*I18N*/
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -374,8 +374,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                 j < bins.length - 1 ? histogram.getBinLowValue(0, j + 1) : histogram.getHighValue(0),
                                 bins[j]);
         }
-       // ChartPanel histogramPanel = createChartPanel(histogramSeries, "Value", "#Pixels", new Color(0, 0, 127));
-        ChartPanel histogramPanel = createChartPanel(histogramSeries, getRaster().getName()+ " (" + getRaster().getUnit()+")", "Frequency in #Pixels", new Color(0, 0, 127));
+        // ChartPanel histogramPanel = createChartPanel(histogramSeries, "Value", "#Pixels", new Color(0, 0, 127));
+        ChartPanel histogramPanel = createChartPanel(histogramSeries, getRaster().getName() + " (" + getRaster().getUnit() + ")", "Frequency in #Pixels", new Color(0, 0, 127));
 
         XIntervalSeries percentileSeries = new XIntervalSeries("Percentile");
         percentileSeries.add(0,
@@ -393,11 +393,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                              100,
                              histogram.getHighValue(0));
 
-   //     ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percentile (%)", "Value Threshold", new Color(127, 0, 0));
-        ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percent Threshold", getRaster().getName()+ " (" + getRaster().getUnit()+")", new Color(127, 0, 0));
+        //     ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percentile (%)", "Value Threshold", new Color(127, 0, 0));
+        ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percent Threshold", getRaster().getName() + " (" + getRaster().getUnit() + ")", new Color(127, 0, 0));
 
-          int size = getRaster().getRasterHeight() * getRaster().getRasterWidth();
-          int sceneSize = getRaster().getSceneRasterHeight() * getRaster().getSceneRasterWidth();
+        int size = getRaster().getRasterHeight() * getRaster().getRasterWidth();
 
 
         Object[][] tableData = new Object[][]{
@@ -421,9 +420,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         };
 
         JPanel plotContainerPanel = new JPanel(new GridLayout(1, 2));
-      //  JPanel plotContainerPanel = new JPanel(new GridLayout(2, 1));
+        //  JPanel plotContainerPanel = new JPanel(new GridLayout(2, 1));
         plotContainerPanel.add(histogramPanel);
-       plotContainerPanel.add(percentilePanel);
+        plotContainerPanel.add(percentilePanel);
 
         TableModel tableModel = new DefaultTableModel(tableData, new String[]{"Name", "Value"}) {
             @Override
@@ -459,15 +458,51 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         });
         table.addMouseListener(popupHandler);
 
-      //  table.setMinimumSize(new Dimension(800,800));
+
+
+
+        // TEST CODE generically preferred size of each column based on longest expected entry
+        // fails a bit because decimal formatting is not captured
+        // stub of code commented out in case we want to make it work
+        // meanwhile longest entry is being used SEE below
+
+//        int column0Length = 0;
+//        int column1Length = 0;
+//        FontMetrics fm = table.getFontMetrics(table.getFont());
+//        for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
+//            String test = table.getValueAt(rowIndex,0).toString();
+//            int currColumn0Length = fm.stringWidth(table.getValueAt(rowIndex,0).toString());
+//            if (currColumn0Length > column0Length) {
+//                column0Length = currColumn0Length;
+//            }
+//
+//            String test2 = table.getValueAt(rowIndex,1).toString();
+//            int currColumn1Length = fm.stringWidth(table.getValueAt(rowIndex,1).toString());
+//            if (currColumn1Length > column1Length) {
+//                column1Length = currColumn1Length;
+//            }
+//        }
+
+
+        // Set preferred size of each column based on longest expected entry
+        FontMetrics fm = table.getFontMetrics(table.getFont());
+        TableColumn column = null;
+        for (int i = 0; i < 2; i++) {
+            column = table.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(fm.stringWidth("Sample Size (Pixels):"));
+            } else {
+                column.setPreferredWidth(fm.stringWidth("1234567"));
+            }
+        }
+
+
 
         JPanel textContainerPanel = new JPanel(new BorderLayout(2, 2));
         textContainerPanel.setBackground(Color.WHITE);
         textContainerPanel.add(table, BorderLayout.CENTER);
-     //  textContainerPanel.setMinimumSize(new Dimension(800,800));
 
         JPanel statsPane = GridBagUtils.createPanel();
-        statsPane.setBorder(UIUtils.createGroupBorder(getSubPanelTitle(mask))); /*I18N*/
         GridBagConstraints gbc = GridBagUtils.createConstraints("");
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -476,7 +511,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         statsPane.add(table, gbc);
 
         JPanel plotsPane = GridBagUtils.createPanel();
-        plotsPane.setBorder(UIUtils.createGroupBorder(" ")); /*I18N*/
+        //    plotsPane.setBorder(UIUtils.createGroupBorder(" ")); /*I18N*/
         GridBagConstraints gbcPlots = GridBagUtils.createConstraints("");
         gbcPlots.gridy = 0;
         gbcPlots.fill = GridBagConstraints.BOTH;
@@ -485,30 +520,21 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         plotsPane.add(plotContainerPanel, gbcPlots);
 
 
-
         JPanel mainPane = GridBagUtils.createPanel();
-        mainPane.setBorder(UIUtils.createGroupBorder(" ")); /*I18N*/
+        mainPane.setBorder(UIUtils.createGroupBorder(getSubPanelTitle(mask))); /*I18N*/
         GridBagConstraints gbcMain = GridBagUtils.createConstraints("");
         gbcMain.gridx = 0;
         gbcMain.gridy = 0;
         gbcMain.anchor = GridBagConstraints.NORTHWEST;
-       gbcMain.fill = GridBagConstraints.BOTH;
-       gbcMain.weightx = 1;
-       gbcMain.weighty = 1;
+        gbcMain.fill = GridBagConstraints.BOTH;
+        gbcMain.weightx = 1;
+        gbcMain.weighty = 1;
         mainPane.add(statsPane, gbcMain);
+        gbcMain.weightx = 1;
+        gbcMain.weighty = 1;
         gbcMain.gridx++;
         mainPane.add(plotsPane, gbcMain);
 
-
-
-//        JPanel statPanel = new JPanel(new BorderLayout(4, 4));
-//        statPanel.setBorder(new EmptyBorder(10, 2, 10, 2));
-//        statPanel.setBackground(Color.WHITE);
-//        statPanel.add(new JLabel(getSubPanelTitle(mask)), BorderLayout.NORTH);
-//        statPanel.add(textContainerPanel, BorderLayout.WEST);
-     //   statPanel.add(plotContainerPanel, BorderLayout.CENTER);
-
-       // return statPanel;
         return mainPane;
     }
 
@@ -673,7 +699,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     private AbstractButton getExportButton() {
         final AbstractButton export = ToolButtonFactory.createButton(UIUtils.loadImageIcon("icons/Export24.gif"),
-                                                                     false);
+                false);
         export.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

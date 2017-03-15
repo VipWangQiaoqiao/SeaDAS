@@ -189,8 +189,8 @@ class MultipleRoiComputePanel extends JPanel {
         GridBagUtils.addToPanel(multiRoiComputePanel, useRoiCheckBox, multiRoiComputePanelConstraints, "gridy=2");
         GridBagUtils.addToPanel(multiRoiComputePanel, maskNameSearchField, multiRoiComputePanelConstraints, "gridy=3,weightx=0,gridwidth=2");
         GridBagUtils.addToPanel(multiRoiComputePanel, showMaskManagerButton, multiRoiComputePanelConstraints, "gridy=3,gridx=2,weightx=0,gridwidth=1");
-        GridBagUtils.addToPanel(multiRoiComputePanel, new JScrollPane(maskNameList), multiRoiComputePanelConstraints, "gridy=4,gridx=0,fill=HORIZONTAL,gridwidth=3");
-        GridBagUtils.addToPanel(multiRoiComputePanel, checkBoxPanel, multiRoiComputePanelConstraints, "gridy=5,weighty=1,gridwidth=3");
+        GridBagUtils.addToPanel(multiRoiComputePanel, new JScrollPane(maskNameList), multiRoiComputePanelConstraints, "gridy=4,gridx=0,fill=BOTH,gridwidth=3");
+        GridBagUtils.addToPanel(multiRoiComputePanel, checkBoxPanel, multiRoiComputePanelConstraints, "gridy=5,weighty=0,gridwidth=3");
         add(multiRoiComputePanel);
 
         setRaster(rasterDataNode);
