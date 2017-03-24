@@ -25,6 +25,26 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
 
     public static final String ID = StatisticsToolView.class.getName();
 
+    public static final String PARAMETER_NAME_HISTOGRAM_PLOT_ENABLED = "statistics.histogramPlot.enabled";
+    public static final boolean DEFAULT_HISTOGRAM_PLOT_ENABLED = true;
+
+    public static final String PARAMETER_NAME_PERCENT_PLOT_ENABLED = "statistics.percentPlot.enabled";
+    public static final boolean DEFAULT_PERCENT_PLOT_ENABLED = true;
+
+    public static final String PARAMETER_NAME_STATS_LIST_ENABLED = "statistics.statsList.enabled";
+    public static final boolean DEFAULT_STATS_LIST_ENABLED = true;
+
+    public static final String PARAMETER_NAME_STATS_SPREADSHEET_ENABLED = "statistics.statsSpreadSheet.enabled";
+    public static final boolean DEFAULT_STATS_SPREADSHEET_ENABLED = true;
+
+
+
+
+
+
+    public static final String RESET_TO_DEFAULTS_PARAM_STR = "statistics.resetToDefaults.enabled";
+
+
     @Override
     protected PagePanel createPagePanel() {
         return new StatisticsPanel(this, getDescriptor().getHelpId());

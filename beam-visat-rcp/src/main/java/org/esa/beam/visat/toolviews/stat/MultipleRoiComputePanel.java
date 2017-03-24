@@ -19,6 +19,7 @@ package org.esa.beam.visat.toolviews.stat;
 import com.jidesoft.list.QuickListFilterField;
 import com.jidesoft.swing.CheckBoxList;
 import com.jidesoft.swing.SearchableUtils;
+import com.jidesoft.swing.TitledSeparator;
 import org.esa.beam.framework.datamodel.Mask;
 import org.esa.beam.framework.datamodel.Product;
 import org.esa.beam.framework.datamodel.ProductNode;
@@ -33,20 +34,11 @@ import org.esa.beam.util.Debug;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.visat.VisatApp;
 
-import javax.swing.AbstractButton;
-import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.Position;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -75,18 +67,22 @@ class MultipleRoiComputePanel extends JPanel {
     private final CheckBoxList maskNameList;
     private final JCheckBox selectAllCheckBox;
     private final JCheckBox selectNoneCheckBox;
+    private boolean validFields = true;
 
     private RasterDataNode raster;
     private Product product;
 
     MultipleRoiComputePanel(final ComputeMasks method, final RasterDataNode rasterDataNode) {
+
+        setLayout(new GridBagLayout());
+
         productNodeListener = new PNL();
 
         DefaultListModel maskNameListModel = new DefaultListModel();
 
         maskNameSearchField = new QuickListFilterField(maskNameListModel);
         maskNameSearchField.setHintText("Mask Filter");
-        maskNameSearchField.setPreferredSize(new Dimension(150, 21));
+        maskNameSearchField.setPreferredSize(new Dimension(200, 21));
 
         maskNameList = new CheckBoxList(maskNameSearchField.getDisplayListModel()) {
             @Override
@@ -105,7 +101,7 @@ class MultipleRoiComputePanel extends JPanel {
         maskNameList.getCheckBoxListSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                updateEnablement();
+                updateEnablement(validFields);
 //                refreshButton.setEnabled(true);
                 if (!e.getValueIsAdjusting()) {
                     selectAndEnableCheckBoxes();
@@ -119,7 +115,7 @@ class MultipleRoiComputePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateEnablement();
+                updateEnablement(validFields);
             }
         });
 
@@ -154,11 +150,12 @@ class MultipleRoiComputePanel extends JPanel {
                 refreshButton.setEnabled(false);
             }
         });
-        topPanel.add(refreshButton, BorderLayout.WEST);
+        topPanel.add(refreshButton, BorderLayout.EAST);
+     //   topPanel.setMinimumSize(new Dimension(50,50));
 
         AbstractButton showMaskManagerButton = VisatApp.getApp().getCommandManager().getCommand("org.esa.beam.visat.toolviews.mask.MaskManagerToolView.showCmd").createToolBarButton();
 
-        selectAllCheckBox = new JCheckBox("Select all");
+        selectAllCheckBox = new JCheckBox("Select All");
         selectAllCheckBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -168,7 +165,7 @@ class MultipleRoiComputePanel extends JPanel {
                 selectAndEnableCheckBoxes();
             }
         });
-        selectNoneCheckBox = new JCheckBox("Select none");
+        selectNoneCheckBox = new JCheckBox("Select None");
         selectNoneCheckBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -178,20 +175,53 @@ class MultipleRoiComputePanel extends JPanel {
                 selectAndEnableCheckBoxes();
             }
         });
-        JPanel checkBoxPanel = new JPanel();
-        checkBoxPanel.add(selectAllCheckBox);
-        checkBoxPanel.add(selectNoneCheckBox);
+//
+//       Dimension testDim =  maskNameList.getPreferredScrollableViewportSize();
+//        maskNameList.setPreferredSize(new Dimension(256,400));
+
+        JPanel checkBoxPanel = GridBagUtils.createPanel();
+        GridBagConstraints checkBoxPanelGbc = GridBagUtils.createConstraints("anchor=NORTHWEST,weightx=1");
+        checkBoxPanelGbc.gridx=0;
+        checkBoxPanelGbc.gridy=0;
+        checkBoxPanel.add(selectAllCheckBox, checkBoxPanelGbc);
+        checkBoxPanelGbc.gridy=1;
+        checkBoxPanel.add(selectNoneCheckBox, checkBoxPanelGbc);
 
         final JPanel multiRoiComputePanel = GridBagUtils.createPanel();
-        GridBagConstraints multiRoiComputePanelConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,weightx=1");
-        GridBagUtils.addToPanel(multiRoiComputePanel, topPanel, multiRoiComputePanelConstraints, "gridx=0,gridy=0,gridwidth=3");
-        GridBagUtils.addToPanel(multiRoiComputePanel, new JSeparator(), multiRoiComputePanelConstraints, "gridy=1,fill=HORIZONTAL");
+        GridBagConstraints multiRoiComputePanelConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,weightx=1,weighty=1");
+        GridBagUtils.addToPanel(multiRoiComputePanel, topPanel, multiRoiComputePanelConstraints, "gridx=0,gridy=0,gridwidth=3,anchor=NORTHEAST");
+      //  GridBagUtils.addToPanel(multiRoiComputePanel, new JSeparator(), multiRoiComputePanelConstraints, "gridy=1,fill=HORIZONTAL");
+        GridBagUtils.addToPanel(multiRoiComputePanel, new TitledSeparator("Masking Options", SwingConstants.CENTER), multiRoiComputePanelConstraints, "gridy=1,fill=HORIZONTAL, weightx=1.0,anchor=NORTHWEST,insets.top=5,gridwidth=3");
+
         GridBagUtils.addToPanel(multiRoiComputePanel, useRoiCheckBox, multiRoiComputePanelConstraints, "gridy=2");
         GridBagUtils.addToPanel(multiRoiComputePanel, maskNameSearchField, multiRoiComputePanelConstraints, "gridy=3,weightx=0,gridwidth=2");
         GridBagUtils.addToPanel(multiRoiComputePanel, showMaskManagerButton, multiRoiComputePanelConstraints, "gridy=3,gridx=2,weightx=0,gridwidth=1");
-        GridBagUtils.addToPanel(multiRoiComputePanel, new JScrollPane(maskNameList), multiRoiComputePanelConstraints, "gridy=4,gridx=0,fill=BOTH,gridwidth=3");
+
+        JScrollPane maskNameListScrollPane = new JScrollPane(maskNameList);
+
+        maskNameListScrollPane.setMinimumSize(maskNameListScrollPane.getPreferredSize());
+    //    maskNameListScrollPane.setPreferredSize(new Dimension(maskNameListScrollPane.getPreferredSize().width, 300));
+    //    maskNameListScrollPane.setMaximumSize(new Dimension(maskNameListScrollPane.getPreferredSize().width, 400));
+
+
+
+        GridBagUtils.addToPanel(multiRoiComputePanel, maskNameListScrollPane, multiRoiComputePanelConstraints, "gridy=4,gridx=0,fill=BOTH,gridwidth=3");
         GridBagUtils.addToPanel(multiRoiComputePanel, checkBoxPanel, multiRoiComputePanelConstraints, "gridy=5,weighty=0,gridwidth=3");
-        add(multiRoiComputePanel);
+
+        GridBagConstraints thisConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,weightx=1,weighty=1, fill=HORIZONTAL");
+
+      //  multiRoiComputePanel.setMinimumSize(multiRoiComputePanel.getPreferredSize());
+//        thisConstraints.anchor = GridBagConstraints.NORTHEAST;
+//        thisConstraints.fill = GridBagConstraints.NONE;
+//        thisConstraints.weighty = 1.0;
+//        thisConstraints.gridy=0;
+//        add(topPanel,thisConstraints);
+//        thisConstraints.gridy=1;
+//        thisConstraints.fill = GridBagConstraints.NONE;
+//        thisConstraints.weighty = 1.0;
+        add(multiRoiComputePanel,thisConstraints);
+
+
 
         setRaster(rasterDataNode);
     }
@@ -274,10 +304,11 @@ class MultipleRoiComputePanel extends JPanel {
             }
         }
 
-        updateEnablement();
+        updateEnablement(validFields);
     }
 
-    void updateEnablement() {
+    void updateEnablement(boolean validFields) {
+        this.validFields = validFields;
         boolean hasMasks = (product != null && product.getMaskGroup().getNodeCount() > 0);
         boolean canSelectMasks = hasMasks && useRoiCheckBox.isSelected();
         useRoiCheckBox.setEnabled(hasMasks);
@@ -285,7 +316,7 @@ class MultipleRoiComputePanel extends JPanel {
         maskNameList.setEnabled(canSelectMasks);
         selectAllCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length < maskNameList.getModel().getSize());
         selectNoneCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length > 0);
-        refreshButton.setEnabled(raster != null);
+        refreshButton.setEnabled(validFields && raster != null);
     }
 
     private class PNL implements ProductNodeListener {
@@ -313,7 +344,7 @@ class MultipleRoiComputePanel extends JPanel {
             final String[] selectedNames = getSelectedMaskNames();
 
             if (StringUtils.contains(selectedNames, maskName)) {
-                updateEnablement();
+                updateEnablement(validFields);
             }
         }
 

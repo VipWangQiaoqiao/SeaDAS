@@ -43,6 +43,7 @@ import org.esa.beam.util.SystemUtils;
 import org.esa.beam.visat.actions.ExportLegendImageAction;
 import org.esa.beam.visat.actions.ShowModuleManagerAction;
 import org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView;
+import org.esa.beam.visat.toolviews.stat.StatisticsToolView;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -133,6 +134,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
         addRootPage(new RepositoryConnectionConfigPage());
         addRootPage(new ProductSettings());
         addRootPage(new RGBImageProfilePage());
+        addRootPage(new StatisticsPage());
         addRootPage(new AppearancePage());
         addRootPage(new BehaviorPage());
 
@@ -848,6 +850,188 @@ public class VisatPreferencesDialog extends ConfigDialog {
             };
 
             getConfigParam(ExportLegendImageAction.RESET_TO_DEFAULTS_PARAM_STR).setValue(false, errorHandler);
+        }
+
+
+        @Override
+        public PropertyMap getConfigParamValues(PropertyMap propertyMap) {
+            propertyMap = super.getConfigParamValues(propertyMap);
+            return propertyMap;
+        }
+
+        @Override
+        public void setConfigParamValues(PropertyMap propertyMap, ParamExceptionHandler errorHandler) {
+
+            super.setConfigParamValues(propertyMap, errorHandler);
+        }
+
+
+    }
+
+
+
+
+
+
+    public static class StatisticsPage extends DefaultConfigPage {
+
+        private boolean resettingDefaults = false;
+
+        public StatisticsPage() {
+            setTitle("Statistics"); /*I18N*/
+        }
+
+        @Override
+        protected void initConfigParams(ParamGroup configParams) {
+            final ParamChangeListener paramChangeListener = new ParamChangeListener() {
+                public void parameterValueChanged(ParamChangeEvent event) {
+                    if (!resettingDefaults) {
+                        updatePageUI();
+                    }
+                }
+            };
+            final ParamChangeListener paramChangeListenerResetToDefaults = new ParamChangeListener() {
+                public void parameterValueChanged(ParamChangeEvent event) {
+                    if ((Boolean) getConfigParam(StatisticsToolView.RESET_TO_DEFAULTS_PARAM_STR).getValue()) {
+                        resettingDefaults = true;
+                        resetToDefaults();
+                        resettingDefaults = false;
+                    }
+                }
+            };
+            Parameter param;
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+
+            param = new Parameter(StatisticsToolView.RESET_TO_DEFAULTS_PARAM_STR, false);
+            param.getProperties().setLabel("RESTORE DEFAULTS (Statistics Preferences)");
+            param.addParamChangeListener(paramChangeListenerResetToDefaults);
+            configParams.addParameter(param);
+
+
+
+            param = new Parameter(StatisticsToolView.PARAMETER_NAME_HISTOGRAM_PLOT_ENABLED, StatisticsToolView.DEFAULT_HISTOGRAM_PLOT_ENABLED);
+            param.getProperties().setLabel("Show Histogram Plots");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+
+            param = new Parameter(StatisticsToolView.PARAMETER_NAME_PERCENT_PLOT_ENABLED, StatisticsToolView.DEFAULT_PERCENT_PLOT_ENABLED);
+            param.getProperties().setLabel("Show Percentile Plots");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+            param = new Parameter(StatisticsToolView.PARAMETER_NAME_STATS_LIST_ENABLED, StatisticsToolView.DEFAULT_STATS_LIST_ENABLED);
+            param.getProperties().setLabel("Show Statistics List");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+            param = new Parameter(StatisticsToolView.PARAMETER_NAME_STATS_SPREADSHEET_ENABLED, StatisticsToolView.DEFAULT_STATS_SPREADSHEET_ENABLED);
+            param.getProperties().setLabel("Show Statistics SpreadSheet");
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+        }
+
+        @Override
+        protected void initPageUI() {
+            JPanel pageUI = createPageUI();
+            setPageUI(pageUI);
+        }
+
+        private JPanel createPageUI() {
+            Parameter param;
+
+
+
+            JPanel optionsPane = GridBagUtils.createPanel();
+            optionsPane.setBorder(UIUtils.createGroupBorder("Options")); /*I18N*/
+            GridBagConstraints gbcOptions = GridBagUtils.createConstraints("");
+            gbcOptions.gridy = 0;
+
+
+
+            param = getConfigParam(StatisticsToolView.PARAMETER_NAME_HISTOGRAM_PLOT_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAMETER_NAME_PERCENT_PLOT_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAMETER_NAME_STATS_LIST_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAMETER_NAME_STATS_SPREADSHEET_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+
+
+            JPanel resetPane = GridBagUtils.createPanel();
+            GridBagConstraints gbcReset = GridBagUtils.createConstraints("");
+            gbcReset.gridy = 0;
+            param = getConfigParam(StatisticsToolView.RESET_TO_DEFAULTS_PARAM_STR);
+            addParamToPane(resetPane, param, gbcReset);
+
+
+
+            JPanel contentsPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcContents = GridBagUtils.createConstraints("fill=HORIZONTAL, anchor=WEST");
+            gbcContents.gridx = 0;
+            gbcContents.gridy = 0;
+            gbcContents.insets.bottom = 10;
+            contentsPanel.add(optionsPane, gbcContents);
+            gbcContents.gridy++;
+            contentsPanel.add(resetPane, gbcContents);
+
+
+
+
+
+            //////////////////////////////////////////////////////////////////////////////////////
+            // All together
+            JPanel pageUI = GridBagUtils.createPanel();
+            GridBagConstraints gbcMain = GridBagUtils.createConstraints("fill=NONE, anchor=WEST, weightx=1, gridy=1");
+            gbcMain.insets.bottom = 4;
+
+            pageUI.add(contentsPanel, gbcMain);
+
+            return createPageUIContentPane(pageUI);
+        }
+
+
+        public void resetToDefaults() {
+
+            ParamExceptionHandler errorHandler = new ParamExceptionHandler() {
+                @Override
+                public boolean handleParamException(ParamException e) {
+                    return false;
+                }
+            };
+
+            getConfigParam(StatisticsToolView.PARAMETER_NAME_HISTOGRAM_PLOT_ENABLED).setValue(StatisticsToolView.DEFAULT_HISTOGRAM_PLOT_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAMETER_NAME_PERCENT_PLOT_ENABLED).setValue(StatisticsToolView.DEFAULT_PERCENT_PLOT_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAMETER_NAME_STATS_LIST_ENABLED).setValue(StatisticsToolView.DEFAULT_STATS_LIST_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAMETER_NAME_STATS_SPREADSHEET_ENABLED).setValue(StatisticsToolView.DEFAULT_STATS_SPREADSHEET_ENABLED, errorHandler);
+
+        }
+
+        @Override
+        public void updatePageUI() {
+            ParamExceptionHandler errorHandler = new ParamExceptionHandler() {
+                @Override
+                public boolean handleParamException(ParamException e) {
+                    return false;
+                }
+            };
+
+            getConfigParam(StatisticsToolView.RESET_TO_DEFAULTS_PARAM_STR).setValue(false, errorHandler);
         }
 
 
