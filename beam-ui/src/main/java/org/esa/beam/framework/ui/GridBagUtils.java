@@ -69,6 +69,32 @@ public class GridBagUtils {
         return gbc;
     }
 
+    public static GridBagConstraints createConstraints() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        return gbc;
+    }
+
+    /**
+     * Resets the constraints to the default value but keeps current grid location (gridx and gridy)
+     * @param gbcIn
+     * @return
+     */
+    public static GridBagConstraints restoreConstraints(GridBagConstraints gbcIn) {
+        GridBagConstraints gbc = createConstraints();
+        gbc.gridx = gbcIn.gridx;
+        gbc.gridy = gbcIn.gridy;
+        return gbc;
+    }
+
+
+
+
     /**
      * Creates a <code>GridBagConstraints</code> instance with the following attributes: <ld> <li><code>{@link
      * GridBagConstraints#anchor anchor}=<b>WEST</b></li> <li><code>{@link GridBagConstraints#insets
