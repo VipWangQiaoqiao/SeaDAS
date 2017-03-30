@@ -47,6 +47,8 @@ public class Stx {
     private final double mean;
     private final double standardDeviation;
     private final double median;
+    private final double medianRaster;
+    private final boolean includesMedianRaster;
     private final int resolutionLevel;
     private final boolean logHistogram;
     private final boolean intHistogram;
@@ -69,6 +71,12 @@ public class Stx {
     public Stx(double minimum, double maximum, double mean, double standardDeviation,
                boolean logHistogram, boolean intHistogram, Histogram histogram, int resolutionLevel) {
 
+        this(minimum, maximum, mean, 0.0, false, standardDeviation, logHistogram, intHistogram, histogram, resolutionLevel);
+
+    }
+
+    public Stx(double minimum, double maximum, double mean, double medianRaster, boolean includesMedianRaster, double standardDeviation,
+               boolean logHistogram, boolean intHistogram, Histogram histogram, int resolutionLevel) {
         Assert.argument(!Double.isNaN(minimum), "minimum must not be NaN");
         Assert.argument(!Double.isInfinite(minimum), "minimum must not be infinity");
         Assert.argument(!Double.isNaN(maximum), "maximum must not be NaN");
@@ -93,6 +101,9 @@ public class Stx {
         this.intHistogram = intHistogram;
         this.histogram = histogram;
         this.resolutionLevel = resolutionLevel;
+        this.medianRaster = medianRaster;
+        this.includesMedianRaster = includesMedianRaster;
+
     }
 
     /**
@@ -122,6 +133,14 @@ public class Stx {
     public double getMedian() {
         return median;
     }
+
+    /**
+     * @return The median value (raster based).
+     */
+    public double getMedianRaster() {
+        return medianRaster;
+    }
+
 
     /**
      * @return The standard deviation value.

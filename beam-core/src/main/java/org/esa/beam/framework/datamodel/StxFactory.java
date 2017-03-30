@@ -37,6 +37,7 @@ public class StxFactory {
     private Number minimum;
     private Number maximum;
     private Number mean;
+    private Number median;
     private Number standardDeviation;
     private Histogram histogram;
     private Integer resolutionLevel;
@@ -65,6 +66,7 @@ public class StxFactory {
         this.mean = mean;
         return this;
     }
+
 
     public StxFactory withStandardDeviation(Number standardDeviation) {
         this.standardDeviation = standardDeviation;
@@ -141,6 +143,7 @@ public class StxFactory {
         double minimum = this.minimum != null ? this.minimum.doubleValue() : Double.NaN;
         double maximum = this.maximum != null ? this.maximum.doubleValue() : Double.NaN;
         double mean = this.mean != null ? this.mean.doubleValue() : Double.NaN;
+        double median = this.median != null ? this.median.doubleValue() : Double.NaN;
         double stdDev = this.standardDeviation != null ? this.standardDeviation.doubleValue() : Double.NaN;
         boolean logHistogram = this.logHistogram != null ? this.logHistogram : false;
         boolean intHistogram = this.intHistogram != null ? this.intHistogram : false;
@@ -203,6 +206,11 @@ public class StxFactory {
                     if (this.mean == null) {
                         mean = meanOp.getMean();
                     }
+
+                    if (this.median == null) {
+                        median = meanOp.getMedian();
+                    }
+
                     if (this.standardDeviation == null) {
                         stdDev = meanOp.getStandardDeviation();
                     }
@@ -246,7 +254,7 @@ public class StxFactory {
             }
         }
 
-        return new Stx(minimum, maximum, mean, stdDev, logHistogram, intHistogram, histogram, level);
+        return new Stx(minimum, maximum, mean, median, true, stdDev, logHistogram, intHistogram, histogram, level);
     }
 
     /**

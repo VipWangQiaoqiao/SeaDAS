@@ -16,9 +16,13 @@
 
 package org.esa.beam.framework.datamodel;
 
+import org.esa.beam.util.math.Array;
 import org.esa.beam.util.math.DoubleList;
 
 import javax.media.jai.UnpackedImageData;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static java.lang.Double.*;
 
@@ -37,12 +41,16 @@ final public class SummaryStxOp extends StxOp {
     private double maximum;
     private double mean;
     private double meanSqr;
+    private ArrayList<Double> sampleData;
+
     private long sampleCount;
 
     public SummaryStxOp() {
         super("Summary");
         this.minimum = POSITIVE_INFINITY;
         this.maximum = NEGATIVE_INFINITY;
+        sampleData = new ArrayList<Double>();
+
     }
 
     public double getMinimum() {
@@ -57,6 +65,30 @@ final public class SummaryStxOp extends StxOp {
 
     public double getMean() {
         return sampleCount > 0 ? mean : NaN;
+    }
+
+    public double getMedian() {
+        if (sampleCount > 0) {
+            double[] sampleArray = new double[sampleData.size()];
+            for (int i = 0; i < sampleData.size(); i++) {
+                sampleArray[i] = (double) sampleData.get(i);
+            }
+
+            Arrays.sort(sampleArray);
+            double median;
+            if (sampleArray.length % 2 == 0)
+
+                median = ((double) sampleArray[sampleArray.length / 2] + (double) sampleArray[sampleArray.length / 2 - 1]) / 2;
+            else
+
+                median = (double) sampleArray[sampleArray.length / 2];
+
+            return median;
+
+        } else {
+            return NaN;
+        }
+
     }
 
     public double getStandardDeviation() {
@@ -122,6 +154,7 @@ final public class SummaryStxOp extends StxOp {
                     delta = value - tileMean;
                     tileMean += delta / tileSampleCount;
                     tileMeanSqr += delta * (value - tileMean);
+                    sampleData.add(value);
                 }
                 dataPixelOffset += dataPixelStride;
                 maskPixelOffset += maskPixelStride;
