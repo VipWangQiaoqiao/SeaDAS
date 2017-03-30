@@ -46,14 +46,21 @@ import java.awt.event.ItemListener;
 
 
 /**
- * A panel which performs the 'compute' action.
+ * A panel which performs the 'compute' action for the Statistic Tool
  *
  * @author Marco Zuehlke
+ * @author Daniel Knowles
+ * @since SeaDAS 7.4.1
+ *
+ * Revised by Daniel Knowles for SeaDAS 7.4.1
+ * 1. better handles layout, prevents components from being hidden due to window resizing.
+ * 2. validFields added to help govern enablement of the refreshButton.
+ *
  */
 class MultipleRoiComputePanel extends JPanel {
 
 
-    private final QuickListFilterField maskNameSearchField;
+    private QuickListFilterField maskNameSearchField;
 
     interface ComputeMasks {
 
@@ -62,11 +69,11 @@ class MultipleRoiComputePanel extends JPanel {
 
     private final ProductNodeListener productNodeListener;
 
-    private final AbstractButton refreshButton;
-    private final JCheckBox useRoiCheckBox;
-    private final CheckBoxList maskNameList;
-    private final JCheckBox selectAllCheckBox;
-    private final JCheckBox selectNoneCheckBox;
+    private AbstractButton refreshButton;
+    private JCheckBox useRoiCheckBox;
+    private CheckBoxList maskNameList;
+    private JCheckBox selectAllCheckBox;
+    private JCheckBox selectNoneCheckBox;
     private boolean validFields = true;
 
     private RasterDataNode raster;
@@ -78,39 +85,11 @@ class MultipleRoiComputePanel extends JPanel {
 
         productNodeListener = new PNL();
 
-        DefaultListModel maskNameListModel = new DefaultListModel();
 
-        maskNameSearchField = new QuickListFilterField(maskNameListModel);
-        maskNameSearchField.setHintText("Mask Filter");
-        maskNameSearchField.setPreferredSize(new Dimension(200, 21));
+        JPanel topPane = getTopPanel(method, rasterDataNode);
 
-        maskNameList = new CheckBoxList(maskNameSearchField.getDisplayListModel()) {
-            @Override
-            public int getNextMatch(String prefix, int startIndex, Position.Bias bias) {
-                return -1;
-            }
-
-            @Override
-            public boolean isCheckBoxEnabled(int index) {
-                return true;
-            }
-        };
-        SearchableUtils.installSearchable(maskNameList);
-
-        maskNameList.getCheckBoxListSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        maskNameList.getCheckBoxListSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                updateEnablement(validFields);
-//                refreshButton.setEnabled(true);
-                if (!e.getValueIsAdjusting()) {
-                    selectAndEnableCheckBoxes();
-                }
-            }
-        });
 
         useRoiCheckBox = new JCheckBox("Use ROI mask(s):");
-        useRoiCheckBox.setMnemonic('R');
         useRoiCheckBox.addActionListener(new ActionListener() {
 
             @Override
@@ -118,113 +97,53 @@ class MultipleRoiComputePanel extends JPanel {
                 updateEnablement(validFields);
             }
         });
-
-        final JPanel topPanel = new JPanel(new BorderLayout());
-        refreshButton = ToolButtonFactory.createButton(
-                UIUtils.loadImageIcon("icons/ViewRefresh22.png"),
-                false);
-        refreshButton.setEnabled(rasterDataNode != null);
-        refreshButton.setToolTipText("Refresh View");
-        refreshButton.setName("refreshButton");
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boolean useRoi = useRoiCheckBox.isSelected();
-                Mask[] selectedMasks;
-                if (useRoi) {
-                    int[] listIndexes = maskNameList.getCheckBoxListSelectedIndices();
-                    if (listIndexes.length > 0) {
-                        selectedMasks = new Mask[listIndexes.length];
-                        for (int i = 0; i < listIndexes.length; i++) {
-                            int listIndex = listIndexes[i];
-                            String maskName = maskNameList.getModel().getElementAt(listIndex).toString();
-                            selectedMasks[i] = raster.getProduct().getMaskGroup().get(maskName);
-                        }
-                    } else {
-                        selectedMasks = new Mask[]{null};
-                    }
-                } else {
-                    selectedMasks = new Mask[]{null};
-                }
-                method.compute(selectedMasks);
-                refreshButton.setEnabled(false);
-            }
-        });
-        topPanel.add(refreshButton, BorderLayout.EAST);
-     //   topPanel.setMinimumSize(new Dimension(50,50));
-
-        AbstractButton showMaskManagerButton = VisatApp.getApp().getCommandManager().getCommand("org.esa.beam.visat.toolviews.mask.MaskManagerToolView.showCmd").createToolBarButton();
-
-        selectAllCheckBox = new JCheckBox("Select All");
-        selectAllCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (selectAllCheckBox.isSelected()) {
-                    maskNameList.selectAll();
-                }
-                selectAndEnableCheckBoxes();
-            }
-        });
-        selectNoneCheckBox = new JCheckBox("Select None");
-        selectNoneCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (selectNoneCheckBox.isSelected()) {
-                    maskNameList.selectNone();
-                }
-                selectAndEnableCheckBoxes();
-            }
-        });
-//
-//       Dimension testDim =  maskNameList.getPreferredScrollableViewportSize();
-//        maskNameList.setPreferredSize(new Dimension(256,400));
-
-        JPanel checkBoxPanel = GridBagUtils.createPanel();
-        GridBagConstraints checkBoxPanelGbc = GridBagUtils.createConstraints("anchor=NORTHWEST,weightx=1");
-        checkBoxPanelGbc.gridx=0;
-        checkBoxPanelGbc.gridy=0;
-        checkBoxPanel.add(selectAllCheckBox, checkBoxPanelGbc);
-        checkBoxPanelGbc.gridy=1;
-        checkBoxPanel.add(selectNoneCheckBox, checkBoxPanelGbc);
-
-        final JPanel multiRoiComputePanel = GridBagUtils.createPanel();
-        GridBagConstraints multiRoiComputePanelConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,weightx=1,weighty=1");
-        GridBagUtils.addToPanel(multiRoiComputePanel, topPanel, multiRoiComputePanelConstraints, "gridx=0,gridy=0,gridwidth=3,anchor=NORTHEAST");
-      //  GridBagUtils.addToPanel(multiRoiComputePanel, new JSeparator(), multiRoiComputePanelConstraints, "gridy=1,fill=HORIZONTAL");
-        GridBagUtils.addToPanel(multiRoiComputePanel, new TitledSeparator("Masking Options", SwingConstants.CENTER), multiRoiComputePanelConstraints, "gridy=1,fill=HORIZONTAL, weightx=1.0,anchor=NORTHWEST,insets.top=5,gridwidth=3");
-
-        GridBagUtils.addToPanel(multiRoiComputePanel, useRoiCheckBox, multiRoiComputePanelConstraints, "gridy=2");
-        GridBagUtils.addToPanel(multiRoiComputePanel, maskNameSearchField, multiRoiComputePanelConstraints, "gridy=3,weightx=0,gridwidth=2");
-        GridBagUtils.addToPanel(multiRoiComputePanel, showMaskManagerButton, multiRoiComputePanelConstraints, "gridy=3,gridx=2,weightx=0,gridwidth=1");
-
-        JScrollPane maskNameListScrollPane = new JScrollPane(maskNameList);
-
-        maskNameListScrollPane.setMinimumSize(maskNameListScrollPane.getPreferredSize());
-    //    maskNameListScrollPane.setPreferredSize(new Dimension(maskNameListScrollPane.getPreferredSize().width, 300));
-    //    maskNameListScrollPane.setMaximumSize(new Dimension(maskNameListScrollPane.getPreferredSize().width, 400));
+        useRoiCheckBox.setMinimumSize(useRoiCheckBox.getPreferredSize());
+        useRoiCheckBox.setPreferredSize(useRoiCheckBox.getPreferredSize());
 
 
-
-        GridBagUtils.addToPanel(multiRoiComputePanel, maskNameListScrollPane, multiRoiComputePanelConstraints, "gridy=4,gridx=0,fill=BOTH,gridwidth=3");
-        GridBagUtils.addToPanel(multiRoiComputePanel, checkBoxPanel, multiRoiComputePanelConstraints, "gridy=5,weighty=0,gridwidth=3");
-
-        GridBagConstraints thisConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,weightx=1,weighty=1, fill=HORIZONTAL");
-
-      //  multiRoiComputePanel.setMinimumSize(multiRoiComputePanel.getPreferredSize());
-//        thisConstraints.anchor = GridBagConstraints.NORTHEAST;
-//        thisConstraints.fill = GridBagConstraints.NONE;
-//        thisConstraints.weighty = 1.0;
-//        thisConstraints.gridy=0;
-//        add(topPanel,thisConstraints);
-//        thisConstraints.gridy=1;
-//        thisConstraints.fill = GridBagConstraints.NONE;
-//        thisConstraints.weighty = 1.0;
-        add(multiRoiComputePanel,thisConstraints);
+        JPanel maskFilterPane = getMaskFilterPanel();
+        JPanel maskNameListPane = getMaskNameListPanel();
+        JPanel checkBoxPane = getSelectAllNonePanel();
 
 
+        JPanel panel = GridBagUtils.createPanel();
+
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        panel.add(topPane, gbc);
+        gbc = GridBagUtils.restoreConstraints(gbc);
+
+        gbc.gridy++;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(new TitledSeparator("Masking Options", SwingConstants.CENTER), gbc);
+        gbc = GridBagUtils.restoreConstraints(gbc);
+
+
+        gbc.gridy++;
+        panel.add(useRoiCheckBox, gbc);
+
+        gbc.gridy++;
+        panel.add(maskFilterPane, gbc);
+
+        gbc.gridy++;
+        panel.add(maskNameListPane, gbc);
+
+        gbc.gridy++;
+        gbc.insets.bottom = 5;
+        panel.add(checkBoxPane, gbc);
+
+        panel.setMinimumSize(panel.getPreferredSize());
+        panel.setPreferredSize(panel.getPreferredSize());
+
+
+        GridBagConstraints gbcMain = GridBagUtils.createConstraints();
+        gbcMain.fill = GridBagConstraints.HORIZONTAL;
+        add(panel, gbcMain);
 
         setRaster(rasterDataNode);
     }
+
+
 
     void setRaster(final RasterDataNode newRaster) {
         if (this.raster != newRaster) {
@@ -365,4 +284,164 @@ class MultipleRoiComputePanel extends JPanel {
             }
         }
     }
+
+    private JPanel getTopPanel(final ComputeMasks method, final RasterDataNode rasterDataNode) {
+
+        refreshButton = ToolButtonFactory.createButton(
+                UIUtils.loadImageIcon("icons/ViewRefresh22.png"),
+                false);
+        refreshButton.setEnabled(rasterDataNode != null);
+        refreshButton.setToolTipText("Refresh View");
+        refreshButton.setName("refreshButton");
+
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean useRoi = useRoiCheckBox.isSelected();
+                Mask[] selectedMasks;
+                if (useRoi) {
+                    int[] listIndexes = maskNameList.getCheckBoxListSelectedIndices();
+                    if (listIndexes.length > 0) {
+                        selectedMasks = new Mask[listIndexes.length];
+                        for (int i = 0; i < listIndexes.length; i++) {
+                            int listIndex = listIndexes[i];
+                            String maskName = maskNameList.getModel().getElementAt(listIndex).toString();
+                            selectedMasks[i] = raster.getProduct().getMaskGroup().get(maskName);
+                        }
+                    } else {
+                        selectedMasks = new Mask[]{null};
+                    }
+                } else {
+                    selectedMasks = new Mask[]{null};
+                }
+                method.compute(selectedMasks);
+                refreshButton.setEnabled(false);
+            }
+        });
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        panel.add(refreshButton, gbc);
+        panel.setMinimumSize(panel.getPreferredSize());
+        panel.setPreferredSize(panel.getPreferredSize());
+
+        return panel;
+    }
+
+    private JPanel getMaskFilterPanel() {
+
+
+        AbstractButton showMaskManagerButton = VisatApp.getApp().getCommandManager().getCommand("org.esa.beam.visat.toolviews.mask.MaskManagerToolView.showCmd").createToolBarButton();
+        showMaskManagerButton.setMinimumSize(showMaskManagerButton.getPreferredSize());
+        showMaskManagerButton.setPreferredSize(showMaskManagerButton.getPreferredSize());
+
+
+        DefaultListModel maskNameListModel = new DefaultListModel();
+
+        maskNameSearchField = new QuickListFilterField(maskNameListModel);
+        maskNameSearchField.setHintText("Mask Filter");
+        maskNameSearchField.setMinimumSize(maskNameSearchField.getPreferredSize());
+        maskNameSearchField.setPreferredSize(maskNameSearchField.getPreferredSize());
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        gbc.insets.top = 3;
+        gbc.insets.bottom = 3;
+        panel.add(maskNameSearchField, gbc);
+        gbc.gridx++;
+        panel.add(showMaskManagerButton, gbc);
+
+        return panel;
+    }
+
+
+    private JPanel getMaskNameListPanel() {
+        maskNameList = new CheckBoxList(maskNameSearchField.getDisplayListModel()) {
+            @Override
+            public int getNextMatch(String prefix, int startIndex, Position.Bias bias) {
+                return -1;
+            }
+
+            @Override
+            public boolean isCheckBoxEnabled(int index) {
+                return true;
+            }
+        };
+        SearchableUtils.installSearchable(maskNameList);
+
+        maskNameList.getCheckBoxListSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        maskNameList.getCheckBoxListSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                updateEnablement(validFields);
+//                refreshButton.setEnabled(true);
+                if (!e.getValueIsAdjusting()) {
+                    selectAndEnableCheckBoxes();
+                }
+            }
+        });
+//        maskNameList.setMinimumSize(maskNameList.getPreferredSize());
+//        maskNameList.setPreferredSize(maskNameList.getPreferredSize());
+
+
+        JScrollPane scrollPane = new JScrollPane(maskNameList);
+        scrollPane.setMinimumSize(scrollPane.getPreferredSize());
+        scrollPane.setPreferredSize(scrollPane.getPreferredSize());
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(scrollPane, gbc);
+
+        return panel;
+
+    }
+
+    private JPanel getSelectAllNonePanel() {
+
+        selectAllCheckBox = new JCheckBox("Select All");
+        selectAllCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (selectAllCheckBox.isSelected()) {
+                    maskNameList.selectAll();
+                }
+                selectAndEnableCheckBoxes();
+            }
+        });
+        selectAllCheckBox.setMinimumSize(selectAllCheckBox.getPreferredSize());
+        selectAllCheckBox.setPreferredSize(selectAllCheckBox.getPreferredSize());
+
+        selectNoneCheckBox = new JCheckBox("Select None");
+        selectNoneCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (selectNoneCheckBox.isSelected()) {
+                    maskNameList.selectNone();
+                }
+                selectAndEnableCheckBoxes();
+            }
+        });
+        selectNoneCheckBox.setMinimumSize(selectNoneCheckBox.getPreferredSize());
+        selectNoneCheckBox.setPreferredSize(selectNoneCheckBox.getPreferredSize());
+
+
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        panel.add(selectAllCheckBox, gbc);
+
+        gbc.gridy++;
+        panel.add(selectNoneCheckBox, gbc);
+
+        return panel;
+    }
+
 }
