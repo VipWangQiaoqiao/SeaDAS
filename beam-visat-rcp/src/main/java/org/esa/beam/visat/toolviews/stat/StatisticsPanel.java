@@ -61,7 +61,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.esa.beam.visat.toolviews.stat.StatisticsToolView.DEFAULT_HISTOGRAM_PLOT_ENABLED;
 
 /**
  * A general pane within the statistics window.
@@ -184,11 +183,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         GridBagUtils.addToPanel(rightPanel, computePanel, extendedOptionsPanelConstraints, "gridy=0,fill=NONE,weighty=1,weightx=1");
         GridBagUtils.addToPanel(rightPanel, accuracyPanel, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
         GridBagUtils.addToPanel(rightPanel, exportAndHelpPanel, extendedOptionsPanelConstraints, "gridy=2,anchor=SOUTHWEST,fill=HORIZONTAL,weighty=0");
-
-        Dimension dimComputePanel = computePanel.getPreferredSize();
-        Dimension dimAccuracyPanel = createAccuracyPanel().getPreferredSize();
-        Dimension dimHelpPanel = exportAndHelpPanel.getPreferredSize();
-        Dimension dimRightPanel = rightPanel.getPreferredSize();
 
 
 
@@ -587,22 +581,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     // stub of code commented out in case we want to make it work
                     // meanwhile longest entry is being used SEE below
 
-//        int column0Length = 0;
-//        int column1Length = 0;
-//        FontMetrics fm = table.getFontMetrics(table.getFont());
-//        for (int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
-//            String test = table.getValueAt(rowIndex,0).toString();
-//            int currColumn0Length = fm.stringWidth(table.getValueAt(rowIndex,0).toString());
-//            if (currColumn0Length > column0Length) {
-//                column0Length = currColumn0Length;
-//            }
-//
-//            String test2 = table.getValueAt(rowIndex,1).toString();
-//            int currColumn1Length = fm.stringWidth(table.getValueAt(rowIndex,1).toString());
-//            if (currColumn1Length > column1Length) {
-//                column1Length = currColumn1Length;
-//            }
-//        }
 
 
                     if (selectedMasks != null) {
@@ -772,8 +750,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
-        //     ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percentile (%)", "Value Threshold", new Color(127, 0, 0));
-
         ChartPanel percentilePanel = createChartPanel(percentileSeries, "Percent Threshold", logTitle + getRaster().getName() + " (" + getRaster().getUnit() + ")", new Color(127, 0, 0));
 
         int size = getRaster().getRasterHeight() * getRaster().getRasterWidth();
@@ -785,11 +761,12 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         Object[][] firstData =
                 new Object[][]{
-                        new Object[]{"RasterSize(Pixels):", size},
-                        new Object[]{"SampleSize(Pixels):", histogram.getTotals()[0]},
-                        new Object[]{"Minimum:", stx.getMinimum()},
-                        new Object[]{"Maximum:", stx.getMaximum()},
-                        new Object[]{"Mean:", stx.getMean()}
+                        new Object[]{"RasterSize(Pixels)", size},
+                        new Object[]{"SampleSize(Pixels)", histogram.getTotals()[0]},
+                        new Object[]{"Minimum", stx.getMinimum()},
+                        new Object[]{"Maximum", stx.getMaximum()},                        new Object[]{"SampleSize(Pixels)", histogram.getTotals()[0]},
+
+                        new Object[]{"Mean", stx.getMean()}
                 };
                 dataRows += firstData.length;
 
@@ -797,7 +774,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         Object[] medianObject = null;
 
         if (includeMedian) {
-           medianObject = new Object[]{"Median:", stx.getMedianRaster()};
+           medianObject = new Object[]{"Median", stx.getMedianRaster()};
 
             dataRows++;
         }
@@ -806,11 +783,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         Object[][] secondData =
                 new Object[][]{
-                        new Object[]{"StandardDeviation:", stx.getStandardDeviation()},
-                        new Object[]{"CoefficientOfVariation:", getCoefficientOfVariation(stx)},
+                        new Object[]{"StandardDeviation", stx.getStandardDeviation()},
+                        new Object[]{"CoefficientOfVariation", getCoefficientOfVariation(stx)},
                         //     new Object[]{"", ""},
-                        new Object[]{"TotalBins:", histogram.getNumBins()[0]},
-                        new Object[]{"BinWidth:", getBinSize(histogram)}
+                        new Object[]{"TotalBins", histogram.getNumBins()[0]},
+                        new Object[]{"BinWidth", getBinSize(histogram)}
                 };
         dataRows += secondData.length;
 
@@ -820,50 +797,19 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (includeHistogramStats) {
             if (LogMode) {
               histogramStats =  new Object[][]{
-                        new Object[]{"Mean(LogBinned):", Math.pow(10, histogram.getMean()[0])},
+                        new Object[]{"Mean(LogBinned)", Math.pow(10, histogram.getMean()[0])},
                         new Object[]{"Median(LogBinned)", Math.pow(10, stx.getMedian())},
-                        new Object[]{"StandardDeviation(LogBinned):", Math.pow(10, histogram.getStandardDeviation()[0])}
+                        new Object[]{"StandardDeviation(LogBinned)", Math.pow(10, histogram.getStandardDeviation()[0])}
                 };
             } else {
                 histogramStats =  new Object[][]{
-                        new Object[]{"Mean(Binned):", histogram.getMean()[0]},
+                        new Object[]{"Mean(Binned)", histogram.getMean()[0]},
                         new Object[]{"Median(Binned)", stx.getMedian()},
-                        new Object[]{"StandardDeviation(Binned):", histogram.getStandardDeviation()[0]}
+                        new Object[]{"StandardDeviation(Binned)", histogram.getStandardDeviation()[0]}
                 };
             }
             dataRows += histogramStats.length;
         }
-
-//        Object[] meanBinned = null;
-//        if (includeMeanBinned) {
-//            if (LogMode) {
-//                meanBinned = new Object[]{"Mean(LogBinned):", Math.pow(10, histogram.getMean()[0])};
-//            } else {
-//                meanBinned = new Object[]{"Mean(Binned):", histogram.getMean()[0]};
-//            }
-//            dataRows += 1;
-//        }
-//
-//
-//        Object[] medianBinned = null;
-//        if (includeMedianBinned) {
-//            if (LogMode) {
-//                medianBinned = new Object[]{"Median(LogBinned)", Math.pow(10, stx.getMedian())};
-//            } else {
-//                medianBinned = new Object[]{"Median(Binned)", stx.getMedian()};
-//            }
-//            dataRows += 1;
-//        }
-//
-//        Object[] stdDevBinned = null;
-//        if (includeStdDevBinned) {
-//            if (LogMode) {
-//                stdDevBinned = new Object[]{"StandardDeviation(LogBinned):", Math.pow(10, histogram.getStandardDeviation()[0])};
-//            } else {
-//                stdDevBinned = new Object[]{"StandardDeviation(Binned):", histogram.getStandardDeviation()[0]};
-//            }
-//            dataRows += 1;
-//        }
 
 
         Object[][] percentData = new Object[percentThresholdsList.size()][];
@@ -874,17 +820,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
             Object[] pTileThreshold;
             if (LogMode) {
-                pTileThreshold = new Object[]{percentString + "%Threshold(LogBinned):", Math.pow(10, histogram.getPTileThreshold(percent)[0])};
+                pTileThreshold = new Object[]{percentString + "%Threshold(LogBinned)", Math.pow(10, histogram.getPTileThreshold(percent)[0])};
             } else {
-                pTileThreshold = new Object[]{percentString + "%Threshold(Binned):", histogram.getPTileThreshold(percent)[0]};
+                pTileThreshold = new Object[]{percentString + "%Threshold(Binned)", histogram.getPTileThreshold(percent)[0]};
             }
             percentData[i] = pTileThreshold;
         }
         dataRows += percentData.length;
 
-
-
-      //  int tableDataSize = firstData.length + percentData.length;
 
         Object[][] tableData = new Object[dataRows][];
         int tableDataIdx = 0;
@@ -908,20 +851,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
         }
 
-//        if (meanBinned != null) {
-//            tableData[tableDataIdx] = meanBinned;
-//            tableDataIdx++;
-//        }
-//
-//        if (medianBinned != null) {
-//            tableData[tableDataIdx] = medianBinned;
-//            tableDataIdx++;
-//        }
-//
-//        if (stdDevBinned != null) {
-//            tableData[tableDataIdx] = stdDevBinned;
-//            tableDataIdx++;
-//        }
 
         if (histogramStats != null) {
             for (int i = 0; i < histogramStats.length; i++) {
@@ -1187,6 +1116,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         return resultText.toString();
     }
 
+
+
+    // todo This part has not been updated by Danny
     private String createText(final Stx stx, final Mask mask) {
 
         if (stx.getSampleCount() == 0) {
@@ -1426,9 +1358,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 try {
                     colCharWidth = Integer.parseInt(textField.getText().toString());
 
-                    if (colCharWidth <= 0 || colCharWidth > 50) {
+                    if (colCharWidth < 0 || colCharWidth > 50) {
                         JOptionPane.showMessageDialog(getParentDialogContentPane(),
-                                "ERROR: Valid " + TEXTFIELD_NAME_COL_WIDTH + " range is (1 to " + "50" + ") ",
+                                "ERROR: Valid " + TEXTFIELD_NAME_COL_WIDTH + " range is (0 to " + "50" + ") ",
                                 "Invalid Input",
                                 JOptionPane.ERROR_MESSAGE);
 
@@ -1572,25 +1504,28 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         int colPreferredWidthData = fm.stringWidth(sampleEntry.toString());
         int tableWidth = 0;
+        int bufferWidth = fm.stringWidth("nn");
 
 
         for (int i = 0; i < statsSpreadsheet[0].length; i++) {
             column = table.getColumnModel().getColumn(i);
-            if (i <= 1) {
+
+            if (colCharWidth < 8) {
+                String header = statsSpreadsheet[0][i].toString();
+                int headerWidth = fm.stringWidth(header) + bufferWidth;
+
+                column.setPreferredWidth(headerWidth);
+                column.setMaxWidth(headerWidth);
+                column.setMinWidth(headerWidth);
+                tableWidth += headerWidth;
+            } else {
                 column.setPreferredWidth(colPreferredWidthData);
                 column.setMaxWidth(colPreferredWidthData);
                 column.setMinWidth(colPreferredWidthData);
                 tableWidth += colPreferredWidthData;
-            } else {
-                column.setMinWidth(colPreferredWidthData);
-                tableWidth += colPreferredWidthData;
             }
-
         }
 
-//
-//        Dimension dim = table.getPreferredSize();
-//        table.setPreferredSize(new Dimension(tablePreferredWidth, dim.height));
 
         table.setPreferredSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
 
