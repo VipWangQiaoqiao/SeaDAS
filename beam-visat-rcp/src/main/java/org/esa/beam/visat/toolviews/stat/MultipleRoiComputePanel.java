@@ -62,6 +62,10 @@ class MultipleRoiComputePanel extends JPanel {
 
     private QuickListFilterField maskNameSearchField;
 
+    public boolean isIncludeUnmasked() {
+        return includeUnmasked;
+    }
+
     interface ComputeMasks {
 
         void compute(Mask[] selectedMasks);
@@ -71,10 +75,12 @@ class MultipleRoiComputePanel extends JPanel {
 
     private AbstractButton refreshButton;
     private JCheckBox useRoiCheckBox;
+    private JCheckBox includeUnmaskedCheckBox;
     private CheckBoxList maskNameList;
     private JCheckBox selectAllCheckBox;
     private JCheckBox selectNoneCheckBox;
     private boolean validFields = true;
+    private boolean includeUnmasked = true;
 
     private RasterDataNode raster;
     private Product product;
@@ -89,7 +95,8 @@ class MultipleRoiComputePanel extends JPanel {
         JPanel topPane = getTopPanel(method, rasterDataNode);
 
 
-        useRoiCheckBox = new JCheckBox("Use ROI mask(s):");
+      //  useRoiCheckBox = new JCheckBox("Use ROI mask(s):");
+        useRoiCheckBox = new JCheckBox("ROI Mask(s)");
         useRoiCheckBox.addActionListener(new ActionListener() {
 
             @Override
@@ -99,6 +106,21 @@ class MultipleRoiComputePanel extends JPanel {
         });
         useRoiCheckBox.setMinimumSize(useRoiCheckBox.getPreferredSize());
         useRoiCheckBox.setPreferredSize(useRoiCheckBox.getPreferredSize());
+
+
+
+        includeUnmaskedCheckBox = new JCheckBox("Full Scene");
+        includeUnmaskedCheckBox.setSelected(includeUnmasked);
+        includeUnmaskedCheckBox.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                includeUnmasked = includeUnmaskedCheckBox.isSelected();
+                updateEnablement(validFields);
+            }
+        });
+        includeUnmaskedCheckBox.setMinimumSize(includeUnmaskedCheckBox.getPreferredSize());
+        includeUnmaskedCheckBox.setPreferredSize(includeUnmaskedCheckBox.getPreferredSize());
 
 
         JPanel maskFilterPane = getMaskFilterPanel();
@@ -113,10 +135,19 @@ class MultipleRoiComputePanel extends JPanel {
         panel.add(topPane, gbc);
         gbc = GridBagUtils.restoreConstraints(gbc);
 
+
+
+        gbc.gridy++;
+        panel.add(includeUnmaskedCheckBox, gbc);
+
         gbc.gridy++;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets.top = 5;
         panel.add(new TitledSeparator("Masking Options", SwingConstants.CENTER), gbc);
         gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.insets.top = 0;
+
+
 
 
         gbc.gridy++;
@@ -235,7 +266,7 @@ class MultipleRoiComputePanel extends JPanel {
         maskNameList.setEnabled(canSelectMasks);
         selectAllCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length < maskNameList.getModel().getSize());
         selectNoneCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length > 0);
-        refreshButton.setEnabled(validFields && raster != null);
+        refreshButton.setEnabled(validFields && raster != null && (useRoiCheckBox.isSelected() || includeUnmaskedCheckBox.isSelected()));
     }
 
     private class PNL implements ProductNodeListener {

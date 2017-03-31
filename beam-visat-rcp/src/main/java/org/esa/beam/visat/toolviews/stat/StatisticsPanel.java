@@ -96,8 +96,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private boolean includeMedian = true;
 
 
-
-
     private MultipleRoiComputePanel computePanel;
     private JPanel backgroundPanel;
     private AbstractButton hideAndShowButton;
@@ -549,7 +547,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     @Override
     public void compute(final Mask[] selectedMasks) {
-        this.histograms = new Histogram[selectedMasks.length];
+
+        final int numHistograms = (computePanel.isIncludeUnmasked()) ? (selectedMasks.length+1) : selectedMasks.length+1;
+
+
+        this.histograms = new Histogram[numHistograms];
         final String title = "Computing Statistics";
 
         percentThresholdsList = getPercentThresholdsList();
@@ -582,39 +584,63 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     // meanwhile longest entry is being used SEE below
 
 
+//
+//                    if (selectedMasks != null) {
+//                        numProductRegions = selectedMasks.length;
+//                    } else {
+//                        numProductRegions = 1;
+//                    }
 
-                    if (selectedMasks != null) {
-                        numProductRegions = selectedMasks.length;
-                    } else {
-                        numProductRegions = 1;
-                    }
-
+                    numProductRegions = numHistograms;
 
 
                     final int binCount = numBins;
-                    int row = 1;
-                    for (int i = 0; i < selectedMasks.length; i++) {
-                        final Mask mask = selectedMasks[i];
-                        final Stx stx;
-                        ProgressMonitor subPm = SubProgressMonitor.create(pm, 1);
-                        if (mask == null) {
-                            stx = new StxFactory()
-                                    .withHistogramBinCount(binCount)
-                                    .withLogHistogram(LogMode)
-                                    .create(getRaster(), subPm);
-
-                            getRaster().setStx(stx);
-                        } else {
-                            stx = new StxFactory()
-                                    .withHistogramBinCount(binCount)
-                                    .withLogHistogram(LogMode)
-                                    .withRoiMask(mask)
-                                    .create(getRaster(), subPm);
 
 
+                    int histogramIdx = 0;
+
+                    if (computePanel.isIncludeUnmasked()) {
+                        final Stx stx1;
+                        ProgressMonitor subPm1 = SubProgressMonitor.create(pm, 1);
+                        stx1 = new StxFactory()
+                                .withHistogramBinCount(binCount)
+                                .withLogHistogram(LogMode)
+                                .create(getRaster(), subPm1);
+                        histograms[0] = stx1.getHistogram();
+                        publish(new ComputeResult(stx1, null));
+
+                        histogramIdx++;
+                    }
+
+
+                    if (selectedMasks != null) {
+                        for (int i = 0; i < selectedMasks.length; i++) {
+                            final Mask mask = selectedMasks[i];
+
+                            if (mask != null) {
+                                final Stx stx;
+                                ProgressMonitor subPm = SubProgressMonitor.create(pm, 1);
+//                        if (mask == null) {
+//                            stx = new StxFactory()
+//                                    .withHistogramBinCount(binCount)
+//                                    .withLogHistogram(LogMode)
+//                                    .create(getRaster(), subPm);
+//
+//                            getRaster().setStx(stx);
+//                        } else {
+                                stx = new StxFactory()
+                                        .withHistogramBinCount(binCount)
+                                        .withLogHistogram(LogMode)
+                                        .withRoiMask(mask)
+                                        .create(getRaster(), subPm);
+//
+//
+//                        }
+                                histograms[histogramIdx] = stx.getHistogram();
+                                publish(new ComputeResult(stx, mask));
+                                histogramIdx++;
+                            }
                         }
-                        histograms[i] = stx.getHistogram();
-                        publish(new ComputeResult(stx, mask));
                     }
                 } finally {
                     pm.done();
