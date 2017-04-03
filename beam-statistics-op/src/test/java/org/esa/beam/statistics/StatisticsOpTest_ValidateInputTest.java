@@ -21,7 +21,7 @@ public class StatisticsOpTest_ValidateInputTest {
         statisticsOp.setParameterDefaultValues();
         statisticsOp.startDate = ProductData.UTC.parse("2010-01-31 14:45:23", "yyyy-MM-ss hh:mm:ss");
         statisticsOp.endDate = ProductData.UTC.parse("2010-01-31 14:46:23", "yyyy-MM-ss hh:mm:ss");
-        statisticsOp.accuracy = 0;
+   //     statisticsOp.accuracy = 0;
         statisticsOp.sourceProducts = new Product[]{TestUtil.getTestProduct()};
     }
 
@@ -31,7 +31,7 @@ public class StatisticsOpTest_ValidateInputTest {
 
     @Test
     public void testValidation_PrecisionLessThanMinPrecision() {
-        statisticsOp.accuracy = -1;
+    //    statisticsOp.accuracy = -1;
 
         try {
             statisticsOp.validateInput();
@@ -43,7 +43,7 @@ public class StatisticsOpTest_ValidateInputTest {
 
     @Test
     public void testValidation_PrecisionGreaterThanMaxPrecision() {
-        statisticsOp.accuracy = 7;
+ //       statisticsOp.accuracy = 7;
 
         try {
             statisticsOp.validateInput();

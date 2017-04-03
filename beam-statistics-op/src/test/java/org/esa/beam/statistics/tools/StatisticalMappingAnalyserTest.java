@@ -20,12 +20,12 @@ public class StatisticalMappingAnalyserTest {
     @Test
     public void test_OneStatisticalMeasurement_TwoGeophysicalParameter() {
         final TreeSet<String> fullNames = new TreeSet<String>();
-        fullNames.add(StatisticsOp.MEDIAN + "_CHL");
-        fullNames.add(StatisticsOp.MEDIAN + "_YS");
+        fullNames.add(StatisticsOp.MEDIAN_OLD_50P + "_CHL");
+        fullNames.add(StatisticsOp.MEDIAN_OLD_50P + "_YS");
         final StatisticalMappingAnalyser mappingAnalyser = new StatisticalMappingAnalyser(fullNames);
 
         assertEquals(1, mappingAnalyser.getStatisticalMeasureNames().length);
-        assertEquals(StatisticsOp.MEDIAN, mappingAnalyser.getStatisticalMeasureNames()[0]);
+        assertEquals(StatisticsOp.MEDIAN_OLD_50P, mappingAnalyser.getStatisticalMeasureNames()[0]);
 
         assertEquals(2, mappingAnalyser.getGeophysicalParameterNames().length);
         assertEquals("CHL", mappingAnalyser.getGeophysicalParameterNames()[0]);
@@ -35,12 +35,12 @@ public class StatisticalMappingAnalyserTest {
     @Test
     public void test_TwoStatisticalMeasurement_OneGeophysicalParameter() {
         final TreeSet<String> fullNames = new TreeSet<String>();
-        fullNames.add(StatisticsOp.MEDIAN +"_CHL");
+        fullNames.add(StatisticsOp.MEDIAN_OLD_50P +"_CHL");
         fullNames.add(StatisticsOp.MINIMUM + "_CHL");
         final StatisticalMappingAnalyser mappingAnalyser = new StatisticalMappingAnalyser(fullNames);
 
         assertEquals(2, mappingAnalyser.getStatisticalMeasureNames().length);
-        assertEquals(StatisticsOp.MEDIAN, mappingAnalyser.getStatisticalMeasureNames()[0]);
+        assertEquals(StatisticsOp.MEDIAN_OLD_50P, mappingAnalyser.getStatisticalMeasureNames()[0]);
         assertEquals(StatisticsOp.MINIMUM, mappingAnalyser.getStatisticalMeasureNames()[1]);
 
         assertEquals(1, mappingAnalyser.getGeophysicalParameterNames().length);
@@ -50,9 +50,9 @@ public class StatisticalMappingAnalyserTest {
     @Test
     public void testWithManyOfBothSides() {
         final TreeSet<String> fullNames = new TreeSet<String>();
-        fullNames.add(StatisticsOp.MEDIAN +"_CHL");
-        fullNames.add(StatisticsOp.MEDIAN +"_YS");
-        fullNames.add(StatisticsOp.MEDIAN +"_TSM");
+        fullNames.add(StatisticsOp.MEDIAN_OLD_50P +"_CHL");
+        fullNames.add(StatisticsOp.MEDIAN_OLD_50P +"_YS");
+        fullNames.add(StatisticsOp.MEDIAN_OLD_50P +"_TSM");
         fullNames.add(StatisticsOp.MINIMUM +"_CHL");
         fullNames.add(StatisticsOp.MINIMUM +"_YS");
         fullNames.add(StatisticsOp.MINIMUM +"_TSM");
@@ -62,9 +62,9 @@ public class StatisticalMappingAnalyserTest {
         fullNames.add(StatisticsOp.MAXIMUM +"_CHL");
         fullNames.add(StatisticsOp.MAXIMUM +"_YS");
         fullNames.add(StatisticsOp.MAXIMUM +"_TSM");
-        fullNames.add(StatisticsOp.AVERAGE +"_CHL");
-        fullNames.add(StatisticsOp.AVERAGE +"_YS");
-        fullNames.add(StatisticsOp.AVERAGE +"_TSM");
+        fullNames.add(StatisticsOp.MEAN +"_CHL");
+        fullNames.add(StatisticsOp.MEAN +"_YS");
+        fullNames.add(StatisticsOp.MEAN +"_TSM");
         fullNames.add(StatisticsOp.SIGMA +"_CHL");
         fullNames.add(StatisticsOp.SIGMA +"_YS");
         fullNames.add(StatisticsOp.SIGMA +"_TSM");
@@ -74,10 +74,10 @@ public class StatisticalMappingAnalyserTest {
         final StatisticalMappingAnalyser mappingAnalyser = new StatisticalMappingAnalyser(fullNames);
 
         assertEquals(7, mappingAnalyser.getStatisticalMeasureNames().length);
-        assertEquals(StatisticsOp.AVERAGE, mappingAnalyser.getStatisticalMeasureNames()[0]);
+        assertEquals(StatisticsOp.MEAN, mappingAnalyser.getStatisticalMeasureNames()[0]);
         assertEquals(StatisticsOp.MAX_ERROR, mappingAnalyser.getStatisticalMeasureNames()[1]);
         assertEquals(StatisticsOp.MAXIMUM, mappingAnalyser.getStatisticalMeasureNames()[2]);
-        assertEquals(StatisticsOp.MEDIAN, mappingAnalyser.getStatisticalMeasureNames()[3]);
+        assertEquals(StatisticsOp.MEDIAN_OLD_50P, mappingAnalyser.getStatisticalMeasureNames()[3]);
         assertEquals(StatisticsOp.MINIMUM, mappingAnalyser.getStatisticalMeasureNames()[4]);
         assertEquals("p90_threshold", mappingAnalyser.getStatisticalMeasureNames()[5]);
         assertEquals(StatisticsOp.SIGMA, mappingAnalyser.getStatisticalMeasureNames()[6]);

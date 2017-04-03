@@ -12,7 +12,7 @@
 
     <name>BEAM Statistics Operator</name>
     <artifactId>beam-statistics-op</artifactId>
-    <version>5.0</version>
+    <version>7.4.1</version>
 
     <description>A statistics operator for BEAM</description>
     <packaging>jar</packaging>

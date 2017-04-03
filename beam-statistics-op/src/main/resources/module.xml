@@ -2,18 +2,32 @@
     <manifestVersion>1.0.0</manifestVersion>
 
     <symbolicName>beam-statistics-op</symbolicName>
-    <version>5.0</version>
+    <version>7.4.1</version>
     <name>BEAM Statistics Operator</name>
     <funding>EU</funding>
 
+    <!--<changeLog>-->
+        <!--<![CDATA[-->
+        <!--1. Changed field "median" to actually be calculated from the raster median.  Previously it was the 50% threshold of the histogram.-->
+        <!--2. Removed the calling parameter "accuracy", and instead using "numBins".-->
+        <!--3. Default percent thresholds are now {50,80,85,90,95,98}, previously they were {90,95}.-->
+        <!--4. "Max Error" field name changed to "BinWidth"-->
+        <!--5. Added "CoefficientOfVariation" field and "TotalBins" field-->
+        <!--6. Changed all field names and their order to match that of the GUI.-->
+         <!--]]>-->
+    <!--</changeLog>-->
+
+
     <description>
         <![CDATA[
-            The beam-statistics module contains an operator for computing statistics for a set of input products and
-            regions.
+            The statistics module contains an operator for computing statistics for a set of input products and
+            regions.  This is the NASA version and slightly varies from the BEAM version.  Version set at 7.4.1 (it was 5.0)
+            to not be confused with BEAM versioning scheme.
         ]]>
     </description>
 
-    <vendor>Brockmann Consult GmbH</vendor>
+
+    <vendor>Brockmann Consult GmbH, NASA</vendor>
     <contactAddress>Max-Planck-Str. 2, 21502 Geesthacht (Germany)</contactAddress>
     <copyright>(C) 2014 by Brockmann Consult GmbH</copyright>
     <url>http://envisat.esa.int/beam</url>

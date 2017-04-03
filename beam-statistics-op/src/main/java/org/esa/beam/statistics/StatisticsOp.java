@@ -75,27 +75,35 @@ import java.util.logging.Level;
  * @author Sabine Embacher
  * @author Tonio Fincke
  * @author Thomas Storm
+ * @author Daniel Knowles
+ * April 2 revision: added real raster based median and removed histogram based 50% median (but add a 50% threshold so it's not truly gone)
  */
 @OperatorMetadata(alias = "StatisticsOp",
-                  version = "1.0",
-                  authors = "Sabine Embacher, Tonio Fincke, Thomas Storm",
+                  version = "7.4.1",
+                  authors = "Sabine Embacher, Tonio Fincke, Thomas Storm, Daniel Knowles",
                   copyright = "(c) 2012 by Brockmann Consult GmbH",
                   description = "Computes statistics for an arbitrary number of source products.",
                   autoWriteDisabled = true)
 public class StatisticsOp extends Operator {
 
     public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    public static final String MAXIMUM = "maximum";
-    public static final String MINIMUM = "minimum";
-    public static final String MEDIAN = "median";
-    public static final String AVERAGE = "average";
-    public static final String SIGMA = "sigma";
-    public static final String MAX_ERROR = "max_error";
-    public static final String TOTAL = "total";
-    public static final String PERCENTILE_PREFIX = "p";
-    public static final String PERCENTILE_SUFFIX = "_threshold";
-    public static final String DEFAULT_PERCENTILES = "90,95";
-    public static final int[] DEFAULT_PERCENTILES_INTS = new int[]{90, 95};
+    public static final String TOTAL = "SampleSize(Pixels)";
+    public static final String MAXIMUM = "Maximum";
+    public static final String MINIMUM = "Minimum";
+    public static final String MEDIAN_OLD_50P = "50%ThresholdHistogram"; // was "Median".  This variable no longer used.
+    public static final String MEDIAN = "Median";
+    public static final String MEAN = "Mean";
+    public static final String SIGMA = "StandardDeviation";
+    public static final String COEF_VARIATION = "CoefficientOfVariation";
+    public static final String TOTAL_BINS = "TotalBins";
+    public static final String BIN_WIDTH = "BinWidth";
+    public static final String MAX_ERROR = "max_error"; // This variable no longer used.
+
+    public static final String PERCENTILE_PREFIX = "";
+    public static final String PERCENTILE_SUFFIX = "%Threshold";
+    public static final String DEFAULT_PERCENTILES = "50,80,85,90,95,98";
+    public static final int[] DEFAULT_PERCENTILES_INTS = new int[]{50,80,85,90,95,98};
+
 
     private static final double FILL_VALUE = -999.0;
 
@@ -142,10 +150,14 @@ public class StatisticsOp extends Operator {
                notNull = false, defaultValue = DEFAULT_PERCENTILES)
     int[] percentiles;
 
-    @Parameter(description = "The degree of accuracy used for statistics computation. Higher numbers " +
-            "indicate higher accuracy but may lead to a considerably longer computation time.",
-               defaultValue = "3")
-    int accuracy;
+//    @Parameter(description = "The degree of accuracy used for statistics computation. Higher numbers " +
+//            "indicate higher accuracy but may lead to a considerably longer computation time.",
+//               defaultValue = "3")
+//    int accuracy;
+
+    @Parameter(description = "The number of bins to use in the histogram statistics",
+            defaultValue = "1000")
+    int numBins;
 
     final Set<StatisticsOutputter> statisticsOutputters = new HashSet<StatisticsOutputter>();
 
@@ -160,7 +172,8 @@ public class StatisticsOp extends Operator {
         setDummyTargetProduct();
         validateInput();
 
-        final StatisticComputer statisticComputer = new StatisticComputer(shapefile, bandConfigurations, Util.computeBinCount(accuracy), getLogger());
+      //  final StatisticComputer statisticComputer = new StatisticComputer(shapefile, bandConfigurations, Util.computeBinCount(accuracy), getLogger());
+        final StatisticComputer statisticComputer = new StatisticComputer(shapefile, bandConfigurations, numBins, getLogger());
 
         final ProductValidator productValidator = new ProductValidator(Arrays.asList(bandConfigurations), startDate, endDate, getLogger());
         final ProductLoop productLoop = new ProductLoop(new ProductLoader(), productValidator, statisticComputer, getLogger());
@@ -234,28 +247,39 @@ public class StatisticsOp extends Operator {
                 final Histogram histogram = histogramMap.get(regionName).getHistogram();
                 final HashMap<String, Number> stxMap = new HashMap<String, Number>();
                 if (histogram.getTotals()[0] == 0) {
+                    stxMap.put(TOTAL, 0);
                     stxMap.put(MINIMUM, FILL_VALUE);
                     stxMap.put(MAXIMUM, FILL_VALUE);
-                    stxMap.put(AVERAGE, FILL_VALUE);
-                    stxMap.put(SIGMA, FILL_VALUE);
-                    stxMap.put(TOTAL, 0);
+                    stxMap.put(MEAN, FILL_VALUE);
                     stxMap.put(MEDIAN, FILL_VALUE);
+                    stxMap.put(SIGMA, FILL_VALUE);
+                    stxMap.put(COEF_VARIATION, FILL_VALUE);
+                    stxMap.put(TOTAL_BINS, FILL_VALUE);
+                    stxMap.put(BIN_WIDTH, FILL_VALUE);
+
                     for (int percentile : percentiles) {
                         stxMap.put(getPercentileName(percentile), FILL_VALUE);
                     }
                 } else {
+                    double median = summaryStxOp.getMedian();
+                    double stdDev = summaryStxOp.getStandardDeviation();
+
+                    stxMap.put(TOTAL, histogram.getTotals()[0]);
                     stxMap.put(MINIMUM, summaryStxOp.getMinimum());
                     stxMap.put(MAXIMUM, summaryStxOp.getMaximum());
-                    stxMap.put(AVERAGE, summaryStxOp.getMean());
-                    stxMap.put(SIGMA, summaryStxOp.getStandardDeviation());
-                    stxMap.put(TOTAL, histogram.getTotals()[0]);
-                    stxMap.put(MEDIAN, histogram.getPTileThreshold(0.5)[0]);
+                    stxMap.put(MEAN, summaryStxOp.getMean());
+                    stxMap.put(MEDIAN, median);
+                    stxMap.put(SIGMA, stdDev);
+                    stxMap.put(COEF_VARIATION, Util.getCoefficientOfVariation(stdDev, median));
+                    stxMap.put(TOTAL_BINS, histogram.getNumBins()[0]);
+                    stxMap.put(BIN_WIDTH, Util.getBinWidth(histogram));
+
                     for (int percentile : percentiles) {
                         stxMap.put(getPercentileName(percentile), computePercentile(percentile, histogram));
                     }
                 }
 
-                stxMap.put(MAX_ERROR, Util.getBinWidth(histogram));
+            //    stxMap.put(MAX_ERROR, Util.getBinWidth(histogram));
                 for (StatisticsOutputter statisticsOutputter : statisticsOutputters) {
                     statisticsOutputter.addToOutput(bandName, regionName, stxMap);
                 }
@@ -302,18 +326,22 @@ public class StatisticsOp extends Operator {
 
     public static String[] getAlgorithmNames(int[] percentiles) {
         final List<String> algorithms = new ArrayList<String>();
+        algorithms.add(TOTAL);
         algorithms.add(MINIMUM);
         algorithms.add(MAXIMUM);
+        algorithms.add(MEAN);
         algorithms.add(MEDIAN);
-        algorithms.add(AVERAGE);
         algorithms.add(SIGMA);
+        algorithms.add(COEF_VARIATION);
+        algorithms.add(TOTAL_BINS);
+        algorithms.add(BIN_WIDTH);
         for (int percentile : percentiles) {
             algorithms.add(getPercentileName(percentile));
         }
-        algorithms.add(MAX_ERROR);
-        algorithms.add(TOTAL);
+
         return algorithms.toArray(new String[algorithms.size()]);
     }
+
 
     private static String getPercentileName(int percentile) {
         return PERCENTILE_PREFIX + percentile + PERCENTILE_SUFFIX;
@@ -375,11 +403,17 @@ public class StatisticsOp extends Operator {
         if (startDate != null && endDate != null && endDate.getAsDate().before(startDate.getAsDate())) {
             throw new OperatorException("End date '" + this.endDate + "' before start date '" + this.startDate + "'");
         }
-        if (accuracy < 0) {
-            throw new OperatorException("Parameter 'accuracy' must be greater than or equal to " + 0);
+//        if (accuracy < 0) {
+//            throw new OperatorException("Parameter 'accuracy' must be greater than or equal to " + 0);
+//        }
+//        if (accuracy > Util.MAX_ACCURACY) {
+//            throw new OperatorException("Parameter 'accuracy' must be less than or equal to " + Util.MAX_ACCURACY);
+//        }
+        if (numBins < Util.MIN_NUMBINS) {
+            throw new OperatorException("Parameter 'numBins' must be greater than or equal to " + Util.MIN_NUMBINS);
         }
-        if (accuracy > Util.MAX_ACCURACY) {
-            throw new OperatorException("Parameter 'accuracy' must be less than or equal to " + Util.MAX_ACCURACY);
+        if (numBins > Util.MAX_NUMBINS) {
+            throw new OperatorException("Parameter 'numBins' must be less than or equal to " + Util.MAX_NUMBINS);
         }
         if ((sourceProducts == null || sourceProducts.length == 0) &&
                 (sourceProductPaths == null || sourceProductPaths.length == 0)) {
@@ -475,5 +509,8 @@ public class StatisticsOp extends Operator {
             super(StatisticsOp.class);
         }
     }
+
+
+
 
 }

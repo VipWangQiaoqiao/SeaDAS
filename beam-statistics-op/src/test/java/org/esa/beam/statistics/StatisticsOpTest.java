@@ -104,7 +104,7 @@ public class StatisticsOpTest {
         statisticsOp.bandConfigurations = new BandConfiguration[]{bandConfiguration};
         statisticsOp.sourceProducts = new Product[]{TestUtil.getTestProduct()};
         statisticsOp.shapefile = new File(getClass().getResource("4_pixels.shp").getFile());
-        statisticsOp.accuracy = 6;
+    //    statisticsOp.accuracy = 6;
 
         final MyOutputter outputter = new MyOutputter();
         statisticsOp.statisticsOutputters.add(outputter);

@@ -27,7 +27,9 @@ import javax.media.jai.Histogram;
  */
 public class Util {
 
-    public static final int MAX_ACCURACY = 6;
+    public static final int MAX_ACCURACY = 6; // no longer used
+    public static final int MAX_NUMBINS = 10000000;
+    public static final int MIN_NUMBINS = 1;
 
     /**
      * Returns the 'best' name of the given feature.
@@ -65,5 +67,9 @@ public class Util {
             throw new IllegalArgumentException("accuracy is not in the range 0 ... " + MAX_ACCURACY);
         }
         return (int) Math.pow(10, accuracy);
+    }
+
+    public static double getCoefficientOfVariation(double std_dev, double mean) {
+        return std_dev / mean;
     }
 }
