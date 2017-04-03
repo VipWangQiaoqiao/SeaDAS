@@ -790,8 +790,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                         new Object[]{"RasterSize(Pixels)", size},
                         new Object[]{"SampleSize(Pixels)", histogram.getTotals()[0]},
                         new Object[]{"Minimum", stx.getMinimum()},
-                        new Object[]{"Maximum", stx.getMaximum()},                        new Object[]{"SampleSize(Pixels)", histogram.getTotals()[0]},
-
+                        new Object[]{"Maximum", stx.getMaximum()},
                         new Object[]{"Mean", stx.getMean()}
                 };
                 dataRows += firstData.length;
