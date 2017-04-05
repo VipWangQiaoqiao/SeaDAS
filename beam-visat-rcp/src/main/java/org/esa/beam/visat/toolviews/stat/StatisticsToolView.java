@@ -25,24 +25,45 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
 
     public static final String ID = StatisticsToolView.class.getName();
 
-    public static final String PARAMETER_NAME_HISTOGRAM_PLOT_ENABLED = "statistics.histogramPlot.enabled";
-    public static final boolean DEFAULT_HISTOGRAM_PLOT_ENABLED = true;
+    public static final String PARAM_LABEL_HISTOGRAM_PLOT_ENABLED = "Show Histogram Plot";
+    public static final String PARAM_KEY_HISTOGRAM_PLOT_ENABLED = "statistics.histogramPlot.enabled";
+    public static final boolean PARAM_DEFVAL_HISTOGRAM_PLOT_ENABLED = true;
 
-    public static final String PARAMETER_NAME_PERCENT_PLOT_ENABLED = "statistics.percentPlot.enabled";
-    public static final boolean DEFAULT_PERCENT_PLOT_ENABLED = true;
+    public static final String PARAM_LABEL_PERCENT_PLOT_ENABLED = "Show Percentile Plot";
+    public static final String PARAM_KEY_PERCENT_PLOT_ENABLED = "statistics.percentPlot.enabled";
+    public static final boolean PARAM_DEFVAL_PERCENT_PLOT_ENABLED = true;
 
-    public static final String PARAMETER_NAME_STATS_LIST_ENABLED = "statistics.statsList.enabled";
-    public static final boolean DEFAULT_STATS_LIST_ENABLED = true;
+    public static final String PARAM_LABEL_STATS_LIST_ENABLED = "Show Statistics List";
+    public static final String PARAM_KEY_STATS_LIST_ENABLED = "statistics.statsList.enabled";
+    public static final boolean PARAM_DEFVAL_STATS_LIST_ENABLED = true;
 
-    public static final String PARAMETER_NAME_STATS_SPREADSHEET_ENABLED = "statistics.statsSpreadSheet.enabled";
-    public static final boolean DEFAULT_STATS_SPREADSHEET_ENABLED = true;
+    public static final String PARAM_LABEL_STATS_SPREADSHEET_ENABLED = "Show Statistics Spreadsheet";
+    public static final String PARAM_KEY_STATS_SPREADSHEET_ENABLED = "statistics.statsSpreadSheet.enabled";
+    public static final boolean PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED = true;
 
+    public static final String PARAM_LABEL_PERCENT_THRESHOLDS = "Thresholds";
+    public static final String PARAM_KEY_PERCENT_THRESHOLDS = "statistics.percentThresholds";
+    public static final String PARAM_DEFVAL_PERCENT_THRESHOLDS = "80,85,90,95,98";
 
+    public static final String PARAM_LABEL_NUM_BINS = "#Bins";
+    public static final String PARAM_KEY_NUM_BINS = "statistics.numBins";
+    public static final int PARAM_DEFVAL_NUM_BINS = 1000;
+    public static final int PARAM_MINVAL_NUM_BINS = 1;
+    public static final int PARAM_MAXVAL_NUM_BINS = 10000000;
 
+    public static final String PARAM_LABEL_HIST_DISPLAY_LOW_THRESH = "Thresh Range: Low";
+    public static final String PARAM_KEY_HIST_DISPLAY_LOW_THRESH = "statistics.histDisplayLowThresh";
+    public static final int PARAM_DEFVAL_HIST_DISPLAY_LOW_THRESH = 5;
+    public static final int PARAM_MINVAL_HIST_DISPLAY_LOW_THRESH = 0;
+    public static final int PARAM_MAXVAL_HIST_DISPLAY_LOW_THRESH = 100;
 
+    public static final String PARAM_LABEL_HIST_DISPLAY_HIGH_THRESH = "High";
+    public static final String PARAM_KEY_HIST_DISPLAY_HIGH_THRESH = "statistics.histDisplayHighThresh";
+    public static final int PARAM_DEFVAL_HIST_DISPLAY_HIGH_THRESH = 95;
+    public static final int PARAM_MINVAL_HIST_DISPLAY_HIGH_THRESH = 0;
+    public static final int PARAM_MAXVAL_HIST_DISPLAY_HIGH_THRESH = 100;
 
-
-    public static final String RESET_TO_DEFAULTS_PARAM_STR = "statistics.resetToDefaults.enabled";
+    public static final String PARAM_KEY_RESET_TO_DEFAULTS = "statistics.resetToDefaults.enabled";
 
 
     @Override

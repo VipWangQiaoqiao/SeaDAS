@@ -269,6 +269,9 @@ class MultipleRoiComputePanel extends JPanel {
         refreshButton.setEnabled(validFields && raster != null && (useRoiCheckBox.isSelected() || includeUnmaskedCheckBox.isSelected()));
     }
 
+    void updateEnablement() {
+        refreshButton.setEnabled(validFields && raster != null && (useRoiCheckBox.isSelected() || includeUnmaskedCheckBox.isSelected()));
+    }
     private class PNL implements ProductNodeListener {
 
         @Override

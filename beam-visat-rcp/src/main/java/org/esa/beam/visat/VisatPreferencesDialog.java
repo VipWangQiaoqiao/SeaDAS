@@ -892,7 +892,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             };
             final ParamChangeListener paramChangeListenerResetToDefaults = new ParamChangeListener() {
                 public void parameterValueChanged(ParamChangeEvent event) {
-                    if ((Boolean) getConfigParam(StatisticsToolView.RESET_TO_DEFAULTS_PARAM_STR).getValue()) {
+                    if ((Boolean) getConfigParam(StatisticsToolView.PARAM_KEY_RESET_TO_DEFAULTS).getValue()) {
                         resettingDefaults = true;
                         resetToDefaults();
                         resettingDefaults = false;
@@ -904,36 +904,49 @@ public class VisatPreferencesDialog extends ConfigDialog {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
 
-            param = new Parameter(StatisticsToolView.RESET_TO_DEFAULTS_PARAM_STR, false);
+            param = new Parameter(StatisticsToolView.PARAM_KEY_RESET_TO_DEFAULTS, false);
             param.getProperties().setLabel("RESTORE DEFAULTS (Statistics Preferences)");
             param.addParamChangeListener(paramChangeListenerResetToDefaults);
             configParams.addParameter(param);
 
 
 
-            param = new Parameter(StatisticsToolView.PARAMETER_NAME_HISTOGRAM_PLOT_ENABLED, StatisticsToolView.DEFAULT_HISTOGRAM_PLOT_ENABLED);
-            param.getProperties().setLabel("Show Histogram Plots");
+            param = new Parameter(StatisticsToolView.PARAM_KEY_HISTOGRAM_PLOT_ENABLED, StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_PLOT_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_HISTOGRAM_PLOT_ENABLED);
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
 
 
-            param = new Parameter(StatisticsToolView.PARAMETER_NAME_PERCENT_PLOT_ENABLED, StatisticsToolView.DEFAULT_PERCENT_PLOT_ENABLED);
-            param.getProperties().setLabel("Show Percentile Plots");
+            param = new Parameter(StatisticsToolView.PARAM_KEY_PERCENT_PLOT_ENABLED, StatisticsToolView.PARAM_DEFVAL_PERCENT_PLOT_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_PERCENT_PLOT_ENABLED);
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
 
-            param = new Parameter(StatisticsToolView.PARAMETER_NAME_STATS_LIST_ENABLED, StatisticsToolView.DEFAULT_STATS_LIST_ENABLED);
-            param.getProperties().setLabel("Show Statistics List");
+            param = new Parameter(StatisticsToolView.PARAM_KEY_STATS_LIST_ENABLED, StatisticsToolView.PARAM_DEFVAL_STATS_LIST_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_STATS_LIST_ENABLED);
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
 
-            param = new Parameter(StatisticsToolView.PARAMETER_NAME_STATS_SPREADSHEET_ENABLED, StatisticsToolView.DEFAULT_STATS_SPREADSHEET_ENABLED);
-            param.getProperties().setLabel("Show Statistics SpreadSheet");
+            param = new Parameter(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED, StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_STATS_SPREADSHEET_ENABLED);
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS, StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_NUM_BINS, StatisticsToolView.PARAM_DEFVAL_NUM_BINS);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_NUM_BINS);
+            param.getProperties().setMinValue(StatisticsToolView.PARAM_MINVAL_NUM_BINS);
+            param.getProperties().setMaxValue(StatisticsToolView.PARAM_MAXVAL_NUM_BINS);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
 
         }
 
@@ -955,28 +968,35 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
 
-            param = getConfigParam(StatisticsToolView.PARAMETER_NAME_HISTOGRAM_PLOT_ENABLED);
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_HISTOGRAM_PLOT_ENABLED);
             addParamToPane(optionsPane, param, gbcOptions);
             gbcOptions.gridy++;
 
-            param = getConfigParam(StatisticsToolView.PARAMETER_NAME_PERCENT_PLOT_ENABLED);
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_PLOT_ENABLED);
             addParamToPane(optionsPane, param, gbcOptions);
             gbcOptions.gridy++;
 
-            param = getConfigParam(StatisticsToolView.PARAMETER_NAME_STATS_LIST_ENABLED);
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_STATS_LIST_ENABLED);
             addParamToPane(optionsPane, param, gbcOptions);
             gbcOptions.gridy++;
 
-            param = getConfigParam(StatisticsToolView.PARAMETER_NAME_STATS_SPREADSHEET_ENABLED);
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED);
             addParamToPane(optionsPane, param, gbcOptions);
             gbcOptions.gridy++;
 
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_NUM_BINS);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
 
 
             JPanel resetPane = GridBagUtils.createPanel();
             GridBagConstraints gbcReset = GridBagUtils.createConstraints("");
             gbcReset.gridy = 0;
-            param = getConfigParam(StatisticsToolView.RESET_TO_DEFAULTS_PARAM_STR);
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_RESET_TO_DEFAULTS);
             addParamToPane(resetPane, param, gbcReset);
 
 
@@ -1015,10 +1035,12 @@ public class VisatPreferencesDialog extends ConfigDialog {
                 }
             };
 
-            getConfigParam(StatisticsToolView.PARAMETER_NAME_HISTOGRAM_PLOT_ENABLED).setValue(StatisticsToolView.DEFAULT_HISTOGRAM_PLOT_ENABLED, errorHandler);
-            getConfigParam(StatisticsToolView.PARAMETER_NAME_PERCENT_PLOT_ENABLED).setValue(StatisticsToolView.DEFAULT_PERCENT_PLOT_ENABLED, errorHandler);
-            getConfigParam(StatisticsToolView.PARAMETER_NAME_STATS_LIST_ENABLED).setValue(StatisticsToolView.DEFAULT_STATS_LIST_ENABLED, errorHandler);
-            getConfigParam(StatisticsToolView.PARAMETER_NAME_STATS_SPREADSHEET_ENABLED).setValue(StatisticsToolView.DEFAULT_STATS_SPREADSHEET_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_HISTOGRAM_PLOT_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_PLOT_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_PLOT_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_PERCENT_PLOT_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_STATS_LIST_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_STATS_LIST_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS).setValue(StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_NUM_BINS).setValue(StatisticsToolView.PARAM_DEFVAL_NUM_BINS, errorHandler);
 
         }
 
@@ -1031,7 +1053,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
                 }
             };
 
-            getConfigParam(StatisticsToolView.RESET_TO_DEFAULTS_PARAM_STR).setValue(false, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_RESET_TO_DEFAULTS).setValue(false, errorHandler);
         }
 
 
