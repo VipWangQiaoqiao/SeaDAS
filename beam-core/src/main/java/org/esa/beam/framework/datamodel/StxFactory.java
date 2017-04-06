@@ -48,6 +48,7 @@ public class StxFactory {
     private Boolean intHistogram;
     private Boolean logHistogram;
     private int[] histogramBins;
+    private boolean calculateMedian = false;
 
     public StxFactory() {
     }
@@ -70,6 +71,11 @@ public class StxFactory {
 
     public StxFactory withStandardDeviation(Number standardDeviation) {
         this.standardDeviation = standardDeviation;
+        return this;
+    }
+
+    public StxFactory withMedian(boolean calculateMedian) {
+        this.calculateMedian = calculateMedian;
         return this;
     }
 
@@ -207,7 +213,7 @@ public class StxFactory {
                         mean = meanOp.getMean();
                     }
 
-                    if (this.median == null) {
+                    if (this.median == null  && calculateMedian) {
                         median = meanOp.getMedian();
                     }
 

@@ -609,6 +609,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     @Override
     protected void updateComponents() {
+        computePanel.updateRunButton(true);
         if (!init) {
             initComponents();
         }
@@ -679,6 +680,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     @Override
     public void compute(final Mask[] selectedMasks) {
 
+        computePanel.updateRunButton(false);
+
         final int numHistograms = (computePanel.isIncludeUnmasked()) ? (selectedMasks.length + 1) : selectedMasks.length + 1;
 
 
@@ -718,13 +721,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     // meanwhile longest entry is being used SEE below
 
 
-//
-//                    if (selectedMasks != null) {
-//                        numProductRegions = selectedMasks.length;
-//                    } else {
-//                        numProductRegions = 1;
-//                    }
-
                     numProductRegions = numHistograms;
 
 
@@ -739,6 +735,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                         stx1 = new StxFactory()
                                 .withHistogramBinCount(binCount)
                                 .withLogHistogram(LogMode)
+                                .withMedian(includeMedian)
                                 .create(getRaster(), subPm1);
                         histograms[0] = stx1.getHistogram();
                         publish(new ComputeResult(stx1, null));
@@ -754,22 +751,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                             if (mask != null) {
                                 final Stx stx;
                                 ProgressMonitor subPm = SubProgressMonitor.create(pm, 1);
-//                        if (mask == null) {
-//                            stx = new StxFactory()
-//                                    .withHistogramBinCount(binCount)
-//                                    .withLogHistogram(LogMode)
-//                                    .create(getRaster(), subPm);
-//
-//                            getRaster().setStx(stx);
-//                        } else {
+
                                 stx = new StxFactory()
                                         .withHistogramBinCount(binCount)
                                         .withLogHistogram(LogMode)
+                                        .withMedian(includeMedian)
                                         .withRoiMask(mask)
                                         .create(getRaster(), subPm);
-//
-//
-//                        }
+
                                 histograms[histogramIdx] = stx.getHistogram();
                                 publish(new ComputeResult(stx, mask));
                                 histogramIdx++;
@@ -815,8 +804,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     JPanel statsSpeadPanel = statsSpreadsheetPanel();
                     spreadsheetPanel.add(statsSpeadPanel);
                     spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
-                    //       spreadsheetScrollPane.setMinimumSize(new Dimension(100, statsSpeadPanel.getPreferredSize().width));
-                    //   contentPanel.add(statsSpreadsheetPanel());
+
                     get();
                     if (exportAsCsvAction == null) {
                         exportAsCsvAction = new ExportStatisticsAsCsvAction(StatisticsPanel.this);
@@ -830,6 +818,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     backgroundPanel.revalidate();
                     backgroundPanel.repaint();
                     currRow = 1;
+
+                    computePanel.updateRunButton(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(getParentDialogContentPane(),
@@ -837,6 +827,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                                   /*I18N*/
                             "Statistics", /*I18N*/
                             JOptionPane.ERROR_MESSAGE);
+                    computePanel.updateRunButton(true);
                 }
             }
         };
