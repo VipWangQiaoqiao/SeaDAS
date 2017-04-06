@@ -91,6 +91,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     private boolean includeMedian = true;
 
+    private double spreadsheetHeightWeight = 0.3;
+    private int spreadsheetMinRowsBeforeWeight = 10;
+
     private boolean customHistThreshRange = true;
     private boolean customHistRange = true;
     private double histDisplayLowThresh = 5;
@@ -109,6 +112,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private JPanel accuracyPanel;
     private JPanel spreadsheetPanel;
     JScrollPane spreadsheetScrollPane;
+    JScrollPane contentScrollPane;
+    JPanel leftPanel;
 
     private final StatisticsPanel.PopupHandler popupHandler;
     private final StringBuilder resultText;
@@ -145,10 +150,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private int numStatisticFields = 0;
     private int numProductRegions = 0;
 
-  //  private HistDisplayLowThreshTextfield histDisplayLowThreshTextfield = new HistDisplayLowThreshTextfield();
-   private TextFieldContainer histDisplayLowThreshTextfield = null;
-   private TextFieldContainer histDisplayHighThreshTextfield = null;
- //   private HistDisplayHighThreshTextfield histDisplayHighThreshTextfield = new HistDisplayHighThreshTextfield();
+    //  private HistDisplayLowThreshTextfield histDisplayLowThreshTextfield = new HistDisplayLowThreshTextfield();
+    private TextFieldContainer histDisplayLowThreshTextfield = null;
+    private TextFieldContainer histDisplayHighThreshTextfield = null;
+    //   private HistDisplayHighThreshTextfield histDisplayHighThreshTextfield = new HistDisplayHighThreshTextfield();
 
 
     public StatisticsPanel(final ToolView parentDialog, String helpID) {
@@ -223,7 +228,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         contentPanel.setBackground(Color.WHITE);
         contentPanel.addMouseListener(popupHandler);
 
-        final JScrollPane contentScrollPane = new JScrollPane(contentPanel);
+        contentScrollPane = new JScrollPane(contentPanel);
         contentScrollPane.setBorder(null);
         contentScrollPane.setBackground(Color.WHITE);
 
@@ -242,10 +247,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
 
 
-        final JPanel leftPanel = new JPanel(new GridBagLayout());
+        leftPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbcLeftPanel = new GridBagConstraints();
         GridBagUtils.addToPanel(leftPanel, contentScrollPane, gbcLeftPanel, "fill=BOTH, weightx=1.0, weighty=1.0, anchor=NORTHWEST");
-        GridBagUtils.addToPanel(leftPanel, spreadsheetScrollPane, gbcLeftPanel, "fill=HORIZONTAL, weightx=1.0, weighty=0.0, anchor=NORTHWEST, gridy=1,insets.top=5");
+        GridBagUtils.addToPanel(leftPanel, spreadsheetScrollPane, gbcLeftPanel, "fill=BOTH, weightx=1.0, weighty=0.0, anchor=NORTHWEST, gridy=1,insets.top=5");
 
         backgroundPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -681,6 +686,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     public void compute(final Mask[] selectedMasks) {
 
         computePanel.updateRunButton(false);
+        spreadsheetPanel.removeAll();
 
         final int numHistograms = (computePanel.isIncludeUnmasked()) ? (selectedMasks.length + 1) : selectedMasks.length + 1;
 
@@ -709,7 +715,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             return;
         }
 
-        SwingWorker<Object, ComputeResult> swingWorker = new ProgressMonitorSwingWorker<Object, ComputeResult>(this, title) {
+
+        ProgressMonitorSwingWorker swingWorker = new ProgressMonitorSwingWorker(this, title) {
+
+            //   SwingWorker<Object, ComputeResult> swingWorker = new ProgressMonitorSwingWorker<Object, ComputeResult>(this, title) {
 
             @Override
             protected Object doInBackground(ProgressMonitor pm) {
@@ -738,7 +747,31 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                 .withMedian(includeMedian)
                                 .create(getRaster(), subPm1);
                         histograms[0] = stx1.getHistogram();
-                        publish(new ComputeResult(stx1, null));
+
+                        // todo Danny Testing this
+                        // publish(new ComputeResult(stx1, null));
+
+
+                        if (resultText.length() > 0) {
+                            resultText.append("\n");
+                        }
+                        resultText.append(createText(stx1, null));
+
+                        JPanel statPanel = createStatPanel(stx1, null, currRow);
+                        contentPanel.add(statPanel);
+
+                        double numRows = 1.0 + selectedMasks.length;
+
+                        updateLeftPanel(numRows);
+
+//                        contentPanel.revalidate();
+//                        contentPanel.repaint();
+//                        backgroundPanel.revalidate();
+//                        backgroundPanel.repaint();
+                        currRow++;
+
+                        // end todo
+
 
                         histogramIdx++;
                     }
@@ -760,50 +793,84 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                         .create(getRaster(), subPm);
 
                                 histograms[histogramIdx] = stx.getHistogram();
-                                publish(new ComputeResult(stx, mask));
+
+
+                                // todo Danny Testing this
+                                // publish(new ComputeResult(stx, mask));
+
+
+                                if (resultText.length() > 0) {
+                                    resultText.append("\n");
+                                }
+                                resultText.append(createText(stx, mask));
+
+                                JPanel statPanel = createStatPanel(stx, mask, currRow);
+                                contentPanel.add(statPanel);
+
+
+                                double numRows = 1.0 + selectedMasks.length;
+
+                                updateLeftPanel(numRows);
+
+//                                contentPanel.revalidate();
+//                                contentPanel.repaint();
+//                                backgroundPanel.revalidate();
+//                                backgroundPanel.repaint();
+
+                                currRow++;
+
+                                // end todo
+
                                 histogramIdx++;
+
+
                             }
                         }
                     }
+
+
                 } finally {
                     pm.done();
                 }
                 return null;
             }
 
-            @Override
-            protected void process(List<ComputeResult> chunks) {
-
-
-                for (ComputeResult result : chunks) {
-
-                    final Stx stx = result.stx;
-                    final Mask mask = result.mask;
-
-                    if (resultText.length() > 0) {
-                        resultText.append("\n");
-                    }
-                    resultText.append(createText(stx, mask));
-
-                    JPanel statPanel = createStatPanel(stx, mask, currRow);
-                    contentPanel.add(statPanel);
-                    contentPanel.revalidate();
-                    contentPanel.repaint();
-                    backgroundPanel.revalidate();
-                    backgroundPanel.repaint();
-                    currRow++;
-                }
-
-
-            }
+            // todo Danny Testing this
+//            @Override
+//            protected void process(List<ComputeResult> chunks) {
+//
+//
+//
+//                for (ComputeResult result : chunks) {
+//
+//                    final Stx stx = result.stx;
+//                    final Mask mask = result.mask;
+//
+//                    if (resultText.length() > 0) {
+//                        resultText.append("\n");
+//                    }
+//                    resultText.append(createText(stx, mask));
+//
+//                    JPanel statPanel = createStatPanel(stx, mask, currRow);
+//                    contentPanel.add(statPanel);
+//                    contentPanel.revalidate();
+//                    contentPanel.repaint();
+//                    backgroundPanel.revalidate();
+//                    backgroundPanel.repaint();
+//                    currRow++;
+//                }
+//
+//
+//            }
 
             @Override
             protected void done() {
                 try {
-                    spreadsheetPanel.removeAll();
-                    JPanel statsSpeadPanel = statsSpreadsheetPanel();
-                    spreadsheetPanel.add(statsSpeadPanel);
-                    spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
+
+                    double numRows = 1.0 + selectedMasks.length;
+
+                    updateLeftPanel(numRows);
+
 
                     get();
                     if (exportAsCsvAction == null) {
@@ -814,9 +881,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                         putStatisticsIntoVectorDataAction = new PutStatisticsIntoVectorDataAction(StatisticsPanel.this);
                     }
                     putStatisticsIntoVectorDataAction.setSelectedMasks(selectedMasks);
-                    exportButton.setEnabled(exportButtonEnabled);
-                    backgroundPanel.revalidate();
-                    backgroundPanel.repaint();
+                    //       exportButton.setEnabled(exportButtonEnabled);
+//                    contentPanel.revalidate();
+//                    contentPanel.repaint();
+//                    backgroundPanel.revalidate();
+//                    backgroundPanel.repaint();
                     currRow = 1;
 
                     computePanel.updateRunButton(true);
@@ -835,8 +904,75 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         resultText.setLength(0);
         contentPanel.removeAll();
 
+        // todo Danny Testing this
+        // swingWorker.execute();
         swingWorker.execute();
     }
+
+
+    private void updateLeftPanel(double numRows) {
+
+        spreadsheetPanel.removeAll();
+        JPanel statsSpeadPanel = statsSpreadsheetPanel();
+        spreadsheetPanel.add(statsSpeadPanel);
+        spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
+        spreadsheetScrollPane.setMinimumSize(new Dimension(100, 100));
+
+
+
+        leftPanel.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+
+        if (showPercentPlots || showHistogramPlots || showStatsList) {
+
+            if (numRows > spreadsheetMinRowsBeforeWeight) {
+                gbc.weighty = 1.0 - spreadsheetHeightWeight;
+                leftPanel.add(contentScrollPane, gbc);
+
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weighty = spreadsheetHeightWeight;
+
+            } else {
+                leftPanel.add(contentScrollPane, gbc);
+
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.weighty = 0;
+
+                int buffer = 50;
+                int minHeight = spreadsheetPanel.getPreferredSize().height + buffer;
+                spreadsheetScrollPane.setMinimumSize(new Dimension(100, minHeight));
+            }
+
+            gbc.gridy += 1;
+            gbc.insets.top = 5;
+
+
+        } else {
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.weighty = 1.0;
+        }
+
+        if (showStatsSpreadSheet) {
+            leftPanel.add(spreadsheetScrollPane, gbc);
+        }
+
+        leftPanel.revalidate();
+        leftPanel.repaint();
+
+        contentPanel.revalidate();
+        contentPanel.repaint();
+        backgroundPanel.revalidate();
+        backgroundPanel.repaint();
+
+    }
+
+
 
     private JPanel createStatPanel(Stx stx, final Mask mask, int row) {
 
@@ -928,8 +1064,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 //        double test = fraction;
 
 
-
-
         boolean invertPercentile = true;
         double[] percentileDomainBounds = {0, 0};
         double[] percentileRangeBounds = {0, 0};
@@ -954,7 +1088,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
 
 
-
             if (!LogMode) {
                 percentileDomainBounds[0] = histDomainBounds[0];
                 percentileDomainBounds[1] = histDomainBounds[1];
@@ -962,10 +1095,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             percentileRangeBounds[0] = 0;
             percentileRangeBounds[1] = 100;
 
-             percentilePanel = createScatterChartPanel(percentileSeries, logTitle + getRaster().getName() + " (" + getRaster().getUnit() + ")", "Percent Threshold",  new Color(0, 0, 0), percentileDomainBounds, percentileRangeBounds);
+            percentilePanel = createScatterChartPanel(percentileSeries, logTitle + getRaster().getName() + " (" + getRaster().getUnit() + ")", "Percent Threshold", new Color(0, 0, 0), percentileDomainBounds, percentileRangeBounds);
 
         } else {
-                        percentileSeries.add(0,
+            percentileSeries.add(0,
                     0,
                     0.25,
                     histogram.getLowValue(0));
@@ -982,19 +1115,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     histogram.getHighValue(0));
 
 
+            percentileDomainBounds[0] = 0;
+            percentileDomainBounds[1] = 100;
+            percentileRangeBounds[0] = histDomainBounds[0];
+            percentileRangeBounds[1] = histDomainBounds[1];
 
-        percentileDomainBounds[0] = 0;
-        percentileDomainBounds[1] = 100;
-        percentileRangeBounds[0] = histDomainBounds[0];
-        percentileRangeBounds[1] = histDomainBounds[1];
-
-             percentilePanel = createScatterChartPanel(percentileSeries, "Percent Threshold", logTitle + getRaster().getName() + " (" + getRaster().getUnit() + ")", new Color(0, 0, 0), percentileDomainBounds, percentileRangeBounds);
+            percentilePanel = createScatterChartPanel(percentileSeries, "Percent Threshold", logTitle + getRaster().getName() + " (" + getRaster().getUnit() + ")", new Color(0, 0, 0), percentileDomainBounds, percentileRangeBounds);
 
         }
-
-
-
-
 
 
         int size = getRaster().getRasterHeight() * getRaster().getRasterWidth();
@@ -1250,6 +1378,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         } else {
             col1PreferredWidth = fm.stringWidth("StandardDeviation(Binned):") + 10;
         }
+
+
         // int col1PreferredWidth = fm.stringWidth("wwwwwwwwwwwwwwwwwwwwwwwwww");
         int col2PreferredWidth = fm.stringWidth("1234567890") + 10;
         int tablePreferredWidth = col1PreferredWidth + col2PreferredWidth;
@@ -1501,7 +1631,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
-
         final XYBarRenderer renderer = (XYBarRenderer) xyPlot.getRenderer();
         renderer.setDrawBarOutline(false);
         renderer.setShadowVisible(false);
@@ -1516,7 +1645,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
     private static ChartPanel getScatterPlotPanel(XIntervalSeriesCollection dataset, String xAxisLabel, String yAxisLabel, Color color, double domainBounds[], double rangeBounds[]) {
-      //  JFreeChart chart = ChartFactory.createScatterPlot(
+        //  JFreeChart chart = ChartFactory.createScatterPlot(
         JFreeChart chart = ChartFactory.createXYLineChart(
                 null,
                 xAxisLabel,
@@ -1528,7 +1657,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 false   // url
         );
         final XYPlot xyPlot = chart.getXYPlot();
-     //   xyPlot.setForegroundAlpha(0.85f);
+        //   xyPlot.setForegroundAlpha(0.85f);
         xyPlot.setBackgroundAlpha(0.0f);
         xyPlot.setNoDataMessage("No data");
         xyPlot.setAxisOffset(new RectangleInsets(5, 5, 5, 10));
@@ -1550,9 +1679,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         renderer.setSeriesPaint(0, color);
         renderer.setUseFillPaint(true);
         renderer.setDrawOutlines(true);
-        renderer.setSeriesShapesFilled(0,true);
+        renderer.setSeriesShapesFilled(0, true);
         renderer.setSeriesFillPaint(0, color);
-
 
 
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -1852,10 +1980,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
-        table.setPreferredSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
+        //  table.setPreferredSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
 
         pane.add(table, gbcMain);
-        pane.setMinimumSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
+        //  pane.setMinimumSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
 
 
         return pane;
@@ -1917,11 +2045,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             return StatisticsToolView.PARAM_DEFVAL_NUM_BINS;
         }
     }
-
-
-
-
-
 
 
 }
