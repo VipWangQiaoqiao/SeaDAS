@@ -162,7 +162,9 @@ class HistogramPanel extends ChartPagePanel {
     }
 
     private void updateRefreshButton() {
-        refreshButton.setEnabled(!model.hasStx(createHistogramConfig()));
+        // todo Danny changed this to keep refreshButton enabled until we look into this code more
+       // refreshButton.setEnabled(!model.hasStx(createHistogramConfig()));
+        refreshButton.setEnabled(true);
     }
 
     @Override
@@ -434,9 +436,11 @@ class HistogramPanel extends ChartPagePanel {
     }
 
     private void handleStxChange() {
-        if (model.hasStx(createHistogramConfig())) {
-            refreshButton.setEnabled(false);
-        }
+        refreshButton.setEnabled(true);
+        // todo Danny changed this to keep refreshButton enabled until we look into this code more
+//        if (model.hasStx(createHistogramConfig())) {
+//            refreshButton.setEnabled(false);
+//        }
         log10HistEnablement.apply();
         updateLogXAxisCheckBox();
         chart.getXYPlot().setDataset(dataset);
@@ -559,6 +563,10 @@ class HistogramPanel extends ChartPagePanel {
             if (!compute) {
                 return null;
             }
+
+            // todo Danny changed this with the idea that this button is only disabled while running
+             refreshButton.setEnabled(false);
+
             if (histogramPlotConfig.useRoiMask || histogramPlotConfig.numBins != Stx.DEFAULT_BIN_COUNT || histogramPlotConfig.histogramLogScaled || min != null || max != null) {
                 final StxFactory factory = new StxFactory();
                 if (histogramPlotConfig.useRoiMask) {
