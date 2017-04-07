@@ -62,9 +62,6 @@ class MultipleRoiComputePanel extends JPanel {
 
     private QuickListFilterField maskNameSearchField;
 
-    public boolean isIncludeUnmasked() {
-        return includeUnmasked;
-    }
 
     interface ComputeMasks {
 
@@ -81,6 +78,7 @@ class MultipleRoiComputePanel extends JPanel {
     private JCheckBox selectNoneCheckBox;
     private boolean validFields = true;
     private boolean includeUnmasked = true;
+    private boolean isRunning = false;
 
     private RasterDataNode raster;
     private Product product;
@@ -101,7 +99,7 @@ class MultipleRoiComputePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateEnablement(validFields);
+                updateEnablement();
             }
         });
         useRoiCheckBox.setMinimumSize(useRoiCheckBox.getPreferredSize());
@@ -116,7 +114,6 @@ class MultipleRoiComputePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 includeUnmasked = includeUnmaskedCheckBox.isSelected();
-                updateEnablement(validFields);
             }
         });
         includeUnmaskedCheckBox.setMinimumSize(includeUnmaskedCheckBox.getPreferredSize());
@@ -131,7 +128,7 @@ class MultipleRoiComputePanel extends JPanel {
         JPanel panel = GridBagUtils.createPanel();
 
         GridBagConstraints gbc = GridBagUtils.createConstraints();
-        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
         panel.add(topPane, gbc);
         gbc = GridBagUtils.restoreConstraints(gbc);
 
@@ -254,11 +251,10 @@ class MultipleRoiComputePanel extends JPanel {
             }
         }
 
-        updateEnablement(validFields);
+        updateEnablement();
     }
 
-    void updateEnablement(boolean validFields) {
-        this.validFields = validFields;
+    void updateEnablement() {
         boolean hasMasks = (product != null && product.getMaskGroup().getNodeCount() > 0);
         boolean canSelectMasks = hasMasks && useRoiCheckBox.isSelected();
         useRoiCheckBox.setEnabled(hasMasks);
@@ -266,7 +262,9 @@ class MultipleRoiComputePanel extends JPanel {
         maskNameList.setEnabled(canSelectMasks);
         selectAllCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length < maskNameList.getModel().getSize());
         selectNoneCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length > 0);
-        refreshButton.setEnabled(validFields && raster != null && (useRoiCheckBox.isSelected() || includeUnmaskedCheckBox.isSelected()));
+        if (!isRunning()) {
+            refreshButton.setEnabled(raster != null);
+        }
     }
 
     void updateRunButton(boolean enabled) {
@@ -298,7 +296,7 @@ class MultipleRoiComputePanel extends JPanel {
             final String[] selectedNames = getSelectedMaskNames();
 
             if (StringUtils.contains(selectedNames, maskName)) {
-                updateEnablement(validFields);
+                updateEnablement();
             }
         }
 
@@ -332,6 +330,7 @@ class MultipleRoiComputePanel extends JPanel {
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setRunning(true);
                 boolean useRoi = useRoiCheckBox.isSelected();
                 Mask[] selectedMasks;
                 if (useRoi) {
@@ -350,14 +349,13 @@ class MultipleRoiComputePanel extends JPanel {
                     selectedMasks = new Mask[]{null};
                 }
                 method.compute(selectedMasks);
-                refreshButton.setEnabled(false);
             }
         });
 
 
         JPanel panel = GridBagUtils.createPanel();
         GridBagConstraints gbc = GridBagUtils.createConstraints();
-        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
         panel.add(refreshButton, gbc);
         panel.setMinimumSize(panel.getPreferredSize());
         panel.setPreferredSize(panel.getPreferredSize());
@@ -411,7 +409,7 @@ class MultipleRoiComputePanel extends JPanel {
         maskNameList.getCheckBoxListSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                updateEnablement(validFields);
+
 //                refreshButton.setEnabled(true);
                 if (!e.getValueIsAdjusting()) {
                     selectAndEnableCheckBoxes();
@@ -478,5 +476,19 @@ class MultipleRoiComputePanel extends JPanel {
 
         return panel;
     }
+
+    public boolean isIncludeUnmasked() {
+        return includeUnmasked;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
+        updateRunButton(!running);
+    }
+
 
 }

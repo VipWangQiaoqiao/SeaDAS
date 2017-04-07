@@ -49,7 +49,7 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final String PARAM_KEY_NUM_BINS = "statistics.numBins";
     public static final int PARAM_DEFVAL_NUM_BINS = 1000;
     public static final int PARAM_MINVAL_NUM_BINS = 1;
-    public static final int PARAM_MAXVAL_NUM_BINS = 10000000;
+    public static final int PARAM_MAXVAL_NUM_BINS = 1000000;
 
     public static final String PARAM_LABEL_HIST_DISPLAY_LOW_THRESH = "Thresh Range: Low";
     public static final String PARAM_KEY_HIST_DISPLAY_LOW_THRESH = "statistics.histDisplayLowThresh";

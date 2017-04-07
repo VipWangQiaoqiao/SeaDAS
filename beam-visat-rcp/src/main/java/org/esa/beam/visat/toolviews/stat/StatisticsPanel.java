@@ -75,7 +75,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     final VisatApp visatApp = VisatApp.getApp();
     private PropertyMap configuration = null;
 
-    private static final String DEFAULT_STATISTICS_TEXT = "No statistics computed yet.";  /*I18N*/
+    private static final String DEFAULT_STATISTICS_TEXT = "No statistics computed";  /*I18N*/
     private static final String TITLE_PREFIX = "Statistics";
 
     private static final int NUM_BINS_INVALID = -999;
@@ -89,20 +89,43 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     private int colCharWidth = COL_WIDTH_DEFAULT;
 
+
+
     private boolean includeMedian = true;
 
     private double spreadsheetHeightWeight = 0.3;
     private int spreadsheetMinRowsBeforeWeight = 10;
 
-    private boolean customHistThreshRange = true;
-    private boolean customHistRange = true;
-    private double histDisplayLowThresh = 5;
-    private String histDisplayLowThreshString = "5";
-    private double histDisplayHighThresh = 95;
-    private String histDisplayHighThreshString = "95";
+    boolean invertPercentile = true;
 
-    private double histRangeLow = 0.1;
-    private double histRangeHigh = 1.0;
+
+
+    boolean binRange = true;
+    double binMin = 0.0;
+    double binMax = 6.0;
+
+    private boolean customHistDomainDisplaySpanThresh = true;
+    private double histDisplayLowThresh = 5;
+    private double histDisplayHighThresh = 95;
+
+    private boolean customHistDomainDisplaySpan = false;
+    private double histDisplayLow = 0;
+    private double histDisplayHigh = 6;
+
+    private int plotMinHeight = 300;
+    private int plotMinWidth = 200;
+
+
+    boolean fixedHistDomainAllPlots = true;
+    boolean fixedHistDomainAllPlotsInitialized = false;
+    double[] histDomainBoundsAllPlots = {0, 0};
+
+    boolean fixedPercentileDomainAllPlots = true;
+    boolean fixedPercentileDomainAllPlotsInitialized = false;
+    double[] histRangeBoundsAllPlots = {0, 0};
+    double[] percentileDomainBoundsAllPlots = {0, 0};
+    double[] percentileRangeBoundsAllPlots = {0, 0};
+
 
     private MultipleRoiComputePanel computePanel;
     private JPanel backgroundPanel;
@@ -213,15 +236,22 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 if (rightPanelShown) {
                     hideAndShowButton.setIcon(collapseIcon);
                     hideAndShowButton.setRolloverIcon(collapseRolloverIcon);
+                    hideAndShowButton.setVisible(true);
                     hideAndShowButton.setToolTipText("Collapse Options Panel");
                 } else {
                     hideAndShowButton.setIcon(expandIcon);
                     hideAndShowButton.setRolloverIcon(expandRolloverIcon);
+                    hideAndShowButton.setVisible(true);
                     hideAndShowButton.setToolTipText("Expand Options Panel");
                 }
                 rightPanelShown = !rightPanelShown;
             }
         });
+
+        hideAndShowButton.setVisible(true);
+
+
+
 
 
         contentPanel = new JPanel(new GridLayout(-1, 1));
@@ -234,23 +264,25 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         spreadsheetPanel = new JPanel(new GridLayout(-1, 1));
-        spreadsheetPanel.setBackground(Color.WHITE);
+    //    spreadsheetPanel.setBackground(Color.WHITE);
         spreadsheetPanel.addMouseListener(popupHandler);
 
         spreadsheetScrollPane = new JScrollPane(spreadsheetPanel);
 
 
         spreadsheetScrollPane.setBorder(null);
-        spreadsheetScrollPane.setBackground(Color.WHITE);
+    //    spreadsheetScrollPane.setBackground(Color.WHITE);
         spreadsheetScrollPane.setMinimumSize(new Dimension(100, 100));
         spreadsheetScrollPane.setBorder(UIUtils.createGroupBorder("Statistics Spreadsheet"));
         spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
 
 
         leftPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbcLeftPanel = new GridBagConstraints();
-        GridBagUtils.addToPanel(leftPanel, contentScrollPane, gbcLeftPanel, "fill=BOTH, weightx=1.0, weighty=1.0, anchor=NORTHWEST");
-        GridBagUtils.addToPanel(leftPanel, spreadsheetScrollPane, gbcLeftPanel, "fill=BOTH, weightx=1.0, weighty=0.0, anchor=NORTHWEST, gridy=1,insets.top=5");
+//        GridBagConstraints gbcLeftPanel = new GridBagConstraints();
+//        GridBagUtils.addToPanel(leftPanel, contentScrollPane, gbcLeftPanel, "fill=BOTH, weightx=1.0, weighty=1.0, anchor=NORTHWEST");
+//        GridBagUtils.addToPanel(leftPanel, spreadsheetScrollPane, gbcLeftPanel, "fill=BOTH, weightx=1.0, weighty=0.0, anchor=NORTHWEST, gridy=1,insets.top=5");
+
+        initLeftPanel();
 
         backgroundPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -259,13 +291,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         //  GridBagUtils.addToPanel(backgroundPanel, spreadsheetScrollPane, gbc, "fill=BOTH, weightx=1.0, weighty=1.0, anchor=NORTHWEST, gridy=1");
         GridBagUtils.addToPanel(backgroundPanel, rightPanel, gbc, "gridx=1,gridy=0, fill=BOTH, weightx=0.0,anchor=NORTHEAST,insets.left=5");
 
+
+
         //   GridBagUtils.addToPanel(backgroundPanel, spreadsheetScrollPane, gbcLeftPanel, "fill=HORIZONTAL, weightx=1.0, weighty=1.0, anchor=NORTHWEST, gridy=1,gridx=0,gridwidth=2,insets.top=5");
-
-
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.add(backgroundPanel);
-        layeredPane.add(hideAndShowButton);
+        layeredPane.add(backgroundPanel, new Integer(0));
+        layeredPane.add(hideAndShowButton, new Integer(1));
         add(layeredPane);
+
 
 
         int minWidth = leftPanel.getMinimumSize().width + rightPanel.getMinimumSize().width;
@@ -392,8 +425,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 } else {
                     decimalPlaces = Integer.parseInt(decimalPlacesString);
                 }
-
-                computePanel.updateEnablement(validFields());
             }
         });
 
@@ -425,7 +456,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             public void itemStateChanged(ItemEvent e) {
                 includeHistogramStats = histogramStatsCheckBox.isSelected();
 
-                computePanel.updateEnablement(validFields());
             }
         });
 
@@ -437,7 +467,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             public void itemStateChanged(ItemEvent e) {
                 showPercentPlots = showPercentPlotCheckBox.isSelected();
 
-                computePanel.updateEnablement(validFields());
             }
         });
 
@@ -449,7 +478,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             public void itemStateChanged(ItemEvent e) {
                 showHistogramPlots = showHistogramPlotCheckBox.isSelected();
 
-                computePanel.updateEnablement(validFields());
             }
         });
 
@@ -461,7 +489,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             public void itemStateChanged(ItemEvent e) {
                 showStatsList = showStatsListCheckBox.isSelected();
 
-                computePanel.updateEnablement(validFields());
             }
         });
 
@@ -473,7 +500,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             public void itemStateChanged(ItemEvent e) {
                 showStatsSpreadSheet = showStatsSpreadSheetCheckBox.isSelected();
 
-                computePanel.updateEnablement(validFields());
             }
         });
 
@@ -484,7 +510,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             public void itemStateChanged(ItemEvent e) {
                 includeMedian = includeMedianCheckBox.isSelected();
 
-                computePanel.updateEnablement(validFields());
             }
         });
 
@@ -545,7 +570,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             public void itemStateChanged(ItemEvent e) {
                 LogMode = logModeCheckBox.isSelected();
 
-                computePanel.updateEnablement(validFields());
             }
         });
 
@@ -614,7 +638,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     @Override
     protected void updateComponents() {
-        computePanel.updateRunButton(true);
+        computePanel.setRunning(true);
         if (!init) {
             initComponents();
         }
@@ -656,6 +680,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             contentPanel.add(new JLabel(DEFAULT_STATISTICS_TEXT));
             exportButton.setEnabled(false);
         }
+        computePanel.setRunning(false);
+
 
         contentPanel.revalidate();
         contentPanel.repaint();
@@ -685,8 +711,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     @Override
     public void compute(final Mask[] selectedMasks) {
 
-        computePanel.updateRunButton(false);
+        computePanel.setRunning(true);
         spreadsheetPanel.removeAll();
+        fixedHistDomainAllPlotsInitialized = false;
 
         final int numHistograms = (computePanel.isIncludeUnmasked()) ? (selectedMasks.length + 1) : selectedMasks.length + 1;
 
@@ -697,12 +724,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         percentThresholdsList = getPercentThresholdsList();
 
         if (percentThresholdsList == null) {
+            abortRun();
             return;
         }
 
         statsSpreadsheet = null;  // reset this
 
         if (!initValidateFields(true)) {
+            abortRun();
             return;
         }
 
@@ -712,6 +741,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     "Failed to compute statistics due to invalid fields",
                     "Invalid Input", /*I18N*/
                     JOptionPane.ERROR_MESSAGE);
+            computePanel.setRunning(false);
             return;
         }
 
@@ -741,11 +771,24 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     if (computePanel.isIncludeUnmasked()) {
                         final Stx stx1;
                         ProgressMonitor subPm1 = SubProgressMonitor.create(pm, 1);
-                        stx1 = new StxFactory()
-                                .withHistogramBinCount(binCount)
-                                .withLogHistogram(LogMode)
-                                .withMedian(includeMedian)
-                                .create(getRaster(), subPm1);
+
+                        if (binRange) {
+                            stx1 = new StxFactory()
+                                    .withHistogramBinCount(binCount)
+                                    .withLogHistogram(LogMode)
+                                    .withMedian(includeMedian)
+                                    .withMinimum(binMin)
+                                    .withMaximum(binMax)
+                                    .create(getRaster(), subPm1);
+                        } else {
+                            stx1 = new StxFactory()
+                                    .withHistogramBinCount(binCount)
+                                    .withLogHistogram(LogMode)
+                                    .withMedian(includeMedian)
+                                    .create(getRaster(), subPm1);
+                        }
+
+
                         histograms[0] = stx1.getHistogram();
 
                         // todo Danny Testing this
@@ -785,12 +828,25 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                 final Stx stx;
                                 ProgressMonitor subPm = SubProgressMonitor.create(pm, 1);
 
-                                stx = new StxFactory()
-                                        .withHistogramBinCount(binCount)
-                                        .withLogHistogram(LogMode)
-                                        .withMedian(includeMedian)
-                                        .withRoiMask(mask)
-                                        .create(getRaster(), subPm);
+
+                                if (binRange) {
+                                    stx = new StxFactory()
+                                            .withHistogramBinCount(binCount)
+                                            .withLogHistogram(LogMode)
+                                            .withMedian(includeMedian)
+                                            .withRoiMask(mask)
+                                            .withMinimum(binMin)
+                                            .withMaximum(binMax)
+                                            .create(getRaster(), subPm);
+                                } else {
+                                    stx = new StxFactory()
+                                            .withHistogramBinCount(binCount)
+                                            .withLogHistogram(LogMode)
+                                            .withMedian(includeMedian)
+                                            .withRoiMask(mask)
+                                            .create(getRaster(), subPm);
+                                }
+
 
                                 histograms[histogramIdx] = stx.getHistogram();
 
@@ -831,6 +887,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
                 } finally {
                     pm.done();
+                    computePanel.setRunning(false);
+
                 }
                 return null;
             }
@@ -888,7 +946,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 //                    backgroundPanel.repaint();
                     currRow = 1;
 
-                    computePanel.updateRunButton(true);
+                    computePanel.setRunning(false);
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(getParentDialogContentPane(),
@@ -896,7 +954,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                                   /*I18N*/
                             "Statistics", /*I18N*/
                             JOptionPane.ERROR_MESSAGE);
-                    computePanel.updateRunButton(true);
+                    computePanel.setRunning(false);
                 }
             }
         };
@@ -910,13 +968,31 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
 
+    private void abortRun() {
+        initLeftPanel();
+        fixedHistDomainAllPlotsInitialized = false;
+        computePanel.setRunning(false);
+    }
+
+
+    private void initLeftPanel() {
+        leftPanel.removeAll();
+        leftPanel.add(new JLabel(DEFAULT_STATISTICS_TEXT));
+        leftPanel.revalidate();
+        leftPanel.repaint();
+       // leftPanel.setBackground(Color.WHITE);
+        fixedHistDomainAllPlotsInitialized = false;
+    }
+
     private void updateLeftPanel(double numRows) {
 
         spreadsheetPanel.removeAll();
         JPanel statsSpeadPanel = statsSpreadsheetPanel();
         spreadsheetPanel.add(statsSpeadPanel);
+     //   spreadsheetPanel.setBackground(Color.WHITE);
         spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
         spreadsheetScrollPane.setMinimumSize(new Dimension(100, 100));
+
 
 
 
@@ -950,7 +1026,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
 
             gbc.gridy += 1;
-            gbc.insets.top = 5;
+            gbc.insets.top = 10;
 
 
         } else {
@@ -979,15 +1055,42 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         final Histogram histogram = stx.getHistogram();
 
         XIntervalSeries histogramSeries = new XIntervalSeries("Histogram");
-        double histDomainBounds[] = {0, 1};
+        double histDomainBounds[] = {0, 0};
         double histRangeBounds[] = {0, 0};
 
-        if (!LogMode && customHistRange && histDisplayLowThresh >= 0.1 && histDisplayHighThresh <= 99.9) {
-            histDomainBounds[0] = histogram.getPTileThreshold((histDisplayLowThresh) / 100)[0];
-            histDomainBounds[1] = histogram.getPTileThreshold(histDisplayHighThresh / 100)[0];
+        if (!fixedHistDomainAllPlots || (fixedHistDomainAllPlots && !fixedHistDomainAllPlotsInitialized)) {
+            if (!LogMode) {
+                if (customHistDomainDisplaySpanThresh && histDisplayLowThresh >= 0.1 && histDisplayHighThresh <= 99.9) {
+                    histDomainBounds[0] = histogram.getPTileThreshold((histDisplayLowThresh) / 100)[0];
+                    histDomainBounds[1] = histogram.getPTileThreshold(histDisplayHighThresh / 100)[0];
+                } else if (customHistDomainDisplaySpan) {
+                    histDomainBounds[0] = histDisplayLow;
+                    histDomainBounds[1] = histDisplayHigh;
+                }
+
+            } else {
+                histDomainBounds[0] = histogram.getBinLowValue(0, 0);
+                histDomainBounds[1] = histogram.getHighValue(0);
+            }
+
+
+//            if (!LogMode && customHistDomainDisplaySpanThresh && histDisplayLowThresh >= 0.1 && histDisplayHighThresh <= 99.9) {
+//                histDomainBounds[0] = histogram.getPTileThreshold((histDisplayLowThresh) / 100)[0];
+//                histDomainBounds[1] = histogram.getPTileThreshold(histDisplayHighThresh / 100)[0];
+//
+//            } else {
+//                histDomainBounds[0] = histogram.getBinLowValue(0, 0);
+//                histDomainBounds[1] = histogram.getHighValue(0);
+//            }
+
+            if (fixedHistDomainAllPlots && !fixedHistDomainAllPlotsInitialized) {
+                histDomainBoundsAllPlots[0] = histDomainBounds[0];
+                histDomainBoundsAllPlots[1] = histDomainBounds[1];
+                fixedHistDomainAllPlotsInitialized = true;
+            }
         } else {
-            histDomainBounds[0] = histogram.getBinLowValue(0, 0);
-            histDomainBounds[1] = histogram.getHighValue(0);
+            histDomainBounds[0] = histDomainBoundsAllPlots[0];
+            histDomainBounds[1] = histDomainBoundsAllPlots[1];
         }
 
 
@@ -1007,6 +1110,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 "Frequency in #Pixels",
                 new Color(0, 0, 127),
                 histDomainBounds, histRangeBounds);
+        histogramPanel.setMinimumSize(new Dimension(plotMinWidth,  plotMinHeight));
+        histogramPanel.setPreferredSize(new Dimension(plotMinWidth,  plotMinHeight));
+        histogramPanel.setMaximumSize(new Dimension(plotMinWidth,  plotMinHeight));
 
         XIntervalSeries percentileSeries = new XIntervalSeries("Percentile");
 
@@ -1064,7 +1170,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 //        double test = fraction;
 
 
-        boolean invertPercentile = true;
+
         double[] percentileDomainBounds = {0, 0};
         double[] percentileRangeBounds = {0, 0};
         ChartPanel percentilePanel = null;
@@ -1121,6 +1227,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             percentileRangeBounds[1] = histDomainBounds[1];
 
             percentilePanel = createScatterChartPanel(percentileSeries, "Percent Threshold", logTitle + getRaster().getName() + " (" + getRaster().getUnit() + ")", new Color(0, 0, 0), percentileDomainBounds, percentileRangeBounds);
+            percentilePanel.setMinimumSize(new Dimension(plotMinWidth,  plotMinHeight));
+            percentilePanel.setPreferredSize(new Dimension(plotMinWidth,  plotMinHeight));
+            percentilePanel.setMaximumSize(new Dimension(plotMinWidth,  plotMinHeight));
 
         }
 
@@ -1395,7 +1504,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         JPanel textContainerPanel = new JPanel(new BorderLayout(2, 2));
-        textContainerPanel.setBackground(Color.WHITE);
+     //   textContainerPanel.setBackground(Color.WHITE);
         textContainerPanel.add(table, BorderLayout.CENTER);
 
         JPanel statsPane = GridBagUtils.createPanel();
@@ -1587,6 +1696,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         backgroundPanel.setBounds(0, 0, getWidth() - 8, getHeight() - 8);
         hideAndShowButton.setBounds(getWidth() - hideAndShowButton.getWidth() - 12, 6, 24, 24);
     }
+
 
 
     private static ChartPanel createChartPanel(XIntervalSeries percentileSeries, String xAxisLabel, String yAxisLabel, Color color, double domainBounds[], double rangeBounds[]) {
@@ -1809,7 +1919,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
         }
 
-        computePanel.updateEnablement(validFields());
     }
 
 
@@ -1841,8 +1950,36 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
+        {
+            String lowName = histDisplayLowThreshTextfield.getName();
+            String highName = histDisplayHighThreshTextfield.getName();
+            double lowVal = histDisplayLowThreshTextfield.getValue();
+            double highVal = histDisplayHighThreshTextfield.getValue();
+            if (!compareFields(lowVal, highVal, lowName, highName, true)) {
+                return false;
+            }
+        }
+
         return true;
     }
+
+
+    private boolean compareFields(double lowVal, double highVal, String lowName, String HighName, boolean showDialog) {
+        if (lowVal >= highVal) {
+            if (showDialog) {
+                JOptionPane.showMessageDialog(getParentDialogContentPane(),
+                        "ERROR: Value of " + lowName + " must be greater than value of " + HighName,
+                        "Invalid Input",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+            return false;
+        }
+
+        return true;
+
+    }
+
 
     private boolean validFields() {
         if (!validNumBins()) {
