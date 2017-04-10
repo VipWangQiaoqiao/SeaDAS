@@ -49,9 +49,29 @@ public class StxFactory {
     private Boolean logHistogram;
     private int[] histogramBins;
     private boolean calculateMedian = false;
+    private Number binMin;
+    private Number binMax;
+    private Number binWidth;
+
 
     public StxFactory() {
     }
+
+    public StxFactory withBinMin(Number binMin) {
+        this.binMin = binMin;
+        return this;
+    }
+
+    public StxFactory withBinWidth(Number binWidth) {
+        this.binWidth = binWidth;
+        return this;
+    }
+
+    public StxFactory withBinMax(Number binMax) {
+        this.binMax = binMax;
+        return this;
+    }
+
 
     public StxFactory withMinimum(Number minimum) {
         this.minimum = minimum;
@@ -146,6 +166,9 @@ public class StxFactory {
      * @return The statistics.
      */
     public Stx create(Mask[] roiMasks, RasterDataNode[] rasters, ProgressMonitor pm) {
+        double binWidth = this.binWidth != null ? this.binWidth.doubleValue() : Double.NaN;
+        double binMin = this.binMin != null ? this.binMin.doubleValue() : Double.NaN;
+        double binMax = this.binMax != null ? this.binMax.doubleValue() : Double.NaN;
         double minimum = this.minimum != null ? this.minimum.doubleValue() : Double.NaN;
         double maximum = this.maximum != null ? this.maximum.doubleValue() : Double.NaN;
         double mean = this.mean != null ? this.mean.doubleValue() : Double.NaN;
@@ -224,12 +247,30 @@ public class StxFactory {
 
                 if (mustComputeHistogramStx) {
                     int binCount = histogramBinCount != null ? histogramBinCount : DEFAULT_BIN_COUNT;
-                    final HistogramStxOp histogramOp = new HistogramStxOp(binCount, minimum, maximum, intHistogram, logHistogram);
-                    for (int i = 0; i < filteredRasters.length; i++) {
-                        final RasterDataNode rasterDataNode = filteredRasters[i];
-                        accumulate(rasterDataNode, level, roiImages[i], roiShapes[i], histogramOp, SubProgressMonitor.create(pm, 50));
+//                    todo Danny added this .  Ideally minimum should be reserved for statistics of the data and not be used to set the bin minimum,
+// but currently existing older programs use it this way so I don't want to break them as is.
+//                     the new way is to use binMin and binMax for designating the histogram bin range.
+                    if (Double.isNaN(binMin)) {
+                        binMin = minimum;
                     }
-                    histogram = histogramOp.getHistogram();
+                    if (Double.isNaN(binMax)) {
+                        binMax = maximum;
+                    }
+
+
+                    if (!Double.isNaN(binWidth) && binWidth != 0) {
+                        binCount = (int) ((binMax - binMin) /binWidth);
+
+                    }
+
+                    if (binCount > 0 && binMax > binMin) {
+                        final HistogramStxOp histogramOp = new HistogramStxOp(binCount, binMin, binMax, intHistogram, logHistogram);
+                        for (int i = 0; i < filteredRasters.length; i++) {
+                            final RasterDataNode rasterDataNode = filteredRasters[i];
+                            accumulate(rasterDataNode, level, roiImages[i], roiShapes[i], histogramOp, SubProgressMonitor.create(pm, 50));
+                        }
+                        histogram = histogramOp.getHistogram();
+                    }
                 }
             } finally {
                 pm.done();

@@ -99,10 +99,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     boolean invertPercentile = true;
 
 
+    // todo Danny
+// this works with the exception that statistics returns these values as the Minimum and Maximum.
 
-    boolean binRange = true;
-    double binMin = 0.0;
-    double binMax = 6.0;
+    boolean binRange = false;
+
+    double binMin = Double.NaN;
+    double binMax = Double.NaN;
+    double binWidth = Double.NaN;
 
     private boolean customHistDomainDisplaySpanThresh = true;
     private double histDisplayLowThresh = 5;
@@ -772,21 +776,16 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                         final Stx stx1;
                         ProgressMonitor subPm1 = SubProgressMonitor.create(pm, 1);
 
-                        if (binRange) {
+
                             stx1 = new StxFactory()
                                     .withHistogramBinCount(binCount)
                                     .withLogHistogram(LogMode)
                                     .withMedian(includeMedian)
-                                    .withMinimum(binMin)
-                                    .withMaximum(binMax)
+                                    .withBinMin(binMin)
+                                    .withBinMax(binMax)
+                                    .withBinWidth(binWidth)
                                     .create(getRaster(), subPm1);
-                        } else {
-                            stx1 = new StxFactory()
-                                    .withHistogramBinCount(binCount)
-                                    .withLogHistogram(LogMode)
-                                    .withMedian(includeMedian)
-                                    .create(getRaster(), subPm1);
-                        }
+
 
 
                         histograms[0] = stx1.getHistogram();
@@ -829,23 +828,15 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                 ProgressMonitor subPm = SubProgressMonitor.create(pm, 1);
 
 
-                                if (binRange) {
                                     stx = new StxFactory()
                                             .withHistogramBinCount(binCount)
                                             .withLogHistogram(LogMode)
                                             .withMedian(includeMedian)
-                                            .withRoiMask(mask)
-                                            .withMinimum(binMin)
-                                            .withMaximum(binMax)
-                                            .create(getRaster(), subPm);
-                                } else {
-                                    stx = new StxFactory()
-                                            .withHistogramBinCount(binCount)
-                                            .withLogHistogram(LogMode)
-                                            .withMedian(includeMedian)
+                                            .withBinMin(binMin)
+                                            .withBinMax(binMax)
+                                            .withBinWidth(binWidth)
                                             .withRoiMask(mask)
                                             .create(getRaster(), subPm);
-                                }
 
 
                                 histograms[histogramIdx] = stx.getHistogram();
