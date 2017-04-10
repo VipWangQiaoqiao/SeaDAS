@@ -89,9 +89,7 @@ public abstract class ChartPagePanel extends PagePanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateChartData();
-                // todo Danny changed this to keep refreshButton enabled until we look into this code more
-               // refreshButton.setEnabled(false);
-                refreshButton.setEnabled(true);
+                refreshButton.setEnabled(false);
             }
         });
 
