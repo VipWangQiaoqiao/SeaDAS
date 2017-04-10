@@ -102,8 +102,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     // todo Danny
 // this works with the exception that statistics returns these values as the Minimum and Maximum.
 
-    boolean binRange = false;
-
+    boolean binRange = false;   // use this to set binMin and binMax to Double.NaN
     double binMin = Double.NaN;
     double binMax = Double.NaN;
     double binWidth = Double.NaN;
@@ -464,26 +463,26 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         });
 
 
-        final JCheckBox showPercentPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PERCENT_PLOT_ENABLED);
-        showPercentPlotCheckBox.setSelected(showPercentPlots);
-        showPercentPlotCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showPercentPlots = showPercentPlotCheckBox.isSelected();
-
-            }
-        });
-
-
-        final JCheckBox showHistogramPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_HISTOGRAM_PLOT_ENABLED);
-        showHistogramPlotCheckBox.setSelected(showHistogramPlots);
-        showHistogramPlotCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showHistogramPlots = showHistogramPlotCheckBox.isSelected();
-
-            }
-        });
+//        final JCheckBox showPercentPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PERCENT_PLOT_ENABLED);
+//        showPercentPlotCheckBox.setSelected(showPercentPlots);
+//        showPercentPlotCheckBox.addItemListener(new ItemListener() {
+//            @Override
+//            public void itemStateChanged(ItemEvent e) {
+//                showPercentPlots = showPercentPlotCheckBox.isSelected();
+//
+//            }
+//        });
+//
+//
+//        final JCheckBox showHistogramPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_HISTOGRAM_PLOT_ENABLED);
+//        showHistogramPlotCheckBox.setSelected(showHistogramPlots);
+//        showHistogramPlotCheckBox.addItemListener(new ItemListener() {
+//            @Override
+//            public void itemStateChanged(ItemEvent e) {
+//                showHistogramPlots = showHistogramPlotCheckBox.isSelected();
+//
+//            }
+//        });
 
 
         final JCheckBox showStatsListCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_LIST_ENABLED);
@@ -523,44 +522,168 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.insets.top = 5;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel.add(new TitledSeparator("Display Options", SwingConstants.CENTER), gbc);
-        gbc = GridBagUtils.restoreConstraints(gbc);
-        gbc.gridy += 1;
+//        panel.add(new TitledSeparator("Display Options", SwingConstants.CENTER), gbc);
+//        gbc = GridBagUtils.restoreConstraints(gbc);
+//        gbc.gridy += 1;
 
 
         panel.add(showStatsListCheckBox, gbc);
         gbc.gridy += 1;
+        gbc.insets.top = 0;
 
         panel.add(showStatsSpreadSheetCheckBox, gbc);
         gbc.gridy += 1;
 
-        panel.add(showHistogramPlotCheckBox, gbc);
+
+
+//        panel.add(includeMedianCheckBox, gbc);
+//        gbc.gridy += 1;
+//
+//        panel.add(histogramStatsCheckBox, gbc);
+//        gbc.gridy += 1;
+//
+//        panel.add(thresholdsPanel, gbc);
+//        gbc.gridy += 1;
+
+        panel.add(decimalPlacesPanel, gbc);
         gbc.gridy += 1;
 
-        panel.add(showPercentPlotCheckBox, gbc);
+        panel.add(colWidthPanel, gbc);
+
+
+        JPanel junk = new JPanel();
+        gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.weighty = 1;
         gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(junk, gbc);
+
+        return panel;
+    }
+
+    private JPanel getFieldOptionsPanel() {
+
+        JPanel thresholdsPanel = getThresholdsPanel();
+
+
+
+        final JCheckBox histogramStatsCheckBox = new JCheckBox("Show Histogram Statistics");
+        histogramStatsCheckBox.setSelected(includeHistogramStats);
+        histogramStatsCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeHistogramStats = histogramStatsCheckBox.isSelected();
+
+            }
+        });
+
+
+
+        final JCheckBox includeMedianCheckBox = new JCheckBox("Show Median");
+        includeMedianCheckBox.setSelected(includeMedian);
+        includeMedianCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeMedian = includeMedianCheckBox.isSelected();
+
+            }
+        });
+
+
+        final JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets.top = 5;
+    //    panel.add(new TitledSeparator("Display Options", SwingConstants.CENTER), gbc);
+ //       gbc = GridBagUtils.restoreConstraints(gbc);
+      //  gbc.gridy += 1;
+
+
 
         panel.add(includeMedianCheckBox, gbc);
+        gbc.insets.top = 0;
         gbc.gridy += 1;
 
         panel.add(histogramStatsCheckBox, gbc);
         gbc.gridy += 1;
 
         panel.add(thresholdsPanel, gbc);
-        gbc.gridy += 1;
 
-        panel.add(decimalPlacesPanel, gbc);
-        gbc.gridy += 1;
 
-        panel.add(colWidthPanel, gbc);
+        JPanel junk = new JPanel();
+        gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.weighty = 1;
+        gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(junk, gbc);
+
+        return panel;
+    }
+
+
+
+    private JPanel getPlotsOptionsPanel() {
+
+
+        final JCheckBox showPercentPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PERCENT_PLOT_ENABLED);
+        showPercentPlotCheckBox.setSelected(showPercentPlots);
+        showPercentPlotCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                showPercentPlots = showPercentPlotCheckBox.isSelected();
+
+            }
+        });
+
+
+        final JCheckBox showHistogramPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_HISTOGRAM_PLOT_ENABLED);
+        showHistogramPlotCheckBox.setSelected(showHistogramPlots);
+        showHistogramPlotCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                showHistogramPlots = showHistogramPlotCheckBox.isSelected();
+
+            }
+        });
+
+
+
+        final JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        gbc.insets.top = 5;
+        gbc.weighty = 0;
+
+        panel.add(showHistogramPlotCheckBox, gbc);
+        gbc.gridy += 1;
+        gbc.insets.top = 0;
+
+        panel.add(showPercentPlotCheckBox, gbc);
         gbc.gridy += 1;
 
         panel.add(getHistDisplayThreshRangePanel(), gbc);
 
+        gbc.gridy += 1;
+
+
+        JPanel junk = new JPanel();
+        gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.weighty = 1;
+        gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(junk, gbc);
 
         return panel;
     }
+
+
 
 
     private JPanel getBinningCriteriaPanel() {
@@ -581,18 +704,28 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         final JPanel panel = GridBagUtils.createPanel();
         GridBagConstraints gbc = GridBagUtils.createConstraints();
 
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1;
-        gbc.anchor = GridBagConstraints.NORTH;
-        panel.add(new TitledSeparator("Binning Criteria", SwingConstants.CENTER), gbc);
-        gbc = GridBagUtils.restoreConstraints(gbc);
-        gbc.gridy += 1;
-
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.weightx = 1;
+//        gbc.weighty = 0;
+//        gbc.anchor = GridBagConstraints.NORTH;
+//        gbc.insets.top = 5;
+    //    panel.add(new TitledSeparator("Binning Criteria", SwingConstants.CENTER), gbc);
+    //    gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.insets.top = 5;
+     //   gbc.gridy += 1;
+        gbc.weighty = 0;
         panel.add(numBinsPanel, gbc);
-        gbc.gridy += 1;
 
-        panel.add(logModeCheckBox, gbc);
         gbc.gridy += 1;
+        gbc.insets.top = 0;
+        panel.add(logModeCheckBox, gbc);
+
+        JPanel junk = new JPanel();
+        gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.weighty = 1;
+        gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(junk, gbc);
 
         return panel;
     }
@@ -606,6 +739,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         final JPanel rightPanel = GridBagUtils.createPanel();
 
+        JTabbedPane tabbedPane =  new JTabbedPane();
+
+
+        final JPanel mainPane = GridBagUtils.createPanel();
+
         //  GridBagConstraints extendedOptionsPanelConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,fill=HORIZONTAL,insets.top=2,weightx=1,insets.right=-2");
         GridBagConstraints extendedOptionsPanelConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,fill=HORIZONTAL,insets.top=2,weightx=1");
 
@@ -614,11 +752,25 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         JPanel optionsPanel = getDisplayOptionsPanel();
+        JPanel fieldsPanel = getFieldOptionsPanel();
         JPanel binningCriteriaPanel = getBinningCriteriaPanel();
+        JPanel plotOptionsPanel = getPlotsOptionsPanel();
 
-        GridBagUtils.addToPanel(rightPanel, optionsPanel, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
+    //    GridBagUtils.addToPanel(rightPanel, optionsPanel, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
 
-        GridBagUtils.addToPanel(rightPanel, binningCriteriaPanel, extendedOptionsPanelConstraints, "gridy=2,fill=BOTH,weighty=0");
+     //   GridBagUtils.addToPanel(rightPanel, binningCriteriaPanel, extendedOptionsPanelConstraints, "gridy=2,fill=BOTH,weighty=0");
+
+      //  GridBagUtils.addToPanel(mainPane, computePanel, extendedOptionsPanelConstraints, "gridy=0,fill=NONE,weighty=1,weightx=1");
+        GridBagUtils.addToPanel(mainPane, binningCriteriaPanel, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
+
+
+        tabbedPane.addTab("Bins", binningCriteriaPanel);
+        tabbedPane.addTab("Fields", fieldsPanel);
+        tabbedPane.addTab("Text", optionsPanel);
+        tabbedPane.addTab("Plots", plotOptionsPanel);
+
+            GridBagUtils.addToPanel(rightPanel, tabbedPane, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0, insets.top=10");
+
 
 
         exportButton = getExportButton();
@@ -631,7 +783,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         GridBagUtils.addToPanel(exportAndHelpPanel, exportButton, helpPanelConstraints, "gridy=1,anchor=WEST,fill=NONE");
         GridBagUtils.addToPanel(exportAndHelpPanel, getHelpButton(), helpPanelConstraints, "gridx=1,gridy=1,anchor=EAST,fill=NONE");
 
-        GridBagUtils.addToPanel(rightPanel, exportAndHelpPanel, extendedOptionsPanelConstraints, "gridy=3,anchor=SOUTHWEST,fill=HORIZONTAL,weighty=0");
+        GridBagUtils.addToPanel(rightPanel, exportAndHelpPanel, extendedOptionsPanelConstraints, "gridy=2,anchor=SOUTHWEST,fill=HORIZONTAL,weighty=0,insets.top=0");
 
 
         rightPanel.setMinimumSize(rightPanel.getPreferredSize());

@@ -135,6 +135,7 @@ class MultipleRoiComputePanel extends JPanel {
 
 
         gbc.gridy++;
+        gbc.insets.top = 5;
         panel.add(includeUnmaskedCheckBox, gbc);
 
         gbc.gridy++;
