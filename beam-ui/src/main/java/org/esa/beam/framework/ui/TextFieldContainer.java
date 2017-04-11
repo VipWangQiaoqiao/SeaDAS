@@ -11,29 +11,47 @@ import java.awt.*;
 public class TextFieldContainer {
 
     private boolean valid = false;
-    private double value = 0.0;
-    private JTextField textfield = new JTextField(3);
+    private Number value;
+    private JTextField textfield;
     private JLabel label;
 
     private String valueString;
     private String name;
-    private int minval;
-    private int maxval;
-    private int defval;
+    private Number minval;
+    private Number maxval;
+    private Number defval;
     private Container parentDialogContentPane = null;
 
+    private boolean list = false;
+    private NumType numType = NumType.DOUBLE;
+
+    public static enum NumType {
+        BYTE,
+        SHORT,
+        INT,
+        LONG,
+        FLOAT,
+        DOUBLE
+    }
 
 
-    public TextFieldContainer(String name, int defval, int minval, int maxval, Container parentDialogContentPane) {
+    public TextFieldContainer(String name, Number defval, NumType numType, int numCols,  Container parentDialogContentPane) {
+        this(name,  defval, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,  numType, numCols, parentDialogContentPane);
+    }
+
+    public TextFieldContainer(String name, Number defval, Number minval, Number maxval, NumType numType, int numCols,  Container parentDialogContentPane) {
         this.name = name;
         this.defval = defval;
         this.minval = minval;
         this.maxval = maxval;
+        this.numType = numType;
         this.parentDialogContentPane = parentDialogContentPane;
+
+        textfield = new JTextField(numCols);
 
         label = new JLabel(name);
         getTextfield().setName(name);
-        getTextfield().setText(Integer.toString(defval));
+        getTextfield().setText(defval.toString());
         textfieldHandler();
 
         setValid(validate(false, true));
@@ -66,12 +84,38 @@ public class TextFieldContainer {
     }
 
 
-    public boolean validate(boolean showDialog, boolean ignoreEmptyString) {
+    // userEntryMode is more forgiving about whether to show the Dialog since user may not be finished typing.
+    public boolean validate(boolean showDialog, boolean userEntryMode) {
 
         try {
-            value = Integer.parseInt(getTextfield().getText().toString());
+            valueString = getTextfield().getText().toString();
+            value = Double.valueOf(valueString);
 
-            if (getValue() < getMinval() || getValue() > getMaxval()) {
+
+            if (!testNumType(value, numType)) {
+                if (showDialog) {
+                    JOptionPane.showMessageDialog(getParentDialogContentPane(),
+                            "ERROR: Value in " + getName() + " must be of type " + numType.toString() + ")",
+                            "Invalid Input",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+                return false;
+            }
+
+
+            if (getValue().doubleValue() < getMinval().doubleValue() || getValue().doubleValue() > getMaxval().doubleValue()) {
+                if (userEntryMode) {
+                    // test user is typing positive number
+                    if (getValue().doubleValue() < getMinval().doubleValue() && getValue().doubleValue() > 0 && getMinval().doubleValue() > 0) {
+                        return false;
+                    }
+                    // test user is typing negative number
+                    if (getValue().doubleValue() > getMaxval().doubleValue() && getValue().doubleValue() < 0 && getMaxval().doubleValue() < 0) {
+                        return false;
+                    }
+
+                }
                 if (showDialog) {
                     JOptionPane.showMessageDialog(getParentDialogContentPane(),
                             "ERROR: Valid " + getName() + " range is (" + getMinval() + " to " + getMaxval() + ")",
@@ -83,8 +127,10 @@ public class TextFieldContainer {
             }
         } catch (NumberFormatException exception) {
 
-            if (ignoreEmptyString && getTextfield().getText().toString().trim().length() == 0) {
-                showDialog = false;
+            String trimmed = getTextfield().getText().toString().trim();
+
+            if (userEntryMode && (trimmed.length() == 0 ||  "-".equals(trimmed))) {
+                return false;
             }
             if (showDialog) {
                 JOptionPane.showMessageDialog(getParentDialogContentPane(),
@@ -97,6 +143,35 @@ public class TextFieldContainer {
 
         return true;
     }
+
+
+    public static boolean testNumType (Number number, NumType numType) {
+
+        double numberDouble = number.doubleValue();
+
+        if (numType == NumType.BYTE) {
+            return  (numberDouble == number.byteValue()) ?  true :  false;
+        }
+
+        if (numType == NumType.SHORT) {
+            return  (numberDouble == number.shortValue()) ?  true :  false;
+        }
+
+        if (numType == NumType.INT) {
+            return  (numberDouble == number.intValue()) ?  true :  false;
+        }
+
+        if (numType == NumType.LONG) {
+            return  (numberDouble == number.longValue()) ?  true :  false;
+        }
+
+        if (numType == NumType.FLOAT) {
+            return  (numberDouble == number.floatValue()) ?  true :  false;
+        }
+
+        return true;
+    }
+
 
     private void setValid(boolean valid) {
         this.valid = valid;
@@ -118,7 +193,7 @@ public class TextFieldContainer {
         return valid;
     }
 
-    public double getValue() {
+    public Number getValue() {
         return value;
     }
 
@@ -138,7 +213,7 @@ public class TextFieldContainer {
         this.name = name;
     }
 
-    public int getMinval() {
+    public Number getMinval() {
         return minval;
     }
 
@@ -146,7 +221,7 @@ public class TextFieldContainer {
         this.minval = minval;
     }
 
-    public int getMaxval() {
+    public Number getMaxval() {
         return maxval;
     }
 
@@ -154,13 +229,24 @@ public class TextFieldContainer {
         this.maxval = maxval;
     }
 
-    public int getDefval() {
+    public Number getDefval() {
         return defval;
     }
 
     public void setDefval(int defval) {
         this.defval = defval;
     }
+
+
+    public boolean isList() {
+        return list;
+    }
+
+    public void setList(boolean list) {
+        this.list = list;
+    }
+
+
 
     public Container getParentDialogContentPane() {
         return parentDialogContentPane;

@@ -63,6 +63,16 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final int PARAM_MINVAL_HIST_DISPLAY_HIGH_THRESH = 0;
     public static final int PARAM_MAXVAL_HIST_DISPLAY_HIGH_THRESH = 100;
 
+
+    public static final String PARAM_KEY_SPREADSHEET_COL_WIDTH_ = "statistics.spreadsheetColWidth";
+    public static final String PARAM_LABEL_SPREADSHEET_COL_WIDTH = "Column Width (Spreadsheet)";
+    public static final int PARAM_DEFVAL_SPREADSHEET_COL_WIDTH = 10;
+    public static final int PARAM_MINVAL_SPREADSHEET_COL_WIDTH = 7;
+    public static final int PARAM_MAXVAL_SPREADSHEET_COL_WIDTH = 50;
+
+
+
+
     public static final String PARAM_KEY_RESET_TO_DEFAULTS = "statistics.resetToDefaults.enabled";
 
 
