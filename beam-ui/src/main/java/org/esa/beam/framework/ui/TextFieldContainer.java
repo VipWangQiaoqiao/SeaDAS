@@ -106,12 +106,17 @@ public class TextFieldContainer {
 
             if (getValue().doubleValue() < getMinval().doubleValue() || getValue().doubleValue() > getMaxval().doubleValue()) {
                 if (userEntryMode) {
+                
+                    //todo Danny this test may be able to be refined
+                    // case 1: if minVal = 25 and user type 100 then problem with first char but following logic resolves this one
+                    // case 2: if minVal = 25 and user types 0.01 then problem with first char
+                    // case 2 resolution needs to be looking at whether a 0 to 1 fraction is being forced
                     // test user is typing positive number
-                    if (getValue().doubleValue() < getMinval().doubleValue() && getValue().doubleValue() > 0 && getMinval().doubleValue() > 0) {
+                    if (getValue().doubleValue() < getMinval().doubleValue() && getValue().doubleValue() >= 0 && getMinval().doubleValue() >= 0) {
                         return false;
                     }
                     // test user is typing negative number
-                    if (getValue().doubleValue() > getMaxval().doubleValue() && getValue().doubleValue() < 0 && getMaxval().doubleValue() < 0) {
+                    if (getValue().doubleValue() > getMaxval().doubleValue() && getValue().doubleValue() <= 0 && getMaxval().doubleValue() <= 0) {
                         return false;
                     }
 
