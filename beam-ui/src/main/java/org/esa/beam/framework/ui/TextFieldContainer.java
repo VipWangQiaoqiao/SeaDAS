@@ -35,6 +35,10 @@ public class TextFieldContainer {
     }
 
 
+    public TextFieldContainer(String name, NumType numType, int numCols,  Container parentDialogContentPane) {
+        this(name,  Double.NaN, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,  numType, numCols, parentDialogContentPane);
+    }
+
     public TextFieldContainer(String name, Number defval, NumType numType, int numCols,  Container parentDialogContentPane) {
         this(name,  defval, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,  numType, numCols, parentDialogContentPane);
     }
@@ -51,7 +55,11 @@ public class TextFieldContainer {
 
         label = new JLabel(name);
         getTextfield().setName(name);
-        getTextfield().setText(defval.toString());
+     //   if (Double.isNaN(defval.doubleValue())) {
+      //      getTextfield().setText("");
+     //   } else {
+            getTextfield().setText(defval.toString());
+      //  }
         textfieldHandler();
 
         setValid(validate(false, true));
@@ -149,6 +157,23 @@ public class TextFieldContainer {
         return true;
     }
 
+    public void reset() {
+    //    if (Double.isNaN(defval.doubleValue())) {
+    //        getTextfield().setText("");
+     //   } else {
+            getTextfield().setText(defval.toString());
+    //    }
+    }
+
+    public void setEnabled(boolean enabled) {
+        if (getLabel() != null) {
+            getLabel().setEnabled(enabled);
+        }
+
+        if (getTextfield() != null) {
+            getTextfield().setEnabled(enabled);
+        }
+    }
 
     public static boolean testNumType (Number number, NumType numType) {
 

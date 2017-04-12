@@ -51,17 +51,54 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final int PARAM_MINVAL_NUM_BINS = 1;
     public static final int PARAM_MAXVAL_NUM_BINS = 1000000;
 
-    public static final String PARAM_LABEL_HIST_DISPLAY_LOW_THRESH = "Thresh Range: Low";
-    public static final String PARAM_KEY_HIST_DISPLAY_LOW_THRESH = "statistics.histDisplayLowThresh";
-    public static final int PARAM_DEFVAL_HIST_DISPLAY_LOW_THRESH = 5;
-    public static final int PARAM_MINVAL_HIST_DISPLAY_LOW_THRESH = 0;
-    public static final int PARAM_MAXVAL_HIST_DISPLAY_LOW_THRESH = 100;
+    public static final String PARAM_LABEL_PLOTS_THRESH_DOMAIN_LOW = "Plot Domain Low Threshold";
+    public static final String PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_LOW = "Low";
+    public static final String PARAM_KEY_PLOTS_THRESH_DOMAIN_LOW = "statistics.plotsThreshDomainLow";
+    public static final double PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW = 5;
+    public static final double PARAM_MINVAL_PLOTS_THRESH_DOMAIN_LOW = 0;
+    public static final double PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_LOW = 100;
 
-    public static final String PARAM_LABEL_HIST_DISPLAY_HIGH_THRESH = "High";
-    public static final String PARAM_KEY_HIST_DISPLAY_HIGH_THRESH = "statistics.histDisplayHighThresh";
-    public static final int PARAM_DEFVAL_HIST_DISPLAY_HIGH_THRESH = 95;
-    public static final int PARAM_MINVAL_HIST_DISPLAY_HIGH_THRESH = 0;
-    public static final int PARAM_MAXVAL_HIST_DISPLAY_HIGH_THRESH = 100;
+    public static final String PARAM_LABEL_PLOTS_THRESH_DOMAIN_HIGH = "Plot Domain High Threshold";
+    public static final String PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_HIGH = "High";
+    public static final String PARAM_KEY_PLOTS_THRESH_DOMAIN_HIGH = "statistics.plotsThreshDomainHigh";
+    public static final double PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH = 95;
+    public static final double PARAM_MINVAL_PLOTS_THRESH_DOMAIN_HIGH = 0;
+    public static final double PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_HIGH = 100;
+
+    public static final String PARAM_LABEL_PLOTS_DOMAIN_LOW = "Low";
+    public static final double PARAM_DEFVAL_PLOTS_DOMAIN_LOW = Double.NaN;
+
+    public static final String PARAM_LABEL_PLOTS_DOMAIN_HIGH = "High";
+    public static final double PARAM_DEFVAL_PLOTS_DOMAIN_HIGH = Double.NaN;
+
+
+    public static final String PARAM_LABEL_PLOTS_DOMAIN_SPAN = "Set Plot Domain: (by Value)";
+    public static final String PARAM_SHORTLABEL_PLOTS_DOMAIN_SPAN = "Set Domain: (by Value)";
+    public static final boolean PARAM_DEFVAL_PLOTS_DOMAIN_SPAN = false;
+
+    public static final String PARAM_LABEL_PLOTS_THRESH_DOMAIN_SPAN = "Set Plot Domain: (by Threshold)";
+    public static final String PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_SPAN = "Set Domain: (by Threshold)";
+    public static final boolean PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN = true;
+
+
+    public static final String PARAM_LABEL_PLOTS_SIZE = "Set Plot Size";
+    public static final String PARAM_SHORTLABEL_PLOTS_SIZE = "Set Size (includes labels)";
+    public static final boolean PARAM_DEFVAL_PLOTS_SIZE = false;
+
+    public static final String PARAM_LABEL_PLOTS_SIZE_HEIGHT = "Plot Size (Height)";
+    public static final String PARAM_SHORTLABEL_PLOTS_SIZE_HEIGHT = "Height";
+    public static final String PARAM_KEY_PLOTS_SIZE_HEIGHT = "statistics.plotsSizeHeight";
+    public static final int PARAM_DEFVAL_PLOTS_SIZE_HEIGHT = 300;
+    public static final int PARAM_MINVAL_PLOTS_SIZE_HEIGHT = 50;
+    public static final int PARAM_MAXVAL_PLOTS_SIZE_HEIGHT = 2000;
+
+    public static final String PARAM_LABEL_PLOTS_SIZE_WIDTH = "Plot Size (Width)";
+    public static final String PARAM_SHORTLABEL_PLOTS_SIZE_WIDTH = "Width";
+    public static final String PARAM_KEY_PLOTS_SIZE_WIDTH = "statistics.plotsSizeWidth";
+    public static final int PARAM_DEFVAL_PLOTS_SIZE_WIDTH = 300;
+    public static final int PARAM_MINVAL_PLOTS_SIZE_WIDTH = 50;
+    public static final int PARAM_MAXVAL_PLOTS_SIZE_WIDTH = 2000;
+
 
 
     public static final String PARAM_KEY_SPREADSHEET_COL_WIDTH_ = "statistics.spreadsheetColWidth";

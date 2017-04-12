@@ -105,17 +105,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     double binMax = Double.NaN;
     double binWidth = Double.NaN;
 
-    private boolean customHistDomainDisplaySpanThresh = true;
-    private double histDisplayLowThresh = 5;
-    private double histDisplayHighThresh = 95;
-
-    private boolean customHistDomainDisplaySpan = false;
-    private double histDisplayLow = 0;
-    private double histDisplayHigh = 6;
-
-    private int plotMinHeight = 300;
-    private int plotMinWidth = 200;
-
 
     boolean fixedHistDomainAllPlots = true;
     boolean fixedHistDomainAllPlotsInitialized = false;
@@ -173,12 +162,39 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private int numStatisticFields = 0;
     private int numProductRegions = 0;
 
-    //  private HistDisplayLowThreshTextfield histDisplayLowThreshTextfieldContainer = new HistDisplayLowThreshTextfield();
-    private TextFieldContainer histDisplayLowThreshTextfieldContainer = null;
-    private TextFieldContainer histDisplayHighThreshTextfieldContainer = null;
+
+    private boolean plotsThreshDomainSpan = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN;
+    private double plotsThreshDomainLow = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW;
+    private double plotsThreshDomainHigh = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH;
+    private JCheckBox plotsThreshDomainSpanCheckBox = null;
+    private TextFieldContainer plotsThreshDomainLowTextfieldContainer = null;
+    private TextFieldContainer plotsThreshDomainHighTextfieldContainer = null;
+
+
+    private boolean plotsDomainSpan = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN;
+    private double plotsDomainLow = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_LOW;
+    private double plotsDomainHigh = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_HIGH;
+    private JCheckBox plotsDomainSpanCheckBox = null;
+    private TextFieldContainer plotsDomainLowTextfieldContainer = null;
+    private TextFieldContainer plotsDomainHighTextfieldContainer = null;
+
+
+    private int plotMinHeight = 300;
+    private int plotMinWidth = 300;
+
+    private boolean exactPlotSize = StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE;
+    private int plotSizeHeight = StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_HEIGHT;
+    private int plotSizeWidth = StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_WIDTH;
+    private JCheckBox plotsSizeCheckBox = null;
+    private TextFieldContainer plotsSizeHeightTextfieldContainer = null;
+    private TextFieldContainer plotsSizeWidthTextfieldContainer = null;
+
+
     private TextFieldContainer numBinsTextfieldContainer = null;
     private TextFieldContainer spreadsheetColWidthTextfieldContainer = null;
-    //   private HistDisplayHighThreshTextfield histDisplayHighThreshTextfieldContainer = new HistDisplayHighThreshTextfield();
+
+
+    //   private HistDisplayHighThreshTextfield plotsThreshDomainHighTextfieldContainer = new HistDisplayHighThreshTextfield();
 
 
     public StatisticsPanel(final ToolView parentDialog, String helpID) {
@@ -195,26 +211,137 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     protected void initComponents() {
         init = true;
 
-        histDisplayLowThreshTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_HIST_DISPLAY_LOW_THRESH,
-                StatisticsToolView.PARAM_DEFVAL_HIST_DISPLAY_LOW_THRESH,
-                StatisticsToolView.PARAM_MINVAL_HIST_DISPLAY_LOW_THRESH,
-                StatisticsToolView.PARAM_MAXVAL_HIST_DISPLAY_LOW_THRESH,
-                TextFieldContainer.NumType.DOUBLE,
-                3,
-                getParentDialogContentPane());
+        statsSpreadsheet = null;
+
+        showHistogramPlots = getPreferencesHistogramPlotEnabled();
+        showPercentPlots = getPreferencesPercentPlotEnabled();
+        showStatsList = getPreferencesStatsListEnabled();
+        showStatsSpreadSheet = getPreferencesStatsSpreadSheetEnabled();
+        numBins = getPreferencesNumBins();
+        percentThresholds = getPreferencesPercentThresholds();
 
 
-        histDisplayHighThreshTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_HIST_DISPLAY_HIGH_THRESH,
-                StatisticsToolView.PARAM_DEFVAL_HIST_DISPLAY_HIGH_THRESH,
-                StatisticsToolView.PARAM_MINVAL_HIST_DISPLAY_HIGH_THRESH,
-                StatisticsToolView.PARAM_MAXVAL_HIST_DISPLAY_HIGH_THRESH,
+        plotsThreshDomainLowTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_LOW,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW,
+                StatisticsToolView.PARAM_MINVAL_PLOTS_THRESH_DOMAIN_LOW,
+                StatisticsToolView.PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_LOW,
                 TextFieldContainer.NumType.DOUBLE,
-                3,
+                4,
                 getParentDialogContentPane());
+        plotsThreshDomainLowTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
+
+
+        plotsThreshDomainHighTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_HIGH,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH,
+                StatisticsToolView.PARAM_MINVAL_PLOTS_THRESH_DOMAIN_HIGH,
+                StatisticsToolView.PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_HIGH,
+                TextFieldContainer.NumType.DOUBLE,
+                4,
+                getParentDialogContentPane());
+        plotsThreshDomainHighTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
+
+
+
+        plotsDomainLowTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_PLOTS_DOMAIN_LOW,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_LOW,
+                TextFieldContainer.NumType.DOUBLE,
+                4,
+                getParentDialogContentPane());
+        plotsDomainLowTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
+
+
+        plotsDomainHighTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_PLOTS_DOMAIN_HIGH,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_HIGH,
+                TextFieldContainer.NumType.DOUBLE,
+                4,
+                getParentDialogContentPane());
+        plotsDomainHighTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
+
+
+
+
+
+        plotsSizeHeightTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_SIZE_HEIGHT,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_HEIGHT,
+                StatisticsToolView.PARAM_MINVAL_PLOTS_SIZE_HEIGHT,
+                StatisticsToolView.PARAM_MAXVAL_PLOTS_SIZE_HEIGHT,
+                TextFieldContainer.NumType.INT,
+                4,
+                getParentDialogContentPane());
+        plotsSizeHeightTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
+
+
+
+        plotsSizeWidthTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_SIZE_WIDTH,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_WIDTH,
+                StatisticsToolView.PARAM_MINVAL_PLOTS_SIZE_WIDTH,
+                StatisticsToolView.PARAM_MAXVAL_PLOTS_SIZE_WIDTH,
+                TextFieldContainer.NumType.INT,
+                4,
+                getParentDialogContentPane());
+        plotsSizeWidthTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
+
+
+
+
+
+
+
+
+
+
+        plotsThreshDomainSpanCheckBox = new JCheckBox(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_SPAN);
+        plotsThreshDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
+
+
+        plotsDomainSpanCheckBox = new JCheckBox(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_DOMAIN_SPAN);
+        plotsDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
+
+        plotsSizeCheckBox = new JCheckBox(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_SIZE);
+        plotsSizeCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
+
+
+
+        plotsSizeCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                plotsSizeHeightTextfieldContainer.setEnabled(plotsSizeCheckBox.isSelected());
+                plotsSizeWidthTextfieldContainer.setEnabled(plotsSizeCheckBox.isSelected());
+            }
+        });
+
+
+        plotsThreshDomainSpanCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                plotsThreshDomainHighTextfieldContainer.setEnabled(plotsThreshDomainSpanCheckBox.isSelected());
+                plotsThreshDomainLowTextfieldContainer.setEnabled(plotsThreshDomainSpanCheckBox.isSelected());
+
+                if (plotsThreshDomainSpanCheckBox.isSelected()) {
+                    plotsDomainSpanCheckBox.setSelected(false);
+                    plotsDomainHighTextfieldContainer.setEnabled(false);
+                    plotsDomainLowTextfieldContainer.setEnabled(false);
+                }
+            }
+        });
+
+        plotsDomainSpanCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                plotsDomainHighTextfieldContainer.setEnabled(plotsDomainSpanCheckBox.isSelected());
+                plotsDomainLowTextfieldContainer.setEnabled(plotsDomainSpanCheckBox.isSelected());
+
+                if (plotsDomainSpanCheckBox.isSelected()) {
+                    plotsThreshDomainSpanCheckBox.setSelected(false);
+                    plotsThreshDomainHighTextfieldContainer.setEnabled(false);
+                    plotsThreshDomainLowTextfieldContainer.setEnabled(false);
+                }
+            }
+        });
 
 
         numBinsTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_NUM_BINS,
-                StatisticsToolView.PARAM_DEFVAL_NUM_BINS,
+                numBins,
                 StatisticsToolView.PARAM_MINVAL_NUM_BINS,
                 StatisticsToolView.PARAM_MAXVAL_NUM_BINS,
                 TextFieldContainer.NumType.INT,
@@ -229,15 +356,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 TextFieldContainer.NumType.INT,
                 2,
                 getParentDialogContentPane());
-
-
-        statsSpreadsheet = null;
-        showHistogramPlots = getPreferencesHistogramPlotEnabled();
-        showPercentPlots = getPreferencesPercentPlotEnabled();
-        showStatsList = getPreferencesStatsListEnabled();
-        showStatsSpreadSheet = getPreferencesStatsSpreadSheetEnabled();
-        percentThresholds = getPreferencesPercentThresholds();
-        numBins = getPreferencesNumBins();
 
 
         final JPanel rightPanel = getRightPanel();
@@ -364,26 +482,112 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
 
-    private JPanel getHistDisplayThreshRangePanel() {
+    private JPanel getPlotsThreshDomainSpanPanel() {
+
+
+        JPanel childPanel = GridBagUtils.createPanel();
+        GridBagConstraints gbcChild = GridBagUtils.createConstraints();
+
+        gbcChild.gridx += 1;
+        gbcChild.insets.left = new JCheckBox(" ").getPreferredSize().width;
+        gbcChild.insets.right = 3;
+        childPanel.add(plotsThreshDomainLowTextfieldContainer.getLabel(), gbcChild);
+        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
+
+        gbcChild.gridx += 1;
+        childPanel.add(plotsThreshDomainLowTextfieldContainer.getTextfield(), gbcChild);
+
+        gbcChild.gridx += 1;
+        gbcChild.insets.right = 3;
+        childPanel.add(plotsThreshDomainHighTextfieldContainer.getLabel(), gbcChild);
+        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
+
+        gbcChild.gridx += 1;
+        childPanel.add(plotsThreshDomainHighTextfieldContainer.getTextfield(), gbcChild);
 
 
         JPanel panel = GridBagUtils.createPanel();
         GridBagConstraints gbc = GridBagUtils.createConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets.right = 3;
-        panel.add(histDisplayLowThreshTextfieldContainer.getLabel(), gbc);
-        gbc.insets.right = 0;
-        gbc.gridx += 1;
-        panel.add(histDisplayLowThreshTextfieldContainer.getTextfield(), gbc);
-        gbc.gridx += 1;
-//        gbc.gridx = 0;
-//        gbc.gridy += 1;
-        gbc.insets.right = 3;
-        panel.add(histDisplayHighThreshTextfieldContainer.getLabel(), gbc);
-        gbc.insets.right = 0;
-        gbc.gridx += 1;
-        gbc.insets.right = 0;
-        panel.add(histDisplayHighThreshTextfieldContainer.getTextfield(), gbc);
+
+        panel.add(plotsThreshDomainSpanCheckBox, gbc);
+
+        gbc.gridy += 1;
+        panel.add(childPanel, gbc);
+
+
+        return panel;
+    }
+
+
+    private JPanel getPlotsDomainSpanPanel() {
+
+
+        JPanel childPanel = GridBagUtils.createPanel();
+        GridBagConstraints gbcChild = GridBagUtils.createConstraints();
+
+        gbcChild.gridx += 1;
+        gbcChild.insets.left = new JCheckBox(" ").getPreferredSize().width;
+        gbcChild.insets.right = 3;
+        childPanel.add(plotsDomainLowTextfieldContainer.getLabel(), gbcChild);
+        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
+
+        gbcChild.gridx += 1;
+        childPanel.add(plotsDomainLowTextfieldContainer.getTextfield(), gbcChild);
+
+        gbcChild.gridx += 1;
+        gbcChild.insets.right = 3;
+        childPanel.add(plotsDomainHighTextfieldContainer.getLabel(), gbcChild);
+        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
+
+        gbcChild.gridx += 1;
+        childPanel.add(plotsDomainHighTextfieldContainer.getTextfield(), gbcChild);
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        panel.add(plotsDomainSpanCheckBox, gbc);
+
+        gbc.gridy += 1;
+        panel.add(childPanel, gbc);
+
+
+        return panel;
+    }
+
+
+    private JPanel getPlotsSizePanel() {
+
+
+        JPanel childPanel = GridBagUtils.createPanel();
+        GridBagConstraints gbcChild = GridBagUtils.createConstraints();
+
+        gbcChild.gridx += 1;
+        gbcChild.insets.left = new JCheckBox(" ").getPreferredSize().width;
+        gbcChild.insets.right = 3;
+        childPanel.add(plotsSizeWidthTextfieldContainer.getLabel(), gbcChild);
+        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
+
+        gbcChild.gridx += 1;
+        childPanel.add(plotsSizeWidthTextfieldContainer.getTextfield(), gbcChild);
+
+        gbcChild.gridx += 1;
+        gbcChild.insets.right = 3;
+        childPanel.add(plotsSizeHeightTextfieldContainer.getLabel(), gbcChild);
+        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
+
+        gbcChild.gridx += 1;
+        childPanel.add(plotsSizeHeightTextfieldContainer.getTextfield(), gbcChild);
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        panel.add(plotsSizeCheckBox, gbc);
+
+        gbc.gridy += 1;
+        panel.add(childPanel, gbc);
+
 
         return panel;
     }
@@ -483,26 +687,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 //        });
 
 
-        final JCheckBox showStatsListCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_LIST_ENABLED);
-        showStatsListCheckBox.setSelected(showStatsList);
-        showStatsListCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showStatsList = showStatsListCheckBox.isSelected();
 
-            }
-        });
-
-
-        final JCheckBox showStatsSpreadSheetCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_SPREADSHEET_ENABLED);
-        showStatsSpreadSheetCheckBox.setSelected(showStatsSpreadSheet);
-        showStatsSpreadSheetCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showStatsSpreadSheet = showStatsSpreadSheetCheckBox.isSelected();
-
-            }
-        });
 
         final JCheckBox includeMedianCheckBox = new JCheckBox("Show Median");
         includeMedianCheckBox.setSelected(includeMedian);
@@ -528,12 +713,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 //        gbc.gridy += 1;
 
 
-        panel.add(showStatsListCheckBox, gbc);
-        gbc.gridy += 1;
-        gbc.insets.top = 0;
-
-        panel.add(showStatsSpreadSheetCheckBox, gbc);
-        gbc.gridy += 1;
 
 
 //        panel.add(includeMedianCheckBox, gbc);
@@ -547,6 +726,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         panel.add(decimalPlacesPanel, gbc);
         gbc.gridy += 1;
+        gbc.insets.top = 0;
+
 
         panel.add(colWidthPanel, gbc);
 
@@ -623,6 +804,81 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
     private JPanel getPlotsOptionsPanel() {
+        final JCheckBox showStatsListCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_LIST_ENABLED);
+        showStatsListCheckBox.setSelected(showStatsList);
+        showStatsListCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                showStatsList = showStatsListCheckBox.isSelected();
+
+            }
+        });
+
+
+        final JCheckBox showStatsSpreadSheetCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_SPREADSHEET_ENABLED);
+        showStatsSpreadSheetCheckBox.setSelected(showStatsSpreadSheet);
+        showStatsSpreadSheetCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                showStatsSpreadSheet = showStatsSpreadSheetCheckBox.isSelected();
+
+            }
+        });
+        final JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        gbc.weighty = 0;
+        gbc.insets.top = 5;
+        gbc.insets.bottom = 3;
+        panel.add(getPlotsThreshDomainSpanPanel(), gbc);
+        gbc = GridBagUtils.restoreConstraints(gbc);
+
+        gbc.gridy += 1;
+        gbc.insets.bottom = 3;
+        panel.add(getPlotsDomainSpanPanel(), gbc);
+        gbc = GridBagUtils.restoreConstraints(gbc);
+
+        // todo PlotSize
+        gbc.gridy += 1;
+        gbc.insets.bottom = 3;
+        panel.add(getPlotsSizePanel(), gbc);
+        gbc = GridBagUtils.restoreConstraints(gbc);
+
+
+        gbc.gridy += 1;
+        JPanel junk = new JPanel();
+        gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.weighty = 1;
+        gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(junk, gbc);
+
+        return panel;
+    }
+
+    private JPanel getViewPanel() {
+
+
+        final JCheckBox showStatsListCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_LIST_ENABLED);
+        showStatsListCheckBox.setSelected(showStatsList);
+        showStatsListCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                showStatsList = showStatsListCheckBox.isSelected();
+
+            }
+        });
+
+
+        final JCheckBox showStatsSpreadSheetCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_SPREADSHEET_ENABLED);
+        showStatsSpreadSheetCheckBox.setSelected(showStatsSpreadSheet);
+        showStatsSpreadSheetCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                showStatsSpreadSheet = showStatsSpreadSheetCheckBox.isSelected();
+
+            }
+        });
 
 
         final JCheckBox showPercentPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PERCENT_PLOT_ENABLED);
@@ -650,21 +906,23 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         final JPanel panel = GridBagUtils.createPanel();
         GridBagConstraints gbc = GridBagUtils.createConstraints();
 
-        gbc.insets.top = 5;
-        gbc.weighty = 0;
 
-        panel.add(showHistogramPlotCheckBox, gbc);
-        gbc.gridy += 1;
+        gbc.weighty = 0;
+        gbc.insets.top = 5;
+        panel.add(showPercentPlotCheckBox, gbc);
         gbc.insets.top = 0;
 
-        panel.add(showPercentPlotCheckBox, gbc);
         gbc.gridy += 1;
-
-        panel.add(getHistDisplayThreshRangePanel(), gbc);
+       // gbc.insets.top = 3;
+        panel.add(showHistogramPlotCheckBox, gbc);
 
         gbc.gridy += 1;
+        panel.add(showStatsListCheckBox, gbc);
 
+        gbc.gridy += 1;
+        panel.add(showStatsSpreadSheetCheckBox, gbc);
 
+        gbc.gridy += 1;
         JPanel junk = new JPanel();
         gbc = GridBagUtils.restoreConstraints(gbc);
         gbc.weighty = 1;
@@ -674,6 +932,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         return panel;
     }
+
 
 
     private JPanel getBinningCriteriaPanel() {
@@ -745,6 +1004,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         JPanel fieldsPanel = getFieldOptionsPanel();
         JPanel binningCriteriaPanel = getBinningCriteriaPanel();
         JPanel plotOptionsPanel = getPlotsOptionsPanel();
+        JPanel viewPanel = getViewPanel();
 
         //    GridBagUtils.addToPanel(rightPanel, optionsPanel, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
 
@@ -758,6 +1018,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         tabbedPane.addTab("Fields", fieldsPanel);
         tabbedPane.addTab("Text", optionsPanel);
         tabbedPane.addTab("Plots", plotOptionsPanel);
+        tabbedPane.addTab("View", viewPanel);
 
         GridBagUtils.addToPanel(rightPanel, tabbedPane, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0, insets.top=10");
 
@@ -787,6 +1048,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (!init) {
             initComponents();
         }
+
+        plotsDomainLowTextfieldContainer.reset();
+        plotsDomainHighTextfieldContainer.reset();
+
         statsSpreadsheet = null;
 
 
@@ -875,7 +1140,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         statsSpreadsheet = null;  // reset this
 
-        if (!initValidateFields(true)) {
+        if (!retrieveValidateTextFields(true)) {
             abortRun();
             return;
         }
@@ -1188,12 +1453,12 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         if (!fixedHistDomainAllPlots || (fixedHistDomainAllPlots && !fixedHistDomainAllPlotsInitialized)) {
             if (!LogMode) {
-                if (customHistDomainDisplaySpanThresh && histDisplayLowThresh >= 0.1 && histDisplayHighThresh <= 99.9) {
-                    histDomainBounds[0] = histogram.getPTileThreshold((histDisplayLowThresh) / 100)[0];
-                    histDomainBounds[1] = histogram.getPTileThreshold(histDisplayHighThresh / 100)[0];
-                } else if (customHistDomainDisplaySpan) {
-                    histDomainBounds[0] = histDisplayLow;
-                    histDomainBounds[1] = histDisplayHigh;
+                if (plotsThreshDomainSpan && plotsThreshDomainLow >= 0.1 && plotsThreshDomainHigh <= 99.9) {
+                    histDomainBounds[0] = histogram.getPTileThreshold((plotsThreshDomainLow) / 100)[0];
+                    histDomainBounds[1] = histogram.getPTileThreshold(plotsThreshDomainHigh / 100)[0];
+                } else if (plotsDomainSpan) {
+                    histDomainBounds[0] = plotsDomainLow;
+                    histDomainBounds[1] = plotsDomainHigh;
                 }
 
             } else {
@@ -1202,9 +1467,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
 
 
-//            if (!LogMode && customHistDomainDisplaySpanThresh && histDisplayLowThresh >= 0.1 && histDisplayHighThresh <= 99.9) {
-//                histDomainBounds[0] = histogram.getPTileThreshold((histDisplayLowThresh) / 100)[0];
-//                histDomainBounds[1] = histogram.getPTileThreshold(histDisplayHighThresh / 100)[0];
+//            if (!LogMode && plotsThreshDomainSpan && plotsThreshDomainLow >= 0.1 && plotsThreshDomainHigh <= 99.9) {
+//                histDomainBounds[0] = histogram.getPTileThreshold((plotsThreshDomainLow) / 100)[0];
+//                histDomainBounds[1] = histogram.getPTileThreshold(plotsThreshDomainHigh / 100)[0];
 //
 //            } else {
 //                histDomainBounds[0] = histogram.getBinLowValue(0, 0);
@@ -1238,9 +1503,19 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 "Frequency in #Pixels",
                 new Color(0, 0, 127),
                 histDomainBounds, histRangeBounds);
-        histogramPanel.setMinimumSize(new Dimension(plotMinWidth, plotMinHeight));
-        histogramPanel.setPreferredSize(new Dimension(plotMinWidth, plotMinHeight));
-        histogramPanel.setMaximumSize(new Dimension(plotMinWidth, plotMinHeight));
+
+
+      //  histogramPanel.setPreferredSize(new Dimension(300, 200));
+
+
+        if (exactPlotSize) {
+            histogramPanel.setMinimumSize(new Dimension(plotSizeWidth, plotSizeHeight));
+            histogramPanel.setPreferredSize(new Dimension(plotSizeWidth, plotSizeHeight));
+            histogramPanel.setMaximumSize(new Dimension(plotSizeWidth, plotSizeHeight));
+        } else {
+            histogramPanel.setMinimumSize(new Dimension(plotMinWidth, plotMinHeight));
+            histogramPanel.setPreferredSize(new Dimension(plotMinWidth, plotMinHeight));
+        }
 
         XIntervalSeries percentileSeries = new XIntervalSeries("Percentile");
 
@@ -1354,12 +1629,20 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             percentileRangeBounds[1] = histDomainBounds[1];
 
             percentilePanel = createScatterChartPanel(percentileSeries, "Percent Threshold", logTitle + getRaster().getName() + " (" + getRaster().getUnit() + ")", new Color(0, 0, 0), percentileDomainBounds, percentileRangeBounds);
-            percentilePanel.setMinimumSize(new Dimension(plotMinWidth, plotMinHeight));
-            percentilePanel.setPreferredSize(new Dimension(plotMinWidth, plotMinHeight));
-            percentilePanel.setMaximumSize(new Dimension(plotMinWidth, plotMinHeight));
+
+
 
         }
 
+     //   percentilePanel.setPreferredSize(new Dimension(300, 200));
+        if (exactPlotSize) {
+            percentilePanel.setMinimumSize(new Dimension(plotSizeWidth, plotSizeHeight));
+            percentilePanel.setPreferredSize(new Dimension(plotSizeWidth, plotSizeHeight));
+            percentilePanel.setMaximumSize(new Dimension(plotSizeWidth, plotSizeHeight));
+        } else {
+            percentilePanel.setMinimumSize(new Dimension(plotMinWidth, plotMinHeight));
+            percentilePanel.setPreferredSize(new Dimension(plotMinWidth, plotMinHeight));
+        }
 
         int size = getRaster().getRasterHeight() * getRaster().getRasterWidth();
 
@@ -1651,10 +1934,16 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         if (plotContainerPanel != null) {
             plotsPane = GridBagUtils.createPanel();
+            plotsPane.setBackground(Color.WHITE);
             //    plotsPane.setBorder(UIUtils.createGroupBorder(" ")); /*I18N*/
             GridBagConstraints gbcPlots = GridBagUtils.createConstraints("");
             gbcPlots.gridy = 0;
-            gbcPlots.fill = GridBagConstraints.BOTH;
+            if (exactPlotSize) {
+                gbcPlots.fill = GridBagConstraints.NONE;
+            } else {
+                gbcPlots.fill = GridBagConstraints.BOTH;
+            }
+
             gbcPlots.anchor = GridBagConstraints.NORTHWEST;
             gbcPlots.weightx = 0.5;
             gbcPlots.weighty = 1;
@@ -1691,6 +1980,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (plotsPane != null) {
             mainPane.add(plotsPane, gbcMain);
         }
+
+
 
         return mainPane;
     }
@@ -1875,7 +2166,16 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         renderer.setBarPainter(painter);
 
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(300, 200));
+//// todo Danny testing out height/width ratio preservation
+//        double histChartHeightWidthRatio = chartPanel.getPreferredSize().height / chartPanel.getPreferredSize().width;
+//        double plotSizeReduction = 1;
+//        Number preferredHeight = chartPanel.getPreferredSize().height * plotSizeReduction;
+//        Number preferredWidth = chartPanel.getPreferredSize().width * plotSizeReduction;
+//
+//        chartPanel.setPreferredSize(new Dimension(preferredWidth.intValue(), preferredHeight.intValue()));
+
+    //  chartPanel.setPreferredSize(new Dimension(300, 200));
+
 //        chartPanel.getPopupMenu().add(createCopyDataToClipboardMenuItem());
         return chartPanel;
     }
@@ -1920,7 +2220,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(300, 200));
+   //    chartPanel.setPreferredSize(new Dimension(300, 200));
 
         return chartPanel;
     }
@@ -2014,24 +2314,71 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
 
-    private boolean initValidateFields(boolean showDialog) {
+    private boolean retrieveValidateTextFields(boolean showDialog) {
         if (!validNumBins()) {
             return false;
         }
 
 
-        if (histDisplayLowThreshTextfieldContainer != null && histDisplayLowThreshTextfieldContainer.isValid(true) && histDisplayLowThreshTextfieldContainer.getValue() != null) {
-            histDisplayLowThresh = histDisplayLowThreshTextfieldContainer.getValue().doubleValue();
+        exactPlotSize = plotsSizeCheckBox.isSelected();
+        plotsDomainSpan = plotsDomainSpanCheckBox.isSelected();
+        plotsThreshDomainSpan = plotsThreshDomainSpanCheckBox.isSelected();
+
+        if (plotsSizeCheckBox.isSelected()) {
+            if (plotsSizeHeightTextfieldContainer != null && plotsSizeHeightTextfieldContainer.isValid(true) && plotsSizeHeightTextfieldContainer.getValue() != null) {
+                plotSizeHeight = plotsSizeHeightTextfieldContainer.getValue().intValue();
+            } else {
+                return false;
+            }
+
+            if (plotsSizeWidthTextfieldContainer != null && plotsSizeWidthTextfieldContainer.isValid(true) && plotsSizeWidthTextfieldContainer.getValue() != null) {
+                plotSizeWidth = plotsSizeWidthTextfieldContainer.getValue().intValue();
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            plotSizeHeight = StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_HEIGHT;
+            plotSizeWidth = StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_WIDTH;
         }
 
 
-        if (histDisplayHighThreshTextfieldContainer != null && histDisplayHighThreshTextfieldContainer.isValid(true) && histDisplayHighThreshTextfieldContainer.getValue() != null) {
-            histDisplayHighThresh = histDisplayHighThreshTextfieldContainer.getValue().doubleValue();
+        if (plotsDomainSpanCheckBox.isSelected()) {
+            if (plotsDomainLowTextfieldContainer != null && plotsDomainLowTextfieldContainer.isValid(true) && plotsDomainLowTextfieldContainer.getValue() != null) {
+                plotsDomainLow = plotsDomainLowTextfieldContainer.getValue().doubleValue();
+            } else {
+                return false;
+            }
+
+
+            if (plotsDomainHighTextfieldContainer != null && plotsDomainHighTextfieldContainer.isValid(true) && plotsDomainHighTextfieldContainer.getValue() != null) {
+                plotsDomainHigh = plotsDomainHighTextfieldContainer.getValue().doubleValue();
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            plotsDomainLow = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_LOW;
+            plotsDomainHigh = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_HIGH;
         }
+
+
+        if (plotsThreshDomainSpanCheckBox.isSelected()) {
+            if (plotsThreshDomainLowTextfieldContainer != null && plotsThreshDomainLowTextfieldContainer.isValid(true) && plotsThreshDomainLowTextfieldContainer.getValue() != null) {
+                plotsThreshDomainLow = plotsThreshDomainLowTextfieldContainer.getValue().doubleValue();
+            } else {
+                return false;
+            }
+
+
+            if (plotsThreshDomainHighTextfieldContainer != null && plotsThreshDomainHighTextfieldContainer.isValid(true) && plotsThreshDomainHighTextfieldContainer.getValue() != null) {
+                plotsThreshDomainHigh = plotsThreshDomainHighTextfieldContainer.getValue().doubleValue();
+            } else {
+                return false;
+            }
+        } else {
+            plotsThreshDomainLow = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW;
+            plotsThreshDomainHigh = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH;
+        }
+
 
 
         if (numBinsTextfieldContainer != null && numBinsTextfieldContainer.isValid(true) && numBinsTextfieldContainer.getValue() != null) {
@@ -2048,14 +2395,25 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         {
-            String lowName = histDisplayLowThreshTextfieldContainer.getName();
-            String highName = histDisplayHighThreshTextfieldContainer.getName();
-            double lowVal = histDisplayLowThreshTextfieldContainer.getValue().doubleValue();
-            double highVal = histDisplayHighThreshTextfieldContainer.getValue().doubleValue();
+            String lowName = plotsThreshDomainLowTextfieldContainer.getName();
+            String highName = plotsThreshDomainHighTextfieldContainer.getName();
+            double lowVal = plotsThreshDomainLowTextfieldContainer.getValue().doubleValue();
+            double highVal = plotsThreshDomainHighTextfieldContainer.getValue().doubleValue();
             if (!compareFields(lowVal, highVal, lowName, highName, true)) {
                 return false;
             }
         }
+
+        {
+            String lowName = plotsDomainLowTextfieldContainer.getName();
+            String highName = plotsDomainHighTextfieldContainer.getName();
+            double lowVal = plotsDomainLowTextfieldContainer.getValue().doubleValue();
+            double highVal = plotsDomainHighTextfieldContainer.getValue().doubleValue();
+            if (!compareFields(lowVal, highVal, lowName, highName, true)) {
+                return false;
+            }
+        }
+
 
         return true;
     }
@@ -2278,6 +2636,19 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         } else {
             return StatisticsToolView.PARAM_DEFVAL_NUM_BINS;
         }
+    }
+
+    void updateEnablement() {
+//        boolean hasMasks = (product != null && product.getMaskGroup().getNodeCount() > 0);
+//        boolean canSelectMasks = hasMasks && useRoiCheckBox.isSelected();
+//        useRoiCheckBox.setEnabled(hasMasks);
+//        maskNameSearchField.setEnabled(canSelectMasks);
+//        maskNameList.setEnabled(canSelectMasks);
+//        selectAllCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length < maskNameList.getModel().getSize());
+//        selectNoneCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length > 0);
+//        if (!isRunning()) {
+//            refreshButton.setEnabled(raster != null);
+//        }
     }
 
 
