@@ -221,7 +221,12 @@ public class StxFactory {
                 pm.beginTask("Computing statistics", mustComputeSummaryStx && mustComputeHistogramStx ? 100 : 50);
 
                 if (mustComputeSummaryStx) {
-                    final SummaryStxOp meanOp = new SummaryStxOp();
+                    SummaryStxOp meanOp;
+                    if (calculateMedian) {
+                         meanOp = new SummaryStxOp(true);
+                    } else {
+                         meanOp = new SummaryStxOp();
+                    }
                     for (int i = 0; i < filteredRasters.length; i++) {
                         final RasterDataNode rasterDataNode = filteredRasters[i];
                         accumulate(rasterDataNode, level, roiImages[i], roiShapes[i], meanOp, SubProgressMonitor.create(pm, 50));
@@ -263,14 +268,15 @@ public class StxFactory {
 
                     }
 
-                    if (binCount > 0 && binMax > binMin) {
+                    // todo Danny tried adding this test but then failure to produce histogram isn't desirable
+                 //   if (binCount > 0 && binMax > binMin) {
                         final HistogramStxOp histogramOp = new HistogramStxOp(binCount, binMin, binMax, intHistogram, logHistogram);
                         for (int i = 0; i < filteredRasters.length; i++) {
                             final RasterDataNode rasterDataNode = filteredRasters[i];
                             accumulate(rasterDataNode, level, roiImages[i], roiShapes[i], histogramOp, SubProgressMonitor.create(pm, 50));
                         }
                         histogram = histogramOp.getHistogram();
-                    }
+                 //   }
                 }
             } finally {
                 pm.done();

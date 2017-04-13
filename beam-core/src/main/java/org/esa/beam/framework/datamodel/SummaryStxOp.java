@@ -42,6 +42,7 @@ final public class SummaryStxOp extends StxOp {
     private double mean;
     private double meanSqr;
     private ArrayList<Double> sampleData;
+    private boolean calculateMedian = false;
 
     private long sampleCount;
 
@@ -49,8 +50,12 @@ final public class SummaryStxOp extends StxOp {
         super("Summary");
         this.minimum = POSITIVE_INFINITY;
         this.maximum = NEGATIVE_INFINITY;
-        sampleData = new ArrayList<Double>();
+    }
 
+    public SummaryStxOp(boolean calculateMedian) {
+        this();
+        this.calculateMedian = calculateMedian;
+        sampleData = new ArrayList<Double>();
     }
 
     public double getMinimum() {
@@ -68,7 +73,7 @@ final public class SummaryStxOp extends StxOp {
     }
 
     public double getMedian() {
-        if (sampleCount > 0) {
+        if (sampleCount > 0 && sampleData != null && calculateMedian) {
             double[] sampleArray = new double[sampleData.size()];
             for (int i = 0; i < sampleData.size(); i++) {
                 sampleArray[i] = (double) sampleData.get(i);
@@ -154,7 +159,9 @@ final public class SummaryStxOp extends StxOp {
                     delta = value - tileMean;
                     tileMean += delta / tileSampleCount;
                     tileMeanSqr += delta * (value - tileMean);
-                    sampleData.add(value);
+                    if (calculateMedian && sampleData != null) {
+                        sampleData.add(value);
+                    }
                 }
                 dataPixelOffset += dataPixelStride;
                 maskPixelOffset += maskPixelStride;
