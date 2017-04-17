@@ -109,6 +109,30 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
 
 
 
+    public static final String PARAM_LABEL_BIN_MIN_MAX_ENABLED = "Bin Span";
+    public static final String PARAM_KEY_BIN_MIN_MAX_ENABLED = "statistics.binMinMaxEnabled";
+    public static final boolean PARAM_DEFVAL_BIN_MIN_MAX_ENABLED = false;
+
+    public static final String PARAM_LABEL_BIN_MIN = "Bin Min";
+    public static final String PARAM_SHORTLABEL_BIN_MIN = "Min";
+    public static final String PARAM_KEY_BIN_MIN = "statistics.binMin";
+    public static final double PARAM_DEFVAL_BIN_MIN = Double.NaN;
+
+    public static final String PARAM_LABEL_BIN_MAX = "Bin Max";
+    public static final String PARAM_SHORTLABEL_BIN_MAX = "Max";
+    public static final String PARAM_KEY_BIN_MAX = "statistics.binMax";
+    public static final double PARAM_DEFVAL_BIN_MAX = Double.NaN;
+
+
+    public static final String PARAM_LABEL_BIN_WIDTH = "Bin Width";
+    public static final String PARAM_SHORTLABEL_BIN_WIDTH = "Width";
+    public static final String PARAM_KEY_BIN_WIDTH = "statistics.binWidthMax";
+    public static final double PARAM_DEFVAL_BIN_WIDTH = Double.NaN;
+
+    public static final String PARAM_LABEL_BIN_WIDTH_ENABLED = "Set #Bins from Bin Width";
+    public static final String PARAM_KEY_BIN_WIDTH_ENABLED = "statistics.binWidthEnabled";
+    public static final boolean PARAM_DEFVAL_BIN_WIDTH_ENABLED = false;
+
 
     public static final String PARAM_KEY_RESET_TO_DEFAULTS = "statistics.resetToDefaults.enabled";
 

@@ -142,7 +142,7 @@ public class TextFieldContainer {
 
             String trimmed = getTextfield().getText().toString().trim();
 
-            if (userEntryMode && (trimmed.length() == 0 ||  "-".equals(trimmed))) {
+            if (userEntryMode && (trimmed.length() == 0 ||  "-".equals(trimmed) || ".".equals(trimmed))) {
                 return false;
             }
             if (showDialog) {
