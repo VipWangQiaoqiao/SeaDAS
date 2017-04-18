@@ -6,9 +6,15 @@ import org.esa.beam.util.PropertyMap;
 import org.esa.beam.visat.VisatApp;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by knowles on 4/18/17.
@@ -39,6 +45,38 @@ public class StatisticsCriteriaPanel {
     double binMax = StatisticsToolView.PARAM_DEFVAL_BIN_MAX;
     private TextFieldContainer binMinTextfieldContainer = null;
     private TextFieldContainer binMaxTextfieldContainer = null;
+
+
+    // "Fields" Tab Variables and Components
+
+    private boolean handlersEnabled = true; //todo this may be temporary and not needed
+    private String percentThresholds = StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS;
+    private java.util.List<Integer> percentThresholdsList = null;
+    private JTextField percentThresholdsTextField = null;
+    private JLabel percentThresholdsLabel = null;
+
+    private boolean includeMedian = true;
+    private JCheckBox includeMedianCheckBox = null;
+
+    private boolean includeHistogramStats = false;
+    private JCheckBox includeHistogramStatsCheckBox = null;
+
+
+    // "Text" Tab Variables and Components
+
+    private static final int COL_WIDTH_DEFAULT = 10;
+    private int colCharWidth = COL_WIDTH_DEFAULT;
+    private TextFieldContainer spreadsheetColWidthTextfieldContainer = null;
+
+    private static final int DECIMAL_PLACES_DEFAULT = 4;
+    public static final int DECIMAL_PLACES_FULL = -1;
+    private int decimalPlaces = DECIMAL_PLACES_DEFAULT;
+
+    private  JLabel decimalPlacesLabel = null;
+    private  JSpinner decimalPlacesSpinner = null;
+
+
+
 
 
     // "Plots" Tab Variables and Components
@@ -103,6 +141,7 @@ public class StatisticsCriteriaPanel {
         showPercentPlots = getPreferencesPercentPlotEnabled();
         showStatsList = getPreferencesStatsListEnabled();
         showStatsSpreadSheet = getPreferencesStatsSpreadSheetEnabled();
+        percentThresholds = getPreferencesPercentThresholds();
 
     }
 
@@ -152,6 +191,112 @@ public class StatisticsCriteriaPanel {
         logModeCheckBox.setSelected(logMode);
 
 
+        // "Fields" Tab Variables and Components
+
+
+        percentThresholdsLabel = new JLabel(StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS);
+        percentThresholdsTextField = new JTextField(14);
+        percentThresholdsTextField.setName(StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS);
+        percentThresholdsTextField.setText(percentThresholds);
+
+        includeMedianCheckBox = new JCheckBox("Show Median");
+        includeMedianCheckBox.setSelected(includeMedian);
+
+        includeHistogramStatsCheckBox = new JCheckBox("Show Histogram Statistics");
+        includeHistogramStatsCheckBox.setSelected(includeHistogramStats);
+
+
+
+        // "Text" Tab Variables and Components
+
+        spreadsheetColWidthTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_SPREADSHEET_COL_WIDTH,
+                StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_COL_WIDTH,
+                StatisticsToolView.PARAM_MINVAL_SPREADSHEET_COL_WIDTH,
+                StatisticsToolView.PARAM_MAXVAL_SPREADSHEET_COL_WIDTH,
+                TextFieldContainer.NumType.INT,
+                2,
+                getParentDialogContentPane);
+
+
+        decimalPlacesLabel = new JLabel("Decimal Places");
+        String[] decimalPlacesList = {"0", "1", "2", "3", "4", "5", "6", " FULL"};
+        SpinnerListModel decimalPlacesSpinnerModel = new SpinnerListModel(decimalPlacesList);
+        decimalPlacesSpinner = new JSpinner(decimalPlacesSpinnerModel);
+        decimalPlacesSpinner.setValue(" FULL");
+        decimalPlacesSpinner.setMinimumSize(decimalPlacesSpinner.getPreferredSize());
+        decimalPlacesSpinner.setPreferredSize(decimalPlacesSpinner.getPreferredSize());
+        decimalPlacesSpinner.setValue("4");
+
+
+
+
+
+        // "Plots" Tab Variables and Components
+
+
+        plotsThreshDomainLowTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_LOW,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW,
+                StatisticsToolView.PARAM_MINVAL_PLOTS_THRESH_DOMAIN_LOW,
+                StatisticsToolView.PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_LOW,
+                TextFieldContainer.NumType.DOUBLE,
+                4,
+                getParentDialogContentPane);
+
+
+        plotsThreshDomainHighTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_HIGH,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH,
+                StatisticsToolView.PARAM_MINVAL_PLOTS_THRESH_DOMAIN_HIGH,
+                StatisticsToolView.PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_HIGH,
+                TextFieldContainer.NumType.DOUBLE,
+                4,
+                getParentDialogContentPane);
+
+
+        plotsDomainLowTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_PLOTS_DOMAIN_LOW,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_LOW,
+                TextFieldContainer.NumType.DOUBLE,
+                4,
+                getParentDialogContentPane);
+
+
+        plotsDomainHighTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_PLOTS_DOMAIN_HIGH,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_HIGH,
+                TextFieldContainer.NumType.DOUBLE,
+                4,
+                getParentDialogContentPane);
+
+
+        plotsSizeHeightTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_SIZE_HEIGHT,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_HEIGHT,
+                StatisticsToolView.PARAM_MINVAL_PLOTS_SIZE_HEIGHT,
+                StatisticsToolView.PARAM_MAXVAL_PLOTS_SIZE_HEIGHT,
+                TextFieldContainer.NumType.INT,
+                4,
+                getParentDialogContentPane);
+
+
+        plotsSizeWidthTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_SIZE_WIDTH,
+                StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_WIDTH,
+                StatisticsToolView.PARAM_MINVAL_PLOTS_SIZE_WIDTH,
+                StatisticsToolView.PARAM_MAXVAL_PLOTS_SIZE_WIDTH,
+                TextFieldContainer.NumType.INT,
+                4,
+                getParentDialogContentPane);
+
+
+
+        plotsThreshDomainSpanCheckBox = new JCheckBox(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_SPAN);
+        plotsThreshDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
+
+        plotsDomainSpanCheckBox = new JCheckBox(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_DOMAIN_SPAN);
+        plotsDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
+
+        plotsSizeCheckBox = new JCheckBox(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_SIZE);
+        plotsSizeCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
+
+
+
+
         // "View" Tab Variables and Components
 
         showStatsListCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_LIST_ENABLED);
@@ -169,16 +314,28 @@ public class StatisticsCriteriaPanel {
 
         addListeners();
 
-        updateEnablement();
+        // toggle each checkbox to force event change in listeners and hence established all proper initial enablement
+        plotsSizeCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
+        plotsSizeCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
+        plotsDomainSpanCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
+        plotsDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
+        plotsThreshDomainSpanCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
+        plotsThreshDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
+        binWidthEnabledCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
+        binWidthEnabledCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
+        binMinMaxCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
+        binMinMaxCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
+
+
     }
 
 
-    private void updateEnablement() {
-        binWidthTextfieldContainer.setEnabled(binWidthEnabledCheckBox.isSelected());
-        numBinsTextfieldContainer.setEnabled(!binWidthEnabledCheckBox.isSelected());
-        binMinTextfieldContainer.setEnabled(binMinMaxCheckBox.isSelected());
-        binMaxTextfieldContainer.setEnabled(binMinMaxCheckBox.isSelected());
-    }
+    //
+    //------------------------------- LISTENERS / HANDLERS / -------------------------------------
+    //
+
+
+
 
 
     private void addListeners() {
@@ -189,8 +346,7 @@ public class StatisticsCriteriaPanel {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 binWidthTextfieldContainer.setEnabled(binWidthEnabledCheckBox.isSelected());
-                numBinsTextfieldContainer.setEnabled(!binWidthEnabledCheckBox.isSelected());
-            }
+                numBinsTextfieldContainer.setEnabled(!binWidthEnabledCheckBox.isSelected());            }
         });
 
         binMinMaxCheckBox.addItemListener(new ItemListener() {
@@ -208,6 +364,81 @@ public class StatisticsCriteriaPanel {
 
             }
         });
+
+
+        // "Fields" Tab Variables and Components
+
+        textfieldHandler(percentThresholdsTextField);
+
+        includeMedianCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeMedian = includeMedianCheckBox.isSelected();
+
+            }
+        });
+
+        includeHistogramStatsCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeHistogramStats = includeHistogramStatsCheckBox.isSelected();
+
+            }
+        });
+
+
+        // "Text" Tab Variables and Components
+
+        decimalPlacesSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                String decimalPlacesString = decimalPlacesSpinner.getValue().toString();
+
+                if (" FULL".equals(decimalPlacesString)) {
+                    decimalPlaces = DECIMAL_PLACES_FULL;
+                } else {
+                    decimalPlaces = Integer.parseInt(decimalPlacesString);
+                }
+            }
+        });
+
+
+        // "Plots" Tab Variables and Components
+
+
+        plotsSizeCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                plotsSizeHeightTextfieldContainer.setEnabled(plotsSizeCheckBox.isSelected());
+                plotsSizeWidthTextfieldContainer.setEnabled(plotsSizeCheckBox.isSelected());
+            }
+        });
+
+
+        plotsThreshDomainSpanCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                plotsThreshDomainHighTextfieldContainer.setEnabled(plotsThreshDomainSpanCheckBox.isSelected());
+                plotsThreshDomainLowTextfieldContainer.setEnabled(plotsThreshDomainSpanCheckBox.isSelected());
+
+                if (plotsThreshDomainSpanCheckBox.isSelected()) {
+                    plotsDomainSpanCheckBox.setSelected(false);
+                }
+            }
+        });
+
+        plotsDomainSpanCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                plotsDomainHighTextfieldContainer.setEnabled(plotsDomainSpanCheckBox.isSelected());
+                plotsDomainLowTextfieldContainer.setEnabled(plotsDomainSpanCheckBox.isSelected());
+
+                if (plotsDomainSpanCheckBox.isSelected()) {
+                    plotsThreshDomainSpanCheckBox.setSelected(false);
+                }
+            }
+        });
+
 
 
         // "View" Tab Variables and Components
@@ -245,10 +476,42 @@ public class StatisticsCriteriaPanel {
     }
 
 
+    private void textfieldHandler(final JTextField textField) {
+
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
+                textfieldHandlerAction(textField);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                textfieldHandlerAction(textField);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+                textfieldHandlerAction(textField);
+            }
+        });
+    }
+
+    private void textfieldHandlerAction(final JTextField textField) {
+
+        if (handlersEnabled) {
+            if (StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS.equals(textField.getName())) {
+                percentThresholds = textField.getText().toString();
+            }
+        }
+
+    }
+
     public void reset() {
         binWidthTextfieldContainer.reset();
         binMinTextfieldContainer.reset();
         binMaxTextfieldContainer.reset();
+        plotsDomainLowTextfieldContainer.reset();
+        plotsDomainHighTextfieldContainer.reset();
     }
 
 
@@ -309,13 +572,77 @@ public class StatisticsCriteriaPanel {
         return exactPlotSize;
     }
 
-    public double plotSizeHeight() {
+    public int plotSizeHeight() {
         return plotSizeHeight;
     }
 
-    public double plotSizeWidth() {
+    public int plotSizeWidth() {
         return plotSizeWidth;
     }
+
+
+
+    // "Fields" Tab Variables and Components
+
+
+    public boolean includeMedian() {
+        return includeMedian;
+    }
+
+    public boolean includeHistogramStats() {
+        return includeHistogramStats;
+    }
+
+    public List<Integer> getPercentThresholdsList() {
+        List<Integer> percentThresholdsList = new ArrayList<Integer>();
+
+        String[] thresholds = percentThresholds.split(",");
+
+
+        for (String threshold : thresholds) {
+            if (threshold != null) {
+                threshold.trim();
+                if (threshold.length() > 0) {
+                    int value;
+                    try {
+                        value = Integer.parseInt(threshold);
+                        if (value < 0 || value > 100) {
+                            JOptionPane.showMessageDialog(getParentDialogContentPane,
+                                    "ERROR: Valid " + StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS + " range is (0 to 100)",
+                                    "Invalid Input",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return null;
+
+                        } else {
+                            percentThresholdsList.add(value);
+                        }
+                    } catch (NumberFormatException exception) {
+                        JOptionPane.showMessageDialog(getParentDialogContentPane,
+                                StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS + "field " + exception.toString(),
+                                "Invalid Input",
+                                JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    }
+                }
+            }
+        }
+
+
+        return percentThresholdsList;
+    }
+
+
+
+    // "Text" Tab Variables and Components
+
+    public int colCharWidth() {
+        return colCharWidth;
+    }
+
+    public int decimalPlaces() {
+        return decimalPlaces;
+    }
+
 
 
     // "View" Tab Variables and Components
@@ -376,6 +703,107 @@ public class StatisticsCriteriaPanel {
 
         return panel;
     }
+
+
+    // "Fields" Tab Variables and Components
+
+
+    public JPanel getFieldOptionsPanel() {
+
+        JPanel thresholdsPanel = getThresholdsPanel();
+
+
+        final JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        gbc.weighty = 0;
+        gbc.insets.top = 5;
+        panel.add(includeMedianCheckBox, gbc);
+
+
+        gbc.insets.top = 0;
+        gbc.gridy += 1;
+        panel.add(includeHistogramStatsCheckBox, gbc);
+
+
+        gbc.gridy += 1;
+        panel.add(thresholdsPanel, gbc);
+
+
+        // Add filler panel at bottom which expands as needed to force all components within this panel to the top
+        gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.weighty = 1;
+        gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(new JPanel(), gbc);
+
+        return panel;
+    }
+
+
+    // "Text" Tab Variables and Components
+
+    public JPanel getTextOptionsPanel() {
+
+        JPanel decimalPlacesPanel = getDecimalPlacesPanel();
+
+
+        final JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        gbc.weighty = 0;
+        gbc.insets.top = 5;
+        panel.add(decimalPlacesPanel, gbc);
+
+
+        gbc.insets.top = 0;
+        gbc.gridy += 1;
+        panel.add(getColWidthPanel(), gbc);
+
+
+        // Add filler panel at bottom which expands as needed to force all components within this panel to the top
+        gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.weighty = 1;
+        gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(new JPanel(), gbc);
+
+        return panel;
+    }
+
+
+    // "Plots" Tab Variables and Components
+
+
+    public JPanel getPlotsOptionsPanel() {
+
+        final JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        gbc.weighty = 0;
+        gbc.insets.top = 5;
+        panel.add(getPlotsThreshDomainSpanPanel(), gbc);
+
+        gbc.insets.top = 0;
+        gbc.gridy += 1;
+        panel.add(getPlotsDomainSpanPanel(), gbc);
+
+        // todo PlotSize
+        gbc.gridy += 1;
+        panel.add(getPlotsSizePanel(), gbc);
+
+
+        // Add filler panel at bottom which expands as needed to force all components within this panel to the top
+        gbc = GridBagUtils.restoreConstraints(gbc);
+        gbc.weighty = 1;
+        gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(new JPanel(), gbc);
+
+        return panel;
+    }
+
+
 
 
     // "View" Tab Variables and Components
@@ -469,6 +897,82 @@ public class StatisticsCriteriaPanel {
     }
 
 
+    // "Fields" Tab Variables and Components
+
+    public JPanel getThresholdsPanel() {
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets.right = 3;
+        panel.add(percentThresholdsLabel, gbc);
+        gbc.insets.right = 0;
+        gbc.gridx++;
+        panel.add(percentThresholdsTextField, gbc);
+
+        return panel;
+    }
+
+
+
+    // "Text" Tab Variables and Components
+
+
+    public JPanel getColWidthPanel() {
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets.right = 3;
+        panel.add(spreadsheetColWidthTextfieldContainer.getLabel(), gbc);
+        gbc.insets.right = 0;
+        gbc.gridx++;
+        panel.add(spreadsheetColWidthTextfieldContainer.getTextfield(), gbc);
+
+        return panel;
+    }
+
+
+    private JPanel getDecimalPlacesPanel() {
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets.right = 3;
+        panel.add(decimalPlacesLabel, gbc);
+        gbc.insets.right = 0;
+        gbc.gridx++;
+        panel.add(decimalPlacesSpinner, gbc);
+
+        return panel;
+    }
+
+    // "Plots" Tab Variables and Components
+
+    private JPanel getPlotsThreshDomainSpanPanel() {
+
+        return getCheckboxTextFieldGroupPanel(plotsThreshDomainSpanCheckBox, plotsThreshDomainLowTextfieldContainer, plotsThreshDomainHighTextfieldContainer);
+
+    }
+
+
+    private JPanel getPlotsDomainSpanPanel() {
+
+
+        return getCheckboxTextFieldGroupPanel(plotsDomainSpanCheckBox, plotsDomainLowTextfieldContainer, plotsDomainHighTextfieldContainer);
+
+    }
+
+
+
+    private JPanel getPlotsSizePanel() {
+
+        return getCheckboxTextFieldGroupPanel(plotsSizeCheckBox, plotsSizeWidthTextfieldContainer, plotsSizeHeightTextfieldContainer);
+
+    }
+
+
     //
     //------------------------------- VALIDATION -------------------------------------
     //
@@ -525,7 +1029,92 @@ public class StatisticsCriteriaPanel {
             }
         }
 
+        exactPlotSize = plotsSizeCheckBox.isSelected();
+        plotsDomainSpan = plotsDomainSpanCheckBox.isSelected();
+        plotsThreshDomainSpan = plotsThreshDomainSpanCheckBox.isSelected();
 
+        if (plotsSizeCheckBox.isSelected()) {
+            if (plotsSizeHeightTextfieldContainer != null && plotsSizeHeightTextfieldContainer.isValid(true) && plotsSizeHeightTextfieldContainer.getValue() != null) {
+                plotSizeHeight = plotsSizeHeightTextfieldContainer.getValue().intValue();
+            } else {
+                return false;
+            }
+
+            if (plotsSizeWidthTextfieldContainer != null && plotsSizeWidthTextfieldContainer.isValid(true) && plotsSizeWidthTextfieldContainer.getValue() != null) {
+                plotSizeWidth = plotsSizeWidthTextfieldContainer.getValue().intValue();
+            } else {
+                return false;
+            }
+        } else {
+            plotSizeHeight = StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_HEIGHT;
+            plotSizeWidth = StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE_WIDTH;
+        }
+
+
+        if (plotsDomainSpanCheckBox.isSelected()) {
+            if (plotsDomainLowTextfieldContainer != null && plotsDomainLowTextfieldContainer.isValid(true) && plotsDomainLowTextfieldContainer.getValue() != null) {
+                plotsDomainLow = plotsDomainLowTextfieldContainer.getValue().doubleValue();
+            } else {
+                return false;
+            }
+
+
+            if (plotsDomainHighTextfieldContainer != null && plotsDomainHighTextfieldContainer.isValid(true) && plotsDomainHighTextfieldContainer.getValue() != null) {
+                plotsDomainHigh = plotsDomainHighTextfieldContainer.getValue().doubleValue();
+            } else {
+                return false;
+            }
+        } else {
+            plotsDomainLow = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_LOW;
+            plotsDomainHigh = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_HIGH;
+        }
+
+
+        if (plotsThreshDomainSpanCheckBox.isSelected()) {
+            if (plotsThreshDomainLowTextfieldContainer != null && plotsThreshDomainLowTextfieldContainer.isValid(true) && plotsThreshDomainLowTextfieldContainer.getValue() != null) {
+                plotsThreshDomainLow = plotsThreshDomainLowTextfieldContainer.getValue().doubleValue();
+            } else {
+                return false;
+            }
+
+
+            if (plotsThreshDomainHighTextfieldContainer != null && plotsThreshDomainHighTextfieldContainer.isValid(true) && plotsThreshDomainHighTextfieldContainer.getValue() != null) {
+                plotsThreshDomainHigh = plotsThreshDomainHighTextfieldContainer.getValue().doubleValue();
+            } else {
+                return false;
+            }
+        } else {
+            plotsThreshDomainLow = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW;
+            plotsThreshDomainHigh = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH;
+        }
+
+
+        {
+            String lowName = plotsThreshDomainLowTextfieldContainer.getName();
+            String highName = plotsThreshDomainHighTextfieldContainer.getName();
+            double lowVal = plotsThreshDomainLowTextfieldContainer.getValue().doubleValue();
+            double highVal = plotsThreshDomainHighTextfieldContainer.getValue().doubleValue();
+            if (!compareFields(lowVal, highVal, lowName, highName, true)) {
+                return false;
+            }
+        }
+
+        {
+            String lowName = plotsDomainLowTextfieldContainer.getName();
+            String highName = plotsDomainHighTextfieldContainer.getName();
+            double lowVal = plotsDomainLowTextfieldContainer.getValue().doubleValue();
+            double highVal = plotsDomainHighTextfieldContainer.getValue().doubleValue();
+            if (!compareFields(lowVal, highVal, lowName, highName, true)) {
+                return false;
+            }
+        }
+
+
+        if (spreadsheetColWidthTextfieldContainer != null && spreadsheetColWidthTextfieldContainer.isValid(true) && spreadsheetColWidthTextfieldContainer.getValue() != null) {
+            colCharWidth = spreadsheetColWidthTextfieldContainer.getValue().intValue();
+        } else {
+            return false;
+        }
         return true;
     }
 
@@ -536,6 +1125,7 @@ public class StatisticsCriteriaPanel {
 
         return true;
     }
+
 
 
     //
@@ -585,6 +1175,15 @@ public class StatisticsCriteriaPanel {
             return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED, StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED);
         } else {
             return StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED;
+        }
+    }
+
+    public String getPreferencesPercentThresholds() {
+
+        if (configuration != null) {
+            return configuration.getPropertyString(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS, StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS;
         }
     }
 
