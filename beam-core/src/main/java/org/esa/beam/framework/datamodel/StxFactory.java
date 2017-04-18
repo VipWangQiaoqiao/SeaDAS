@@ -263,8 +263,11 @@ public class StxFactory {
                     }
 
 
-                    if (!Double.isNaN(binWidth) && binWidth != 0) {
-                        binCount = (int) ((binMax - binMin) /binWidth);
+                    if (!Double.isNaN(binWidth) && binWidth != 0 && !Double.isNaN(binMin) && !Double.isNaN(binMax)) {
+                       int binCountTmp = (int) ((binMax - binMin) /binWidth);
+                        if (binCountTmp > 0) {
+                            binCount = binCountTmp;
+                        }
 
                     }
 

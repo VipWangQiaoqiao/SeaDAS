@@ -76,6 +76,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     ProgressMonitorSwingWorker swingWorker;
 
+
+    private StatisticsCriteriaPanel statisticsCriteriaPanel;
+
+
     private static final String DEFAULT_STATISTICS_TEXT = "No statistics computed";  /*I18N*/
     private static final String TITLE_PREFIX = "Statistics";
 
@@ -138,7 +142,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private ExportStatisticsAsCsvAction exportAsCsvAction;
     private PutStatisticsIntoVectorDataAction putStatisticsIntoVectorDataAction;
     //   private AccuracyModel accuracyModel;
-    private boolean LogMode = false;  // keeping false for the moment as all the nuances of log mode may not be worked out
 
     private String percentThresholds = StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS;
     private List<Integer> percentThresholdsList = null;
@@ -150,10 +153,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private boolean handlersEnabled = true;
 
 
-    private boolean showPercentPlots = StatisticsToolView.PARAM_DEFVAL_PERCENT_PLOT_ENABLED;
-    private boolean showHistogramPlots = StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_PLOT_ENABLED;
-    private boolean showStatsList = StatisticsToolView.PARAM_DEFVAL_STATS_LIST_ENABLED;
-    private boolean showStatsSpreadSheet = StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED;
 
 
     private boolean includeHistogramStats = false;
@@ -179,28 +178,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private JCheckBox plotsDomainSpanCheckBox = null;
     private TextFieldContainer plotsDomainLowTextfieldContainer = null;
     private TextFieldContainer plotsDomainHighTextfieldContainer = null;
-
-
-    private int numBins = StatisticsToolView.PARAM_DEFVAL_NUM_BINS;
-    private TextFieldContainer numBinsTextfieldContainer = null;
-    private TextFieldContainer binWidthTextfieldContainer = null;
-    private JCheckBox binWidthEnabledCheckBox = null;
-    double binWidth = Double.NaN;
-
-
-    boolean binRange = false;   // use this to set binMin and binMax to Double.NaN
-    double binMin = Double.NaN;
-    double binMax = Double.NaN;
-    private JCheckBox binMinMaxCheckBox = null;
-    private TextFieldContainer binMinTextfieldContainer = null;
-    private TextFieldContainer binMaxTextfieldContainer = null;
-
-
-
-
-
-
-
 
 
     private int plotMinHeight = 300;
@@ -229,21 +206,21 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (visatApp != null) {
             this.configuration = visatApp.getPreferences();
         }
+
     }
 
     @Override
     protected void initComponents() {
         init = true;
 
+
+
         statsSpreadsheet = null;
 
-        showHistogramPlots = getPreferencesHistogramPlotEnabled();
-        showPercentPlots = getPreferencesPercentPlotEnabled();
-        showStatsList = getPreferencesStatsListEnabled();
-        showStatsSpreadSheet = getPreferencesStatsSpreadSheetEnabled();
-        numBins = getPreferencesNumBins();
         percentThresholds = getPreferencesPercentThresholds();
 
+
+        statisticsCriteriaPanel = new StatisticsCriteriaPanel(getParentDialogContentPane());
 
         plotsThreshDomainLowTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_LOW,
                 StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW,
@@ -289,33 +266,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
 
-        binMinTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_BIN_MIN,
-                StatisticsToolView.PARAM_DEFVAL_BIN_MIN,
-                TextFieldContainer.NumType.DOUBLE,
-                5,
-                getParentDialogContentPane());
-        binMinTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
-
-
-        binMaxTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_BIN_MAX,
-                StatisticsToolView.PARAM_DEFVAL_BIN_MAX,
-                TextFieldContainer.NumType.DOUBLE,
-                5,
-                getParentDialogContentPane());
-        binMaxTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
-
-
-
-
-
-        binWidthTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_BIN_WIDTH,
-                StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH,
-                TextFieldContainer.NumType.DOUBLE,
-                5,
-                getParentDialogContentPane());
-        binWidthTextfieldContainer.setEnabled(StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
-
-
 
 
 
@@ -349,13 +299,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         plotsDomainSpanCheckBox = new JCheckBox(StatisticsToolView.PARAM_SHORTLABEL_PLOTS_DOMAIN_SPAN);
         plotsDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
 
-
-
-        binMinMaxCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BIN_MIN_MAX_ENABLED);
-        binMinMaxCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
-
-        binWidthEnabledCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BIN_WIDTH_ENABLED);
-        binWidthEnabledCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
 
 
 
@@ -397,36 +340,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         });
 
 
-        binMinMaxCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                binMinTextfieldContainer.setEnabled(binMinMaxCheckBox.isSelected());
-                binMaxTextfieldContainer.setEnabled(binMinMaxCheckBox.isSelected());
-            }
-        });
-
-
-        binWidthEnabledCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                binWidthTextfieldContainer.setEnabled(binWidthEnabledCheckBox.isSelected());
-                numBinsTextfieldContainer.setEnabled(!binWidthEnabledCheckBox.isSelected());
-            }
-        });
 
 
 
 
-
-
-
-        numBinsTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_NUM_BINS,
-                numBins,
-                StatisticsToolView.PARAM_MINVAL_NUM_BINS,
-                StatisticsToolView.PARAM_MAXVAL_NUM_BINS,
-                TextFieldContainer.NumType.INT,
-                7,
-                getParentDialogContentPane());
 
 
         spreadsheetColWidthTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_SPREADSHEET_COL_WIDTH,
@@ -493,7 +410,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         //    spreadsheetScrollPane.setBackground(Color.WHITE);
         spreadsheetScrollPane.setMinimumSize(new Dimension(100, 100));
         spreadsheetScrollPane.setBorder(UIUtils.createGroupBorder("Statistics Spreadsheet"));
-        spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
+        spreadsheetScrollPane.setVisible(statisticsCriteriaPanel.showStatsSpreadSheet());
 
 
         leftPanel = new JPanel(new GridBagLayout());
@@ -637,73 +554,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
 
-    private JPanel getBinMinMaxPanel() {
-
-
-        JPanel childPanel = GridBagUtils.createPanel();
-        GridBagConstraints gbcChild = GridBagUtils.createConstraints();
-
-        gbcChild.gridx += 1;
-        gbcChild.insets.left = new JCheckBox(" ").getPreferredSize().width;
-        gbcChild.insets.right = 3;
-        childPanel.add(binMinTextfieldContainer.getLabel(), gbcChild);
-        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
-
-        gbcChild.gridx += 1;
-        childPanel.add(binMinTextfieldContainer.getTextfield(), gbcChild);
-
-        gbcChild.gridx += 1;
-        gbcChild.insets.right = 3;
-        childPanel.add(binMaxTextfieldContainer.getLabel(), gbcChild);
-        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
-
-        gbcChild.gridx += 1;
-        childPanel.add(binMaxTextfieldContainer.getTextfield(), gbcChild);
-
-
-        JPanel panel = GridBagUtils.createPanel();
-        GridBagConstraints gbc = GridBagUtils.createConstraints();
-
-        panel.add(binMinMaxCheckBox, gbc);
-
-        gbc.gridy += 1;
-        panel.add(childPanel, gbc);
-
-
-        return panel;
-    }
 
 
 
 
-    private JPanel getBinWidthPanel() {
 
-
-        JPanel childPanel = GridBagUtils.createPanel();
-        GridBagConstraints gbcChild = GridBagUtils.createConstraints();
-
-        gbcChild.gridx += 1;
-        gbcChild.insets.left = new JCheckBox(" ").getPreferredSize().width;
-        gbcChild.insets.right = 3;
-        childPanel.add(binWidthTextfieldContainer.getLabel(), gbcChild);
-        gbcChild = GridBagUtils.restoreConstraints(gbcChild);
-
-        gbcChild.gridx += 1;
-        childPanel.add(binWidthTextfieldContainer.getTextfield(), gbcChild);
-
-
-
-        JPanel panel = GridBagUtils.createPanel();
-        GridBagConstraints gbc = GridBagUtils.createConstraints();
-
-        panel.add(binWidthEnabledCheckBox, gbc);
-
-        gbc.gridy += 1;
-        panel.add(childPanel, gbc);
-
-
-        return panel;
-    }
 
 
 
@@ -747,20 +602,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
 
-    private JPanel getNumBinsPanel() {
-
-
-        JPanel panel = GridBagUtils.createPanel();
-        GridBagConstraints gbc = GridBagUtils.createConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets.right = 3;
-        panel.add(numBinsTextfieldContainer.getLabel(), gbc);
-        gbc.insets.right = 0;
-        gbc.gridx++;
-        panel.add(numBinsTextfieldContainer.getTextfield(), gbc);
-
-        return panel;
-    }
 
 
     private JPanel getDecimalPlacesPanel() {
@@ -916,123 +757,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
 
-    private JPanel getViewPanel() {
-
-
-        final JCheckBox showStatsListCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_LIST_ENABLED);
-        showStatsListCheckBox.setSelected(showStatsList);
-        showStatsListCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showStatsList = showStatsListCheckBox.isSelected();
-            }
-        });
-
-
-        final JCheckBox showStatsSpreadSheetCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_SPREADSHEET_ENABLED);
-        showStatsSpreadSheetCheckBox.setSelected(showStatsSpreadSheet);
-        showStatsSpreadSheetCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showStatsSpreadSheet = showStatsSpreadSheetCheckBox.isSelected();
-                updateLeftPanel();
-            }
-        });
-
-
-        final JCheckBox showPercentPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PERCENT_PLOT_ENABLED);
-        showPercentPlotCheckBox.setSelected(showPercentPlots);
-        showPercentPlotCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showPercentPlots = showPercentPlotCheckBox.isSelected();
-            }
-        });
-
-
-        final JCheckBox showHistogramPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_HISTOGRAM_PLOT_ENABLED);
-        showHistogramPlotCheckBox.setSelected(showHistogramPlots);
-        showHistogramPlotCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                showHistogramPlots = showHistogramPlotCheckBox.isSelected();
-            }
-        });
-
-
-        final JPanel panel = GridBagUtils.createPanel();
-        GridBagConstraints gbc = GridBagUtils.createConstraints();
-
-
-        gbc.weighty = 0;
-        gbc.insets.top = 5;
-        panel.add(showPercentPlotCheckBox, gbc);
-
-        gbc.insets.top = 0;
-        gbc.gridy += 1;
-        panel.add(showHistogramPlotCheckBox, gbc);
-
-        gbc.gridy += 1;
-        panel.add(showStatsListCheckBox, gbc);
-
-        gbc.gridy += 1;
-        panel.add(showStatsSpreadSheetCheckBox, gbc);
-
-        // Add filler panel at bottom which expands as needed to force all components within this panel to the top
-        gbc = GridBagUtils.restoreConstraints(gbc);
-        gbc.weighty = 1;
-        gbc.gridy += 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        panel.add(new JPanel(), gbc);
-
-        return panel;
-    }
 
 
 
-    private JPanel getBinningCriteriaPanel() {
 
-        JPanel numBinsPanel = getNumBinsPanel();
-
-        final JCheckBox logModeCheckBox = new JCheckBox("Log Scaled Bins");
-        logModeCheckBox.setSelected(LogMode);
-        logModeCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                LogMode = logModeCheckBox.isSelected();
-
-            }
-        });
-
-
-        final JPanel panel = GridBagUtils.createPanel();
-        GridBagConstraints gbc = GridBagUtils.createConstraints();
-
-        gbc.insets.top = 5;
-        gbc.weighty = 0;
-        panel.add(numBinsPanel, gbc);
-
-        gbc.insets.top = 0;
-        gbc.gridy += 1;
-
-        panel.add(getBinWidthPanel(), gbc);
-
-
-        gbc.gridy += 1;
-        panel.add(getBinMinMaxPanel(), gbc);
-
-        gbc.gridy += 1;
-        panel.add(logModeCheckBox, gbc);
-
-        // Add filler panel at bottom which expands as needed to force all components within this panel to the top
-        gbc = GridBagUtils.restoreConstraints(gbc);
-        gbc.weighty = 1;
-        gbc.gridy += 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        panel.add(new JPanel(), gbc);
-
-        return panel;
-    }
 
 
     private JPanel getRightPanel() {
@@ -1057,9 +785,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         JPanel optionsPanel = getTextOptionsPanel();
         JPanel fieldsPanel = getFieldOptionsPanel();
-        JPanel binningCriteriaPanel = getBinningCriteriaPanel();
+        JPanel binningCriteriaPanel = statisticsCriteriaPanel.getBinningCriteriaPanel();
         JPanel plotOptionsPanel = getPlotsOptionsPanel();
-        JPanel viewPanel = getViewPanel();
+        JPanel viewPanel = statisticsCriteriaPanel.getViewPanel();
 
         //    GridBagUtils.addToPanel(rightPanel, optionsPanel, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
 
@@ -1122,10 +850,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         plotsDomainLowTextfieldContainer.reset();
         plotsDomainHighTextfieldContainer.reset();
-        binMinTextfieldContainer.reset();
-        binMaxTextfieldContainer.reset();
-        binWidthTextfieldContainer.reset();
 
+
+        statisticsCriteriaPanel.reset();
 
 
 
@@ -1164,7 +891,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         contentPanel.revalidate();
         contentPanel.repaint();
-        spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
+        spreadsheetScrollPane.setVisible(statisticsCriteriaPanel.showStatsSpreadSheet());
         spreadsheetPanel.revalidate();
         spreadsheetPanel.repaint();
         backgroundPanel.revalidate();
@@ -1246,7 +973,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     numProductRegions = numHistograms;
 
 
-                    final int binCount = numBins;
+                    final int binCount = statisticsCriteriaPanel.getNumBins();
 
 
                     int histogramIdx = 0;
@@ -1257,17 +984,17 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
                         double numBinsTest = binCount;
-                        double binMinTest = binMin;
-                        double binMaxTest = binMax;
-                        double binWidthTest = binWidth;
+                        double binMinTest = statisticsCriteriaPanel.getBinMin();
+                        double binMaxTest = statisticsCriteriaPanel.getBinMax();
+                        double binWidthTest = statisticsCriteriaPanel.getBinWidth();
 
                         stx1 = new StxFactory()
                                 .withHistogramBinCount(binCount)
-                                .withLogHistogram(LogMode)
+                                .withLogHistogram(statisticsCriteriaPanel.isLogMode())
                                 .withMedian(includeMedian)
-                                .withBinMin(binMin)
-                                .withBinMax(binMax)
-                                .withBinWidth(binWidth)
+                                .withBinMin(statisticsCriteriaPanel.getBinMin())
+                                .withBinMax(statisticsCriteriaPanel.getBinMax())
+                                .withBinWidth(statisticsCriteriaPanel.getBinWidth())
                                 .create(getRaster(), subPm1);
 
 
@@ -1313,11 +1040,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
                                 stx = new StxFactory()
                                         .withHistogramBinCount(binCount)
-                                        .withLogHistogram(LogMode)
+                                        .withLogHistogram(statisticsCriteriaPanel.isLogMode())
                                         .withMedian(includeMedian)
-                                        .withBinMin(binMin)
-                                        .withBinMax(binMax)
-                                        .withBinWidth(binWidth)
+                                        .withBinMin(statisticsCriteriaPanel.getBinMin())
+                                        .withBinMax(statisticsCriteriaPanel.getBinMax())
+                                        .withBinWidth(statisticsCriteriaPanel.getBinWidth())
                                         .withRoiMask(mask)
                                         .create(getRaster(), subPm);
 
@@ -1464,7 +1191,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         JPanel statsSpeadPanel = statsSpreadsheetPanel();
         spreadsheetPanel.add(statsSpeadPanel);
         //   spreadsheetPanel.setBackground(Color.WHITE);
-        spreadsheetScrollPane.setVisible(showStatsSpreadSheet);
+        spreadsheetScrollPane.setVisible(statisticsCriteriaPanel.showStatsSpreadSheet());
         spreadsheetScrollPane.setMinimumSize(new Dimension(100, 100));
 
 
@@ -1479,7 +1206,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
        // histogramPanel.setVisible(showHistogramPlots);
 
-        if (showPercentPlots || showHistogramPlots || showStatsList) {
+        if (statisticsCriteriaPanel.showPercentPlots() || statisticsCriteriaPanel.showHistogramPlots() || statisticsCriteriaPanel.showStatsList()) {
 
             if (numRows > spreadsheetMinRowsBeforeWeight) {
                 gbc.weighty = 1.0 - spreadsheetHeightWeight;
@@ -1508,7 +1235,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             gbc.weighty = 1.0;
         }
 
-        if (showStatsSpreadSheet) {
+        if (statisticsCriteriaPanel.showStatsSpreadSheet()) {
             leftPanel.add(spreadsheetScrollPane, gbc);
         }
 
@@ -1532,7 +1259,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         double histRangeBounds[] = {Double.NaN, Double.NaN};
 
         if (!fixedHistDomainAllPlots || (fixedHistDomainAllPlots && !fixedHistDomainAllPlotsInitialized)) {
-            if (!LogMode) {
+            if (!statisticsCriteriaPanel.isLogMode()) {
                 if (plotsThreshDomainSpan) {
 
                     if (plotsThreshDomainLow >= 0.1) {
@@ -1588,7 +1315,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
-        String logTitle = (LogMode) ? "Log10 of " : "";
+        String logTitle = (statisticsCriteriaPanel.isLogMode()) ? "Log10 of " : "";
 
         ChartPanel histogramPanel = createChartPanel(histogramSeries,
                 logTitle + getRaster().getName() + " (" + getRaster().getUnit() + ")",
@@ -1688,7 +1415,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
 
 
-            if (!LogMode) {
+            if (!statisticsCriteriaPanel.isLogMode()) {
                 percentileDomainBounds[0] = histDomainBounds[0];
                 percentileDomainBounds[1] = histDomainBounds[1];
             }
@@ -1776,7 +1503,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         Object[][] histogramStats = null;
         if (includeHistogramStats) {
-            if (LogMode) {
+            if (statisticsCriteriaPanel.isLogMode()) {
                 histogramStats = new Object[][]{
                         new Object[]{"Mean(LogBinned)", Math.pow(10, histogram.getMean()[0])},
                         new Object[]{"Median(LogBinned)", Math.pow(10, stx.getMedian())},
@@ -1800,7 +1527,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             String percentString = Integer.toString(value);
 
             Object[] pTileThreshold;
-            if (LogMode) {
+            if (statisticsCriteriaPanel.isLogMode()) {
                 pTileThreshold = new Object[]{percentString + "%Threshold(Log)", Math.pow(10, histogram.getPTileThreshold(percent)[0])};
             } else {
                 pTileThreshold = new Object[]{percentString + "%Threshold", histogram.getPTileThreshold(percent)[0]};
@@ -1892,11 +1619,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         // todo Danny stats spreadsheet too big
 
         int numPlots = 0;
-        if (showPercentPlots) {
+        if (statisticsCriteriaPanel.showPercentPlots()) {
             numPlots++;
         }
 
-        if (showHistogramPlots) {
+        if (statisticsCriteriaPanel.showHistogramPlots()) {
             numPlots++;
         }
 
@@ -1905,11 +1632,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (numPlots > 0) {
             plotContainerPanel = new JPanel(new GridLayout(1, numPlots));
 
-            if (showHistogramPlots) {
+            if (statisticsCriteriaPanel.showHistogramPlots()) {
                 plotContainerPanel.add(histogramPanel);
             }
 
-            if (showPercentPlots) {
+            if (statisticsCriteriaPanel.showPercentPlots()) {
                 plotContainerPanel.add(percentilePanel);
             }
         }
@@ -1986,7 +1713,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         FontMetrics fm = table.getFontMetrics(table.getFont());
         TableColumn column = null;
         int col1PreferredWidth = -1;
-        if (LogMode) {
+        if (statisticsCriteriaPanel.isLogMode()) {
             col1PreferredWidth = fm.stringWidth("StandardDeviation(LogBinned):") + 10;
         } else {
             col1PreferredWidth = fm.stringWidth("StandardDeviation(Binned):") + 10;
@@ -2059,7 +1786,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             gbcMain.weightx = 1;
         }
 
-        if (showStatsList) {
+        if (statisticsCriteriaPanel.showStatsList()) {
             gbcMain.weighty = 1;
             mainPane.add(statsPane, gbcMain);
             gbcMain.gridx++;
@@ -2433,19 +2160,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
 
-    private boolean validNumBins() {
-        if (numBins < StatisticsToolView.PARAM_MINVAL_NUM_BINS || numBins > StatisticsToolView.PARAM_MAXVAL_NUM_BINS) {
-            return false;
-        }
-
-        return true;
-    }
 
 
     private boolean retrieveValidateTextFields(boolean showDialog) {
-        if (!validNumBins()) {
-            return false;
-        }
+
 
 
         exactPlotSize = plotsSizeCheckBox.isSelected();
@@ -2510,37 +2228,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
 
-        if (binMinMaxCheckBox.isSelected()) {
-            if (binMinTextfieldContainer != null && binMinTextfieldContainer.isValid(true) && binMinTextfieldContainer.getValue() != null) {
-                binMin = binMinTextfieldContainer.getValue().doubleValue();
-            } else {
-                return false;
-            }
-
-
-            if (binMaxTextfieldContainer != null && binMaxTextfieldContainer.isValid(true) && binMaxTextfieldContainer.getValue() != null) {
-                binMax = binMaxTextfieldContainer.getValue().doubleValue();
-            } else {
-                return false;
-            }
-        } else {
-            binMin = StatisticsToolView.PARAM_DEFVAL_BIN_MIN;
-            binMax = StatisticsToolView.PARAM_DEFVAL_BIN_MAX;
-        }
-
-
-
-        if (binWidthEnabledCheckBox.isSelected()) {
-            if (binWidthTextfieldContainer != null && binWidthTextfieldContainer.isValid(true) && binWidthTextfieldContainer.getValue() != null) {
-                binWidth = binWidthTextfieldContainer.getValue().doubleValue();
-            } else {
-                return false;
-            }
-
-        } else {
-            binWidth = StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH;
-            binWidth = StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH;
-        }
 
 
 
@@ -2550,11 +2237,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
 
-        if (numBinsTextfieldContainer != null && numBinsTextfieldContainer.isValid(true) && numBinsTextfieldContainer.getValue() != null) {
-            numBins = numBinsTextfieldContainer.getValue().intValue();
-        } else {
-            return false;
-        }
+
+
+
+       if (!statisticsCriteriaPanel.validatePrepare()) {
+           return false;
+       }
+
+
 
         if (spreadsheetColWidthTextfieldContainer != null && spreadsheetColWidthTextfieldContainer.isValid(true) && spreadsheetColWidthTextfieldContainer.getValue() != null) {
             colCharWidth = spreadsheetColWidthTextfieldContainer.getValue().intValue();
@@ -2584,15 +2274,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
-        {
-            String lowName = binMinTextfieldContainer.getName();
-            String highName = binMaxTextfieldContainer.getName();
-            double lowVal = binMinTextfieldContainer.getValue().doubleValue();
-            double highVal = binMaxTextfieldContainer.getValue().doubleValue();
-            if (!compareFields(lowVal, highVal, lowName, highName, true)) {
-                return false;
-            }
-        }
+
 
 
 
@@ -2620,9 +2302,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
     private boolean validFields() {
-        if (!validNumBins()) {
-            return false;
-        }
+//        if (!validNumBins()) {
+//            return false;
+//        }
 
         return true;
     }
@@ -2771,41 +2453,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
 
-    public boolean getPreferencesHistogramPlotEnabled() {
 
-        if (configuration != null) {
-            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_HISTOGRAM_PLOT_ENABLED, StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_PLOT_ENABLED);
-        } else {
-            return StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_PLOT_ENABLED;
-        }
-    }
-
-    public boolean getPreferencesPercentPlotEnabled() {
-
-        if (configuration != null) {
-            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_PERCENT_PLOT_ENABLED, StatisticsToolView.PARAM_DEFVAL_PERCENT_PLOT_ENABLED);
-        } else {
-            return StatisticsToolView.PARAM_DEFVAL_PERCENT_PLOT_ENABLED;
-        }
-    }
-
-    public boolean getPreferencesStatsListEnabled() {
-
-        if (configuration != null) {
-            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_STATS_LIST_ENABLED, StatisticsToolView.PARAM_DEFVAL_STATS_LIST_ENABLED);
-        } else {
-            return StatisticsToolView.PARAM_DEFVAL_STATS_LIST_ENABLED;
-        }
-    }
-
-    public boolean getPreferencesStatsSpreadSheetEnabled() {
-
-        if (configuration != null) {
-            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED, StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED);
-        } else {
-            return StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED;
-        }
-    }
 
 
     public String getPreferencesPercentThresholds() {
@@ -2818,14 +2466,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
 
-    public int getPreferencesNumBins() {
 
-        if (configuration != null) {
-            return configuration.getPropertyInt(StatisticsToolView.PARAM_KEY_NUM_BINS, StatisticsToolView.PARAM_DEFVAL_NUM_BINS);
-        } else {
-            return StatisticsToolView.PARAM_DEFVAL_NUM_BINS;
-        }
-    }
 
     void updateEnablement() {
 //        boolean hasMasks = (product != null && product.getMaskGroup().getNodeCount() > 0);
