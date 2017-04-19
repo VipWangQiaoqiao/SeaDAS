@@ -94,7 +94,7 @@ class MultipleRoiComputePanel extends JPanel {
 
 
       //  useRoiCheckBox = new JCheckBox("Use ROI mask(s):");
-        useRoiCheckBox = new JCheckBox("ROI Mask(s)");
+        useRoiCheckBox = new JCheckBox("Mask(ROI)");
         useRoiCheckBox.addActionListener(new ActionListener() {
 
             @Override

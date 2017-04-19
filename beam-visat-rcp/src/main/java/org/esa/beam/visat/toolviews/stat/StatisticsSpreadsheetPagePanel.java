@@ -30,13 +30,15 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
 
     private Object[][] statsSpreadsheet;
     private StatisticsCriteriaPanel statisticsCriteriaPanel;
+    private StatisticsPanel statisticsPanel;
 
 
-    public StatisticsSpreadsheetPagePanel(final ToolView parentDialog, String helpID, StatisticsCriteriaPanel statisticsCriteriaPanel, Object[][] statsSpreadsheet) {
+    public StatisticsSpreadsheetPagePanel(final ToolView parentDialog, String helpID, StatisticsCriteriaPanel statisticsCriteriaPanel, Object[][] statsSpreadsheet, StatisticsPanel statisticsPanel) {
         super(parentDialog, helpID, TITLE_PREFIX);
 
         this.statsSpreadsheet = statsSpreadsheet;
         this.statisticsCriteriaPanel = statisticsCriteriaPanel;
+        this.statisticsPanel = statisticsPanel;
 
 //        setMinimumSize(new Dimension(1000, 390));
         resultText = new StringBuilder("");
@@ -159,23 +161,45 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
         int bufferWidth = fm.stringWidth("nn");
 
 
+        int maskWidth = 0;
+        for (int rowIdx = 0; rowIdx < statsSpreadsheet.length; rowIdx++) {
+            Object valueObject = statsSpreadsheet[rowIdx][2];
+            if (valueObject != null) {
+                int currMaskWidth = fm.stringWidth(valueObject.toString()) + bufferWidth;
+
+                if (currMaskWidth > maskWidth) {
+                    maskWidth = currMaskWidth;
+                }
+            }
+        }
+
+        int bandWidth = fm.stringWidth(statisticsPanel.getRaster().getName()) + bufferWidth;
+        int filenameWidth = fm.stringWidth(statisticsPanel.getProduct().getName()) + bufferWidth;
+
+
         for (int i = 0; i < statsSpreadsheet[0].length; i++) {
             column = table.getColumnModel().getColumn(i);
+            int width = 0;
 
-            if (statisticsCriteriaPanel.colCharWidth() < 8) {
-                String header = statsSpreadsheet[0][i].toString();
-                int headerWidth = fm.stringWidth(header) + bufferWidth;
-
-                column.setPreferredWidth(headerWidth);
-                column.setMaxWidth(headerWidth);
-                column.setMinWidth(headerWidth);
-                tableWidth += headerWidth;
+            if (i == 0) {
+                width = filenameWidth;
+            } else if (i == 1) {
+                width = bandWidth;
+            } else if (i == 2) {
+                width = maskWidth;
             } else {
-                column.setPreferredWidth(colPreferredWidthData);
-                column.setMaxWidth(colPreferredWidthData);
-                column.setMinWidth(colPreferredWidthData);
-                tableWidth += colPreferredWidthData;
+                if (statisticsCriteriaPanel.colCharWidth() < 8) {
+                    String autoWidth = statsSpreadsheet[0][i].toString();
+                    width = fm.stringWidth(autoWidth) + bufferWidth;
+                } else {
+                    width = colPreferredWidthData;
+                }
             }
+
+            column.setPreferredWidth(width);
+            column.setMaxWidth(width);
+            column.setMinWidth(width);
+            tableWidth += width;
         }
 
 
