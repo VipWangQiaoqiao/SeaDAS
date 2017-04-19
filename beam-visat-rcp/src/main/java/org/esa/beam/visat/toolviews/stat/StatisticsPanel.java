@@ -148,6 +148,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private int plotMinWidth = 300;
 
 
+    ToolView parentDialog;
+    String helpID;
 
 
 
@@ -165,6 +167,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (visatApp != null) {
             this.configuration = visatApp.getPreferences();
         }
+
+        this.parentDialog = parentDialog;
+        this.helpID = helpID;
 
     }
 
@@ -406,7 +411,12 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         //    percentThresholdsList = statisticsCriteriaPanel.getPercentThresholdsList();
             resultText.append(createText(raster.getStx(), null));
             contentPanel.add(createStatPanel(raster.getStx(), null, 1));
-            spreadsheetPanel.add(statsSpreadsheetPanel());
+
+            PagePanel pagePanel = new StatisticsSpreadsheetPagePanel(parentDialog, helpID,statisticsCriteriaPanel, statsSpreadsheet);
+            pagePanel.initComponents();
+            spreadsheetPanel.add(pagePanel);
+
+         //   spreadsheetPanel.add(statsSpreadsheetPanel());
             histograms = new Histogram[]{raster.getStx().getHistogram()};
             exportAsCsvAction = new ExportStatisticsAsCsvAction(this);
             putStatisticsIntoVectorDataAction = new PutStatisticsIntoVectorDataAction(this);
@@ -718,9 +728,13 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     private void updateLeftPanel() {
 
+        PagePanel pagePanel = new StatisticsSpreadsheetPagePanel(parentDialog, helpID,statisticsCriteriaPanel, statsSpreadsheet);
+        pagePanel.initComponents();
+
         spreadsheetPanel.removeAll();
-        JPanel statsSpeadPanel = statsSpreadsheetPanel();
-        spreadsheetPanel.add(statsSpeadPanel);
+      //  JPanel statsSpeadPanel = statsSpreadsheetPanel();
+      //  spreadsheetPanel.add(statsSpeadPanel);
+        spreadsheetPanel.add(pagePanel);
         //   spreadsheetPanel.setBackground(Color.WHITE);
         spreadsheetScrollPane.setVisible(statisticsCriteriaPanel.showStatsSpreadSheet());
         spreadsheetScrollPane.setMinimumSize(new Dimension(100, 100));
@@ -769,6 +783,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (statisticsCriteriaPanel.showStatsSpreadSheet()) {
             leftPanel.add(spreadsheetScrollPane, gbc);
         }
+
+
+//        gbc.gridy += 1;
+//        leftPanel.add(pagePanel, gbc);
 
         leftPanel.revalidate();
         leftPanel.repaint();
@@ -1268,6 +1286,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         JPanel textContainerPanel = new JPanel(new BorderLayout(2, 2));
         //   textContainerPanel.setBackground(Color.WHITE);
         textContainerPanel.add(table, BorderLayout.CENTER);
+        textContainerPanel.addMouseListener(popupHandler);
 
         JPanel statsPane = GridBagUtils.createPanel();
         GridBagConstraints gbc = GridBagUtils.createConstraints("");
@@ -1661,65 +1680,17 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
 
-
-
-
-
     private boolean retrieveValidateTextFields(boolean showDialog) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
        if (!statisticsCriteriaPanel.validatePrepare()) {
            return false;
        }
 
-
-
-
-
-
-
-
-
-
-
-
-
         return true;
     }
 
 
-    private boolean compareFields(double lowVal, double highVal, String lowName, String HighName, boolean showDialog) {
-        if (lowVal >= highVal) {
-            if (showDialog) {
-                JOptionPane.showMessageDialog(getParentDialogContentPane(),
-                        "ERROR: Value of " + lowName + " must be greater than value of " + HighName,
-                        "Invalid Input",
-                        JOptionPane.ERROR_MESSAGE);
-            }
 
-            return false;
-        }
-
-        return true;
-
-    }
 
 
     private boolean validFields() {
@@ -1730,132 +1701,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         return true;
     }
 
-
-    private JPanel statsSpreadsheetPanel() {
-
-        JPanel pane = GridBagUtils.createPanel();
-
-        if (statsSpreadsheet == null) {
-            return pane;
-        }
-        //     pane.setBorder(UIUtils.createGroupBorder("Statistics Spreadsheet")); /*I18N*/
-        GridBagConstraints gbcMain = GridBagUtils.createConstraints("");
-        gbcMain.gridx = 0;
-        gbcMain.gridy = 0;
-        gbcMain.weighty = 1.0;
-        gbcMain.anchor = GridBagConstraints.NORTHWEST;
-
-
-
-
-        TableModel tableModel = new DefaultTableModel(statsSpreadsheet, statsSpreadsheet[0]) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                return columnIndex <= 1 ? String.class : Number.class;
-            }
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-
-        final JTable table = new JTable(tableModel);
-        table.setDefaultRenderer(Number.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                final Component label = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                if (value instanceof Float || value instanceof Double) {
-                    setHorizontalTextPosition(RIGHT);
-                    setText(getFormattedValue((Number) value));
-                }
-                return label;
-            }
-
-            private String getFormattedValue(Number value) {
-                if (value.doubleValue() < 0.001 && value.doubleValue() > -0.001 && value.doubleValue() != 0.0) {
-                    return new DecimalFormat("0.####E0").format(value.doubleValue());
-                }
-                String format = null;
-                if (statisticsCriteriaPanel.decimalPlaces() == statisticsCriteriaPanel.DECIMAL_PLACES_FULL) {
-                    format = "%f";
-//                } else if (decimalPlaces == 0) {
-//                    format = "%0f";
-                } else {
-                    format = "%." + Integer.toString(statisticsCriteriaPanel.decimalPlaces()) + "f";
-                }
-                return String.format(format, value.doubleValue());
-                // return String.format("%.4f", value.doubleValue());
-            }
-        });
-        table.addMouseListener(popupHandler);
-
-
-        FontMetrics fm = table.getFontMetrics(table.getFont());
-        TableColumn column = null;
-
-        // int colPreferredWidthData = fm.stringWidth("StandardDeviation(LogBinned):") + 10;
-
-        StringBuilder sampleEntry = new StringBuilder("");
-        for (int i = 1; i < statisticsCriteriaPanel.colCharWidth(); i++) {
-            sampleEntry.append("n");
-        }
-
-        int colPreferredWidthData = fm.stringWidth(sampleEntry.toString());
-        int tableWidth = 0;
-        int bufferWidth = fm.stringWidth("nn");
-
-
-        for (int i = 0; i < statsSpreadsheet[0].length; i++) {
-            column = table.getColumnModel().getColumn(i);
-
-            if (statisticsCriteriaPanel.colCharWidth() < 8) {
-                String header = statsSpreadsheet[0][i].toString();
-                int headerWidth = fm.stringWidth(header) + bufferWidth;
-
-                column.setPreferredWidth(headerWidth);
-                column.setMaxWidth(headerWidth);
-                column.setMinWidth(headerWidth);
-                tableWidth += headerWidth;
-            } else {
-                column.setPreferredWidth(colPreferredWidthData);
-                column.setMaxWidth(colPreferredWidthData);
-                column.setMinWidth(colPreferredWidthData);
-                tableWidth += colPreferredWidthData;
-            }
-        }
-
-
-        //  table.setPreferredSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
-
-        pane.add(table, gbcMain);
-        //  pane.setMinimumSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
-
-
-        return pane;
-    }
-
-
-
-
-
-
-
-
-
-    void updateEnablement() {
-//        boolean hasMasks = (product != null && product.getMaskGroup().getNodeCount() > 0);
-//        boolean canSelectMasks = hasMasks && useRoiCheckBox.isSelected();
-//        useRoiCheckBox.setEnabled(hasMasks);
-//        maskNameSearchField.setEnabled(canSelectMasks);
-//        maskNameList.setEnabled(canSelectMasks);
-//        selectAllCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length < maskNameList.getModel().getSize());
-//        selectNoneCheckBox.setEnabled(canSelectMasks && maskNameList.getCheckBoxListSelectedIndices().length > 0);
-//        if (!isRunning()) {
-//            refreshButton.setEnabled(raster != null);
-//        }
-    }
 
 
 }
