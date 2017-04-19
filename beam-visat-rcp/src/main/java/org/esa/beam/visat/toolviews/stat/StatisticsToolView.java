@@ -108,6 +108,13 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final int PARAM_MAXVAL_SPREADSHEET_COL_WIDTH = 50;
 
 
+    public static final String PARAM_KEY_SPREADSHEET_DECIMAL_PLACES = "statistics.textDecimalPlaces";
+    public static final String PARAM_LABEL_SPREADSHEET_DECIMAL_PLACES = "Decimal Places";
+    public static final int PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES = 4;
+    public static final int PARAM_MINVAL_SPREADSHEET_DECIMAL_PLACES = 0;
+    public static final int PARAM_MAXVAL_SPREADSHEET_DECIMAL_PLACES = 20;
+
+
 
     public static final String PARAM_LABEL_BIN_MIN_MAX_ENABLED = "Bin Span";
     public static final String PARAM_KEY_BIN_MIN_MAX_ENABLED = "statistics.binMinMaxEnabled";

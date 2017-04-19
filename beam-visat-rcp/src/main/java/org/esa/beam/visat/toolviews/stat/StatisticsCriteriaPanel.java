@@ -68,12 +68,8 @@ public class StatisticsCriteriaPanel {
     private int colCharWidth = COL_WIDTH_DEFAULT;
     private TextFieldContainer spreadsheetColWidthTextfieldContainer = null;
 
-    private static final int DECIMAL_PLACES_DEFAULT = 4;
-    public static final int DECIMAL_PLACES_FULL = -1;
-    private int decimalPlaces = DECIMAL_PLACES_DEFAULT;
-
-    private  JLabel decimalPlacesLabel = null;
-    private  JSpinner decimalPlacesSpinner = null;
+    private int decimalPlaces = StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES;
+    private TextFieldContainer decimalPlacesTextfieldContainer = null;
 
 
 
@@ -218,14 +214,14 @@ public class StatisticsCriteriaPanel {
                 getParentDialogContentPane);
 
 
-        decimalPlacesLabel = new JLabel("Decimal Places");
-        String[] decimalPlacesList = {"0", "1", "2", "3", "4", "5", "6", " FULL"};
-        SpinnerListModel decimalPlacesSpinnerModel = new SpinnerListModel(decimalPlacesList);
-        decimalPlacesSpinner = new JSpinner(decimalPlacesSpinnerModel);
-        decimalPlacesSpinner.setValue(" FULL");
-        decimalPlacesSpinner.setMinimumSize(decimalPlacesSpinner.getPreferredSize());
-        decimalPlacesSpinner.setPreferredSize(decimalPlacesSpinner.getPreferredSize());
-        decimalPlacesSpinner.setValue("4");
+        decimalPlacesTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_LABEL_SPREADSHEET_DECIMAL_PLACES,
+                StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES,
+                StatisticsToolView.PARAM_MINVAL_SPREADSHEET_DECIMAL_PLACES,
+                StatisticsToolView.PARAM_MAXVAL_SPREADSHEET_DECIMAL_PLACES,
+                TextFieldContainer.NumType.INT,
+                2,
+                getParentDialogContentPane);
+
 
 
 
@@ -389,18 +385,6 @@ public class StatisticsCriteriaPanel {
 
         // "Text" Tab Variables and Components
 
-        decimalPlacesSpinner.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                String decimalPlacesString = decimalPlacesSpinner.getValue().toString();
-
-                if (" FULL".equals(decimalPlacesString)) {
-                    decimalPlaces = DECIMAL_PLACES_FULL;
-                } else {
-                    decimalPlaces = Integer.parseInt(decimalPlacesString);
-                }
-            }
-        });
 
 
         // "Plots" Tab Variables and Components
@@ -940,10 +924,10 @@ public class StatisticsCriteriaPanel {
         GridBagConstraints gbc = GridBagUtils.createConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets.right = 3;
-        panel.add(decimalPlacesLabel, gbc);
+        panel.add(decimalPlacesTextfieldContainer.getLabel(), gbc);
         gbc.insets.right = 0;
         gbc.gridx++;
-        panel.add(decimalPlacesSpinner, gbc);
+        panel.add(decimalPlacesTextfieldContainer.getTextfield(), gbc);
 
         return panel;
     }
@@ -1115,7 +1099,18 @@ public class StatisticsCriteriaPanel {
         } else {
             return false;
         }
+
+        if (decimalPlacesTextfieldContainer != null && decimalPlacesTextfieldContainer.isValid(true) && decimalPlacesTextfieldContainer.getValue() != null) {
+            decimalPlaces = decimalPlacesTextfieldContainer.getValue().intValue();
+        } else {
+            return false;
+        }
+
+
         return true;
+
+
+
     }
 
     private boolean validNumBins() {

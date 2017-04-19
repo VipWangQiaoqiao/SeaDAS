@@ -1220,16 +1220,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 if (value.doubleValue() < 0.001 && value.doubleValue() > -0.001 && value.doubleValue() != 0.0) {
                     return new DecimalFormat("0.####E0").format(value.doubleValue());
                 }
-                String format = null;
-                if (statisticsCriteriaPanel.decimalPlaces() == statisticsCriteriaPanel.DECIMAL_PLACES_FULL) {
-                    format = "%f";
-//                } else if (decimalPlaces == 0) {
-//                    format = "%0f";
-                } else {
-                    format = "%." + Integer.toString(statisticsCriteriaPanel.decimalPlaces()) + "f";
-                }
+                String format = "%." + Integer.toString(statisticsCriteriaPanel.decimalPlaces()) + "f";
+
                 return String.format(format, value.doubleValue());
-                // return String.format("%.4f", value.doubleValue());
             }
         });
         table.addMouseListener(popupHandler);
