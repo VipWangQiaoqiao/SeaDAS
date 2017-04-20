@@ -20,17 +20,12 @@ import com.jidesoft.list.QuickListFilterField;
 import com.jidesoft.swing.CheckBoxList;
 import com.jidesoft.swing.SearchableUtils;
 import com.jidesoft.swing.TitledSeparator;
-import org.esa.beam.framework.datamodel.Mask;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductNode;
-import org.esa.beam.framework.datamodel.ProductNodeEvent;
-import org.esa.beam.framework.datamodel.ProductNodeGroup;
-import org.esa.beam.framework.datamodel.ProductNodeListener;
-import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
 import org.esa.beam.util.Debug;
+import org.esa.beam.util.ObjectUtils;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.visat.VisatApp;
 
@@ -61,21 +56,26 @@ class MultipleRoiComputePanel extends JPanel {
 
 
     private QuickListFilterField maskNameSearchField;
+    private QuickListFilterField bandNameSearchField;
 
 
     interface ComputeMasks {
 
-        void compute(Mask[] selectedMasks);
+        void compute(Mask[] selectedMasks, Band[] selectedBands);
     }
 
     private final ProductNodeListener productNodeListener;
+    private final ProductNodeListener productBandNodeListener;
 
     private AbstractButton refreshButton;
     private JCheckBox useRoiCheckBox;
     private JCheckBox includeUnmaskedCheckBox;
     private CheckBoxList maskNameList;
+    private CheckBoxList bandNameList;
     private JCheckBox selectAllCheckBox;
+    private JCheckBox bandNameselectAllCheckBox;
     private JCheckBox selectNoneCheckBox;
+    private JCheckBox bandNameselectNoneCheckBox;
     private boolean validFields = true;
     private boolean includeUnmasked = true;
     private boolean isRunning = false;
@@ -88,6 +88,7 @@ class MultipleRoiComputePanel extends JPanel {
         setLayout(new GridBagLayout());
 
         productNodeListener = new PNL();
+        productBandNodeListener = new BandNamePNL();
 
 
         JPanel topPane = getTopPanel(method, rasterDataNode);
@@ -124,6 +125,9 @@ class MultipleRoiComputePanel extends JPanel {
         JPanel maskNameListPane = getMaskNameListPanel();
         JPanel checkBoxPane = getSelectAllNonePanel();
 
+        JPanel bandFilterPane = getBandFilterPanel();
+        JPanel bandNameListPane = getBandNameListPanel();
+        JPanel bandNameCheckBoxPane = getBandNameSelectAllNonePanel();
 
         JPanel panel = GridBagUtils.createPanel();
 
@@ -161,6 +165,27 @@ class MultipleRoiComputePanel extends JPanel {
         gbc.insets.bottom = 5;
         panel.add(checkBoxPane, gbc);
 
+        // todo Danny working on this: uncomment this to activate multi-band mode
+//        gbc.gridy++;
+//        gbc.fill = GridBagConstraints.HORIZONTAL;
+//        gbc.insets.top = 5;
+//        panel.add(new TitledSeparator("Bands", SwingConstants.CENTER), gbc);
+//        gbc = GridBagUtils.restoreConstraints(gbc);
+//        gbc.insets.top = 0;
+//
+//
+//        gbc.gridy++;
+//        gbc.insets.bottom = 0;
+//        panel.add(bandFilterPane, gbc);
+//
+//        gbc.gridy++;
+//        panel.add(bandNameListPane, gbc);
+//
+//        gbc.gridy++;
+//        gbc.insets.bottom = 5;
+//        panel.add(bandNameCheckBoxPane, gbc);
+
+
         panel.setMinimumSize(panel.getPreferredSize());
         panel.setPreferredSize(panel.getPreferredSize());
 
@@ -192,6 +217,7 @@ class MultipleRoiComputePanel extends JPanel {
                 }
             }
             updateMaskListState();
+            updateBandNameListState();
             refreshButton.setEnabled(raster != null);
         }
     }
@@ -349,7 +375,21 @@ class MultipleRoiComputePanel extends JPanel {
                 } else {
                     selectedMasks = new Mask[]{null};
                 }
-                method.compute(selectedMasks);
+
+                Band[] selectedBands;
+                int[] bandListIndexes = bandNameList.getCheckBoxListSelectedIndices();
+                if (bandListIndexes.length > 0) {
+                    selectedBands = new Band[bandListIndexes.length];
+                    for (int i = 0; i < bandListIndexes.length; i++) {
+                        int listIndex = bandListIndexes[i];
+                        String bandName = bandNameList.getModel().getElementAt(listIndex).toString();
+                        selectedBands[i] = raster.getProduct().getBandGroup().get(bandName);
+                    }
+                } else {
+                    selectedBands = new Band[]{null};
+                }
+
+                method.compute(selectedMasks, selectedBands);
             }
         });
 
@@ -385,8 +425,8 @@ class MultipleRoiComputePanel extends JPanel {
         gbc.insets.top = 3;
         gbc.insets.bottom = 3;
         panel.add(maskNameSearchField, gbc);
-        gbc.gridx++;
-        panel.add(showMaskManagerButton, gbc);
+    //    gbc.gridx++;
+    //    panel.add(showMaskManagerButton, gbc);
 
         return panel;
     }
@@ -481,6 +521,266 @@ class MultipleRoiComputePanel extends JPanel {
     public boolean isIncludeUnmasked() {
         return includeUnmasked;
     }
+
+
+
+    //---------------------- Bandnames List ----------------------------------------------
+
+//    void setRaster(final RasterDataNode newRaster) {
+//        if (this.raster != newRaster) {
+//            this.raster = newRaster;
+//            if (newRaster == null) {
+//                if (product != null) {
+//                    product.removeProductNodeListener(productNodeListener);
+//                }
+//                product = null;
+//            } else if (product != newRaster.getProduct()) {
+//                if (product != null) {
+//                    product.removeProductNodeListener(productNodeListener);
+//                }
+//                product = newRaster.getProduct();
+//                if (product != null) {
+//                    product.addProductNodeListener(productNodeListener);
+//                }
+//            }
+//            updateBandNameListState();
+//            refreshButton.setEnabled(raster != null);
+//        }
+//    }
+
+
+    private class BandNamePNL implements ProductNodeListener {
+
+        @Override
+        public void nodeAdded(ProductNodeEvent event) {
+            handleEvent(event);
+        }
+
+        @Override
+        public void nodeChanged(ProductNodeEvent event) {
+//            handleEvent(event);
+        }
+
+        @Override
+        public void nodeDataChanged(ProductNodeEvent event) {
+            final ProductNode sourceNode = event.getSourceNode();
+            if (!(sourceNode instanceof Band)) {
+                return;
+            }
+            final String bandName = ((Band) sourceNode).getName();
+            final String[] selectedNames = getSelectedBandNames();
+
+            if (StringUtils.contains(selectedNames, bandName)) {
+                updateEnablement();
+            }
+        }
+
+        @Override
+        public void nodeRemoved(ProductNodeEvent event) {
+            handleEvent(event);
+        }
+
+        private void handleEvent(ProductNodeEvent event) {
+            ProductNode sourceNode = event.getSourceNode();
+            if (sourceNode instanceof Band) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateBandNameListState();
+                    }
+                });
+            }
+        }
+    }
+
+
+    private void selectAndEnableBandNameCheckBoxes() {
+        final int numEntries = bandNameList.getModel().getSize();
+        final int numSelected = bandNameList.getCheckBoxListSelectedIndices().length;
+        bandNameselectNoneCheckBox.setEnabled(numSelected > 0);
+        bandNameselectAllCheckBox.setEnabled(numSelected < numEntries);
+        bandNameselectNoneCheckBox.setSelected(numSelected == 0);
+        bandNameselectAllCheckBox.setSelected(numSelected == numEntries);
+    }
+
+    private String[] getSelectedBandNames() {
+        final Object[] selectedValues = bandNameList.getCheckBoxListSelectedValues();
+        return StringUtils.toStringArray(selectedValues);
+    }
+
+
+    private void updateBandNameListState() {
+
+        final DefaultListModel bandNameListModel = new DefaultListModel();
+        final String[] currentSelectedBandNames = getSelectedBandNames();
+
+        if (product != null) {
+            final ProductNodeGroup<Band> bandGroup = product.getBandGroup();
+            final Band[] bands = bandGroup.toArray(new Band[bandGroup.getNodeCount()]);
+            for (Band band : bands) {
+                bandNameListModel.addElement(band.getName());
+            }
+        }
+
+        try {
+            bandNameSearchField.setListModel(bandNameListModel);
+            if (product != null) {
+                bandNameList.setModel(bandNameSearchField.getDisplayListModel());
+            }
+        } catch (Throwable e) {
+
+            /*
+            We catch everything here, because there seems to be a bug in the combination of
+            JIDE QuickListFilterField and FilteredCheckBoxList:
+
+             java.lang.IndexOutOfBoundsException: bitIndex < 0: -1
+             	at java.util.BitSet.get(BitSet.java:441)
+             	at javax.swing.DefaultListSelectionModel.clear(DefaultListSelectionModel.java:257)
+             	at javax.swing.DefaultListSelectionModel.setState(DefaultListSelectionModel.java:567)
+             	at javax.swing.DefaultListSelectionModel.removeIndexInterval(DefaultListSelectionModel.java:635)
+             	at com.jidesoft.list.CheckBoxListSelectionModelWithWrapper.removeIndexInterval(Unknown Source)
+/             */
+            Debug.trace(e);
+        }
+
+        final String[] allNames = StringUtils.toStringArray(bandNameListModel.toArray());
+        for (int i = 0; i < allNames.length; i++) {
+            String name = allNames[i];
+            if (StringUtils.contains(currentSelectedBandNames, name)) {
+                bandNameList.getCheckBoxListSelectionModel().addSelectionInterval(i, i);
+            }
+        }
+
+        bandNameList.selectNone();
+        bandNameList.clearCheckBoxListSelection();
+        bandNameList.clearSelection();
+        String[] selectedBandNames = {raster.getName()};
+        bandNameList.setSelectedObjects(selectedBandNames);
+
+
+        updateEnablement();
+    }
+
+
+
+    private JPanel getBandNameListPanel() {
+        bandNameList = new CheckBoxList(bandNameSearchField.getDisplayListModel()) {
+            @Override
+            public int getNextMatch(String prefix, int startIndex, Position.Bias bias) {
+                return -1;
+            }
+
+            @Override
+            public boolean isCheckBoxEnabled(int index) {
+                return true;
+            }
+        };
+        SearchableUtils.installSearchable(bandNameList);
+
+        bandNameList.getCheckBoxListSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        bandNameList.getCheckBoxListSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+
+//                refreshButton.setEnabled(true);
+                if (!e.getValueIsAdjusting()) {
+                    selectAndEnableBandNameCheckBoxes();
+                }
+            }
+        });
+//        maskNameList.setMinimumSize(maskNameList.getPreferredSize());
+//        maskNameList.setPreferredSize(maskNameList.getPreferredSize());
+
+
+        JScrollPane scrollPane = new JScrollPane(bandNameList);
+        scrollPane.setMinimumSize(scrollPane.getPreferredSize());
+        scrollPane.setPreferredSize(scrollPane.getPreferredSize());
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(scrollPane, gbc);
+
+        return panel;
+
+    }
+
+    private JPanel getBandNameSelectAllNonePanel() {
+
+        bandNameselectAllCheckBox = new JCheckBox("Select All");
+        bandNameselectAllCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (bandNameselectAllCheckBox.isSelected()) {
+                    bandNameList.selectAll();
+                }
+                selectAndEnableBandNameCheckBoxes();
+            }
+        });
+        bandNameselectAllCheckBox.setMinimumSize(bandNameselectAllCheckBox.getPreferredSize());
+        bandNameselectAllCheckBox.setPreferredSize(bandNameselectAllCheckBox.getPreferredSize());
+
+        bandNameselectNoneCheckBox = new JCheckBox("Select None");
+        bandNameselectNoneCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (bandNameselectNoneCheckBox.isSelected()) {
+                    bandNameList.selectNone();
+                }
+                selectAndEnableBandNameCheckBoxes();
+            }
+        });
+        bandNameselectNoneCheckBox.setMinimumSize(bandNameselectNoneCheckBox.getPreferredSize());
+        bandNameselectNoneCheckBox.setPreferredSize(bandNameselectNoneCheckBox.getPreferredSize());
+
+
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        panel.add(bandNameselectAllCheckBox, gbc);
+
+        gbc.gridy++;
+        panel.add(bandNameselectNoneCheckBox, gbc);
+
+        return panel;
+    }
+
+
+    private JPanel getBandFilterPanel() {
+
+
+        AbstractButton showMaskManagerButton = VisatApp.getApp().getCommandManager().getCommand("org.esa.beam.visat.toolviews.mask.MaskManagerToolView.showCmd").createToolBarButton();
+        showMaskManagerButton.setMinimumSize(showMaskManagerButton.getPreferredSize());
+        showMaskManagerButton.setPreferredSize(showMaskManagerButton.getPreferredSize());
+
+
+        DefaultListModel maskNameListModel = new DefaultListModel();
+
+        bandNameSearchField = new QuickListFilterField(maskNameListModel);
+        bandNameSearchField.setHintText("Band Filter");
+        bandNameSearchField.setMinimumSize(bandNameSearchField.getPreferredSize());
+        bandNameSearchField.setPreferredSize(bandNameSearchField.getPreferredSize());
+
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        gbc.insets.top = 3;
+        gbc.insets.bottom = 3;
+        panel.add(bandNameSearchField, gbc);
+    //    gbc.gridx++;
+    //    panel.add(showMaskManagerButton, gbc);
+
+        return panel;
+    }
+
+
+    //--------------------- General-------------------------------------------
+
+
 
     public boolean isRunning() {
         return isRunning;

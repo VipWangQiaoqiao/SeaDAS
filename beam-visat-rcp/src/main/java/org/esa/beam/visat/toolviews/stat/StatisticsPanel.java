@@ -19,12 +19,7 @@ package org.esa.beam.visat.toolviews.stat;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
-import org.esa.beam.framework.datamodel.Mask;
-import org.esa.beam.framework.datamodel.ProductNodeGroup;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.datamodel.Stx;
-import org.esa.beam.framework.datamodel.StxFactory;
-import org.esa.beam.framework.datamodel.VectorDataNode;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.TextFieldContainer;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.UIUtils;
@@ -465,7 +460,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     }
 
     @Override
-    public void compute(final Mask[] selectedMasks) {
+    public void compute(final Mask[] selectedMasks, final Band[] selectedBands) {
 
         computePanel.setRunning(true);
         spreadsheetPanel.removeAll();
@@ -473,12 +468,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         //todo Danny this is start of coding ability to select multiple bands
-        boolean allBands = true;
-        String[] thisBandName = {getRaster().getName()};
-       final String[] bandNames = (allBands) ? getProduct().getBandNames() : thisBandName;
-
-        int numMaskRows = selectedMasks.length * bandNames.length;
-        int numUnMaskedRows = (computePanel.isIncludeUnmasked()) ? bandNames.length : 0;
+        int numMaskRows = selectedMasks.length * selectedBands.length;
+        int numUnMaskedRows = (computePanel.isIncludeUnmasked()) ? selectedBands.length : 0;
         numRows = 1 + numMaskRows + numUnMaskedRows;
         numProductRegions = numRows - 1;
 
@@ -528,9 +519,12 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     final int binCount = statisticsCriteriaPanel.getNumBins();
                     int histogramIdx = 0;
 
-                    for (int rasterIdx = 0; rasterIdx < bandNames.length; rasterIdx++) {
+                   // for (int rasterIdx = 0; rasterIdx < bandNames.length; rasterIdx++) {
+                    for (int rasterIdx = 0; rasterIdx < selectedBands.length; rasterIdx++) {
+                        final Band band = selectedBands[rasterIdx];
 
-                        raster = getProduct().getRasterDataNode(bandNames[rasterIdx]);
+                    //    raster = getProduct().getRasterDataNode(bandNames[rasterIdx]);
+                        raster = getProduct().getRasterDataNode(band.getName());
 
                         if (computePanel.isIncludeUnmasked()) {
                             final Stx stx1;
