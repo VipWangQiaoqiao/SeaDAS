@@ -86,28 +86,18 @@ class MultipleRoiComputePanel extends JPanel {
     MultipleRoiComputePanel(final ComputeMasks method, final RasterDataNode rasterDataNode) {
 
         setLayout(new GridBagLayout());
+        JPanel topPane = getTopPanel(method, rasterDataNode);
 
         productNodeListener = new PNL();
         productBandNodeListener = new BandNamePNL();
 
+        JPanel panel = GridBagUtils.createPanel();
 
-        JPanel topPane = getTopPanel(method, rasterDataNode);
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        panel.add(topPane, gbc);
 
-
-      //  useRoiCheckBox = new JCheckBox("Use ROI mask(s):");
-        useRoiCheckBox = new JCheckBox("Mask(ROI)");
-        useRoiCheckBox.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateEnablement();
-            }
-        });
-        useRoiCheckBox.setMinimumSize(useRoiCheckBox.getPreferredSize());
-        useRoiCheckBox.setPreferredSize(useRoiCheckBox.getPreferredSize());
-
-
-
+        gbc = GridBagUtils.restoreConstraints(gbc);
         includeUnmaskedCheckBox = new JCheckBox("Full Scene");
         includeUnmaskedCheckBox.setSelected(includeUnmasked);
         includeUnmaskedCheckBox.addActionListener(new ActionListener() {
@@ -120,75 +110,12 @@ class MultipleRoiComputePanel extends JPanel {
         includeUnmaskedCheckBox.setMinimumSize(includeUnmaskedCheckBox.getPreferredSize());
         includeUnmaskedCheckBox.setPreferredSize(includeUnmaskedCheckBox.getPreferredSize());
 
-
-        JPanel maskFilterPane = getMaskFilterPanel();
-        JPanel maskNameListPane = getMaskNameListPanel();
-        JPanel checkBoxPane = getSelectAllNonePanel();
-
-        JPanel bandFilterPane = getBandFilterPanel();
-        JPanel bandNameListPane = getBandNameListPanel();
-        JPanel bandNameCheckBoxPane = getBandNameSelectAllNonePanel();
-
-        JPanel panel = GridBagUtils.createPanel();
-
-        GridBagConstraints gbc = GridBagUtils.createConstraints();
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        panel.add(topPane, gbc);
-        gbc = GridBagUtils.restoreConstraints(gbc);
-
-
-
-        gbc.gridy++;
         gbc.insets.top = 5;
+        gbc.gridy += 1;
         panel.add(includeUnmaskedCheckBox, gbc);
 
         gbc.gridy++;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets.top = 5;
-        panel.add(new TitledSeparator("Masking Options", SwingConstants.CENTER), gbc);
-        gbc = GridBagUtils.restoreConstraints(gbc);
-        gbc.insets.top = 0;
-
-
-
-
-        gbc.gridy++;
-        panel.add(useRoiCheckBox, gbc);
-
-        gbc.gridy++;
-        panel.add(maskFilterPane, gbc);
-
-        gbc.gridy++;
-        panel.add(maskNameListPane, gbc);
-
-        gbc.gridy++;
-        gbc.insets.bottom = 5;
-        panel.add(checkBoxPane, gbc);
-
-        // todo Danny working on this: uncomment this to activate multi-band mode
-//        gbc.gridy++;
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
-//        gbc.insets.top = 5;
-//        panel.add(new TitledSeparator("Bands", SwingConstants.CENTER), gbc);
-//        gbc = GridBagUtils.restoreConstraints(gbc);
-//        gbc.insets.top = 0;
-//
-//
-//        gbc.gridy++;
-//        gbc.insets.bottom = 0;
-//        panel.add(bandFilterPane, gbc);
-//
-//        gbc.gridy++;
-//        panel.add(bandNameListPane, gbc);
-//
-//        gbc.gridy++;
-//        gbc.insets.bottom = 5;
-//        panel.add(bandNameCheckBoxPane, gbc);
-
-
-        panel.setMinimumSize(panel.getPreferredSize());
-        panel.setPreferredSize(panel.getPreferredSize());
-
+        panel.add(getMaskAndBandTabbedPane(), gbc);
 
         GridBagConstraints gbcMain = GridBagUtils.createConstraints();
         gbcMain.fill = GridBagConstraints.HORIZONTAL;
@@ -197,6 +124,92 @@ class MultipleRoiComputePanel extends JPanel {
         setRaster(rasterDataNode);
     }
 
+    private JTabbedPane getMaskAndBandTabbedPane() {
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+
+        tabbedPane.addTab("Masks", getMaskROIPanel());
+        tabbedPane.setToolTipTextAt(0, "Select region of interest masks for which to create statistics");
+
+        tabbedPane.addTab("Bands", getBandsPanel());
+        tabbedPane.setToolTipTextAt(1, "Select bands for which to create statistics");
+
+        return  tabbedPane;
+
+    }
+
+    private JPanel getMaskROIPanel() {
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+
+        //  useRoiCheckBox = new JCheckBox("Use ROI mask(s):");
+        useRoiCheckBox = new JCheckBox("Mask(ROI)");
+        useRoiCheckBox.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateEnablement();
+            }
+        });
+        useRoiCheckBox.setMinimumSize(useRoiCheckBox.getPreferredSize());
+        useRoiCheckBox.setPreferredSize(useRoiCheckBox.getPreferredSize());
+        useRoiCheckBox.setSelected(true);
+
+        JPanel maskFilterPane = getMaskFilterPanel();
+        JPanel maskNameListPane = getMaskNameListPanel();
+        JPanel checkBoxPane = getSelectAllNonePanel();
+
+        // todo Danny commented this out and set selected to true as we may get rid of this
+//        panel.add(useRoiCheckBox, gbc);
+//
+//        gbc.gridy++;
+
+        gbc.insets.top = 5;
+        panel.add(maskFilterPane, gbc);
+        gbc.insets.top = 0;
+
+        gbc.gridy++;
+        panel.add(maskNameListPane, gbc);
+
+        gbc.gridy++;
+        gbc.insets.bottom = 5;
+        panel.add(checkBoxPane, gbc);
+
+        panel.setMinimumSize(panel.getPreferredSize());
+        panel.setPreferredSize(panel.getPreferredSize());
+
+        return panel;
+    }
+
+
+
+    private JPanel getBandsPanel() {
+
+
+        JPanel bandFilterPane = getBandFilterPanel();
+        JPanel bandNameListPane = getBandNameListPanel();
+        JPanel bandNameCheckBoxPane = getBandNameSelectAllNonePanel();
+
+        JPanel panel = GridBagUtils.createPanel();
+        GridBagConstraints gbc = GridBagUtils.createConstraints();
+        // todo Danny uncomment this to get Bands working and to test out this feature
+
+//        gbc.insets.top = 5;
+//        panel.add(bandFilterPane, gbc);
+//        gbc.insets.top = 0;
+//
+//        gbc.gridy++;
+//        panel.add(bandNameListPane, gbc);
+//
+//        gbc.gridy++;
+//        gbc.insets.bottom = 5;
+//        panel.add(bandNameCheckBoxPane, gbc);
+
+        panel.setMinimumSize(panel.getPreferredSize());
+        panel.setPreferredSize(panel.getPreferredSize());
+
+        return panel;
+    }
 
 
     void setRaster(final RasterDataNode newRaster) {

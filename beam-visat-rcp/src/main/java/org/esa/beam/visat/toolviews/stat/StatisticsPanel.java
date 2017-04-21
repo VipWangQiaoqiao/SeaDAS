@@ -244,7 +244,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         final JPanel rightPanel = GridBagUtils.createPanel();
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+
 
 
         final JPanel mainPane = GridBagUtils.createPanel();
@@ -256,36 +256,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         GridBagUtils.addToPanel(rightPanel, computePanel, extendedOptionsPanelConstraints, "gridy=0,fill=NONE,weighty=1,weightx=1");
 
 
-        JPanel optionsPanel = statisticsCriteriaPanel.getTextOptionsPanel();
-        JPanel fieldsPanel = statisticsCriteriaPanel.getFieldOptionsPanel();
-        JPanel binningCriteriaPanel = statisticsCriteriaPanel.getBinningCriteriaPanel();
-        JPanel plotOptionsPanel = statisticsCriteriaPanel.getPlotsOptionsPanel();
-        JPanel viewPanel = statisticsCriteriaPanel.getViewPanel();
 
-        //    GridBagUtils.addToPanel(rightPanel, optionsPanel, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
-
-        //   GridBagUtils.addToPanel(rightPanel, binningCriteriaPanel, extendedOptionsPanelConstraints, "gridy=2,fill=BOTH,weighty=0");
-
-        //  GridBagUtils.addToPanel(mainPane, computePanel, extendedOptionsPanelConstraints, "gridy=0,fill=NONE,weighty=1,weightx=1");
-        GridBagUtils.addToPanel(mainPane, binningCriteriaPanel, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0");
-
-
-        tabbedPane.addTab("Bins", binningCriteriaPanel);
-        tabbedPane.setToolTipTextAt(0, "Histogram statistics binning criteria");
-
-        tabbedPane.addTab("Fields", fieldsPanel);
-        tabbedPane.setToolTipTextAt(1, "Statistic fields to display within text and spreadsheet");
-
-        tabbedPane.addTab("Text", optionsPanel);
-        tabbedPane.setToolTipTextAt(2, "Text and spreadsheet formatting");
-
-        tabbedPane.addTab("Plots", plotOptionsPanel);
-        tabbedPane.setToolTipTextAt(3, "Plot formatting");
-
-        tabbedPane.addTab("View", viewPanel);
-        tabbedPane.setToolTipTextAt(4, "View options");
-
-        GridBagUtils.addToPanel(rightPanel, tabbedPane, extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0, insets.top=10");
+        GridBagUtils.addToPanel(rightPanel, statisticsCriteriaPanel.getCriteriaFormattingTabbedPane(), extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0, insets.top=10");
 
 
         exportButton = getExportButton();
@@ -1067,7 +1039,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         // account for header as added row
-        if (row+1 < statsSpreadsheet.length) {
+        if (row < statsSpreadsheet.length) {
             if (includeFileName) {
                 statsSpreadsheet[row][fileNameIdx] = getProduct().getName();
             }

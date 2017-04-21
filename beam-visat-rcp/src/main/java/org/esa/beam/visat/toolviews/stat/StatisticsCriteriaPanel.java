@@ -649,12 +649,41 @@ public class StatisticsCriteriaPanel {
 
 
     //
-    //------------------------------- PUBLIC PANELS -------------------------------------
+    //------------------------------- PUBLIC TABBED PANEL -------------------------------------
     //
 
     // "Bins" Tab Variables and Components
 
-    public JPanel getBinningCriteriaPanel() {
+    public JTabbedPane getCriteriaFormattingTabbedPane() {
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Bins", getBinningCriteriaPanel());
+        tabbedPane.setToolTipTextAt(0, "Histogram statistics binning criteria");
+
+        tabbedPane.addTab("Fields", getFieldOptionsPanel());
+        tabbedPane.setToolTipTextAt(1, "Statistic fields to display within text and spreadsheet");
+
+        tabbedPane.addTab("Text", getTextOptionsPanel());
+        tabbedPane.setToolTipTextAt(2, "Text and spreadsheet formatting");
+
+        tabbedPane.addTab("Plots", getPlotsOptionsPanel());
+        tabbedPane.setToolTipTextAt(3, "Plot formatting");
+
+        tabbedPane.addTab("View", getViewPanel());
+        tabbedPane.setToolTipTextAt(4, "View options");
+
+        return  tabbedPane;
+
+    }
+
+
+    //
+    //------------------------------- PRIVATE TABBED PANELS -------------------------------------
+    //
+
+    // "Bins" Tab Variables and Components
+
+    private JPanel getBinningCriteriaPanel() {
 
         JPanel numBinsPanel = getNumBinsPanel();
 
@@ -692,7 +721,7 @@ public class StatisticsCriteriaPanel {
     // "Fields" Tab Variables and Components
 
 
-    public JPanel getFieldOptionsPanel() {
+    private JPanel getFieldOptionsPanel() {
 
         JPanel thresholdsPanel = getThresholdsPanel();
 
@@ -727,7 +756,7 @@ public class StatisticsCriteriaPanel {
 
     // "Text" Tab Variables and Components
 
-    public JPanel getTextOptionsPanel() {
+    private JPanel getTextOptionsPanel() {
 
         JPanel decimalPlacesPanel = getDecimalPlacesPanel();
 
@@ -759,7 +788,7 @@ public class StatisticsCriteriaPanel {
     // "Plots" Tab Variables and Components
 
 
-    public JPanel getPlotsOptionsPanel() {
+    private JPanel getPlotsOptionsPanel() {
 
         final JPanel panel = GridBagUtils.createPanel();
         GridBagConstraints gbc = GridBagUtils.createConstraints();
@@ -792,7 +821,7 @@ public class StatisticsCriteriaPanel {
 
     // "View" Tab Variables and Components
 
-    public JPanel getViewPanel() {
+    private JPanel getViewPanel() {
 
         final JPanel panel = GridBagUtils.createPanel();
         GridBagConstraints gbc = GridBagUtils.createConstraints();
@@ -883,7 +912,7 @@ public class StatisticsCriteriaPanel {
 
     // "Fields" Tab Variables and Components
 
-    public JPanel getThresholdsPanel() {
+    private JPanel getThresholdsPanel() {
 
         JPanel panel = GridBagUtils.createPanel();
         GridBagConstraints gbc = GridBagUtils.createConstraints();
@@ -902,7 +931,7 @@ public class StatisticsCriteriaPanel {
     // "Text" Tab Variables and Components
 
 
-    public JPanel getColWidthPanel() {
+    private JPanel getColWidthPanel() {
 
 
         JPanel panel = GridBagUtils.createPanel();
