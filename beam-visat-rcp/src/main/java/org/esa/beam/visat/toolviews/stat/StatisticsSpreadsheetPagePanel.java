@@ -72,7 +72,7 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
 
     }
 
-        @Override
+    @Override
     protected String getDataAsText() {
         return resultText.toString();
     }
@@ -91,7 +91,6 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
     }
 
 
-
     private JPanel statsSpreadsheetPanel() {
 
         JPanel pane = GridBagUtils.createPanel();
@@ -105,8 +104,6 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
         gbcMain.gridy = 0;
         gbcMain.weighty = 1.0;
         gbcMain.anchor = GridBagConstraints.NORTHWEST;
-
-
 
 
         TableModel tableModel = new DefaultTableModel(statsSpreadsheet, statsSpreadsheet[0]) {
@@ -161,32 +158,55 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
         int bufferWidth = fm.stringWidth("nn");
 
 
-        int maskWidth = 0;
-        for (int rowIdx = 0; rowIdx < statsSpreadsheet.length; rowIdx++) {
-            Object valueObject = statsSpreadsheet[rowIdx][2];
-            if (valueObject != null) {
-                int currMaskWidth = fm.stringWidth(valueObject.toString()) + bufferWidth;
+        boolean includeFileName = true;
+        boolean includeBandName = true;
+        boolean includeBandUnits = true;
+        boolean includeMaskName = true;
 
-                if (currMaskWidth > maskWidth) {
-                    maskWidth = currMaskWidth;
+        int numAddedFields = 0;
+        {
+            int fieldIdx = 0;
+            if (includeFileName) {
+                fieldIdx++;
+            }
+            if (includeBandName) {
+                fieldIdx++;
+            }
+            if (includeBandUnits) {
+                fieldIdx++;
+            }
+
+            if (includeMaskName) {
+                fieldIdx++;
+            }
+            numAddedFields = fieldIdx;
+        }
+
+
+        int[] widthAddedFields = new int[numAddedFields];
+
+        for (int fieldIdx = 0; fieldIdx < numAddedFields; fieldIdx++) {
+            widthAddedFields[fieldIdx] = 0;
+
+            for (int rowIdx = 0; rowIdx < statsSpreadsheet.length; rowIdx++) {
+                Object spreadsheetCell = statsSpreadsheet[rowIdx][fieldIdx];
+                if (spreadsheetCell != null && StringUtils.isNotNullAndNotEmpty(spreadsheetCell.toString())) {
+                    int currWidth = fm.stringWidth(spreadsheetCell.toString()) + bufferWidth;
+
+                    if (currWidth > 0 && currWidth > widthAddedFields[fieldIdx]) {
+                        widthAddedFields[fieldIdx] = currWidth;
+                    }
                 }
             }
         }
-
-        int bandWidth = fm.stringWidth(statisticsPanel.getRaster().getName()) + bufferWidth;
-        int filenameWidth = fm.stringWidth(statisticsPanel.getProduct().getName()) + bufferWidth;
 
 
         for (int i = 0; i < statsSpreadsheet[0].length; i++) {
             column = table.getColumnModel().getColumn(i);
             int width = 0;
 
-            if (i == 0) {
-                width = filenameWidth;
-            } else if (i == 1) {
-                width = bandWidth;
-            } else if (i == 2) {
-                width = maskWidth;
+            if (i < numAddedFields - 1) {
+                width = widthAddedFields[i];
             } else {
                 if (statisticsCriteriaPanel.colCharWidth() < 8) {
                     String autoWidth = statsSpreadsheet[0][i].toString();
@@ -233,13 +253,13 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
                 if (valueObject == null) {
                     sb.append("");
                 } else if (valueObject instanceof Float || valueObject instanceof Double) {
-                        String valueFormatted = getFormattedValue((Number) valueObject);
-                        sb.append(valueFormatted);
+                    String valueFormatted = getFormattedValue((Number) valueObject);
+                    sb.append(valueFormatted);
                 } else {
                     sb.append(valueObject.toString());
                 }
 
-                if (colIdx < statsSpreadsheet[0].length -1) {
+                if (colIdx < statsSpreadsheet[0].length - 1) {
                     sb.append("\t");
                 }
 
