@@ -19,6 +19,8 @@ package org.esa.beam.visat.toolviews.stat;
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
+import org.esa.beam.framework.dataio.ProductReader;
+import org.esa.beam.framework.dataio.ProductReaderPlugIn;
 import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.TextFieldContainer;
 import org.esa.beam.framework.ui.GridBagUtils;
@@ -49,6 +51,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 
 /**
@@ -245,8 +248,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         final JPanel rightPanel = GridBagUtils.createPanel();
 
 
-
-
         final JPanel mainPane = GridBagUtils.createPanel();
 
         //  GridBagConstraints extendedOptionsPanelConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,fill=HORIZONTAL,insets.top=2,weightx=1,insets.right=-2");
@@ -254,7 +255,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         GridBagUtils.addToPanel(rightPanel, computePanel, extendedOptionsPanelConstraints, "gridy=0,fill=NONE,weighty=1,weightx=1");
-
 
 
         GridBagUtils.addToPanel(rightPanel, statisticsCriteriaPanel.getCriteriaFormattingTabbedPane(), extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0, insets.top=10");
@@ -597,7 +597,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         if (statisticsCriteriaPanel.showPercentPlots() || statisticsCriteriaPanel.showHistogramPlots() || statisticsCriteriaPanel.showStatsList()) {
 
-            if ((numStxRegions+1) > spreadsheetMinRowsBeforeWeight) {
+            if ((numStxRegions + 1) > spreadsheetMinRowsBeforeWeight) {
                 gbc.weighty = 1.0 - spreadsheetHeightWeight;
                 leftPanel.add(contentScrollPane, gbc);
 
@@ -963,51 +963,96 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         if (percentData != null) {
             for (int i = 0; i < percentData.length; i++) {
-                //  int tableDataIndex = i + firstData.length;
                 tableData[tableDataIdx] = percentData[i];
                 tableDataIdx++;
             }
         }
 
 
+        numStxFields = tableData.length;
 
 
-        boolean includeFileName = true;
-        boolean includeBandName = true;
-        boolean includeBandUnits = true;
-        boolean includeMaskName = true;
+        boolean includeFileName = statisticsCriteriaPanel.isIncludeFileName();
+        boolean includeBandName = statisticsCriteriaPanel.isIncludeBandName();
+        boolean includeBandUnits = statisticsCriteriaPanel.isIncludeBandUnits();
+        boolean includeMaskName = statisticsCriteriaPanel.isIncludeMaskName();
+        boolean includeDateTime = statisticsCriteriaPanel.isIncludeDateTime();
+        boolean includeValidPixExp = statisticsCriteriaPanel.isIncludeValidPixExp();
+        boolean includeDescription = statisticsCriteriaPanel.isIncludeDescription();
+        boolean includeProductFormat = statisticsCriteriaPanel.isIncludeProductFormat();
+
+
         int fileNameIdx = -1;
         int bandNameIdx = -1;
         int bandUnitsIdx = -1;
         int maskNameIdx = -1;
 
-        int fieldIdx = 0;
-            if (includeFileName) {
-                fileNameIdx = fieldIdx;
-                fieldIdx++;
-            }
-            if (includeBandName) {
-                bandNameIdx = fieldIdx;
-                fieldIdx++;
-            }
-            if (includeBandUnits) {
-                bandUnitsIdx = fieldIdx;
-                fieldIdx++;
-            }
+        int startTimeIdx = -1;
+        int startDateIdx = -1;
+        int endTimeIdx = -1;
+        int endDateIdx = -1;
 
-            if (includeMaskName) {
-                maskNameIdx = fieldIdx;
-                fieldIdx++;
-            }
-        int numAddedFields = fieldIdx;
+        int validPixExpIdx = -1;
+        int descriptionIdx = -1;
+        int productTypeIdx = -1;
+        int productFormatIdx = -1;
+
+
+        int fieldIdx = 0;
+
+        if (includeFileName) {
+            fileNameIdx = fieldIdx;
+            fieldIdx++;
+        }
+        if (includeBandName) {
+            bandNameIdx = fieldIdx;
+            fieldIdx++;
+        }
+        if (includeBandUnits) {
+            bandUnitsIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+        if (includeMaskName) {
+            maskNameIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+        int stxFieldsStartIdx = fieldIdx;
+        fieldIdx += numStxFields;
+        int stxFieldsEndIdx = fieldIdx - 1;
+
+        if (includeDateTime) {
+            startDateIdx = fieldIdx;
+            fieldIdx++;
+            startTimeIdx = fieldIdx;
+            fieldIdx++;
+            endDateIdx = fieldIdx;
+            fieldIdx++;
+            endTimeIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+        if (includeValidPixExp) {
+            validPixExpIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+        if (includeDescription) {
+            descriptionIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+         if (includeProductFormat) {
+             productTypeIdx = fieldIdx;
+             fieldIdx++;
+             productFormatIdx = fieldIdx;
+             fieldIdx++;
+         }
 
 
         if (statsSpreadsheet == null) {
-            numStxFields = tableData.length;
-
-            int numCols = numStxFields + numAddedFields;
-
-            statsSpreadsheet = new Object[numStxRegions+1][numCols];
+            statsSpreadsheet = new Object[numStxRegions + 1][fieldIdx];
         }
 
 
@@ -1026,15 +1071,36 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 statsSpreadsheet[0][maskNameIdx] = "Mask(ROI)";
             }
 
-
+            int k = stxFieldsStartIdx;
             for (int i = 0; i < tableData.length; i++) {
                 Object value = tableData[i][0];
 
-                int k = i + numAddedFields;
-                if (k < statsSpreadsheet[0].length) {
+
+                if (k < statsSpreadsheet[0].length && k <= stxFieldsEndIdx) {
                     statsSpreadsheet[0][k] = value;
+                    k++;
                 }
             }
+
+            if (includeDateTime) {
+                statsSpreadsheet[0][startDateIdx] = "FileStartDate";
+                statsSpreadsheet[0][startTimeIdx] = "FileStartTime";
+                statsSpreadsheet[0][endDateIdx] = "FileEndDate";
+                statsSpreadsheet[0][endTimeIdx] = "FileEndTime";
+            }
+            if (includeValidPixExp) {
+                statsSpreadsheet[0][validPixExpIdx] = "ValidPixelExpression";
+            }
+
+            if (includeDescription) {
+                statsSpreadsheet[0][descriptionIdx] = "Description";
+            }
+
+            if (includeProductFormat) {
+                statsSpreadsheet[0][productTypeIdx] = "FileType";
+                statsSpreadsheet[0][productFormatIdx] = "FileFormat";
+            }
+
         }
 
 
@@ -1042,9 +1108,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (row < statsSpreadsheet.length) {
             if (includeFileName) {
                 statsSpreadsheet[row][fileNameIdx] = getProduct().getName();
+                //   statsSpreadsheet[row][fileNameIdx] = getProduct().getEndTime();
             }
             if (includeBandName) {
                 statsSpreadsheet[row][bandNameIdx] = raster.getName();
+                //    statsSpreadsheet[row][bandNameIdx] = getProduct().getEndTime().getAsDate().getTime();
             }
             if (includeBandUnits) {
                 statsSpreadsheet[row][bandUnitsIdx] = raster.getUnit();
@@ -1052,17 +1120,77 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             if (includeMaskName) {
                 statsSpreadsheet[row][maskNameIdx] = (mask != null) ? mask.getName() : "";
             }
+
+            int k = stxFieldsStartIdx;
             for (int i = 0; i < tableData.length; i++) {
                 Object value = tableData[i][1];
 
-                int k = i + numAddedFields;
-                if (k < statsSpreadsheet[row].length) {
+                if (k < statsSpreadsheet[row].length && k <= stxFieldsEndIdx) {
                     statsSpreadsheet[row][k] = value;
+                    k++;
+                }
+            }
+
+
+
+            if (includeDateTime) {
+                ProductData.UTC startDateTimeCorrected;
+                ProductData.UTC endDateTimeCorrected;
+
+                if (getProduct().getStartTime() != null && getProduct().getEndTime() != null) {
+                    if (getProduct().getStartTime().getMJD() <= getProduct().getEndTime().getMJD()) {
+
+                        startDateTimeCorrected = getProduct().getStartTime();
+                        endDateTimeCorrected = getProduct().getEndTime();
+                    } else {
+
+                        startDateTimeCorrected = getProduct().getEndTime();
+                        endDateTimeCorrected = getProduct().getStartTime();
+                    }
+
+                    String startDateString = "";
+                    String startTimeString = "";
+                    String endDateString = "";
+                    String endTimeString = "";
+
+                    if (startDateTimeCorrected != null) {
+                        String[] startDateTimeStringArray = startDateTimeCorrected.toString().split(" ");
+                        if (startDateTimeStringArray.length >= 2) {
+                            startDateString = startDateTimeStringArray[0].trim();
+                            startTimeString = startDateTimeStringArray[1].trim();
+                        }
+                    }
+
+
+                    if (endDateTimeCorrected != null) {
+                        String[] endDateTimeStringArray = endDateTimeCorrected.toString().split(" ");
+                        if (endDateTimeStringArray.length >= 2) {
+                            endDateString = endDateTimeStringArray[0].trim();
+                            endTimeString = endDateTimeStringArray[1].trim();
+                        }
+                    }
+
+                    statsSpreadsheet[row][startDateIdx] = startDateString;
+                    statsSpreadsheet[row][startTimeIdx] = startTimeString;
+                    statsSpreadsheet[row][endDateIdx] = endDateString;
+                    statsSpreadsheet[row][endTimeIdx] = endTimeString;
+                }
+
+                if (includeValidPixExp) {
+                    statsSpreadsheet[row][validPixExpIdx] = raster.getValidPixelExpression();
+                }
+
+                if (includeDescription) {
+                    statsSpreadsheet[row][descriptionIdx] = raster.getDescription();
+                }
+
+                if (includeProductFormat) {
+                    statsSpreadsheet[row][productTypeIdx] = getProduct().getProductType();
+                    statsSpreadsheet[row][productFormatIdx] = getProductFormatName(getProduct());
                 }
             }
         }
 
-        // todo Danny stats spreadsheet too big
 
         int numPlots = 0;
         if (statisticsCriteriaPanel.showPercentPlots()) {
@@ -1638,6 +1766,28 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         return true;
     }
 
+
+    // todo Danny copied this from InformationPanel perhaps that could be called directly by making it public
+    private static String getProductFormatName(final Product product) {
+        final ProductReader productReader = product.getProductReader();
+        if (productReader == null) {
+            return null;
+        }
+        final ProductReaderPlugIn readerPlugIn = productReader.getReaderPlugIn();
+        if (readerPlugIn != null) {
+            return getProductFormatName(readerPlugIn);
+        }
+        return null;
+    }
+
+    // todo - make this a method in ProductReader and ProductWriter
+    private static String getProductFormatName(final ProductReaderPlugIn readerPlugIn) {
+        final String[] formatNames = readerPlugIn.getFormatNames();
+        if (formatNames != null && formatNames.length > 0) {
+            return formatNames[0];
+        }
+        return null;
+    }
 
 }
 

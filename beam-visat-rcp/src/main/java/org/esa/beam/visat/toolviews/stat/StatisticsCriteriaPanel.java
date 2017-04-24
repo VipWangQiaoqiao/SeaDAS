@@ -61,6 +61,16 @@ public class StatisticsCriteriaPanel {
     private boolean includeHistogramStats = false;
     private JCheckBox includeHistogramStatsCheckBox = null;
 
+    private boolean includeFileName = true;
+    private boolean includeBandName = true;
+    private boolean includeBandUnits = true;
+    private boolean includeMaskName = true;
+    private boolean includeDateTime = true;
+    private boolean includeValidPixExp = true;
+    private boolean includeDescription = true;
+    private boolean includeProductFormat = true;
+
+
 
     // "Text" Tab Variables and Components
 
@@ -611,10 +621,42 @@ public class StatisticsCriteriaPanel {
             }
         }
 
-
         return percentThresholdsList;
     }
 
+
+
+    public boolean isIncludeFileName() {
+        return includeFileName;
+    }
+
+    public boolean isIncludeBandName() {
+        return includeBandName;
+    }
+
+    public boolean isIncludeBandUnits() {
+        return includeBandUnits;
+    }
+
+    public boolean isIncludeMaskName() {
+        return includeMaskName;
+    }
+
+    public boolean isIncludeDateTime() {
+        return includeDateTime;
+    }
+
+    public boolean isIncludeValidPixExp() {
+        return includeValidPixExp;
+    }
+
+    public boolean isIncludeDescription() {
+        return includeDescription;
+    }
+
+    public boolean isIncludeProductFormat() {
+        return includeProductFormat;
+    }
 
 
     // "Text" Tab Variables and Components
@@ -1273,4 +1315,6 @@ public class StatisticsCriteriaPanel {
 
         return panel;
     }
+
+
 }

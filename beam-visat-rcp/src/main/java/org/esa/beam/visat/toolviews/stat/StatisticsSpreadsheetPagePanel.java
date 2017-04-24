@@ -1,6 +1,7 @@
 package org.esa.beam.visat.toolviews.stat;
 
 import org.esa.beam.framework.datamodel.Mask;
+import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.framework.datamodel.Stx;
 import org.esa.beam.framework.ui.GridBagUtils;
@@ -154,73 +155,45 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
         }
 
         int colPreferredWidthData = fm.stringWidth(sampleEntry.toString());
-        int tableWidth = 0;
         int bufferWidth = fm.stringWidth("nn");
 
 
-        boolean includeFileName = true;
-        boolean includeBandName = true;
-        boolean includeBandUnits = true;
-        boolean includeMaskName = true;
-
-        int numAddedFields = 0;
-        {
-            int fieldIdx = 0;
-            if (includeFileName) {
-                fieldIdx++;
-            }
-            if (includeBandName) {
-                fieldIdx++;
-            }
-            if (includeBandUnits) {
-                fieldIdx++;
-            }
-
-            if (includeMaskName) {
-                fieldIdx++;
-            }
-            numAddedFields = fieldIdx;
-        }
-
-
-        int[] widthAddedFields = new int[numAddedFields];
-
-        for (int fieldIdx = 0; fieldIdx < numAddedFields; fieldIdx++) {
-            widthAddedFields[fieldIdx] = 0;
+        for (int fieldIdx = 0; fieldIdx < statsSpreadsheet[0].length; fieldIdx++) {
+            column = table.getColumnModel().getColumn(fieldIdx);
+            int width = 0;
 
             for (int rowIdx = 0; rowIdx < statsSpreadsheet.length; rowIdx++) {
                 Object spreadsheetCell = statsSpreadsheet[rowIdx][fieldIdx];
+                int currWidth = 0;
+
                 if (spreadsheetCell != null && StringUtils.isNotNullAndNotEmpty(spreadsheetCell.toString())) {
-                    int currWidth = fm.stringWidth(spreadsheetCell.toString()) + bufferWidth;
 
-                    if (currWidth > 0 && currWidth > widthAddedFields[fieldIdx]) {
-                        widthAddedFields[fieldIdx] = currWidth;
+                    if (spreadsheetCell instanceof Float || spreadsheetCell instanceof  Double) {
+                        if (statisticsCriteriaPanel.colCharWidth() < 8) {
+                            String valueFormatted = getFormattedValue((Number) spreadsheetCell);
+                            currWidth = fm.stringWidth(valueFormatted.trim()) + bufferWidth;
+                        } else {
+                            currWidth = colPreferredWidthData;
+                        }
+
+                    } else {
+                         currWidth = fm.stringWidth(spreadsheetCell.toString()) + bufferWidth;
                     }
-                }
-            }
-        }
 
-
-        for (int i = 0; i < statsSpreadsheet[0].length; i++) {
-            column = table.getColumnModel().getColumn(i);
-            int width = 0;
-
-            if (i < numAddedFields - 1) {
-                width = widthAddedFields[i];
-            } else {
-                if (statisticsCriteriaPanel.colCharWidth() < 8) {
-                    String autoWidth = statsSpreadsheet[0][i].toString();
-                    width = fm.stringWidth(autoWidth) + bufferWidth;
-                } else {
-                    width = colPreferredWidthData;
+                    if (currWidth > 0 && currWidth > width) {
+                        width = currWidth;
+                    }
                 }
             }
 
             column.setPreferredWidth(width);
             column.setMaxWidth(width);
             column.setMinWidth(width);
-            tableWidth += width;
         }
+
+
+
+
 
 
         //  table.setPreferredSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
