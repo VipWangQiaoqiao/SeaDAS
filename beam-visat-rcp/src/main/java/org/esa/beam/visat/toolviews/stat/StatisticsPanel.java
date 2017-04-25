@@ -51,7 +51,6 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
-import java.util.Calendar;
 
 
 /**
@@ -117,6 +116,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     private int plotMinHeight = 300;
     private int plotMinWidth = 300;
+
 
 
     ToolView parentDialog;
@@ -294,52 +294,55 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
-        statisticsCriteriaPanel.reset();
+        if (computePanel.isUseBandInViewWindowMode()) {
+            statisticsCriteriaPanel.reset();
 
 
-        statsSpreadsheet = null;
+            statsSpreadsheet = null;
 
 
-        final RasterDataNode raster = getRaster();
-        computePanel.setRaster(raster);
-        contentPanel.removeAll();
-        spreadsheetPanel.removeAll();
-        resultText.setLength(0);
+            final RasterDataNode raster = getRaster();
+            computePanel.setRaster(raster);
+            contentPanel.removeAll();
+            spreadsheetPanel.removeAll();
+            resultText.setLength(0);
 
 
-        if (raster != null && raster.isStxSet() && raster.getStx().getResolutionLevel() == 0) {
+            if (raster != null && raster.isStxSet() && raster.getStx().getResolutionLevel() == 0) {
 
-            //    percentThresholdsList = statisticsCriteriaPanel.getPercentThresholdsList();
-            //   resultText.append(createText(raster.getStx(), null));
-            contentPanel.add(createStatPanel(raster.getStx(), null, 1, getRaster()));
+                //    percentThresholdsList = statisticsCriteriaPanel.getPercentThresholdsList();
+                //   resultText.append(createText(raster.getStx(), null));
+                contentPanel.add(createStatPanel(raster.getStx(), null, 1, getRaster()));
 
-            PagePanel pagePanel = new StatisticsSpreadsheetPagePanel(parentDialog, helpID, statisticsCriteriaPanel, statsSpreadsheet, this);
-            pagePanel.initComponents();
-            spreadsheetPanel.add(pagePanel);
+                PagePanel pagePanel = new StatisticsSpreadsheetPagePanel(parentDialog, helpID, statisticsCriteriaPanel, statsSpreadsheet, this);
+                pagePanel.initComponents();
+                spreadsheetPanel.add(pagePanel);
 
-            //   spreadsheetPanel.add(statsSpreadsheetPanel());
-            histograms = new Histogram[]{raster.getStx().getHistogram()};
-            exportAsCsvAction = new ExportStatisticsAsCsvAction(this);
-            putStatisticsIntoVectorDataAction = new PutStatisticsIntoVectorDataAction(this);
-            exportButton.setEnabled(exportButtonEnabled);
+                //   spreadsheetPanel.add(statsSpreadsheetPanel());
+                histograms = new Histogram[]{raster.getStx().getHistogram()};
+                exportAsCsvAction = new ExportStatisticsAsCsvAction(this);
+                putStatisticsIntoVectorDataAction = new PutStatisticsIntoVectorDataAction(this);
+                exportButton.setEnabled(exportButtonEnabled);
 
-        } else {
-            contentPanel.add(new JLabel(DEFAULT_STATISTICS_TEXT));
-            exportButton.setEnabled(false);
+            } else {
+                contentPanel.add(new JLabel(DEFAULT_STATISTICS_TEXT));
+                exportButton.setEnabled(false);
+            }
+
+
+            contentPanel.revalidate();
+            contentPanel.repaint();
+            spreadsheetScrollPane.setVisible(statisticsCriteriaPanel.showStatsSpreadSheet());
+            spreadsheetPanel.revalidate();
+            spreadsheetPanel.repaint();
+            backgroundPanel.revalidate();
+            backgroundPanel.repaint();
+
+            if (raster != null) {
+                exportButton.setEnabled(false);
+            }
         }
 
-
-        contentPanel.revalidate();
-        contentPanel.repaint();
-        spreadsheetScrollPane.setVisible(statisticsCriteriaPanel.showStatsSpreadSheet());
-        spreadsheetPanel.revalidate();
-        spreadsheetPanel.repaint();
-        backgroundPanel.revalidate();
-        backgroundPanel.repaint();
-
-        if (raster != null) {
-            exportButton.setEnabled(false);
-        }
     }
 
     @Override
@@ -366,9 +369,33 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         fixedHistDomainAllPlotsInitialized = false;
 
 
-        //todo Danny this is start of coding ability to select multiple bands
-        int numMaskRows = selectedMasks.length * selectedBands.length;
-        int numUnMaskedRows = (computePanel.isIncludeUnmasked()) ? selectedBands.length : 0;
+        int numMaskRows;
+        int numUnMaskedRows;
+
+        if (selectedBands != null && selectedBands.length > 0 && selectedBands[0] != null) {
+            if (selectedBands.length == 1) {
+                String rasterName = getRaster().getName();
+                String selectedBandName = selectedBands[0].getName();
+                if (rasterName.equals(selectedBandName)) {
+                    computePanel.setUseBandInViewWindowMode(true);
+                } else {
+                    computePanel.setUseBandInViewWindowMode(false);
+                }
+            } else {
+                computePanel.setUseBandInViewWindowMode(false);
+            }
+        } else {
+            computePanel.setUseBandInViewWindowMode(true);
+        }
+
+        if (computePanel.isUseBandInViewWindowMode()) {
+            numMaskRows = selectedMasks.length;
+            numUnMaskedRows = (computePanel.isIncludeUnmasked()) ? 1 : 0;
+        } else {
+            numMaskRows = selectedMasks.length * selectedBands.length;
+            numUnMaskedRows = (computePanel.isIncludeUnmasked()) ? selectedBands.length : 0;
+        }
+
         numStxRegions = numMaskRows + numUnMaskedRows;
 
         this.histograms = new Histogram[numStxRegions];
@@ -407,72 +434,18 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             protected Object doInBackground(ProgressMonitor pm) {
                 pm.beginTask(title, numStxRegions);
                 try {
-                    RasterDataNode raster = getRaster();
-
-                    final int binCount = statisticsCriteriaPanel.getNumBins();
                     int stxIdx = 0;
 
-                    for (int rasterIdx = 0; rasterIdx < selectedBands.length; rasterIdx++) {
-                        final Band band = selectedBands[rasterIdx];
-
-                        raster = getProduct().getRasterDataNode(band.getName());
-
-                        if (computePanel.isIncludeUnmasked()) {
-                            final Stx stx;
-                            final ProgressMonitor subPm = SubProgressMonitor.create(pm, 1);
-
-                            stx = new StxFactory()
-                                    .withHistogramBinCount(binCount)
-                                    .withLogHistogram(statisticsCriteriaPanel.isLogMode())
-                                    .withMedian(statisticsCriteriaPanel.includeMedian())
-                                    .withBinMin(statisticsCriteriaPanel.getBinMin())
-                                    .withBinMax(statisticsCriteriaPanel.getBinMax())
-                                    .withBinWidth(statisticsCriteriaPanel.getBinWidth())
-                                    .create(raster, subPm);
-
-                            histograms[0] = stx.getHistogram();
-
-                            // publish(new ComputeResult(stx1, null));
-
-                            JPanel statPanel = createStatPanel(stx, null, stxIdx, raster);
-                            contentPanel.add(statPanel);
-                            updateLeftPanel();
-                            stxIdx++;
+                    if (computePanel.isUseBandInViewWindowMode()) {
+                        RasterDataNode raster = getRaster();
+                        int recordCount = computeAllStxForRaster(raster, pm, selectedMasks, stxIdx);
+                    } else {
+                        for (int rasterIdx = 0; rasterIdx < selectedBands.length; rasterIdx++) {
+                            final Band band = selectedBands[rasterIdx];
+                            RasterDataNode raster = getProduct().getRasterDataNode(band.getName());
+                            int recordCount = computeAllStxForRaster(raster, pm, selectedMasks, stxIdx);
+                            stxIdx += recordCount;
                         }
-
-
-                        if (selectedMasks != null) {
-                            for (int i = 0; i < selectedMasks.length; i++) {
-                                final Mask mask = selectedMasks[i];
-
-                                if (mask != null) {
-                                    final Stx stx;
-                                    final ProgressMonitor subPm = SubProgressMonitor.create(pm, 1);
-
-                                    stx = new StxFactory()
-                                            .withHistogramBinCount(binCount)
-                                            .withLogHistogram(statisticsCriteriaPanel.isLogMode())
-                                            .withMedian(statisticsCriteriaPanel.includeMedian())
-                                            .withBinMin(statisticsCriteriaPanel.getBinMin())
-                                            .withBinMax(statisticsCriteriaPanel.getBinMax())
-                                            .withBinWidth(statisticsCriteriaPanel.getBinWidth())
-                                            .withRoiMask(mask)
-                                            .create(raster, subPm);
-
-
-                                    histograms[stxIdx] = stx.getHistogram();
-
-                                    // publish(new ComputeResult(stx, mask));
-
-                                    JPanel statPanel = createStatPanel(stx, mask, stxIdx, raster);
-                                    contentPanel.add(statPanel);
-                                    updateLeftPanel();
-                                    stxIdx++;
-                                }
-                            }
-                        }
-
-
                     }
 
 
@@ -551,6 +524,66 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         // swingWorker.execute();
         swingWorker.executeWithBlocking();
+    }
+
+
+    private int computeAllStxForRaster(RasterDataNode raster, ProgressMonitor pm, final Mask[] selectedMasks, int stxIdx) {
+
+        int recordCount = 0;
+        if (computePanel.isIncludeUnmasked()) {
+            computeStx(raster, pm, null, stxIdx + recordCount);
+            recordCount++;
+        }
+
+        if (selectedMasks != null) {
+            for (int i = 0; i < selectedMasks.length; i++) {
+                final Mask mask = selectedMasks[i];
+
+                if (mask != null) {
+                    computeStx(raster, pm, mask, stxIdx + recordCount);
+                    recordCount++;
+                }
+            }
+        }
+
+        return recordCount;
+    }
+
+
+    private void computeStx(RasterDataNode raster, ProgressMonitor pm, Mask mask, int stxIdx) {
+        final Stx stx;
+        final ProgressMonitor subPm = SubProgressMonitor.create(pm, 1);
+
+        if (mask != null) {
+            stx = new StxFactory()
+                    .withHistogramBinCount(statisticsCriteriaPanel.getNumBins())
+                    .withLogHistogram(statisticsCriteriaPanel.isLogMode())
+                    .withMedian(statisticsCriteriaPanel.includeMedian())
+                    .withBinMin(statisticsCriteriaPanel.getBinMin())
+                    .withBinMax(statisticsCriteriaPanel.getBinMax())
+                    .withBinWidth(statisticsCriteriaPanel.getBinWidth())
+                    .withRoiMask(mask)
+                    .create(raster, subPm);
+
+
+        } else {
+            stx = new StxFactory()
+                    .withHistogramBinCount(statisticsCriteriaPanel.getNumBins())
+                    .withLogHistogram(statisticsCriteriaPanel.isLogMode())
+                    .withMedian(statisticsCriteriaPanel.includeMedian())
+                    .withBinMin(statisticsCriteriaPanel.getBinMin())
+                    .withBinMax(statisticsCriteriaPanel.getBinMax())
+                    .withBinWidth(statisticsCriteriaPanel.getBinWidth())
+                    .create(raster, subPm);
+        }
+
+        histograms[stxIdx] = stx.getHistogram();
+
+        // publish(new ComputeResult(stx1, null));
+
+        JPanel statPanel = createStatPanel(stx, mask, stxIdx, raster);
+        contentPanel.add(statPanel);
+        updateLeftPanel();
     }
 
 
@@ -1008,10 +1041,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             bandNameIdx = fieldIdx;
             fieldIdx++;
         }
-        if (includeBandUnits) {
-            bandUnitsIdx = fieldIdx;
-            fieldIdx++;
-        }
+
 
         if (includeMaskName) {
             maskNameIdx = fieldIdx;
@@ -1033,6 +1063,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             fieldIdx++;
         }
 
+        if (includeBandUnits) {
+            bandUnitsIdx = fieldIdx;
+            fieldIdx++;
+        }
+
         if (includeValidPixExp) {
             validPixExpIdx = fieldIdx;
             fieldIdx++;
@@ -1043,16 +1078,18 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             fieldIdx++;
         }
 
-         if (includeProductFormat) {
-             productTypeIdx = fieldIdx;
-             fieldIdx++;
-             productFormatIdx = fieldIdx;
-             fieldIdx++;
-         }
+        if (includeProductFormat) {
+            productTypeIdx = fieldIdx;
+            fieldIdx++;
+            productFormatIdx = fieldIdx;
+            fieldIdx++;
+        }
 
 
         if (statsSpreadsheet == null) {
-            statsSpreadsheet = new Object[numStxRegions + 1][fieldIdx];
+            statsSpreadsheet = new Object[numStxRegions + 2][fieldIdx];
+            // add 1 row to account for the header and 1 more empty row because JTable for some reason displays
+            // only half of the last row when row count is large
         }
 
 
@@ -1130,7 +1167,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     k++;
                 }
             }
-
 
 
             if (includeDateTime) {

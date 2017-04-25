@@ -19,13 +19,11 @@ package org.esa.beam.visat.toolviews.stat;
 import com.jidesoft.list.QuickListFilterField;
 import com.jidesoft.swing.CheckBoxList;
 import com.jidesoft.swing.SearchableUtils;
-import com.jidesoft.swing.TitledSeparator;
 import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
 import org.esa.beam.util.Debug;
-import org.esa.beam.util.ObjectUtils;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.visat.VisatApp;
 
@@ -59,6 +57,7 @@ class MultipleRoiComputePanel extends JPanel {
     private QuickListFilterField bandNameSearchField;
 
 
+
     interface ComputeMasks {
 
         void compute(Mask[] selectedMasks, Band[] selectedBands);
@@ -82,6 +81,7 @@ class MultipleRoiComputePanel extends JPanel {
 
     private RasterDataNode raster;
     private Product product;
+    private boolean useBandInViewWindowMode = true;
 
     MultipleRoiComputePanel(final ComputeMasks method, final RasterDataNode rasterDataNode) {
 
@@ -164,16 +164,16 @@ class MultipleRoiComputePanel extends JPanel {
 //
 //        gbc.gridy++;
 
-        gbc.insets.top = 5;
-        panel.add(maskFilterPane, gbc);
-        gbc.insets.top = 0;
-
-        gbc.gridy++;
-        panel.add(maskNameListPane, gbc);
-
-        gbc.gridy++;
-        gbc.insets.bottom = 5;
-        panel.add(checkBoxPane, gbc);
+//        gbc.insets.top = 5;
+//        panel.add(maskFilterPane, gbc);
+//        gbc.insets.top = 0;
+//
+//        gbc.gridy++;
+//        panel.add(maskNameListPane, gbc);
+//
+//        gbc.gridy++;
+//        gbc.insets.bottom = 5;
+//        panel.add(checkBoxPane, gbc);
 
         panel.setMinimumSize(panel.getPreferredSize());
         panel.setPreferredSize(panel.getPreferredSize());
@@ -194,16 +194,16 @@ class MultipleRoiComputePanel extends JPanel {
         GridBagConstraints gbc = GridBagUtils.createConstraints();
         // todo Danny uncomment this to get Bands working and to test out this feature
 
-//        gbc.insets.top = 5;
-//        panel.add(bandFilterPane, gbc);
-//        gbc.insets.top = 0;
-//
-//        gbc.gridy++;
-//        panel.add(bandNameListPane, gbc);
-//
-//        gbc.gridy++;
-//        gbc.insets.bottom = 5;
-//        panel.add(bandNameCheckBoxPane, gbc);
+        gbc.insets.top = 5;
+        panel.add(bandFilterPane, gbc);
+        gbc.insets.top = 0;
+
+        gbc.gridy++;
+        panel.add(bandNameListPane, gbc);
+
+        gbc.gridy++;
+        gbc.insets.bottom = 5;
+        panel.add(bandNameCheckBoxPane, gbc);
 
         panel.setMinimumSize(panel.getPreferredSize());
         panel.setPreferredSize(panel.getPreferredSize());
@@ -664,11 +664,13 @@ class MultipleRoiComputePanel extends JPanel {
             }
         }
 
-        bandNameList.selectNone();
-        bandNameList.clearCheckBoxListSelection();
-        bandNameList.clearSelection();
-        String[] selectedBandNames = {raster.getName()};
-        bandNameList.setSelectedObjects(selectedBandNames);
+        if (isUseBandInViewWindowMode()) {
+            bandNameList.selectNone();
+            bandNameList.clearCheckBoxListSelection();
+            bandNameList.clearSelection();
+            String[] selectedBandNames = {raster.getName()};
+            bandNameList.setSelectedObjects(selectedBandNames);
+        }
 
 
         updateEnablement();
@@ -792,6 +794,15 @@ class MultipleRoiComputePanel extends JPanel {
 
 
     //--------------------- General-------------------------------------------
+
+
+    public boolean isUseBandInViewWindowMode() {
+        return useBandInViewWindowMode;
+    }
+
+    public void setUseBandInViewWindowMode(boolean useBandInViewWindowMode) {
+        this.useBandInViewWindowMode = useBandInViewWindowMode;
+    }
 
 
 

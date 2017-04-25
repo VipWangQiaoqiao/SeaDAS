@@ -99,12 +99,7 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
         if (statsSpreadsheet == null) {
             return pane;
         }
-        //     pane.setBorder(UIUtils.createGroupBorder("Statistics Spreadsheet")); /*I18N*/
-        GridBagConstraints gbcMain = GridBagUtils.createConstraints("");
-        gbcMain.gridx = 0;
-        gbcMain.gridy = 0;
-        gbcMain.weighty = 1.0;
-        gbcMain.anchor = GridBagConstraints.NORTHWEST;
+
 
 
         TableModel tableModel = new DefaultTableModel(statsSpreadsheet, statsSpreadsheet[0]) {
@@ -197,7 +192,13 @@ class StatisticsSpreadsheetPagePanel extends PagePanel {
 
 
         //  table.setPreferredSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
-
+        //     pane.setBorder(UIUtils.createGroupBorder("Statistics Spreadsheet")); /*I18N*/
+        GridBagConstraints gbcMain = GridBagUtils.createConstraints("");
+        gbcMain.gridx = 0;
+        gbcMain.gridy = 0;
+        gbcMain.weighty = 1.0;
+        gbcMain.insets.bottom = 5;
+        gbcMain.anchor = GridBagConstraints.NORTHWEST;
         pane.add(table, gbcMain);
         //  pane.setMinimumSize(new Dimension(tableWidth, table.getRowCount() * table.getRowHeight()));
 
