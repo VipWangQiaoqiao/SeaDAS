@@ -27,6 +27,7 @@ import org.esa.beam.framework.ui.GridBagUtils;
 import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.application.ToolView;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
+import org.esa.beam.util.Guardian;
 import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.visat.VisatApp;
@@ -294,7 +295,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
-        if (computePanel.isUseBandInViewWindowMode()) {
+
+
+
+        if (computePanel.forceUpdate) {
             statisticsCriteriaPanel.reset();
 
 
@@ -372,23 +376,28 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         int numMaskRows;
         int numUnMaskedRows;
 
+        // todo Danny really this is trying to do isAnotherBand selected it could be renamed and inverted appropriately or maybe gotten rid of
+
         if (selectedBands != null && selectedBands.length > 0 && selectedBands[0] != null) {
             if (selectedBands.length == 1) {
                 String rasterName = getRaster().getName();
                 String selectedBandName = selectedBands[0].getName();
                 if (rasterName.equals(selectedBandName)) {
-                    computePanel.setUseBandInViewWindowMode(true);
+                    computePanel.setUseViewBandRaster(true);
                 } else {
-                    computePanel.setUseBandInViewWindowMode(false);
+                    computePanel.setUseViewBandRaster(false);
                 }
             } else {
-                computePanel.setUseBandInViewWindowMode(false);
+                computePanel.setUseViewBandRaster(false);
             }
         } else {
-            computePanel.setUseBandInViewWindowMode(true);
+            computePanel.setUseViewBandRaster(true);
         }
 
-        if (computePanel.isUseBandInViewWindowMode()) {
+
+
+
+        if (computePanel.isUseViewBandRaster()) {
             numMaskRows = selectedMasks.length;
             numUnMaskedRows = (computePanel.isIncludeUnmasked()) ? 1 : 0;
         } else {
@@ -436,7 +445,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 try {
                     int stxIdx = 0;
 
-                    if (computePanel.isUseBandInViewWindowMode()) {
+                    if (computePanel.isUseViewBandRaster()) {
                         RasterDataNode raster = getRaster();
                         int recordCount = computeAllStxForRaster(raster, pm, selectedMasks, stxIdx);
                     } else {
@@ -917,13 +926,13 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         Object[][] secondData =
                 new Object[][]{
-                        new Object[]{"StandardDeviation", stx.getStandardDeviation()},
-                        new Object[]{"CoefficientOfVariation", getCoefficientOfVariation(stx)},
+                        new Object[]{"Standard Deviation", stx.getStandardDeviation()},
+                        new Object[]{"Coefficient of Variation", getCoefficientOfVariation(stx)},
                         //     new Object[]{"", ""},
-                        new Object[]{"TotalBins", histogram.getNumBins()[0]},
-                        new Object[]{"BinWidth", getBinSize(histogram)},
-                        new Object[]{"BinMin", histogram.getLowValue(0)},
-                        new Object[]{"BinMax", histogram.getHighValue(0)}
+                        new Object[]{"Total Bins", histogram.getNumBins()[0]},
+                        new Object[]{"Bin Width", getBinSize(histogram)},
+                        new Object[]{"Bin Min", histogram.getLowValue(0)},
+                        new Object[]{"Bin Max", histogram.getHighValue(0)}
                 };
         dataRows += secondData.length;
 
@@ -1013,6 +1022,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         boolean includeValidPixExp = statisticsCriteriaPanel.isIncludeValidPixExp();
         boolean includeDescription = statisticsCriteriaPanel.isIncludeDescription();
         boolean includeProductFormat = statisticsCriteriaPanel.isIncludeProductFormat();
+        boolean isIncludeTimeSeriesFields = statisticsCriteriaPanel.isIncludeTimeSeriesFields();
+
+
 
 
         int fileNameIdx = -1;
@@ -1029,6 +1041,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         int descriptionIdx = -1;
         int productTypeIdx = -1;
         int productFormatIdx = -1;
+
+        int timeSeriesBandTimeIdx = -1;
+        int timeSeriesBandDateIdx = -1;
 
 
         int fieldIdx = 0;
@@ -1062,6 +1077,18 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             endTimeIdx = fieldIdx;
             fieldIdx++;
         }
+
+
+        if (isIncludeTimeSeriesFields) {
+            timeSeriesBandDateIdx = fieldIdx;
+            fieldIdx++;
+            timeSeriesBandTimeIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+
+
+
 
         if (includeBandUnits) {
             bandUnitsIdx = fieldIdx;
@@ -1120,13 +1147,22 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
 
             if (includeDateTime) {
-                statsSpreadsheet[0][startDateIdx] = "FileStartDate";
-                statsSpreadsheet[0][startTimeIdx] = "FileStartTime";
-                statsSpreadsheet[0][endDateIdx] = "FileEndDate";
-                statsSpreadsheet[0][endTimeIdx] = "FileEndTime";
+                statsSpreadsheet[0][startDateIdx] = "File Start Date";
+                statsSpreadsheet[0][startTimeIdx] = "File Start Time";
+                statsSpreadsheet[0][endDateIdx] = "File End Date";
+                statsSpreadsheet[0][endTimeIdx] = "File End Time";
             }
+
+
+
+            if (isIncludeTimeSeriesFields) {
+                statsSpreadsheet[0][timeSeriesBandDateIdx] = "TimeSeries Date";
+                statsSpreadsheet[0][timeSeriesBandTimeIdx] = "TimeSeries Time";
+            }
+
+
             if (includeValidPixExp) {
-                statsSpreadsheet[0][validPixExpIdx] = "ValidPixelExpression";
+                statsSpreadsheet[0][validPixExpIdx] = "Valid Pixel Expression";
             }
 
             if (includeDescription) {
@@ -1134,8 +1170,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
 
             if (includeProductFormat) {
-                statsSpreadsheet[0][productTypeIdx] = "FileType";
-                statsSpreadsheet[0][productFormatIdx] = "FileFormat";
+                statsSpreadsheet[0][productTypeIdx] = "File Type";
+                statsSpreadsheet[0][productFormatIdx] = "File Format";
             }
 
         }
@@ -1224,6 +1260,29 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     statsSpreadsheet[row][productTypeIdx] = getProduct().getProductType();
                     statsSpreadsheet[row][productFormatIdx] = getProductFormatName(getProduct());
                 }
+            }
+
+            if (isIncludeTimeSeriesFields) {
+
+                String bandName = raster.getName();
+
+
+                String productDateTime =  convertBandNameToProductTime(bandName);
+
+                String productDate = null;
+                String productTime = null;
+
+                if (productDateTime != null) {
+                    String[] endDateTimeStringArray = productDateTime.split(" ");
+                    if (endDateTimeStringArray.length >= 2) {
+                        productDate = endDateTimeStringArray[0].trim();
+                        productTime = endDateTimeStringArray[1].trim();
+                    }
+                }
+
+
+                statsSpreadsheet[row][timeSeriesBandDateIdx] = productDate;
+                statsSpreadsheet[row][timeSeriesBandTimeIdx] = productTime;
             }
         }
 
@@ -1824,6 +1883,41 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
         return null;
     }
+
+    private static String convertBandNameToProductTime(String bandName) {
+
+        Guardian.assertNotNull("bandName", bandName);
+
+        String bandNameDateTime = null;
+        String[] bandNameDateTimeArray = bandName.split("_");
+        if (bandNameDateTimeArray.length >= 2) {
+            // get last one as band name can also have underscore in it.
+            bandNameDateTime = bandNameDateTimeArray[bandNameDateTimeArray.length-1].trim();
+        }
+
+        if (bandNameDateTime != null &&  bandNameDateTime.length() > 13) {
+            String year = bandNameDateTime.substring(0, 4);
+            String month = bandNameDateTime.substring(4, 6);
+            String day = bandNameDateTime.substring(6, 8);
+
+            String hour = bandNameDateTime.substring(9, 11);
+            String min = bandNameDateTime.substring(11, 13);
+            String sec = bandNameDateTime.substring(13);
+
+            String[] monthNamesArray = new String[]{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+
+            int monthIdx = Integer.valueOf(month);
+            String monthStr = monthNamesArray[monthIdx-1];
+
+            String productDate = day + "-" + monthStr + "-" + year;
+            String productTime = hour + ":" + min + ":" + sec;
+
+            return productDate + " " + productTime;
+        } else {
+            return null;
+        }
+    }
+
 
 }
 

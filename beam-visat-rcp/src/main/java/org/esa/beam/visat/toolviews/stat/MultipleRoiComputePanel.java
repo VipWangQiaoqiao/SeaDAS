@@ -81,7 +81,12 @@ class MultipleRoiComputePanel extends JPanel {
 
     private RasterDataNode raster;
     private Product product;
-    private boolean useBandInViewWindowMode = true;
+    private boolean useViewBandRaster = true;
+
+    // todo Danny right now this is complicated by creation of a MathBand or changing to a different file in which case reset is needed.
+    // so for now setting this to true
+    public boolean forceUpdate = true;
+
 
     MultipleRoiComputePanel(final ComputeMasks method, final RasterDataNode rasterDataNode) {
 
@@ -161,19 +166,19 @@ class MultipleRoiComputePanel extends JPanel {
 
         // todo Danny commented this out and set selected to true as we may get rid of this
 //        panel.add(useRoiCheckBox, gbc);
-//
-//        gbc.gridy++;
 
-//        gbc.insets.top = 5;
-//        panel.add(maskFilterPane, gbc);
-//        gbc.insets.top = 0;
-//
-//        gbc.gridy++;
-//        panel.add(maskNameListPane, gbc);
-//
-//        gbc.gridy++;
-//        gbc.insets.bottom = 5;
-//        panel.add(checkBoxPane, gbc);
+  //      gbc.gridy++;
+
+        gbc.insets.top = 5;
+        panel.add(maskFilterPane, gbc);
+        gbc.insets.top = 0;
+
+        gbc.gridy++;
+        panel.add(maskNameListPane, gbc);
+
+        gbc.gridy++;
+        gbc.insets.bottom = 5;
+        panel.add(checkBoxPane, gbc);
 
         panel.setMinimumSize(panel.getPreferredSize());
         panel.setPreferredSize(panel.getPreferredSize());
@@ -664,7 +669,7 @@ class MultipleRoiComputePanel extends JPanel {
             }
         }
 
-        if (isUseBandInViewWindowMode()) {
+        if (forceUpdate) {
             bandNameList.selectNone();
             bandNameList.clearCheckBoxListSelection();
             bandNameList.clearSelection();
@@ -796,12 +801,12 @@ class MultipleRoiComputePanel extends JPanel {
     //--------------------- General-------------------------------------------
 
 
-    public boolean isUseBandInViewWindowMode() {
-        return useBandInViewWindowMode;
+    public boolean isUseViewBandRaster() {
+        return useViewBandRaster;
     }
 
-    public void setUseBandInViewWindowMode(boolean useBandInViewWindowMode) {
-        this.useBandInViewWindowMode = useBandInViewWindowMode;
+    public void setUseViewBandRaster(boolean useViewBandRaster) {
+        this.useViewBandRaster = useViewBandRaster;
     }
 
 

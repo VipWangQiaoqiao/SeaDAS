@@ -69,6 +69,7 @@ public class StatisticsCriteriaPanel {
     private boolean includeValidPixExp = true;
     private boolean includeDescription = true;
     private boolean includeProductFormat = true;
+    private boolean includeTimeSeriesFields = true;
 
 
 
@@ -576,6 +577,8 @@ public class StatisticsCriteriaPanel {
 
 
 
+
+
     // "Fields" Tab Variables and Components
 
 
@@ -657,6 +660,12 @@ public class StatisticsCriteriaPanel {
     public boolean isIncludeProductFormat() {
         return includeProductFormat;
     }
+
+
+    public boolean isIncludeTimeSeriesFields() {
+        return includeTimeSeriesFields;
+    }
+
 
 
     // "Text" Tab Variables and Components
