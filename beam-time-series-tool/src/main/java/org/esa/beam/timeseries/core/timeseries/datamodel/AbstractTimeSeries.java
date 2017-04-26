@@ -177,10 +177,12 @@ public abstract class AbstractTimeSeries {
         for(int i = 0; i < 12; i++) {
             if (monthNamesArray[i].equals(month.toUpperCase())) {
 
-                if (i < 10) {
-                    monthNumStr = "0" + Integer.toString(i+1);
+                int monthNum = i+1;
+
+                if (monthNum < 10) {
+                    monthNumStr = "0" + Integer.toString(monthNum);
                 } else {
-                    monthNumStr = Integer.toString(i+1);
+                    monthNumStr = Integer.toString(monthNum);
                 }
             }
         }
