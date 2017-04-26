@@ -25,12 +25,10 @@ import org.esa.beam.framework.datamodel.ProductData;
 import org.esa.beam.framework.datamodel.RasterDataNode;
 import org.esa.beam.timeseries.core.insitu.InsituSource;
 import org.esa.beam.util.Guardian;
+import org.esa.beam.util.StringUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Instances of AbstractTimeSeries allow the framework user access to every kind of data needed when dealing with time
@@ -126,7 +124,11 @@ public abstract class AbstractTimeSeries {
         final ProductData.UTC rasterStartTime = timeCoding.getStartTime();
         Guardian.assertNotNull("rasterStartTime", rasterStartTime);
         final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.ENGLISH);
-        return variableName + SEPARATOR + dateFormat.format(rasterStartTime.getAsDate());
+        // todo Danny commented out this and added the line which follows
+     //   return variableName + SEPARATOR + dateFormat.format(rasterStartTime.getAsDate());
+       String bandName = variableName + SEPARATOR + convertProductTimeToBandNameDate(rasterStartTime);
+
+        return bandName;
     }
 
     public static String rasterToVariableName(String rasterName) {
@@ -143,4 +145,53 @@ public abstract class AbstractTimeSeries {
     public abstract Product[] getSourceProducts();
 
     public abstract void dispose();
+
+    // todo Danny added this quick fix for the band name to maintain UTC.  The rasterStartTime.getAsDate() approach yields current local zone values
+    private static String convertProductTimeToBandNameDate(ProductData.UTC productDateTime) {
+
+        Guardian.assertNotNull("productDateTime", productDateTime);
+
+        String productDate = "";
+        String productTime = "";
+        String[] productDateTimeArray = productDateTime.toString().split(" ");
+        if (productDateTimeArray.length >= 2) {
+            productDate = productDateTimeArray[0].trim();
+            productTime = productDateTimeArray[1].trim();
+        }
+
+        String day = "";
+        String month = "";
+        String year = "";
+
+        String[] productDateArray = productDate.split("-");
+        if (productDateArray.length == 3) {
+            day = productDateArray[0];
+            month = productDateArray[1];
+            year = productDateArray[2];
+        }
+
+        String[] monthNamesArray = new String[]{"JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"};
+
+        String monthNumStr = "";
+
+        for(int i = 0; i < 12; i++) {
+            if (monthNamesArray[i].equals(month.toUpperCase())) {
+
+                if (i < 10) {
+                    monthNumStr = "0" + Integer.toString(i+1);
+                } else {
+                    monthNumStr = Integer.toString(i+1);
+                }
+            }
+        }
+
+        String formattedDate = year + monthNumStr + day;
+
+        String[] productTimeArray = productTime.split(":");
+        String formattedTime = StringUtils.join(productTimeArray, "");
+
+        return formattedDate + "." + formattedTime;
+    }
+
+
 }
