@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -95,6 +96,8 @@ public class RGBImageProfileManager {
             }
         });
         if (files != null) {
+            Arrays.sort(files);
+
             for (File file : files) {
                 try {
                     addProfile(RGBImageProfile.loadProfile(file));

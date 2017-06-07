@@ -610,6 +610,15 @@ public class RGBImageProfilePane extends JPanel {
                 bestMatchScore = currentMatchScore;
             }
         }
+
+
+        // todo Danny added this to set default if exists
+        for (RGBImageProfile rgbImageProfile : rgbImageProfiles) {
+            if (rgbImageProfile != null && rgbImageProfile.getName() != null && rgbImageProfile.getName().endsWith("_TrueColor_Log")) {
+                bestProfile = rgbImageProfile;
+            }
+        }
+
         return bestProfile;
     }
 

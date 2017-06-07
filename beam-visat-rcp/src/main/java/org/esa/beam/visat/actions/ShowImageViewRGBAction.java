@@ -249,7 +249,8 @@ public class ShowImageViewRGBAction extends ExecCommand {
             nameBuilder.append(rgbImageProfile.getName().replace("_", " "));
             nameBuilder.append(" ");
         }
-        nameBuilder.append("RGB");
+        // todo Danny removed RGB from window name
+       // nameBuilder.append("RGB");
 
         return nameBuilder.toString();
     }
