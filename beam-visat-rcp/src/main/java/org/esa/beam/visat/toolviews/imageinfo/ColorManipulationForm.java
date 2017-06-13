@@ -1003,6 +1003,7 @@ class ColorManipulationForm {
             protected Object doInBackground(ProgressMonitor progressMonitor) throws Exception {
                 resourceInstaller.install(".*.rgb", progressMonitor, false);
                 resourceInstaller.install(".*.txt", progressMonitor, false);
+                resourceInstaller.install(".*.pl", progressMonitor, false);
                 defaultRgbProfilesInstalled = true;
                 return Boolean.TRUE;
             }
