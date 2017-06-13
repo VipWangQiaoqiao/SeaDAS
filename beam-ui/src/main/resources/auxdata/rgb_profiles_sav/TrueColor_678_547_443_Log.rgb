@@ -1,0 +1,14 @@
+#
+# RGB-Image Configuration Profile
+# MODIS_TrueColor_645_555_469
+# Created by Daniel Knowles, 2015
+#
+# A true color RGB configuration profile which uses a red, green, and blue band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=TrueColor_(748,547,443)_Log
+red=(\!nan(rhos_748) and \!nan(rhos_547) and \!nan(rhos_443)) ? log(rhos_748/0.01)/log(1.0/0.01) \: NaN
+green=(\!nan(rhos_748) and \!nan(rhos_547) and \!nan(rhos_443)) ? log(rhos_547/0.01)/log(1.0/0.01) \: NaN
+blue=(\!nan(rhos_748) and \!nan(rhos_547) and \!nan(rhos_443)) ? log(rhos_443/0.01)/log(1.0/0.01) \: NaN

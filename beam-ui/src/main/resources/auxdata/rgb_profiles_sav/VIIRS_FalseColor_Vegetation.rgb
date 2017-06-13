@@ -1,0 +1,16 @@
+#
+# RGB-Image Configuration Profile
+# VIIRS_FalseColor_Vegetation
+# Created by Daniel Knowles, 2017
+#
+# A false color RGB configuration profile which uses a NIR, red, and green band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=VIIRS_FalseColor_Vegetation
+red=(\!nan(rhos_862) and \!nan(rhos_671) and \!nan(rhos_551)) ? log(rhos_862/0.01)/log(1.0/0.01) \: NaN
+green=(\!nan(rhos_862) and \!nan(rhos_671) and \!nan(rhos_551)) ? log(rhos_671/0.01)/log(1.0/0.01) \: NaN
+blue=(\!nan(rhos_862) and \!nan(rhos_671) and \!nan(rhos_551)) ? log(rhos_551/0.01)/log(1.0/0.01) \: NaN
+
+

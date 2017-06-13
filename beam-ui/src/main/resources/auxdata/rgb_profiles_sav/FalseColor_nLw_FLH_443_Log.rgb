@@ -1,0 +1,14 @@
+#
+# RGB-Image Configuration Profile
+# FalseColor_(748,678,667,443)_nLw_FLH_Log
+# Created by Daniel Knowles, 2015
+#
+# A true color RGB configuration profile which uses a red, green, and blue band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=FalseColor_(748,678,667,443)_nLw_FLH_Log
+red=(\!nan(nLw_748) and \!nan(nLw_678) and \!nan(nLw_667) and \!nan(nLw_443)) ? log(nLw_678/0.01)/log(1.0/0.01) \: NaN
+green=(\!nan(nLw_748) and \!nan(nLw_678) and \!nan(nLw_667) and \!nan(nLw_443)) ? log((nLw_667+(678-667)*(nLw_748-nLw_667)/(748-667))/0.01)/log(1.0/0.01) \: NaN
+blue=(\!nan(nLw_748) and \!nan(nLw_678) and \!nan(nLw_667) and \!nan(nLw_443)) ? log(nLw_443/0.01)/log(1.0/0.01) \: NaN

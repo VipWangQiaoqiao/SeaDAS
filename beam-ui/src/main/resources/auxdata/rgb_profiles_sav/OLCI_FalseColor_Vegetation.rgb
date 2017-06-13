@@ -1,0 +1,14 @@
+#
+# RGB-Image Configuration Profile
+# OLCI_FalseColor_Vegetation
+# Created by Daniel Knowles, 2017
+#
+# A false color RGB configuration profile which uses a NIR, red, and green band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=OLCI_FalseColor_Vegetation
+red=(\!nan(rhos_865) and \!nan(rhos_665) and \!nan(rhos_560)) ? log(rhos_865/0.01)/log(1.0/0.01) \: NaN
+green=(\!nan(rhos_865) and \!nan(rhos_665) and \!nan(rhos_560)) ? log(rhos_665/0.01)/log(1.0/0.01) \: NaN
+blue=(\!nan(rhos_865) and \!nan(rhos_665) and \!nan(rhos_560)) ? log(rhos_560/0.01)/log(1.0/0.01) \: NaN

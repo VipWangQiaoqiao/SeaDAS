@@ -1,0 +1,14 @@
+#
+# RGB-Image Configuration Profile
+# OLCI_TrueColor_Arctan
+# Created by Daniel Knowles, 2017
+#
+# A true color RGB configuration profile which uses a red, green, and blue band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=OLCI_TrueColor_Arctan
+blue=(\!nan(rhos_665) and \!nan(rhos_560) and \!nan(rhos_490)) ? 0.091935692 + 0.61788 * atan(10*(rhos_442-.015)) \: NaN
+green=(\!nan(rhos_665) and \!nan(rhos_560) and \!nan(rhos_490)) ? 0.091935692 + 0.61788 * atan(10*(rhos_560-.015)) \: NaN
+red=(\!nan(rhos_665) and \!nan(rhos_560) and \!nan(rhos_490)) ? 0.091935692 + 0.61788 * atan(10*(rhos_665-.015)) \: NaN

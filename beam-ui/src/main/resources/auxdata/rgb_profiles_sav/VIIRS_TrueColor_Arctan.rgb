@@ -1,0 +1,15 @@
+#
+# RGB-Image Configuration Profile
+# VIIRS_TrueColor_Arctan
+# Created by Daniel Knowles, 2017
+#
+# A true color RGB configuration profile which uses a red, green, and blue band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=VIIRS_TrueColor_Arctan
+red=(\!nan(rhos_671) and \!nan(rhos_551) and \!nan(rhos_486)) ? 0.091935692 + 0.61788 * atan(10*(rhos_671-.015)) \: NaN
+green=(\!nan(rhos_671) and \!nan(rhos_551) and \!nan(rhos_486)) ? 0.091935692 + 0.61788 * atan(10*(rhos_551-.015)) \: NaN
+blue=(\!nan(rhos_671) and \!nan(rhos_551) and \!nan(rhos_486)) ? 0.091935692 + 0.61788 * atan(10*(rhos_486-.015)) \: NaN
+

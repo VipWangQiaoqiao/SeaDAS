@@ -1,0 +1,27 @@
+#
+# RGB-Image Configuration Profile
+# MODIS_TrueColor_CloudDesert
+# Created by Daniel Knowles, 2015
+#
+# This is a true color RGB configuration profile which uses a red, green, and blue band.
+#
+# The sources are surface reflectance bands at: 645 nm, 555 nm and 469 nm for the respective RGB color model channels.
+#
+# The transformation is log-based with min=0.015 and max=1.3
+#
+# The naming convention and band selection used in these RGB configuration files for the MODIS bands is:
+# UV = 412 nm
+# Blue = 469 nm
+# Green = 555 nm
+# Red = 645 nm
+# NIR = 859 nm
+# SWIR0 = 1240 nm
+# SWIR1 = 1640 nm
+# SWIR2 = 2130 nm
+#
+# Note: These particular MODIS bands were chosen because they do not saturate over clouds.
+
+name=MODIS_TrueColor_CloudDesert
+blue=(\!nan(rhos_469) and \!nan(rhos_555) and \!nan(rhos_645)) ? log(rhos_469/0.015)/log(1.3/0.015) \: NaN
+green=(\!nan(rhos_469) and \!nan(rhos_555) and \!nan(rhos_645)) ? log(rhos_555/0.015)/log(1.3/0.015) \: NaN
+red=(\!nan(rhos_469) and \!nan(rhos_555) and \!nan(rhos_645)) ? log(rhos_645/0.015)/log(1.3/0.015) \: NaN

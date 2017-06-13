@@ -1,0 +1,14 @@
+#
+# RGB-Image Configuration Profile
+# MODIS_FalseColor_CloudIceSnow
+# Created by Daniel Knowles, 2017
+#
+# A false color RGB configuration profile which uses a blue, SWIR1, and SWIR2 band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=MODIS_FalseColor_CloudIceSnow
+red=(rhos_469 \!\= NaN and rhos_1240 \!\= NaN and rhos_2130 \!\= NaN) ? log(rhos_469/0.01)/log(1.0/0.01) \: NaN
+green=(rhos_469 \!\= NaN and rhos_1240 \!\= NaN and rhos_2130 \!\= NaN) ? log(rhos_1240/0.01)/log(1.0/0.01) \: NaN
+blue=(rhos_469 \!\= NaN and rhos_1240 \!\= NaN and rhos_2130 \!\= NaN) ? log(rhos_2130/0.01)/log(1.0/0.01) \: NaN

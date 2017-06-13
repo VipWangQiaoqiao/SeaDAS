@@ -1,0 +1,14 @@
+#
+# RGB-Image Configuration Profile
+# MODIS_TrueColor_Arctan
+# Created by Daniel Knowles, 2015
+#
+# A true color RGB configuration profile which uses a red, green, and blue band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=TrueColor_Violet_(645,555,412)_Arctan
+red=(\!nan(rhos_645) and \!nan(rhos_555) and \!nan(rhos_412)) ? 0.091935692 + 0.61788 * atan(10*(rhos_645-.015)) \: NaN
+green=(\!nan(rhos_645) and \!nan(rhos_555) and \!nan(rhos_412)) ? 0.091935692 + 0.61788 * atan(10*(rhos_555-.015)) \: NaN
+blue=(\!nan(rhos_645) and \!nan(rhos_555) and \!nan(rhos_412)) ? 0.091935692 + 0.61788 * atan(10*(rhos_412-.015)) \: NaN

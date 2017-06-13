@@ -1,0 +1,27 @@
+#
+# RGB-Image Configuration Profile
+# MODIS_FalseColor_CloudSnowIce_Linear
+# Created by Daniel Knowles, 2017
+#
+# This is a false color RGB configuration profile which uses a NIR, red, and green band.
+#
+# The sources are surface reflectance bands at: 469 nm, 1240 nm and 2130 nm for the respective RGB color model channels.
+#
+# The transformation is linear.
+#
+# The naming convention and band selection used in these RGB configuration files for the MODIS bands is:
+# UV = 412 nm
+# Blue = 469 nm
+# Green = 555 nm
+# Red = 645 nm
+# NIR = 859 nm
+# SWIR0 = 1240 nm
+# SWIR1 = 1640 nm
+# SWIR2 = 2130 nm
+#
+# Note: These particular MODIS bands were chosen because they do not saturate over clouds.
+
+name=MODIS_FalseColor_CloudSnowIce_Linear
+red=(rhos_469 \!\= NaN and rhos_1240 \!\= NaN and rhos_2130 \!\= NaN) ? rhos_469 \: NaN
+green=(rhos_469 \!\= NaN and rhos_1240 \!\= NaN and rhos_2130 \!\= NaN) ? rhos_1240 \: NaN
+blue=(rhos_469 \!\= NaN and rhos_1240 \!\= NaN and rhos_2130 \!\= NaN) ? rhos_2130 \: NaN

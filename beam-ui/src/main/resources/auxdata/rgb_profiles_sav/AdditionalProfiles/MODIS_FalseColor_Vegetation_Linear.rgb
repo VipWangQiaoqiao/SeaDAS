@@ -1,0 +1,27 @@
+#
+# RGB-Image Configuration Profile
+# MODIS_FalseColor_Vegetation_Linear
+# Created by Daniel Knowles, 2017
+#
+# This is a false color RGB configuration profile which uses a NIR, red, and green band.
+#
+# The sources are surface reflectance bands at: 859 nm, 645 nm and 555 nm for the respective RGB color model channels.
+#
+# The transformation is log.
+#
+# The naming convention and band selection used in these RGB configuration files for the MODIS bands is:
+# UV = 412 nm
+# Blue = 469 nm
+# Green = 555 nm
+# Red = 645 nm
+# NIR = 859 nm
+# SWIR0 = 1240 nm
+# SWIR1 = 1640 nm
+# SWIR2 = 2130 nm
+#
+# Note: These particular MODIS bands were chosen because they do not saturate over clouds.
+
+name=MODIS_FalseColor_Vegetation_Linear
+red=(\!nan(rhos_859) and \!nan(rhos_645) and \!nan(rhos_555)) ? rhos_859 \: NaN
+green=(\!nan(rhos_859) and \!nan(rhos_645) and \!nan(rhos_555)) ? rhos_645 \: NaN
+blue=(\!nan(rhos_859) and \!nan(rhos_645) and \!nan(rhos_555)) ? rhos_555 \: NaN

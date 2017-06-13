@@ -1,0 +1,15 @@
+#
+# RGB-Image Configuration Profile
+# OLCI_TrueColor
+# Created by Daniel Knowles, 2017
+#
+# A true color RGB configuration profile which uses a red, green, and blue band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=OLCI_TrueColor
+red=(\!nan(rhos_665) and \!nan(rhos_560) and \!nan(rhos_490)) ? log(rhos_665/0.01)/log(1.0/0.01) \: NaN
+green=(\!nan(rhos_665) and \!nan(rhos_560) and \!nan(rhos_490)) ? log(rhos_560/0.01)/log(1.0/0.01) \: NaN
+blue=(\!nan(rhos_665) and \!nan(rhos_560) and \!nan(rhos_490)) ? log(rhos_490/0.01)/log(1.0/0.01) \: NaN
+

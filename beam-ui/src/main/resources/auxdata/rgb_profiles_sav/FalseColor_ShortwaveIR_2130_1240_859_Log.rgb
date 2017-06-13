@@ -1,0 +1,15 @@
+#
+# RGB-Image Configuration Profile
+# MODIS_FalseColor_Vegetation
+# Created by Daniel Knowles, 2017
+#
+# A false color RGB configuration profile which uses a NIR, red, and green band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=FalseColor_ShortwaveIR_(2130,1240,859)_Log
+red=(\!nan(rhos_2130) and \!nan(rhos_1240) and \!nan(rhos_859)) ? log(rhos_2130/0.01)/log(1.0/0.01) \: NaN
+green=(\!nan(rhos_2130) and \!nan(rhos_1240) and \!nan(rhos_859)) ? log(rhos_1240/0.01)/log(1.0/0.01) \: NaN
+blue=(\!nan(rhos_2130) and \!nan(rhos_1240) and \!nan(rhos_859)) ? log(rhos_859/0.01)/log(1.0/0.01) \: NaN
+

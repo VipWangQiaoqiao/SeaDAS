@@ -1,9 +1,0 @@
-# RGB-Image Profile
-# Created by Daniel Knowles, 2017
-# To obtain the desired results, once this profile is loaded, go to the Color Manager and toggle through the 'Red', 'Green', and 'Blue' windows
-# setting the minimum (left-most arrow) to 0.0 and the maximum (right-most arrow) to 1.0.  By default these minimums and maximums are set based
-# on the statistics of the band.
-name=OLCI_RHOS_LOG
-blue=(rhos_442 \!\= NaN and rhos_560 \!\= NaN and rhos_665 \!\= NaN) ? log(rhos_442/0.01)/log(1.0/0.01) \: NaN
-green=(rhos_442 \!\= NaN and rhos_560 \!\= NaN and rhos_665 \!\= NaN) ? log(rhos_560/0.01)/log(1.0/0.01) \: NaN
-red=(rhos_442 \!\= NaN and rhos_560 \!\= NaN and rhos_665 \!\= NaN) ? log(rhos_665/0.01)/log(1.0/0.01) \: NaN

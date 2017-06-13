@@ -1,0 +1,14 @@
+#
+# RGB-Image Configuration Profile
+# VIIRS_TrueColor_Hybrid
+# Created by Daniel Knowles, 2017
+#
+# A true color RGB configuration profile which uses a red, green, and blue band for the respective RGB color
+# model channels.
+#
+# For details on this see README.txt
+
+name=VIIRS_TrueColor_Hybrid
+red=if (\!nan(rhos_671) and \!nan(rhos_551) and \!nan(rhos_486)) then (if (LAND) then (.091935692 + .61788 * atan(10*(rhos_671-.015))) else log(rhos_671/0.01)/log(1.0/0.01)) else NaN
+green=if (\!nan(rhos_671) and \!nan(rhos_551) and \!nan(rhos_486)) then (if (LAND) then (.091935692 + .61788 * atan(10*(rhos_551-.015))) else log(rhos_551/0.01)/log(1.0/0.01)) else NaN
+blue=if (\!nan(rhos_671) and \!nan(rhos_551) and \!nan(rhos_486)) then (if (LAND) then (.091935692 + .61788 * atan(10*(rhos_486-.015))) else log(rhos_486/0.01)/log(1.0/0.01)) else NaN
