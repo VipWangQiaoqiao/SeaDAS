@@ -42,14 +42,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -114,7 +107,7 @@ public class RGBImageProfilePane extends JPanel {
             }
         };
         deleteAction.putValue(Command.ACTION_KEY_LARGE_ICON,
-                              UIUtils.loadImageIcon("icons/Remove24.gif"));   // todo - use the nicer "cross" icon
+                UIUtils.loadImageIcon("icons/Remove24.gif"));   // todo - use the nicer "cross" icon
         deleteAction.putValue(Action.SHORT_DESCRIPTION, "Delete the selected RGB profile");
 
         JPanel p2 = new JPanel(new GridLayout(1, 3, 2, 2));
@@ -127,7 +120,6 @@ public class RGBImageProfilePane extends JPanel {
         profileBox.addItemListener(new ProfileSelectionHandler());
         profileBox.setEditable(false);
         profileBox.setName("profileBox");
-        setPrefferedWidth(profileBox, 200);
 
         storeInProductCheck = new JCheckBox();
         storeInProductCheck.setText("Store RGB channels as virtual bands in current product");
@@ -193,6 +185,9 @@ public class RGBImageProfilePane extends JPanel {
             }
         }
         setRgbaExpressionsFromSelectedProfile();
+        // todo Danny modified this to auto-adjust according to longest file name in comboBox
+        int longestProfileName = getLongestProfileNameWithBuffer(registeredProfiles, profileBox);
+        setPrefferedWidth(profileBox, longestProfileName);
     }
 
     public Product getProduct() {
@@ -221,7 +216,6 @@ public class RGBImageProfilePane extends JPanel {
      * Gets the selected RGB-image profile if any.
      *
      * @return the selected profile, can be null
-     *
      * @see #getRgbaExpressions()
      */
     public RGBImageProfile getSelectedProfile() {
@@ -233,7 +227,6 @@ public class RGBImageProfilePane extends JPanel {
      * Gets the selected RGB expressions as array of 3 strings.
      *
      * @return the selected RGB expressions, never null
-     *
      * @see #getSelectedProfile()
      */
     public String[] getRgbExpressions() {
@@ -248,7 +241,6 @@ public class RGBImageProfilePane extends JPanel {
      * Gets the selected RGBA expressions as array of 4 strings.
      *
      * @return the selected RGBA expressions, never null
-     *
      * @see #getSelectedProfile()
      */
     public String[] getRgbaExpressions() {
@@ -316,27 +308,27 @@ public class RGBImageProfilePane extends JPanel {
             profile = RGBImageProfile.loadProfile(file);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                                          "Failed to open RGB-profile '"
-                                          + file.getName() + "':\n" + e.getMessage(),
-                                          "Open RGB-Image Profile",
-                                          JOptionPane.ERROR_MESSAGE);
+                    "Failed to open RGB-profile '"
+                            + file.getName() + "':\n" + e.getMessage(),
+                    "Open RGB-Image Profile",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (profile == null) {
             JOptionPane.showMessageDialog(this,
-                                          "Invalid RGB-Profile '" + file.getName() + "'.",
-                                          "Open RGB-Image Profile",
-                                          JOptionPane.ERROR_MESSAGE);
+                    "Invalid RGB-Profile '" + file.getName() + "'.",
+                    "Open RGB-Image Profile",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         RGBImageProfileManager.getInstance().addProfile(profile);
         if (product != null && !profile.isApplicableTo(product)) {
             JOptionPane.showMessageDialog(this,
-                                          "The selected RGB-Profile '" + profile.getName() + "'\n" +
-                                          "is not applicable to the current product.",
-                                          "Open RGB-Image Profile",
-                                          JOptionPane.ERROR_MESSAGE);
+                    "The selected RGB-Profile '" + profile.getName() + "'\n" +
+                            "is not applicable to the current product.",
+                    "Open RGB-Image Profile",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
         addNewProfile(profile);
@@ -348,15 +340,15 @@ public class RGBImageProfilePane extends JPanel {
             return;
         }
         RGBImageProfile profile = new RGBImageProfile(FileUtils.getFilenameWithoutExtension(file),
-                                                      getRgbaExpressions());
+                getRgbaExpressions());
         try {
             profile.store(file);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                                          "Failed to save RGB-profile '" + file.getName() + "':\n"
-                                          + e.getMessage(),
-                                          "Open RGB-Image Profile",
-                                          JOptionPane.ERROR_MESSAGE);
+                    "Failed to save RGB-profile '" + file.getName() + "':\n"
+                            + e.getMessage(),
+                    "Open RGB-Image Profile",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -383,11 +375,11 @@ public class RGBImageProfilePane extends JPanel {
             }
             if (selectedFile.exists()) {
                 final int answer = JOptionPane.showConfirmDialog(RGBImageProfilePane.this,
-                                                                 "The file '" + selectedFile.getName()
-                                                                 + "' already exists.\n" +
-                                                                 "So you really want to overwrite it?",
-                                                                 "Safe RGB-Profile As",
-                                                                 JOptionPane.YES_NO_CANCEL_OPTION);
+                        "The file '" + selectedFile.getName()
+                                + "' already exists.\n" +
+                                "So you really want to overwrite it?",
+                        "Safe RGB-Profile As",
+                        JOptionPane.YES_NO_CANCEL_OPTION);
                 if (answer == JOptionPane.CANCEL_OPTION) {
                     selectedFile = null;
                     break;
@@ -586,6 +578,32 @@ public class RGBImageProfilePane extends JPanel {
         comboBox.setPreferredSize(new Dimension(width, preferredSize.height));
     }
 
+    public static int getLongestProfileNameWithBuffer(RGBImageProfile[] rgbImageProfiles, JComboBox jComboBox) {
+        // Created by Daniel Knowles
+
+        int stringLength = 0;
+
+        if (rgbImageProfiles != null && jComboBox != null) {
+            FontMetrics fm = jComboBox.getFontMetrics(jComboBox.getFont());
+
+            for (RGBImageProfile rgbImageProfile : rgbImageProfiles) {
+                try {
+                    int currStringLength = fm.stringWidth(rgbImageProfile.getName());
+                    if (currStringLength > stringLength) {
+                        stringLength = currStringLength;
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+
+            int bufferWidth = fm.stringWidth("###");
+            stringLength += bufferWidth;
+        }
+
+        return stringLength;
+    }
+
+
     public static RGBImageProfile findProfileForProductPattern(RGBImageProfile[] rgbImageProfiles, Product product) {
         if (rgbImageProfiles.length == 0) {
             return null;
@@ -611,20 +629,63 @@ public class RGBImageProfilePane extends JPanel {
             }
         }
 
-
         // todo Danny added this to set default if exists
-        for (RGBImageProfile rgbImageProfile : rgbImageProfiles) {
-            if (rgbImageProfile != null && rgbImageProfile.getName() != null && rgbImageProfile.getName().endsWith(")_Log") && rgbImageProfile.getName().startsWith("TrueColor_(")) {
-                bestProfile = rgbImageProfile;
+        String mission = getSensorString(product);
+
+        boolean matchFound = false;
+        if (mission != null) {
+            for (RGBImageProfile rgbImageProfile : rgbImageProfiles) {
+                if (rgbImageProfile != null && rgbImageProfile.getName() != null &&
+                        rgbImageProfile.getName().startsWith(mission + "_TrueColor_(") &&
+                        rgbImageProfile.getName().endsWith(")_Log")) {
+                    bestProfile = rgbImageProfile;
+                    matchFound = true;
+                }
+            }
+        }
+        if (!matchFound) {
+            for (RGBImageProfile rgbImageProfile : rgbImageProfiles) {
+                if (rgbImageProfile != null && rgbImageProfile.getName() != null && rgbImageProfile.getName().endsWith(")_Log") && rgbImageProfile.getName().startsWith("TrueColor_(")) {
+                    bestProfile = rgbImageProfile;
+                }
             }
         }
 
         return bestProfile;
     }
 
+    private static String getSensorString(Product product) {
+        // Created by Daniel Knowles
+        // Note this tries to retrieve a sensor name but does not check validity of sensor name
+        String sensor = null;
+
+        try {
+            sensor = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Sensor_Name").getData().getElemString();
+        } catch (Exception ignore) {
+            try {
+                sensor = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("instrument").getData().getElemString();
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (sensor == null) {
+            try {
+                String[] productTypeNameArray = product.getProductType().split(" ");
+                // the sensor name may be here as the first entry but ignore any obvious false positives
+                if (!sensor.toUpperCase().equals("LEVEL")) {
+                    sensor = productTypeNameArray[0];
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+        return sensor;
+    }
+
+
     private static boolean matches(String s, String pattern) {
         return pattern != null &&
-               s.matches(pattern.replace("*", ".*").replace("?", "."));
+                s.matches(pattern.replace("*", ".*").replace("?", "."));
     }
 
 
