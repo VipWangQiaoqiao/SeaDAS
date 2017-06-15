@@ -1,0 +1,6 @@
+#RGB-Image Profile
+#Fri Nov 13 13:18:09 EST 2015
+name=GENERIC_RGB_LINEAR
+red=(blue \!\= NaN and green \!\= NaN and red \!\= NaN) ? red \: NaN
+green=(blue \!\= NaN and green \!\= NaN and red \!\= NaN) ? green \: NaN
+blue=(blue \!\= NaN and green \!\= NaN and red \!\= NaN) ? blue \: NaN

@@ -110,7 +110,10 @@ my @falseColorArrays = (
                            ["blue", "swir2", "swir3", "SnowCloud"],
                            ["nir", "red", "green", "Vegetation"],
                            ["swir3", "swir1", "nir", "ShortwaveIR"],
-                           ["swir3", "swir2", "nir", "ShortwaveIR"],
+                           ["swir3", "swir2", "nir", "ShortwaveIR"]
+                       );
+
+my @additionalFalseColorArrays = (
                            ["nir", "swir1", "blue", ""],
                            ["nir", "swir2", "blue", ""],
                            ["nir", "swir1", "red", ""],
@@ -135,29 +138,33 @@ my $atanGainDefault = 20;
 for (@MISSION_RGB_BAND_ARRAY) {
     my %tmpHash = %{$_};
 
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $product, 0);
 
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 10, 0.015, $product);
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 20, 0.015, $product);
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 30, 0.015, $product);
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.015, $product);
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 10, 0.03, $product);
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 20, 0.03, $product);
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 30, 0.03, $product);
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.03, $product);
-    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.05, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 10, 0.015, $product, 1);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 20, 0.015, $product, 1);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 30, 0.015, $product, 1);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.015, $product, 1);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 10, 0.03, $product, 1);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 20, 0.03, $product, 1);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 30, 0.03, $product, 1);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.03, $product, 1);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.05, $product, 1);
 
-    &create_atan_log_hybrid_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $logMinDefault, $logMaxDefault, $product, 'LAND');
-    &create_atan_log_hybrid_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $logMinDefault, $logMaxDefault, $product, 'LandMask');
+    &create_atan_log_hybrid_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $logMinDefault, $logMaxDefault, $product, 'LAND', 0);
+    &create_atan_log_hybrid_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $logMinDefault, $logMaxDefault, $product, 'LandMask', 0);
 
     for (@falseColorArrays) {
         my @falseColorArray = @{$_};
-        &create_log_file(\%tmpHash, $_, 0, $logMinDefault, $logMaxDefault, $product);
+        &create_log_file(\%tmpHash, $_, 0, $logMinDefault, $logMaxDefault, $product, 0);
     }
 
+    for (@additionalFalseColorArrays) {
+        my @falseColorArray = @{$_};
+        &create_log_file(\%tmpHash, $_, 0, $logMinDefault, $logMaxDefault, $product, 1);
+    }
     for (@trueColorArrays) {
         my @trueColorArray = @{$_};
-        &create_log_file(\%tmpHash, $_, 1, $logMinDefault, $logMaxDefault, $product);
+        &create_log_file(\%tmpHash, $_, 1, $logMinDefault, $logMaxDefault, $product, 0);
     }
 }
 
@@ -175,6 +182,7 @@ sub create_atan_log_hybrid_file
     my $max = shift;
     my $product = shift;
     my $mask = shift;
+    my $putInSubDir = shift;
 
     my $mode = $mask . "_Hybrid";
 
@@ -195,7 +203,7 @@ sub create_atan_log_hybrid_file
         $tmpHash{'green_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $green_inner_expr, $green_inner_mask_expr, $mask);
         $tmpHash{'blue_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $blue_inner_expr, $blue_inner_mask_expr, $mask);
 
-        &create_file(\%tmpHash);
+        &create_file(\%tmpHash, $putInSubDir);
     }
 }
 
@@ -209,6 +217,8 @@ sub create_atan_file
     my $gain = shift;
     my $offset = shift;
     my $product = shift;
+    my $putInSubDir = shift;
+
 
     my $mode = "Atan_${gain}_${offset}";
 
@@ -225,7 +235,7 @@ sub create_atan_file
         $tmpHash{'green_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $green_inner_expr);
         $tmpHash{'blue_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $blue_inner_expr);
 
-        &create_file(\%tmpHash);
+        &create_file(\%tmpHash, $putInSubDir);
     }
 }
 
@@ -239,6 +249,7 @@ sub create_log_file
     my $min = shift;
     my $max = shift;
     my $product = shift;
+    my $putInSubDir = shift;
 
     my $mode = "Log";
 
@@ -255,7 +266,7 @@ sub create_log_file
         $tmpHash{'green_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $green_inner_expr);
         $tmpHash{'blue_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $blue_inner_expr);
 
-        &create_file(\%tmpHash);
+        &create_file(\%tmpHash, $putInSubDir);
     }
 }
 
@@ -370,6 +381,7 @@ sub create_contents_hash
 sub create_file {
 
     my $tmpHash_ref = shift;
+    my $putInSubDir = shift;
 
     my %tmpHash = %{$tmpHash_ref};
 
@@ -377,10 +389,10 @@ sub create_file {
         my $color_type = ($tmpHash{'true_color'} == 1) ? "true color" : "false color";
 
         if (length $tmpHash{'functionality'} > 0) {
-            $tmpHash{'functionality'} .= "_";
+            $tmpHash{'functionality'} = "_" . $tmpHash{'functionality'};
         }
-        my $basename = $tmpHash{'sensor'} . "_${color_type_camel}_" . $tmpHash{'red_wave'} . "_" . $tmpHash{'green_wave'} . "_" . $tmpHash{'blue_wave'}  . "_" . $tmpHash{'mode'} . "_$tmpHash{'functionality'}";
-        my $name = $tmpHash{'sensor'} . "_${color_type_camel}_(" . $tmpHash{'red_wave'} . "," . $tmpHash{'green_wave'} . "," . $tmpHash{'blue_wave'} . ")_" . $tmpHash{'mode'} . "_$tmpHash{'functionality'}";
+        my $basename = $tmpHash{'sensor'} . "_${color_type_camel}_" . $tmpHash{'red_wave'} . "_" . $tmpHash{'green_wave'} . "_" . $tmpHash{'blue_wave'}  . "_" . $tmpHash{'mode'} . "$tmpHash{'functionality'}";
+        my $name = $tmpHash{'sensor'} . "_${color_type_camel}_(" . $tmpHash{'red_wave'} . "," . $tmpHash{'green_wave'} . "," . $tmpHash{'blue_wave'} . ")_" . $tmpHash{'mode'} . "$tmpHash{'functionality'}";
         my $filename = $basename . ".rgb";
 
         my $contents = "# RGB-Image Configuration Profile\n";
@@ -393,6 +405,23 @@ sub create_file {
         $contents .= "red=$tmpHash{'red_expr'}\n";
         $contents .= "green=$tmpHash{'green_expr'}\n";
         $contents .= "blue=$tmpHash{'blue_expr'}\n";
+
+        if ($putInSubDir) {
+            if ($tmpHash{'true_color'}) {
+                my $subDir = "additional_true_color_profiles";
+                unless (-d $subDir) {
+                    mkdir $subDir;
+                }
+                $filename = $subDir . "/" . $filename;
+
+            } else {
+                my $subDir = "additional_false_color_profiles";
+                unless (-d $subDir) {
+                    mkdir $subDir;
+                }
+                $filename = $subDir . "/" . $filename;
+            }
+        }
 
         &write_file($filename, $contents);
 }
