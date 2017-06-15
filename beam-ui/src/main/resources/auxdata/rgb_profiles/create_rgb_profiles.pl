@@ -98,105 +98,104 @@ my @MISSION_RGB_BAND_ARRAY = (
 
 
 
-my @trueColorArray = ("red", "green", "blue");
-my @trueColorOCArray = ("red-OC", "green-OC", "blue-OC");
-my @trueColorBlueUVArray = ("red", "green", "blue-UV");
-my @falseColorSnowCloudArray = ("blue", "swir1", "swir3");
-my @falseColorSnowCloud2Array = ("blue", "swir2", "swir3");
-my @falseColorVegetationArray = ("nir", "red", "green");
-my @falseColorShortwaveIRArray = ("swir3", "swir1", "nir");
-my @falseColorShortwaveIR2Array = ("swir3", "swir2", "nir");
 
-#my $gain = 10.0;
-#my $offset = 0.015;
+my @trueColorArrays = (
+                           ["red", "green", "blue", ""],
+                           ["red-OC", "green-OC", "blue-OC", "OC"],
+                           ["red", "green", "blue-UV", "BlueUV"]
+                       );
+
+my @falseColorArrays = (
+                           ["blue", "swir1", "swir3", "SnowCloud"],
+                           ["blue", "swir2", "swir3", "SnowCloud"],
+                           ["nir", "red", "green", "Vegetation"],
+                           ["swir3", "swir1", "nir", "ShortwaveIR"],
+                           ["swir3", "swir2", "nir", "ShortwaveIR"],
+                           ["nir", "swir1", "blue", ""],
+                           ["nir", "swir2", "blue", ""],
+                           ["nir", "swir1", "red", ""],
+                           ["nir", "swir2", "red", ""],
+                           ["swir1", "nir", "blue", ""],
+                           ["swir2", "nir", "blue", ""],
+                           ["swir1", "nir", "red", ""],
+                           ["swir2", "nir", "red", ""],
+                           ["swir3", "nir", "green", ""],
+                           ["swir3", "nir", "red", ""],
+                           ["swir3", "swir1", "red", ""],
+                           ["swir3", "swir2", "red", ""]
+                       );
+
+
 my $product = "rhos";
+my $logMinDefault = 0.01;
+my $logMaxDefault = 1.0;
+my $atanOffsetDefault = 0.015;
+my $atanGainDefault = 20;
 
 for (@MISSION_RGB_BAND_ARRAY) {
     my %tmpHash = %{$_};
 
-    &create_atan_file(\%tmpHash, \@trueColorArray, 1, "", 10, 0.015, $product);
-    &create_atan_file(\%tmpHash, \@trueColorArray, 1, "", 20, 0.015, $product);
-    &create_atan_file(\%tmpHash, \@trueColorArray, 1, "", 10, 0.03, $product);
-    &create_atan_file(\%tmpHash, \@trueColorArray, 1, "", 20, 0.03, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $product);
 
-    &create_hybrid_file(\%tmpHash, \@trueColorArray, 1, "", $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 10, 0.015, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 20, 0.015, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 30, 0.015, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.015, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 10, 0.03, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 20, 0.03, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 30, 0.03, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.03, $product);
+    &create_atan_file(\%tmpHash, $trueColorArrays[0], 1, 60, 0.05, $product);
 
-    &create_log_file(\%tmpHash, \@trueColorArray, 1, "", $product);
-    &create_log_file(\%tmpHash, \@trueColorOCArray, 1, "OC_", $product);
-    &create_log_file(\%tmpHash, \@trueColorBlueUVArray, 1, "BlueUV_", $product);
-    &create_log_file(\%tmpHash, \@falseColorSnowCloudArray, 0, "SnowCloud_", $product);
-    &create_log_file(\%tmpHash, \@falseColorSnowCloud2Array, 0, "SnowCloud_", $product);
-    &create_log_file(\%tmpHash, \@falseColorVegetationArray, 0, "Vegetation_", $product);
-    &create_log_file(\%tmpHash, \@falseColorShortwaveIRArray, 0, "ShortwaveIR_", $product);
-    &create_log_file(\%tmpHash, \@falseColorShortwaveIR2Array, 0, "ShortwaveIR_", $product);
+    &create_atan_log_hybrid_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $logMinDefault, $logMaxDefault, $product, 'LAND');
+    &create_atan_log_hybrid_file(\%tmpHash, $trueColorArrays[0], 1, $atanGainDefault, $atanOffsetDefault, $logMinDefault, $logMaxDefault, $product, 'LandMask');
+
+    for (@falseColorArrays) {
+        my @falseColorArray = @{$_};
+        &create_log_file(\%tmpHash, $_, 0, $logMinDefault, $logMaxDefault, $product);
+    }
+
+    for (@trueColorArrays) {
+        my @trueColorArray = @{$_};
+        &create_log_file(\%tmpHash, $_, 1, $logMinDefault, $logMaxDefault, $product);
+    }
 }
 
 
 
 
-sub create_hybrid_file
+sub create_atan_log_hybrid_file
 {
     my $tmpHash_ref = shift;
     my $colorArray_ref = shift;
     my $true_color = shift;
-    my $functionality = shift;
+    my $gain = shift;
+    my $offset = shift;
+    my $min = shift;
+    my $max = shift;
     my $product = shift;
+    my $mask = shift;
 
-    my %tmpHash = %{$tmpHash_ref};
-    my @colorArray = @{$colorArray_ref};
-    my $red_source = $colorArray[0];
-    my $green_source = $colorArray[1];
-    my $blue_source = $colorArray[2];
+    my $mode = $mask . "_Hybrid";
 
-    my $red_wave = $tmpHash{$red_source};
-    my $green_wave = $tmpHash{$green_source};
-    my $blue_wave = $tmpHash{$blue_source};
+    my $newHash_ref = &create_contents_hash($tmpHash_ref, $colorArray_ref, $true_color, $product, $mode);
 
-    if (defined $red_wave && defined $green_wave && defined $blue_wave) {
-        my $gain = 20.0;
-        my $offset = 0.015;
-        my $min = '0.01';
-        my $max = '1.0';
-        my $mask = 'LAND';
-        my $mode = "Hybrid";
+    if (defined $newHash_ref) {
+        my %tmpHash = %{$newHash_ref};
 
-        my $color_type_camel = ($true_color == 1) ? "TrueColor" : "FalseColor";
-        my $color_type = ($true_color == 1) ? "true color" : "false color";
-       
-        my $red_band = $product . "_" . $red_wave;
-        my $green_band = $product . "_" . $green_wave;
-        my $blue_band = $product . "_" . $blue_wave;
+        my $red_inner_mask_expr = &create_atan_expression($tmpHash{'red_band'}, $gain, $offset);
+        my $green_inner_mask_expr = &create_atan_expression($tmpHash{'green_band'}, $gain, $offset);
+        my $blue_inner_mask_expr = &create_atan_expression($tmpHash{'blue_band'}, $gain, $offset);
 
-        my $basename = $tmpHash{'sensor'} . "_${color_type_camel}_${functionality}" . $red_wave . "_" . $green_wave . "_" . $blue_wave . "_" . $mode;
-        my $name = $tmpHash{'sensor'} . "_${color_type_camel}_${functionality}(" . $red_wave . "," . $green_wave . "," . $blue_wave . ")_" . $mode;
-        my $filename = $basename . ".rgb";
+        my $red_inner_expr = &create_log_expression($tmpHash{'red_band'}, $min, $max);
+        my $green_inner_expr = &create_log_expression($tmpHash{'green_band'}, $min, $max);
+        my $blue_inner_expr = &create_log_expression($tmpHash{'blue_band'}, $min, $max);
 
-        my $red_mask_expr = &create_atan_expression($red_band, $gain, $offset);
-        my $green_mask_expr = &create_atan_expression($green_band, $gain, $offset);
-        my $blue_mask_expr = &create_atan_expression($blue_band, $gain, $offset);
+        $tmpHash{'red_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $red_inner_expr, $red_inner_mask_expr, $mask );
+        $tmpHash{'green_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $green_inner_expr, $green_inner_mask_expr, $mask);
+        $tmpHash{'blue_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $blue_inner_expr, $blue_inner_mask_expr, $mask);
 
-        my $red_expr = &create_log_expression($red_band, $min, $max);
-        my $green_expr = &create_log_expression($green_band, $min, $max);
-        my $blue_expr = &create_log_expression($blue_band, $min, $max);
-
-        my $red_full_expr = &create_expression($red_band, $green_band, $blue_band, $red_expr, $red_mask_expr, $mask );
-        my $green_full_expr = &create_expression($red_band, $green_band, $blue_band, $green_expr, $green_mask_expr, $mask);
-        my $blue_full_expr = &create_expression($red_band, $green_band, $blue_band, $blue_expr, $blue_mask_expr, $mask);
-
-        my $contents = "# RGB-Image Configuration Profile\n";
-        $contents .= "# $name\n";
-        $contents .= "#\n";
-        $contents .= "# A ${color_type} RGB configuration profile which uses a ${red_source}, ${green_source} and ${blue_source} band for the\n";
-        $contents .= "# respective RGB color model channels\n";
-        $contents .= "#\n";
-        $contents .= "name=$name\n";
-        $contents .= "red=$red_full_expr\n";
-        $contents .= "green=$green_full_expr\n";
-        $contents .= "blue=$blue_full_expr\n";
-
-#        print "$contents\n";
-
-        &write_file($filename, $contents);
+        &create_file(\%tmpHash);
     }
 }
 
@@ -207,57 +206,26 @@ sub create_atan_file
     my $tmpHash_ref = shift;
     my $colorArray_ref = shift;
     my $true_color = shift;
-    my $functionality = shift;
     my $gain = shift;
     my $offset = shift;
     my $product = shift;
 
-    my %tmpHash = %{$tmpHash_ref};
-    my @colorArray = @{$colorArray_ref};
-    my $red_source = $colorArray[0];
-    my $green_source = $colorArray[1];
-    my $blue_source = $colorArray[2];
+    my $mode = "Atan_${gain}_${offset}";
 
-    my $red_wave = $tmpHash{$red_source};
-    my $green_wave = $tmpHash{$green_source};
-    my $blue_wave = $tmpHash{$blue_source};
+    my $newHash_ref = &create_contents_hash($tmpHash_ref, $colorArray_ref, $true_color, $product, $mode);
 
-    if (defined $red_wave && defined $green_wave && defined $blue_wave) {
-        my $mode = "Atan_${gain}_${offset}";
+    if (defined $newHash_ref) {
+        my %tmpHash = %{$newHash_ref};
 
-        my $color_type_camel = ($true_color == 1) ? "TrueColor" : "FalseColor";
-        my $color_type = ($true_color == 1) ? "true color" : "false color";
-       
-        my $red_band = $product . "_" . $red_wave;
-        my $green_band = $product . "_" . $green_wave;
-        my $blue_band = $product . "_" . $blue_wave;
+        my $red_inner_expr = &create_atan_expression($tmpHash{'red_band'}, $gain, $offset);
+        my $green_inner_expr = &create_atan_expression($tmpHash{'green_band'}, $gain, $offset);
+        my $blue_inner_expr = &create_atan_expression($tmpHash{'blue_band'}, $gain, $offset);
 
-        my $basename = $tmpHash{'sensor'} . "_${color_type_camel}_${functionality}" . $red_wave . "_" . $green_wave . "_" . $blue_wave . "_" . $mode;
-        my $name = $tmpHash{'sensor'} . "_${color_type_camel}_${functionality}(" . $red_wave . "," . $green_wave . "," . $blue_wave . ")_" . $mode;
-        my $filename = $basename . ".rgb";
+        $tmpHash{'red_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $red_inner_expr );
+        $tmpHash{'green_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $green_inner_expr);
+        $tmpHash{'blue_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $blue_inner_expr);
 
-        my $red_expr = &create_atan_expression($red_band, $gain, $offset);
-        my $green_expr = &create_atan_expression($green_band, $gain, $offset);
-        my $blue_expr = &create_atan_expression($blue_band, $gain, $offset);
-        
-        my $red_full_expr = &create_expression($red_band, $green_band, $blue_band, $red_expr );
-        my $green_full_expr = &create_expression($red_band, $green_band, $blue_band, $green_expr);
-        my $blue_full_expr = &create_expression($red_band, $green_band, $blue_band, $blue_expr);
-        
-        my $contents = "# RGB-Image Configuration Profile\n";
-        $contents .= "# $name\n";
-        $contents .= "#\n";
-        $contents .= "# A ${color_type} RGB configuration profile which uses a ${red_source}, ${green_source} and ${blue_source} band for the\n";
-        $contents .= "# respective RGB color model channels\n";
-        $contents .= "#\n";
-        $contents .= "name=$name\n";
-        $contents .= "red=$red_full_expr\n";
-        $contents .= "green=$green_full_expr\n";
-        $contents .= "blue=$blue_full_expr\n";
-        
-#        print "$contents\n";
-        
-        &write_file($filename, $contents);
+        &create_file(\%tmpHash);
     }
 }
 
@@ -268,70 +236,28 @@ sub create_log_file
     my $tmpHash_ref = shift;
     my $colorArray_ref = shift;
     my $true_color = shift;
-    my $functionality = shift;
+    my $min = shift;
+    my $max = shift;
     my $product = shift;
 
+    my $mode = "Log";
 
-    my %tmpHash = %{$tmpHash_ref};
-    my @colorArray = @{$colorArray_ref};
-    my $red_source = $colorArray[0];
-    my $green_source = $colorArray[1];
-    my $blue_source = $colorArray[2];
+    my $newHash_ref = &create_contents_hash($tmpHash_ref, $colorArray_ref, $true_color, $product, $mode);
 
-    my $red_wave = $tmpHash{$red_source};
-    my $green_wave = $tmpHash{$green_source};
-    my $blue_wave = $tmpHash{$blue_source};
+    if (defined $newHash_ref) {
+        my %tmpHash = %{$newHash_ref};
 
-    if (defined $red_wave && defined $green_wave && defined $blue_wave) {
-        my $color_type_camel = ($true_color == 1) ? "TrueColor" : "FalseColor";
-        my $color_type = ($true_color == 1) ? "true color" : "false color";
+        my $red_inner_expr = &create_log_expression($tmpHash{'red_band'}, $min, $max);
+        my $green_inner_expr = &create_log_expression($tmpHash{'green_band'}, $min, $max);
+        my $blue_inner_expr = &create_log_expression($tmpHash{'blue_band'}, $min, $max);
 
-        my $min = '0.01';
-        my $max = '1.0';
-        my $mask = 'LAND';
-        my $mode = "Log";
+        $tmpHash{'red_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $red_inner_expr );
+        $tmpHash{'green_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $green_inner_expr);
+        $tmpHash{'blue_expr'} = &create_expression($tmpHash{'red_band'}, $tmpHash{'green_band'}, $tmpHash{'blue_band'}, $blue_inner_expr);
 
-        my $red_band = $product . "_" . $red_wave;
-        my $green_band = $product . "_" . $green_wave;
-        my $blue_band = $product . "_" . $blue_wave;
-
-        my $basename = $tmpHash{'sensor'} . "_${color_type_camel}_${functionality}" . $red_wave . "_" . $green_wave . "_" . $blue_wave . "_" . $mode;
-        my $name = $tmpHash{'sensor'} . "_${color_type_camel}_${functionality}(" . $red_wave . "," . $green_wave . "," . $blue_wave . ")_" . $mode;
-        my $filename = $basename . ".rgb";
-
-        my $red_expr = &create_log_expression($red_band, $min, $max);
-        my $green_expr = &create_log_expression($green_band, $min, $max);
-        my $blue_expr = &create_log_expression($blue_band, $min, $max);
-
-        my $red_full_expr = &create_expression($red_band, $green_band, $blue_band, $red_expr );
-        my $green_full_expr = &create_expression($red_band, $green_band, $blue_band, $green_expr);
-        my $blue_full_expr = &create_expression($red_band, $green_band, $blue_band, $blue_expr);
-
-        my $contents = "# RGB-Image Configuration Profile\n";
-        $contents .= "# $name\n";
-        $contents .= "#\n";
-        $contents .= "# A ${color_type} RGB configuration profile which uses a ${red_source}, ${green_source} and ${blue_source} band for the\n";
-        $contents .= "# respective RGB color model channels\n";
-        $contents .= "#\n";
-        $contents .= "name=$name\n";
-        $contents .= "red=$red_full_expr\n";
-        $contents .= "green=$green_full_expr\n";
-        $contents .= "blue=$blue_full_expr\n";
-
-#        print "$contents\n";
-
-        &write_file($filename, $contents);
+        &create_file(\%tmpHash);
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -372,7 +298,7 @@ sub create_expression
 {
     my $red_band = shift;
     my $green_band = shift;
-    my $blue_band = shift; 
+    my $blue_band = shift;
     my $default_expression = shift;
     my $mask_expression = shift;
     my $mask_name = shift;
@@ -392,6 +318,86 @@ sub create_expression
 
     return $expression;
 }
+
+
+
+
+sub create_contents_hash
+{
+    my $tmpHash_ref = shift;
+    my $colorArray_ref = shift;
+    my $true_color = shift;
+    my $product = shift;
+    my $mode = shift;
+
+    my %tmpHash = %{$tmpHash_ref};
+    my @colorArray = @{$colorArray_ref};
+    my $red_source = $colorArray[0];
+    my $green_source = $colorArray[1];
+    my $blue_source = $colorArray[2];
+    my $functionality = $colorArray[3];
+
+
+    if (defined $tmpHash{$red_source} && defined $tmpHash{$green_source} && defined $tmpHash{$blue_source}) {
+        $tmpHash{'red_source'} = $red_source;
+        $tmpHash{'green_source'} = $green_source;
+        $tmpHash{'blue_source'} = $blue_source;
+
+        $tmpHash{'red_wave'} = $tmpHash{$red_source};
+        $tmpHash{'green_wave'} = $tmpHash{$green_source};
+        $tmpHash{'blue_wave'} = $tmpHash{$blue_source};
+
+        $tmpHash{'red_band'} = $product . "_" . $tmpHash{'red_wave'};
+        $tmpHash{'green_band'} = $product . "_" . $tmpHash{'green_wave'};
+        $tmpHash{'blue_band'} = $product . "_" . $tmpHash{'blue_wave'};
+
+        $tmpHash{'product'} = $product;
+        $tmpHash{'true_color'} = $true_color;
+        $tmpHash{'functionality'} = $functionality;
+        $tmpHash{'mode'} = $mode;
+    } else {
+        return undef();
+    }
+
+    return \%tmpHash;
+}
+
+
+
+
+
+
+sub create_file {
+
+    my $tmpHash_ref = shift;
+
+    my %tmpHash = %{$tmpHash_ref};
+
+        my $color_type_camel = ($tmpHash{'true_color'} == 1) ? "TrueColor" : "FalseColor";
+        my $color_type = ($tmpHash{'true_color'} == 1) ? "true color" : "false color";
+
+        if (length $tmpHash{'functionality'} > 0) {
+            $tmpHash{'functionality'} .= "_";
+        }
+        my $basename = $tmpHash{'sensor'} . "_${color_type_camel}_" . $tmpHash{'red_wave'} . "_" . $tmpHash{'green_wave'} . "_" . $tmpHash{'blue_wave'}  . "_" . $tmpHash{'mode'} . "_$tmpHash{'functionality'}";
+        my $name = $tmpHash{'sensor'} . "_${color_type_camel}_(" . $tmpHash{'red_wave'} . "," . $tmpHash{'green_wave'} . "," . $tmpHash{'blue_wave'} . ")_" . $tmpHash{'mode'} . "_$tmpHash{'functionality'}";
+        my $filename = $basename . ".rgb";
+
+        my $contents = "# RGB-Image Configuration Profile\n";
+        $contents .= "# $name\n";
+        $contents .= "#\n";
+        $contents .= "# A ${color_type} RGB configuration profile which uses a $tmpHash{'red_source'}, $tmpHash{'green_source'} and $tmpHash{'blue_source'} band for the\n";
+        $contents .= "# respective RGB color model channels\n";
+        $contents .= "#\n";
+        $contents .= "name=$name\n";
+        $contents .= "red=$tmpHash{'red_expr'}\n";
+        $contents .= "green=$tmpHash{'green_expr'}\n";
+        $contents .= "blue=$tmpHash{'blue_expr'}\n";
+
+        &write_file($filename, $contents);
+}
+
+
 
 
 sub write_file
