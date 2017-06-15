@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# MODIS_FalseColor_(2130,1240,859)_Log
+#
+# A false color RGB configuration profile which uses a swir3, swir1 and nir band for the
+# respective RGB color model channels
+#
+name=MODIS_FalseColor_(2130,1240,859)_Log
+red=if (rhos_2130 \!\= NaN and rhos_1240 \!\= NaN and rhos_859 \!\= NaN) then (log(rhos_2130/0.01)/log(1/0.01)) else NaN
+green=if (rhos_2130 \!\= NaN and rhos_1240 \!\= NaN and rhos_859 \!\= NaN) then (log(rhos_1240/0.01)/log(1/0.01)) else NaN
+blue=if (rhos_2130 \!\= NaN and rhos_1240 \!\= NaN and rhos_859 \!\= NaN) then (log(rhos_859/0.01)/log(1/0.01)) else NaN

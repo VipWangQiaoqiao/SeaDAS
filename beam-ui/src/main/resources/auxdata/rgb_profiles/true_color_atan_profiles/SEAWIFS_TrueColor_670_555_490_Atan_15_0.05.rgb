@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# SEAWIFS_TrueColor_(670,555,490)_Atan_15_0.05
+#
+# A true color RGB configuration profile which uses a red, green and blue band for the
+# respective RGB color model channels
+#
+name=SEAWIFS_TrueColor_(670,555,490)_Atan_15_0.05
+red=if (rhos_670 \!\= NaN and rhos_555 \!\= NaN and rhos_490 \!\= NaN) then (0.300107288944339 + 0.4663663898064 * atan( 15 * (rhos_670 - 0.05))) else NaN
+green=if (rhos_670 \!\= NaN and rhos_555 \!\= NaN and rhos_490 \!\= NaN) then (0.300107288944339 + 0.4663663898064 * atan( 15 * (rhos_555 - 0.05))) else NaN
+blue=if (rhos_670 \!\= NaN and rhos_555 \!\= NaN and rhos_490 \!\= NaN) then (0.300107288944339 + 0.4663663898064 * atan( 15 * (rhos_490 - 0.05))) else NaN

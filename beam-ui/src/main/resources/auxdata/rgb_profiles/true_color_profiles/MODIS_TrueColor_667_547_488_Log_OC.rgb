@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# MODIS_TrueColor_(667,547,488)_Log_OC
+#
+# A true color RGB configuration profile which uses a red-OC, green-OC and blue-OC band for the
+# respective RGB color model channels
+#
+name=MODIS_TrueColor_(667,547,488)_Log_OC
+red=if (rhos_667 \!\= NaN and rhos_547 \!\= NaN and rhos_488 \!\= NaN) then (log(rhos_667/0.01)/log(1/0.01)) else NaN
+green=if (rhos_667 \!\= NaN and rhos_547 \!\= NaN and rhos_488 \!\= NaN) then (log(rhos_547/0.01)/log(1/0.01)) else NaN
+blue=if (rhos_667 \!\= NaN and rhos_547 \!\= NaN and rhos_488 \!\= NaN) then (log(rhos_488/0.01)/log(1/0.01)) else NaN

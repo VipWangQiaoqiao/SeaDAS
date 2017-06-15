@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# OLI_FalseColor_(2201,865,561)_Log
+#
+# A false color RGB configuration profile which uses a swir3, nir and green band for the
+# respective RGB color model channels
+#
+name=OLI_FalseColor_(2201,865,561)_Log
+red=if (rhos_2201 \!\= NaN and rhos_865 \!\= NaN and rhos_561 \!\= NaN) then (log(rhos_2201/0.01)/log(1/0.01)) else NaN
+green=if (rhos_2201 \!\= NaN and rhos_865 \!\= NaN and rhos_561 \!\= NaN) then (log(rhos_865/0.01)/log(1/0.01)) else NaN
+blue=if (rhos_2201 \!\= NaN and rhos_865 \!\= NaN and rhos_561 \!\= NaN) then (log(rhos_561/0.01)/log(1/0.01)) else NaN

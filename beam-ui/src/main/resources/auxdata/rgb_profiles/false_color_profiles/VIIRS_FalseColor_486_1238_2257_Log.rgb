@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# VIIRS_FalseColor_(486,1238,2257)_Log
+#
+# A false color RGB configuration profile which uses a blue, swir1 and swir3 band for the
+# respective RGB color model channels
+#
+name=VIIRS_FalseColor_(486,1238,2257)_Log
+red=if (rhos_486 \!\= NaN and rhos_1238 \!\= NaN and rhos_2257 \!\= NaN) then (log(rhos_486/0.01)/log(1/0.01)) else NaN
+green=if (rhos_486 \!\= NaN and rhos_1238 \!\= NaN and rhos_2257 \!\= NaN) then (log(rhos_1238/0.01)/log(1/0.01)) else NaN
+blue=if (rhos_486 \!\= NaN and rhos_1238 \!\= NaN and rhos_2257 \!\= NaN) then (log(rhos_2257/0.01)/log(1/0.01)) else NaN

@@ -85,7 +85,7 @@ my @MISSION_RGB_BAND_ARRAY = (
                                'swir3' => '2202.4'
                              },
                              {
-                               'sensor' => 'MSI-S3A',
+                               'sensor' => 'MSI-S2A',
                                'blue' => '492.1',
                                'green' => '559.0',
                                'red' => '665.0',

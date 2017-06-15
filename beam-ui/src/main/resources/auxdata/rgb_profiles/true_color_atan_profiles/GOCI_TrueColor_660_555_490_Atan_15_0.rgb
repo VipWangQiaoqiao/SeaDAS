@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# GOCI_TrueColor_(660,555,490)_Atan_15_0
+#
+# A true color RGB configuration profile which uses a red, green and blue band for the
+# respective RGB color model channels
+#
+name=GOCI_TrueColor_(660,555,490)_Atan_15_0
+red=if (rhos_660 \!\= NaN and rhos_555 \!\= NaN and rhos_490 \!\= NaN) then (0 + 0.664792765209862 * atan( 15 * (rhos_660 - 0))) else NaN
+green=if (rhos_660 \!\= NaN and rhos_555 \!\= NaN and rhos_490 \!\= NaN) then (0 + 0.664792765209862 * atan( 15 * (rhos_555 - 0))) else NaN
+blue=if (rhos_660 \!\= NaN and rhos_555 \!\= NaN and rhos_490 \!\= NaN) then (0 + 0.664792765209862 * atan( 15 * (rhos_490 - 0))) else NaN

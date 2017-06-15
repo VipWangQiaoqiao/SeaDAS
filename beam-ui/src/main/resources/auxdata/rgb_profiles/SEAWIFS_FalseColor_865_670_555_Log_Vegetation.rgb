@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# SEAWIFS_FalseColor_(865,670,555)_Log_Vegetation
+#
+# A false color RGB configuration profile which uses a nir, red and green band for the
+# respective RGB color model channels
+#
+name=SEAWIFS_FalseColor_(865,670,555)_Log_Vegetation
+red=if (rhos_865 \!\= NaN and rhos_670 \!\= NaN and rhos_555 \!\= NaN) then (log(rhos_865/0.01)/log(1/0.01)) else NaN
+green=if (rhos_865 \!\= NaN and rhos_670 \!\= NaN and rhos_555 \!\= NaN) then (log(rhos_670/0.01)/log(1/0.01)) else NaN
+blue=if (rhos_865 \!\= NaN and rhos_670 \!\= NaN and rhos_555 \!\= NaN) then (log(rhos_555/0.01)/log(1/0.01)) else NaN

@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# OLI_FalseColor_(482,1609,2201)_Log_SnowCloud
+#
+# A false color RGB configuration profile which uses a blue, swir2 and swir3 band for the
+# respective RGB color model channels
+#
+name=OLI_FalseColor_(482,1609,2201)_Log_SnowCloud
+red=if (rhos_482 \!\= NaN and rhos_1609 \!\= NaN and rhos_2201 \!\= NaN) then (log(rhos_482/0.01)/log(1/0.01)) else NaN
+green=if (rhos_482 \!\= NaN and rhos_1609 \!\= NaN and rhos_2201 \!\= NaN) then (log(rhos_1609/0.01)/log(1/0.01)) else NaN
+blue=if (rhos_482 \!\= NaN and rhos_1609 \!\= NaN and rhos_2201 \!\= NaN) then (log(rhos_2201/0.01)/log(1/0.01)) else NaN

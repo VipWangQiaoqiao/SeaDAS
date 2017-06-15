@@ -1,0 +1,10 @@
+# RGB-Image Configuration Profile
+# OLI_TrueColor_(655,561,482)_Atan_40_0.05
+#
+# A true color RGB configuration profile which uses a red, green and blue band for the
+# respective RGB color model channels
+#
+name=OLI_TrueColor_(655,561,482)_Atan_40_0.05
+red=if (rhos_655 \!\= NaN and rhos_561 \!\= NaN and rhos_482 \!\= NaN) then (0.417534306614618 + 0.377125764501199 * atan( 40 * (rhos_655 - 0.05))) else NaN
+green=if (rhos_655 \!\= NaN and rhos_561 \!\= NaN and rhos_482 \!\= NaN) then (0.417534306614618 + 0.377125764501199 * atan( 40 * (rhos_561 - 0.05))) else NaN
+blue=if (rhos_655 \!\= NaN and rhos_561 \!\= NaN and rhos_482 \!\= NaN) then (0.417534306614618 + 0.377125764501199 * atan( 40 * (rhos_482 - 0.05))) else NaN
