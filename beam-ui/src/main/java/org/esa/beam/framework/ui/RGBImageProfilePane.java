@@ -635,18 +635,25 @@ public class RGBImageProfilePane extends JPanel {
         boolean matchFound = false;
         if (mission != null) {
             for (RGBImageProfile rgbImageProfile : rgbImageProfiles) {
-                if (rgbImageProfile != null && rgbImageProfile.getName() != null &&
-                        rgbImageProfile.getName().startsWith(mission + "_TrueColor_(") &&
-                        rgbImageProfile.getName().endsWith(")_Log")) {
-                    bestProfile = rgbImageProfile;
-                    matchFound = true;
+                if (!matchFound && rgbImageProfile != null && rgbImageProfile.getName() != null) {
+                    if (rgbImageProfile.getName().startsWith(mission + "_TrueColor_(") &&
+                            rgbImageProfile.getName().endsWith(")_Log")) {
+                        bestProfile = rgbImageProfile;
+                        matchFound = true;
+                    }
                 }
             }
         }
+
         if (!matchFound) {
+            // try without specifying mission
             for (RGBImageProfile rgbImageProfile : rgbImageProfiles) {
-                if (rgbImageProfile != null && rgbImageProfile.getName() != null && rgbImageProfile.getName().endsWith(")_Log") && rgbImageProfile.getName().startsWith("TrueColor_(")) {
-                    bestProfile = rgbImageProfile;
+                if (!matchFound && rgbImageProfile != null && rgbImageProfile.getName() != null) {
+                    if (rgbImageProfile.getName().contains("TrueColor_(") &&
+                            rgbImageProfile.getName().endsWith(")_Log")) {
+                        bestProfile = rgbImageProfile;
+                        matchFound = true;
+                    }
                 }
             }
         }
