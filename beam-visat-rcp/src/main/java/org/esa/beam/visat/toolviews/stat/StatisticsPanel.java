@@ -1075,6 +1075,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         int validPixExpIdx = -1;
         int descriptionIdx = -1;
         int productTypeIdx = -1;
+        int sensorIdx = -1;
+        int platformIdx = -1;
+        int processingVersionIdx = -1;
         int productFormatIdx = -1;
 
         int timeSeriesBandTimeIdx = -1;
@@ -1145,7 +1148,15 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             fieldIdx++;
             productFormatIdx = fieldIdx;
             fieldIdx++;
+            sensorIdx = fieldIdx;
+            fieldIdx++;
+            platformIdx = fieldIdx;
+            fieldIdx++;
+            processingVersionIdx = fieldIdx;
+            fieldIdx++;
         }
+
+
 
 
         if (statsSpreadsheet == null) {
@@ -1207,8 +1218,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             if (includeProductFormat) {
                 statsSpreadsheet[0][productTypeIdx] = "File Type";
                 statsSpreadsheet[0][productFormatIdx] = "File Format";
+                statsSpreadsheet[0][sensorIdx] = "Sensor";
+                statsSpreadsheet[0][platformIdx] = "Platform";
+                statsSpreadsheet[0][processingVersionIdx] = "Processing Version";
             }
-
         }
 
 
@@ -1294,6 +1307,9 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 if (includeProductFormat) {
                     statsSpreadsheet[row][productTypeIdx] = getProduct().getProductType();
                     statsSpreadsheet[row][productFormatIdx] = getProductFormatName(getProduct());
+                    statsSpreadsheet[row][sensorIdx] = StatisticsUtils.getMetaDataSensor(getProduct());
+                    statsSpreadsheet[row][platformIdx] = StatisticsUtils.getMetaDataPlatform(getProduct());
+                    statsSpreadsheet[row][processingVersionIdx] = StatisticsUtils.getMetaDataProcessingVersion(getProduct());
                 }
             }
 

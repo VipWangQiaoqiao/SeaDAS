@@ -18,10 +18,7 @@ package org.esa.beam.visat.toolviews.stat;
 
 import com.bc.ceres.swing.figure.Figure;
 import com.bc.ceres.swing.figure.ShapeFigure;
-import org.esa.beam.framework.datamodel.GeoPos;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.RasterDataNode;
-import org.esa.beam.framework.datamodel.TransectProfileData;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.product.ProductSceneView;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.math.MathUtils;
@@ -148,5 +145,73 @@ public class StatisticsUtils {
 
             return sb.toString();
         }
+    }
+
+    public static String getMetaDataSensor(Product product) {
+        // Created by Daniel Knowles
+        // Note this tries to retrieve a sensor name but does not check validity of sensor name
+        String sensor = "";
+
+        try {
+            MetadataAttribute att = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Sensor_Name");
+            MetadataElement elm = product.getMetadataRoot().getElement("Global_Attributes");
+            sensor = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Sensor_Name").getData().getElemString();
+        } catch (Exception ignore) {
+            try {
+                MetadataAttribute att = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("instrument");
+                MetadataElement elm = product.getMetadataRoot().getElement("Global_Attributes");
+                sensor = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("instrument").getData().getElemString();
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (sensor == null) {
+            try {
+                String[] productTypeNameArray = product.getProductType().split(" ");
+                // the sensor name may be here as the first entry but ignore any obvious false positives
+                if (!sensor.toUpperCase().equals("LEVEL")) {
+                    sensor = productTypeNameArray[0];
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+        return sensor;
+    }
+
+    public static String getMetaDataPlatform(Product product) {
+        // Created by Daniel Knowles
+        // Note this tries to retrieve a platform name
+        String platform = "";
+
+        try {
+            platform = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Platform").getData().getElemString();
+        } catch (Exception ignore) {
+            try {
+                platform = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("platform").getData().getElemString();
+            } catch (Exception ignored) {
+            }
+        }
+
+
+        return platform;
+    }
+
+    public static String getMetaDataProcessingVersion(Product product) {
+        // Created by Daniel Knowles
+        // Note this tries to retrieve a platform name
+        String processingVersion = "";
+
+        try {
+            processingVersion = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Processing_Version").getData().getElemString();
+        } catch (Exception ignore) {
+            try {
+                processingVersion = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("processing_version").getData().getElemString();
+            } catch (Exception ignored) {
+            }
+        }
+
+
+        return processingVersion;
     }
 }
