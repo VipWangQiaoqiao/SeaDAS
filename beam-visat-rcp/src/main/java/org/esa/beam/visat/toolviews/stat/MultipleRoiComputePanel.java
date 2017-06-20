@@ -43,9 +43,9 @@ import java.awt.event.ItemListener;
  *
  * @author Marco Zuehlke
  * @author Daniel Knowles
- * @since SeaDAS 7.4.1
+ * @since SeaDAS 7.5
  *
- * Revised by Daniel Knowles for SeaDAS 7.4.1
+ * Revised by Daniel Knowles for SeaDAS 7.5
  * 1. better handles layout, prevents components from being hidden due to window resizing.
  * 2. validFields added to help govern enablement of the refreshButton.
  *
@@ -83,8 +83,9 @@ class MultipleRoiComputePanel extends JPanel {
     private Product product;
     private boolean useViewBandRaster = true;
 
-    // todo Danny right now this is complicated by creation of a MathBand or changing to a different file in which case reset is needed.
-    // so for now setting this to true
+    // todo Danny right now this is complicated by creation of a MathBand (bands have been added since initialization)
+    // in which case reset is needed so for now setting this to true which is probably better anyway
+    // this forces a reset when another band view window is opened
     public boolean forceUpdate = true;
 
 
@@ -669,12 +670,12 @@ class MultipleRoiComputePanel extends JPanel {
             }
         }
 
-        if (forceUpdate) {
-            bandNameList.selectNone();
-            bandNameList.clearCheckBoxListSelection();
-            bandNameList.clearSelection();
-            String[] selectedBandNames = {raster.getName()};
-            bandNameList.setSelectedObjects(selectedBandNames);
+        if (forceUpdate && raster != null) {
+                bandNameList.selectNone();
+                bandNameList.clearCheckBoxListSelection();
+                bandNameList.clearSelection();
+                String[] selectedBandNames = {raster.getName()};
+                bandNameList.setSelectedObjects(selectedBandNames);
         }
 
 

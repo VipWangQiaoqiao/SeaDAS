@@ -70,7 +70,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     private StatisticsCriteriaPanel statisticsCriteriaPanel;
 
-    private static final String DEFAULT_STATISTICS_TEXT = "No statistics computed";  /*I18N*/
+    private static final String DEFAULT_STATISTICS_TEXT = "<html>No statistics computed<br>Note: requires a view window to be selected</html>";  /*I18N*/
     private static final String TITLE_PREFIX = "Statistics";
 
     private double spreadsheetHeightWeight = 0.3;
@@ -113,10 +113,16 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     private int numStxFields = 0;
     private int numStxRegions = 0;
+    private int recordCount = 0;
+
 
 
     private int plotMinHeight = 300;
     private int plotMinWidth = 300;
+
+    private Product currProduct = null;
+    private RasterDataNode currRaster = null;
+    boolean fieldsInitialized = false;
 
 
 
@@ -296,14 +302,34 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
 
+        boolean productChanged = false;
+        boolean rasterChanged = false;
+
+        if (getProduct() != null) {
+            Product prevProduct = currProduct;
+            currProduct = getProduct();
+
+            if (currProduct != null && currProduct != prevProduct) {
+                productChanged = true;
+                fieldsInitialized = false;
+            }
+        }
 
 
-        if (computePanel.forceUpdate) {
+        if (getRaster() != null) {
+            RasterDataNode prevRaster = currRaster;
+            currRaster = getRaster();
+
+            if (currRaster != null && currRaster != prevRaster) {
+                rasterChanged = true;
+            }
+        }
+
+
+        if (!fieldsInitialized || productChanged || (rasterChanged && computePanel.forceUpdate)) {
             statisticsCriteriaPanel.reset();
 
-
             statsSpreadsheet = null;
-
 
             final RasterDataNode raster = getRaster();
             computePanel.setRaster(raster);
@@ -346,7 +372,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 exportButton.setEnabled(false);
             }
         }
-
     }
 
     @Override
@@ -395,6 +420,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
+        fieldsInitialized = true;
 
 
         if (computePanel.isUseViewBandRaster()) {
@@ -444,15 +470,16 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 pm.beginTask(title, numStxRegions);
                 try {
                     int stxIdx = 0;
+                    recordCount = 0;
 
                     if (computePanel.isUseViewBandRaster()) {
                         RasterDataNode raster = getRaster();
-                        int recordCount = computeAllStxForRaster(raster, pm, selectedMasks, stxIdx);
+                        recordCount = computeAllStxForRaster(raster, pm, selectedMasks, stxIdx);
                     } else {
                         for (int rasterIdx = 0; rasterIdx < selectedBands.length; rasterIdx++) {
                             final Band band = selectedBands[rasterIdx];
                             RasterDataNode raster = getProduct().getRasterDataNode(band.getName());
-                            int recordCount = computeAllStxForRaster(raster, pm, selectedMasks, stxIdx);
+                            recordCount = computeAllStxForRaster(raster, pm, selectedMasks, stxIdx);
                             stxIdx += recordCount;
                         }
                     }
@@ -502,6 +529,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             @Override
             protected void done() {
                 try {
+                    if (recordCount == 0) {
+                        JOptionPane.showMessageDialog(getParentDialogContentPane(),
+                                "No statistics computed.\nMask and/or Full Scene must be selected",
+                                                  /*I18N*/
+                                "Statistics", /*I18N*/
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+
 
 //                    get();
 //                    if (exportAsCsvAction == null) {
