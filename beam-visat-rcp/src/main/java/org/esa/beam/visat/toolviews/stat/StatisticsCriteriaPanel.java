@@ -6,8 +6,6 @@ import org.esa.beam.util.PropertyMap;
 import org.esa.beam.visat.VisatApp;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -61,16 +59,20 @@ public class StatisticsCriteriaPanel {
     private boolean includeHistogramStats = false;
     private JCheckBox includeHistogramStatsCheckBox = null;
 
-    private boolean includeFileName = true;
+    private boolean includeFileRefNo = true;
     private boolean includeBandName = true;
     private boolean includeBandUnits = true;
     private boolean includeMaskName = true;
     private boolean includeDateTime = true;
     private boolean includeValidPixExp = true;
     private boolean includeDescription = true;
-    private boolean includeProductFormat = true;
     private boolean includeTimeSeriesFields = true;
 
+    private boolean includeFileMetaData = StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED;
+    private JCheckBox includeFileMetaDataCheckBox = null;
+
+    private boolean includeMaskMetaData = StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED;
+    private JCheckBox includeMaskMetaDataCheckBox = null;
 
 
     // "Text" Tab Variables and Components
@@ -126,6 +128,8 @@ public class StatisticsCriteriaPanel {
     private JCheckBox showStatsSpreadSheetCheckBox = null;
 
 
+
+
     public StatisticsCriteriaPanel(Container getParentDialogContentPane) {
         this.getParentDialogContentPane = getParentDialogContentPane;
 
@@ -149,7 +153,8 @@ public class StatisticsCriteriaPanel {
         showStatsList = getPreferencesStatsListEnabled();
         showStatsSpreadSheet = getPreferencesStatsSpreadSheetEnabled();
         percentThresholds = getPreferencesPercentThresholds();
-
+        includeFileMetaData = getPreferencesFileMetaDataEnabled();
+        includeMaskMetaData = getPreferencesMaskMetaDataEnabled();
     }
 
     private void initComponents() {
@@ -212,7 +217,11 @@ public class StatisticsCriteriaPanel {
         includeHistogramStatsCheckBox = new JCheckBox("Show Histogram Statistics");
         includeHistogramStatsCheckBox.setSelected(includeHistogramStats);
 
+        includeFileMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_FILE_METADATA_ENABLED);
+        includeFileMetaDataCheckBox.setSelected(includeFileMetaData);
 
+        includeMaskMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_MASK_METADATA_ENABLED);
+        includeMaskMetaDataCheckBox.setSelected(includeMaskMetaData);
 
         // "Text" Tab Variables and Components
 
@@ -390,6 +399,20 @@ public class StatisticsCriteriaPanel {
             public void itemStateChanged(ItemEvent e) {
                 includeHistogramStats = includeHistogramStatsCheckBox.isSelected();
 
+            }
+        });
+
+        includeFileMetaDataCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeFileMetaData = includeFileMetaDataCheckBox.isSelected();
+            }
+        });
+
+        includeMaskMetaDataCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeMaskMetaData = includeMaskMetaDataCheckBox.isSelected();
             }
         });
 
@@ -629,8 +652,8 @@ public class StatisticsCriteriaPanel {
 
 
 
-    public boolean isIncludeFileName() {
-        return includeFileName;
+    public boolean isIncludeFileRefNo() {
+        return includeFileRefNo;
     }
 
     public boolean isIncludeBandName() {
@@ -657,10 +680,14 @@ public class StatisticsCriteriaPanel {
         return includeDescription;
     }
 
-    public boolean isIncludeProductFormat() {
-        return includeProductFormat;
+
+    public boolean isIncludeFileMetaData() {
+        return includeFileMetaData;
     }
 
+    public boolean isIncludeMaskMetaData() {
+        return includeMaskMetaData;
+    }
 
     public boolean isIncludeTimeSeriesFields() {
         return includeTimeSeriesFields;
@@ -789,6 +816,12 @@ public class StatisticsCriteriaPanel {
         gbc.gridy += 1;
         panel.add(includeHistogramStatsCheckBox, gbc);
 
+        gbc.gridy += 1;
+        panel.add(includeFileMetaDataCheckBox, gbc);
+
+
+        gbc.gridy += 1;
+        panel.add(includeMaskMetaDataCheckBox, gbc);
 
         gbc.gridy += 1;
         panel.add(thresholdsPanel, gbc);
@@ -1259,6 +1292,24 @@ public class StatisticsCriteriaPanel {
             return configuration.getPropertyString(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS, StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS);
         } else {
             return StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS;
+        }
+    }
+
+    public boolean getPreferencesFileMetaDataEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED;
+        }
+    }
+
+    public boolean getPreferencesMaskMetaDataEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED;
         }
     }
 

@@ -199,7 +199,6 @@ public class StatisticsUtils {
 
     public static String getMetaDataProcessingVersion(Product product) {
         // Created by Daniel Knowles
-        // Note this tries to retrieve a platform name
         String processingVersion = "";
 
         try {
@@ -213,5 +212,48 @@ public class StatisticsUtils {
 
 
         return processingVersion;
+    }
+
+
+
+    public static String getMetaDataOrbit(Product product) {
+        // Created by Daniel Knowles
+        // Note this tries to retrieve an orbit or orbit range name
+        String metaData = "";
+
+        try {
+            metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("orbit_number").getData().getElemString();
+        } catch (Exception ignore) {
+            try {
+                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("start_orbit_number").getData().getElemString();
+                String endOrbit = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("end_orbit_number").getData().getElemString();
+                if (metaData != null && metaData.length() > 0 && endOrbit != null && endOrbit.length() > 0) {
+                    metaData = metaData + "-" + endOrbit;
+                } else if (metaData == null && endOrbit != null && endOrbit.length() > 0) {
+                    metaData = endOrbit;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+        return metaData;
+    }
+
+
+    public static String getMetaData(Product product, String key) {
+        // Created by Daniel Knowles
+        // Note this tries to retrieve a platform name
+        String metaData = "";
+
+        try {
+            metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+        } catch (Exception ignore) {
+            try {
+                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+            } catch (Exception ignored) {
+            }
+        }
+
+        return metaData;
     }
 }

@@ -918,7 +918,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             percentileRangeBounds[0] = histDomainBounds[0];
             percentileRangeBounds[1] = histDomainBounds[1];
 
-            percentilePanel = createScatterChartPanel(percentileSeries, "Percent Threshold", logTitle + raster.getName() + " (" + raster.getUnit() + ")", new Color(0, 0, 0), percentileDomainBounds, percentileRangeBounds);
+            percentilePanel = createScatterChartPanel(percentileSeries, "Percent_Threshold", logTitle + raster.getName() + " (" + raster.getUnit() + ")", new Color(0, 0, 0), percentileDomainBounds, percentileRangeBounds);
 
 
         }
@@ -961,13 +961,13 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         Object[][] secondData =
                 new Object[][]{
-                        new Object[]{"Standard Deviation", stx.getStandardDeviation()},
-                        new Object[]{"Coefficient of Variation", getCoefficientOfVariation(stx)},
+                        new Object[]{"Standard_Deviation", stx.getStandardDeviation()},
+                        new Object[]{"Coefficient_of_Variation", getCoefficientOfVariation(stx)},
                         //     new Object[]{"", ""},
-                        new Object[]{"Total Bins", histogram.getNumBins()[0]},
-                        new Object[]{"Bin Width", getBinSize(histogram)},
-                        new Object[]{"Bin Min", histogram.getLowValue(0)},
-                        new Object[]{"Bin Max", histogram.getHighValue(0)}
+                        new Object[]{"Total_Bins", histogram.getNumBins()[0]},
+                        new Object[]{"Bin_Width", getBinSize(histogram)},
+                        new Object[]{"Bin_Min", histogram.getLowValue(0)},
+                        new Object[]{"Bin_Max", histogram.getHighValue(0)}
                 };
         dataRows += secondData.length;
 
@@ -1049,20 +1049,20 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         numStxFields = tableData.length;
 
 
-        boolean includeFileName = statisticsCriteriaPanel.isIncludeFileName();
+        boolean includeFileRefNo = statisticsCriteriaPanel.isIncludeFileRefNo();
         boolean includeBandName = statisticsCriteriaPanel.isIncludeBandName();
         boolean includeBandUnits = statisticsCriteriaPanel.isIncludeBandUnits();
         boolean includeMaskName = statisticsCriteriaPanel.isIncludeMaskName();
         boolean includeDateTime = statisticsCriteriaPanel.isIncludeDateTime();
         boolean includeValidPixExp = statisticsCriteriaPanel.isIncludeValidPixExp();
         boolean includeDescription = statisticsCriteriaPanel.isIncludeDescription();
-        boolean includeProductFormat = statisticsCriteriaPanel.isIncludeProductFormat();
+        boolean includeFileMetaData = statisticsCriteriaPanel.isIncludeFileMetaData();
         boolean isIncludeTimeSeriesFields = statisticsCriteriaPanel.isIncludeTimeSeriesFields();
+        boolean includeMaskMetaData = statisticsCriteriaPanel.isIncludeMaskMetaData();
 
 
 
 
-        int fileNameIdx = -1;
         int bandNameIdx = -1;
         int bandUnitsIdx = -1;
         int maskNameIdx = -1;
@@ -1074,8 +1074,17 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         int validPixExpIdx = -1;
         int descriptionIdx = -1;
+
+        int fileNameIdx = -1;
+        int fileRefNoIdx = -1;
+        int fileMetaDataBreakIdx = -1;
         int productTypeIdx = -1;
+        int productWidthIdx = -1;
+        int productHeightIdx = -1;
         int sensorIdx = -1;
+        int resolutionIdx = -1;
+        int dayNightIdx = -1;
+        int orbitIdx = -1;
         int platformIdx = -1;
         int processingVersionIdx = -1;
         int productFormatIdx = -1;
@@ -1083,13 +1092,17 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         int timeSeriesBandTimeIdx = -1;
         int timeSeriesBandDateIdx = -1;
 
+        int maskDescriptionIdx = -1;
+        int maskExpressionIdx = -1;
+
 
         int fieldIdx = 0;
 
-        if (includeFileName) {
-            fileNameIdx = fieldIdx;
+        if (includeFileRefNo) {
+            fileRefNoIdx = fieldIdx;
             fieldIdx++;
         }
+
         if (includeBandName) {
             bandNameIdx = fieldIdx;
             fieldIdx++;
@@ -1104,6 +1117,65 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         int stxFieldsStartIdx = fieldIdx;
         fieldIdx += numStxFields;
         int stxFieldsEndIdx = fieldIdx - 1;
+
+
+
+
+
+        if (includeBandUnits) {
+            bandUnitsIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+        if (includeValidPixExp) {
+            validPixExpIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+        if (includeDescription) {
+            descriptionIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+        if (includeMaskMetaData) {
+            maskDescriptionIdx = fieldIdx;
+            fieldIdx++;
+            maskExpressionIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+
+
+
+
+        if (includeFileMetaData) {
+            fileMetaDataBreakIdx = fieldIdx;
+            fieldIdx++;
+            fileNameIdx = fieldIdx;
+            fieldIdx++;
+            productTypeIdx = fieldIdx;
+            fieldIdx++;
+            productWidthIdx = fieldIdx;
+            fieldIdx++;
+            productHeightIdx = fieldIdx;
+            fieldIdx++;
+            productFormatIdx = fieldIdx;
+            fieldIdx++;
+            sensorIdx = fieldIdx;
+            fieldIdx++;
+            resolutionIdx = fieldIdx;
+            fieldIdx++;
+            dayNightIdx = fieldIdx;
+            fieldIdx++;
+            orbitIdx = fieldIdx;
+            fieldIdx++;
+            platformIdx = fieldIdx;
+            fieldIdx++;
+            processingVersionIdx = fieldIdx;
+            fieldIdx++;
+        }
+
+
 
         if (includeDateTime) {
             startDateIdx = fieldIdx;
@@ -1127,38 +1199,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
 
-
-        if (includeBandUnits) {
-            bandUnitsIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-        if (includeValidPixExp) {
-            validPixExpIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-        if (includeDescription) {
-            descriptionIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-        if (includeProductFormat) {
-            productTypeIdx = fieldIdx;
-            fieldIdx++;
-            productFormatIdx = fieldIdx;
-            fieldIdx++;
-            sensorIdx = fieldIdx;
-            fieldIdx++;
-            platformIdx = fieldIdx;
-            fieldIdx++;
-            processingVersionIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-
-
-
         if (statsSpreadsheet == null) {
             statsSpreadsheet = new Object[numStxRegions + 2][fieldIdx];
             // add 1 row to account for the header and 1 more empty row because JTable for some reason displays
@@ -1168,8 +1208,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         // Add Header first time through
         if (row <= 1) {
-            if (includeFileName) {
-                statsSpreadsheet[0][fileNameIdx] = "File";
+            if (includeFileRefNo) {
+                statsSpreadsheet[0][fileRefNoIdx] = "File#";
             }
             if (includeBandName) {
                 statsSpreadsheet[0][bandNameIdx] = "Band";
@@ -1193,43 +1233,54 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
 
             if (includeDateTime) {
-                statsSpreadsheet[0][startDateIdx] = "File Start Date";
-                statsSpreadsheet[0][startTimeIdx] = "File Start Time";
-                statsSpreadsheet[0][endDateIdx] = "File End Date";
-                statsSpreadsheet[0][endTimeIdx] = "File End Time";
+                statsSpreadsheet[0][startDateIdx] = "Start_Date";
+                statsSpreadsheet[0][startTimeIdx] = "Start_Time";
+                statsSpreadsheet[0][endDateIdx] = "End_Date";
+                statsSpreadsheet[0][endTimeIdx] = "End_Time";
             }
 
 
 
             if (isIncludeTimeSeriesFields) {
-                statsSpreadsheet[0][timeSeriesBandDateIdx] = "TimeSeries Date";
-                statsSpreadsheet[0][timeSeriesBandTimeIdx] = "TimeSeries Time";
+                statsSpreadsheet[0][timeSeriesBandDateIdx] = "TimeSeries_Date";
+                statsSpreadsheet[0][timeSeriesBandTimeIdx] = "TimeSeries_Time";
             }
 
 
             if (includeValidPixExp) {
-                statsSpreadsheet[0][validPixExpIdx] = "Valid Pixel Expression";
+                statsSpreadsheet[0][validPixExpIdx] = "Band_Valid_Expression";
             }
 
             if (includeDescription) {
-                statsSpreadsheet[0][descriptionIdx] = "Description";
+                statsSpreadsheet[0][descriptionIdx] = "Band_Description";
             }
 
-            if (includeProductFormat) {
-                statsSpreadsheet[0][productTypeIdx] = "File Type";
-                statsSpreadsheet[0][productFormatIdx] = "File Format";
+            if (includeFileMetaData) {
+                statsSpreadsheet[0][fileMetaDataBreakIdx] = "||";
+                statsSpreadsheet[0][fileNameIdx] = "File";
+                statsSpreadsheet[0][productTypeIdx] = "File_Type";
+                statsSpreadsheet[0][productWidthIdx] = "File_Width";
+                statsSpreadsheet[0][productHeightIdx] = "File_Height";
+                statsSpreadsheet[0][productFormatIdx] = "File_Format";
                 statsSpreadsheet[0][sensorIdx] = "Sensor";
+                statsSpreadsheet[0][resolutionIdx] = "Resolution";
+                statsSpreadsheet[0][dayNightIdx] = "Day_Night";
+                statsSpreadsheet[0][orbitIdx] = "Orbit";
                 statsSpreadsheet[0][platformIdx] = "Platform";
-                statsSpreadsheet[0][processingVersionIdx] = "Processing Version";
+                statsSpreadsheet[0][processingVersionIdx] = "Processing_Version";
+            }
+
+            if (includeMaskMetaData) {
+                statsSpreadsheet[0][maskDescriptionIdx] = "Mask_Description";
+                statsSpreadsheet[0][maskExpressionIdx] = "Mask_Expression";
             }
         }
 
 
         // account for header as added row
         if (row < statsSpreadsheet.length) {
-            if (includeFileName) {
-                statsSpreadsheet[row][fileNameIdx] = getProduct().getName();
-                //   statsSpreadsheet[row][fileNameIdx] = getProduct().getEndTime();
+            if (includeFileRefNo) {
+                statsSpreadsheet[row][fileRefNoIdx] = getProduct().getRefNo();
             }
             if (includeBandName) {
                 statsSpreadsheet[row][bandNameIdx] = raster.getName();
@@ -1254,18 +1305,18 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
             if (includeDateTime) {
-                ProductData.UTC startDateTimeCorrected;
-                ProductData.UTC endDateTimeCorrected;
+                ProductData.UTC startDateTime;
+                ProductData.UTC endDateTime;
 
                 if (getProduct().getStartTime() != null && getProduct().getEndTime() != null) {
                     if (getProduct().getStartTime().getMJD() <= getProduct().getEndTime().getMJD()) {
 
-                        startDateTimeCorrected = getProduct().getStartTime();
-                        endDateTimeCorrected = getProduct().getEndTime();
+                        startDateTime = getProduct().getStartTime();
+                        endDateTime = getProduct().getEndTime();
                     } else {
 
-                        startDateTimeCorrected = getProduct().getEndTime();
-                        endDateTimeCorrected = getProduct().getStartTime();
+                        startDateTime = getProduct().getEndTime();
+                        endDateTime = getProduct().getStartTime();
                     }
 
                     String startDateString = "";
@@ -1273,8 +1324,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     String endDateString = "";
                     String endTimeString = "";
 
-                    if (startDateTimeCorrected != null) {
-                        String[] startDateTimeStringArray = startDateTimeCorrected.toString().split(" ");
+                    if (startDateTime != null) {
+                        String[] startDateTimeStringArray = startDateTime.toString().split(" ");
                         if (startDateTimeStringArray.length >= 2) {
                             startDateString = startDateTimeStringArray[0].trim();
                             startTimeString = startDateTimeStringArray[1].trim();
@@ -1282,8 +1333,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     }
 
 
-                    if (endDateTimeCorrected != null) {
-                        String[] endDateTimeStringArray = endDateTimeCorrected.toString().split(" ");
+                    if (endDateTime != null) {
+                        String[] endDateTimeStringArray = endDateTime.toString().split(" ");
                         if (endDateTimeStringArray.length >= 2) {
                             endDateString = endDateTimeStringArray[0].trim();
                             endTimeString = endDateTimeStringArray[1].trim();
@@ -1304,12 +1355,32 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                     statsSpreadsheet[row][descriptionIdx] = raster.getDescription();
                 }
 
-                if (includeProductFormat) {
+                if (includeFileMetaData) {
+                    statsSpreadsheet[row][fileNameIdx] = getProduct().getName();
+                    statsSpreadsheet[row][fileMetaDataBreakIdx] = "||";
                     statsSpreadsheet[row][productTypeIdx] = getProduct().getProductType();
+                    statsSpreadsheet[row][productWidthIdx] = getProduct().getSceneRasterWidth() + " pixels";
+                    statsSpreadsheet[row][productHeightIdx] = getProduct().getSceneRasterHeight() + " pixels";
                     statsSpreadsheet[row][productFormatIdx] = getProductFormatName(getProduct());
                     statsSpreadsheet[row][sensorIdx] = StatisticsUtils.getMetaDataSensor(getProduct());
+                    statsSpreadsheet[row][resolutionIdx] = StatisticsUtils.getMetaData(getProduct(),"spatialResolution");
+                    statsSpreadsheet[row][dayNightIdx] = StatisticsUtils.getMetaData(getProduct(),"day_night_flag");
+                    statsSpreadsheet[row][orbitIdx] = StatisticsUtils.getMetaDataOrbit(getProduct());
                     statsSpreadsheet[row][platformIdx] = StatisticsUtils.getMetaDataPlatform(getProduct());
                     statsSpreadsheet[row][processingVersionIdx] = StatisticsUtils.getMetaDataProcessingVersion(getProduct());
+                }
+
+                if (includeMaskMetaData) {
+                    statsSpreadsheet[row][maskDescriptionIdx] = "";
+                    statsSpreadsheet[row][maskExpressionIdx] = "";
+
+                    if (mask != null) {
+                        statsSpreadsheet[row][maskDescriptionIdx] = mask.getDescription();
+                        if (mask.getImageConfig() != null) {
+                            statsSpreadsheet[row][maskExpressionIdx] = mask.getImageConfig().getValue("expression");
+                        }
+                    }
+
                 }
             }
 

@@ -51,6 +51,14 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final int PARAM_MINVAL_NUM_BINS = 1;
     public static final int PARAM_MAXVAL_NUM_BINS = 1000000;
 
+    public static final String PARAM_LABEL_FILE_METADATA_ENABLED = "Include File MetaData";
+    public static final String PARAM_KEY_FILE_METADATA_ENABLED = "statistics.fileMetaData.enabled";
+    public static final boolean PARAM_DEFVAL_FILE_METADATA_ENABLED = true;
+
+    public static final String PARAM_LABEL_MASK_METADATA_ENABLED = "Include Mask MetaData";
+    public static final String PARAM_KEY_MASK_METADATA_ENABLED = "statistics.maskMetaData.enabled";
+    public static final boolean PARAM_DEFVAL_MASK_METADATA_ENABLED = true;
+
     public static final String PARAM_LABEL_PLOTS_THRESH_DOMAIN_LOW = "Plot Domain Low Threshold";
     public static final String PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_LOW = "Low";
     public static final String PARAM_KEY_PLOTS_THRESH_DOMAIN_LOW = "statistics.plotsThreshDomainLow";

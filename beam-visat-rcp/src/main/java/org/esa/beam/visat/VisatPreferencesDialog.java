@@ -947,7 +947,16 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
+            param = new Parameter(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_FILE_METADATA_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
 
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_MASK_METADATA_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
         }
 
         @Override
@@ -992,6 +1001,13 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(optionsPane, param, gbcOptions);
             gbcOptions.gridy++;
 
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
 
             JPanel resetPane = GridBagUtils.createPanel();
             GridBagConstraints gbcReset = GridBagUtils.createConstraints("");
@@ -1041,6 +1057,8 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS).setValue(StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_NUM_BINS).setValue(StatisticsToolView.PARAM_DEFVAL_NUM_BINS, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED, errorHandler);
 
         }
 
