@@ -59,6 +59,20 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final String PARAM_KEY_MASK_METADATA_ENABLED = "statistics.maskMetaData.enabled";
     public static final boolean PARAM_DEFVAL_MASK_METADATA_ENABLED = true;
 
+    public static final String PARAM_LABEL_BAND_METADATA_ENABLED = "Include Band MetaData";
+    public static final String PARAM_KEY_BAND_METADATA_ENABLED = "statistics.bandMetaData.enabled";
+    public static final boolean PARAM_DEFVAL_BAND_METADATA_ENABLED = true;
+
+    public static final String PARAM_LABEL_TIME_SERIES_METADATA_ENABLED = "Include Time Series MetaData";
+    public static final String PARAM_KEY_TIME_SERIES_METADATA_ENABLED = "statistics.timeSeriesMetaData.enabled";
+    public static final boolean PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED = true;
+
+    public static final String PARAM_LABEL_TIME_METADATA_ENABLED = "Include Time MetaData";
+    public static final String PARAM_KEY_TIME_METADATA_ENABLED = "statistics.timeMetaData.enabled";
+    public static final boolean PARAM_DEFVAL_TIME_METADATA_ENABLED = true;
+
+
+
     public static final String PARAM_LABEL_PLOTS_THRESH_DOMAIN_LOW = "Plot Domain Low Threshold";
     public static final String PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_LOW = "Low";
     public static final String PARAM_KEY_PLOTS_THRESH_DOMAIN_LOW = "statistics.plotsThreshDomainLow";

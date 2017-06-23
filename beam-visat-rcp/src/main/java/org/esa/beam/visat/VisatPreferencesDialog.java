@@ -957,6 +957,22 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_MASK_METADATA_ENABLED);
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_BAND_METADATA_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_TIME_SERIES_METADATA_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_TIME_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_TIME_METADATA_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
         }
 
         @Override
@@ -1009,6 +1025,23 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(optionsPane, param, gbcOptions);
             gbcOptions.gridy++;
 
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_TIME_METADATA_ENABLED);
+            addParamToPane(optionsPane, param, gbcOptions);
+            gbcOptions.gridy++;
+
+
+
+
+
+
             JPanel resetPane = GridBagUtils.createPanel();
             GridBagConstraints gbcReset = GridBagUtils.createConstraints("");
             gbcReset.gridy = 0;
@@ -1059,6 +1092,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam(StatisticsToolView.PARAM_KEY_NUM_BINS).setValue(StatisticsToolView.PARAM_DEFVAL_NUM_BINS, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_TIME_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED, errorHandler);
 
         }
 

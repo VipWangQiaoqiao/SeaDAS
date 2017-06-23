@@ -61,18 +61,26 @@ public class StatisticsCriteriaPanel {
 
     private boolean includeFileRefNo = true;
     private boolean includeBandName = true;
-    private boolean includeBandUnits = true;
     private boolean includeMaskName = true;
-    private boolean includeDateTime = true;
-    private boolean includeValidPixExp = true;
-    private boolean includeDescription = true;
-    private boolean includeTimeSeriesFields = true;
+
 
     private boolean includeFileMetaData = StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED;
     private JCheckBox includeFileMetaDataCheckBox = null;
 
     private boolean includeMaskMetaData = StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED;
     private JCheckBox includeMaskMetaDataCheckBox = null;
+
+
+    private boolean includeBandMetaData = StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED;
+    private JCheckBox includeBandMetaDataCheckBox = null;
+
+    private boolean includeTimeSeriesMetaData = StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED;
+    private JCheckBox includeTimeSeriesMetaDataCheckBox = null;
+
+    private boolean includeTimeMetaData = StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED;
+    private JCheckBox includeTimeMetaDataCheckBox = null;
+
+
 
 
     // "Text" Tab Variables and Components
@@ -155,6 +163,10 @@ public class StatisticsCriteriaPanel {
         percentThresholds = getPreferencesPercentThresholds();
         includeFileMetaData = getPreferencesFileMetaDataEnabled();
         includeMaskMetaData = getPreferencesMaskMetaDataEnabled();
+        includeBandMetaData = getPreferencesBandMetaDataEnabled();
+        includeTimeSeriesMetaData = getPreferencesTimeSeriesMetaDataEnabled();
+        includeTimeMetaData = getPreferencesFileTimeMetaDataEnabled();
+
     }
 
     private void initComponents() {
@@ -222,6 +234,18 @@ public class StatisticsCriteriaPanel {
 
         includeMaskMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_MASK_METADATA_ENABLED);
         includeMaskMetaDataCheckBox.setSelected(includeMaskMetaData);
+
+        includeBandMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BAND_METADATA_ENABLED);
+        includeBandMetaDataCheckBox.setSelected(includeBandMetaData);
+
+        includeTimeSeriesMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_TIME_SERIES_METADATA_ENABLED);
+        includeTimeSeriesMetaDataCheckBox.setSelected(includeTimeSeriesMetaData);
+
+        includeTimeMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_TIME_METADATA_ENABLED);
+        includeTimeMetaDataCheckBox.setSelected(includeTimeMetaData);
+
+
+
 
         // "Text" Tab Variables and Components
 
@@ -415,6 +439,30 @@ public class StatisticsCriteriaPanel {
                 includeMaskMetaData = includeMaskMetaDataCheckBox.isSelected();
             }
         });
+
+        includeBandMetaDataCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeBandMetaData = includeBandMetaDataCheckBox.isSelected();
+            }
+        });
+
+        includeTimeSeriesMetaDataCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeTimeSeriesMetaData = includeTimeSeriesMetaDataCheckBox.isSelected();
+            }
+        });
+
+        includeTimeMetaDataCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeTimeMetaData = includeTimeMetaDataCheckBox.isSelected();
+            }
+        });
+
+
+
 
 
         // "Text" Tab Variables and Components
@@ -660,25 +708,13 @@ public class StatisticsCriteriaPanel {
         return includeBandName;
     }
 
-    public boolean isIncludeBandUnits() {
-        return includeBandUnits;
-    }
 
     public boolean isIncludeMaskName() {
         return includeMaskName;
     }
 
-    public boolean isIncludeDateTime() {
-        return includeDateTime;
-    }
 
-    public boolean isIncludeValidPixExp() {
-        return includeValidPixExp;
-    }
 
-    public boolean isIncludeDescription() {
-        return includeDescription;
-    }
 
 
     public boolean isIncludeFileMetaData() {
@@ -689,9 +725,20 @@ public class StatisticsCriteriaPanel {
         return includeMaskMetaData;
     }
 
-    public boolean isIncludeTimeSeriesFields() {
-        return includeTimeSeriesFields;
+
+    public boolean isIncludeTimeSeriesMetaData() {
+        return includeTimeSeriesMetaData;
     }
+
+
+    public boolean isIncludeBandMetaData() {
+        return includeBandMetaData;
+    }
+
+    public boolean isIncludeTimeMetaData() {
+        return includeTimeMetaData;
+    }
+
 
 
 
@@ -822,6 +869,18 @@ public class StatisticsCriteriaPanel {
 
         gbc.gridy += 1;
         panel.add(includeMaskMetaDataCheckBox, gbc);
+
+
+        gbc.gridy += 1;
+        panel.add(includeBandMetaDataCheckBox, gbc);
+
+
+        gbc.gridy += 1;
+        panel.add(includeTimeMetaDataCheckBox, gbc);
+
+
+        gbc.gridy += 1;
+        panel.add(includeTimeSeriesMetaDataCheckBox, gbc);
 
         gbc.gridy += 1;
         panel.add(thresholdsPanel, gbc);
@@ -1312,6 +1371,35 @@ public class StatisticsCriteriaPanel {
             return StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED;
         }
     }
+
+
+    public boolean getPreferencesBandMetaDataEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED;
+        }
+    }
+
+    public boolean getPreferencesTimeSeriesMetaDataEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED;
+        }
+    }
+
+    public boolean getPreferencesFileTimeMetaDataEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_TIME_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED;
+        }
+    }
+
 
 
     //

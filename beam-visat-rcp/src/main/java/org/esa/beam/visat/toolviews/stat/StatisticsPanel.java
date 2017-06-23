@@ -52,6 +52,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 
 /**
@@ -116,7 +117,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private int recordCount = 0;
 
 
-
     private int plotMinHeight = 300;
     private int plotMinWidth = 300;
 
@@ -125,9 +125,78 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     boolean fieldsInitialized = false;
 
 
-
     ToolView parentDialog;
     String helpID;
+
+
+    private static String COLUMN_BREAK = "||";
+
+
+    private enum PrimaryStatisticsFields {
+        FileRefNum("File#"),
+        BandName("Band"),
+        MaskName("Mask");
+
+        PrimaryStatisticsFields(String name) {
+            this.name = name;
+        }
+
+        private final String name;
+
+        public String toString() {
+            return name;
+        }
+    }
+
+
+    private enum MetaDataFields {
+        FileMetaDataBreak(COLUMN_BREAK),
+        FileName("File"),
+        FileType("File_Type"),
+        FileWidth("File_Width"),
+        FileHeight("File_Height"),
+        FileFormat("File_Format"),
+        Sensor("Sensor"),
+        Resolution("Resolution"),
+        DayNight("Day_Night"),
+        Orbit("Orbit"),
+        Platform("Platform"),
+        ProcessingVersion("Processing_Version"),
+        TimeMetaDataBreak(COLUMN_BREAK),
+        StartDate("Start_Date"),
+        StartTime("Start_Time"),
+        EndDate("End_Date"),
+        EndTime("End_Time"),
+        TimeSeriesDate("TimeSeries_Date"),
+        TimeSeriesTime("TimeSeries_Time"),
+        BandMetaDataBreak(COLUMN_BREAK),
+        BandName("Band"),
+        BandUnit("Unit"),
+        BandValidExpression("Band_Valid_Expression"),
+        BandDescription("Band_Description"),
+        MaskMetaDataBreak(COLUMN_BREAK),
+        MaskName("Mask"),
+        MaskDescription("Mask_Description"),
+        MaskExpression("Mask_Expression");
+
+        MetaDataFields(String name) {
+            this.name = name;
+        }
+
+        private final String name;
+
+        public String toString() {
+            return name;
+        }
+    }
+
+
+    int stxFieldsStartIdx = -1;
+    int stxFieldsEndIdx = -1;
+
+
+    private HashMap<MetaDataFields, Integer> metaDataFieldsHashMap = new HashMap<MetaDataFields, Integer>();
+    private HashMap<PrimaryStatisticsFields, Integer> primaryStatisticsFieldsHashMap = new HashMap<PrimaryStatisticsFields, Integer>();
 
 
     private TextFieldContainer spreadsheetColWidthTextfieldContainer = null;
@@ -299,7 +368,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         if (!init) {
             initComponents();
         }
-
 
 
         boolean productChanged = false;
@@ -725,6 +793,32 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         final Histogram histogram = stx.getHistogram();
         final int row = stxIdx + 1;  // account for header
 
+        boolean includeFileMetaData = statisticsCriteriaPanel.isIncludeFileMetaData();
+        boolean includeMaskMetaData = statisticsCriteriaPanel.isIncludeMaskMetaData();
+        boolean includeBandMetaData = statisticsCriteriaPanel.isIncludeBandMetaData();
+        ;
+        boolean includeTimeMetaData = statisticsCriteriaPanel.isIncludeTimeMetaData();
+        boolean isIncludeTimeSeriesMetaData = statisticsCriteriaPanel.isIncludeTimeSeriesMetaData();
+
+
+        // Initialize all spreadsheet table indices to -1 (default don't use value)
+        if (stxIdx == 0) {
+
+            metaDataFieldsHashMap = new HashMap<MetaDataFields, Integer>();
+
+            for (MetaDataFields field : MetaDataFields.values()) {
+                metaDataFieldsHashMap.put(field, -1);
+            }
+
+            primaryStatisticsFieldsHashMap = new HashMap<PrimaryStatisticsFields, Integer>();
+
+            for (PrimaryStatisticsFields field : PrimaryStatisticsFields.values()) {
+                primaryStatisticsFieldsHashMap.put(field, -1);
+            }
+
+        }
+
+
         XIntervalSeries histogramSeries = new XIntervalSeries("Histogram");
         double histDomainBounds[] = {histogram.getLowValue(0), histogram.getHighValue(0)};
         double histRangeBounds[] = {Double.NaN, Double.NaN};
@@ -1045,158 +1139,105 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
         }
 
-
         numStxFields = tableData.length;
-
-
-        boolean includeFileRefNo = statisticsCriteriaPanel.isIncludeFileRefNo();
-        boolean includeBandName = statisticsCriteriaPanel.isIncludeBandName();
-        boolean includeBandUnits = statisticsCriteriaPanel.isIncludeBandUnits();
-        boolean includeMaskName = statisticsCriteriaPanel.isIncludeMaskName();
-        boolean includeDateTime = statisticsCriteriaPanel.isIncludeDateTime();
-        boolean includeValidPixExp = statisticsCriteriaPanel.isIncludeValidPixExp();
-        boolean includeDescription = statisticsCriteriaPanel.isIncludeDescription();
-        boolean includeFileMetaData = statisticsCriteriaPanel.isIncludeFileMetaData();
-        boolean isIncludeTimeSeriesFields = statisticsCriteriaPanel.isIncludeTimeSeriesFields();
-        boolean includeMaskMetaData = statisticsCriteriaPanel.isIncludeMaskMetaData();
-
-
-
-
-        int bandNameIdx = -1;
-        int bandUnitsIdx = -1;
-        int maskNameIdx = -1;
-
-        int startTimeIdx = -1;
-        int startDateIdx = -1;
-        int endTimeIdx = -1;
-        int endDateIdx = -1;
-
-        int validPixExpIdx = -1;
-        int descriptionIdx = -1;
-
-        int fileNameIdx = -1;
-        int fileRefNoIdx = -1;
-        int fileMetaDataBreakIdx = -1;
-        int productTypeIdx = -1;
-        int productWidthIdx = -1;
-        int productHeightIdx = -1;
-        int sensorIdx = -1;
-        int resolutionIdx = -1;
-        int dayNightIdx = -1;
-        int orbitIdx = -1;
-        int platformIdx = -1;
-        int processingVersionIdx = -1;
-        int productFormatIdx = -1;
-
-        int timeSeriesBandTimeIdx = -1;
-        int timeSeriesBandDateIdx = -1;
-
-        int maskDescriptionIdx = -1;
-        int maskExpressionIdx = -1;
 
 
         int fieldIdx = 0;
 
-        if (includeFileRefNo) {
-            fileRefNoIdx = fieldIdx;
+        // Initialize indices
+        if (stxIdx == 0) {
+
+            primaryStatisticsFieldsHashMap.put(PrimaryStatisticsFields.FileRefNum, fieldIdx);
             fieldIdx++;
+            primaryStatisticsFieldsHashMap.put(PrimaryStatisticsFields.BandName, fieldIdx);
+            fieldIdx++;
+            primaryStatisticsFieldsHashMap.put(PrimaryStatisticsFields.MaskName, fieldIdx);
+            fieldIdx++;
+
+
+            stxFieldsStartIdx = fieldIdx;
+            fieldIdx += numStxFields;
+            stxFieldsEndIdx = fieldIdx - 1;
+
+
+            if (includeTimeMetaData || isIncludeTimeSeriesMetaData) {
+                metaDataFieldsHashMap.put(MetaDataFields.TimeMetaDataBreak, fieldIdx);
+                fieldIdx++;
+
+                if (includeTimeMetaData) {
+                    metaDataFieldsHashMap.put(MetaDataFields.StartDate, fieldIdx);
+                    fieldIdx++;
+                    metaDataFieldsHashMap.put(MetaDataFields.StartTime, fieldIdx);
+                    fieldIdx++;
+                    metaDataFieldsHashMap.put(MetaDataFields.EndDate, fieldIdx);
+                    fieldIdx++;
+                    metaDataFieldsHashMap.put(MetaDataFields.EndTime, fieldIdx);
+                    fieldIdx++;
+                }
+
+                if (isIncludeTimeSeriesMetaData) {
+                    metaDataFieldsHashMap.put(MetaDataFields.TimeSeriesDate, fieldIdx);
+                    fieldIdx++;
+                    metaDataFieldsHashMap.put(MetaDataFields.TimeSeriesTime, fieldIdx);
+                    fieldIdx++;
+                }
+            }
+
+
+            if (includeFileMetaData) {
+                metaDataFieldsHashMap.put(MetaDataFields.FileMetaDataBreak, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.FileName, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.FileType, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.FileWidth, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.FileHeight, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.FileFormat, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.Sensor, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.Resolution, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.DayNight, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.Orbit, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.Platform, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.ProcessingVersion, fieldIdx);
+                fieldIdx++;
+            }
+
+
+            if (includeBandMetaData) {
+                metaDataFieldsHashMap.put(MetaDataFields.BandMetaDataBreak, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.BandName, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.BandUnit, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.BandValidExpression, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.BandDescription, fieldIdx);
+                fieldIdx++;
+
+            }
+
+
+            if (includeMaskMetaData) {
+                metaDataFieldsHashMap.put(MetaDataFields.MaskMetaDataBreak, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.MaskName, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.MaskDescription, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.MaskExpression, fieldIdx);
+                fieldIdx++;
+            }
         }
-
-        if (includeBandName) {
-            bandNameIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-
-        if (includeMaskName) {
-            maskNameIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-        int stxFieldsStartIdx = fieldIdx;
-        fieldIdx += numStxFields;
-        int stxFieldsEndIdx = fieldIdx - 1;
-
-
-
-
-
-        if (includeBandUnits) {
-            bandUnitsIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-        if (includeValidPixExp) {
-            validPixExpIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-        if (includeDescription) {
-            descriptionIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-        if (includeMaskMetaData) {
-            maskDescriptionIdx = fieldIdx;
-            fieldIdx++;
-            maskExpressionIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-
-
-
-
-        if (includeFileMetaData) {
-            fileMetaDataBreakIdx = fieldIdx;
-            fieldIdx++;
-            fileNameIdx = fieldIdx;
-            fieldIdx++;
-            productTypeIdx = fieldIdx;
-            fieldIdx++;
-            productWidthIdx = fieldIdx;
-            fieldIdx++;
-            productHeightIdx = fieldIdx;
-            fieldIdx++;
-            productFormatIdx = fieldIdx;
-            fieldIdx++;
-            sensorIdx = fieldIdx;
-            fieldIdx++;
-            resolutionIdx = fieldIdx;
-            fieldIdx++;
-            dayNightIdx = fieldIdx;
-            fieldIdx++;
-            orbitIdx = fieldIdx;
-            fieldIdx++;
-            platformIdx = fieldIdx;
-            fieldIdx++;
-            processingVersionIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-
-
-        if (includeDateTime) {
-            startDateIdx = fieldIdx;
-            fieldIdx++;
-            startTimeIdx = fieldIdx;
-            fieldIdx++;
-            endDateIdx = fieldIdx;
-            fieldIdx++;
-            endTimeIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-
-        if (isIncludeTimeSeriesFields) {
-            timeSeriesBandDateIdx = fieldIdx;
-            fieldIdx++;
-            timeSeriesBandTimeIdx = fieldIdx;
-            fieldIdx++;
-        }
-
-
 
 
         if (statsSpreadsheet == null) {
@@ -1206,20 +1247,113 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         }
 
 
+        String startDateString = "";
+        String startTimeString = "";
+        String endDateString = "";
+        String endTimeString = "";
+
+        if (includeTimeMetaData) {
+            ProductData.UTC startDateTimeCorrected;
+            ProductData.UTC endDateTimeCorrected;
+
+            // correct time (invert start and end time if end time later than start time
+            if (getProduct().getStartTime() != null && getProduct().getEndTime() != null) {
+                if (getProduct().getStartTime().getMJD() <= getProduct().getEndTime().getMJD()) {
+
+                    startDateTimeCorrected = getProduct().getStartTime();
+                    endDateTimeCorrected = getProduct().getEndTime();
+                } else {
+
+                    startDateTimeCorrected = getProduct().getEndTime();
+                    endDateTimeCorrected = getProduct().getStartTime();
+                }
+
+                if (startDateTimeCorrected != null) {
+                    String[] startDateTimeStringArray = startDateTimeCorrected.toString().split(" ");
+                    if (startDateTimeStringArray.length >= 2) {
+                        startDateString = startDateTimeStringArray[0].trim();
+                        startTimeString = startDateTimeStringArray[1].trim();
+                    }
+                }
+
+                if (endDateTimeCorrected != null) {
+                    String[] endDateTimeStringArray = endDateTimeCorrected.toString().split(" ");
+                    if (endDateTimeStringArray.length >= 2) {
+                        endDateString = endDateTimeStringArray[0].trim();
+                        endTimeString = endDateTimeStringArray[1].trim();
+                    }
+                }
+            }
+        }
+
+
+        String timeSeriesDate = "";
+        String timeSeriesTime = "";
+        if (isIncludeTimeSeriesMetaData) {
+            String bandName = raster.getName();
+
+            String productDateTime = convertBandNameToProductTime(bandName);
+
+            if (productDateTime != null) {
+                String[] endDateTimeStringArray = productDateTime.split(" ");
+                if (endDateTimeStringArray.length >= 2) {
+                    timeSeriesDate = endDateTimeStringArray[0].trim();
+                    timeSeriesTime = endDateTimeStringArray[1].trim();
+                }
+            }
+        }
+
+
+        String maskName = "";
+        String maskDescription = "";
+        String maskExpression = "";
+        if (mask != null) {
+            maskName = mask.getName();
+            maskDescription = mask.getDescription();
+            maskExpression = mask.getImageConfig().getValue("expression");
+        }
+
+
+        addFieldToSpreadsheet(row, PrimaryStatisticsFields.FileRefNum, getProduct().getRefNo());
+        addFieldToSpreadsheet(row, PrimaryStatisticsFields.BandName, raster.getName());
+        addFieldToSpreadsheet(row, PrimaryStatisticsFields.MaskName, maskName);
+
+        addFieldToSpreadsheet(row, MetaDataFields.TimeMetaDataBreak, COLUMN_BREAK);
+        addFieldToSpreadsheet(row, MetaDataFields.StartDate, startDateString);
+        addFieldToSpreadsheet(row, MetaDataFields.StartTime, startTimeString);
+        addFieldToSpreadsheet(row, MetaDataFields.EndDate, endDateString);
+        addFieldToSpreadsheet(row, MetaDataFields.EndTime, endTimeString);
+
+        addFieldToSpreadsheet(row, MetaDataFields.TimeSeriesDate, timeSeriesDate);
+        addFieldToSpreadsheet(row, MetaDataFields.TimeSeriesTime, timeSeriesTime);
+
+        addFieldToSpreadsheet(row, MetaDataFields.FileMetaDataBreak, COLUMN_BREAK);
+        addFieldToSpreadsheet(row, MetaDataFields.FileName, getProduct().getName());
+        addFieldToSpreadsheet(row, MetaDataFields.FileType, getProduct().getProductType());
+        addFieldToSpreadsheet(row, MetaDataFields.FileWidth, getProduct().getSceneRasterWidth());
+        addFieldToSpreadsheet(row, MetaDataFields.FileHeight, getProduct().getSceneRasterHeight());
+        addFieldToSpreadsheet(row, MetaDataFields.FileFormat, getProductFormatName(getProduct()));
+        addFieldToSpreadsheet(row, MetaDataFields.Sensor, StatisticsUtils.getMetaDataSensor(getProduct()));
+        addFieldToSpreadsheet(row, MetaDataFields.Resolution, StatisticsUtils.getMetaData(getProduct(), "spatialResolution"));
+        addFieldToSpreadsheet(row, MetaDataFields.DayNight, StatisticsUtils.getMetaData(getProduct(), "day_night_flag"));
+        addFieldToSpreadsheet(row, MetaDataFields.Orbit, StatisticsUtils.getMetaDataOrbit(getProduct()));
+        addFieldToSpreadsheet(row, MetaDataFields.Platform, StatisticsUtils.getMetaDataPlatform(getProduct()));
+        addFieldToSpreadsheet(row, MetaDataFields.ProcessingVersion, StatisticsUtils.getMetaDataProcessingVersion(getProduct()));
+
+        addFieldToSpreadsheet(row, MetaDataFields.BandMetaDataBreak, COLUMN_BREAK);
+        addFieldToSpreadsheet(row, MetaDataFields.BandName, raster.getName());
+        addFieldToSpreadsheet(row, MetaDataFields.BandUnit, raster.getUnit());
+        addFieldToSpreadsheet(row, MetaDataFields.BandValidExpression, raster.getValidPixelExpression());
+        addFieldToSpreadsheet(row, MetaDataFields.BandDescription, raster.getDescription());
+
+        addFieldToSpreadsheet(row, MetaDataFields.MaskMetaDataBreak, COLUMN_BREAK);
+        addFieldToSpreadsheet(row, MetaDataFields.MaskName, maskName);
+        addFieldToSpreadsheet(row, MetaDataFields.MaskDescription, maskDescription);
+        addFieldToSpreadsheet(row, MetaDataFields.MaskExpression, maskExpression);
+
+
         // Add Header first time through
         if (row <= 1) {
-            if (includeFileRefNo) {
-                statsSpreadsheet[0][fileRefNoIdx] = "File#";
-            }
-            if (includeBandName) {
-                statsSpreadsheet[0][bandNameIdx] = "Band";
-            }
-            if (includeBandUnits) {
-                statsSpreadsheet[0][bandUnitsIdx] = "Units";
-            }
-            if (includeMaskName) {
-                statsSpreadsheet[0][maskNameIdx] = "Mask(ROI)";
-            }
 
             int k = stxFieldsStartIdx;
             for (int i = 0; i < tableData.length; i++) {
@@ -1232,66 +1366,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 }
             }
 
-            if (includeDateTime) {
-                statsSpreadsheet[0][startDateIdx] = "Start_Date";
-                statsSpreadsheet[0][startTimeIdx] = "Start_Time";
-                statsSpreadsheet[0][endDateIdx] = "End_Date";
-                statsSpreadsheet[0][endTimeIdx] = "End_Time";
-            }
-
-
-
-            if (isIncludeTimeSeriesFields) {
-                statsSpreadsheet[0][timeSeriesBandDateIdx] = "TimeSeries_Date";
-                statsSpreadsheet[0][timeSeriesBandTimeIdx] = "TimeSeries_Time";
-            }
-
-
-            if (includeValidPixExp) {
-                statsSpreadsheet[0][validPixExpIdx] = "Band_Valid_Expression";
-            }
-
-            if (includeDescription) {
-                statsSpreadsheet[0][descriptionIdx] = "Band_Description";
-            }
-
-            if (includeFileMetaData) {
-                statsSpreadsheet[0][fileMetaDataBreakIdx] = "||";
-                statsSpreadsheet[0][fileNameIdx] = "File";
-                statsSpreadsheet[0][productTypeIdx] = "File_Type";
-                statsSpreadsheet[0][productWidthIdx] = "File_Width";
-                statsSpreadsheet[0][productHeightIdx] = "File_Height";
-                statsSpreadsheet[0][productFormatIdx] = "File_Format";
-                statsSpreadsheet[0][sensorIdx] = "Sensor";
-                statsSpreadsheet[0][resolutionIdx] = "Resolution";
-                statsSpreadsheet[0][dayNightIdx] = "Day_Night";
-                statsSpreadsheet[0][orbitIdx] = "Orbit";
-                statsSpreadsheet[0][platformIdx] = "Platform";
-                statsSpreadsheet[0][processingVersionIdx] = "Processing_Version";
-            }
-
-            if (includeMaskMetaData) {
-                statsSpreadsheet[0][maskDescriptionIdx] = "Mask_Description";
-                statsSpreadsheet[0][maskExpressionIdx] = "Mask_Expression";
-            }
         }
 
 
         // account for header as added row
         if (row < statsSpreadsheet.length) {
-            if (includeFileRefNo) {
-                statsSpreadsheet[row][fileRefNoIdx] = getProduct().getRefNo();
-            }
-            if (includeBandName) {
-                statsSpreadsheet[row][bandNameIdx] = raster.getName();
-                //    statsSpreadsheet[row][bandNameIdx] = getProduct().getEndTime().getAsDate().getTime();
-            }
-            if (includeBandUnits) {
-                statsSpreadsheet[row][bandUnitsIdx] = raster.getUnit();
-            }
-            if (includeMaskName) {
-                statsSpreadsheet[row][maskNameIdx] = (mask != null) ? mask.getName() : "";
-            }
 
             int k = stxFieldsStartIdx;
             for (int i = 0; i < tableData.length; i++) {
@@ -1303,109 +1382,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 }
             }
 
-
-            if (includeDateTime) {
-                ProductData.UTC startDateTime;
-                ProductData.UTC endDateTime;
-
-                if (getProduct().getStartTime() != null && getProduct().getEndTime() != null) {
-                    if (getProduct().getStartTime().getMJD() <= getProduct().getEndTime().getMJD()) {
-
-                        startDateTime = getProduct().getStartTime();
-                        endDateTime = getProduct().getEndTime();
-                    } else {
-
-                        startDateTime = getProduct().getEndTime();
-                        endDateTime = getProduct().getStartTime();
-                    }
-
-                    String startDateString = "";
-                    String startTimeString = "";
-                    String endDateString = "";
-                    String endTimeString = "";
-
-                    if (startDateTime != null) {
-                        String[] startDateTimeStringArray = startDateTime.toString().split(" ");
-                        if (startDateTimeStringArray.length >= 2) {
-                            startDateString = startDateTimeStringArray[0].trim();
-                            startTimeString = startDateTimeStringArray[1].trim();
-                        }
-                    }
-
-
-                    if (endDateTime != null) {
-                        String[] endDateTimeStringArray = endDateTime.toString().split(" ");
-                        if (endDateTimeStringArray.length >= 2) {
-                            endDateString = endDateTimeStringArray[0].trim();
-                            endTimeString = endDateTimeStringArray[1].trim();
-                        }
-                    }
-
-                    statsSpreadsheet[row][startDateIdx] = startDateString;
-                    statsSpreadsheet[row][startTimeIdx] = startTimeString;
-                    statsSpreadsheet[row][endDateIdx] = endDateString;
-                    statsSpreadsheet[row][endTimeIdx] = endTimeString;
-                }
-
-                if (includeValidPixExp) {
-                    statsSpreadsheet[row][validPixExpIdx] = raster.getValidPixelExpression();
-                }
-
-                if (includeDescription) {
-                    statsSpreadsheet[row][descriptionIdx] = raster.getDescription();
-                }
-
-                if (includeFileMetaData) {
-                    statsSpreadsheet[row][fileNameIdx] = getProduct().getName();
-                    statsSpreadsheet[row][fileMetaDataBreakIdx] = "||";
-                    statsSpreadsheet[row][productTypeIdx] = getProduct().getProductType();
-                    statsSpreadsheet[row][productWidthIdx] = getProduct().getSceneRasterWidth() + " pixels";
-                    statsSpreadsheet[row][productHeightIdx] = getProduct().getSceneRasterHeight() + " pixels";
-                    statsSpreadsheet[row][productFormatIdx] = getProductFormatName(getProduct());
-                    statsSpreadsheet[row][sensorIdx] = StatisticsUtils.getMetaDataSensor(getProduct());
-                    statsSpreadsheet[row][resolutionIdx] = StatisticsUtils.getMetaData(getProduct(),"spatialResolution");
-                    statsSpreadsheet[row][dayNightIdx] = StatisticsUtils.getMetaData(getProduct(),"day_night_flag");
-                    statsSpreadsheet[row][orbitIdx] = StatisticsUtils.getMetaDataOrbit(getProduct());
-                    statsSpreadsheet[row][platformIdx] = StatisticsUtils.getMetaDataPlatform(getProduct());
-                    statsSpreadsheet[row][processingVersionIdx] = StatisticsUtils.getMetaDataProcessingVersion(getProduct());
-                }
-
-                if (includeMaskMetaData) {
-                    statsSpreadsheet[row][maskDescriptionIdx] = "";
-                    statsSpreadsheet[row][maskExpressionIdx] = "";
-
-                    if (mask != null) {
-                        statsSpreadsheet[row][maskDescriptionIdx] = mask.getDescription();
-                        if (mask.getImageConfig() != null) {
-                            statsSpreadsheet[row][maskExpressionIdx] = mask.getImageConfig().getValue("expression");
-                        }
-                    }
-
-                }
-            }
-
-            if (isIncludeTimeSeriesFields) {
-
-                String bandName = raster.getName();
-
-
-                String productDateTime =  convertBandNameToProductTime(bandName);
-
-                String productDate = null;
-                String productTime = null;
-
-                if (productDateTime != null) {
-                    String[] endDateTimeStringArray = productDateTime.split(" ");
-                    if (endDateTimeStringArray.length >= 2) {
-                        productDate = endDateTimeStringArray[0].trim();
-                        productTime = endDateTimeStringArray[1].trim();
-                    }
-                }
-
-
-                statsSpreadsheet[row][timeSeriesBandDateIdx] = productDate;
-                statsSpreadsheet[row][timeSeriesBandTimeIdx] = productTime;
-            }
         }
 
 
@@ -1590,6 +1566,49 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         return mainPane;
     }
+
+
+    private void addFieldToSpreadsheet(int idx, int row, String header, String entry) {
+
+        if (idx > 0 && idx < statsSpreadsheet[0].length) {
+            if (row <= 1) {
+                statsSpreadsheet[0][idx] = header;
+            }
+
+            if (row < statsSpreadsheet[0].length) {
+                statsSpreadsheet[row][idx] = entry;
+            }
+        }
+    }
+
+    private void addFieldToSpreadsheet(int row, MetaDataFields fileMetaDataField, Object entry) {
+
+        int idx = metaDataFieldsHashMap.get(fileMetaDataField);
+        if (idx > 0 && idx < statsSpreadsheet[0].length) {
+            if (row <= 1) {
+                statsSpreadsheet[0][idx] = fileMetaDataField.toString();
+            }
+
+            if (row < statsSpreadsheet[0].length) {
+                statsSpreadsheet[row][idx] = entry;
+            }
+        }
+    }
+
+    private void addFieldToSpreadsheet(int row, PrimaryStatisticsFields primaryStatisticsField, Object entry) {
+
+        int idx = primaryStatisticsFieldsHashMap.get(primaryStatisticsField);
+        if (idx >= 0 && idx < statsSpreadsheet[0].length) {
+            if (row <= 1) {
+                statsSpreadsheet[0][idx] = primaryStatisticsField.toString();
+            }
+
+            if (row < statsSpreadsheet[0].length) {
+                statsSpreadsheet[row][idx] = entry;
+            }
+        }
+    }
+
 
     static double getBinSize(Histogram histogram) {
         return (histogram.getHighValue(0) - histogram.getLowValue(0)) / histogram.getNumBins(0);
@@ -2014,10 +2033,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         String[] bandNameDateTimeArray = bandName.split("_");
         if (bandNameDateTimeArray.length >= 2) {
             // get last one as band name can also have underscore in it.
-            bandNameDateTime = bandNameDateTimeArray[bandNameDateTimeArray.length-1].trim();
+            bandNameDateTime = bandNameDateTimeArray[bandNameDateTimeArray.length - 1].trim();
         }
 
-        if (bandNameDateTime != null &&  bandNameDateTime.length() > 13) {
+        if (bandNameDateTime != null && bandNameDateTime.length() > 13) {
             String year = bandNameDateTime.substring(0, 4);
             String month = bandNameDateTime.substring(4, 6);
             String day = bandNameDateTime.substring(6, 8);
@@ -2029,7 +2048,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             String[] monthNamesArray = new String[]{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
             int monthIdx = Integer.valueOf(month);
-            String monthStr = monthNamesArray[monthIdx-1];
+            String monthStr = monthNamesArray[monthIdx - 1];
 
             String productDate = day + "-" + monthStr + "-" + year;
             String productTime = hour + ":" + min + ":" + sec;
