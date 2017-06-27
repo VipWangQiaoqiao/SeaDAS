@@ -71,7 +71,9 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final String PARAM_KEY_TIME_METADATA_ENABLED = "statistics.timeMetaData.enabled";
     public static final boolean PARAM_DEFVAL_TIME_METADATA_ENABLED = true;
 
-
+    public static final String PARAM_LABEL_PROJECTION_PARAMETERS_METADATA_ENABLED = "Include Projection Parameters";
+    public static final String PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED = "statistics.projectionParameters.enabled";
+    public static final boolean PARAM_DEFVAL_PROJECTION_PARAMETERS_METADATA_ENABLED = false;
 
     public static final String PARAM_LABEL_PLOTS_THRESH_DOMAIN_LOW = "Plot Domain Low Threshold";
     public static final String PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_LOW = "Low";

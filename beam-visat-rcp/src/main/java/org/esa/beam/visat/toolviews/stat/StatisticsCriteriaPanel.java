@@ -80,6 +80,9 @@ public class StatisticsCriteriaPanel {
     private boolean includeTimeMetaData = StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED;
     private JCheckBox includeTimeMetaDataCheckBox = null;
 
+    private boolean includeProjectionParameters = StatisticsToolView.PARAM_DEFVAL_PROJECTION_PARAMETERS_METADATA_ENABLED;;
+    private JCheckBox includeProjectionParametersCheckBox = null;
+
 
 
 
@@ -167,6 +170,8 @@ public class StatisticsCriteriaPanel {
         includeTimeSeriesMetaData = getPreferencesTimeSeriesMetaDataEnabled();
         includeTimeMetaData = getPreferencesFileTimeMetaDataEnabled();
 
+        includeProjectionParameters = getPreferencesProjectionParametersEnabled();
+
     }
 
     private void initComponents() {
@@ -237,6 +242,9 @@ public class StatisticsCriteriaPanel {
 
         includeBandMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BAND_METADATA_ENABLED);
         includeBandMetaDataCheckBox.setSelected(includeBandMetaData);
+
+        includeProjectionParametersCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PROJECTION_PARAMETERS_METADATA_ENABLED);
+        includeProjectionParametersCheckBox.setSelected(includeProjectionParameters);
 
         includeTimeSeriesMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_TIME_SERIES_METADATA_ENABLED);
         includeTimeSeriesMetaDataCheckBox.setSelected(includeTimeSeriesMetaData);
@@ -461,6 +469,12 @@ public class StatisticsCriteriaPanel {
             }
         });
 
+        includeProjectionParametersCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeProjectionParameters = includeProjectionParametersCheckBox.isSelected();
+            }
+        });
 
 
 
@@ -739,6 +753,9 @@ public class StatisticsCriteriaPanel {
         return includeTimeMetaData;
     }
 
+    public boolean isIncludeProjectionParameters() {
+        return includeProjectionParameters;
+    }
 
 
 
@@ -881,6 +898,10 @@ public class StatisticsCriteriaPanel {
 
         gbc.gridy += 1;
         panel.add(includeTimeSeriesMetaDataCheckBox, gbc);
+
+        gbc.gridy += 1;
+        panel.add(includeProjectionParametersCheckBox, gbc);
+
 
         gbc.gridy += 1;
         panel.add(thresholdsPanel, gbc);
@@ -1379,6 +1400,15 @@ public class StatisticsCriteriaPanel {
             return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED);
         } else {
             return StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED;
+        }
+    }
+
+    public boolean getPreferencesProjectionParametersEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_PROJECTION_PARAMETERS_METADATA_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_PROJECTION_PARAMETERS_METADATA_ENABLED;
         }
     }
 

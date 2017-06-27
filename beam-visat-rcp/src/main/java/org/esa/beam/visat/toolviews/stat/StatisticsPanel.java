@@ -42,6 +42,10 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XIntervalSeries;
 import org.jfree.data.xy.XIntervalSeriesCollection;
 import org.jfree.ui.RectangleInsets;
+import org.opengis.referencing.ReferenceIdentifier;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.util.GenericName;
+import org.opengis.util.InternationalString;
 
 import javax.media.jai.Histogram;
 import javax.swing.*;
@@ -52,7 +56,9 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 
 /**
@@ -162,6 +168,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         Orbit("Orbit"),
         Platform("Platform"),
         ProcessingVersion("Processing_Version"),
+        Projection("Projection"),
+        ProjectionParameters("Projection Parameters"),
         TimeMetaDataBreak(COLUMN_BREAK),
         StartDate("Start_Date"),
         StartTime("Start_Time"),
@@ -216,9 +224,33 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
     }
 
+
+    private void initHashMaps() {
+        metaDataFieldsHashMap = new HashMap<MetaDataFields, Integer>();
+
+        for (MetaDataFields field : MetaDataFields.values()) {
+            metaDataFieldsHashMap.put(field, -1);
+        }
+
+        primaryStatisticsFieldsHashMap = new HashMap<PrimaryStatisticsFields, Integer>();
+
+        for (PrimaryStatisticsFields field : PrimaryStatisticsFields.values()) {
+            primaryStatisticsFieldsHashMap.put(field, -1);
+        }
+
+    }
+
+
+
     @Override
     protected void initComponents() {
         init = true;
+
+
+
+        initHashMaps();
+
+
 
 
         statsSpreadsheet = null;
@@ -799,23 +831,12 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         ;
         boolean includeTimeMetaData = statisticsCriteriaPanel.isIncludeTimeMetaData();
         boolean isIncludeTimeSeriesMetaData = statisticsCriteriaPanel.isIncludeTimeSeriesMetaData();
+        boolean includeProjectionParameters = statisticsCriteriaPanel.isIncludeProjectionParameters();
 
 
         // Initialize all spreadsheet table indices to -1 (default don't use value)
-        if (stxIdx == 0) {
-
-            metaDataFieldsHashMap = new HashMap<MetaDataFields, Integer>();
-
-            for (MetaDataFields field : MetaDataFields.values()) {
-                metaDataFieldsHashMap.put(field, -1);
-            }
-
-            primaryStatisticsFieldsHashMap = new HashMap<PrimaryStatisticsFields, Integer>();
-
-            for (PrimaryStatisticsFields field : PrimaryStatisticsFields.values()) {
-                primaryStatisticsFieldsHashMap.put(field, -1);
-            }
-
+        if (stxIdx == 0 || metaDataFieldsHashMap == null || primaryStatisticsFieldsHashMap == null) {
+               initHashMaps();
         }
 
 
@@ -1158,7 +1179,31 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             stxFieldsStartIdx = fieldIdx;
             fieldIdx += numStxFields;
             stxFieldsEndIdx = fieldIdx - 1;
+            if (includeBandMetaData) {
+                metaDataFieldsHashMap.put(MetaDataFields.BandMetaDataBreak, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.BandName, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.BandUnit, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.BandValidExpression, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.BandDescription, fieldIdx);
+                fieldIdx++;
 
+            }
+
+
+            if (includeMaskMetaData) {
+                metaDataFieldsHashMap.put(MetaDataFields.MaskMetaDataBreak, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.MaskName, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.MaskDescription, fieldIdx);
+                fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.MaskExpression, fieldIdx);
+                fieldIdx++;
+            }
 
             if (includeTimeMetaData || isIncludeTimeSeriesMetaData) {
                 metaDataFieldsHashMap.put(MetaDataFields.TimeMetaDataBreak, fieldIdx);
@@ -1199,44 +1244,28 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.Sensor, fieldIdx);
                 fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.Platform, fieldIdx);
+                fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.Resolution, fieldIdx);
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.DayNight, fieldIdx);
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.Orbit, fieldIdx);
                 fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.Platform, fieldIdx);
-                fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.ProcessingVersion, fieldIdx);
                 fieldIdx++;
-            }
-
-
-            if (includeBandMetaData) {
-                metaDataFieldsHashMap.put(MetaDataFields.BandMetaDataBreak, fieldIdx);
-                fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.BandName, fieldIdx);
-                fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.BandUnit, fieldIdx);
-                fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.BandValidExpression, fieldIdx);
-                fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.BandDescription, fieldIdx);
+                metaDataFieldsHashMap.put(MetaDataFields.Projection, fieldIdx);
                 fieldIdx++;
 
             }
 
 
-            if (includeMaskMetaData) {
-                metaDataFieldsHashMap.put(MetaDataFields.MaskMetaDataBreak, fieldIdx);
-                fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.MaskName, fieldIdx);
-                fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.MaskDescription, fieldIdx);
-                fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.MaskExpression, fieldIdx);
+            if (includeProjectionParameters) {
+                metaDataFieldsHashMap.put(MetaDataFields.ProjectionParameters, fieldIdx);
                 fieldIdx++;
             }
+
+
         }
 
 
@@ -1339,6 +1368,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         addFieldToSpreadsheet(row, MetaDataFields.Orbit, StatisticsUtils.getMetaDataOrbit(getProduct()));
         addFieldToSpreadsheet(row, MetaDataFields.Platform, StatisticsUtils.getMetaDataPlatform(getProduct()));
         addFieldToSpreadsheet(row, MetaDataFields.ProcessingVersion, StatisticsUtils.getMetaDataProcessingVersion(getProduct()));
+        addFieldToSpreadsheet(row, MetaDataFields.Projection, getProduct().getGeoCoding().getMapCRS().getName());
+        addFieldToSpreadsheet(row, MetaDataFields.ProjectionParameters, getProduct().getGeoCoding().getMapCRS().toString().replaceAll("\n", " ").replaceAll(" ", ""));
 
         addFieldToSpreadsheet(row, MetaDataFields.BandMetaDataBreak, COLUMN_BREAK);
         addFieldToSpreadsheet(row, MetaDataFields.BandName, raster.getName());
@@ -1350,6 +1381,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         addFieldToSpreadsheet(row, MetaDataFields.MaskName, maskName);
         addFieldToSpreadsheet(row, MetaDataFields.MaskDescription, maskDescription);
         addFieldToSpreadsheet(row, MetaDataFields.MaskExpression, maskExpression);
+
+
 
 
         // Add Header first time through
