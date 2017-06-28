@@ -15,23 +15,13 @@
  */
 package org.esa.beam.gpf.operators.standard.reproject;
 
+import com.bc.ceres.binding.PropertySet;
+import com.bc.ceres.binding.dom.DomElement;
 import com.bc.ceres.glevel.MultiLevelImage;
 import com.bc.ceres.glevel.MultiLevelModel;
 import com.bc.ceres.glevel.support.AbstractMultiLevelSource;
 import com.bc.ceres.glevel.support.DefaultMultiLevelImage;
-import org.esa.beam.framework.datamodel.Band;
-import org.esa.beam.framework.datamodel.ColorPaletteDef;
-import org.esa.beam.framework.datamodel.CrsGeoCoding;
-import org.esa.beam.framework.datamodel.FlagCoding;
-import org.esa.beam.framework.datamodel.GeoCoding;
-import org.esa.beam.framework.datamodel.GeoPos;
-import org.esa.beam.framework.datamodel.ImageGeometry;
-import org.esa.beam.framework.datamodel.ImageInfo;
-import org.esa.beam.framework.datamodel.IndexCoding;
-import org.esa.beam.framework.datamodel.Product;
-import org.esa.beam.framework.datamodel.ProductData;
-import org.esa.beam.framework.datamodel.ProductNodeGroup;
-import org.esa.beam.framework.datamodel.RasterDataNode;
+import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.dataop.dem.ElevationModel;
 import org.esa.beam.framework.dataop.dem.ElevationModelDescriptor;
 import org.esa.beam.framework.dataop.dem.ElevationModelRegistry;
@@ -45,6 +35,9 @@ import org.esa.beam.framework.gpf.annotations.OperatorMetadata;
 import org.esa.beam.framework.gpf.annotations.Parameter;
 import org.esa.beam.framework.gpf.annotations.SourceProduct;
 import org.esa.beam.framework.gpf.annotations.TargetProduct;
+import org.esa.beam.framework.gpf.descriptor.OperatorDescriptor;
+import org.esa.beam.framework.gpf.ui.OperatorParameterSupport;
+import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.jai.ImageManager;
 import org.esa.beam.jai.ResolutionLevel;
 import org.esa.beam.util.Debug;
@@ -68,6 +61,8 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p/>
@@ -210,6 +205,12 @@ public class ReprojectionOp extends Operator {
     private MultiLevelModel targetModel;
     private Reproject reprojection;
 
+    private OperatorDescriptor operatorDescriptor = null;
+    private OperatorParameterSupport parameterSupport = null;
+
+    private String operatorName = "Reproject";
+
+
     @Override
     public void initialize() throws OperatorException {
         validateCrsParameters();
@@ -282,6 +283,34 @@ public class ReprojectionOp extends Operator {
         ProductUtils.copyMasks(sourceProduct, targetProduct);
         ProductUtils.copyOverlayMasks(sourceProduct, targetProduct);
         targetProduct.setAutoGrouping(sourceProduct.getAutoGrouping());
+
+
+        // todo Danny added these metadata lines
+
+        ProductUtils.setMapProjectionMetaDataFields(targetProduct);
+        ProductUtils.prependHistoryMetaDataField(targetProduct, operatorName);
+        ProductUtils.markProductMetaDataFieldAsDerivedFrom(targetProduct);
+
+        final Map<String, Object> parameterMap = new HashMap<>();
+        updateParameterMap(parameterMap);
+
+        operatorDescriptor = getSpi().getOperatorDescriptor();
+        parameterSupport = new OperatorParameterSupport(operatorDescriptor, null, parameterMap, null);
+
+        String parameterXml = "";
+        try {
+            DomElement domElement = parameterSupport.toDomElement();
+            parameterXml = domElement.toXml();
+        } catch (Exception e) {
+        }
+
+        if (parameterXml != null) {
+            ProductUtils.setMetaDataField(targetProduct, "gpt_" + operatorName + "_parameters", parameterXml.toString().replaceAll("\n", "").replaceAll(" ", ""));
+        }
+
+        // todo end Danny additions
+
+
 
         if (addDeltaBands) {
             addDeltaBands();
@@ -694,5 +723,28 @@ public class ReprojectionOp extends Operator {
                 new ColorPaletteDef.Point((p1 + p2) / 2, new Color(255, 255, 255)),
                 new ColorPaletteDef.Point(p2, new Color(0, 0, 127)),
         }));
+    }
+
+    // todo Danny added this
+    void updateParameterMap(Map<String, Object> parameterMap) {
+        parameterMap.clear();
+        parameterMap.put("resamplingName", resamplingName);
+        parameterMap.put("includeTiePointGrids", includeTiePointGrids);
+        parameterMap.put("addDeltaBands", addDeltaBands);
+        parameterMap.put("noDataValue", noDataValue);
+        parameterMap.put("crs", crs);
+        parameterMap.put("orthorectify", orthorectify);
+        parameterMap.put("elevationModelName", elevationModelName);
+        parameterMap.put("referencePixelX", referencePixelX);
+        parameterMap.put("referencePixelY", referencePixelY);
+        parameterMap.put("easting", easting);
+        parameterMap.put("northing", northing);
+        parameterMap.put("orientation", orientation);
+        parameterMap.put("pixelSizeX", pixelSizeX);
+        parameterMap.put("pixelSizeY", pixelSizeY);
+        parameterMap.put("width", width);
+        parameterMap.put("height", height);
+        parameterMap.put("tileSizeX", tileSizeX);
+        parameterMap.put("tileSizeY", tileSizeY);
     }
 }

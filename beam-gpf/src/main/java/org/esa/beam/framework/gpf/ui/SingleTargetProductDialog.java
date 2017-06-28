@@ -30,6 +30,7 @@ import org.esa.beam.framework.ui.BasicApp;
 import org.esa.beam.framework.ui.ModelessDialog;
 import org.esa.beam.framework.ui.SuppressibleOptionPane;
 import org.esa.beam.gpf.operators.standard.WriteOp;
+import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.SystemUtils;
 import org.esa.beam.util.io.FileUtils;
 
@@ -141,6 +142,9 @@ public abstract class SingleTargetProductDialog extends ModelessDialog {
         }
 
         targetProduct.setName(targetProductSelector.getModel().getProductName());
+        // todo Danny added this to mark some metadata fields as "derived from"
+        ProductUtils.markProductMetaDataFieldAsDerivedFrom(targetProduct);
+
         if (targetProductSelector.getModel().isSaveToFileSelected()) {
             targetProduct.setFileLocation(targetProductSelector.getModel().getProductFile());
             final ProgressMonitorSwingWorker worker = new ProductWriterSwingWorker(targetProduct);
