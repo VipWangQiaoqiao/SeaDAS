@@ -56,7 +56,7 @@ public class CollocationCrsForm extends CrsForm {
 
     @Override
     protected String getLabelText() {
-        return "Use CRS of";
+        return "Use CRS of file";
     }
 
     @Override

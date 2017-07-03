@@ -248,7 +248,7 @@ class ReprojectionForm extends JTabbedPane {
 
     private void createUI() {
         addTab("I/O Parameters", createIOPanel());
-        addTab("Reprojection Parameters", createParametersPanel());
+        addTab("Map Projection & Settings", createParametersPanel());
     }
 
     private JPanel createIOPanel() {

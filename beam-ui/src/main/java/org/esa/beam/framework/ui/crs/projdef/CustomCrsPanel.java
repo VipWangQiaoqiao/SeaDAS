@@ -165,7 +165,7 @@ public class CustomCrsPanel extends JPanel {
         final ComboBoxSearchable datumSearchable = new IdentifiedObjectSearchable(datumComboBox);
         datumSearchable.installListeners();
 
-        paramButton = new JButton("Projection Parameters...");
+        paramButton = new JButton("CRS Parameters...");
         paramButton.addActionListener(new ParameterButtonListener());
         add(datumLabel);
         add(datumComboBox);
