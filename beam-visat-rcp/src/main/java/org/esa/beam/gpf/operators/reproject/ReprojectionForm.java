@@ -530,7 +530,7 @@ class ReprojectionForm extends JTabbedPane {
 
     private JPanel createSourceProductPanel() {
         final JPanel panel = sourceProductSelector.createDefaultPanel();
-        sourceProductSelector.getProductNameLabel().setText("Name:");
+        sourceProductSelector.getProductNameLabel().setText("File:");
         sourceProductSelector.getProductNameComboBox().setPrototypeDisplayValue(
                 "MER_RR__1PPBCM20030730_071000_000003972018_00321_07389_0000.N1");
         sourceProductSelector.addSelectionChangeListener(new AbstractSelectionChangeListener() {

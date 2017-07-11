@@ -91,7 +91,7 @@ public class TargetProductSelector {
         productDirChooserButton.setMinimumSize(size);
 
         if (!alwaysWriteOutput) {
-            saveToFileCheckBox = new JCheckBox("Save as:");
+            saveToFileCheckBox = new JCheckBox("Save file as:");
             formatNameComboBox = new JComboBox<>(model.getFormatNames());
             openInAppCheckBox = new JCheckBox("Open in application");
         }
@@ -186,7 +186,7 @@ public class TargetProductSelector {
         tableLayout.setCellPadding(3, 0, new Insets(3, 3, 3, 3));
 
         final JPanel panel = new JPanel(tableLayout);
-        panel.setBorder(BorderFactory.createTitledBorder("Target File"));
+        panel.setBorder(BorderFactory.createTitledBorder("Output"));
         panel.add(subPanel1);
 
         if (!alwaysWriteOutput) {

@@ -262,7 +262,7 @@ public class SourceProductSelector {
         tableLayout.setRowFill(1, TableLayout.Fill.HORIZONTAL);
         tableLayout.setTablePadding(3, 3);
         JPanel panel = new JPanel(tableLayout);
-        panel.setBorder(BorderFactory.createTitledBorder("Source File"));
+        panel.setBorder(BorderFactory.createTitledBorder("Source"));
         panel.add(getProductNameLabel());
         panel.add(subPanel);
         panel.add(tableLayout.createVerticalSpacer());
