@@ -143,7 +143,7 @@ public abstract class SingleTargetProductDialog extends ModelessDialog {
 
         targetProduct.setName(targetProductSelector.getModel().getProductName());
         // todo Danny added this to mark some metadata fields as "derived from"
-        ProductUtils.markProductMetaDataFieldAsDerivedFrom(targetProduct);
+      //  ProductUtils.markProductMetaDataFieldAsDerivedFrom(targetProduct);
 
         if (targetProductSelector.getModel().isSaveToFileSelected()) {
             targetProduct.setFileLocation(targetProductSelector.getModel().getProductFile());

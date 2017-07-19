@@ -435,7 +435,7 @@ class ReprojectionForm extends JTabbedPane {
 
             panel.add(new JLabel("CRS:"));
             panel.add(crsLabel);
-            wktButton = new JButton("Show WKT");
+            wktButton = new JButton("Show WKT of CRS");
             wktButton.addActionListener(new ActionListener() {
 
                 @Override

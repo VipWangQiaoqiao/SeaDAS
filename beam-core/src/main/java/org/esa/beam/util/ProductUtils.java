@@ -85,7 +85,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,6 +93,8 @@ import java.util.Map;
  * @see org.esa.beam.framework.datamodel.Product
  */
 public class ProductUtils {
+
+    private static String GLOBAL_ATTRIBUTES_KEY = "Global_Attributes";
 
     private static final int[] RGB_BAND_OFFSETS = new int[]{
             2, 1, 0
@@ -1410,7 +1411,6 @@ public class ProductUtils {
     // todo Danny added this
     public static void markAsDerivedFromMetaDataField(Product product, String attribute) {
 
-        String GLOBAL_ATTRIBUTES_KEY = "Global_Attributes";
         String tag = "Derived from (";
 
         if (attribute != null && attribute.length() > 0 && product != null && product.getMetadataRoot() != null && product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY) != null) {
@@ -1418,22 +1418,17 @@ public class ProductUtils {
 
             String value = "";
 
-            if (metadataElement.getAttribute(attribute) != null) {
-                value = metadataElement.getAttribute(attribute).getData().toString();
+            MetadataAttribute metadataAttribute = metadataElement.getAttribute(attribute);
+
+            if (metadataAttribute != null) {
+                value = metadataAttribute.getData().toString();
 
                 if (value != null && value.length() > 0 && !value.startsWith(tag)) {
-                    metadataElement.getAttribute(attribute).setReadOnly(false);
-                    metadataElement.getAttribute(attribute).setModified(true);
-
                     value = tag + value + ")";
-                    metadataElement.setAttributeString(attribute, value);
-
-                    metadataElement.getAttribute(attribute).setReadOnly(true);
-
+                    setMetaDataField(product, attribute, value);
                 }
             }
         }
-
 
     }
 
@@ -1462,110 +1457,147 @@ public class ProductUtils {
     // todo Danny added this
     public static void prependHistoryMetaDataField(Product product, String latestHistoryEvent) {
 
-        String GLOBAL_ATTRIBUTES_KEY = "Global_Attributes";
         String HISTORY_KEY = "history";
+        String history = latestHistoryEvent;
 
         if (product != null && product.getMetadataRoot() != null && product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY) != null) {
+
             MetadataElement metadataElement = product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY);
 
-            String previousHistory = "";
-
             if (metadataElement.getAttribute(HISTORY_KEY) != null) {
-                metadataElement.getAttribute(HISTORY_KEY).setReadOnly(false);
-                metadataElement.getAttribute(HISTORY_KEY).setModified(true);
-                previousHistory = metadataElement.getAttribute(HISTORY_KEY).getData().toString();
+                String previousHistory = metadataElement.getAttribute(HISTORY_KEY).getData().toString();
+
+                if (previousHistory.length() > 0) {
+                    history = latestHistoryEvent + " :: " + previousHistory;
+                }
             }
 
-            String history = latestHistoryEvent;
+            setMetaDataField(product, HISTORY_KEY, history);
+        }
+    }
 
-            if (previousHistory.length() > 0) {
-                history += " :<: " + previousHistory;
+
+    // todo Danny added this
+    public static void setResolutionMetaDataField(Product product, boolean markAsDerivedFrom) {
+
+        String RESOLUTION_KEY = "spatial_resolution";
+        String[] possibleCurrentResolutionsKeys = {"spatialResolution", "resolution", "Resolution"};
+
+        setMetaDataFieldFromPossible(product, RESOLUTION_KEY, possibleCurrentResolutionsKeys);
+        deleteMetaDataFields(product, possibleCurrentResolutionsKeys);
+
+        if (markAsDerivedFrom) {
+            markAsDerivedFromMetaDataField(product, RESOLUTION_KEY);
+        }
+    }
+
+
+    // todo Danny added this
+    // if attribute does not exist then set to first value found from the possibleAttributes
+    public static void setMetaDataFieldFromPossible(Product product, String attribute, String[] possibleAttributes) {
+
+        if (product != null && product.getMetadataRoot() != null) {
+            MetadataElement metadataElement = product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY);
+
+            if (metadataElement != null) {
+                MetadataAttribute metadataAttribute = metadataElement.getAttribute(attribute);
+
+                if (metadataAttribute == null) {
+                    for (String key : possibleAttributes) {
+                        if (metadataElement.getAttribute(key) != null) {
+                            String value = metadataElement.getAttribute(key).getData().toString();
+                            setMetaDataField(product, attribute, value);
+                            break;
+                        }
+                    }
+                }
             }
-
-            metadataElement.setAttributeString(HISTORY_KEY, history);
-
-            metadataElement.getAttribute(HISTORY_KEY).setReadOnly(true);
         }
     }
 
 
     // todo Danny added this
     public static void setMapProjectionMetaDataFields(Product product) {
-        ProductUtils.markAsDerivedFromMetaDataField(product, "spatialResolution");
 
         String MAP_PROJECTION_KEY = "map_projection";
-        String MAP_PROJECTION_PARAMETERS_KEY = "crs";
-        String GLOBAL_ATTRIBUTES_KEY = "Global_Attributes";
+        String CRS_KEY = "crs";
         String UNDEFINED_VALUE = "undefined";
         String[] keysToDelete = {"projection", "mapprojection", "coordinatesystem", "coordinatereferencesystem", "coordinate_system", "geocoding", "geo_coding"};
 
 
         if (product != null && product.getMetadataRoot() != null && product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY) != null) {
 
-            MetadataElement metadataElement = product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY);
+            deleteMetaDataFields(product, keysToDelete);
 
-            // try get rid of params with different naming convention
-            for (String key : keysToDelete) {
-                MetadataAttribute metadataAttribute = metadataElement.getAttribute(key);
-                if (metadataAttribute != null) {
-                    metadataAttribute.setReadOnly(false);
-                    metadataAttribute.setModified(true);
-                    metadataElement.setAttributeString(key, " ");
-                }
-            }
-
-
-            if (metadataElement.getAttribute(MAP_PROJECTION_KEY) != null) {
-                metadataElement.getAttribute(MAP_PROJECTION_KEY).setReadOnly(false);
-                metadataElement.getAttribute(MAP_PROJECTION_KEY).setModified(true);
-            }
-
-            if (metadataElement.getAttribute(MAP_PROJECTION_PARAMETERS_KEY) != null) {
-                metadataElement.getAttribute(MAP_PROJECTION_PARAMETERS_KEY).setReadOnly(false);
-                metadataElement.getAttribute(MAP_PROJECTION_PARAMETERS_KEY).setModified(true);
-            }
+            String mapProjectionString = UNDEFINED_VALUE;
+            String crsString = UNDEFINED_VALUE;
 
             if (product.getGeoCoding() != null && product.getGeoCoding().getMapCRS() != null) {
                 if (product.getGeoCoding().getMapCRS().getName() != null) {
-                    metadataElement.setAttributeString(MAP_PROJECTION_KEY, product.getGeoCoding().getMapCRS().getName().toString());
+                    mapProjectionString = product.getGeoCoding().getMapCRS().getName().toString();
                 }
                 if (product.getGeoCoding().getMapCRS().toString() != null) {
-                    metadataElement.setAttributeString(MAP_PROJECTION_PARAMETERS_KEY, product.getGeoCoding().getMapCRS().toString().replaceAll("\n", "").replaceAll(" ", ""));
+                    crsString = product.getGeoCoding().getMapCRS().toString().replaceAll("\n", "").replaceAll(" ", "");
                 }
-            } else {
-                metadataElement.setAttributeString(MAP_PROJECTION_KEY, UNDEFINED_VALUE);
-                metadataElement.setAttributeString(MAP_PROJECTION_PARAMETERS_KEY, UNDEFINED_VALUE);
             }
 
-            metadataElement.getAttribute(MAP_PROJECTION_KEY).setReadOnly(true);
-            metadataElement.getAttribute(MAP_PROJECTION_PARAMETERS_KEY).setReadOnly(true);
+            setMetaDataField(product, MAP_PROJECTION_KEY, mapProjectionString);
+            setMetaDataField(product, CRS_KEY, crsString);
         }
     }
 
 
     // todo Danny added this
-    public static void setMetaDataField(Product product, String field, String value) {
-        ProductUtils.markAsDerivedFromMetaDataField(product, "spatialResolution");
+    public static void deleteMetaDataFields(Product product, String[] fields) {
 
-        String GLOBAL_ATTRIBUTES_KEY = "Global_Attributes";
+        MetadataElement metadataElement = product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY);
+
+        for (String key : fields) {
+            MetadataAttribute metadataAttribute = metadataElement.getAttribute(key);
+            if (metadataAttribute != null) {
+                metadataAttribute.setReadOnly(false);
+                metadataElement.removeAttribute(metadataAttribute);
+            }
+        }
+    }
+
+
+    // todo Danny added this
+    public static void deleteMetaDataField(Product product, String field) {
+        String[] fields = {field};
+        deleteMetaDataFields(product, fields);
+    }
+
+
+    // todo Danny added this
+    public static void setMetaDataField(Product product, String field, String value) {
+
         String UNDEFINED_VALUE = "undefined";
 
         if (product != null && product.getMetadataRoot() != null && product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY) != null) {
 
             MetadataElement metadataElement = product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY);
 
-            if (metadataElement.getAttribute(field) != null) {
-                metadataElement.getAttribute(field).setReadOnly(false);
-                metadataElement.getAttribute(field).setModified(true);
+            MetadataAttribute metadataAttribute = metadataElement.getAttribute(field);
+            if (metadataAttribute != null) {
+                metadataAttribute.setReadOnly(false);
+                metadataAttribute.setModified(true);
             }
 
-            if (value != null) {
-                metadataElement.setAttributeString(field, value);
-            } else {
-                metadataElement.setAttributeString(field, UNDEFINED_VALUE);
+            // this wont do anything if attribute is not a String type
+            try {
+                if (value != null) {
+                    metadataElement.setAttributeString(field, value);
+                } else {
+                    metadataElement.setAttributeString(field, UNDEFINED_VALUE);
+                }
+            } catch (Exception e) {
+
             }
 
-            metadataElement.getAttribute(field).setReadOnly(true);
+            if (metadataAttribute != null) {
+                metadataAttribute.setReadOnly(true);
+            }
         }
     }
 
@@ -1626,12 +1658,12 @@ public class ProductUtils {
                 String name = sourceVDN.getName();
                 FeatureCollection<SimpleFeatureType, SimpleFeature> featureCollection = sourceVDN.getFeatureCollection();
                 featureCollection = FeatureUtils.clipCollection(featureCollection,
-                                                                srcModelCrs,
-                                                                clipGeometry,
-                                                                DefaultGeographicCRS.WGS84,
-                                                                null,
-                                                                targetModelCrs,
-                                                                ProgressMonitor.NULL);
+                        srcModelCrs,
+                        clipGeometry,
+                        DefaultGeographicCRS.WGS84,
+                        null,
+                        targetModelCrs,
+                        ProgressMonitor.NULL);
                 if (!targetProduct.getVectorDataGroup().contains(name)) {
                     targetProduct.getVectorDataGroup().add(new VectorDataNode(name, featureCollection.getSchema()));
                 }
@@ -1648,13 +1680,12 @@ public class ProductUtils {
      * Returns whether or not a product can return a pixel position from a given geographical position.
      *
      * @param product the product to be checked
-     *
      * @return <code>true</code> if the given product can return a pixel position
      */
     public static boolean canGetPixelPos(Product product) {
         return product != null
-               && product.getGeoCoding() != null
-               && product.getGeoCoding().canGetPixelPos();
+                && product.getGeoCoding() != null
+                && product.getGeoCoding().canGetPixelPos();
     }
 
     /**

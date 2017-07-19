@@ -288,6 +288,7 @@ public class ReprojectionOp extends Operator {
         // todo Danny added these metadata lines
 
         ProductUtils.setMapProjectionMetaDataFields(targetProduct);
+        ProductUtils.setResolutionMetaDataField(targetProduct, true);
         ProductUtils.prependHistoryMetaDataField(targetProduct, operatorName);
         ProductUtils.markProductMetaDataFieldAsDerivedFrom(targetProduct);
 
@@ -305,7 +306,7 @@ public class ReprojectionOp extends Operator {
         }
 
         if (parameterXml != null) {
-            ProductUtils.setMetaDataField(targetProduct, "gpt_" + operatorName + "_parameters", parameterXml.toString().replaceAll("\n", "").replaceAll(" ", ""));
+            ProductUtils.setMetaDataField(targetProduct, operatorName + "_gpt_parameters", parameterXml.toString().replaceAll("\n", "").replaceAll(" ", ""));
         }
 
         // todo end Danny additions
