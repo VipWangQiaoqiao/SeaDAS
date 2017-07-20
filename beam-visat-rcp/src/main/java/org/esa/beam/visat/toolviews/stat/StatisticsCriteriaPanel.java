@@ -53,10 +53,10 @@ public class StatisticsCriteriaPanel {
     private JTextField percentThresholdsTextField = null;
     private JLabel percentThresholdsLabel = null;
 
-    private boolean includeMedian = true;
+    private boolean includeMedian = StatisticsToolView.PARAM_DEFVAL_MEDIAN_ENABLED;
     private JCheckBox includeMedianCheckBox = null;
 
-    private boolean includeHistogramStats = false;
+    private boolean includeHistogramStats = StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_STATS_ENABLED;
     private JCheckBox includeHistogramStatsCheckBox = null;
 
     private boolean includeFileRefNo = true;
@@ -95,7 +95,8 @@ public class StatisticsCriteriaPanel {
     private int decimalPlaces = StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES;
     private TextFieldContainer decimalPlacesTextfieldContainer = null;
 
-
+    private boolean includeColBreaks = StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED;
+    private JCheckBox includeColBreaksCheckBox = null;
 
 
 
@@ -171,6 +172,9 @@ public class StatisticsCriteriaPanel {
         includeTimeMetaData = getPreferencesFileTimeMetaDataEnabled();
 
         includeProjectionParameters = getPreferencesProjectionParametersEnabled();
+        includeColBreaks = getPreferencesColumnBreaksEnabled();
+        includeHistogramStats = getPreferencesHistogramStatsEnabled();
+        includeMedian = getPreferencesMedianEnabled();
 
     }
 
@@ -228,10 +232,10 @@ public class StatisticsCriteriaPanel {
         percentThresholdsTextField.setName(StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS);
         percentThresholdsTextField.setText(percentThresholds);
 
-        includeMedianCheckBox = new JCheckBox("Show Median");
+        includeMedianCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_MEDIAN_ENABLED);
         includeMedianCheckBox.setSelected(includeMedian);
 
-        includeHistogramStatsCheckBox = new JCheckBox("Show Histogram Statistics");
+        includeHistogramStatsCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_HISTOGRAM_STATS_ENABLED);
         includeHistogramStatsCheckBox.setSelected(includeHistogramStats);
 
         includeFileMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_FILE_METADATA_ENABLED);
@@ -275,7 +279,8 @@ public class StatisticsCriteriaPanel {
                 getParentDialogContentPane);
 
 
-
+        includeColBreaksCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_COL_BREAKS_ENABLED);
+        includeColBreaksCheckBox.setSelected(includeColBreaks);
 
 
 
@@ -481,6 +486,12 @@ public class StatisticsCriteriaPanel {
 
         // "Text" Tab Variables and Components
 
+        includeColBreaksCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeColBreaks = includeColBreaksCheckBox.isSelected();
+            }
+        });
 
 
         // "Plots" Tab Variables and Components
@@ -757,6 +768,9 @@ public class StatisticsCriteriaPanel {
         return includeProjectionParameters;
     }
 
+    public boolean isIncludeColBreaks() {
+        return includeColBreaks;
+    }
 
 
     // "Text" Tab Variables and Components
@@ -936,6 +950,9 @@ public class StatisticsCriteriaPanel {
         gbc.insets.top = 0;
         gbc.gridy += 1;
         panel.add(getColWidthPanel(), gbc);
+
+        gbc.gridy += 1;
+        panel.add(includeColBreaksCheckBox, gbc);
 
 
         // Add filler panel at bottom which expands as needed to force all components within this panel to the top
@@ -1384,6 +1401,26 @@ public class StatisticsCriteriaPanel {
         }
     }
 
+    public boolean getPreferencesMedianEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_MEDIAN_ENABLED, StatisticsToolView.PARAM_DEFVAL_MEDIAN_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_MEDIAN_ENABLED;
+        }
+    }
+
+    public boolean getPreferencesHistogramStatsEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_HISTOGRAM_STATS_ENABLED, StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_STATS_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_STATS_ENABLED;
+        }
+    }
+
+
+
     public boolean getPreferencesMaskMetaDataEnabled() {
 
         if (configuration != null) {
@@ -1412,6 +1449,18 @@ public class StatisticsCriteriaPanel {
         }
     }
 
+
+    public boolean getPreferencesColumnBreaksEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_COL_BREAKS_ENABLED, StatisticsToolView.PARAM_DEFVAL_COL_BREAKS_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_COL_BREAKS_ENABLED;
+        }
+    }
+
+
+
     public boolean getPreferencesTimeSeriesMetaDataEnabled() {
 
         if (configuration != null) {
@@ -1429,6 +1478,7 @@ public class StatisticsCriteriaPanel {
             return StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED;
         }
     }
+
 
 
 

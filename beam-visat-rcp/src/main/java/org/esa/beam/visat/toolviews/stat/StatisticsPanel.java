@@ -832,6 +832,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         boolean includeTimeMetaData = statisticsCriteriaPanel.isIncludeTimeMetaData();
         boolean isIncludeTimeSeriesMetaData = statisticsCriteriaPanel.isIncludeTimeSeriesMetaData();
         boolean includeProjectionParameters = statisticsCriteriaPanel.isIncludeProjectionParameters();
+        boolean includeColumnBreaks = statisticsCriteriaPanel.isIncludeColBreaks();
 
 
         // Initialize all spreadsheet table indices to -1 (default don't use value)
@@ -1180,8 +1181,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             fieldIdx += numStxFields;
             stxFieldsEndIdx = fieldIdx - 1;
             if (includeBandMetaData) {
-                metaDataFieldsHashMap.put(MetaDataFields.BandMetaDataBreak, fieldIdx);
-                fieldIdx++;
+                if (includeColumnBreaks) {
+                    metaDataFieldsHashMap.put(MetaDataFields.BandMetaDataBreak, fieldIdx);
+                    fieldIdx++;
+                }
                 metaDataFieldsHashMap.put(MetaDataFields.BandName, fieldIdx);
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.BandUnit, fieldIdx);
@@ -1195,8 +1198,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
             if (includeMaskMetaData) {
-                metaDataFieldsHashMap.put(MetaDataFields.MaskMetaDataBreak, fieldIdx);
-                fieldIdx++;
+                if (includeColumnBreaks) {
+                    metaDataFieldsHashMap.put(MetaDataFields.MaskMetaDataBreak, fieldIdx);
+                    fieldIdx++;
+                }
                 metaDataFieldsHashMap.put(MetaDataFields.MaskName, fieldIdx);
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.MaskDescription, fieldIdx);
@@ -1206,8 +1211,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
 
             if (includeTimeMetaData || isIncludeTimeSeriesMetaData) {
-                metaDataFieldsHashMap.put(MetaDataFields.TimeMetaDataBreak, fieldIdx);
-                fieldIdx++;
+                if (includeColumnBreaks) {
+                    metaDataFieldsHashMap.put(MetaDataFields.TimeMetaDataBreak, fieldIdx);
+                    fieldIdx++;
+                }
 
                 if (includeTimeMetaData) {
                     metaDataFieldsHashMap.put(MetaDataFields.StartDate, fieldIdx);
@@ -1230,8 +1237,10 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
             if (includeFileMetaData) {
-                metaDataFieldsHashMap.put(MetaDataFields.FileMetaDataBreak, fieldIdx);
-                fieldIdx++;
+                if (includeColumnBreaks) {
+                    metaDataFieldsHashMap.put(MetaDataFields.FileMetaDataBreak, fieldIdx);
+                    fieldIdx++;
+                }
                 metaDataFieldsHashMap.put(MetaDataFields.FileName, fieldIdx);
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.FileType, fieldIdx);
@@ -1363,13 +1372,36 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         addFieldToSpreadsheet(row, MetaDataFields.FileHeight, getProduct().getSceneRasterHeight());
         addFieldToSpreadsheet(row, MetaDataFields.FileFormat, getProductFormatName(getProduct()));
         addFieldToSpreadsheet(row, MetaDataFields.Sensor, StatisticsUtils.getMetaDataSensor(getProduct()));
-        addFieldToSpreadsheet(row, MetaDataFields.Resolution, StatisticsUtils.getMetaData(getProduct(), "spatialResolution"));
+
+
+        String[] resolutionFields = {"spatial_resolution", "spatialResolution"};
+        addFieldToSpreadsheet(row, MetaDataFields.Resolution, StatisticsUtils.getMetaData(getProduct(), resolutionFields));
         addFieldToSpreadsheet(row, MetaDataFields.DayNight, StatisticsUtils.getMetaData(getProduct(), "day_night_flag"));
         addFieldToSpreadsheet(row, MetaDataFields.Orbit, StatisticsUtils.getMetaDataOrbit(getProduct()));
         addFieldToSpreadsheet(row, MetaDataFields.Platform, StatisticsUtils.getMetaDataPlatform(getProduct()));
         addFieldToSpreadsheet(row, MetaDataFields.ProcessingVersion, StatisticsUtils.getMetaDataProcessingVersion(getProduct()));
-        addFieldToSpreadsheet(row, MetaDataFields.Projection, getProduct().getGeoCoding().getMapCRS().getName());
-        addFieldToSpreadsheet(row, MetaDataFields.ProjectionParameters, getProduct().getGeoCoding().getMapCRS().toString().replaceAll("\n", " ").replaceAll(" ", ""));
+
+
+
+        // Determine projection
+        String projection = "";
+        String projectionParameters = "";
+        GeoCoding geo = getProduct().getGeoCoding();
+        // determine if using class BowtiePixelGeoCoding in which case there is no CRS
+        if (geo != null) {
+            if (geo != null && geo.toString() != null && geo.toString().contains("Bowtie")) {
+                projection = geo.toString();
+            } else {
+
+                projection = geo.getMapCRS().getName().toString();
+                projectionParameters =  geo.getMapCRS().toString().replaceAll("\n", " ").replaceAll(" ", "");
+            }
+        } else {
+
+        }
+        addFieldToSpreadsheet(row, MetaDataFields.Projection, projection);
+        addFieldToSpreadsheet(row, MetaDataFields.ProjectionParameters, projectionParameters);
+
 
         addFieldToSpreadsheet(row, MetaDataFields.BandMetaDataBreak, COLUMN_BREAK);
         addFieldToSpreadsheet(row, MetaDataFields.BandName, raster.getName());

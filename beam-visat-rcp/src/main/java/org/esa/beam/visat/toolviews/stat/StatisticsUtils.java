@@ -242,7 +242,6 @@ public class StatisticsUtils {
 
     public static String getMetaData(Product product, String key) {
         // Created by Daniel Knowles
-        // Note this tries to retrieve a platform name
         String metaData = "";
 
         try {
@@ -251,6 +250,28 @@ public class StatisticsUtils {
             try {
                 metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
             } catch (Exception ignored) {
+            }
+        }
+
+        return metaData;
+    }
+
+    public static String getMetaData(Product product, String[] keys) {
+        // Created by Daniel Knowles
+        String metaData = "";
+
+        for (String key: keys) {
+            try {
+                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+            } catch (Exception ignore) {
+                try {
+                    metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+                } catch (Exception ignored) {
+                }
+            }
+
+            if (metaData.length() > 0) {
+                return metaData;
             }
         }
 

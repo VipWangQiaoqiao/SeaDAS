@@ -952,6 +952,10 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
+            param = new Parameter(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_PROJECTION_PARAMETERS_METADATA_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_PROJECTION_PARAMETERS_METADATA_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
 
             param = new Parameter(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED);
             param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_MASK_METADATA_ENABLED);
@@ -973,6 +977,16 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
+            param = new Parameter(StatisticsToolView.PARAM_KEY_MEDIAN_ENABLED, StatisticsToolView.PARAM_DEFVAL_MEDIAN_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_MEDIAN_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_HISTOGRAM_STATS_ENABLED, StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_STATS_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_HISTOGRAM_STATS_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
         }
 
         @Override
@@ -985,57 +999,85 @@ public class VisatPreferencesDialog extends ConfigDialog {
             Parameter param;
 
 
+            JPanel fieldsPane = GridBagUtils.createPanel();
+            fieldsPane.setBorder(UIUtils.createGroupBorder("Fields")); /*I18N*/
+            GridBagConstraints gbcFields = GridBagUtils.createConstraints("");
+            gbcFields.gridy = 0;
 
-            JPanel optionsPane = GridBagUtils.createPanel();
-            optionsPane.setBorder(UIUtils.createGroupBorder("Options")); /*I18N*/
-            GridBagConstraints gbcOptions = GridBagUtils.createConstraints("");
-            gbcOptions.gridy = 0;
+
+            JPanel viewPane = GridBagUtils.createPanel();
+            viewPane.setBorder(UIUtils.createGroupBorder("View")); /*I18N*/
+            GridBagConstraints gbcView = GridBagUtils.createConstraints("");
+            gbcView.gridy = 0;
+
+
+            JPanel binsPane = GridBagUtils.createPanel();
+            binsPane.setBorder(UIUtils.createGroupBorder("Bins")); /*I18N*/
+            GridBagConstraints gbcBins = GridBagUtils.createConstraints("");
+            gbcBins.gridy = 0;
 
 
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_HISTOGRAM_PLOT_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(viewPane, param, gbcView);
+            gbcView.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_PLOT_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(viewPane, param, gbcView);
+            gbcView.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_STATS_LIST_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(viewPane, param, gbcView);
+            gbcView.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(viewPane, param, gbcView);
+            gbcView.gridy++;
 
-            param = getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_NUM_BINS);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(binsPane, param, gbcBins);
+            gbcBins.gridy++;
+
+
+
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_MEDIAN_ENABLED);
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_HISTOGRAM_STATS_ENABLED);
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
-
-            param = getConfigParam(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_TIME_METADATA_ENABLED);
-            addParamToPane(optionsPane, param, gbcOptions);
-            gbcOptions.gridy++;
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED);
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED);
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS);
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
+
 
 
 
@@ -1055,7 +1097,11 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbcContents.gridx = 0;
             gbcContents.gridy = 0;
             gbcContents.insets.bottom = 10;
-            contentsPanel.add(optionsPane, gbcContents);
+            contentsPanel.add(binsPane, gbcContents);
+            gbcContents.gridy++;
+            contentsPanel.add(fieldsPane, gbcContents);
+            gbcContents.gridy++;
+            contentsPanel.add(viewPane, gbcContents);
             gbcContents.gridy++;
             contentsPanel.add(resetPane, gbcContents);
 
@@ -1095,6 +1141,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_TIME_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_PROJECTION_PARAMETERS_METADATA_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_MEDIAN_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_MEDIAN_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_HISTOGRAM_STATS_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_STATS_ENABLED, errorHandler);
 
         }
 

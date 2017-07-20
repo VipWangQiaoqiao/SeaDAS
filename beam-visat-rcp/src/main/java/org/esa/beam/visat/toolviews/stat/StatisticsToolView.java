@@ -51,6 +51,20 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final int PARAM_MINVAL_NUM_BINS = 1;
     public static final int PARAM_MAXVAL_NUM_BINS = 1000000;
 
+
+    public static final String PARAM_LABEL_COL_BREAKS_ENABLED = "Include Column Breaks";
+    public static final String PARAM_KEY_COL_BREAKS_ENABLED = "statistics.columnBreaks.enabled";
+    public static final boolean PARAM_DEFVAL_COL_BREAKS_ENABLED = true;
+
+
+    public static final String PARAM_LABEL_MEDIAN_ENABLED = "Include Median";
+    public static final String PARAM_KEY_MEDIAN_ENABLED = "statistics.median.enabled";
+    public static final boolean PARAM_DEFVAL_MEDIAN_ENABLED = true;
+
+    public static final String PARAM_LABEL_HISTOGRAM_STATS_ENABLED = "Include Histogram Statistics";
+    public static final String PARAM_KEY_HISTOGRAM_STATS_ENABLED = "statistics.histogramStats.enabled";
+    public static final boolean PARAM_DEFVAL_HISTOGRAM_STATS_ENABLED = false;
+
     public static final String PARAM_LABEL_FILE_METADATA_ENABLED = "Include File MetaData";
     public static final String PARAM_KEY_FILE_METADATA_ENABLED = "statistics.fileMetaData.enabled";
     public static final boolean PARAM_DEFVAL_FILE_METADATA_ENABLED = true;
