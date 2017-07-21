@@ -57,6 +57,7 @@ class MultipleRoiComputePanel extends JPanel {
     private QuickListFilterField bandNameSearchField;
 
 
+    private ComputeMasks method;
 
     interface ComputeMasks {
 
@@ -90,6 +91,7 @@ class MultipleRoiComputePanel extends JPanel {
 
 
     MultipleRoiComputePanel(final ComputeMasks method, final RasterDataNode rasterDataNode) {
+        this.method = method;
 
         setLayout(new GridBagLayout());
         JPanel topPane = getTopPanel(method, rasterDataNode);
@@ -376,39 +378,7 @@ class MultipleRoiComputePanel extends JPanel {
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setRunning(true);
-                boolean useRoi = useRoiCheckBox.isSelected();
-                Mask[] selectedMasks;
-                if (useRoi) {
-                    int[] listIndexes = maskNameList.getCheckBoxListSelectedIndices();
-                    if (listIndexes.length > 0) {
-                        selectedMasks = new Mask[listIndexes.length];
-                        for (int i = 0; i < listIndexes.length; i++) {
-                            int listIndex = listIndexes[i];
-                            String maskName = maskNameList.getModel().getElementAt(listIndex).toString();
-                            selectedMasks[i] = raster.getProduct().getMaskGroup().get(maskName);
-                        }
-                    } else {
-                        selectedMasks = new Mask[]{null};
-                    }
-                } else {
-                    selectedMasks = new Mask[]{null};
-                }
-
-                Band[] selectedBands;
-                int[] bandListIndexes = bandNameList.getCheckBoxListSelectedIndices();
-                if (bandListIndexes.length > 0) {
-                    selectedBands = new Band[bandListIndexes.length];
-                    for (int i = 0; i < bandListIndexes.length; i++) {
-                        int listIndex = bandListIndexes[i];
-                        String bandName = bandNameList.getModel().getElementAt(listIndex).toString();
-                        selectedBands[i] = raster.getProduct().getBandGroup().get(bandName);
-                    }
-                } else {
-                    selectedBands = new Band[]{null};
-                }
-
-                method.compute(selectedMasks, selectedBands);
+               run();
             }
         });
 
@@ -421,6 +391,42 @@ class MultipleRoiComputePanel extends JPanel {
         panel.setPreferredSize(panel.getPreferredSize());
 
         return panel;
+    }
+
+    public void run() {
+        setRunning(true);
+        boolean useRoi = useRoiCheckBox.isSelected();
+        Mask[] selectedMasks;
+        if (useRoi) {
+            int[] listIndexes = maskNameList.getCheckBoxListSelectedIndices();
+            if (listIndexes.length > 0) {
+                selectedMasks = new Mask[listIndexes.length];
+                for (int i = 0; i < listIndexes.length; i++) {
+                    int listIndex = listIndexes[i];
+                    String maskName = maskNameList.getModel().getElementAt(listIndex).toString();
+                    selectedMasks[i] = raster.getProduct().getMaskGroup().get(maskName);
+                }
+            } else {
+                selectedMasks = new Mask[]{null};
+            }
+        } else {
+            selectedMasks = new Mask[]{null};
+        }
+
+        Band[] selectedBands;
+        int[] bandListIndexes = bandNameList.getCheckBoxListSelectedIndices();
+        if (bandListIndexes.length > 0) {
+            selectedBands = new Band[bandListIndexes.length];
+            for (int i = 0; i < bandListIndexes.length; i++) {
+                int listIndex = bandListIndexes[i];
+                String bandName = bandNameList.getModel().getElementAt(listIndex).toString();
+                selectedBands[i] = raster.getProduct().getBandGroup().get(bandName);
+            }
+        } else {
+            selectedBands = new Band[]{null};
+        }
+
+        method.compute(selectedMasks, selectedBands);
     }
 
     private JPanel getMaskFilterPanel() {

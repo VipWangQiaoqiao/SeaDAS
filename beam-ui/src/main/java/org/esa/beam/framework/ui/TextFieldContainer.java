@@ -165,6 +165,12 @@ public class TextFieldContainer {
     //    }
     }
 
+    public void reset(Number defval) {
+        this.defval = defval;
+
+        getTextfield().setText(defval.toString());
+    }
+
     public void setEnabled(boolean enabled) {
         if (getLabel() != null) {
             getLabel().setEnabled(enabled);

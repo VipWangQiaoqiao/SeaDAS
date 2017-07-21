@@ -18,6 +18,7 @@ package org.esa.beam.visat.toolviews.stat;
 
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
+import com.bc.ceres.swing.Grid;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.dataio.ProductReaderPlugIn;
@@ -367,6 +368,26 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         GridBagUtils.addToPanel(rightPanel, statisticsCriteriaPanel.getCriteriaFormattingTabbedPane(), extendedOptionsPanelConstraints, "gridy=1,fill=BOTH,weighty=0, insets.top=10");
 
+        JButton resetToDefaultsButton = new JButton("Reset");
+        resetToDefaultsButton.addActionListener(new ActionListener() {
+                                                    @Override
+                                                    public void actionPerformed(ActionEvent e) {
+                                                        statisticsCriteriaPanel.reset();
+                                                    }
+                                                }
+        );
+
+        JButton runButton = new JButton("Run");
+        runButton.addActionListener(new ActionListener() {
+                                                    @Override
+                                                    public void actionPerformed(ActionEvent e) {
+                                                        computePanel.run();
+                                                    }
+                                                }
+        );
+
+
+
 
         exportButton = getExportButton();
         exportButton.setToolTipText("Export: This only exports the binning portion of the statistics");
@@ -374,9 +395,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         final JPanel exportAndHelpPanel = GridBagUtils.createPanel();
         GridBagConstraints helpPanelConstraints = GridBagUtils.createConstraints("anchor=NORTHWEST,fill=HORIZONTAL,insets.top=2,weightx=1,ipadx=0");
-        GridBagUtils.addToPanel(exportAndHelpPanel, new JSeparator(), helpPanelConstraints, "fill=HORIZONTAL,gridwidth=2,insets.left=5,insets.right=5");
-        GridBagUtils.addToPanel(exportAndHelpPanel, exportButton, helpPanelConstraints, "gridy=1,anchor=WEST,fill=NONE");
-        GridBagUtils.addToPanel(exportAndHelpPanel, getHelpButton(), helpPanelConstraints, "gridx=1,gridy=1,anchor=EAST,fill=NONE");
+        GridBagUtils.addToPanel(exportAndHelpPanel, new JSeparator(), helpPanelConstraints, "fill=HORIZONTAL,gridwidth=4,insets.left=5,insets.right=5");
+        GridBagUtils.addToPanel(exportAndHelpPanel, exportButton, helpPanelConstraints, "gridy=1,anchor=WEST,fill=NONE, gridwidth=1");
+        GridBagUtils.addToPanel(exportAndHelpPanel, runButton, helpPanelConstraints, "gridx=1, gridy=1,anchor=WEST,fill=NONE");
+        GridBagUtils.addToPanel(exportAndHelpPanel, resetToDefaultsButton, helpPanelConstraints, "gridx=2, gridy=1,anchor=CENTER,fill=NONE");
+        GridBagUtils.addToPanel(exportAndHelpPanel, getHelpButton(), helpPanelConstraints, "gridx=3,gridy=1,anchor=EAST,fill=NONE");
 
         GridBagUtils.addToPanel(rightPanel, exportAndHelpPanel, extendedOptionsPanelConstraints, "gridy=2,anchor=SOUTHWEST,fill=HORIZONTAL,weighty=0,insets.top=0");
 
@@ -427,7 +450,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
 
         if (!fieldsInitialized || productChanged || (rasterChanged && computePanel.forceUpdate)) {
-            statisticsCriteriaPanel.reset();
+            statisticsCriteriaPanel.resetProduct();
 
             statsSpreadsheet = null;
 
@@ -1387,17 +1410,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         String projection = "";
         String projectionParameters = "";
         GeoCoding geo = getProduct().getGeoCoding();
-        // determine if using class BowtiePixelGeoCoding in which case there is no CRS
+        // determine if using class CrsGeoCoding otherwise display class
         if (geo != null) {
-            if (geo != null && geo.toString() != null && geo.toString().contains("Bowtie")) {
-                projection = geo.toString();
-            } else {
-
+            if (geo instanceof CrsGeoCoding) {
                 projection = geo.getMapCRS().getName().toString();
                 projectionParameters =  geo.getMapCRS().toString().replaceAll("\n", " ").replaceAll(" ", "");
+            } else if (geo.toString() != null) {
+                    projection = geo.getClass().toString();
             }
-        } else {
-
         }
         addFieldToSpreadsheet(row, MetaDataFields.Projection, projection);
         addFieldToSpreadsheet(row, MetaDataFields.ProjectionParameters, projectionParameters);

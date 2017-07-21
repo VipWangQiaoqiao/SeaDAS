@@ -20,7 +20,7 @@ import java.util.List;
 public class StatisticsCriteriaPanel {
 
     private Container getParentDialogContentPane;
-    final VisatApp visatApp = VisatApp.getApp();
+    private VisatApp visatApp = VisatApp.getApp();
     private PropertyMap configuration = null;
 
 
@@ -35,7 +35,7 @@ public class StatisticsCriteriaPanel {
     private JCheckBox binWidthEnabledCheckBox = null;
     private JCheckBox logModeCheckBox = null;
 
-    private boolean logMode = false;
+    private boolean logMode;
 
 
     private JCheckBox binMinMaxCheckBox = null;
@@ -158,12 +158,36 @@ public class StatisticsCriteriaPanel {
     //------------------------------- INIT/RESET -------------------------------------
     //
 
-    private void initPreferences() {
+    public void reset() {
+        initPreferences();
+        updateComponents();
+
+
+        // toggle each checkbox to force event change in listeners and hence establishe all proper initial enablement
+        plotsSizeCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
+        plotsSizeCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
+        plotsDomainSpanCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
+        plotsDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
+        plotsThreshDomainSpanCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
+        plotsThreshDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
+        binWidthEnabledCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
+        binWidthEnabledCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
+        binMinMaxCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
+        binMinMaxCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
+
+    }
+
+
+    public void initPreferences() {
+
+
         numBins = getPreferencesNumBins();
-        showHistogramPlots = getPreferencesHistogramPlotEnabled();
-        showPercentPlots = getPreferencesPercentPlotEnabled();
-        showStatsList = getPreferencesStatsListEnabled();
-        showStatsSpreadSheet = getPreferencesStatsSpreadSheetEnabled();
+        logMode = false;
+        binWidth = StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH;
+        binMin = StatisticsToolView.PARAM_DEFVAL_BIN_MIN;
+        binMax = StatisticsToolView.PARAM_DEFVAL_BIN_MAX;
+
+
         percentThresholds = getPreferencesPercentThresholds();
         includeFileMetaData = getPreferencesFileMetaDataEnabled();
         includeMaskMetaData = getPreferencesMaskMetaDataEnabled();
@@ -172,9 +196,58 @@ public class StatisticsCriteriaPanel {
         includeTimeMetaData = getPreferencesFileTimeMetaDataEnabled();
 
         includeProjectionParameters = getPreferencesProjectionParametersEnabled();
-        includeColBreaks = getPreferencesColumnBreaksEnabled();
         includeHistogramStats = getPreferencesHistogramStatsEnabled();
         includeMedian = getPreferencesMedianEnabled();
+
+
+
+        includeColBreaks = getPreferencesColumnBreaksEnabled();
+
+        showHistogramPlots = getPreferencesHistogramPlotEnabled();
+        showPercentPlots = getPreferencesPercentPlotEnabled();
+        showStatsList = getPreferencesStatsListEnabled();
+        showStatsSpreadSheet = getPreferencesStatsSpreadSheetEnabled();
+
+
+    }
+
+
+
+    public void updateComponents() {
+        // Bins
+        numBinsTextfieldContainer.reset(numBins);
+        binWidthTextfieldContainer.reset(binWidth);
+        binMinTextfieldContainer.reset(binMin);
+        binMaxTextfieldContainer.reset(binMax);
+        binWidthEnabledCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
+        binMinMaxCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
+        logModeCheckBox.setSelected(logMode);
+
+
+        // Fields
+        includeMedianCheckBox.setSelected(includeMedian);
+        includeHistogramStatsCheckBox.setSelected(includeHistogramStats);
+        includeFileMetaDataCheckBox.setSelected(includeFileMetaData);
+        includeMaskMetaDataCheckBox.setSelected(includeMaskMetaData);
+        includeBandMetaDataCheckBox.setSelected(includeBandMetaData);
+        includeProjectionParametersCheckBox.setSelected(includeProjectionParameters);
+        includeTimeSeriesMetaDataCheckBox.setSelected(includeTimeSeriesMetaData);
+        includeTimeMetaDataCheckBox.setSelected(includeTimeMetaData);
+        percentThresholdsTextField.setText(percentThresholds);
+
+        // Text
+        includeColBreaksCheckBox.setSelected(includeColBreaks);
+
+
+        // Plots
+
+
+
+        // View
+        showStatsListCheckBox.setSelected(showStatsList);
+        showStatsSpreadSheetCheckBox.setSelected(showStatsSpreadSheet);
+        showPercentPlotCheckBox.setSelected(showPercentPlots);
+        showHistogramPlotCheckBox.setSelected(showHistogramPlots);
 
     }
 
@@ -199,12 +272,8 @@ public class StatisticsCriteriaPanel {
 
 
         binWidthEnabledCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BIN_WIDTH_ENABLED);
-        binWidthEnabledCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
-
 
         binMinMaxCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BIN_MIN_MAX_ENABLED);
-        binMinMaxCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
-
 
         binMinTextfieldContainer = new TextFieldContainer(StatisticsToolView.PARAM_SHORTLABEL_BIN_MIN,
                 StatisticsToolView.PARAM_DEFVAL_BIN_MIN,
@@ -221,7 +290,6 @@ public class StatisticsCriteriaPanel {
 
 
         logModeCheckBox = new JCheckBox("Log Scaled Bins");
-        logModeCheckBox.setSelected(logMode);
 
 
         // "Fields" Tab Variables and Components
@@ -230,31 +298,22 @@ public class StatisticsCriteriaPanel {
         percentThresholdsLabel = new JLabel(StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS);
         percentThresholdsTextField = new JTextField(14);
         percentThresholdsTextField.setName(StatisticsToolView.PARAM_LABEL_PERCENT_THRESHOLDS);
-        percentThresholdsTextField.setText(percentThresholds);
 
         includeMedianCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_MEDIAN_ENABLED);
-        includeMedianCheckBox.setSelected(includeMedian);
 
         includeHistogramStatsCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_HISTOGRAM_STATS_ENABLED);
-        includeHistogramStatsCheckBox.setSelected(includeHistogramStats);
 
         includeFileMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_FILE_METADATA_ENABLED);
-        includeFileMetaDataCheckBox.setSelected(includeFileMetaData);
 
         includeMaskMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_MASK_METADATA_ENABLED);
-        includeMaskMetaDataCheckBox.setSelected(includeMaskMetaData);
 
         includeBandMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BAND_METADATA_ENABLED);
-        includeBandMetaDataCheckBox.setSelected(includeBandMetaData);
 
         includeProjectionParametersCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PROJECTION_PARAMETERS_METADATA_ENABLED);
-        includeProjectionParametersCheckBox.setSelected(includeProjectionParameters);
 
         includeTimeSeriesMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_TIME_SERIES_METADATA_ENABLED);
-        includeTimeSeriesMetaDataCheckBox.setSelected(includeTimeSeriesMetaData);
 
         includeTimeMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_TIME_METADATA_ENABLED);
-        includeTimeMetaDataCheckBox.setSelected(includeTimeMetaData);
 
 
 
@@ -353,31 +412,19 @@ public class StatisticsCriteriaPanel {
         // "View" Tab Variables and Components
 
         showStatsListCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_LIST_ENABLED);
-        showStatsListCheckBox.setSelected(showStatsList);
 
         showStatsSpreadSheetCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_STATS_SPREADSHEET_ENABLED);
-        showStatsSpreadSheetCheckBox.setSelected(showStatsSpreadSheet);
 
         showPercentPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PERCENT_PLOT_ENABLED);
-        showPercentPlotCheckBox.setSelected(showPercentPlots);
 
         showHistogramPlotCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_HISTOGRAM_PLOT_ENABLED);
-        showHistogramPlotCheckBox.setSelected(showHistogramPlots);
+
 
 
         addListeners();
 
-        // toggle each checkbox to force event change in listeners and hence established all proper initial enablement
-        plotsSizeCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
-        plotsSizeCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_SIZE);
-        plotsDomainSpanCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
-        plotsDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN);
-        plotsThreshDomainSpanCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
-        plotsThreshDomainSpanCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN);
-        binWidthEnabledCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
-        binWidthEnabledCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_WIDTH_ENABLED);
-        binMinMaxCheckBox.setSelected(!StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
-        binMinMaxCheckBox.setSelected(StatisticsToolView.PARAM_DEFVAL_BIN_MIN_MAX_ENABLED);
+        reset();
+
 
 
     }
@@ -597,7 +644,7 @@ public class StatisticsCriteriaPanel {
 
     }
 
-    public void reset() {
+    public void resetProduct() {
         binWidthTextfieldContainer.reset();
         binMinTextfieldContainer.reset();
         binMaxTextfieldContainer.reset();
