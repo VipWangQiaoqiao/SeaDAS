@@ -95,6 +95,11 @@ import java.util.Map;
 public class ProductUtils {
 
     private static String GLOBAL_ATTRIBUTES_KEY = "Global_Attributes";
+    public static String METADATA_PROJECTION_KEY = "map_projection";
+    public static String[] METADATA_POSSIBLE_PROJECTION_KEYS = {METADATA_PROJECTION_KEY, "projection", "crs"};
+
+   public static String METADATA_RESOLUTION_KEY = "spatial_resolution";
+    public static  String[] METADATA_POSSIBLE_RESOLUTION_KEYS = {METADATA_RESOLUTION_KEY, "spatialResolution", "resolution", "Resolution"};
 
     private static final int[] RGB_BAND_OFFSETS = new int[]{
             2, 1, 0
@@ -1480,14 +1485,10 @@ public class ProductUtils {
     // todo Danny added this
     public static void setResolutionMetaDataField(Product product, boolean markAsDerivedFrom) {
 
-        String RESOLUTION_KEY = "spatial_resolution";
-        String[] possibleCurrentResolutionsKeys = {"spatialResolution", "resolution", "Resolution"};
-
-        setMetaDataFieldFromPossible(product, RESOLUTION_KEY, possibleCurrentResolutionsKeys);
-        deleteMetaDataFields(product, possibleCurrentResolutionsKeys);
+        setMetaDataFieldFromPossible(product, METADATA_RESOLUTION_KEY, METADATA_POSSIBLE_RESOLUTION_KEYS);
 
         if (markAsDerivedFrom) {
-            markAsDerivedFromMetaDataField(product, RESOLUTION_KEY);
+            markAsDerivedFromMetaDataField(product, METADATA_RESOLUTION_KEY);
         }
     }
 
@@ -1508,6 +1509,12 @@ public class ProductUtils {
                             String value = metadataElement.getAttribute(key).getData().toString();
                             setMetaDataField(product, attribute, value);
                             break;
+                        }
+                    }
+
+                    for (String key : possibleAttributes) {
+                        if (key != null && !key.equals(attribute)) {
+                            deleteMetaDataField(product, key);
                         }
                     }
                 }
@@ -1599,6 +1606,44 @@ public class ProductUtils {
                 metadataAttribute.setReadOnly(true);
             }
         }
+    }
+
+    public static String getMetaData(Product product, String key) {
+        // Created by Daniel Knowles
+        String metaData = "";
+
+        try {
+            metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+        } catch (Exception ignore) {
+            try {
+                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+            } catch (Exception ignored) {
+            }
+        }
+
+        return metaData;
+    }
+
+    public static String getMetaData(Product product, String[] keys) {
+        // Created by Daniel Knowles
+        String metaData = "";
+
+        for (String key: keys) {
+            try {
+                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+            } catch (Exception ignore) {
+                try {
+                    metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+                } catch (Exception ignored) {
+                }
+            }
+
+            if (metaData.length() > 0) {
+                return metaData;
+            }
+        }
+
+        return metaData;
     }
 
 

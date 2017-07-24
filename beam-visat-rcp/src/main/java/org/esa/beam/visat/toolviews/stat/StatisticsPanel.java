@@ -18,7 +18,6 @@ package org.esa.beam.visat.toolviews.stat;
 
 import com.bc.ceres.core.ProgressMonitor;
 import com.bc.ceres.core.SubProgressMonitor;
-import com.bc.ceres.swing.Grid;
 import com.bc.ceres.swing.progress.ProgressMonitorSwingWorker;
 import org.esa.beam.framework.dataio.ProductReader;
 import org.esa.beam.framework.dataio.ProductReaderPlugIn;
@@ -29,6 +28,7 @@ import org.esa.beam.framework.ui.UIUtils;
 import org.esa.beam.framework.ui.application.ToolView;
 import org.esa.beam.framework.ui.tool.ToolButtonFactory;
 import org.esa.beam.util.Guardian;
+import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.PropertyMap;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.visat.VisatApp;
@@ -43,10 +43,6 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XIntervalSeries;
 import org.jfree.data.xy.XIntervalSeriesCollection;
 import org.jfree.ui.RectangleInsets;
-import org.opengis.referencing.ReferenceIdentifier;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.util.GenericName;
-import org.opengis.util.InternationalString;
 
 import javax.media.jai.Histogram;
 import javax.swing.*;
@@ -57,9 +53,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
 
 
 /**
@@ -105,6 +99,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     JScrollPane spreadsheetScrollPane;
     JScrollPane contentScrollPane;
     JPanel leftPanel;
+
+    JButton runButton = new JButton("Run");
 
     private final StatisticsPanel.PopupHandler popupHandler;
     private final StringBuilder resultText;
@@ -377,7 +373,6 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                                 }
         );
 
-        JButton runButton = new JButton("Run");
         runButton.addActionListener(new ActionListener() {
                                                     @Override
                                                     public void actionPerformed(ActionEvent e) {
@@ -385,6 +380,8 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                                                     }
                                                 }
         );
+
+        runButton.setEnabled(getRaster() != null);
 
 
 
@@ -456,6 +453,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
             final RasterDataNode raster = getRaster();
             computePanel.setRaster(raster);
+            runButton.setEnabled(raster != null);
             contentPanel.removeAll();
             spreadsheetPanel.removeAll();
             resultText.setLength(0);
@@ -528,10 +526,14 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
 
         if (selectedBands != null && selectedBands.length > 0 && selectedBands[0] != null) {
             if (selectedBands.length == 1) {
-                String rasterName = getRaster().getName();
-                String selectedBandName = selectedBands[0].getName();
-                if (rasterName.equals(selectedBandName)) {
-                    computePanel.setUseViewBandRaster(true);
+                if (getRaster() != null) {
+                    String rasterName = getRaster().getName();
+                    String selectedBandName = selectedBands[0].getName();
+                    if (rasterName.equals(selectedBandName)) {
+                        computePanel.setUseViewBandRaster(true);
+                    } else {
+                        computePanel.setUseViewBandRaster(false);
+                    }
                 } else {
                     computePanel.setUseViewBandRaster(false);
                 }
@@ -1413,10 +1415,17 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         // determine if using class CrsGeoCoding otherwise display class
         if (geo != null) {
             if (geo instanceof CrsGeoCoding) {
-                projection = geo.getMapCRS().getName().toString();
+                projection = geo.getMapCRS().getName().toString() + "(obtained from CrsGeoCoding)";
                 projectionParameters =  geo.getMapCRS().toString().replaceAll("\n", " ").replaceAll(" ", "");
             } else if (geo.toString() != null) {
-                    projection = geo.getClass().toString();
+                String projectionFromMetaData = ProductUtils.getMetaData(getProduct(), ProductUtils.METADATA_POSSIBLE_PROJECTION_KEYS);
+
+                if (projectionFromMetaData != null && projectionFromMetaData.length() > 0 )
+                {
+                    projection = projectionFromMetaData + "(obtained from MetaData)";
+                } else {
+                    projection = "unknown (" + geo.getClass().toString() + ")";
+                }
             }
         }
         addFieldToSpreadsheet(row, MetaDataFields.Projection, projection);

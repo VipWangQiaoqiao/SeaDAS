@@ -95,6 +95,7 @@ class MultipleRoiComputePanel extends JPanel {
 
         setLayout(new GridBagLayout());
         JPanel topPane = getTopPanel(method, rasterDataNode);
+        topPane.setVisible(false);
 
         productNodeListener = new PNL();
         productBandNodeListener = new BandNamePNL();

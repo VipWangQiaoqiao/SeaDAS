@@ -165,6 +165,8 @@ public class TextFieldContainer {
     //    }
     }
 
+
+
     public void reset(Number defval) {
         this.defval = defval;
 
@@ -178,6 +180,16 @@ public class TextFieldContainer {
 
         if (getTextfield() != null) {
             getTextfield().setEnabled(enabled);
+        }
+    }
+
+    public void setVisible(boolean visible) {
+        if (getLabel() != null) {
+            getLabel().setVisible(visible);
+        }
+
+        if (getTextfield() != null) {
+            getTextfield().setVisible(visible);
         }
     }
 
