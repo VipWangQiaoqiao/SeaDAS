@@ -1040,9 +1040,12 @@ public class StatisticsCriteriaPanel {
         gbc.gridy += 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets.right = 10;
+        gbc.insets.left = 10;
         panel.add(new JSeparator(), gbc);
         gbc.fill = GridBagConstraints.NONE;
         gbc.insets.right = 0;
+        gbc.insets.left = 0;
+
 
 
         gbc.insets.top = 5;

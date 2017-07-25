@@ -45,15 +45,7 @@ import org.esa.beam.visat.actions.ShowModuleManagerAction;
 import org.esa.beam.visat.toolviews.imageinfo.ColorManipulationToolView;
 import org.esa.beam.visat.toolviews.stat.StatisticsToolView;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.*;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -1092,6 +1084,21 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(textPane, param, gbcText);
             gbcText.gridy++;
 
+
+
+            GridBagConstraints gbcDivider = GridBagUtils.createConstraints("");
+            gbcDivider.gridy = gbcText.gridy;
+
+            gbcDivider.fill = GridBagConstraints.HORIZONTAL;
+            gbcDivider.insets.right = 10;
+            gbcDivider.insets.left = 10;
+            gbcDivider.insets.top = -5;
+            gbcDivider.insets.bottom = 5;
+            gbcDivider.gridwidth = 2;
+            gbcDivider.gridx = 0;
+            textPane.add(new JSeparator(), gbcDivider);
+            gbcText.gridy++;
+
             param = getConfigParam(StatisticsToolView.PARAM_KEY_SPREADSHEET_COL_WIDTH);
             addParamToPane(textPane, param, gbcText);
             gbcText.gridy++;
@@ -1109,11 +1116,37 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
 
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_HISTOGRAM_STATS_ENABLED);
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
+
+
             param = getConfigParam(StatisticsToolView.PARAM_KEY_MEDIAN_ENABLED);
             addParamToPane(fieldsPane, param, gbcFields);
             gbcFields.gridy++;
 
-            param = getConfigParam(StatisticsToolView.PARAM_KEY_HISTOGRAM_STATS_ENABLED);
+
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS);
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
+
+
+            GridBagConstraints gbcDivider2 = GridBagUtils.createConstraints("");
+            gbcDivider2.gridy = gbcFields.gridy;
+
+            gbcDivider2.fill = GridBagConstraints.HORIZONTAL;
+            gbcDivider2.insets.right = 10;
+            gbcDivider2.insets.left = 10;
+            gbcDivider2.insets.top = -5;
+            gbcDivider2.insets.bottom = 5;
+            gbcDivider2.gridwidth = 2;
+            gbcDivider2.gridx = 0;
+            fieldsPane.add(new JSeparator(), gbcDivider2);
+            gbcFields.gridy++;
+
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED);
             addParamToPane(fieldsPane, param, gbcFields);
             gbcFields.gridy++;
 
@@ -1125,9 +1158,11 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(fieldsPane, param, gbcFields);
             gbcFields.gridy++;
 
-            param = getConfigParam(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED);
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED);
             addParamToPane(fieldsPane, param, gbcFields);
             gbcFields.gridy++;
+
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_TIME_METADATA_ENABLED);
             addParamToPane(fieldsPane, param, gbcFields);
@@ -1137,13 +1172,6 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(fieldsPane, param, gbcFields);
             gbcFields.gridy++;
 
-            param = getConfigParam(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED);
-            addParamToPane(fieldsPane, param, gbcFields);
-            gbcFields.gridy++;
-
-            param = getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS);
-            addParamToPane(fieldsPane, param, gbcFields);
-            gbcFields.gridy++;
 
 
 
@@ -1162,30 +1190,126 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
 
-            JPanel resetPane = GridBagUtils.createPanel();
+//            JPanel resetPane = GridBagUtils.createPanel();
+//            GridBagConstraints gbcReset = GridBagUtils.createConstraints("");
+//            gbcReset.gridy = 0;
+//            param = getConfigParam(StatisticsToolView.PARAM_KEY_RESET_TO_DEFAULTS);
+//            addParamToPane(resetPane, param, gbcReset);
+
+
+
+
+
+            JPanel leftPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcLeft = GridBagUtils.createConstraints("");
+//            leftPanel.setBorder(UIUtils.createGroupBorder("")); /*I18N*/
+            gbcLeft.gridx = 0;
+            gbcLeft.gridy = 0;
+            gbcLeft.weightx = 0.0;
+            gbcLeft.fill = GridBagConstraints.HORIZONTAL;
+            gbcLeft.anchor = GridBagConstraints.NORTHWEST;
+            gbcLeft.insets.bottom=5;
+            gbcLeft.insets.top=0;
+
+
+
+            JPanel rightPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcRight = GridBagUtils.createConstraints("");
+//            rightPanel.setBorder(UIUtils.createGroupBorder("")); /*I18N*/
+            gbcRight.gridx = 0;
+            gbcRight.gridy = 0;
+            gbcRight.weightx = 0.0;
+            gbcRight.fill = GridBagConstraints.HORIZONTAL;
+            gbcRight.anchor = GridBagConstraints.NORTHWEST;
+            gbcRight.insets.bottom=5;
+            gbcRight.insets.top=0;
+
+
+
+            gbcLeft.weighty = 0;
+            leftPanel.add(binsPane, gbcLeft);
+            gbcLeft.gridy++;
+            leftPanel.add(fieldsPane, gbcLeft);
+            // Add filler panel at bottom which expands as needed to force all components within this panel to the top
+            gbcLeft = GridBagUtils.restoreConstraints(gbcLeft);
+            gbcLeft.weighty = 1;
+            gbcLeft.gridy += 1;
+            gbcLeft.fill = GridBagConstraints.BOTH;
+            leftPanel.add(new JPanel(), gbcLeft);
+
+
+            gbcRight.weighty = 0;
+            rightPanel.add(textPane, gbcRight);
+            gbcRight.gridy++;
+            rightPanel.add(plotsPane, gbcRight);
+            gbcRight.gridy++;
+            rightPanel.add(viewPane, gbcRight);
+            // Add filler panel at bottom which expands as needed to force all components within this panel to the top
+            gbcRight = GridBagUtils.restoreConstraints(gbcRight);
+            gbcRight.weighty = 1;
+            gbcRight.gridy += 1;
+            gbcRight.fill = GridBagConstraints.BOTH;
+            rightPanel.add(new JPanel(), gbcRight);
+
+
+
+
+
+            JPanel resetPanel = GridBagUtils.createPanel();
             GridBagConstraints gbcReset = GridBagUtils.createConstraints("");
+            gbcReset.gridx = 0;
             gbcReset.gridy = 0;
+            gbcReset.weightx = 0.0;
+            gbcReset.fill = GridBagConstraints.HORIZONTAL;
+            gbcReset.anchor = GridBagConstraints.NORTHWEST;
+            gbcReset.insets.bottom=0;
+            gbcReset.insets.top=0;
+
+
             param = getConfigParam(StatisticsToolView.PARAM_KEY_RESET_TO_DEFAULTS);
-            addParamToPane(resetPane, param, gbcReset);
+            addParamToPane(resetPanel, param, gbcReset);
+            gbcReset.gridy++;
 
 
 
-            JPanel contentsPanel = GridBagUtils.createPanel();
-            GridBagConstraints gbcContents = GridBagUtils.createConstraints("fill=HORIZONTAL, anchor=WEST");
-            gbcContents.gridx = 0;
-            gbcContents.gridy = 0;
-            gbcContents.insets.bottom = 10;
-            contentsPanel.add(binsPane, gbcContents);
-            gbcContents.gridy++;
-            contentsPanel.add(fieldsPane, gbcContents);
-            gbcContents.gridy++;
-            contentsPanel.add(textPane, gbcContents);
-            gbcContents.gridy++;
-            contentsPanel.add(plotsPane, gbcContents);
-            gbcContents.gridy++;
-            contentsPanel.add(viewPane, gbcContents);
-            gbcContents.gridy++;
-            contentsPanel.add(resetPane, gbcContents);
+            JPanel leftFullPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcLeftFull = GridBagUtils.createConstraints("");
+            gbcLeftFull.gridx = 0;
+            gbcLeftFull.gridy = 0;
+            gbcLeftFull.weightx = 0.0;
+            gbcLeftFull.fill = GridBagConstraints.HORIZONTAL;
+            gbcLeftFull.anchor = GridBagConstraints.NORTHWEST;
+            gbcLeftFull.insets.bottom=0;
+            gbcLeftFull.insets.top=0;
+            leftFullPanel.add(leftPanel, gbcLeftFull);
+            gbcLeftFull.gridy++;
+            gbcLeftFull.insets.top=10;
+            leftFullPanel.add(resetPanel, gbcLeftFull);
+
+
+
+            JPanel groupPanel = GridBagUtils.createPanel();
+            GridBagConstraints gbcGroup = GridBagUtils.createConstraints("");
+            gbcGroup.gridx = 0;
+            gbcGroup.gridy = 0;
+            gbcGroup.weightx = 0.5;
+            gbcGroup.weighty = 1.0;
+            gbcGroup.fill = GridBagConstraints.NONE;
+            gbcGroup.anchor = GridBagConstraints.NORTHWEST;
+            gbcGroup.insets.bottom=10;
+            gbcGroup.insets.right=20;
+            groupPanel.add(leftFullPanel, gbcGroup);
+            gbcGroup.gridx++;
+            gbcGroup.weightx = 0.5;
+            gbcGroup.weighty = 1.0;
+            gbcGroup.insets.right=0;
+            gbcGroup.fill = GridBagConstraints.NONE;
+//            gbcGroup.insets.top = _LINE_INSET_TOP;
+
+            groupPanel.add(rightPanel, gbcGroup);
+
+
+            return createPageUIContentPane(groupPanel);
 
 
 
@@ -1193,15 +1317,41 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
 
-            //////////////////////////////////////////////////////////////////////////////////////
-            // All together
-            JPanel pageUI = GridBagUtils.createPanel();
-            GridBagConstraints gbcMain = GridBagUtils.createConstraints("fill=NONE, anchor=WEST, weightx=1, gridy=1");
-            gbcMain.insets.bottom = 4;
 
-            pageUI.add(contentsPanel, gbcMain);
 
-            return createPageUIContentPane(pageUI);
+
+//            JPanel contentsPanel = GridBagUtils.createPanel();
+//            GridBagConstraints gbcContents = GridBagUtils.createConstraints("fill=HORIZONTAL, anchor=WEST");
+//            gbcContents.gridx = 0;
+//            gbcContents.gridy = 0;
+//            gbcContents.insets.bottom = 10;
+//            contentsPanel.add(binsPane, gbcContents);
+//            gbcContents.gridy++;
+//            contentsPanel.add(fieldsPane, gbcContents);
+//            gbcContents.gridy++;
+//            contentsPanel.add(textPane, gbcContents);
+//            gbcContents.gridy++;
+//            contentsPanel.add(plotsPane, gbcContents);
+//            gbcContents.gridy++;
+//            contentsPanel.add(viewPane, gbcContents);
+//            gbcContents.gridy++;
+//            contentsPanel.add(resetPane, gbcContents);
+
+
+
+//
+//
+//
+//
+//            //////////////////////////////////////////////////////////////////////////////////////
+//            // All together
+//            JPanel pageUI = GridBagUtils.createPanel();
+//            GridBagConstraints gbcMain = GridBagUtils.createConstraints("fill=NONE, anchor=WEST, weightx=1, gridy=1");
+//            gbcMain.insets.bottom = 4;
+//
+//            pageUI.add(contentsPanel, gbcMain);
+//
+//            return createPageUIContentPane(pageUI);
         }
 
 
@@ -2203,7 +2353,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbcGroup.weighty = 1.0;
             gbcGroup.insets.right=0;
             gbcGroup.fill = GridBagConstraints.NONE;
-            gbcGroup.insets.top = _LINE_INSET_TOP;
+//            gbcGroup.insets.top = _LINE_INSET_TOP;
 
             groupPanel.add(rightPanel, gbcGroup);
 
