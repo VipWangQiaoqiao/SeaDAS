@@ -265,6 +265,7 @@ public class StatisticsOp extends Operator {
                 } else {
                     double median = summaryStxOp.getMedian();
                     double stdDev = summaryStxOp.getStandardDeviation();
+                    double mean = summaryStxOp.getMean();
 
                     stxMap.put(TOTAL, histogram.getTotals()[0]);
                     stxMap.put(MINIMUM, summaryStxOp.getMinimum());
@@ -272,7 +273,7 @@ public class StatisticsOp extends Operator {
                     stxMap.put(MEAN, summaryStxOp.getMean());
                     stxMap.put(MEDIAN, median);
                     stxMap.put(SIGMA, stdDev);
-                    stxMap.put(COEF_VARIATION, Util.getCoefficientOfVariation(stdDev, median));
+                    stxMap.put(COEF_VARIATION, Util.getCoefficientOfVariation(stdDev, mean));
                     stxMap.put(TOTAL_BINS, histogram.getNumBins()[0]);
                     stxMap.put(BIN_WIDTH, Util.getBinWidth(histogram));
 
