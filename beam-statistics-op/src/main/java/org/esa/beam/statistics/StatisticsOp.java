@@ -104,6 +104,8 @@ public class StatisticsOp extends Operator {
     public static final String DEFAULT_PERCENTILES = "50,80,85,90,95,98";
     public static final int[] DEFAULT_PERCENTILES_INTS = new int[]{50,80,85,90,95,98};
 
+    public boolean calculateMedian = true;
+
 
     private static final double FILL_VALUE = -999.0;
 
@@ -173,7 +175,7 @@ public class StatisticsOp extends Operator {
         validateInput();
 
       //  final StatisticComputer statisticComputer = new StatisticComputer(shapefile, bandConfigurations, Util.computeBinCount(accuracy), getLogger());
-        final StatisticComputer statisticComputer = new StatisticComputer(shapefile, bandConfigurations, numBins, getLogger());
+        final StatisticComputer statisticComputer = new StatisticComputer(shapefile, bandConfigurations, numBins, getLogger(), calculateMedian);
 
         final ProductValidator productValidator = new ProductValidator(Arrays.asList(bandConfigurations), startDate, endDate, getLogger());
         final ProductLoop productLoop = new ProductLoop(new ProductLoader(), productValidator, statisticComputer, getLogger());

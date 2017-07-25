@@ -45,8 +45,9 @@ public class StatisticComputer {
     private final Map<BandConfiguration, StxOpMapping> stxOpMappings;
     private final int initialBinCount;
     private final Logger logger;
+    private boolean calculateMedian = false;
 
-    public StatisticComputer(File shapefile, BandConfiguration[] bandConfigurations, int initialBinCount, Logger logger) {
+    public StatisticComputer(File shapefile, BandConfiguration[] bandConfigurations, int initialBinCount, Logger logger, boolean calculateMedian) {
         this.initialBinCount = initialBinCount;
         this.logger = logger != null ? logger : BeamLogManager.getSystemLogger();
         if (shapefile != null) {
@@ -70,6 +71,7 @@ public class StatisticComputer {
         pm = ProgressMonitor.NULL;
         this.bandConfigurations = bandConfigurations;
         stxOpMappings = new HashMap<BandConfiguration, StxOpMapping>();
+        this.calculateMedian = calculateMedian;
     }
 
     public void computeStatistic(final Product product) {
@@ -109,7 +111,7 @@ public class StatisticComputer {
     }
 
     private void computeStatistic(String regionName, StxOpMapping stxOpsMapping, Band band, Shape roiShape, MultiLevelImage roiImage) {
-        final SummaryStxOp summaryStxOp = stxOpsMapping.getSummaryOp(regionName);
+        final SummaryStxOp summaryStxOp = stxOpsMapping.getSummaryOp(regionName, calculateMedian);
         StxFactory.accumulate(band, 0, roiImage, roiShape, summaryStxOp, SubProgressMonitor.create(pm, 50));
         final double minimum = summaryStxOp.getMinimum();
         final double maximum = summaryStxOp.getMaximum();
@@ -174,10 +176,10 @@ public class StatisticComputer {
             this.initialBinCount = initialBinCount;
         }
 
-        private SummaryStxOp getSummaryOp(String vdnName) {
+        private SummaryStxOp getSummaryOp(String vdnName, boolean calculateMedian) {
             SummaryStxOp summaryStxOp = summaryMap.get(vdnName);
             if (summaryStxOp == null) {
-                summaryStxOp = new SummaryStxOp();
+                summaryStxOp = new SummaryStxOp(calculateMedian);
                 summaryMap.put(vdnName, summaryStxOp);
             }
             return summaryStxOp;
