@@ -137,11 +137,13 @@ class MultipleRoiComputePanel extends JPanel {
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        tabbedPane.addTab("Masks", getMaskROIPanel());
-        tabbedPane.setToolTipTextAt(0, "Select region of interest masks for which to create statistics");
-
         tabbedPane.addTab("Bands", getBandsPanel());
-        tabbedPane.setToolTipTextAt(1, "Select bands for which to create statistics");
+        tabbedPane.setToolTipTextAt(0, "Select bands for which to create statistics");
+
+        tabbedPane.addTab("Masks", getMaskROIPanel());
+        tabbedPane.setToolTipTextAt(1, "Select region of interest masks for which to create statistics");
+
+
 
         return  tabbedPane;
 
@@ -172,6 +174,11 @@ class MultipleRoiComputePanel extends JPanel {
 //        panel.add(useRoiCheckBox, gbc);
 
   //      gbc.gridy++;
+
+
+        gbc.insets.top = 5;
+        panel.add(includeUnmaskedCheckBox, gbc);
+        gbc.gridy += 1;
 
         gbc.insets.top = 5;
         panel.add(maskFilterPane, gbc);

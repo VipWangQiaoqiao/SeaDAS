@@ -205,16 +205,16 @@ public class StatisticsCriteriaPanel {
 
 
         // Text
-        colCharWidth = COL_WIDTH_DEFAULT;
-        decimalPlaces = StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES;
+        colCharWidth = getPreferencesColWidth();
+        decimalPlaces = getPreferencesDecimalPlaces();
         includeColBreaks = getPreferencesColumnBreaksEnabled();
 
 
 
         // Plots
         plotsThreshDomainSpan = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_SPAN;
-        plotsThreshDomainLow = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW;
-        plotsThreshDomainHigh = StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH;
+        plotsThreshDomainLow = getPreferencesPlotDomainThreshLow();
+        plotsThreshDomainHigh = getPreferencesPlotDomainThreshHigh();
 
         plotsDomainSpan = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_SPAN;
         plotsDomainLow = StatisticsToolView.PARAM_DEFVAL_PLOTS_DOMAIN_LOW;
@@ -959,12 +959,14 @@ public class StatisticsCriteriaPanel {
 
         gbc.weighty = 0;
         gbc.insets.top = 5;
-        panel.add(includeMedianCheckBox, gbc);
+        panel.add(includeHistogramStatsCheckBox, gbc);
+
 
 
         gbc.insets.top = 0;
         gbc.gridy += 1;
-        panel.add(includeHistogramStatsCheckBox, gbc);
+        panel.add(includeMedianCheckBox, gbc);
+
 
 
         gbc.gridy += 1;
@@ -973,6 +975,7 @@ public class StatisticsCriteriaPanel {
 
         gbc.gridy += 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets.top = 5;
         gbc.insets.right = 10;
         panel.add(new JSeparator(), gbc);
         gbc.fill = GridBagConstraints.NONE;
@@ -981,9 +984,14 @@ public class StatisticsCriteriaPanel {
 
 //        GridBagUtils.addToPanel(exportAndHelpPanel, new JSeparator(), helpPanelConstraints, "fill=HORIZONTAL,gridwidth=4,insets.left=5,insets.right=5");
 
+        gbc.insets.top = 5;
+        gbc.gridy += 1;
+        panel.add(includeBandMetaDataCheckBox, gbc);
 
+        gbc.insets.top = 0;
         gbc.gridy += 1;
         panel.add(includeFileMetaDataCheckBox, gbc);
+
 
 
         gbc.gridy += 1;
@@ -991,8 +999,7 @@ public class StatisticsCriteriaPanel {
 
 
         gbc.gridy += 1;
-        panel.add(includeBandMetaDataCheckBox, gbc);
-
+        panel.add(includeProjectionParametersCheckBox, gbc);
 
         gbc.gridy += 1;
         panel.add(includeTimeMetaDataCheckBox, gbc);
@@ -1001,8 +1008,6 @@ public class StatisticsCriteriaPanel {
         gbc.gridy += 1;
         panel.add(includeTimeSeriesMetaDataCheckBox, gbc);
 
-        gbc.gridy += 1;
-        panel.add(includeProjectionParametersCheckBox, gbc);
 
 
 
@@ -1032,11 +1037,19 @@ public class StatisticsCriteriaPanel {
         gbc.insets.top = 5;
         panel.add(decimalPlacesPanel, gbc);
 
+        gbc.gridy += 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets.right = 10;
+        panel.add(new JSeparator(), gbc);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.insets.right = 0;
 
-        gbc.insets.top = 0;
+
+        gbc.insets.top = 5;
         gbc.gridy += 1;
         panel.add(getColWidthPanel(), gbc);
 
+        gbc.insets.top = 0;
         gbc.gridy += 1;
         panel.add(includeColBreaksCheckBox, gbc);
 
@@ -1096,11 +1109,12 @@ public class StatisticsCriteriaPanel {
 
         gbc.weighty = 0;
         gbc.insets.top = 5;
-        panel.add(showPercentPlotCheckBox, gbc);
+        panel.add(showHistogramPlotCheckBox, gbc);
 
         gbc.insets.top = 0;
         gbc.gridy += 1;
-        panel.add(showHistogramPlotCheckBox, gbc);
+        panel.add(showPercentPlotCheckBox, gbc);
+
 
         gbc.gridy += 1;
         panel.add(showStatsListCheckBox, gbc);
@@ -1421,6 +1435,52 @@ public class StatisticsCriteriaPanel {
     //
     //------------------------------- PREFERENCES -------------------------------------
     //
+
+
+
+
+
+    public int getPreferencesDecimalPlaces() {
+
+        if (configuration != null) {
+            return configuration.getPropertyInt(StatisticsToolView.PARAM_KEY_SPREADSHEET_DECIMAL_PLACES, StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES;
+        }
+    }
+
+    public int getPreferencesColWidth() {
+
+        if (configuration != null) {
+            return configuration.getPropertyInt(StatisticsToolView.PARAM_KEY_SPREADSHEET_COL_WIDTH, StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_COL_WIDTH);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_COL_WIDTH;
+        }
+    }
+
+
+
+
+
+
+
+    public double getPreferencesPlotDomainThreshLow() {
+
+        if (configuration != null) {
+            return configuration.getPropertyDouble(StatisticsToolView.PARAM_KEY_PLOTS_THRESH_DOMAIN_LOW, StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW;
+        }
+    }
+
+    public double getPreferencesPlotDomainThreshHigh() {
+
+        if (configuration != null) {
+            return configuration.getPropertyDouble(StatisticsToolView.PARAM_KEY_PLOTS_THRESH_DOMAIN_HIGH, StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH;
+        }
+    }
 
 
     public int getPreferencesNumBins() {

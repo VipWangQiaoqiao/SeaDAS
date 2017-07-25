@@ -41,7 +41,7 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final String PARAM_KEY_STATS_SPREADSHEET_ENABLED = "statistics.statsSpreadSheet.enabled";
     public static final boolean PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED = true;
 
-    public static final String PARAM_LABEL_PERCENT_THRESHOLDS = "Thresholds";
+    public static final String PARAM_LABEL_PERCENT_THRESHOLDS = "Include Thresholds";
     public static final String PARAM_KEY_PERCENT_THRESHOLDS = "statistics.percentThresholds";
     public static final String PARAM_DEFVAL_PERCENT_THRESHOLDS = "80,85,90,95,98";
 
@@ -52,9 +52,6 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final int PARAM_MAXVAL_NUM_BINS = 1000000;
 
 
-    public static final String PARAM_LABEL_COL_BREAKS_ENABLED = "Include Column Breaks";
-    public static final String PARAM_KEY_COL_BREAKS_ENABLED = "statistics.columnBreaks.enabled";
-    public static final boolean PARAM_DEFVAL_COL_BREAKS_ENABLED = true;
 
 
     public static final String PARAM_LABEL_MEDIAN_ENABLED = "Include Median";
@@ -79,7 +76,7 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
 
     public static final String PARAM_LABEL_TIME_SERIES_METADATA_ENABLED = "Include Time Series MetaData";
     public static final String PARAM_KEY_TIME_SERIES_METADATA_ENABLED = "statistics.timeSeriesMetaData.enabled";
-    public static final boolean PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED = true;
+    public static final boolean PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED = false;
 
     public static final String PARAM_LABEL_TIME_METADATA_ENABLED = "Include Time MetaData";
     public static final String PARAM_KEY_TIME_METADATA_ENABLED = "statistics.timeMetaData.enabled";
@@ -92,6 +89,7 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final String PARAM_LABEL_PLOTS_THRESH_DOMAIN_LOW = "Plot Domain Low Threshold";
     public static final String PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_LOW = "Low";
     public static final String PARAM_KEY_PLOTS_THRESH_DOMAIN_LOW = "statistics.plotsThreshDomainLow";
+
     public static final double PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW = 5;
     public static final double PARAM_MINVAL_PLOTS_THRESH_DOMAIN_LOW = 0;
     public static final double PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_LOW = 100;
@@ -99,6 +97,7 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final String PARAM_LABEL_PLOTS_THRESH_DOMAIN_HIGH = "Plot Domain High Threshold";
     public static final String PARAM_SHORTLABEL_PLOTS_THRESH_DOMAIN_HIGH = "High";
     public static final String PARAM_KEY_PLOTS_THRESH_DOMAIN_HIGH = "statistics.plotsThreshDomainHigh";
+
     public static final double PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH = 95;
     public static final double PARAM_MINVAL_PLOTS_THRESH_DOMAIN_HIGH = 0;
     public static final double PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_HIGH = 100;
@@ -139,9 +138,9 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
 
 
 
-    public static final String PARAM_KEY_SPREADSHEET_COL_WIDTH_ = "statistics.spreadsheetColWidth";
+    public static final String PARAM_KEY_SPREADSHEET_COL_WIDTH = "statistics.spreadsheetColWidth";
     public static final String PARAM_LABEL_SPREADSHEET_COL_WIDTH = "Column Width (Spreadsheet)";
-    public static final int PARAM_DEFVAL_SPREADSHEET_COL_WIDTH = 0;
+    public static final int PARAM_DEFVAL_SPREADSHEET_COL_WIDTH = 10;
     public static final int PARAM_MINVAL_SPREADSHEET_COL_WIDTH = 0;
     public static final int PARAM_MAXVAL_SPREADSHEET_COL_WIDTH = 50;
 
@@ -151,6 +150,12 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final int PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES = 4;
     public static final int PARAM_MINVAL_SPREADSHEET_DECIMAL_PLACES = 0;
     public static final int PARAM_MAXVAL_SPREADSHEET_DECIMAL_PLACES = 20;
+
+
+    public static final String PARAM_LABEL_COL_BREAKS_ENABLED = "Include Column Breaks";
+    public static final String PARAM_KEY_COL_BREAKS_ENABLED = "statistics.columnBreaks.enabled";
+    public static final boolean PARAM_DEFVAL_COL_BREAKS_ENABLED = true;
+
 
 
 

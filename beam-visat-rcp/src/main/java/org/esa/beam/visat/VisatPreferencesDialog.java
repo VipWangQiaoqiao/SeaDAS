@@ -947,6 +947,23 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
+            param = new Parameter(StatisticsToolView.PARAM_KEY_PLOTS_THRESH_DOMAIN_LOW, StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_PLOTS_THRESH_DOMAIN_LOW);
+            param.getProperties().setMinValue(StatisticsToolView.PARAM_MINVAL_PLOTS_THRESH_DOMAIN_LOW);
+            param.getProperties().setMaxValue(StatisticsToolView.PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_LOW);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_PLOTS_THRESH_DOMAIN_HIGH, StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_PLOTS_THRESH_DOMAIN_HIGH);
+            param.getProperties().setMinValue(StatisticsToolView.PARAM_MINVAL_PLOTS_THRESH_DOMAIN_HIGH);
+            param.getProperties().setMaxValue(StatisticsToolView.PARAM_MAXVAL_PLOTS_THRESH_DOMAIN_HIGH);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+
             param = new Parameter(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED);
             param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_FILE_METADATA_ENABLED);
             param.addParamChangeListener(paramChangeListener);
@@ -987,6 +1004,26 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
+            param = new Parameter(StatisticsToolView.PARAM_KEY_SPREADSHEET_DECIMAL_PLACES, StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_SPREADSHEET_DECIMAL_PLACES);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_SPREADSHEET_COL_WIDTH, StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_COL_WIDTH);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_SPREADSHEET_COL_WIDTH);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+            param = new Parameter(StatisticsToolView.PARAM_KEY_COL_BREAKS_ENABLED, StatisticsToolView.PARAM_DEFVAL_COL_BREAKS_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_COL_BREAKS_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+
+
+
+
         }
 
         @Override
@@ -998,11 +1035,27 @@ public class VisatPreferencesDialog extends ConfigDialog {
         private JPanel createPageUI() {
             Parameter param;
 
+            JPanel binsPane = GridBagUtils.createPanel();
+            binsPane.setBorder(UIUtils.createGroupBorder("Bins")); /*I18N*/
+            GridBagConstraints gbcBins = GridBagUtils.createConstraints("");
+            gbcBins.gridy = 0;
 
             JPanel fieldsPane = GridBagUtils.createPanel();
             fieldsPane.setBorder(UIUtils.createGroupBorder("Fields")); /*I18N*/
             GridBagConstraints gbcFields = GridBagUtils.createConstraints("");
             gbcFields.gridy = 0;
+
+
+            JPanel textPane = GridBagUtils.createPanel();
+            textPane.setBorder(UIUtils.createGroupBorder("Text")); /*I18N*/
+            GridBagConstraints gbcText = GridBagUtils.createConstraints("");
+            gbcText.gridy = 0;
+
+
+            JPanel plotsPane = GridBagUtils.createPanel();
+            plotsPane.setBorder(UIUtils.createGroupBorder("Plots")); /*I18N*/
+            GridBagConstraints gbcPlots = GridBagUtils.createConstraints("");
+            gbcPlots.gridy = 0;
 
 
             JPanel viewPane = GridBagUtils.createPanel();
@@ -1011,10 +1064,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbcView.gridy = 0;
 
 
-            JPanel binsPane = GridBagUtils.createPanel();
-            binsPane.setBorder(UIUtils.createGroupBorder("Bins")); /*I18N*/
-            GridBagConstraints gbcBins = GridBagUtils.createConstraints("");
-            gbcBins.gridy = 0;
+
+
+
 
 
 
@@ -1033,6 +1085,21 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param = getConfigParam(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED);
             addParamToPane(viewPane, param, gbcView);
             gbcView.gridy++;
+
+
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_SPREADSHEET_DECIMAL_PLACES);
+            addParamToPane(textPane, param, gbcText);
+            gbcText.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_SPREADSHEET_COL_WIDTH);
+            addParamToPane(textPane, param, gbcText);
+            gbcText.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_COL_BREAKS_ENABLED);
+            addParamToPane(textPane, param, gbcText);
+            gbcText.gridy++;
+
 
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_NUM_BINS);
@@ -1084,6 +1151,17 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
 
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_PLOTS_THRESH_DOMAIN_LOW);
+            addParamToPane(plotsPane, param, gbcPlots);
+            gbcPlots.gridy++;
+
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_PLOTS_THRESH_DOMAIN_HIGH);
+            addParamToPane(plotsPane, param, gbcPlots);
+            gbcPlots.gridy++;
+
+
+
             JPanel resetPane = GridBagUtils.createPanel();
             GridBagConstraints gbcReset = GridBagUtils.createConstraints("");
             gbcReset.gridy = 0;
@@ -1101,9 +1179,15 @@ public class VisatPreferencesDialog extends ConfigDialog {
             gbcContents.gridy++;
             contentsPanel.add(fieldsPane, gbcContents);
             gbcContents.gridy++;
+            contentsPanel.add(textPane, gbcContents);
+            gbcContents.gridy++;
+            contentsPanel.add(plotsPane, gbcContents);
+            gbcContents.gridy++;
             contentsPanel.add(viewPane, gbcContents);
             gbcContents.gridy++;
             contentsPanel.add(resetPane, gbcContents);
+
+
 
 
 
@@ -1136,6 +1220,8 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam(StatisticsToolView.PARAM_KEY_STATS_SPREADSHEET_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_STATS_SPREADSHEET_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS).setValue(StatisticsToolView.PARAM_DEFVAL_PERCENT_THRESHOLDS, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_NUM_BINS).setValue(StatisticsToolView.PARAM_DEFVAL_NUM_BINS, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_PLOTS_THRESH_DOMAIN_LOW).setValue(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_LOW, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_PLOTS_THRESH_DOMAIN_HIGH).setValue(StatisticsToolView.PARAM_DEFVAL_PLOTS_THRESH_DOMAIN_HIGH, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED, errorHandler);
@@ -1144,6 +1230,10 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_PROJECTION_PARAMETERS_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_MEDIAN_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_MEDIAN_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_HISTOGRAM_STATS_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_HISTOGRAM_STATS_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_SPREADSHEET_DECIMAL_PLACES).setValue(StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_SPREADSHEET_COL_WIDTH).setValue(StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_COL_WIDTH, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_COL_BREAKS_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_COL_BREAKS_ENABLED, errorHandler);
+
 
         }
 
