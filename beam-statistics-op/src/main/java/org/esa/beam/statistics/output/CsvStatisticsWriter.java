@@ -54,7 +54,7 @@ public class CsvStatisticsWriter implements StatisticsOutputter {
     @Override
     public void initialiseOutput(StatisticsOutputContext statisticsOutputContext) {
         this.algorithmNames = statisticsOutputContext.algorithmNames;
-        Arrays.sort(algorithmNames);
+       // Arrays.sort(algorithmNames);
     }
 
     /**
