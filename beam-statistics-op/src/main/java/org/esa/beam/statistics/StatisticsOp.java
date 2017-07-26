@@ -48,15 +48,7 @@ import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -328,21 +320,41 @@ public class StatisticsOp extends Operator {
     }
 
     public static String[] getAlgorithmNames(int[] percentiles) {
-        final List<String> algorithms = new ArrayList<String>();
-        algorithms.add(TOTAL);
-        algorithms.add(MINIMUM);
-        algorithms.add(MAXIMUM);
-        algorithms.add(MEAN);
-        algorithms.add(MEDIAN);
-        algorithms.add(SIGMA);
-        algorithms.add(COEF_VARIATION);
-        algorithms.add(TOTAL_BINS);
-        algorithms.add(BIN_WIDTH);
+        final LinkedHashSet<String> fieldNamesLhs = new LinkedHashSet<String>();
+        fieldNamesLhs.add(TOTAL);
+        fieldNamesLhs.add(MINIMUM);
+        fieldNamesLhs.add(MAXIMUM);
+        fieldNamesLhs.add(MEAN);
+        fieldNamesLhs.add(MEDIAN);
+        fieldNamesLhs.add(SIGMA);
+        fieldNamesLhs.add(COEF_VARIATION);
+        fieldNamesLhs.add(TOTAL_BINS);
+        fieldNamesLhs.add(BIN_WIDTH);
         for (int percentile : percentiles) {
-            algorithms.add(getPercentileName(percentile));
+            fieldNamesLhs.add(getPercentileName(percentile));
         }
 
-        return algorithms.toArray(new String[algorithms.size()]);
+        String[] fieldNamesArray = new String[fieldNamesLhs.size()];
+        fieldNamesLhs.toArray(fieldNamesArray);
+
+        return fieldNamesArray;
+
+
+//        final List<String> algorithms = new ArrayList<String>();
+//        algorithms.add(TOTAL);
+//        algorithms.add(MINIMUM);
+//        algorithms.add(MAXIMUM);
+//        algorithms.add(MEAN);
+//        algorithms.add(MEDIAN);
+//        algorithms.add(SIGMA);
+//        algorithms.add(COEF_VARIATION);
+//        algorithms.add(TOTAL_BINS);
+//        algorithms.add(BIN_WIDTH);
+//        for (int percentile : percentiles) {
+//            algorithms.add(getPercentileName(percentile));
+//        }
+//
+//        return algorithms.toArray(new String[algorithms.size()]);
     }
 
 
