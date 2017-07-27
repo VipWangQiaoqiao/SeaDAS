@@ -1039,7 +1039,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
 
 
             JPanel textPane = GridBagUtils.createPanel();
-            textPane.setBorder(UIUtils.createGroupBorder("Text")); /*I18N*/
+            textPane.setBorder(UIUtils.createGroupBorder("Format")); /*I18N*/
             GridBagConstraints gbcText = GridBagUtils.createConstraints("");
             gbcText.gridy = 0;
 

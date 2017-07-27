@@ -257,6 +257,13 @@ public class StatisticsCriteriaPanel {
         includeProjectionParametersCheckBox.setSelected(includeProjectionParameters);
         percentThresholdsTextField.setText(percentThresholds);
 
+        includeHistogramStatsCheckBox.setVisible(getPreferencesHistogramStatsEnabled());
+        includeTimeSeriesMetaDataCheckBox.setVisible(getPreferencesTimeSeriesMetaDataEnabled());
+        includeProjectionParametersCheckBox.setVisible(getPreferencesProjectionParametersEnabled());
+        includeTimeMetaDataCheckBox.setToolTipText("See preferences for time series option");
+
+
+
         // Text
         decimalPlacesTextfieldContainer.reset(decimalPlaces);
         spreadsheetColWidthTextfieldContainer.reset(colCharWidth);
@@ -891,7 +898,7 @@ public class StatisticsCriteriaPanel {
         tabbedPane.addTab("Fields", getFieldOptionsPanel());
         tabbedPane.setToolTipTextAt(1, "Statistic fields to display within text and spreadsheet");
 
-        tabbedPane.addTab("Text", getTextOptionsPanel());
+        tabbedPane.addTab("Format", getTextOptionsPanel());
         tabbedPane.setToolTipTextAt(2, "Text and spreadsheet formatting");
 
         tabbedPane.addTab("Plots", getPlotsOptionsPanel());
