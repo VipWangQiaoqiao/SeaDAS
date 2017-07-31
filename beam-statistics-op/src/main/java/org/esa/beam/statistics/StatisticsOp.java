@@ -86,6 +86,7 @@ public class StatisticsOp extends Operator {
     public static final String MEDIAN = "Median";
     public static final String MEAN = "Mean";
     public static final String SIGMA = "StandardDeviation";
+    public static final String VARIANCE = "Variance";
     public static final String COEF_VARIATION = "CoefficientOfVariation";
     public static final String TOTAL_BINS = "TotalBins";
     public static final String BIN_WIDTH = "BinWidth";
@@ -247,6 +248,7 @@ public class StatisticsOp extends Operator {
                     stxMap.put(MEAN, FILL_VALUE);
                     stxMap.put(MEDIAN, FILL_VALUE);
                     stxMap.put(SIGMA, FILL_VALUE);
+                    stxMap.put(VARIANCE, FILL_VALUE);
                     stxMap.put(COEF_VARIATION, FILL_VALUE);
                     stxMap.put(TOTAL_BINS, FILL_VALUE);
                     stxMap.put(BIN_WIDTH, FILL_VALUE);
@@ -265,6 +267,7 @@ public class StatisticsOp extends Operator {
                     stxMap.put(MEAN, summaryStxOp.getMean());
                     stxMap.put(MEDIAN, median);
                     stxMap.put(SIGMA, stdDev);
+                    stxMap.put(VARIANCE, summaryStxOp.getVariance());
                     stxMap.put(COEF_VARIATION, Util.getCoefficientOfVariation(stdDev, mean));
                     stxMap.put(TOTAL_BINS, histogram.getNumBins()[0]);
                     stxMap.put(BIN_WIDTH, Util.getBinWidth(histogram));
@@ -327,6 +330,7 @@ public class StatisticsOp extends Operator {
         fieldNamesLhs.add(MEAN);
         fieldNamesLhs.add(MEDIAN);
         fieldNamesLhs.add(SIGMA);
+        fieldNamesLhs.add(VARIANCE);
         fieldNamesLhs.add(COEF_VARIATION);
         fieldNamesLhs.add(TOTAL_BINS);
         fieldNamesLhs.add(BIN_WIDTH);
@@ -338,23 +342,6 @@ public class StatisticsOp extends Operator {
         fieldNamesLhs.toArray(fieldNamesArray);
 
         return fieldNamesArray;
-
-
-//        final List<String> algorithms = new ArrayList<String>();
-//        algorithms.add(TOTAL);
-//        algorithms.add(MINIMUM);
-//        algorithms.add(MAXIMUM);
-//        algorithms.add(MEAN);
-//        algorithms.add(MEDIAN);
-//        algorithms.add(SIGMA);
-//        algorithms.add(COEF_VARIATION);
-//        algorithms.add(TOTAL_BINS);
-//        algorithms.add(BIN_WIDTH);
-//        for (int percentile : percentiles) {
-//            algorithms.add(getPercentileName(percentile));
-//        }
-//
-//        return algorithms.toArray(new String[algorithms.size()]);
     }
 
 

@@ -1103,6 +1103,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         Object[][] secondData =
                 new Object[][]{
                         new Object[]{"Standard_Deviation", stx.getStandardDeviation()},
+                        new Object[]{"Variance", getVariance(stx)},
                         new Object[]{"Coefficient_of_Variation", getCoefficientOfVariation(stx)},
                         //     new Object[]{"", ""},
                         new Object[]{"Total_Bins", histogram.getNumBins()[0]},
@@ -1867,6 +1868,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
     private double getCoefficientOfVariation(Stx stx) {
         return stx.getStandardDeviation() / stx.getMean();
     }
+
+    private double getVariance(Stx stx) {
+        return stx.getStandardDeviation() * stx.getStandardDeviation();
+    }
+
 
     @Override
     public void doLayout() {
