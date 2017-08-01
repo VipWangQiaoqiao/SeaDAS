@@ -74,6 +74,11 @@ public class StatisticsToolView extends AbstractStatisticsToolView {
     public static final String PARAM_KEY_BAND_METADATA_ENABLED = "statistics.bandMetaData.enabled";
     public static final boolean PARAM_DEFVAL_BAND_METADATA_ENABLED = true;
 
+
+    public static final String PARAM_LABEL_BINNING_INFO_ENABLED = "Include Binning Info";
+    public static final String PARAM_KEY_BINNING_INFO_ENABLED = "statistics.binningInfo.enabled";
+    public static final boolean PARAM_DEFVAL_BINNING_INFO_ENABLED = true;
+
     public static final String PARAM_LABEL_TIME_SERIES_METADATA_ENABLED = "Include Time Series MetaData";
     public static final String PARAM_KEY_TIME_SERIES_METADATA_ENABLED = "statistics.timeSeriesMetaData.enabled";
     public static final boolean PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED = false;

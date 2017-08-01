@@ -853,6 +853,7 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         boolean includeFileMetaData = statisticsCriteriaPanel.isIncludeFileMetaData();
         boolean includeMaskMetaData = statisticsCriteriaPanel.isIncludeMaskMetaData();
         boolean includeBandMetaData = statisticsCriteriaPanel.isIncludeBandMetaData();
+        boolean includeBinningInfo = statisticsCriteriaPanel.isIncludeBinningInfo();
         ;
         boolean includeTimeMetaData = statisticsCriteriaPanel.isIncludeTimeMetaData();
         boolean isIncludeTimeSeriesMetaData = statisticsCriteriaPanel.isIncludeTimeSeriesMetaData();
@@ -1104,14 +1105,22 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 new Object[][]{
                         new Object[]{"Standard_Deviation", stx.getStandardDeviation()},
                         new Object[]{"Variance", getVariance(stx)},
-                        new Object[]{"Coefficient_of_Variation", getCoefficientOfVariation(stx)},
-                        //     new Object[]{"", ""},
-                        new Object[]{"Total_Bins", histogram.getNumBins()[0]},
-                        new Object[]{"Bin_Width", getBinSize(histogram)},
-                        new Object[]{"Bin_Min", histogram.getLowValue(0)},
-                        new Object[]{"Bin_Max", histogram.getHighValue(0)}
+                        new Object[]{"Coefficient_of_Variation", getCoefficientOfVariation(stx)}
                 };
         dataRows += secondData.length;
+
+
+        Object[][] binningInfo = null;
+        if (statisticsCriteriaPanel.isIncludeBinningInfo()) {
+            binningInfo= new Object[][]{
+                    new Object[]{"Total_Bins", histogram.getNumBins()[0]},
+                    new Object[]{"Bin_Width", getBinSize(histogram)},
+                    new Object[]{"Bin_Min", histogram.getLowValue(0)},
+                    new Object[]{"Bin_Max", histogram.getHighValue(0)}
+            };
+
+            dataRows += binningInfo.length;
+        }
 
 
         Object[][] histogramStats = null;
@@ -1172,6 +1181,12 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
             }
         }
 
+        if (binningInfo != null) {
+            for (int i = 0; i < binningInfo.length; i++) {
+                tableData[tableDataIdx] = binningInfo[i];
+                tableDataIdx++;
+            }
+        }
 
         if (histogramStats != null) {
             for (int i = 0; i < histogramStats.length; i++) {

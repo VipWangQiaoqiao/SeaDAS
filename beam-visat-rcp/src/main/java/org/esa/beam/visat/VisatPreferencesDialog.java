@@ -976,6 +976,13 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param.addParamChangeListener(paramChangeListener);
             configParams.addParameter(param);
 
+            param = new Parameter(StatisticsToolView.PARAM_KEY_BINNING_INFO_ENABLED, StatisticsToolView.PARAM_DEFVAL_BINNING_INFO_ENABLED);
+            param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_BINNING_INFO_ENABLED);
+            param.addParamChangeListener(paramChangeListener);
+            configParams.addParameter(param);
+
+
+
             param = new Parameter(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED, StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED);
             param.getProperties().setLabel(StatisticsToolView.PARAM_LABEL_TIME_SERIES_METADATA_ENABLED);
             param.addParamChangeListener(paramChangeListener);
@@ -1125,7 +1132,9 @@ public class VisatPreferencesDialog extends ConfigDialog {
             addParamToPane(fieldsPane, param, gbcFields);
             gbcFields.gridy++;
 
-
+            param = getConfigParam(StatisticsToolView.PARAM_KEY_BINNING_INFO_ENABLED);
+            addParamToPane(fieldsPane, param, gbcFields);
+            gbcFields.gridy++;
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_PERCENT_THRESHOLDS);
             addParamToPane(fieldsPane, param, gbcFields);
@@ -1157,6 +1166,8 @@ public class VisatPreferencesDialog extends ConfigDialog {
             param = getConfigParam(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED);
             addParamToPane(fieldsPane, param, gbcFields);
             gbcFields.gridy++;
+
+
 
 
             param = getConfigParam(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED);
@@ -1375,6 +1386,7 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam(StatisticsToolView.PARAM_KEY_FILE_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_FILE_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_MASK_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_MASK_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_BAND_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED, errorHandler);
+            getConfigParam(StatisticsToolView.PARAM_KEY_BINNING_INFO_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_BINNING_INFO_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_TIME_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_TIME_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_TIME_SERIES_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_PROJECTION_PARAMETERS_METADATA_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_PROJECTION_PARAMETERS_METADATA_ENABLED, errorHandler);
@@ -1383,7 +1395,6 @@ public class VisatPreferencesDialog extends ConfigDialog {
             getConfigParam(StatisticsToolView.PARAM_KEY_SPREADSHEET_DECIMAL_PLACES).setValue(StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_DECIMAL_PLACES, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_SPREADSHEET_COL_WIDTH).setValue(StatisticsToolView.PARAM_DEFVAL_SPREADSHEET_COL_WIDTH, errorHandler);
             getConfigParam(StatisticsToolView.PARAM_KEY_COL_BREAKS_ENABLED).setValue(StatisticsToolView.PARAM_DEFVAL_COL_BREAKS_ENABLED, errorHandler);
-
 
         }
 

@@ -74,6 +74,9 @@ public class StatisticsCriteriaPanel {
     private boolean includeBandMetaData = StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED;
     private JCheckBox includeBandMetaDataCheckBox = null;
 
+    private boolean includeBinningInfo = StatisticsToolView.PARAM_DEFVAL_BINNING_INFO_ENABLED;
+    private JCheckBox includeBinningInfoCheckBox = null;
+
     private boolean includeTimeSeriesMetaData = StatisticsToolView.PARAM_DEFVAL_TIME_SERIES_METADATA_ENABLED;
     private JCheckBox includeTimeSeriesMetaDataCheckBox = null;
 
@@ -196,6 +199,7 @@ public class StatisticsCriteriaPanel {
         includeFileMetaData = getPreferencesFileMetaDataEnabled();
         includeMaskMetaData = getPreferencesMaskMetaDataEnabled();
         includeBandMetaData = getPreferencesBandMetaDataEnabled();
+        includeBinningInfo = getPreferencesBinningInfoEnabled();
         includeTimeMetaData = getPreferencesFileTimeMetaDataEnabled();
         includeTimeSeriesMetaData = getPreferencesTimeSeriesMetaDataEnabled();
         includeProjectionParameters = getPreferencesProjectionParametersEnabled();
@@ -252,6 +256,7 @@ public class StatisticsCriteriaPanel {
         includeFileMetaDataCheckBox.setSelected(includeFileMetaData);
         includeMaskMetaDataCheckBox.setSelected(includeMaskMetaData);
         includeBandMetaDataCheckBox.setSelected(includeBandMetaData);
+        includeBinningInfoCheckBox.setSelected(includeBinningInfo);
         includeTimeMetaDataCheckBox.setSelected(includeTimeMetaData);
         includeTimeSeriesMetaDataCheckBox.setSelected(includeTimeSeriesMetaData);
         includeProjectionParametersCheckBox.setSelected(includeProjectionParameters);
@@ -341,6 +346,7 @@ public class StatisticsCriteriaPanel {
         includeFileMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_FILE_METADATA_ENABLED);
         includeMaskMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_MASK_METADATA_ENABLED);
         includeBandMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BAND_METADATA_ENABLED);
+        includeBinningInfoCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_BINNING_INFO_ENABLED);
         includeTimeMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_TIME_METADATA_ENABLED);
         includeTimeSeriesMetaDataCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_TIME_SERIES_METADATA_ENABLED);
         includeProjectionParametersCheckBox = new JCheckBox(StatisticsToolView.PARAM_LABEL_PROJECTION_PARAMETERS_METADATA_ENABLED);
@@ -523,6 +529,13 @@ public class StatisticsCriteriaPanel {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 includeMaskMetaData = includeMaskMetaDataCheckBox.isSelected();
+            }
+        });
+
+        includeBinningInfoCheckBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                includeBinningInfo = includeBinningInfoCheckBox.isSelected();
             }
         });
 
@@ -839,6 +852,10 @@ public class StatisticsCriteriaPanel {
         return includeBandMetaData;
     }
 
+    public boolean isIncludeBinningInfo() {
+        return includeBinningInfo;
+    }
+
     public boolean isIncludeTimeMetaData() {
         return includeTimeMetaData;
     }
@@ -974,6 +991,9 @@ public class StatisticsCriteriaPanel {
         gbc.gridy += 1;
         panel.add(includeMedianCheckBox, gbc);
 
+        gbc.gridy += 1;
+        panel.add(includeBinningInfoCheckBox, gbc);
+
 
 
         gbc.gridy += 1;
@@ -995,7 +1015,10 @@ public class StatisticsCriteriaPanel {
         gbc.gridy += 1;
         panel.add(includeBandMetaDataCheckBox, gbc);
 
+
         gbc.insets.top = 0;
+
+
         gbc.gridy += 1;
         panel.add(includeFileMetaDataCheckBox, gbc);
 
@@ -1594,6 +1617,16 @@ public class StatisticsCriteriaPanel {
             return StatisticsToolView.PARAM_DEFVAL_BAND_METADATA_ENABLED;
         }
     }
+
+    public boolean getPreferencesBinningInfoEnabled() {
+
+        if (configuration != null) {
+            return configuration.getPropertyBool(StatisticsToolView.PARAM_KEY_BINNING_INFO_ENABLED, StatisticsToolView.PARAM_DEFVAL_BINNING_INFO_ENABLED);
+        } else {
+            return StatisticsToolView.PARAM_DEFVAL_BINNING_INFO_ENABLED;
+        }
+    }
+
 
     public boolean getPreferencesProjectionParametersEnabled() {
 
