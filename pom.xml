@@ -33,7 +33,8 @@
         <ceres.versionRange>0.14.1</ceres.versionRange>
         <hdf.version>2.7</hdf.version>
         <netcdf.version>4.3.22</netcdf.version>
-        <geotools.version>2.7.4</geotools.version>
+        <!--<geotools.version>2.7.4</geotools.version>-->
+        <geotools.version>8.7</geotools.version>
         <jide.version>3.5.15</jide.version>
     </properties>
 
