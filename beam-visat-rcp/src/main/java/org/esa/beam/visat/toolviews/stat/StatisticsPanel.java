@@ -1286,11 +1286,11 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.FileType, fieldIdx);
                 fieldIdx++;
+                metaDataFieldsHashMap.put(MetaDataFields.FileFormat, fieldIdx);
+                fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.FileWidth, fieldIdx);
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.FileHeight, fieldIdx);
-                fieldIdx++;
-                metaDataFieldsHashMap.put(MetaDataFields.FileFormat, fieldIdx);
                 fieldIdx++;
                 metaDataFieldsHashMap.put(MetaDataFields.Sensor, fieldIdx);
                 fieldIdx++;
@@ -1410,17 +1410,15 @@ class StatisticsPanel extends PagePanel implements MultipleRoiComputePanel.Compu
         addFieldToSpreadsheet(row, MetaDataFields.FileName, getProduct().getName());
         addFieldToSpreadsheet(row, MetaDataFields.FileType, getProduct().getProductType());
         addFieldToSpreadsheet(row, MetaDataFields.FileWidth, getProduct().getSceneRasterWidth());
-        addFieldToSpreadsheet(row, MetaDataFields.FileHeight, getProduct().getSceneRasterHeight());
         addFieldToSpreadsheet(row, MetaDataFields.FileFormat, getProductFormatName(getProduct()));
-        addFieldToSpreadsheet(row, MetaDataFields.Sensor, StatisticsUtils.getMetaDataSensor(getProduct()));
+        addFieldToSpreadsheet(row, MetaDataFields.FileHeight, getProduct().getSceneRasterHeight());
+        addFieldToSpreadsheet(row, MetaDataFields.Sensor, ProductUtils.getMetaData(getProduct(), ProductUtils.METADATA_POSSIBLE_SENSOR_KEYS));
+        addFieldToSpreadsheet(row, MetaDataFields.Platform, ProductUtils.getMetaData(getProduct(), ProductUtils.METADATA_POSSIBLE_PLATFORM_KEYS));
+        addFieldToSpreadsheet(row, MetaDataFields.Resolution, ProductUtils.getMetaData(getProduct(), ProductUtils.METADATA_POSSIBLE_RESOLUTION_KEYS));
+        addFieldToSpreadsheet(row, MetaDataFields.DayNight, ProductUtils.getMetaData(getProduct(), ProductUtils.METADATA_POSSIBLE_DAY_NIGHT_KEYS));
+        addFieldToSpreadsheet(row, MetaDataFields.Orbit, ProductUtils.getMetaDataOrbit(getProduct()));
+        addFieldToSpreadsheet(row, MetaDataFields.ProcessingVersion, ProductUtils.getMetaData(getProduct(), ProductUtils.METADATA_POSSIBLE_PROCESSING_VERSION_KEYS));
 
-
-        String[] resolutionFields = {"spatial_resolution", "spatialResolution"};
-        addFieldToSpreadsheet(row, MetaDataFields.Resolution, StatisticsUtils.getMetaData(getProduct(), resolutionFields));
-        addFieldToSpreadsheet(row, MetaDataFields.DayNight, StatisticsUtils.getMetaData(getProduct(), "day_night_flag"));
-        addFieldToSpreadsheet(row, MetaDataFields.Orbit, StatisticsUtils.getMetaDataOrbit(getProduct()));
-        addFieldToSpreadsheet(row, MetaDataFields.Platform, StatisticsUtils.getMetaDataPlatform(getProduct()));
-        addFieldToSpreadsheet(row, MetaDataFields.ProcessingVersion, StatisticsUtils.getMetaDataProcessingVersion(getProduct()));
 
 
 

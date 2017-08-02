@@ -20,6 +20,7 @@ import com.bc.ceres.swing.figure.Figure;
 import com.bc.ceres.swing.figure.ShapeFigure;
 import org.esa.beam.framework.datamodel.*;
 import org.esa.beam.framework.ui.product.ProductSceneView;
+import org.esa.beam.util.ProductUtils;
 import org.esa.beam.util.StringUtils;
 import org.esa.beam.util.math.MathUtils;
 import org.esa.beam.visat.VisatApp;
@@ -147,134 +148,10 @@ public class StatisticsUtils {
         }
     }
 
-    public static String getMetaDataSensor(Product product) {
-        // Created by Daniel Knowles
-        // Note this tries to retrieve a sensor name but does not check validity of sensor name
-        String sensor = "";
-
-        try {
-            MetadataAttribute att = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Sensor_Name");
-            MetadataElement elm = product.getMetadataRoot().getElement("Global_Attributes");
-            sensor = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Sensor_Name").getData().getElemString();
-        } catch (Exception ignore) {
-            try {
-                MetadataAttribute att = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("instrument");
-                MetadataElement elm = product.getMetadataRoot().getElement("Global_Attributes");
-                sensor = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("instrument").getData().getElemString();
-            } catch (Exception ignored) {
-            }
-        }
-
-        if (sensor == null) {
-            try {
-                String[] productTypeNameArray = product.getProductType().split(" ");
-                // the sensor name may be here as the first entry but ignore any obvious false positives
-                if (!sensor.toUpperCase().equals("LEVEL")) {
-                    sensor = productTypeNameArray[0];
-                }
-            } catch (Exception ignored) {
-            }
-        }
-
-        return sensor;
-    }
-
-    public static String getMetaDataPlatform(Product product) {
-        // Created by Daniel Knowles
-        // Note this tries to retrieve a platform name
-        String platform = "";
-
-        try {
-            platform = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Platform").getData().getElemString();
-        } catch (Exception ignore) {
-            try {
-                platform = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("platform").getData().getElemString();
-            } catch (Exception ignored) {
-            }
-        }
-
-
-        return platform;
-    }
-
-    public static String getMetaDataProcessingVersion(Product product) {
-        // Created by Daniel Knowles
-        String processingVersion = "";
-
-        try {
-            processingVersion = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("Processing_Version").getData().getElemString();
-        } catch (Exception ignore) {
-            try {
-                processingVersion = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("processing_version").getData().getElemString();
-            } catch (Exception ignored) {
-            }
-        }
-
-
-        return processingVersion;
-    }
 
 
 
-    public static String getMetaDataOrbit(Product product) {
-        // Created by Daniel Knowles
-        // Note this tries to retrieve an orbit or orbit range name
-        String metaData = "";
-
-        try {
-            metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("orbit_number").getData().getElemString();
-        } catch (Exception ignore) {
-            try {
-                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("start_orbit_number").getData().getElemString();
-                String endOrbit = product.getMetadataRoot().getElement("Global_Attributes").getAttribute("end_orbit_number").getData().getElemString();
-                if (metaData != null && metaData.length() > 0 && endOrbit != null && endOrbit.length() > 0) {
-                    metaData = metaData + "-" + endOrbit;
-                } else if (metaData == null && endOrbit != null && endOrbit.length() > 0) {
-                    metaData = endOrbit;
-                }
-            } catch (Exception ignored) {
-            }
-        }
-
-        return metaData;
-    }
 
 
-    public static String getMetaData(Product product, String key) {
-        // Created by Daniel Knowles
-        String metaData = "";
 
-        try {
-            metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-        } catch (Exception ignore) {
-            try {
-                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-            } catch (Exception ignored) {
-            }
-        }
-
-        return metaData;
-    }
-
-    public static String getMetaData(Product product, String[] keys) {
-        // Created by Daniel Knowles
-        String metaData = "";
-
-        for (String key: keys) {
-            try {
-                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-            } catch (Exception ignore) {
-                try {
-                    metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-                } catch (Exception ignored) {
-                }
-            }
-
-            if (metaData.length() > 0) {
-                return metaData;
-            }
-        }
-
-        return metaData;
-    }
 }

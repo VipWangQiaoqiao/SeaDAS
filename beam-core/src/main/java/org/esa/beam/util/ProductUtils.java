@@ -96,7 +96,14 @@ public class ProductUtils {
 
     private static String GLOBAL_ATTRIBUTES_KEY = "Global_Attributes";
     public static String METADATA_PROJECTION_KEY = "map_projection";
-    public static String[] METADATA_POSSIBLE_PROJECTION_KEYS = {METADATA_PROJECTION_KEY, "projection", "crs"};
+    public static String[] METADATA_POSSIBLE_PROJECTION_KEYS = {METADATA_PROJECTION_KEY, "Projection", "crs"};
+    public static String[] METADATA_POSSIBLE_SENSOR_KEYS = {"Sensor_Name", "Instrument", "Sensor"};
+    public static String[] METADATA_POSSIBLE_PLATFORM_KEYS = {"Platform"};
+    public static String[] METADATA_POSSIBLE_PROCESSING_VERSION_KEYS = {"Processing_Version"};
+    public static String[] METADATA_POSSIBLE_DAY_NIGHT_KEYS = {"Day_Night_Flag", "Day_Night"};
+    public static String[] METADATA_POSSIBLE_ORBIT_KEYS = {"Orbit_Number", "Orbit"};
+    public static String[] METADATA_POSSIBLE_START_ORBIT_KEYS = {"Start_Orbit_Number", "End_Orbit"};
+    public static String[] METADATA_POSSIBLE_END_ORBIT_KEYS = {"End_Orbit_Number", "End_Orbit"};
 
    public static String METADATA_RESOLUTION_KEY = "spatial_resolution";
     public static  String[] METADATA_POSSIBLE_RESOLUTION_KEYS = {METADATA_RESOLUTION_KEY, "spatialResolution", "resolution", "Resolution"};
@@ -1612,12 +1619,18 @@ public class ProductUtils {
         // Created by Daniel Knowles
         String metaData = "";
 
-        try {
-            metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-        } catch (Exception ignore) {
+        if (key != null && key.length() > 0) {
             try {
                 metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-            } catch (Exception ignored) {
+            } catch (Exception ignore) {
+                try {
+                    metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key.toLowerCase()).getData().getElemString();
+                } catch (Exception ignoreThis) {
+                    try {
+                        metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key.toUpperCase()).getData().getElemString();
+                    } catch (Exception ignored) {
+                    }
+                }
             }
         }
 
@@ -1629,14 +1642,7 @@ public class ProductUtils {
         String metaData = "";
 
         for (String key: keys) {
-            try {
-                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-            } catch (Exception ignore) {
-                try {
-                    metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-                } catch (Exception ignored) {
-                }
-            }
+            metaData = getMetaData(product, key);
 
             if (metaData.length() > 0) {
                 return metaData;
@@ -1645,6 +1651,34 @@ public class ProductUtils {
 
         return metaData;
     }
+
+
+    public static String getMetaDataOrbit(Product product) {
+        // Created by Daniel Knowles
+        // Note this tries to retrieve an orbit or orbit range name
+         String   metaData = getMetaData(product, METADATA_POSSIBLE_ORBIT_KEYS);
+
+        if (metaData != null && metaData.length() > 0) {
+            return metaData;
+        }
+
+            try {
+                String startOrbit = getMetaData(product, METADATA_POSSIBLE_START_ORBIT_KEYS);
+                String endOrbit = getMetaData(product, METADATA_POSSIBLE_END_ORBIT_KEYS);
+                if (startOrbit != null && startOrbit.length() > 0 && endOrbit != null && endOrbit.length() > 0) {
+                    metaData = startOrbit + "-" + endOrbit;
+                } else if (endOrbit == null && startOrbit != null && startOrbit.length() > 0) {
+                    metaData = startOrbit;
+                } else if (startOrbit == null && endOrbit != null && endOrbit.length() > 0) {
+                    metaData = endOrbit;
+                }
+            } catch (Exception ignored) {
+            }
+
+
+        return metaData;
+    }
+
 
 
     public static void copyVectorData(Product sourceProduct, Product targetProduct) {
