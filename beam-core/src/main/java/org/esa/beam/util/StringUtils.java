@@ -19,10 +19,7 @@ import com.bc.jexp.impl.Tokenizer;
 
 import java.awt.Color;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * The <code>StringUtils</code> class provides frequently used utility methods dealing with <code>String</code> values
@@ -36,6 +33,21 @@ import java.util.StringTokenizer;
  * @version $Revision$ $Date$
  */
 public class StringUtils {
+
+
+    public  enum CaseType {
+        TITLE,
+        TITLE_UNDERSCORE,
+        LOWER_UNDERSCORE,
+        UPPER_UNDERSCORE,
+        CAMEL_LOWER_FIRST,
+        CAMEL_UPPER
+    }
+
+
+    public static String DELIMITOR_SPACE = " ";
+    public static String DELIMITOR_UNDERSCORE = "_";
+
 
     /**
      * Splits the given text into a list of tokens by using the supplied separators. Empty tokens are created for
@@ -386,7 +398,7 @@ public class StringUtils {
      * remove. The first occurrence of the given Strings in the string array to remove was removed.
      *
      * @return new <code>String[]</code> without the first occurrence of the given Strings in the string array to
-     *         remove
+     * remove
      * @throws IllegalArgumentException if array is <code>null</code>
      */
     public static String[] removeFromArray(String[] array, String[] toRemove) throws IllegalArgumentException {
@@ -482,7 +494,7 @@ public class StringUtils {
      * @param a the string array in which to search
      * @param s the string for which the search is performed
      * @return the array index of the first occurence of <code>s</code> in <code>a</code> or <code>-1</code> if it is
-     *         not cointained in the array
+     * not cointained in the array
      * @throws IllegalArgumentException if one of the arguments is <code>null</code>
      */
     public static int indexOf(String[] a, String s) {
@@ -503,7 +515,7 @@ public class StringUtils {
      * @param a the string array in which to search
      * @param s the string for which the search is performed
      * @return the array index of the first occurence of <code>s</code> in <code>a</code> or <code>-1</code> if it is
-     *         not cointained in the array
+     * not cointained in the array
      * @throws IllegalArgumentException if one of the arguments is <code>null</code>
      */
     public static int indexOfIgnoreCase(String[] a, String s) {
@@ -524,7 +536,7 @@ public class StringUtils {
      * @param l the string list in which to search
      * @param s the string for which the search is performed
      * @return the array index of the first occurence of <code>s</code> in <code>a</code> or <code>-1</code> if it is
-     *         not cointained in the array
+     * not cointained in the array
      * @throws IllegalArgumentException if one of the arguments is <code>null</code>
      */
     public static int indexOfIgnoreCase(List l, String s) {
@@ -595,8 +607,8 @@ public class StringUtils {
      * @throws IllegalArgumentException if the given Object is not an <code>array</code> or <code>null</code>.
      */
     public static String[] stringToArray(final String csvString, final String delim) {
-		Guardian.assertNotNullOrEmpty("csvString", csvString);
-		Guardian.assertNotNullOrEmpty("delim", delim);
+        Guardian.assertNotNullOrEmpty("csvString", csvString);
+        Guardian.assertNotNullOrEmpty("delim", delim);
         final StringTokenizer tokenizer = new StringTokenizer(csvString, delim);
         final List<String> strList = new ArrayList<>(tokenizer.countTokens());
         while (tokenizer.hasMoreTokens()) {
@@ -796,8 +808,8 @@ public class StringUtils {
      * @param s the string for which the search is performed
      * @param i the index of the occurrence of the requested string
      * @return the array index of the <code>i-th</code> occurrence of <code>s</code> in <code>a</code> or
-     *         <code>-1</code> if <code>s</code> is contained less than <code>i</code> times in the array or if
-     *         <code>i</code> is less than 1
+     * <code>-1</code> if <code>s</code> is contained less than <code>i</code> times in the array or if
+     * <code>i</code> is less than 1
      * @throws IllegalArgumentException if <code>a</code> <code>s</code> are <code>null</code>
      */
     public static int indexOfSpecificOccurrence(String a, String s, int i) {
@@ -812,9 +824,10 @@ public class StringUtils {
     /**
      * Adds padding to an integer
      * 1 becomes 001 or __1
+     *
      * @param num the integer value
      * @param max the desired string length
-     * @param c the inserted character
+     * @param c   the inserted character
      * @return padded number as string
      */
     public static String padNum(final int num, final int max, final char c) {
@@ -824,4 +837,144 @@ public class StringUtils {
         }
         return str.toString();
     }
+
+
+    public static String[] getStringCaseVariations(String s) {
+        // Created by Daniel Knowles
+        if (s == null || s.length() == 0) {
+            return null;
+        }
+
+        if (s.length() == 1) {
+            String[] stringArray = {s.toLowerCase(), s.toUpperCase()};
+            return stringArray;
+        }
+
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<String>();
+        linkedHashSet.add(s);
+        linkedHashSet.add(getStringCaseVariation(s, CaseType.LOWER_UNDERSCORE));
+        linkedHashSet.add(getStringCaseVariation(s, CaseType.UPPER_UNDERSCORE));
+        linkedHashSet.add(getStringCaseVariation(s, CaseType.CAMEL_LOWER_FIRST));
+        linkedHashSet.add(getStringCaseVariation(s, CaseType.CAMEL_UPPER));
+        linkedHashSet.add(getStringCaseVariation(s, CaseType.TITLE_UNDERSCORE));
+
+        String[] stringArray = new String[linkedHashSet.size()];
+        linkedHashSet.toArray(stringArray);
+        return stringArray;
+    }
+
+
+
+    public static String getStringCaseVariation(String s, CaseType caseType) {
+        // Created by Daniel Knowles
+        if (s == null || s.length() == 0) {
+            return null;
+        }
+
+        String tmpString;
+        switch (caseType) {
+            case TITLE:
+                return toTitleCase(s, true);
+            case TITLE_UNDERSCORE:
+                return toTitleCase(s, false);
+            case LOWER_UNDERSCORE:
+                tmpString = toTitleCase(s, true);
+                if (tmpString != null) {
+                    return tmpString.toLowerCase();
+                } else {
+                    return null;
+                }
+            case UPPER_UNDERSCORE:
+                tmpString = toTitleCase(s, true);
+                if (tmpString != null) {
+                    return tmpString.toUpperCase();
+                } else {
+                    return null;
+                }
+            case CAMEL_LOWER_FIRST:
+                return toCamelCase(s, false);
+            case CAMEL_UPPER:
+                return toCamelCase(s, true);
+            default:
+                return null;
+        }
+
+
+    }
+
+
+    static String toCamelCase(String s, boolean upper) {
+        // Created by Daniel Knowles
+
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+
+        String sourceDelimitor;
+
+        if (s.contains(DELIMITOR_SPACE)) {
+            sourceDelimitor = DELIMITOR_SPACE;
+        } else if (s.contains(DELIMITOR_UNDERSCORE)) {
+            sourceDelimitor = DELIMITOR_UNDERSCORE;
+        } else {
+            return s;
+        }
+
+        String[] parts = s.split(sourceDelimitor);
+        StringBuilder camelCaseString = new StringBuilder("");
+        boolean firstWordSet = false;
+        for (String part : parts) {
+            if (part != null && part.length() > 0) {
+                if (!firstWordSet && !upper) {
+                    camelCaseString.append(part.toLowerCase());
+                    firstWordSet = true;
+                } else {
+                    camelCaseString.append(toProperCase(part));
+                }
+            }
+        }
+
+        return camelCaseString.toString();
+    }
+
+
+    static String toTitleCase(String s, boolean spaceDelimitor) {
+        // Created by Daniel Knowles
+        // Source string is either space or underscore delimited
+        // Returned string is of format "This Is My Title" or "This_Is_My_Title"
+
+        String delimitor = (spaceDelimitor) ? DELIMITOR_SPACE : DELIMITOR_UNDERSCORE;
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+
+        String sourceDelimitor;
+
+        if (s.contains(DELIMITOR_SPACE)) {
+            sourceDelimitor = DELIMITOR_SPACE;
+        } else if (s.contains(DELIMITOR_UNDERSCORE)) {
+            sourceDelimitor = DELIMITOR_UNDERSCORE;
+        } else {
+            return s;
+        }
+
+        String[] parts = s.split(sourceDelimitor);
+        for (int i = 0; i < parts.length; i++) {
+            parts[i] = toProperCase(parts[i]);
+        }
+
+        return StringUtils.join(parts, delimitor);
+    }
+
+
+    static String toProperCase(String s) {
+        // Created by Daniel Knowles
+
+        if (s == null || s.length() < 2) {
+            return s;
+        }
+
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+    }
+
 }

@@ -82,10 +82,7 @@ import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class provides many static factory methods to be used in conjunction with data products.
@@ -96,17 +93,17 @@ public class ProductUtils {
 
     private static String GLOBAL_ATTRIBUTES_KEY = "Global_Attributes";
     public static String METADATA_PROJECTION_KEY = "map_projection";
-    public static String[] METADATA_POSSIBLE_PROJECTION_KEYS = {METADATA_PROJECTION_KEY, "Projection", "crs"};
-    public static String[] METADATA_POSSIBLE_SENSOR_KEYS = {"Sensor_Name", "Instrument", "Sensor"};
-    public static String[] METADATA_POSSIBLE_PLATFORM_KEYS = {"Platform"};
-    public static String[] METADATA_POSSIBLE_PROCESSING_VERSION_KEYS = {"Processing_Version"};
-    public static String[] METADATA_POSSIBLE_DAY_NIGHT_KEYS = {"Day_Night_Flag", "Day_Night"};
-    public static String[] METADATA_POSSIBLE_ORBIT_KEYS = {"Orbit_Number", "Orbit"};
-    public static String[] METADATA_POSSIBLE_START_ORBIT_KEYS = {"Start_Orbit_Number", "End_Orbit"};
-    public static String[] METADATA_POSSIBLE_END_ORBIT_KEYS = {"End_Orbit_Number", "End_Orbit"};
+    public static String[] METADATA_POSSIBLE_PROJECTION_KEYS = {METADATA_PROJECTION_KEY, "projection", "crs"};
+    public static String[] METADATA_POSSIBLE_SENSOR_KEYS = {"sensor_name", "instrument", "sensor"};
+    public static String[] METADATA_POSSIBLE_PLATFORM_KEYS = {"platform"};
+    public static String[] METADATA_POSSIBLE_PROCESSING_VERSION_KEYS = {"processing_version"};
+    public static String[] METADATA_POSSIBLE_DAY_NIGHT_KEYS = {"day_night_flag", "day_night"};
+    public static String[] METADATA_POSSIBLE_ORBIT_KEYS = {"orbit_number", "orbit"};
+    public static String[] METADATA_POSSIBLE_START_ORBIT_KEYS = {"start_orbit_number", "end_orbit"};
+    public static String[] METADATA_POSSIBLE_END_ORBIT_KEYS = {"end_orbit_number", "end_orbit"};
 
-   public static String METADATA_RESOLUTION_KEY = "spatial_resolution";
-    public static  String[] METADATA_POSSIBLE_RESOLUTION_KEYS = {METADATA_RESOLUTION_KEY, "spatialResolution", "resolution", "Resolution"};
+    public static String METADATA_RESOLUTION_KEY = "spatial_resolution";
+    public static String[] METADATA_POSSIBLE_RESOLUTION_KEYS = {METADATA_RESOLUTION_KEY, "resolution"};
 
     private static final int[] RGB_BAND_OFFSETS = new int[]{
             2, 1, 0
@@ -1420,8 +1417,8 @@ public class ProductUtils {
     }
 
 
-    // todo Danny added this
     public static void markAsDerivedFromMetaDataField(Product product, String attribute) {
+        // Created by Daniel Knowles
 
         String tag = "Derived from (";
 
@@ -1445,8 +1442,8 @@ public class ProductUtils {
     }
 
 
-    // todo Danny added this
     public static void markProductMetaDataFieldAsDerivedFrom(Product product) {
+        // Created by Daniel Knowles
 
         markAsDerivedFromMetaDataField(product, "product_name");
         markAsDerivedFromMetaDataField(product, "title");
@@ -1466,8 +1463,8 @@ public class ProductUtils {
     }
 
 
-    // todo Danny added this
     public static void prependHistoryMetaDataField(Product product, String latestHistoryEvent) {
+        // Created by Daniel Knowles
 
         String HISTORY_KEY = "history";
         String history = latestHistoryEvent;
@@ -1489,8 +1486,8 @@ public class ProductUtils {
     }
 
 
-    // todo Danny added this
     public static void setResolutionMetaDataField(Product product, boolean markAsDerivedFrom) {
+        // Created by Daniel Knowles
 
         setMetaDataFieldFromPossible(product, METADATA_RESOLUTION_KEY, METADATA_POSSIBLE_RESOLUTION_KEYS);
 
@@ -1500,9 +1497,9 @@ public class ProductUtils {
     }
 
 
-    // todo Danny added this
-    // if attribute does not exist then set to first value found from the possibleAttributes
     public static void setMetaDataFieldFromPossible(Product product, String attribute, String[] possibleAttributes) {
+        // Created by Daniel Knowles
+        // if attribute does not exist then set to first value found from the possibleAttributes
 
         if (product != null && product.getMetadataRoot() != null) {
             MetadataElement metadataElement = product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY);
@@ -1512,16 +1509,22 @@ public class ProductUtils {
 
                 if (metadataAttribute == null) {
                     for (String key : possibleAttributes) {
-                        if (metadataElement.getAttribute(key) != null) {
-                            String value = metadataElement.getAttribute(key).getData().toString();
-                            setMetaDataField(product, attribute, value);
-                            break;
+                       String[] keyVariations = StringUtils.getStringCaseVariations(key);
+                        for (String keyVariation : keyVariations) {
+                            if (metadataElement.getAttribute(keyVariation) != null) {
+                                String value = metadataElement.getAttribute(keyVariation).getData().toString();
+                                setMetaDataField(product, attribute, value);
+                                break;
+                            }
                         }
                     }
 
                     for (String key : possibleAttributes) {
-                        if (key != null && !key.equals(attribute)) {
-                            deleteMetaDataField(product, key);
+                        String[] keyVariations = StringUtils.getStringCaseVariations(key);
+                        for (String keyVariation : keyVariations) {
+                            if (keyVariation != null && !keyVariation.toLowerCase().equals(attribute.toLowerCase())) {
+                                deleteMetaDataField(product, keyVariation);
+                            }
                         }
                     }
                 }
@@ -1530,8 +1533,8 @@ public class ProductUtils {
     }
 
 
-    // todo Danny added this
     public static void setMapProjectionMetaDataFields(Product product) {
+        // Created by Daniel Knowles
 
         String MAP_PROJECTION_KEY = "map_projection";
         String CRS_KEY = "crs";
@@ -1561,8 +1564,8 @@ public class ProductUtils {
     }
 
 
-    // todo Danny added this
     public static void deleteMetaDataFields(Product product, String[] fields) {
+        // Created by Daniel Knowles
 
         MetadataElement metadataElement = product.getMetadataRoot().getElement(GLOBAL_ATTRIBUTES_KEY);
 
@@ -1576,15 +1579,16 @@ public class ProductUtils {
     }
 
 
-    // todo Danny added this
     public static void deleteMetaDataField(Product product, String field) {
+        // Created by Daniel Knowles
+
         String[] fields = {field};
         deleteMetaDataFields(product, fields);
     }
 
 
-    // todo Danny added this
     public static void setMetaDataField(Product product, String field, String value) {
+        // Created by Daniel Knowles
 
         String UNDEFINED_VALUE = "undefined";
 
@@ -1615,34 +1619,15 @@ public class ProductUtils {
         }
     }
 
-    public static String getMetaData(Product product, String key) {
-        // Created by Daniel Knowles
-        String metaData = "";
 
-        if (key != null && key.length() > 0) {
-            try {
-                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
-            } catch (Exception ignore) {
-                try {
-                    metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key.toLowerCase()).getData().getElemString();
-                } catch (Exception ignoreThis) {
-                    try {
-                        metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key.toUpperCase()).getData().getElemString();
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-        }
 
-        return metaData;
-    }
 
     public static String getMetaData(Product product, String[] keys) {
         // Created by Daniel Knowles
         String metaData = "";
 
-        for (String key: keys) {
-            metaData = getMetaData(product, key);
+        for (String key : keys) {
+            metaData = getMetaData(product, key, false);
 
             if (metaData.length() > 0) {
                 return metaData;
@@ -1652,33 +1637,79 @@ public class ProductUtils {
         return metaData;
     }
 
+    public static String getMetaData(Product product, String key) {
+        // Created by Daniel Knowles
+        String metaData = "";
+
+        if (key != null && key.length() > 0) {
+            try {
+                metaData = product.getMetadataRoot().getElement("Global_Attributes").getAttribute(key).getData().getElemString();
+            } catch (Exception ignore) {
+            }
+        }
+
+        return metaData;
+    }
+
+
+
+
+    public static String getMetaData(Product product, String key, boolean exact) {
+        // Created by Daniel Knowles
+        if (key == null) {
+            return null;
+        }
+
+        if (exact) {
+            return getMetaData(product, key);
+        } else {
+            String metaData = "";
+            String[] keyVariations = StringUtils.getStringCaseVariations(key);
+            for (String keyVariation : keyVariations) {
+                metaData = getMetaData(product, keyVariation);
+                if (metaData != null && metaData.length() > 0) {
+                    return metaData;
+                }
+            }
+
+            return metaData;
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     public static String getMetaDataOrbit(Product product) {
         // Created by Daniel Knowles
         // Note this tries to retrieve an orbit or orbit range name
-         String   metaData = getMetaData(product, METADATA_POSSIBLE_ORBIT_KEYS);
+        String metaData = getMetaData(product, METADATA_POSSIBLE_ORBIT_KEYS);
 
         if (metaData != null && metaData.length() > 0) {
             return metaData;
         }
 
-            try {
-                String startOrbit = getMetaData(product, METADATA_POSSIBLE_START_ORBIT_KEYS);
-                String endOrbit = getMetaData(product, METADATA_POSSIBLE_END_ORBIT_KEYS);
-                if (startOrbit != null && startOrbit.length() > 0 && endOrbit != null && endOrbit.length() > 0) {
-                    metaData = startOrbit + "-" + endOrbit;
-                } else if (endOrbit == null && startOrbit != null && startOrbit.length() > 0) {
-                    metaData = startOrbit;
-                } else if (startOrbit == null && endOrbit != null && endOrbit.length() > 0) {
-                    metaData = endOrbit;
-                }
-            } catch (Exception ignored) {
+        try {
+            String startOrbit = getMetaData(product, METADATA_POSSIBLE_START_ORBIT_KEYS);
+            String endOrbit = getMetaData(product, METADATA_POSSIBLE_END_ORBIT_KEYS);
+            if (startOrbit != null && startOrbit.length() > 0 && endOrbit != null && endOrbit.length() > 0) {
+                metaData = startOrbit + "-" + endOrbit;
+            } else if (endOrbit == null && startOrbit != null && startOrbit.length() > 0) {
+                metaData = startOrbit;
+            } else if (startOrbit == null && endOrbit != null && endOrbit.length() > 0) {
+                metaData = endOrbit;
             }
+        } catch (Exception ignored) {
+        }
 
 
         return metaData;
     }
-
 
 
     public static void copyVectorData(Product sourceProduct, Product targetProduct) {
